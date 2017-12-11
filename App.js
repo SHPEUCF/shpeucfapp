@@ -4,9 +4,7 @@ import { Platform, StatusBar, StyleSheet, View, Text } from 'react-native';
 export default class App extends Component {
   render() {
       return (
-        <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
+        <View>
           <Text>
             Hello there
           </Text>
