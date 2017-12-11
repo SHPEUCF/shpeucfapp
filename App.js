@@ -9,11 +9,7 @@ export default class App extends Component {
           <Text>
             Hello there
           </Text>
-<<<<<<< HEAD
           <TabNavigator />
-=======
-          <TabNavigator/>
->>>>>>> 82b477feccaecb458b28f1f28ddf4ecf64497f4d
         </View>
       );
   }
