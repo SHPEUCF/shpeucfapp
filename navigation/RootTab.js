@@ -3,11 +3,12 @@ import { TabNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MoreMenu from '../navigation/MoreMenu';
 import HomeScreen from '../screens/Home';
+import EventsScreen from '../screens/Events';
 import ProfileScreen from '../screens/Profile';
-import ResourcesScreen from '../screens/Resources';
-import CheckIn from '../screens/CheckIn';
 import JobBoard from '../screens/JobBoard';
 import Leaderboard from '../screens/Leaderboard';
+import ResourcesScreen from '../screens/Resources';
+import CheckIn from '../screens/CheckIn';
 import About from '../screens/About';
 
 
@@ -25,6 +26,19 @@ const RootTab = TabNavigator({
       ),
     },
   },
+  Events: {
+    screen: EventsScreen,
+    navigationOptions: {
+      tabBarLabel: 'Events',
+      tabBarIcon: ({ tintColor, focused }) => (
+        <Ionicons
+          name={focused ? 'ios-calendar' : 'ios-calendar-outline'}
+          size ={26}
+          style={{ color: tintColor }}
+          />
+      ),
+    },
+  },
   Profile: {
     screen: ProfileScreen,
     navigationOptions: {
@@ -33,19 +47,6 @@ const RootTab = TabNavigator({
         <Ionicons
           name={focused ? 'ios-person' : 'ios-person-outline'}
           size={26}
-          style={{ color: tintColor }}
-          />
-      ),
-    },
-  },
-  Resources: {
-    screen: ResourcesScreen,
-    navigationOptions: {
-      tabBarLabel: 'Resources',
-      tabBarIcon: ({ tintColor, focused }) => (
-        <Ionicons
-          name={focused ? 'ios-archive' : 'ios-archive-outline'}
-          size ={26}
           style={{ color: tintColor }}
           />
       ),

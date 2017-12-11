@@ -6,9 +6,10 @@ export default class MoreMenu extends Component {
   render() {
     return (
       <View style = {styles.container}>
-        <Text>Check In</Text>
         <Text>Job Board</Text>
         <Text>Leaderboard</Text>
+        <Text>Check In</Text>
+        <Text>Resources</Text>
         <Text>About</Text>
       </View>
     )
