@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import {Text, View, StyleSheet }from 'react-native';
 
-export default class ProfileScreen extends Component {
+export default class JobBoard extends Component {
   render() {
     return (
       <View style = {styles.container}>
-        <Text>Profile Screen</Text>
+        <Text>JobBoard</Text>
       </View>
     )
   }

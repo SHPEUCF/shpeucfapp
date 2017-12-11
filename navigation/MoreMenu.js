@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import {Text, View, StyleSheet }from 'react-native';
+import { StackNavigator } from 'react-navigation';
 
-export default class ProfileScreen extends Component {
+export default class MoreMenu extends Component {
   render() {
     return (
       <View style = {styles.container}>
-        <Text>Profile Screen</Text>
+        <Text>Check In</Text>
+        <Text>Job Board</Text>
+        <Text>Leaderboard</Text>
+        <Text>About</Text>
       </View>
     )
   }

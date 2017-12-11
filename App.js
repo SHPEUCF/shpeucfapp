@@ -1,15 +1,12 @@
 import React, { Component} from 'react';
 import { Platform, StatusBar, StyleSheet, View, Text } from 'react-native';
-import TabNavigator from './navigation/TabNavigator';
+import RootTab from './navigation/RootTab';
 
 export default class App extends Component {
   render() {
       return (
-        <View>
-          <Text>
-            Hello there
-          </Text>
-          <TabNavigator />
+        <View style={styles.container}>
+          <RootTab />
         </View>
       );
   }
