@@ -8,8 +8,8 @@ export default class MoreMenu extends Component {
       <View style = {styles.container}>
         <Text>Job Board</Text>
         <Text>Leaderboard</Text>
-        <Text>Check In</Text>
         <Text>Resources</Text>
+        <Text>Check In</Text>
         <Text>About</Text>
       </View>
     )

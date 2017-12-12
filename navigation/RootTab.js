@@ -1,10 +1,10 @@
 import React from 'react';
 import { TabNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MoreMenu from '../navigation/MoreMenu';
 import HomeScreen from '../screens/Home';
 import EventsScreen from '../screens/Events';
 import ProfileScreen from '../screens/Profile';
+import MoreMenu from '../navigation/MoreMenu';
 import JobBoard from '../screens/JobBoard';
 import Leaderboard from '../screens/Leaderboard';
 import ResourcesScreen from '../screens/Resources';
