@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import {Text, View, StyleSheet }from 'react-native';
+import {Text, View, StyleSheet, Button }from 'react-native';
+import { StackNavigator } from 'react-navigation';
 
 export default class JobBoard extends Component {
+  static navigationOptions = {
+    title: 'Job Board',
+  };
   render() {
     return (
       <View style = {styles.container}>

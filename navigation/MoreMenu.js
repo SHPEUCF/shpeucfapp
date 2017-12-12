@@ -1,30 +1,44 @@
 import React, { Component } from 'react';
-import {Text, View, StyleSheet }from 'react-native';
+import { AppRegistry }from 'react-native';
 import { StackNavigator } from 'react-navigation';
+import More from '../screens/More';
+import JobBoard from '../screens/JobBoard';
+import Leaderboard from '../screens/Leaderboard';
+import Resources from '../screens/Resources';
+import CheckIn from '../screens/CheckIn';
+import About from '../screens/About';
 
-export default class MoreMenu extends Component {
-  render() {
-    return (
-      <View style = {styles.container}>
-        <Text>Job Board</Text>
-        <Text>Leaderboard</Text>
-        <Text>Resources</Text>
-        <Text>Check In</Text>
-        <Text>About</Text>
-      </View>
-    )
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#D5DBDB',
-    alignItems: 'center',
-    justifyContent: 'center'
+const StackNav = StackNavigator({
+  More:{
+    screen: More
   },
-  statusBarUnderlay: {
-    height: 24,
-    backgroundColor: 'rgba(0,0,0,0.2)',
+  JobBoard:{
+    screen: JobBoard
+  },
+  Leaderboard:{
+    screen: Leaderboard,
+    navigationOptions: {
+      headerTitle: 'Leader Board',
+    },
+  },
+  Resources:{
+    screen: Resources,
+    navigationOptions: {
+      headerTitle: 'Resources',
+    },
+  },
+  CheckIn:{
+    screen: CheckIn,
+    navigationOptions: {
+      headerTitle: 'Check In',
+    },
+  },
+  About:{
+    screen: About,
+    navigationOptions: {
+      headerTitle: 'About',
+    },
   },
 });
+
+export default StackNav;
