@@ -1,4 +1,7 @@
+'use strict';
+
 import React from 'react';
+import { Platform } from 'react-native';
 import { TabNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeScreen from '../screens/Home';
@@ -20,7 +23,7 @@ const RootTab = TabNavigator({
       tabBarIcon: ({ tintColor, focused }) => (
         <Ionicons
           name={focused ? 'ios-home' : 'ios-home-outline'}
-          size ={26}
+          size={26}
           style={{ color: tintColor }}
           />
       ),
@@ -69,7 +72,7 @@ const RootTab = TabNavigator({
   {
     initialRouteName: 'Home',
     tabBarPosition: 'bottom'
-      }
+  }
 );
 
 export default RootTab;
