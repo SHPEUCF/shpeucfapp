@@ -2,11 +2,15 @@ import React, { Component } from 'react';
 import {Text, View, StyleSheet, ScrollView } from 'react-native';
 
 import Header from '../src/components/Header';
+import PostList from '../src/components/PostList';
 
 export default class HomeScreen extends Component {
   render() {
     return (
-      <Header headerTitle={'Home'} />
+      <View>
+        <Header headerTitle={'Home'} />
+        <PostList />
+      </View>
     )
   }
 }
