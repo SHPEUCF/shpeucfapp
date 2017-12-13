@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
-import {Text, View, StyleSheet, Button }from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button } from 'react-native';
 import { StackNavigator } from 'react-navigation';
+
+// screens
 import JobBoard from '../screens/JobBoard';
 import Leaderboard from '../screens/Leaderboard';
 import Resources from '../screens/Resources';
