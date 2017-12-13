@@ -21,7 +21,7 @@ export default class More extends Component {
           />
           <Button
            onPress={() => navigate('Leaderboard')}
-           title="Leader Board"/>
+           title="Leaderboard"/>
           <Button
            onPress={() => navigate('Resources')}
            title="Resources"/>
@@ -30,7 +30,7 @@ export default class More extends Component {
             title="Check In"/>
           <Button
             onPress={() => navigate('About')}
-            title="About Us"/>
+            title="About"/>
       </View>
     )
   }
