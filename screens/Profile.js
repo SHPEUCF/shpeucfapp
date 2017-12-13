@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import {Text, View, StyleSheet }from 'react-native';
 
+import Header from '../src/components/Header';
+
 export default class ProfileScreen extends Component {
   render() {
     return (
-      <View style = {styles.container}>
-        <Text>Profile Screen</Text>
-      </View>
+      <Header headerTitle={'Profile'} />
     )
   }
 }
