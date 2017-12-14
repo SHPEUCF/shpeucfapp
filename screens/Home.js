@@ -7,7 +7,7 @@ import PostList from '../src/components/PostList';
 export default class HomeScreen extends Component {
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         <Header headerTitle={'Home'} />
         <PostList />
       </View>
@@ -17,14 +17,6 @@ export default class HomeScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#FDF2E9',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-  },
-  statusBarUnderlay: {
-    height: 24,
-    backgroundColor: 'rgba(0,0,0,0.2)',
-  },
+    backgroundColor: '#F8F8F8',
+  }
 });
