@@ -9,7 +9,7 @@ export default class PostList extends Component {
   state = { posts: [] };
 
   componentWillMount() {
-      axios.get('https://jsonplaceholder.typicode.com/posts')
+      axios.get('https://my.api.mockaroo.com/basic_posts.json?key=9a3fce50')
       .then(response => this.setState({ posts: response.data}));
   }
 

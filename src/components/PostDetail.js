@@ -3,15 +3,18 @@ import { Text, View, Image } from 'react-native';
 import Card from './Card';
 import CardSection from './CardSection';
 
-const PostDetail = (props) => {
+const PostDetail = ({ post }) => {
+  const { title, description, imageurl } = post;
+
   return (
     <Card>
       <CardSection>
         <View>
+          <Image source={{ uri: imageurl }} />
         </View>
         <View style={styles.headerContentStyle}>
-          <Text>{props.post.title}</Text>
-          <Text>{props.post.body}</Text>
+          <Text>{title}</Text>
+          <Text>{description}</Text>
         </View>
       </CardSection>
     </Card>
