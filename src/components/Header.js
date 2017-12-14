@@ -18,7 +18,7 @@ const styles = {
     backgroundColor: '#F8F8F8',
     justifyContent: 'center',
     alignItems: 'center',
-    height: 65,
+    height: 64,
     paddingTop: 15,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -28,7 +28,7 @@ const styles = {
 
   },
   textStyle: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '600',
   }
 };

@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Button } from 'react-native';
 import { StackNavigator } from 'react-navigation';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // screens
 import JobBoard from '../screens/JobBoard';
@@ -14,15 +15,17 @@ import CheckIn from '../screens/CheckIn';
 import About from '../screens/About';
 
 export default class More extends Component {
-  static navigationOptions = {
-    title: 'More',
-  };
+
   render() {
     const { navigate } = this.props.navigation;
+
     return (
+      <View style={{flex:1}}>
+
       <View style = {styles.container}>
          <Button
           onPress={() => navigate('JobBoard')}
+          raised
           title="Job Board"
           />
           <Button
@@ -37,7 +40,7 @@ export default class More extends Component {
           <Button
             onPress={() => navigate('About')}
             title="About"/>
-      </View>
+      </View></View>
     )
   }
 }
