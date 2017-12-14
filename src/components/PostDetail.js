@@ -5,7 +5,11 @@ import CardSection from './CardSection';
 
 const PostDetail = ({ post }) => {
   const { title, description, imageurl } = post;
-  const { postImageStyle,
+  const { postHeaderStyle,
+          postSourceStyle,
+          postSourceTextStyle,
+          postMenuStyle,
+          postImageStyle,
           postImageContainerStyle,
           postContentStyle,
           postTitleStyle
@@ -13,6 +17,17 @@ const PostDetail = ({ post }) => {
 
   return (
     <Card>
+      <CardSection>
+        <View style={postHeaderStyle}>
+          <View style={postSourceStyle}>
+            <Text style={postSourceTextStyle}>Source:</Text>
+            <Text>[SHPE UCF]</Text>
+          </View>
+          <View style={postMenuStyle}>
+            <Text>...</Text>
+          </View>
+        </View>
+      </CardSection>
       <CardSection>
         <Image
           style={postImageStyle}
@@ -29,25 +44,42 @@ const PostDetail = ({ post }) => {
 };
 
 const styles = {
-  postImageStyle: {
-    height: 150,
+  postHeaderStyle: {
     flex: 1,
-    width: null
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 5,
+    height: 45,
   },
-  postImageContainerStyle: {
-    justifyContent: 'center',
+  postSourceStyle: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    marginLeft: 10,
-    marginRight: 10,
+  },
+  postSourceTextStyle: {
+    fontSize: 12,
+    color: '#666',
+    paddingRight: 5,
+  },
+  postMenuStyle: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  postImageStyle: {
+    flex: 1,
+    height: 200,
+    width: null
   },
   postContentStyle: {
     flexDirection: 'column',
     justifyContent: 'space-around',
+    padding: 5,
   },
   postTitleStyle: {
     fontSize: 16,
     fontWeight: 'bold'
   }
-}
+};
 
 export default PostDetail;
