@@ -3,7 +3,7 @@ import {Text, View, StyleSheet, Button }from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
 export default class JobBoard extends Component {
-  
+
   render() {
     return (
       <View style = {styles.container}>
@@ -19,9 +19,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#D5DBDB',
     alignItems: 'center',
     justifyContent: 'center'
-  },
-  statusBarUnderlay: {
-    height: 24,
-    backgroundColor: 'rgba(0,0,0,0.2)',
   },
 });

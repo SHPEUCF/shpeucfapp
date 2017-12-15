@@ -15,12 +15,8 @@ export default class Leaderboard extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#D5DBDB',
+    backgroundColor: '#FFF',
     alignItems: 'center',
     justifyContent: 'center'
-  },
-  statusBarUnderlay: {
-    height: 24,
-    backgroundColor: 'rgba(0,0,0,0.2)',
   },
 });
