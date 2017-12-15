@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Text, View, StyleSheet, Linking }from 'react-native';
 
-import Button from '../src/components/Button';
+import { Button } from '../components/general';
 
 export default class ResourcesScreen extends Component {
   render() {

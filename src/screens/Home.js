@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {Text, View, StyleSheet, ScrollView } from 'react-native';
 
-import Header from '../src/components/Header';
-import PostList from '../src/components/PostList';
+import { Header } from '../components/general';
+import PostList from '../components/post/PostList';
 
 export default class HomeScreen extends Component {
   render() {
