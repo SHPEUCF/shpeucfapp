@@ -16,7 +16,7 @@ const StyledStatusBar = ({ backgroundColor, barStyle}) => (
 
 );
 
-const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 22 : StatusBar.currentHeight;
+const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 22 : null;
 
 const styles = StyleSheet.create({
   mycontainer: {
