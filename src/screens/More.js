@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Button } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import ButtonImage from '../src/components/ButtonWImage';
+import { ButtonImage } from '../components/general';
 
 // screens
 import JobBoard from '../screens/JobBoard';
@@ -41,8 +41,8 @@ export default class More extends Component {
           text={'About Us'}backgroundColor={'rgba(255,215,0,0.15)'}
           image={require('../images/ic_trending_up_black.png')}/>
       </View>
-    )
-  }
+    );
+  };
 }
 const styles = StyleSheet.create({
   container: {

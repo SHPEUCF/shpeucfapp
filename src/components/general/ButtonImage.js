@@ -55,4 +55,4 @@ const ButtonImage = ({ onPress, text, backgroundColor, image }) => {
 </View>
 )
 };
-export default ButtonImage;
+export { ButtonImage };

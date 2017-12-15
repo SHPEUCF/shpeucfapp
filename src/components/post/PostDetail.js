@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, Image } from 'react-native';
-import Card from './Card';
-import CardSection from './CardSection';
+import { Card, CardSection } from '../general';
 
 const PostDetail = ({ post }) => {
   const { title, description, imageurl } = post;

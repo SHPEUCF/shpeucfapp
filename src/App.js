@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import { Platform, StatusBar, StyleSheet, View, Text } from 'react-native';
 import RootTab from './navigation/RootTab';
-import StyledStatusBar from './src/components/MyStatusBar';
+import { StyledStatusBar } from './components/general';
 
 export default class App extends Component {
   render() {
