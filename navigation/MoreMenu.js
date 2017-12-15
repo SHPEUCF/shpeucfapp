@@ -16,6 +16,7 @@ const StackNav = StackNavigator({
       headerBackTitle:'Back',
       headerTitle: 'More Menu',
       headerStyle:{
+        backgroundColor: '#F8F8F8',
         shadowColor: '#000',
         shadowOffset:{ width: 0, height: 2 },
         shadowOpacity: 0.2,
@@ -28,6 +29,7 @@ const StackNav = StackNavigator({
     navigationOptions: {
       headerTitle: 'Job Board',
       headerStyle:{
+        backgroundColor: '#F8F8F8',
         shadowColor: '#000',
         shadowOffset:{ width: 0, height: 2 },
         shadowOpacity: 0.2,
@@ -39,10 +41,12 @@ const StackNav = StackNavigator({
     screen: Leaderboard,
     navigationOptions: {
       headerTitle: 'Leaderboard',
-      headerStyle:{ shadowColor: '#000',
-      shadowOffset:{ width: 0, height: 2 },
-      shadowOpacity: 0.2,
-      elevation: 2,
+      headerStyle: {
+        backgroundColor: '#F8F8F8',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        elevation: 2,
       },
     },
   },
@@ -50,27 +54,38 @@ const StackNav = StackNavigator({
     screen: Resources,
     navigationOptions: {
       headerTitle: 'Resources',
+      headerStyle: {
+        backgroundColor: '#F8F8F8',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        elevation: 2,
+      },
     },
   },
   CheckIn:{
     screen: CheckIn,
     navigationOptions: {
       headerTitle: 'Check In',
-      headerStyle:{ shadowColor: '#000',
-      shadowOffset:{ width: 0, height: 2 },
-      shadowOpacity: 0.2,
-      elevation: 2,
+      headerStyle: {
+        backgroundColor: '#F8F8F8',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        elevation: 2,
       },
     },
   },
   About:{
     screen: About,
     navigationOptions: {
-      headerTitle: 'About Us',
-      headerStyle:{ shadowColor: '#000',
-      shadowOffset:{ width: 0, height: 2 },
-      shadowOpacity: 0.2,
-      elevation: 2,
+      headerTitle: 'About',
+      headerStyle: {
+        backgroundColor: '#F8F8F8',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        elevation: 2,
       },
     },
   },
