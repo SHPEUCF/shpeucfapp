@@ -8,7 +8,7 @@ export default class PostList extends Component {
   state = { posts: [] };
 
   componentWillMount() {
-      axios.get('https://my.api.mockaroo.com/basic_posts.json?key=9a3fce50')
+      axios.get('https://api.myjson.com/bins/13curn')
       .then(response => this.setState({ posts: response.data}));
   }
 
