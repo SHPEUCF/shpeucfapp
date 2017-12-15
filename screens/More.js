@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Button } from 'react-native';
 import { StackNavigator } from 'react-navigation';
+import ButtonImage from '../src/components/ButtonWImage';
 
 // screens
 import JobBoard from '../screens/JobBoard';
@@ -20,22 +21,25 @@ export default class More extends Component {
 
     return (
       <View style = {styles.container}>
-       <Button
-          onPress={() => navigate('JobBoard')}
-          raised
-          title="Job Board"/>
-       <Button
-         onPress={() => navigate('Leaderboard')}
-         title="Leaderboard"/>
-       <Button
-         onPress={() => navigate('Resources')}
-         title="Resources"/>
-       <Button
-          onPress={() => navigate('CheckIn')}
-          title="Check In"/>
-       <Button
-          onPress={() => navigate('About')}
-          title="About"/>
+        <ButtonImage onPress={() => navigate('JobBoard')}
+          text={'Job Board'} backgroundColor={'rgba(255,215,0,0.15)'}
+          image={require('../images/ic_trending_up_black.png')}/>
+
+        <ButtonImage onPress={() => navigate('Leaderboard')}
+          text={'Leaderboard'}backgroundColor={'rgba(255,215,0,0.15)'}
+          image={require('../images/ic_equalizer.png')}/>
+
+        <ButtonImage onPress={() => navigate('Resources')}
+          text={'Resources'}backgroundColor={'rgba(255,215,0,0.15)'}
+          image={require('../images/ic_folder.png')}/>
+
+        <ButtonImage onPress={() => navigate('CheckIn')}
+          text={'Check In'}backgroundColor={'rgba(255,215,0,0.15)'}
+          image={require('../images/ic_trending_up_black.png')}/>
+
+        <ButtonImage onPress={() => navigate('About')}
+          text={'About Us'}backgroundColor={'rgba(255,215,0,0.15)'}
+          image={require('../images/ic_trending_up_black.png')}/>
       </View>
     )
   }
