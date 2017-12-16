@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Text, View, StyleSheet, ScrollView } from 'react-native';
 
 import { Header } from '../components/general';
-import PostList from '../components/post/PostList';
+import { PostList } from '../components/post';
 
 export default class HomeScreen extends Component {
   render() {

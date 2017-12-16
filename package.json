@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
+    "firebase": "^4.8.0",
     "react": "16.0.0",
     "react-native": "0.51.0",
     "react-native-scrollable-tab-view": "^0.8.0",

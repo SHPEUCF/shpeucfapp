@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { ScrollView } from 'react-native';
 import axios from 'axios';
 
-import PostDetail from './PostDetail';
+import { PostDetail } from './PostDetail';
 
-export default class PostList extends Component {
+class PostList extends Component {
   state = { posts: [] };
 
   componentWillMount() {
@@ -27,3 +27,5 @@ export default class PostList extends Component {
     );
   }
 }
+
+export { PostList };
