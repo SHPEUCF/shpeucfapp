@@ -13,11 +13,7 @@ class LoginForm extends Component {
 
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(this.onLoginSucces.bind(this))
-      .catch(() => {
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-          .then(this.onLoginSucces.bind(this))
-          .catch(this.onLoginFail.bind(this));
-      });
+      .catch((error) => this.onLoginFail(error));
   }
 
   onLoginSucces() {
@@ -28,11 +24,26 @@ class LoginForm extends Component {
     });
   }
 
-  onLoginFail() {
+  onLoginFail(error) {
+    const errorCode = error.code;
+    let errorMessage;
+
+    switch (errorCode) {
+      case 'auth/wrong-password':
+        errorMessage = 'Your credentials do not match our records';
+        break;
+      case 'auth/invalid-email':
+        errorMessage = 'Enter a valid email';
+        break;
+      default:
+      errorMessage = error.message;
+    }
+
     this.setState({
-      error: 'Authentication failed, try again!',
+      error: errorMessage,
       loading: false
     });
+    console.log(error);
   }
 
   renderButton() {

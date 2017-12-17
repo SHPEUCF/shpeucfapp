@@ -3,7 +3,7 @@ import { Platform, StatusBar, StyleSheet, View, Text, TouchableOpacity } from 'r
 import firebase from 'firebase';
 import RootTab from './navigation/RootTab';
 import { StyledStatusBar, Spinner } from './components/general';
-import { LoginForm } from './components/auth';
+import { LoginForm, RegistrationForm } from './components/auth';
 
 export default class App extends Component {
   state = { loggedIn: null };
@@ -25,6 +25,29 @@ export default class App extends Component {
         this.setState({ loggedIn: false });
       }
     });
+  }
+
+  createAccount(e) {
+
+    return (
+      <View style={styles.loginViewStyle}>
+        <View style={styles.logoContainerStyle}>
+          <Text style={styles.textLogoStyle}>
+            SHPE UCF
+          </Text>
+        </View>
+        <View style={styles.loginFormContainerStyle}>
+          <RegistrationForm />
+        </View>
+        <View style={styles.createAccountContainerStyle}>
+          <TouchableOpacity>
+            <Text style={styles.createAccountTextStyle}>
+              -> back to Log In
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
   }
 
   renderContent() {
@@ -83,9 +106,6 @@ const styles = StyleSheet.create({
   },
   contentStyle: {
     flex: 1,
-  },
-  logOutButtonStyle: {
-    flex: 0.1,
   },
   spinnerStyle: {
     flex: 1,

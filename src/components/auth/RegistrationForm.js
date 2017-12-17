@@ -1,66 +1,159 @@
 import React, { Component} from 'react';
-import { Text } from 'react-native';
-import { Button, Card, CardSection, Input } from '../general';
+import { View, Text, } from 'react-native';
 import firebase from 'firebase';
+import { Button, Card, CardSection, Input, Spinner } from '../general';
 
 class RegistrationForm extends Component {
-  state = { email: '', password: '', error: '' }
+  state = {
+    email: '',
+    password: '',
+    error: '',
+    loading: false
+  };
 
   onButtonPress() {
-    const { email, password } = this.state;
+    const { email , password } = this.state;
 
-    this.setState({ error: '' });
+    this.setState({ error: '', loading: true});
 
-    firebase.auth().signInWithEmailAndPassword(email, password)
-    .catch(() => {
-      firebase.auth().createUserWithEmailAndPassword(email, password)
-      .catch(() => {
-        this.setState({ error: 'Authentication Failed'})
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then(this.onRegisterSucces.bind(this))
+      .catch((error) => {
+        this.onRegisterFail(error);
       });
+  }
+
+  onRegisterSucces() {
+    this.setState({
+      email: '',
+      password: '',
+      loading: false
     });
+  }
+
+  onRegisterFail(error) {
+    const errorCode = error.code;
+    let errorMessage;
+
+    switch (errorCode) {
+      case 'auth/weak-password':
+        errorMessage = 'The password is too weak';
+        break;
+      case 'auth/invalid-email':
+        errorMessage = 'Enter a valid email';
+        break;
+      default:
+      errorMessage = error.message;
+    }
+    this.setState({
+      error: errorMessage,
+      loading: false
+    });
+    console.log(error);
+  }
+
+  renderButton() {
+    if (this.state.loading) {
+      return <Spinner size="small" />
+    };
+
+    return (
+      <Button
+        onPress={this.onButtonPress.bind(this)}>
+        Register
+      </Button>
+    );
   }
 
   render() {
     return (
-      <Card>
-        <CardSection>
-          <Input
-            label="Email"
-            placeholder="user@gmail.com"
-            value={this.state.email}
-            onChangeText={email => this.setState({ email })}
-            />
-        </CardSection>
+      <View style={styles.formContainerStyle}>
 
-        <CardSection>
-          <Input
-            label="Password"
-            placeholder="password"
-            value={this.state.password}
-            onChangeText={password => this.setState({ password })}
-            secureTextEntry
-            />
-        </CardSection>
+        <View style={styles.headerStyle}>
+          <Text style={styles.headerTextStyle}>Welcome! Create account below</Text>
+        </View>
 
-        <Text style={styles.errorTextStyle}>
-          {this.state.error}
-        </Text>
+        <View style={styles.formFieldsContainer}>
+          <View style={styles.formField}>
+            <Input
+              label="Email"
+              placeholder="user@knights.ucf.com"
+              value={this.state.email}
+              onChangeText={email => this.setState({ email })}
+              />
+          </View>
 
-        <CardSection>
-          <Button onPress={this.onButtonPress.bind(this)}>
-            Login
-          </Button>
-        </CardSection>
-      </Card>
+          <View style={styles.formField}>
+            <Input
+              secureTextEntry
+              label="Password"
+              placeholder="password"
+              value={this.state.password}
+              onChangeText={password => this.setState({ password })}
+              />
+          </View>
+        </View>
+
+        <View>
+          <Text style={styles.errorTextStyle}>
+            {this.state.error}
+          </Text>
+        </View>
+
+        <View style={styles.formButton}>
+          {this.renderButton()}
+        </View>
+
+      </View>
     );
   }
 }
 
 const styles = {
+  formContainerStyle: {
+    marginLeft: 30,
+    marginRight: 30,
+  },
+  headerStyle: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 5,
+  },
+  headerTextStyle: {
+    fontSize: 14,
+  },
+  formFieldsContainer: {
+    borderWidth: 1,
+    borderRadius: 2,
+    borderColor: '#ddd',
+    borderBottomWidth: 0,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    marginBottom: 5,
+  },
+  formField: {
+    borderBottomWidth: 1,
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    borderColor: '#ddd',
+    position: 'relative',
+  },
   errorTextStyle: {
-    fontSize: 20,
+    fontSize: 14,
     alignSelf: 'center',
     color: 'red',
+    paddingTop: 10,
+  },
+  formButton: {
+    flexDirection: 'row',
+    marginRight: 70,
+    marginLeft: 70,
+    marginTop: 10,
+    marginBottom: 10
   },
 };
 
