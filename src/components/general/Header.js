@@ -7,13 +7,13 @@ const Header = (props) => {
 
   return (
     <View style={viewStyle}>
-      <View style={styles.leftChild}>
+      <View style={styles.headerLeftChild}>
         {props.backButton}
       </View>
       <View style={styles.headerTitleContainer}>
         <Text style={textStyle}>{props.headerTitle}</Text>
       </View>
-      <View style={styles.logoutButtonContainer}>
+      <View style={styles.headerRightChild}>
         <TouchableOpacity onPress={() => firebase.auth().signOut()}>
           <Text style={styles.logoutTextStyle}>
             Log Out
@@ -29,6 +29,7 @@ const styles = {
     height: 64,
     paddingTop: 15,
     shadowColor: '#000',
+    backgroundColor: '#FFF',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     elevation: 2,
@@ -47,17 +48,17 @@ const styles = {
     position: 'absolute',
     textAlign:'center',
   },
-  logoutButtonContainer: {
+  headerRightChild: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-end',
     paddingRight: 10,
   },
   logoutTextStyle: {
-    fontSize: 14,
+    fontSize: 15,
     color: '#007AFF'
   },
-  leftChild:{
+  headerLeftChild:{
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',

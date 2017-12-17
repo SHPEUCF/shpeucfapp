@@ -13,7 +13,7 @@ export default class JobBoard extends Component {
           headerTitle={'Job Board'}
           backButton={
           <TouchableOpacity onPress={() => goBack()} >
-            <Text style={styles.backTextStyle}> Back </Text>
+            <Text style={styles.backTextStyle}>{"< Back"}</Text>
           </TouchableOpacity>}/>
 
 
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start'
   },
   backTextStyle: {
-    fontSize: 14,
+    fontSize: 15,
     color: '#007AFF'
   },
 

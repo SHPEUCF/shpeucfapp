@@ -6,20 +6,53 @@ import { Header } from '../components/general';
 export default class ProfileScreen extends Component {
   render() {
     return (
-      <Header headerTitle={'Profile'} />
+      <View>
+        <Header headerTitle={'Profile'} />
+
+        <View style={styles.containerStyle}>
+
+          <View style={styles.itemsContainerStyle}>
+
+            <View style={styles.itemLabelStyle}>
+              <Text style={styles.itemLabelText}>First Name:</Text>
+            </View>
+            <View style={styles.itemValueStyle}>
+              <Text style={styles.itemValueTex}>John Doe</Text>
+            </View>
+
+          </View>
+
+        </View>
+      </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  containerStyle: {
     flex: 1,
-    backgroundColor: '#D5DBDB',
-    alignItems: 'center',
-    justifyContent: 'center'
   },
-  statusBarUnderlay: {
-    height: 24,
-    backgroundColor: 'rgba(0,0,0,0.2)',
+  itemsContainerStyle: {
+    flexDirection: 'row',
+    backgroundColor: 'blue',
+    marginTop: 20,
+    padding: 30,
+  },
+  itemLabelStyle: {
+    flex: 2,
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+  },
+  itemLabelText: {
+    fontSize: 14,
+    fontWeight: 'bold'
+  },
+  itemValueStyle: {
+    flex: 5,
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+  },
+  itemValueTex: {
+    fontSize: 14,
   },
 });

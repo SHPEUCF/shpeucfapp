@@ -13,7 +13,7 @@ export default class ResourcesScreen extends Component {
           headerTitle={'Resources'}
           backButton={
           <TouchableOpacity onPress={() => goBack()} >
-            <Text style={styles.backTextStyle}> Back </Text>
+            <Text style={styles.backTextStyle}>{"< Back"}</Text>
           </TouchableOpacity>}/>
 
         <View style={styles.itemBox}>
@@ -81,7 +81,7 @@ const styles = {
     paddingTop: 5,
   },
   backTextStyle: {
-    fontSize: 14,
+    fontSize: 15,
     color: '#007AFF'
   },
 };
