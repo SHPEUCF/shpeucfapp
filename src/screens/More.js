@@ -4,8 +4,7 @@ import {
   View,
   StyleSheet,
   Button } from 'react-native';
-import { StackNavigator } from 'react-navigation';
-import { ButtonImage } from '../components/general';
+import { ButtonImage, Header } from '../components/general';
 
 // screens
 import JobBoard from '../screens/JobBoard';
@@ -21,6 +20,7 @@ export default class More extends Component {
 
     return (
       <View style = {styles.container}>
+        <Header headerTitle={'More Menu'}/>
         <ButtonImage onPress={() => navigate('JobBoard')}
           text={'Job Board'} backgroundColor={'rgba(255,215,0,0.15)'}
           image={require('../images/ic_trending_up_black.png')}/>
@@ -49,6 +49,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'flex-start'
   }
 });

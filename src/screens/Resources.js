@@ -1,12 +1,21 @@
 import React, { Component } from 'react';
-import {Text, View, StyleSheet, Linking }from 'react-native';
+import {Text, View, StyleSheet, Linking, TouchableOpacity }from 'react-native';
 
-import { Button } from '../components/general';
+import { Button, Header } from '../components/general';
 
 export default class ResourcesScreen extends Component {
   render() {
+    const { navigate, goBack } = this.props.navigation;
     return (
       <View style={styles.container}>
+
+        <Header
+          headerTitle={'Resources'}
+          backButton={
+          <TouchableOpacity onPress={() => goBack()} >
+            <Text style={styles.backTextStyle}> Back </Text>
+          </TouchableOpacity>}/>
+
         <View style={styles.itemBox}>
           <View style={styles.itemDescription}>
             <Text style={styles.itemDescriptionText}>
@@ -70,5 +79,9 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'flex-end',
     paddingTop: 5,
+  },
+  backTextStyle: {
+    fontSize: 14,
+    color: '#007AFF'
   },
 };

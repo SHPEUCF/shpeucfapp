@@ -7,6 +7,9 @@ const Header = (props) => {
 
   return (
     <View style={viewStyle}>
+      <View style={styles.leftChild}>
+        {props.backButton}
+      </View>
       <View style={styles.headerTitleContainer}>
         <Text style={textStyle}>{props.headerTitle}</Text>
       </View>
@@ -23,7 +26,6 @@ const Header = (props) => {
 
 const styles = {
   viewStyle: {
-    backgroundColor: '#F8F8F8',
     height: 64,
     paddingTop: 15,
     shadowColor: '#000',
@@ -35,7 +37,7 @@ const styles = {
 
   },
   headerTitleContainer: {
-    flex: 5,
+    flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -43,17 +45,23 @@ const styles = {
     fontSize: 17,
     fontWeight: '600',
     position: 'absolute',
-    left: 150,
+    textAlign:'center',
   },
   logoutButtonContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     paddingRight: 10,
   },
   logoutTextStyle: {
     fontSize: 14,
     color: '#007AFF'
+  },
+  leftChild:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    paddingLeft: 10,
   }
 };
 

@@ -1,12 +1,24 @@
 import React, { Component } from 'react';
-import {Text, View, StyleSheet }from 'react-native';
-import { StackNavigator } from 'react-navigation';
+import {Text, View, StyleSheet, TouchableOpacity, Dimensions }from 'react-native';
+import { Header } from '../components/general';
 
 export default class Leaderboard extends Component {
   render() {
+    const { navigate, goBack } = this.props.navigation;
+
     return (
-      <View style = {styles.container}>
-        <Text>Leaderboard</Text>
+      <View style={styles.container}>
+        <Header
+          headerTitle={'Leaderboard'}
+          backButton={
+          <TouchableOpacity onPress={() => goBack()} >
+            <Text style={styles.backTextStyle}> Back </Text>
+          </TouchableOpacity>}/>
+
+
+        <Text style={{marginTop: Dimensions.get('window').height/3}}>Leaderboard</Text>
+
+
       </View>
     )
   }
@@ -15,8 +27,12 @@ export default class Leaderboard extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'flex-start'
   },
+  backTextStyle: {
+    fontSize: 14,
+    color: '#007AFF'
+  },
+
 });
