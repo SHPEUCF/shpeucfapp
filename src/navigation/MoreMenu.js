@@ -23,35 +23,30 @@ const StackNav = StackNavigator({
   JobBoard:{
     screen: JobBoard,
     navigationOptions: {
-      tabBarVisible:false,
       header:null,
     },
   },
   Leaderboard:{
     screen: Leaderboard,
     navigationOptions: {
-      tabBarVisible:false,
       header: null,
     },
   },
   Resources:{
     screen: Resources,
     navigationOptions: {
-      tabBarVisible:false,
       header:null
     },
   },
   CheckIn:{
     screen: CheckIn,
     navigationOptions: {
-      tabBarVisible:false,
       header: null
     },
   },
   About:{
     screen: About,
     navigationOptions: {
-      tabBarVisible:false,
       header:null
     },
   },
