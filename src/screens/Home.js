@@ -4,7 +4,7 @@ import {Text, View, StyleSheet, ScrollView } from 'react-native';
 import { Header } from '../components/general';
 import { PostList } from '../components/post';
 
-export default class HomeScreen extends Component {
+class Home extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -20,3 +20,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F8F8',
   }
 });
+
+export { Home };

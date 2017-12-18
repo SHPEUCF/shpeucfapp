@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, Dimensions }from 'react-native';
 import { Header } from '../components/general';
 
-export default class JobBoard extends Component {
+class JobBoard extends Component {
 
   render() {
     const { navigate, goBack } = this.props.navigation;
@@ -15,11 +15,7 @@ export default class JobBoard extends Component {
           <TouchableOpacity onPress={() => goBack()} >
             <Text style={styles.backTextStyle}>{"< Back"}</Text>
           </TouchableOpacity>}/>
-
-
         <Text style={{marginTop: Dimensions.get('window').height/3}}>Job Board</Text>
-
-
       </View>
     )
   }
@@ -35,5 +31,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#007AFF'
   },
-
 });
+
+export { JobBoard };

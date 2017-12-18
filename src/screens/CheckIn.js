@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, Dimensions }from 'react-native';
 import { Header } from '../components/general';
 
-export default class CheckIn extends Component {
+class CheckIn extends Component {
   render() {
     const { navigate, goBack } = this.props.navigation;
 
@@ -36,3 +36,5 @@ const styles = StyleSheet.create({
   },
 
 });
+
+export { CheckIn };

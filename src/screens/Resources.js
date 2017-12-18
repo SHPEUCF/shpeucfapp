@@ -3,7 +3,7 @@ import {Text, View, StyleSheet, Linking, TouchableOpacity }from 'react-native';
 
 import { Button, Header } from '../components/general';
 
-export default class ResourcesScreen extends Component {
+class Resources extends Component {
   render() {
     const { navigate, goBack } = this.props.navigation;
     return (
@@ -85,3 +85,5 @@ const styles = {
     color: '#007AFF'
   },
 };
+
+export { Resources };

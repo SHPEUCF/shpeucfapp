@@ -3,7 +3,7 @@ import {Text, View, StyleSheet }from 'react-native';
 
 import { Header } from '../components/general';
 
-export default class ProfileScreen extends Component {
+class Profile extends Component {
   render() {
     return (
       <View>
@@ -77,3 +77,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   }
 });
+
+export { Profile };

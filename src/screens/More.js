@@ -7,13 +7,14 @@ import {
 import { ButtonImage, Header } from '../components/general';
 
 // screens
-import JobBoard from '../screens/JobBoard';
-import Leaderboard from '../screens/Leaderboard';
-import Resources from '../screens/Resources';
-import CheckIn from '../screens/CheckIn';
-import About from '../screens/About';
+import {
+  JobBoard,
+  Leaderboard,
+  Resources,
+  CheckIn,
+  About } from './';
 
-export default class More extends Component {
+class More extends Component {
 
   render() {
     const { navigate } = this.props.navigation;
@@ -52,3 +53,5 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start'
   }
 });
+
+export { More };
