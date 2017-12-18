@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Image } from 'react-native';
+import { Text, View, Image, StyleSheet } from 'react-native';
 import { Card, CardSection } from '../general';
 
 const PostDetail = ({ post }) => {
@@ -42,7 +42,7 @@ const PostDetail = ({ post }) => {
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   postHeaderStyle: {
     flex: 1,
     flexDirection: 'row',
@@ -79,6 +79,6 @@ const styles = {
     fontSize: 16,
     fontWeight: 'bold'
   }
-};
+});
 
 export { PostDetail };

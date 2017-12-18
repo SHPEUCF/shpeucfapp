@@ -23,23 +23,23 @@ export default class More extends Component {
         <Header headerTitle={'More Menu'}/>
         <ButtonImage onPress={() => navigate('JobBoard')}
           text={'Job Board'} backgroundColor={'rgba(255,215,0,0.15)'}
-          image={require('../images/ic_trending_up_black.png')}/>
+          image={require('../assets/images/ic_trending_up_black.png')}/>
 
         <ButtonImage onPress={() => navigate('Leaderboard')}
           text={'Leaderboard'}backgroundColor={'rgba(255,215,0,0.15)'}
-          image={require('../images/ic_equalizer.png')}/>
+          image={require('../assets/images/ic_equalizer.png')}/>
 
         <ButtonImage onPress={() => navigate('Resources')}
           text={'Resources'}backgroundColor={'rgba(255,215,0,0.15)'}
-          image={require('../images/ic_folder.png')}/>
+          image={require('../assets/images/ic_folder.png')}/>
 
         <ButtonImage onPress={() => navigate('CheckIn')}
           text={'Check In'}backgroundColor={'rgba(255,215,0,0.15)'}
-          image={require('../images/ic_trending_up_black.png')}/>
+          image={require('../assets/images/ic_trending_up_black.png')}/>
 
         <ButtonImage onPress={() => navigate('About')}
           text={'About Us'}backgroundColor={'rgba(255,215,0,0.15)'}
-          image={require('../images/ic_trending_up_black.png')}/>
+          image={require('../assets/images/ic_trending_up_black.png')}/>
       </View>
     );
   };

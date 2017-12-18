@@ -11,15 +11,26 @@ export default class ProfileScreen extends Component {
 
         <View style={styles.containerStyle}>
 
-          <View style={styles.itemsContainerStyle}>
+          <View style={styles.personaInfoHeader}>
+            <Text style={styles.sectionHeaderText}>
+              Personal Information
+            </Text>
+          </View>
 
+          <View style={styles.itemsContainerStyle}>
             <View style={styles.itemLabelStyle}>
               <Text style={styles.itemLabelText}>First Name:</Text>
             </View>
             <View style={styles.itemValueStyle}>
-              <Text style={styles.itemValueTex}>John Doe</Text>
+              <Text style={styles.itemValueTex}>John</Text>
             </View>
 
+            <View style={styles.itemLabelStyle}>
+              <Text style={styles.itemLabelText}>Last Name:</Text>
+            </View>
+            <View style={styles.itemValueStyle}>
+              <Text style={styles.itemValueTex}>Doe</Text>
+            </View>
           </View>
 
         </View>
@@ -33,26 +44,36 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   itemsContainerStyle: {
+    flex: 1,
     flexDirection: 'row',
-    backgroundColor: 'blue',
-    marginTop: 20,
-    padding: 30,
+    height: 40,
+    margin: 20,
   },
   itemLabelStyle: {
-    flex: 2,
+    flex: 3,
     alignItems: 'flex-start',
     justifyContent: 'center',
+  },
+  itemValueStyle: {
+    flex: 2,
+    alignItems: 'flex-start',
+    justifyContent: 'center'
   },
   itemLabelText: {
     fontSize: 14,
-    fontWeight: 'bold'
-  },
-  itemValueStyle: {
-    flex: 5,
-    alignItems: 'flex-start',
-    justifyContent: 'center',
+    fontWeight: 'bold',
   },
   itemValueTex: {
     fontSize: 14,
   },
+  personaInfoHeader: {
+    flex: 1,
+    marginTop: 20,
+    marginLeft: 20,
+    marginBottom: 20,
+  },
+  sectionHeaderText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  }
 });
