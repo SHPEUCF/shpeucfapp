@@ -1,81 +1,153 @@
 import React, { Component } from 'react';
-import {Text, View, StyleSheet }from 'react-native';
+import {Text, View, StyleSheet, Image, ScrollView, TouchableOpacity }from 'react-native';
 
 import { Header } from '../components/general';
 
 class Profile extends Component {
   render() {
+ //When edit is pressed create text fields that change props this.text
+    //this.text
     return (
+
       <View>
-        <Header headerTitle={'Profile'} />
+        <Header headerTitle={'Profile'} backButton={  <TouchableOpacity onPress={() => edit()} >
+          <Text style={styles.editTextStyle}>{"Edit"}</Text>
+          </TouchableOpacity>}/>
+        <ScrollView contentContainerStyle={styles.contentContainer}>
 
-        <View style={styles.containerStyle}>
 
-          <View style={styles.personaInfoHeader}>
-            <Text style={styles.sectionHeaderText}>
-              Personal Information
-            </Text>
-          </View>
 
-          <View style={styles.itemsContainerStyle}>
-            <View style={styles.itemLabelStyle}>
-              <Text style={styles.itemLabelText}>First Name:</Text>
-            </View>
-            <View style={styles.itemValueStyle}>
-              <Text style={styles.itemValueTex}>John</Text>
-            </View>
 
-            <View style={styles.itemLabelStyle}>
-              <Text style={styles.itemLabelText}>Last Name:</Text>
-            </View>
-            <View style={styles.itemValueStyle}>
-              <Text style={styles.itemValueTex}>Doe</Text>
-            </View>
-          </View>
-
+        <View style={styles.containerStyle1}>
+          <Image style={{height:100, width:100, margin: 10}}
+           source={{uri:'https://78.media.tumblr.com/98ab9195d736eae9661faef27cc33504/tumblr_n7s5qcoovN1qea4hso1_1280.png'}}/>
+         <View style={{marginLeft:70, justifyContent: 'center', flex: 3}}>
+        <Text style={styles.tagline}>"Bitcoin or no coin"</Text>
         </View>
       </View>
+
+         <View style={styles.containerStyle2}>
+
+          <View style={styles.itemsContainerStyle1}>
+            <View style={styles.itemLabelStyle}>
+              <Text style={styles.itemLabelText}>Name:</Text>
+            </View>
+            <View style={styles.itemValueStyle}>
+              <Text style={styles.itemValueText}>John Doe</Text>
+            </View>
+          </View>
+
+
+          <View style={styles.itemsContainerStyle2}>
+            <View style={styles.itemLabelStyle}>
+              <Text style={styles.itemLabelText}>Email:</Text>
+            </View>
+            <View style={styles.itemValueStyle}>
+              <Text style={styles.itemValueText}>@knights.ucf.edu</Text>
+            </View>
+          </View>
+
+          <View style={styles.itemsContainerStyle3}>
+            <View style={styles.itemLabelStyle}>
+              <Text style={styles.itemLabelText}>Major:</Text>
+            </View>
+            <View style={styles.itemValueStyle}>
+              <Text style={styles.itemValueText}>Computer Engineering</Text>
+            </View>
+          </View>
+
+          <View style={styles.itemsContainerStyle4}>
+            <View style={styles.itemLabelStyle}>
+              <Text style={styles.itemLabelText}>Membership:</Text>
+            </View>
+            <View style={styles.itemValueStyle2}>
+              <Text style={styles.itemValueText}>Active</Text>
+            </View>
+            <View style={styles.itemValueStyle2}>
+               <Text style={styles.itemValueText}>Expires: Date</Text>
+            </View>
+          </View>
+        </View>
+
+
+
+        </ScrollView>
+      </View>
+
     )
   }
 }
 
 const styles = StyleSheet.create({
-  containerStyle: {
-    flex: 1,
+  containerStyle1: {
+  flex: 1,
+  flexDirection: 'row',
   },
-  itemsContainerStyle: {
-    flex: 1,
+
+  containerStyle2: {
+  flex: 1,
+
+  },
+  tagline:{
+    fontSize: 15,
+    fontWeight: '500'
+  },
+  itemsContainerStyle1: {
     flexDirection: 'row',
-    height: 40,
-    margin: 20,
+    backgroundColor: 'green',
+    marginTop: 10,
+    padding: 20,
+  },
+  itemsContainerStyle2: {
+    flexDirection: 'row',
+    backgroundColor: 'blue',
+    marginTop: 10,
+    padding: 20,
+  },
+  itemsContainerStyle3: {
+    flexDirection: 'row',
+    backgroundColor: 'red',
+    marginTop: 10,
+    padding: 20,
+  },
+  itemsContainerStyle4: {
+    flexDirection: 'row',
+    backgroundColor: 'orange',
+    marginTop: 10,
+    padding: 20,
   },
   itemLabelStyle: {
-    flex: 3,
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-  },
-  itemValueStyle: {
-    flex: 2,
-    alignItems: 'flex-start',
+    flex: 1,
     justifyContent: 'center'
   },
   itemLabelText: {
-    fontSize: 14,
-    fontWeight: 'bold',
+    fontSize: 15,
+    fontWeight: 'bold'
   },
-  itemValueTex: {
-    fontSize: 14,
+
+
+  itemValueStyle: {
+    flex: 4,
+    justifyContent: 'center',
+    alignItems: 'flex-start'
   },
-  personaInfoHeader: {
+  itemValueStyle2: {
     flex: 1,
-    marginTop: 20,
-    marginLeft: 20,
-    marginBottom: 20,
+    justifyContent: 'center',
   },
-  sectionHeaderText: {
-    fontSize: 16,
-    fontWeight: 'bold',
+  itemValueText: {
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  editTextStyle: {
+    fontSize: 15,
+    color: '#007AFF'
+  },
+
+
+  contentContainer: {
+    paddingVertical: 10
   }
 });
 
-export { Profile };
+export {Profile};

@@ -1,40 +1,33 @@
+
 import React, { Component } from 'react';
 import { Text, View, Image, StyleSheet } from 'react-native';
 import { Card, CardSection } from '../general';
 
 const PostDetail = ({ post }) => {
   const { title, description, imageurl } = post;
-  const { postHeaderStyle,
-          postSourceStyle,
-          postSourceTextStyle,
-          postMenuStyle,
-          postImageStyle,
-          postImageContainerStyle,
-          postContentStyle,
-          postTitleStyle
-           } = styles;
+
 
   return (
     <Card>
       <CardSection>
-        <View style={postHeaderStyle}>
-          <View style={postSourceStyle}>
-            <Text style={postSourceTextStyle}>Source:</Text>
+        <View style={styles.postHeaderStyle}>
+          <View style={styles.postSourceStyle}>
+            <Text style={styles.postSourceTextStyle}>Source:</Text>
             <Text>[SHPE UCF]</Text>
           </View>
-          <View style={postMenuStyle}>
+          <View style={styles.postMenuStyle}>
             <Text>...</Text>
           </View>
         </View>
       </CardSection>
       <CardSection>
         <Image
-          style={postImageStyle}
+          style={styles.postImageStyle}
           source={{ uri: imageurl }} />
       </CardSection>
       <CardSection>
-        <View style={postContentStyle}>
-          <Text style={postTitleStyle}>{title}</Text>
+        <View style={styles.postContentStyle}>
+          <Text style={styles.postTitleStyle}>{title}</Text>
           <Text>{description}</Text>
         </View>
       </CardSection>
