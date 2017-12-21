@@ -9,7 +9,7 @@ class Profile extends Component {
     //this.text
     return (
 
-      <View>
+      <View style={{ flex: 1 }}>
         <Header headerTitle={'Profile'} backButton={  <TouchableOpacity onPress={() => edit()} >
           <Text style={styles.editTextStyle}>{"Edit"}</Text>
           </TouchableOpacity>}/>
