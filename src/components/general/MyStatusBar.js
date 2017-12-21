@@ -1,5 +1,8 @@
 import React,{ Component } from 'react';
-import { StatusBar, Platform, View, StyleSheet } from 'react-native';
+import { Dimensions, StatusBar, Platform, View, StyleSheet } from 'react-native';
+
+const X_WIDTH = 375;
+const X_HEIGHT= 812;
 
 const StyledStatusBar = ({ backgroundColor, barStyle}) => (
 
@@ -15,8 +18,9 @@ const StyledStatusBar = ({ backgroundColor, barStyle}) => (
 
 
 );
-
-const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 22 : null;
+const { height: D_HEIGHT, width: D_WIDTH } = Dimensions.get('window');
+const iphone = D_HEIGHT != X_HEIGHT || D_WIDTH != X_WIDTH? 22: 38;
+const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? iphone : null;
 
 const styles = StyleSheet.create({
   mycontainer: {
