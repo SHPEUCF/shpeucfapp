@@ -1,5 +1,12 @@
 import React, { Component} from 'react';
-import { SafeAreaView, Platform, StatusBar, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import {
+  SafeAreaView,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity } from 'react-native';
 import firebase from 'firebase';
 import RootTab from './navigation/RootTab';
 import { StyledStatusBar, Spinner } from './components/general';
@@ -88,18 +95,15 @@ export default class App extends Component {
   }
 
   render() {
-      return (
+    return (
 
-        <View style={styles.containerStyle}>
-          <StyledStatusBar
-            backgroundColor='rgba(0,0,0,0.6)'
-            barStyle='light-content'/>
-          
-          {this.renderContent()}
-
-        </View>
-
-      );
+      <View style={styles.containerStyle}>
+        <StyledStatusBar
+          backgroundColor='rgba(0,0,0,0.6)'
+          barStyle='light-content'/>
+        {this.renderContent()}
+      </View>
+    );
   }
 }
 
