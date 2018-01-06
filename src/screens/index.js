@@ -7,3 +7,5 @@ export * from './Leaderboard';
 export * from './More';
 export * from './Profile';
 export * from './Resources';
+export * from './WebPage1';
+export * from './WebPage2';

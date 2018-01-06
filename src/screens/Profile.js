@@ -19,10 +19,10 @@ class Profile extends Component {
 
 
         <View style={styles.containerStyle1}>
-          <Image style={{height:100, width:100, margin: 10}}
-           source={{uri:'https://78.media.tumblr.com/98ab9195d736eae9661faef27cc33504/tumblr_n7s5qcoovN1qea4hso1_1280.png'}}/>
+          <Image style={{height:100, width:100, margin: 10, borderRadius: 50}}
+           source={{uri:'http://s2.storage.akamai.coub.com/get/b92/p/coub/simple/cw_timeline_pic/410c9604b2e/24bf4be1fe57b332d8099/big_1476460439_image.jpg'}}/>
          <View style={{marginLeft:70, justifyContent: 'center', flex: 3}}>
-        <Text style={styles.tagline}>"Bitcoin or no coin"</Text>
+        <Text style={styles.tagline}>"Turn up!"</Text>
         </View>
       </View>
 
@@ -100,19 +100,19 @@ const styles = StyleSheet.create({
   },
   itemsContainerStyle2: {
     flexDirection: 'row',
-    backgroundColor: 'blue',
+    backgroundColor: 'green',
     marginTop: 10,
     padding: 20,
   },
   itemsContainerStyle3: {
     flexDirection: 'row',
-    backgroundColor: 'red',
+    backgroundColor: 'green',
     marginTop: 10,
     padding: 20,
   },
   itemsContainerStyle4: {
     flexDirection: 'row',
-    backgroundColor: 'orange',
+    backgroundColor: 'green',
     marginTop: 10,
     padding: 20,
   },

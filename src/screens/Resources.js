@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import {Text, View, StyleSheet, Linking, TouchableOpacity }from 'react-native';
-
+import { Text, View, StyleSheet, Linking, TouchableOpacity }from 'react-native';
 import { Button, Header } from '../components/general';
+
+
 
 class Resources extends Component {
   render() {
@@ -16,6 +17,7 @@ class Resources extends Component {
             <Text style={styles.backTextStyle}>{"< Back"}</Text>
           </TouchableOpacity>}/>
 
+
         <View style={styles.itemBox}>
           <View style={styles.itemDescription}>
             <Text style={styles.itemDescriptionText}>
@@ -23,11 +25,12 @@ class Resources extends Component {
             </Text>
           </View>
           <View style={styles.itemButton}>
-            <Button onPress={() => Linking.openURL('http://shpeucf.com')}>
+            <Button onPress={() => navigate('WebPage1')}>
               Open
             </Button>
           </View>
         </View>
+
         <View style={styles.itemBox}>
           <View style={styles.itemDescription}>
             <Text style={styles.itemDescriptionText}>
@@ -35,7 +38,7 @@ class Resources extends Component {
             </Text>
           </View>
           <View style={styles.itemButton}>
-            <Button onPress={() => Linking.openURL('https://www.facebook.com/groups/SHPEUCF/')}>
+            <Button onPress={() => navigate('WebPage2')}>
               Open
             </Button>
           </View>
