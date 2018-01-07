@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput, View, Text } from 'react-native';
+import { TextInput, View, Text, ScrollView } from 'react-native';
 
 const Input = ({ label, value, onChangeText, placeholder, secureTextEntry }) =>  {
   const { inputStyle, labelStyle, containerStyle} = styles;
@@ -7,14 +7,16 @@ const Input = ({ label, value, onChangeText, placeholder, secureTextEntry }) => 
   return (
     <View style={containerStyle}>
       <Text style={labelStyle}>{label}</Text>
-      <TextInput
-        value={value}
-        onChangeText={onChangeText}
-        style={inputStyle}
-        autoCorrect={false}
-        placeholder={placeholder}
-        secureTextEntry={secureTextEntry}
-        />
+      <ScrollView scrollEnabled={false}>
+        <TextInput
+          value={value}
+          onChangeText={onChangeText}
+          style={inputStyle}
+          autoCorrect={false}
+          placeholder={placeholder}
+          secureTextEntry={secureTextEntry}
+          />
+      </ScrollView>
     </View>
   );
 };
