@@ -1,4 +1,4 @@
 // json missing but soon from firebase
-import data from './PostList.json';
+import data from '../data/PostList.json';
 
 export default () => data;

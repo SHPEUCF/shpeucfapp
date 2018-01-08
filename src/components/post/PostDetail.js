@@ -6,7 +6,6 @@ import { Card, CardSection } from '../general';
 const PostDetail = ({ post }) => {
   const { title, description, imageurl } = post;
 
-
   return (
     <Card>
       <CardSection>

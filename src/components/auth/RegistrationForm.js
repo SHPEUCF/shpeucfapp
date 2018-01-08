@@ -1,76 +1,68 @@
 import React, { Component} from 'react';
-import { View, Text, } from 'react-native';
-import firebase from 'firebase';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
+import { emailChanged, passwordChanged, createUser, goToLogIn } from '../../actions';
 import { Button, Card, CardSection, Input, Spinner } from '../general';
 
 class RegistrationForm extends Component {
-  state = {
-    email: '',
-    password: '',
-    error: '',
-    loading: false
-  };
+
+  onEmailChange(text) {
+    this.props.emailChanged(text);
+  }
+
+  onPasswordChange(text) {
+    this.props.passwordChanged(text);
+  }
 
   onButtonPress() {
-    const { email , password } = this.state;
+    const { email, password } = this.props;
 
-    this.setState({ error: '', loading: true});
-
-    firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then(this.onRegisterSucces.bind(this))
-      .catch((error) => {
-        this.onRegisterFail(error);
-      });
+    this.props.createUser({ email, password });
   }
 
-  onRegisterSucces() {
-    this.setState({
-      email: '',
-      password: '',
-      loading: false
-    });
-  }
-
-  onRegisterFail(error) {
-    const errorCode = error.code;
-    let errorMessage;
-
-    switch (errorCode) {
-      case 'auth/weak-password':
-        errorMessage = 'The password is too weak';
-        break;
-      case 'auth/invalid-email':
-        errorMessage = 'Enter a valid email';
-        break;
-      default:
-      errorMessage = error.message;
+  renderError() {
+    if (this.props.error) {
+      return (
+        <View style={{ backgroundColor: 'white'}}>
+          <Text style={styles.errorTextStyle}>
+            {this.props.error}
+          </Text>
+        </View>
+      );
     }
-    this.setState({
-      error: errorMessage,
-      loading: false
-    });
-    console.log(error);
   }
 
-  renderButton() {
-    if (this.state.loading) {
+  renderSignUpButton() {
+    if (this.props.loading) {
       return <Spinner size="small" />
     };
 
     return (
       <Button
         onPress={this.onButtonPress.bind(this)}>
-        Register
+        Sign Up
       </Button>
     );
   }
+  renderLogInButton() {
+    if (this.props.loading) {
+      return <Spinner size="small" />
+    };
 
+    return (
+      <TouchableOpacity
+        onPress={this.props.goToLogIn}>
+        <Text style={styles.logInButton}>Log In</Text>
+      </TouchableOpacity>
+    );
+  }
   render() {
     return (
       <View style={styles.formContainerStyle}>
 
         <View style={styles.headerStyle}>
-          <Text style={styles.headerTextStyle}>Welcome! Create account below</Text>
+          <Text style={styles.headerTextStyle}>Create Account</Text>
         </View>
 
         <View style={styles.formFieldsContainer}>
@@ -78,8 +70,10 @@ class RegistrationForm extends Component {
             <Input
               label="Email"
               placeholder="user@knights.ucf.com"
-              value={this.state.email}
-              onChangeText={email => this.setState({ email })}
+              value={this.props.email}
+              autoCapitalize="none"
+              maxLength={45}
+              onChangeText={this.onEmailChange.bind(this)}
               />
           </View>
 
@@ -88,20 +82,28 @@ class RegistrationForm extends Component {
               secureTextEntry
               label="Password"
               placeholder="password"
-              value={this.state.password}
-              onChangeText={password => this.setState({ password })}
+              value={this.props.password}
+              maxLength={45}
+              onChangeText={this.onPasswordChange.bind(this)}
               />
           </View>
         </View>
 
         <View>
-          <Text style={styles.errorTextStyle}>
-            {this.state.error}
-          </Text>
+          {this.renderError()}
         </View>
 
         <View style={styles.formButton}>
-          {this.renderButton()}
+          {this.renderSignUpButton()}
+        </View>
+
+        <View style={styles.logInContainer}>
+          <View>
+            {this.renderLogInButton()}
+          </View>
+          <View>
+            <Text> instead?</Text>
+          </View>
         </View>
 
       </View>
@@ -109,10 +111,12 @@ class RegistrationForm extends Component {
   }
 }
 
-const styles = {
+const styles = StyleSheet.create({
   formContainerStyle: {
-    marginLeft: 30,
-    marginRight: 30,
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 100,
+
   },
   headerStyle: {
     flexDirection: 'column',
@@ -146,7 +150,7 @@ const styles = {
     fontSize: 14,
     alignSelf: 'center',
     color: 'red',
-    paddingTop: 10,
+    padding: 10,
   },
   formButton: {
     flexDirection: 'row',
@@ -155,6 +159,27 @@ const styles = {
     marginTop: 10,
     marginBottom: 10
   },
+  logInButton: {
+    fontWeight: 'bold',
+    color: '#007aff'
+  },
+  logInContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  }
+});
+
+const mapStateToProps = ({ auth }) => {
+  const { email, password, error, loading } = auth;
+
+  return { email, password, error, loading };
 };
 
-export { RegistrationForm };
+const mapDispatchToProps = {
+  emailChanged,
+  passwordChanged,
+  createUser,
+  goToLogIn }
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegistrationForm);

@@ -1,22 +1,29 @@
 import React from 'react';
 import { TextInput, View, Text, ScrollView } from 'react-native';
 
-const Input = ({ label, value, onChangeText, placeholder, secureTextEntry }) =>  {
+const Input = ({
+  label,
+  value,
+  onChangeText,
+  placeholder,
+  autoCapitalize, 
+  maxLength,
+  secureTextEntry }) =>  {
   const { inputStyle, labelStyle, containerStyle} = styles;
 
   return (
     <View style={containerStyle}>
       <Text style={labelStyle}>{label}</Text>
-      <ScrollView scrollEnabled={false}>
-        <TextInput
-          value={value}
-          onChangeText={onChangeText}
-          style={inputStyle}
-          autoCorrect={false}
-          placeholder={placeholder}
-          secureTextEntry={secureTextEntry}
-          />
-      </ScrollView>
+      <TextInput
+        value={value}
+        onChangeText={onChangeText}
+        style={inputStyle}
+        autoCorrect={false}
+        autoCapitalize={autoCapitalize}
+        placeholder={placeholder}
+        secureTextEntry={secureTextEntry}
+        maxLength={maxLength}
+        />
     </View>
   );
 };

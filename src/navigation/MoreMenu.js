@@ -17,51 +17,51 @@ import {
 
 const MoreMenu = StackNavigator({
 
-  More:{
+  More: {
     screen: More,
     navigationOptions: {
       headerBackTitle:'Back',
       header: null,
     },
   },
-  JobBoard:{
+  JobBoard: {
     screen: JobBoard,
     navigationOptions: {
       header:null,
     },
   },
-  Leaderboard:{
+  Leaderboard: {
     screen: Leaderboard,
     navigationOptions: {
       header: null,
     },
   },
-  Resources:{
+  Resources: {
     screen: Resources,
     navigationOptions: {
       header:null
     },
   },
-  CheckIn:{
+  CheckIn: {
     screen: CheckIn,
     navigationOptions: {
       header: null
     },
   },
-  About:{
+  About: {
     screen: About,
     navigationOptions: {
       header:null
     },
   },
-  WebPage1:{
+  WebPage1: {
     screen: WebPage1,
     navigationOptions: {
       headerBackTitle:'Back',
       header: null,
     },
   },
-  WebPage2:{
+  WebPage2: {
     screen: WebPage2,
     navigationOptions: {
       headerBackTitle:'Back',

@@ -141,7 +141,6 @@ class Events extends Component {
   render() {
     return (
       <View style={{ flex:1 }}>
-        <Header headerTitle={'Events'}/>
 
         <View style={styles.container}>
 

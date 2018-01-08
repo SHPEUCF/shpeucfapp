@@ -5,5 +5,4 @@ import PostReducer from './PostReducer';
 export default combineReducers({
   auth: AuthReducer,
   post: PostReducer,
-
 });

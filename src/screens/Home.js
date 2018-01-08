@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import {Text, View, StyleSheet, ScrollView } from 'react-native';
-
-import { Header } from '../components/general';
 import { PostList } from '../components/post';
 
 class Home extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header headerTitle={'Home'} />
         <PostList />
       </View>
     )

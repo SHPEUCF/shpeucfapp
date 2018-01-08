@@ -21,7 +21,6 @@ class More extends Component {
 
     return (
       <View style = {styles.container}>
-        <Header headerTitle={'More Menu'}/>
         <ButtonImage onPress={() => navigate('JobBoard')}
           text={'Job Board'} backgroundColor={'rgba(255,215,0,0.15)'}
           image={require('../assets/images/ic_trending_up_black.png')}/>

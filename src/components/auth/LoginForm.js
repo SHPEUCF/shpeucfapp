@@ -1,61 +1,61 @@
-import React, { Component} from 'react';
-import { View, Text, } from 'react-native';
-import firebase from 'firebase';
+import React, { Component } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
+import { emailChanged, passwordChanged, loginUser, goToRegistration } from '../../actions';
 import { Button, Card, CardSection, Input, Spinner } from '../general';
 
 class LoginForm extends Component {
-  state = { email: '', password: '', error: '', loading: false };
+
+  onEmailChange(text) {
+    this.props.emailChanged(text);
+  }
+
+  onPasswordChange(text) {
+    this.props.passwordChanged(text);
+  }
 
   onButtonPress() {
-    const { email , password } = this.state;
+    const { email, password } = this.props;
 
-    this.setState({ error: '', loading: true});
-
-    firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(this.onLoginSucces.bind(this))
-      .catch((error) => this.onLoginFail(error));
+    this.props.loginUser({ email, password });
   }
 
-  onLoginSucces() {
-    this.setState({
-      email: '',
-      password: '',
-      loading: false
-    });
-  }
-
-  onLoginFail(error) {
-    const errorCode = error.code;
-    let errorMessage;
-
-    switch (errorCode) {
-      case 'auth/wrong-password':
-        errorMessage = 'Your credentials do not match our records';
-        break;
-      case 'auth/invalid-email':
-        errorMessage = 'Enter a valid email';
-        break;
-      default:
-      errorMessage = error.message;
+  renderError() {
+    if (this.props.error) {
+      return (
+        <View style={{ backgroundColor: 'white'}}>
+          <Text style={styles.errorTextStyle}>
+            {this.props.error}
+          </Text>
+        </View>
+      );
     }
-
-    this.setState({
-      error: errorMessage,
-      loading: false
-    });
-    console.log(error);
   }
 
-  renderButton() {
-    if (this.state.loading) {
+  renderLogInButton() {
+    if (this.props.loading) {
       return <Spinner size="small" />
     };
 
     return (
       <Button
         onPress={this.onButtonPress.bind(this)}>
-        Log in
+        Log In
       </Button>
+    );
+  }
+
+  renderSignUpButton() {
+    if (this.props.loading) {
+      return <Spinner size="small" />
+    };
+
+    return (
+      <TouchableOpacity
+        onPress={this.props.goToRegistration}>
+        <Text style={styles.signUpButton}>Sign Up</Text>
+      </TouchableOpacity>
     );
   }
 
@@ -64,7 +64,7 @@ class LoginForm extends Component {
       <View style={styles.formContainerStyle}>
 
         <View style={styles.headerStyle}>
-          <Text style={styles.headerTextStyle}>Welcome! Please Log In or Create Account</Text>
+          <Text style={styles.headerTextStyle}>Welcome! Please Log In or Sign Up</Text>
         </View>
 
         <View style={styles.formFieldsContainer}>
@@ -72,8 +72,10 @@ class LoginForm extends Component {
             <Input
               label="Email"
               placeholder="user@knights.ucf.com"
-              value={this.state.email}
-              onChangeText={email => this.setState({ email })}
+              value={this.props.email}
+              autoCapitalize="none"
+              maxLength={45}
+              onChangeText={this.onEmailChange.bind(this)}
               />
           </View>
 
@@ -82,20 +84,28 @@ class LoginForm extends Component {
               secureTextEntry
               label="Password"
               placeholder="password"
-              value={this.state.password}
-              onChangeText={password => this.setState({ password })}
+              value={this.props.password}
+              maxLength={45}
+              onChangeText={this.onPasswordChange.bind(this)}
               />
           </View>
         </View>
 
         <View>
-          <Text style={styles.errorTextStyle}>
-            {this.state.error}
-          </Text>
+          {this.renderError()}
         </View>
 
         <View style={styles.formButton}>
-          {this.renderButton()}
+          {this.renderLogInButton()}
+        </View>
+
+        <View style={styles.signUpContainer}>
+          <View>
+            <Text>Don't have an account? </Text>
+          </View>
+          <View>
+            {this.renderSignUpButton()}
+          </View>
         </View>
 
       </View>
@@ -103,10 +113,11 @@ class LoginForm extends Component {
   }
 }
 
-const styles = {
+const styles = StyleSheet.create({
   formContainerStyle: {
-    marginLeft: 30,
-    marginRight: 30,
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 100,
   },
   headerStyle: {
     flexDirection: 'column',
@@ -140,7 +151,7 @@ const styles = {
     fontSize: 14,
     alignSelf: 'center',
     color: 'red',
-    paddingTop: 10,
+    padding: 10,
   },
   formButton: {
     flexDirection: 'row',
@@ -149,6 +160,26 @@ const styles = {
     marginTop: 10,
     marginBottom: 10
   },
-};
+  signUpButton: {
+    fontWeight: 'bold',
+    color: '#007aff'
+  },
+  signUpContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  }
+});
 
-export { LoginForm };
+const mapStateToProps = ({ auth }) => {
+  const { email, password, error, loading, } = auth;
+
+  return { email, password, error, loading };
+};
+const mapDispatchToProps = {
+  emailChanged,
+  passwordChanged,
+  loginUser,
+  goToRegistration }
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
