@@ -6,3 +6,4 @@ export * from './MyStatusBar';
 export * from './ButtonImage';
 export * from './Input';
 export * from './Spinner';
+export * from './SegmentBtn';

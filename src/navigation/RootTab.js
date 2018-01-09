@@ -74,7 +74,8 @@ const RootTab = TabNavigator({
 },
   {
     initialRouteName: 'Home',
-    tabBarPosition: 'bottom'
+    tabBarPosition: 'bottom',
+    animationEnabled: true
   }
 );
 

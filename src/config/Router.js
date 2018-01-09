@@ -1,7 +1,7 @@
 import React from 'react';
 import { Router, Scene, Stack, ActionConst, Actions } from 'react-native-router-flux';
 import firebase from 'firebase';
-import TabIcon from '../navigation/TabIcon';
+import RootTab from '../navigation/RootTab';
 import RegistrationForm from '../components/auth/RegistrationForm';
 import LoginForm from '../components/auth/LoginForm'
 
@@ -38,10 +38,10 @@ const RouterComponent = () => {
             hideNavBar
              />
          </Scene>
-        <Scene key="main">
+        <Scene key="main" >
           <Scene
             key="home"
-            component={Home}
+            component={RootTab}
             title="Feed"
             initial
             rightTitle="Log Out"

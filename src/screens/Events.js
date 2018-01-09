@@ -4,9 +4,10 @@ import {
   Image,
   Text,
   View,
-  StyleSheet } from 'react-native';
+  StyleSheet,
+  Dimensions} from 'react-native';
 import Moment from 'moment';
-import { Header, Card } from '../components/general';
+import { Header, Card, SegmentBtn } from '../components/general';
 
 let date = new Date();
 
@@ -15,7 +16,6 @@ let curDay = date.getDate();
 
 let BeginMonth = date.getMonth();
 let BeginYear = date.getFullYear();
-
 
 let fullMonthName = ["January  ","February  ",
 "March  ","April  ","May  ","June  ",
@@ -52,7 +52,7 @@ class Events extends Component {
     return shortWeekDayName.map((item, key) => {
       return(
         <View key={key} style={{flex:1, alignItems:'center',
-          justifyContent:'center',height:50,
+          justifyContent:'center',height:70,
           backgroundColor:'grey',borderWidth:3,
           borderColor:'white'}}>
             <Text key={key}
@@ -65,7 +65,7 @@ class Events extends Component {
       });
     }
 
-  renderDays(week_days) {
+  renderDays(week_days, len) {
     return week_days.map((day, key) => {
       return (
         <View
@@ -75,7 +75,8 @@ class Events extends Component {
             justifyContent:'center',
             backgroundColor:'lightgrey',
             borderWidth:3,
-            borderColor:'white'}}>
+            borderColor:'white',
+            height:(Dimensions.get('window').height/len)-48}}>
             <Text key={key} style={{
                 fontSize:18,
                 fontWeight:'100'
@@ -125,41 +126,58 @@ class Events extends Component {
         count = 0;
       }
     });
+    return weeks;
+}
+renderMonth(){
+var weeks = this.renderCalendarDays();
 
     return weeks.map((item, key) => {
       return(
-        <View key={key} style={{flex:0,
+        <View key={key} style={{flex:1,
             flexDirection:'row',
-            alignItems:'center',
-            justifyContent:'center'}}>
-            { this.renderDays(item) }
+            alignItems:'flex-start',
+            justifyContent:'center',}}>
+            { this.renderDays(item, weeks.length) }
           </View>
         );
       });
     }
 
   render() {
+
     return (
       <View style={{ flex:1 }}>
 
         <View style={styles.container}>
 
-          <View style={{flex:0,flexDirection:'row', alignItems:'center',}}>
-            <TouchableOpacity style={{flex:1}}
-              onPress={this.prevMonth.bind(this)} >
-              <Text style={{textAlign:'left', fontSize:20}}>{"< Back"}</Text>
-            </TouchableOpacity>
-            <Text style={{textAlign:'center', fontSize:24}}>{fullMonthName[this.state.month].concat(this.state.year)}</Text>
-            <TouchableOpacity style={{flex:1}}
-              onPress = {this.nextMonth.bind(this)} >
-              <Text style={{textAlign:'right', fontSize:20}}>{"Next >"}</Text>
-            </TouchableOpacity>
-          </View>
+          <SegmentBtn
+            leftText={"Month"}
+            rightText={"List"}
+            borderColor={'gold'}
+            color={'gold'}
+            screen1={
+              <View style={{flex: 1,
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              margin:3}}>
+              <View style={{flex:0,flexDirection:'row', alignItems:'center',}}>
+                <TouchableOpacity style={{flex:1}}
+                  onPress={this.prevMonth.bind(this)} >
+                  <Text style={{textAlign:'left', fontSize:20}}>{"< Back"}</Text>
+                </TouchableOpacity>
+                <Text style={{textAlign:'center', fontSize:24}}>{fullMonthName[this.state.month].concat(this.state.year)}</Text>
+                <TouchableOpacity style={{flex:1}}
+                  onPress = {this.nextMonth.bind(this)} >
+                  <Text style={{textAlign:'right', fontSize:20}}>{"Next >"}</Text>
+                </TouchableOpacity>
+              </View>
 
-          <View style={{flex:0, flexDirection:'row'}}>
-            { this.renderWeekDays() }
-          </View>
-          { this.renderCalendarDays() }
+              <View style={{flex:0, flexDirection:'row'}}>
+                { this.renderWeekDays() }
+              </View>
+              { this.renderMonth() }
+              </View>
+            }/>
 
         </View>
       </View>
@@ -173,9 +191,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    marginTop: 5,
-    marginLeft: 5,
-    marginRight: 5
+    margin: 5,
   },
   text: {
     textAlign: 'center',
