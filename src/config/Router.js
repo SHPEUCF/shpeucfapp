@@ -1,13 +1,12 @@
 import React from 'react';
 import { Router, Scene, Stack, ActionConst, Actions } from 'react-native-router-flux';
 import firebase from 'firebase';
-import RootTab from '../navigation/RootTab';
 import RegistrationForm from '../components/auth/RegistrationForm';
 import LoginForm from '../components/auth/LoginForm'
 
 // Screens
 import {
-  Home,
+  Feed,
   Profile,
   Events,
   JobBoard,
@@ -19,13 +18,12 @@ import {
   WebPage1,
   WebPage2
 } from '../screens/';
-import MoreMenu from '../navigation/MoreMenu';
 
 const RouterComponent = () => {
   return (
     <Router>
-      <Scene key="root" hideNavBar>
-        <Scene key="auth">
+      <Stack key="root" hideNavBar>
+        <Stack key="auth">
           <Scene
             key="login"
             component={LoginForm}
@@ -40,21 +38,22 @@ const RouterComponent = () => {
             type={ActionConst.REPLACE}
             hideNavBar
              />
-         </Scene>
-        <Scene key="main" tabs={true}>
+         </Stack>
+        <Stack key="main"
+          tabs={true}
+          rightTitle="Log Out"
+          onRight={() => firebase.auth().signOut().then(function() {
+          Actions.login()})} >
           <Scene
-            key="home"
-            component={Home}
-            title="Feed"
+            key="feed"
             initial
-            rightTitle="Log Out"
-            onRight={() => firebase.auth().signOut().then(function() {
-              Actions.login()})}/>
+            component={Feed}
+            title="Feed"
+            />
           <Scene
             key="events"
             component={Events}
             title="Events"
-
             />
           <Scene
             key="profile"
@@ -63,8 +62,7 @@ const RouterComponent = () => {
             rightTitle="Edit"
             onRight={() => {}}
             />
-
-          <Stack key="more">
+          <Stack key="more" tabBarLabel="More">
             <Scene
               key="more"
               component={More}
@@ -74,38 +72,34 @@ const RouterComponent = () => {
             <Scene key="JobBoard"
               component={JobBoard}
               title="Job Board"
-
               />
             <Scene key="Leaderboard"
                 component={Leaderboard}
                 title="Leaderboard"
                 />
-              <Scene key="Resources"
-                component={Resources}
-                title="Resources"
-                />
-
-                <Scene key="WebPage1"
-                  component={WebPage1}
-                  title="SHPE UCF Website"
-                  />
-                <Scene key="WebPage2"
-                  component={WebPage2}
-                  title="SHPE UCF Facbook page"
-                  />
-              
-              <Scene key="CheckIn"
-                  component={CheckIn}
-                  title="Check In"
+            <Scene key="Resources"
+              component={Resources}
+              title="Resources"
               />
-              <Scene key="About"
-                  component={About}
-                  title="About Us"
+              <Scene key="WebPage1"
+                component={WebPage1}
+                title="SHPE UCF Website"
                 />
+              <Scene key="WebPage2"
+                component={WebPage2}
+                title="SHPE UCF Facebook page"
+                />
+            <Scene key="CheckIn"
+                component={CheckIn}
+                title="Check In"
+            />
+            <Scene key="About"
+                component={About}
+                title="About Us"
+            />
           </Stack>
-
-        </Scene>
-      </Scene>
+        </Stack>
+      </Stack>
     </Router>
   );
 };
