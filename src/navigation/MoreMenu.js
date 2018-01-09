@@ -27,30 +27,35 @@ const MoreMenu = StackNavigator({
   JobBoard: {
     screen: JobBoard,
     navigationOptions: {
+      headerBackTitle:'Back',
       header:null,
     },
   },
   Leaderboard: {
     screen: Leaderboard,
     navigationOptions: {
+      headerBackTitle:'Back',
       header: null,
     },
   },
   Resources: {
     screen: Resources,
     navigationOptions: {
+      headerBackTitle:'Back',
       header:null
     },
   },
   CheckIn: {
     screen: CheckIn,
     navigationOptions: {
+      headerBackTitle:'Back',
       header: null
     },
   },
   About: {
     screen: About,
     navigationOptions: {
+      headerBackTitle:'Back',
       header:null
     },
   },

@@ -177,6 +177,11 @@ var weeks = this.renderCalendarDays();
               </View>
               { this.renderMonth() }
               </View>
+            }
+            screen2={
+              <View style={{flex:1, backgroundColor:'black', alignItems:'center', justifyContent:'center'}}>
+                <Text style={{color:'gold', fontWeight:'900', fontSize:30}}>FBGM</Text>
+                </View>
             }/>
 
         </View>

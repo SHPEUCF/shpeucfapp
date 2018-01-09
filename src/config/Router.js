@@ -14,7 +14,10 @@ import {
   Leaderboard,
   Resources,
   CheckIn,
-  About
+  About,
+  More,
+  WebPage1,
+  WebPage2
 } from '../screens/';
 import MoreMenu from '../navigation/MoreMenu';
 
@@ -38,10 +41,10 @@ const RouterComponent = () => {
             hideNavBar
              />
          </Scene>
-        <Scene key="main" >
+        <Scene key="main" tabs={true}>
           <Scene
             key="home"
-            component={RootTab}
+            component={Home}
             title="Feed"
             initial
             rightTitle="Log Out"
@@ -51,6 +54,7 @@ const RouterComponent = () => {
             key="events"
             component={Events}
             title="Events"
+
             />
           <Scene
             key="profile"
@@ -59,11 +63,47 @@ const RouterComponent = () => {
             rightTitle="Edit"
             onRight={() => {}}
             />
-          <Scene
-            key="more"
-            component={MoreMenu}
-            title="More Options"
-            />
+
+          <Stack key="more">
+            <Scene
+              key="more"
+              component={More}
+              title="More Options"
+              leftTitle="Back"
+              />
+            <Scene key="JobBoard"
+              component={JobBoard}
+              title="Job Board"
+
+              />
+            <Scene key="Leaderboard"
+                component={Leaderboard}
+                title="Leaderboard"
+                />
+              <Scene key="Resources"
+                component={Resources}
+                title="Resources"
+                />
+
+                <Scene key="WebPage1"
+                  component={WebPage1}
+                  title="SHPE UCF Website"
+                  />
+                <Scene key="WebPage2"
+                  component={WebPage2}
+                  title="SHPE UCF Facbook page"
+                  />
+              
+              <Scene key="CheckIn"
+                  component={CheckIn}
+                  title="Check In"
+              />
+              <Scene key="About"
+                  component={About}
+                  title="About Us"
+                />
+          </Stack>
+
         </Scene>
       </Scene>
     </Router>
