@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Dimensions} from 'react-native';
 import Moment from 'moment';
-import { Header, Card, SegmentBtn } from '../components/general';
+import { Card, SegmentBtn } from '../components/general';
 
 let date = new Date();
 

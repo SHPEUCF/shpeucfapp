@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, Dimensions }from 'react-native';
-import { Header,SegmentBtn } from '../components/general';
+import { SegmentBtn } from '../components/general';
 
 class JobBoard extends Component {
 
@@ -9,19 +9,11 @@ class JobBoard extends Component {
 
     return (
       <View style={{flex:1}}>
-        <Header
-          headerTitle={'Job Board'}
-          backButton={
-          <TouchableOpacity onPress={() => goBack()} >
-            <Text style={styles.backTextStyle}>{"< Back"}</Text>
-          </TouchableOpacity>}/>
         {/*<Text style={{marginTop: Dimensions.get('window').height/3}}>Job Board</Text>*/}
         <View style={styles.container}>
-
           <SegmentBtn
             leftText={"Month"}
             />
-
         </View>
       </View>
 

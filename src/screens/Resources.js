@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Linking, TouchableOpacity }from 'react-native';
-import { Button, Header } from '../components/general';
+import { Button } from '../components/general';
 
 
 
@@ -9,14 +9,6 @@ class Resources extends Component {
     const { navigate, goBack } = this.props.navigation;
     return (
       <View style={styles.container}>
-
-        <Header
-          headerTitle={'Resources'}
-          backButton={
-          <TouchableOpacity onPress={() => goBack()} >
-            <Text style={styles.backTextStyle}>{"< Back"}</Text>
-          </TouchableOpacity>}/>
-
 
         <View style={styles.itemBox}>
           <View style={styles.itemDescription}>
