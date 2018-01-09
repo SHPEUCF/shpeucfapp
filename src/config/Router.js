@@ -40,7 +40,8 @@ const RouterComponent = () => {
              />
          </Stack>
         <Stack key="main"
-          tabs={true}
+          tabs
+          tabBarPosition="bottom"
           rightTitle="Log Out"
           onRight={() => firebase.auth().signOut().then(function() {
           Actions.login()})} >
@@ -60,7 +61,7 @@ const RouterComponent = () => {
             component={Profile}
             title="Profile"
             rightTitle="Edit"
-            onRight={() => {}}
+            onRight={()=>alert("Coming soon!")}
             />
           <Stack key="more" tabBarLabel="More">
             <Scene
@@ -74,9 +75,9 @@ const RouterComponent = () => {
               title="Job Board"
               />
             <Scene key="Leaderboard"
-                component={Leaderboard}
-                title="Leaderboard"
-                />
+              component={Leaderboard}
+              title="Leaderboard"
+              />
             <Scene key="Resources"
               component={Resources}
               title="Resources"
@@ -84,18 +85,18 @@ const RouterComponent = () => {
               <Scene key="WebPage1"
                 component={WebPage1}
                 title="SHPE UCF Website"
-                />
+              />
               <Scene key="WebPage2"
-                component={WebPage2}
-                title="SHPE UCF Facebook page"
-                />
+              component={WebPage2}
+              title="SHPE UCF Facebook page"
+              />
             <Scene key="CheckIn"
-                component={CheckIn}
-                title="Check In"
+              component={CheckIn}
+              title="Check In"
             />
             <Scene key="About"
-                component={About}
-                title="About Us"
+              component={About}
+              title="About Us"
             />
           </Stack>
         </Stack>
