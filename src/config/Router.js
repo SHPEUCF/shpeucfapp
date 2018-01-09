@@ -9,12 +9,12 @@ import {
   Feed,
   Profile,
   Events,
+  More,
   JobBoard,
   Leaderboard,
   Resources,
   CheckIn,
   About,
-  More,
   WebPage1,
   WebPage2
 } from '../screens/';

@@ -21,7 +21,7 @@ const MoreMenu = StackNavigator({
     screen: More,
     navigationOptions: {
       headerBackTitle:'Back',
-      header: null,
+      header: 'OK',
     },
   },
   JobBoard: {

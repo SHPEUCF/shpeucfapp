@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Text, View, StyleSheet, ScrollView } from 'react-native';
 import { PostList } from '../components/post';
 
-class Home extends Component {
+class Feed extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -18,4 +18,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export { Home };
+export { Feed };

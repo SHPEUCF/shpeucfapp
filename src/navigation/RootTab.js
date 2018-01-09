@@ -8,7 +8,7 @@ import MoreMenu from './MoreMenu';
 
 // Screens
 import {
-  Home,
+  Feed,
   Profile,
   Events,
   JobBoard,
@@ -19,10 +19,10 @@ import {
 } from '../screens/';
 
 const RootTab = TabNavigator({
-  Home: {
-    screen: Home,
+  Feed: {
+    screen: Feed,
     navigationOptions: {
-      tabBarLabel: 'Home',
+      tabBarLabel: 'Feed',
       tabBarIcon: ({ tintColor, focused }) => (
         <Ionicons
           name={focused ? 'ios-home' : 'ios-home-outline'}
@@ -73,7 +73,7 @@ const RootTab = TabNavigator({
   },
 },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Feed',
     tabBarPosition: 'bottom',
     animationEnabled: true
   }
