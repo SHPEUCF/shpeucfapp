@@ -3,8 +3,6 @@ import {Text, View, StyleSheet, TouchableOpacity, Dimensions }from 'react-native
 
 class Leaderboard extends Component {
   render() {
-    const { navigate, goBack } = this.props.navigation;
-
     return (
       <View style={styles.container}>
         <Text style={{marginTop: Dimensions.get('window').height/3}}>Leaderboard</Text>

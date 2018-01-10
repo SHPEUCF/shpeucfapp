@@ -6,7 +6,6 @@ import { Button } from '../components/general';
 
 class Resources extends Component {
   render() {
-    const { navigate, goBack } = this.props.navigation;
     return (
       <View style={styles.container}>
 

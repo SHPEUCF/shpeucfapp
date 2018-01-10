@@ -5,8 +5,6 @@ import { SegmentBtn } from '../components/general';
 class JobBoard extends Component {
 
   render() {
-    const { navigate, goBack } = this.props.navigation;
-
     return (
       <View style={{flex:1}}>
         {/*<Text style={{marginTop: Dimensions.get('window').height/3}}>Job Board</Text>*/}
@@ -16,9 +14,7 @@ class JobBoard extends Component {
             />
         </View>
       </View>
-
-
-    )
+    );
   }
 }
 
