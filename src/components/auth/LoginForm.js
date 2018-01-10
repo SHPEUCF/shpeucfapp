@@ -17,7 +17,6 @@ class LoginForm extends Component {
 
   onButtonPress() {
     const { email, password } = this.props;
-
     this.props.loginUser({ email, password });
   }
 
@@ -47,16 +46,14 @@ class LoginForm extends Component {
   }
 
   renderSignUpButton() {
-    if (this.props.loading) {
-      return <Spinner size="small" />
-    };
-
-    return (
-      <TouchableOpacity
-        onPress={this.props.goToRegistration}>
-        <Text style={styles.signUpButton}>Sign Up</Text>
-      </TouchableOpacity>
-    );
+    if (!this.props.loading) {
+      return (
+        <TouchableOpacity
+          onPress={this.props.goToRegistration}>
+          <Text style={styles.signUpButton}>Sign Up</Text>
+        </TouchableOpacity>
+      );
+    }
   }
 
   render() {

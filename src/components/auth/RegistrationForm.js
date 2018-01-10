@@ -46,16 +46,14 @@ class RegistrationForm extends Component {
     );
   }
   renderLogInButton() {
-    if (this.props.loading) {
-      return <Spinner size="small" />
-    };
-
-    return (
-      <TouchableOpacity
-        onPress={this.props.goToLogIn}>
-        <Text style={styles.logInButton}>Log In</Text>
-      </TouchableOpacity>
-    );
+    if (!this.props.loading) {
+      return (
+        <TouchableOpacity
+          onPress={this.props.goToLogIn}>
+          <Text style={styles.logInButton}>Log In</Text>
+        </TouchableOpacity>
+      );
+    }
   }
   render() {
     return (
