@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import {
-  Text,
   View,
-  StyleSheet,
-  Button } from 'react-native';
-import { ButtonImage, Header } from '../components/general';
+  StyleSheet } from 'react-native';
+import { List, ListItem } from 'react-native-elements';
 
 // screens
 import {
@@ -20,37 +18,43 @@ class More extends Component {
     const { navigate } = this.props.navigation;
 
     return (
-      <View style = {styles.container}>
-        <ButtonImage onPress={() => navigate('JobBoard')}
-          text={'Job Board'} backgroundColor={'rgba(255,215,0,0.15)'}
-          image={require('../assets/images/ic_trending_up_black.png')}/>
-
-        <ButtonImage onPress={() => navigate('Leaderboard')}
-          text={'Leaderboard'} backgroundColor={'rgba(255,215,0,0.15)'}
-          image={require('../assets/images/ic_equalizer.png')}/>
-
-        <ButtonImage onPress={() => navigate('Resources')}
-          text={'Resources'} backgroundColor={'rgba(255,215,0,0.15)'}
-          image={require('../assets/images/ic_folder.png')}/>
-
-        <ButtonImage onPress={() => navigate('CheckIn')}
-          text={'Check In'} backgroundColor={'rgba(255,215,0,0.15)'}
-          image={require('../assets/images/ic_trending_up_black.png')}/>
-
-        <ButtonImage onPress={() => navigate('About')}
-          text={'About Us'} backgroundColor={'rgba(255,215,0,0.15)'}
-          image={require('../assets/images/ic_trending_up_black.png')}/>
+      <View>
+        <List>
+          <ListItem
+            key={1}
+            title={'Job Board'}
+            leftIcon={{name: 'card-travel'}}
+            onPress={() => navigate('JobBoard')}
+          />
+          <ListItem
+            key={2}
+            title={'Leaderboard'}
+            leftIcon={{name: 'format-align-left'}}
+            onPress={() => navigate('Leaderboard')}
+          />
+          <ListItem
+            key={3}
+            title={'Resources'}
+            leftIcon={{name: 'layers'}}
+            onPress={() => navigate('Resources')}
+          />
+          <ListItem
+            key={4}
+            title={'Check In'}
+            leftIcon={{name: 'directions-walk'}}
+            onPress={() => navigate('CheckIn')}
+          />
+          <ListItem
+            key={5}
+            title={'About'}
+            leftIcon={{name: 'info'}}
+            onPress={() => navigate('About')}
+          />
+        </List>
       </View>
     );
   };
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFF',
-    alignItems: 'center',
-    justifyContent: 'flex-start'
-  }
-});
+
 
 export { More };
