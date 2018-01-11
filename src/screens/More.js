@@ -12,6 +12,34 @@ import {
   CheckIn,
   About } from './';
 
+  const menuItems = [
+      {
+        title: 'Job Board',
+        icon: 'home',
+        screen: 'JobBoard'
+      },
+      {
+        title: 'Leaderboard',
+        icon: 'home',
+        screen: 'Leaderboard'
+      },
+      {
+        title: 'Resources',
+        icon: 'home',
+        screen: 'Resources'
+      },
+      {
+        title: 'Check In',
+        icon: 'home',
+        screen: 'CheckIn'
+      },
+      {
+        title: 'About',
+        icon: 'home',
+        screen: 'About'
+      }
+    ];
+
 class More extends Component {
 
   render() {
@@ -20,36 +48,16 @@ class More extends Component {
     return (
       <View>
         <List>
-          <ListItem
-            key={1}
-            title={'Job Board'}
-            leftIcon={{name: 'card-travel'}}
-            onPress={() => navigate('JobBoard')}
-          />
-          <ListItem
-            key={2}
-            title={'Leaderboard'}
-            leftIcon={{name: 'format-align-left'}}
-            onPress={() => navigate('Leaderboard')}
-          />
-          <ListItem
-            key={3}
-            title={'Resources'}
-            leftIcon={{name: 'layers'}}
-            onPress={() => navigate('Resources')}
-          />
-          <ListItem
-            key={4}
-            title={'Check In'}
-            leftIcon={{name: 'directions-walk'}}
-            onPress={() => navigate('CheckIn')}
-          />
-          <ListItem
-            key={5}
-            title={'About'}
-            leftIcon={{name: 'info'}}
-            onPress={() => navigate('About')}
-          />
+          {
+            menuItems.map((menuItem, i) => (
+              <ListItem
+                key={i}
+                title={menuItem.title}
+                leftIcon={{name: menuItem.icon}}
+                onPress={() => navigate(menuItem.screen)}
+              />
+            ))
+          }
         </List>
       </View>
     );
