@@ -1,84 +1,47 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Linking, TouchableOpacity }from 'react-native';
-import { Button } from '../components/general';
+import { Text, View, StyleSheet }from 'react-native';
+import { List, ListItem } from 'react-native-elements';
 
+const resources = [
+  {
+    uri: 'http://www.shpeucf.com',
+    title: "SHPE UCF",
+    screen: 'WebPage1',
+    description: 'Chapter website',
+    group: 'SHPE UCF'
+  },
+  {
+    uri:'https://www.facebook.com/groups/SHPEUCF/',
+    title: 'Facebook',
+    screen: 'WebPage2',
+    description: 'SHPE UCF Facebook group',
+    group: 'SHPE UCF'
+  },
+];
 
 
 class Resources extends Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <View style={styles.container}>
-
-        <View style={styles.itemBox}>
-          <View style={styles.itemDescription}>
-            <Text style={styles.itemDescriptionText}>
-              SHPE UCF Website
-            </Text>
-          </View>
-          <View style={styles.itemButton}>
-            <Button onPress={() => navigate('WebPage1')}>
-              Open
-            </Button>
-          </View>
-        </View>
-
-        <View style={styles.itemBox}>
-          <View style={styles.itemDescription}>
-            <Text style={styles.itemDescriptionText}>
-              Facebook Group
-            </Text>
-          </View>
-          <View style={styles.itemButton}>
-            <Button onPress={() => navigate('WebPage2')}>
-              Open
-            </Button>
-          </View>
-        </View>
+      <View>
+        <List>
+          {
+            resources.map((resource, i) => (
+              <ListItem
+                key={i}
+                title={resource.title}
+                subtitle={resource.description}
+                onPress={() => navigate(resource.screen)}
+              />
+          ))
+          }
+        </List>
       </View>
     );
   };
 }
 
-const styles = {
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#FFF',
-  },
-  itemBox: {
-    height: 80,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    marginTop: 5,
-    borderWidth: 1,
-    borderColor: '#F2F2F2',
-    padding: 5,
-    backgroundColor: '#F1F1F1',
-  },
-  itemDescription: {
-    flexDirection: 'row',
-    alignItems: 'stretch',
-    justifyContent: 'flex-start',
-    padding: 5,
-    borderBottomWidth: 1,
-    borderColor: '#999',
-  },
-  itemDescriptionText: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  itemButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    paddingTop: 5,
-  },
-  backTextStyle: {
-    fontSize: 15,
-    color: '#007AFF'
-  },
-};
+const styles = StyleSheet.create({});
 
 export { Resources };

@@ -119,7 +119,7 @@ const RouterComponent = () => {
               />
               <Scene key="WebPage2"
               component={WebPage2}
-              title="SHPE UCF Facebook page"
+              title="Facebook Group"
               />
             <Scene key="CheckIn"
               component={CheckIn}
