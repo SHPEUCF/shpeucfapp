@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import {
   TouchableOpacity,
+  Button,
   Image,
   Text,
   View,
   StyleSheet,
-  Dimensions} from 'react-native';
+  Dimensions,
+  ScrollView
+  } from 'react-native';
 import Moment from 'moment';
 import { Card, SegmentBtn } from '../components/general';
 
@@ -17,6 +20,8 @@ let curDay = date.getDate();
 let BeginMonth = date.getMonth();
 let BeginYear = date.getFullYear();
 
+let todayKey;
+
 let fullMonthName = ["January  ","February  ",
 "March  ","April  ","May  ","June  ",
 "July  ","August  ","September  ","October  "
@@ -26,7 +31,7 @@ let shortWeekDayName = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ];
 
 class Events extends Component {
 
-  state = { month:BeginMonth, year:BeginYear };
+  state = { month:BeginMonth, year:BeginYear, selectedDay:date, show:false };
 
   prevMonth = () => {
     if (this.state.month > 0) {
@@ -47,7 +52,7 @@ class Events extends Component {
       this.setState({year: (this.state.year + 1)});
     }
   };
-
+// This func render the names of the week days.
   renderWeekDays() {
     return shortWeekDayName.map((item, key) => {
       return(
@@ -65,26 +70,32 @@ class Events extends Component {
       });
     }
 
+
   renderDays(week_days, len) {
     return week_days.map((day, key) => {
+      var mapDate = new Date(this.state.year, this.state.month, day).toDateString();
       return (
-        <View
+        <TouchableOpacity
           key={key}
+          onPress={()=> this.datePress(day)}
           style={{flex:1,
             alignItems:'center',
-            justifyContent:'center',
-            backgroundColor:'lightgrey',
+            justifyContent:'flex-start',
+            backgroundColor:this.daySelectedColor(day),
             borderWidth:3,
             borderColor:'white',
             height:(Dimensions.get('window').height/len)-48}}>
             <Text key={key} style={{
                 fontSize:18,
-                fontWeight:'100'
+                fontWeight:date.toDateString() == mapDate ?'900':'100',
+                color:date.toDateString() == mapDate ?'#1c5f68':'black',
+                textAlign:date.toDateString() == mapDate ? 'center':'left',
               }}>
               {day}
             </Text>
             <Card></Card>
-        </View>
+
+        </TouchableOpacity>
       );
     });
   }
@@ -111,6 +122,8 @@ class Events extends Component {
       }
       else if (d <= monthDays) {
         test2[i] = d;
+        //if (d == curDay){
+          //this.setState({selectedDay:i});}
         d++;
       } else {
         test2[i] = " ";
@@ -143,6 +156,45 @@ var weeks = this.renderCalendarDays();
       });
     }
 
+      daySelectedColor(day){
+        var newDate = new Date(this.state.year, this.state.month, day).toDateString();
+        var stateDate = this.state.selectedDay.toDateString();
+      return newDate == stateDate ? 'lightgrey':'white';
+    }
+datePress(day){
+
+      if(day != " " ){
+        this.setState({show:true});
+
+        if(this.state.selectedDay.getDate() != day){
+
+        var tempDate = new Date(this.state.year, this.state.month, day);
+        this.setState({selectedDay:tempDate});
+      }
+    }
+  }
+showDayInfo(){
+  if(this.state.show){
+    return(
+      <View style={styles.overlay}>
+          <View style={styles.display}>
+            <View style={{flex:0, alignItems:'flex-end', marginRight:6}}>
+              <Button title={"X"} onPress={()=> {this.setState({show:false})}}
+                style={{flex:2,fontSize:48, color: '#000000'}}/>
+            </View>
+            <ScrollView style={{margin:2, marginBottom:6, backgroundColor:'lightgrey'}}>
+            </ScrollView>
+          </View>
+      </View>
+    );
+  }
+  else{
+    return(null);
+  }
+}
+
+
+
   render() {
 
     return (
@@ -150,6 +202,7 @@ var weeks = this.renderCalendarDays();
 
         <View style={styles.container}>
 
+          {/*]<Text>{new Date(this.state.year, this.state.month, 11).toDateString()+" | "+this.state.selectedDay.toDateString()}</Text>*/}
           <SegmentBtn
             leftText={"Month"}
             rightText={"List"}
@@ -185,6 +238,7 @@ var weeks = this.renderCalendarDays();
             }/>
 
         </View>
+          {this.showDayInfo()}
       </View>
     );
   }
@@ -197,9 +251,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     margin: 5,
+    backgroundColor:'white',
   },
   text: {
     textAlign: 'center',
+  },
+  overlay:{
+    flex:1,
+    position:'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: '#00000095',
+  },
+  display:{
+    flex:1,
+    margin:20,
+    backgroundColor:'white',
+    borderRadius:10,
   }
 });
 
