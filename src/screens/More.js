@@ -15,27 +15,27 @@ import {
   const menuItems = [
       {
         title: 'Job Board',
-        icon: 'home',
+        icon: 'card-travel',
         screen: 'JobBoard'
       },
       {
         title: 'Leaderboard',
-        icon: 'home',
+        icon: 'format-align-left',
         screen: 'Leaderboard'
       },
       {
         title: 'Resources',
-        icon: 'home',
+        icon: 'layers',
         screen: 'Resources'
       },
       {
         title: 'Check In',
-        icon: 'home',
+        icon: 'done',
         screen: 'CheckIn'
       },
       {
         title: 'About',
-        icon: 'home',
+        icon: 'info',
         screen: 'About'
       }
     ];
