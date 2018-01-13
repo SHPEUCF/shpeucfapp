@@ -7,3 +7,4 @@ export * from './ButtonImage';
 export * from './Input';
 export * from './Spinner';
 export * from './SegmentBtn';
+export * from './WebPageShow';

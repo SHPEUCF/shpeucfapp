@@ -4,6 +4,7 @@ import firebase from 'firebase';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import RegistrationForm from '../components/auth/RegistrationForm';
 import LoginForm from '../components/auth/LoginForm'
+import { WebPageShow } from '../components/general';
 
 // Screens
 import {
@@ -17,8 +18,6 @@ import {
   CheckIn,
   Forms,
   About,
-  WebPage1,
-  WebPage2
 } from '../screens/';
 
 const RouterComponent = () => {
@@ -114,14 +113,10 @@ const RouterComponent = () => {
               component={Resources}
               title="Resources"
             />
-              <Scene key="WebPage1"
-                component={WebPage1}
-                title="SHPE UCF Website"
-              />
-              <Scene key="WebPage2"
-              component={WebPage2}
-              title="Facebook Group"
-              />
+              <Scene key="WebPageShow"
+                    component={WebPageShow}
+                    passProps
+                  />
             <Scene key="CheckIn"
               component={CheckIn}
               title="Check In"

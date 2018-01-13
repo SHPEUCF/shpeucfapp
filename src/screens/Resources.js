@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet }from 'react-native';
+import { View }from 'react-native';
+import { Actions } from 'react-native-router-flux';
 import { List, ListItem } from 'react-native-elements';
 
 const resources = [
   {
     uri: 'http://www.shpeucf.com',
     title: "SHPE UCF",
-    screen: 'WebPage1',
     description: 'Chapter website',
     group: 'SHPE UCF'
   },
   {
     uri:'https://www.facebook.com/groups/SHPEUCF/',
     title: 'Facebook',
-    screen: 'WebPage2',
     description: 'SHPE UCF Facebook group',
     group: 'SHPE UCF'
   },
@@ -32,7 +31,10 @@ class Resources extends Component {
                 key={i}
                 title={resource.title}
                 subtitle={resource.description}
-                onPress={() => navigate(resource.screen)}
+                onPress={() => Actions.WebPageShow(
+                  { title: resource.title,
+                    uri: resource.uri }
+                )}
               />
             ))
           }
@@ -41,7 +43,5 @@ class Resources extends Component {
     );
   };
 }
-
-const styles = StyleSheet.create({});
 
 export { Resources };

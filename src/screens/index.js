@@ -8,5 +8,3 @@ export * from './Resources';
 export * from './CheckIn';
 export * from './Forms';
 export * from './About';
-export * from './WebPage1';
-export * from './WebPage2';
