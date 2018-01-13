@@ -50,6 +50,9 @@ export const loginUserFail = (dispatch, error) => {
     case 'auth/wrong-password':
       errorMessage = 'Incorrect credentials';
       break;
+    case 'auth/network-request-failed':
+      errorMessage = 'Network error. Check your Internet connectivity.';
+      break;
     default:
     errorMessage = error.message;
   }
