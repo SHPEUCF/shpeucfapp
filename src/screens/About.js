@@ -17,11 +17,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start'
   },
-  backTextStyle: {
-    fontSize: 15,
-    color: '#007AFF'
-  },
-
 });
 
 export { About };

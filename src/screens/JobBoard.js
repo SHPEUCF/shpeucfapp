@@ -6,13 +6,10 @@ class JobBoard extends Component {
 
   render() {
     return (
-      <View style={{flex:1}}>
-        {/*<Text style={{marginTop: Dimensions.get('window').height/3}}>Job Board</Text>*/}
-        <View style={styles.container}>
+      <View style={styles.container}>
           <SegmentBtn
             leftText={"Month"}
             />
-        </View>
       </View>
     );
   }
@@ -24,10 +21,6 @@ const styles = StyleSheet.create({
     marginTop:5,
     alignItems: 'center',
     justifyContent: 'flex-start'
-  },
-  backTextStyle: {
-    fontSize: 15,
-    color: '#007AFF'
   },
 });
 

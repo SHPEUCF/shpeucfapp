@@ -11,10 +11,11 @@ import {
   Profile,
   Events,
   More,
-  JobBoard,
   Leaderboard,
+  JobBoard,
   Resources,
   CheckIn,
+  Forms,
   About,
   WebPage1,
   WebPage2
@@ -101,13 +102,13 @@ const RouterComponent = () => {
               title="More Options"
               leftTitle="Back"
             />
-            <Scene key="JobBoard"
-              component={JobBoard}
-              title="Job Board"
-            />
             <Scene key="Leaderboard"
               component={Leaderboard}
               title="Leaderboard"
+            />
+            <Scene key="JobBoard"
+              component={JobBoard}
+              title="Job Board"
             />
             <Scene key="Resources"
               component={Resources}
@@ -125,6 +126,10 @@ const RouterComponent = () => {
               component={CheckIn}
               title="Check In"
             />
+            <Scene key="Forms"
+                component={Forms}
+                title="Forms"
+              />
             <Scene key="About"
               component={About}
               title="About Us"

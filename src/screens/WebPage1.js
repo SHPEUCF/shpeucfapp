@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-
-
 import {
    View,
    WebView,
@@ -18,14 +16,9 @@ class WebPage1 extends Component {
   }
 }
 
-
 const styles = StyleSheet.create({
    container: {
       flex: 1
-   },
-   backTextStyle: {
-     fontSize: 15,
-     color: '#007AFF'
    },
 })
 

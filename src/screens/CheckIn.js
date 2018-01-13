@@ -5,7 +5,7 @@ class CheckIn extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={{marginTop: Dimensions.get('window').height/3}}>Check In</Text>
+        <Text>Check In</Text>
       </View>
     )
   }
@@ -15,13 +15,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-start'
+    justifyContent: 'center'
   },
-  backTextStyle: {
-    fontSize: 15,
-    color: '#007AFF'
-  },
-
 });
 
 export { CheckIn };

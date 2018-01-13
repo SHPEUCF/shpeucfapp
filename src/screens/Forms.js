@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import {Text, View, StyleSheet, TouchableOpacity, Dimensions }from 'react-native';
+import {Text, View, StyleSheet }from 'react-native';
 
-class Leaderboard extends Component {
+class Forms extends Component {
+
   render() {
     return (
       <View style={styles.container}>
-        <Text>Leaderboard</Text>
+        <Text>
+          Google Forms live here
+        </Text>
       </View>
-    )
+    );
   }
 }
 
@@ -19,4 +22,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { Leaderboard };
+export { Forms };

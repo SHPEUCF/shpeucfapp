@@ -6,38 +6,44 @@ import { List, ListItem } from 'react-native-elements';
 
 // screens
 import {
-  JobBoard,
   Leaderboard,
+  JobBoard,
   Resources,
   CheckIn,
+  Forms,
   About } from './';
 
   const menuItems = [
-      {
-        title: 'Job Board',
-        icon: 'card-travel',
-        screen: 'JobBoard'
-      },
-      {
-        title: 'Leaderboard',
-        icon: 'format-align-left',
-        screen: 'Leaderboard'
-      },
-      {
-        title: 'Resources',
-        icon: 'layers',
-        screen: 'Resources'
-      },
-      {
-        title: 'Check In',
-        icon: 'done',
-        screen: 'CheckIn'
-      },
-      {
-        title: 'About',
-        icon: 'info',
-        screen: 'About'
-      }
+    {
+      title: 'Leaderboard',
+      icon: 'format-align-left',
+      screen: 'Leaderboard'
+    },
+    {
+      title: 'Job Board',
+      icon: 'card-travel',
+      screen: 'JobBoard'
+    },
+    {
+      title: 'Resources',
+      icon: 'layers',
+      screen: 'Resources'
+    },
+    {
+      title: 'Check In',
+      icon: 'done',
+      screen: 'CheckIn'
+    },
+    {
+      title: 'Forms',
+      icon: 'assignment',
+      screen: 'Forms'
+    },
+    {
+      title: 'About',
+      icon: 'info',
+      screen: 'About'
+    }
     ];
 
 class More extends Component {

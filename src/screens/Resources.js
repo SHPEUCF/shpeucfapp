@@ -34,7 +34,7 @@ class Resources extends Component {
                 subtitle={resource.description}
                 onPress={() => navigate(resource.screen)}
               />
-          ))
+            ))
           }
         </List>
       </View>
