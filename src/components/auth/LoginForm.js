@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
 import { emailChanged, passwordChanged, loginUser, goToRegistration } from '../../actions';
 import { Button, Card, CardSection, Input, Spinner } from '../general';
 
@@ -56,57 +55,65 @@ class LoginForm extends Component {
     }
   }
 
+  renderContent() {
+    if (this.props.loggedIn) {
+      return <Spinner />;
+    } else {
+      return (
+        <View style={styles.formContainerStyle}>
+
+          <View style={styles.headerStyle}>
+            <Text style={styles.headerTextStyle}>Welcome! Please Log In or Sign Up</Text>
+          </View>
+
+          <View style={styles.formFieldsContainer}>
+            <View style={styles.formField}>
+              <Input
+                label="Email"
+                placeholder="user@knights.ucf.edu"
+                value={this.props.email}
+                autoCapitalize="none"
+                maxLength={45}
+                onChangeText={this.onEmailChange.bind(this)}
+                />
+            </View>
+
+            <View style={styles.formField}>
+              <Input
+                secureTextEntry
+                label="Password"
+                placeholder="password"
+                value={this.props.password}
+                maxLength={45}
+                onChangeText={this.onPasswordChange.bind(this)}
+                />
+            </View>
+          </View>
+
+          <View>
+            {this.renderError()}
+          </View>
+
+          <View style={styles.formButton}>
+            {this.renderLogInButton()}
+          </View>
+
+          <View style={styles.signUpContainer}>
+            <View>
+              <Text>Don't have an account? </Text>
+            </View>
+            <View>
+              {this.renderSignUpButton()}
+            </View>
+          </View>
+
+        </View>
+      );
+    }
+  }
+
   render() {
-    return (
-      <View style={styles.formContainerStyle}>
-
-        <View style={styles.headerStyle}>
-          <Text style={styles.headerTextStyle}>Welcome! Please Log In or Sign Up</Text>
-        </View>
-
-        <View style={styles.formFieldsContainer}>
-          <View style={styles.formField}>
-            <Input
-              label="Email"
-              placeholder="user@knights.ucf.com"
-              value={this.props.email}
-              autoCapitalize="none"
-              maxLength={45}
-              onChangeText={this.onEmailChange.bind(this)}
-              />
-          </View>
-
-          <View style={styles.formField}>
-            <Input
-              secureTextEntry
-              label="Password"
-              placeholder="password"
-              value={this.props.password}
-              maxLength={45}
-              onChangeText={this.onPasswordChange.bind(this)}
-              />
-          </View>
-        </View>
-
-        <View>
-          {this.renderError()}
-        </View>
-
-        <View style={styles.formButton}>
-          {this.renderLogInButton()}
-        </View>
-
-        <View style={styles.signUpContainer}>
-          <View>
-            <Text>Don't have an account? </Text>
-          </View>
-          <View>
-            {this.renderSignUpButton()}
-          </View>
-        </View>
-
-      </View>
-    );
+    return this.renderContent();
   }
 }
 
@@ -169,9 +176,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ auth }) => {
-  const { email, password, error, loading, } = auth;
+  const { email, password, error, loading, loggedIn } = auth;
 
-  return { email, password, error, loading };
+  return { email, password, error, loading, loggedIn };
 };
 const mapDispatchToProps = {
   emailChanged,

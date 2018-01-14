@@ -1,12 +1,13 @@
 import React, { Component} from 'react';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
 import firebase from 'firebase';
-import thunk from 'redux-thunk';
-import reducers from './reducers';
+import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
+import { Spinner } from './components/general';
+import { goToLogIn } from './actions';
 import Router from './config/Router';
 
-export default class App extends Component {
+
+class App extends Component {
 
   componentWillMount() {
     // Initialize firebase
@@ -19,15 +20,28 @@ export default class App extends Component {
       messagingSenderId: '60634673791'
     };
     firebase.initializeApp(config);
+
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.props.loggedIn = true;
+        Actions.main();
+      } else {
+        this.props.loggedIn = false;
+        Actions.login();
+      }
+    });
   }
 
   render() {
-    const store = createStore(reducers, {}, applyMiddleware(thunk));
-
-    return (
-      <Provider store={store}>
-        <Router />
-      </Provider>
-    );
+    return <Router />;
   }
 }
+
+const mapStateToProps = ({ auth }) => {
+  const { loggedIn } = auth;
+  return { loggedIn };
+};
+
+const mapDispatchToProps = { goToLogIn };
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

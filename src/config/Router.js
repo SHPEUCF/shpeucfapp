@@ -32,6 +32,7 @@ const RouterComponent = () => {
             title="Login"
             type={ActionConst.REPLACE}
             hideNavBar
+            passProps
              />
           <Scene
             key="registration"
@@ -45,11 +46,10 @@ const RouterComponent = () => {
           tabs
           tabBarPosition="bottom"
           rightTitle="Log Out"
-          onRight={() => firebase.auth().signOut().then(function() {
-          Actions.login()})} >
+          type={ActionConst.RESET}
+          onRight={() => firebase.auth().signOut()} >
           <Scene
             key="feed"
-            initial
             component={Feed}
             title="Feed"
             tabBarIcon={ ({ tintColor, focused }) =>

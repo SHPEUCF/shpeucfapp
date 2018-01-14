@@ -67,7 +67,7 @@ class RegistrationForm extends Component {
           <View style={styles.formField}>
             <Input
               label="Email"
-              placeholder="user@knights.ucf.com"
+              placeholder="user@knights.ucf.edu"
               value={this.props.email}
               autoCapitalize="none"
               maxLength={45}

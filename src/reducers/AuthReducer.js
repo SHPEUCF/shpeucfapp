@@ -15,6 +15,7 @@ const INITIAL_STATE = {
   email: '',
   password: '',
   user: null,
+  loggedIn: null,
   error: '',
   loading: false,
 };
@@ -24,38 +25,51 @@ export default (state = INITIAL_STATE, action) => {
 
   switch (action.type) {
     case EMAIL_CHANGED:
-      return { ...state, email: payload };
-      break;
+      return { ...state,
+        email: payload
+      };
     case PASSWORD_CHANGED:
-      return { ...state, password: payload };
-      break;
+      return { ...state,
+        password: payload
+      };
     case LOGIN_USER:
       return { ...state,
         loading: true,
-        error: '' };
-        break;
+        error: ''
+      };
     case LOGIN_USER_SUCCESS:
-      return { ...state, ...INITIAL_STATE, user: payload };
-      break;
+      return { ...state,
+        ...INITIAL_STATE,
+        user: payload,
+        loggedIn: true
+      };
     case LOGIN_USER_FAIL:
-      return { ...state, error: payload, loading: false, password: '' };
+      return { ...state,
+        error: payload,
+        loading: false,
+        password: ''
+      };
     case CREATE_USER:
       return { ...state,
         loading: true,
-        error: '' };
-        break;
+        error: ''
+      };
     case CREATE_USER_SUCCESS:
-      return { ...state, ...INITIAL_STATE, user: payload };
-      break;
+      return { ...state,
+        ...INITIAL_STATE,
+        user: payload
+      };
     case CREATE_USER_FAIL:
-      return { ...state, error: payload, loading: false, email: '', password: ''};
-      break;
+      return { ...state,
+        error: payload,
+        loading: false,
+        email: '',
+        password: ''
+      };
     case GO_TO_LOGIN:
       return INITIAL_STATE;
-      break;
     case GO_TO_REGISTRATION:
       return INITIAL_STATE;
-      break;
     default:
       return state;
   }
