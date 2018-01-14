@@ -1,47 +1,149 @@
 import React, { Component } from 'react';
-import { View }from 'react-native';
+import { ScrollView, View, Text, StyleSheet }from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { List, ListItem } from 'react-native-elements';
 
 const resources = [
   {
-    uri: 'http://www.shpeucf.com',
-    title: "SHPE UCF",
-    description: 'Chapter website',
-    group: 'SHPE UCF'
+    group: {
+      name: "SHPE UCF",
+      items: [
+        {
+          uri: "http://www.shpeucf.com",
+          title: "SHPE UCF",
+          description: "Chapter website",
+        },
+        {
+          uri: "https://www.facebook.com/groups/SHPEUCF/",
+          title: "Facebook",
+          description: "SHPE UCF group",
+        },
+        {
+          uri: "https://www.instagram.com/shpeucf/",
+          title: "Instagram",
+          description: "SHPE UCF Instagram",
+        },
+        {
+          uri: "https://twitter.com/shpeucfchapter",
+          title: "Twitter",
+          description: "SHPE UCF Twitter",
+        },
+      ],
+    }
   },
   {
-    uri:'https://www.facebook.com/groups/SHPEUCF/',
-    title: 'Facebook',
-    description: 'SHPE UCF Facebook group',
-    group: 'SHPE UCF'
+    group: {
+      name: "SHPE NATIONAL",
+      items: [
+        {
+          uri: "http://www.shpe.org",
+          title: "SHPE National",
+          description: "SHPE website",
+        },
+      ]
+    }
   },
+  {
+    group: {
+      name: "UCF",
+      items: [
+        {
+          uri: "http://www.ucf.edu",
+          title: "University of Central Florida",
+          description: "website",
+        },
+      ]
+    }
+  },
+  {
+    group: {
+      name: "INDUSTRY",
+      items: [
+        {
+          uri: "http://www.nasa.gov",
+          title: "NASA",
+          description: "website",
+        },
+        {
+          uri: "http://www.northropgrumman.com/Pages/default.aspx",
+          title: "Northrop Grumman",
+          description: "website",
+        },
+        {
+          uri: "https://www.lockheedmartin.com/us.html",
+          title: "Lochheed Martin",
+          description: "website",
+        },
+        {
+          uri: "https://careers.google.com/students/",
+          title: "Google Careers",
+          description: "website",
+        },
+      ]
+    }
+  },
+  {
+    group: {
+      name: "STUDENT FREEBIES / DISCOUNTS",
+      items: [
+        {
+          uri: "https://www.visualstudio.com/free-developer-offers/",
+          title: "Microsoft",
+          description: "Visual Studio Dev Essentials credits",
+        },
+        {
+          uri: "https://www.jetbrains.com/student/",
+          title: "JetBrains",
+          description: "Student free licenses",
+        },
+        {
+          uri: "https://education.github.com/pack",
+          title: "GitHub",
+          description: "Student Developer Pack",
+        },
+      ]
+    }
+  }
 ];
-
 
 class Resources extends Component {
   render() {
-    const { navigate } = this.props.navigation;
     return (
-      <View>
-        <List>
-          {
-            resources.map((resource, i) => (
-              <ListItem
-                key={i}
-                title={resource.title}
-                subtitle={resource.description}
-                onPress={() => Actions.WebPageShow(
-                  { title: resource.title,
-                    uri: resource.uri }
-                )}
-              />
-            ))
-          }
-        </List>
-      </View>
+      <ScrollView>
+        {
+          resources.map((resource, i) => (
+            <View key={i}>
+              <Text style={styles.sectionTitle}>
+                {resource.group.name}
+              </Text>
+              <List containerStyle={{ marginTop: 10 }}>
+                {
+                  resource.group.items.map((item, i) => (
+                    <ListItem
+                      key={i}
+                      title={item.title}
+                      subtitle={item.description}
+                      onPress={() => Actions.WebPageShow(
+                        { title: item.title,
+                          uri: item.uri }
+                      )}
+                    />
+                  ))
+                }
+              </List>
+            </View>
+          ))
+        }
+      </ScrollView>
+
     );
   };
 }
 
+const styles = StyleSheet.create({
+  sectionTitle: {
+    marginTop: 10,
+    marginLeft: 20,
+  }
+});
 export { Resources };
