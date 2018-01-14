@@ -1,17 +1,9 @@
 import React, { Component } from 'react';
+import { Actions } from 'react-native-router-flux';
 import {
-  View,
+  ScrollView,
   StyleSheet } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
-
-// screens
-import {
-  Leaderboard,
-  JobBoard,
-  Resources,
-  CheckIn,
-  Forms,
-  About } from './';
 
   const menuItems = [
     {
@@ -49,10 +41,8 @@ import {
 class More extends Component {
 
   render() {
-    const { navigate } = this.props.navigation;
-
     return (
-      <View>
+      <ScrollView>
         <List>
           {
             menuItems.map((menuItem, i) => (
@@ -60,15 +50,14 @@ class More extends Component {
                 key={i}
                 title={menuItem.title}
                 leftIcon={{name: menuItem.icon}}
-                onPress={() => navigate(menuItem.screen)}
+                onPress={() => Actions[menuItem.screen]()}
               />
             ))
           }
         </List>
-      </View>
+      </ScrollView>
     );
   };
 }
-
 
 export { More };
