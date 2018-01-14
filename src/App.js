@@ -19,7 +19,8 @@ class App extends Component {
       storageBucket: 'authentication-d9d53.appspot.com',
       messagingSenderId: '60634673791'
     };
-    firebase.initializeApp(config);
+    firebase.initializeApp(config)
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
