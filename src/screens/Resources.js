@@ -71,7 +71,7 @@ const resources = [
         },
         {
           uri: "https://www.lockheedmartin.com/us.html",
-          title: "Lochheed Martin",
+          title: "Lockheed Martin",
           description: "website",
         },
         {
