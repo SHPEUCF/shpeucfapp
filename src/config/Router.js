@@ -4,7 +4,7 @@ import firebase from 'firebase';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import RegistrationForm from '../components/auth/RegistrationForm';
 import LoginForm from '../components/auth/LoginForm'
-import { WebPageShow } from '../components/general';
+import { WebPageShow, ComingSoon } from '../components/general';
 
 // Screens
 import {
@@ -18,6 +18,7 @@ import {
   CheckIn,
   Forms,
   About,
+  EBoard,
 } from '../screens/';
 
 const RouterComponent = () => {
@@ -127,8 +128,16 @@ const RouterComponent = () => {
               />
             <Scene key="About"
               component={About}
-              title="About Us"
+              title="About"
             />
+              <Scene key="EBoard"
+                        component={EBoard}
+                        passProps
+                      />
+              <Scene key="ComingSoon"
+                    component={ComingSoon}
+                    passProps
+                  />
           </Stack>
         </Stack>
       </Stack>
