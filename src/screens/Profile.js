@@ -1,69 +1,108 @@
 import React, { Component } from 'react';
+import firebase from 'firebase';
 import {
   Text,
   View, StyleSheet,
   Image,
-  ScrollView, 
+  ScrollView,
   TouchableOpacity } from 'react-native';
-
-import { Header } from '../components/general';
+import { Avatar, Divider, Button } from 'react-native-elements';
 
 class Profile extends Component {
-  render() {
-    return (
-      <View style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={styles.contentContainer}>
 
-          <View style={styles.containerStyle1}>
-            <Image style={{height:100, width:100, margin: 10, borderRadius: 50}}
-             source={{uri:'http://s2.storage.akamai.coub.com/get/b92/p/coub/simple/cw_timeline_pic/410c9604b2e/24bf4be1fe57b332d8099/big_1476460439_image.jpg'}}
-             />
-             <View style={{marginLeft:70, justifyContent: 'center', flex: 3}}>
-               <Text style={styles.tagline}>"Turn up!"</Text>
+  render() {
+    const {
+      containerStyle,
+      headerInfoContainer,
+      avatarContainerStyle,
+      taglineContainer,
+      taglineTextStyle,
+      contentContainerStyle,
+      contentItemsContainerStyle,
+      itemLabelContainerStyle,
+      itemLabelText,
+      itemValueContainerStyle,
+      itemValueText,
+      buttonsContainerStyle,
+      editButtonContainer,
+      logOutButtonContainer } = styles;
+
+    return (
+      <View style={containerStyle}>
+        <ScrollView>
+
+          <View style={headerInfoContainer}>
+            <View style={avatarContainerStyle}>
+              <Avatar
+                large
+                rounded
+                title="FL"
+                onPress={() => alert("Coming Soon")}
+                activeOpacity={0.7}
+                />
+            </View>
+            <View style={taglineContainer}>
+               <Text style={taglineTextStyle}>Turn up!</Text>
             </View>
           </View>
+          <Divider style={{ backgroundColor: '#D9D7CE' }} />
 
-          <View style={styles.containerStyle2}>
+          <View style={contentContainerStyle}>
 
-            <View style={styles.itemsContainerStyle1}>
-              <View style={styles.itemLabelStyle}>
-                <Text style={styles.itemLabelText}>Name:</Text>
+            <View style={contentItemsContainerStyle}>
+              <View style={itemLabelContainerStyle}>
+                <Text style={itemLabelText}>Name:</Text>
               </View>
-              <View style={styles.itemValueStyle}>
-                <Text style={styles.itemValueText}>John Doe</Text>
+              <View style={itemValueContainerStyle}>
+                <Text style={itemValueText}>John Doe</Text>
               </View>
             </View>
 
-            <View style={styles.itemsContainerStyle2}>
-              <View style={styles.itemLabelStyle}>
-                <Text style={styles.itemLabelText}>Email:</Text>
+            <View style={contentItemsContainerStyle}>
+              <View style={itemLabelContainerStyle}>
+                <Text style={itemLabelText}>Email:</Text>
               </View>
-              <View style={styles.itemValueStyle}>
-                <Text style={styles.itemValueText}>@knights.ucf.edu</Text>
-              </View>
-            </View>
-
-            <View style={styles.itemsContainerStyle3}>
-              <View style={styles.itemLabelStyle}>
-                <Text style={styles.itemLabelText}>Major:</Text>
-              </View>
-              <View style={styles.itemValueStyle}>
-                <Text style={styles.itemValueText}>Computer Engineering</Text>
+              <View style={itemValueContainerStyle}>
+                <Text style={itemValueText}>user@knights.ucf.edu</Text>
               </View>
             </View>
 
-            <View style={styles.itemsContainerStyle4}>
-              <View style={styles.itemLabelStyle}>
-                <Text style={styles.itemLabelText}>Membership:</Text>
+            <View style={contentItemsContainerStyle}>
+              <View style={itemLabelContainerStyle}>
+                <Text style={itemLabelText}>Major:</Text>
               </View>
-              <View style={styles.itemValueStyle2}>
-                <Text style={styles.itemValueText}>Active</Text>
-              </View>
-              <View style={styles.itemValueStyle2}>
-                 <Text style={styles.itemValueText}>Expires: Date</Text>
+              <View style={itemValueContainerStyle}>
+                <Text style={itemValueText}>Computer Engineering</Text>
               </View>
             </View>
 
+          </View>
+
+          <Divider style={{ backgroundColor: '#D9D7CE' }} />
+
+          <View style={buttonsContainerStyle}>
+            <View style={editButtonContainer}>
+              <Button
+                title='Edit Profile'
+                raised
+                backgroundColor='#FECB00'
+                color='#000'
+                fontSize={15}
+                icon={{color: '#000', name: 'mode-edit' }}
+                onPress={() => alert("Coming Soon")}
+              />
+            </View>
+            <View style={logOutButtonContainer}>
+              <Button
+                title='Log Out'
+                raised
+                backgroundColor='#FECB00'
+                color='#000'
+                fontSize={15}
+                icon={{color: '#000', name: 'keyboard-tab'}}
+                onPress={() => firebase.auth().signOut()}
+              />
+            </View>
           </View>
 
         </ScrollView>
@@ -74,43 +113,38 @@ class Profile extends Component {
 }
 
 const styles = StyleSheet.create({
-  containerStyle1: {
-  flex: 1,
-  flexDirection: 'row',
+  containerStyle: {
+    flex: 1,
+    backgroundColor: '#FFF'
   },
-  containerStyle2: {
-  flex: 1,
-
+  headerInfoContainer: {
+    flex: 1,
+    paddingTop: 30,
+    paddingBottom: 30,
+    backgroundColor: '#D9D7CE'
   },
-  tagline:{
-    fontSize: 15,
-    fontWeight: '500'
+  avatarContainerStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  itemsContainerStyle1: {
-    flexDirection: 'row',
-    backgroundColor: 'green',
+  taglineContainer: {
+    alignItems: 'center',
     marginTop: 10,
-    padding: 20,
   },
-  itemsContainerStyle2: {
+  taglineTextStyle:{
+    fontSize: 16,
+    fontWeight: '600'
+  },
+  contentContainerStyle: {
+    flex: 1,
+    marginTop: 30,
+    marginBottom: 30,
+  },
+  contentItemsContainerStyle: {
     flexDirection: 'row',
-    backgroundColor: 'green',
-    marginTop: 10,
-    padding: 20,
+    padding: 10,
   },
-  itemsContainerStyle3: {
-    flexDirection: 'row',
-    backgroundColor: 'green',
-    marginTop: 10,
-    padding: 20,
-  },
-  itemsContainerStyle4: {
-    flexDirection: 'row',
-    backgroundColor: 'green',
-    marginTop: 10,
-    padding: 20,
-  },
-  itemLabelStyle: {
+  itemLabelContainerStyle: {
     flex: 1,
     justifyContent: 'center'
   },
@@ -118,26 +152,29 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold'
   },
-  itemValueStyle: {
+  itemValueContainerStyle: {
     flex: 4,
     justifyContent: 'center',
     alignItems: 'flex-start'
-  },
-  itemValueStyle2: {
-    flex: 1,
-    justifyContent: 'center',
   },
   itemValueText: {
     fontSize: 15,
     fontWeight: '500',
   },
-  editTextStyle: {
-    fontSize: 15,
-    color: '#007AFF'
+  buttonsContainerStyle: {
+    marginTop: 50,
+    marginRight: 10,
+    marginBottom: 20,
+    marginLeft: 10,
+    justifyContent: 'flex-end',
   },
-  contentContainer: {
-    paddingVertical: 10
-  }
+  editButtonContainer: {
+    flex: 1,
+    marginBottom: 10,
+  },
+  logOutButtonContainer: {
+    flex: 1,
+  },
 });
 
 export {Profile};
