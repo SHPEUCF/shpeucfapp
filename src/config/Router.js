@@ -1,6 +1,5 @@
 import React from 'react';
 import { Router, Scene, Stack, ActionConst, Actions } from 'react-native-router-flux';
-import firebase from 'firebase';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import RegistrationForm from '../components/auth/RegistrationForm';
 import LoginForm from '../components/auth/LoginForm'
@@ -45,9 +44,7 @@ const RouterComponent = () => {
         <Stack key="main"
           tabs
           tabBarPosition="bottom"
-          rightTitle="Log Out"
-          type={ActionConst.RESET}
-          onRight={() => firebase.auth().signOut()} >
+          type={ActionConst.RESET}>
           <Scene
             key="feed"
             component={Feed}
@@ -76,8 +73,6 @@ const RouterComponent = () => {
             key="profile"
             component={Profile}
             title="Profile"
-            rightTitle="Edit"
-            onRight={()=>alert("Coming soon!")}
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
                 name={focused ? 'ios-person' : 'ios-person-outline'}
