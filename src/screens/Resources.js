@@ -124,7 +124,7 @@ class Resources extends Component {
                       title={item.title}
                       subtitle={item.description}
                       onPress={() => Actions.WebPageShow(
-                        { title: item.title,
+                        { title: item.title, // Title not being used now - delete after checking
                           uri: item.uri }
                       )}
                     />

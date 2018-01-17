@@ -11,7 +11,7 @@ class WebPageShow extends Component {
         renderLoading={() => <Spinner /> }
         startInLoadingState
       />
-  );
+    );
   }
 }
 

@@ -99,7 +99,7 @@ class Profile extends Component {
                 backgroundColor='#FECB00'
                 color='#000'
                 fontSize={15}
-                icon={{color: '#000', name: 'keyboard-tab'}}
+                icon={{color: '#000', name: 'exit-to-app'}}
                 onPress={() => firebase.auth().signOut()}
               />
             </View>

@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, Dimensions }from 'react-native';
-import { SegmentBtn } from '../components/general';
+import { Actions } from 'react-native-router-flux';
 
 class JobBoard extends Component {
 
   render() {
     return (
       <View style={styles.container}>
-          <SegmentBtn
-            leftText={"Month"}
-            />
+        <Text>Coming Soon</Text>
       </View>
     );
   }
@@ -20,7 +18,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop:5,
     alignItems: 'center',
-    justifyContent: 'flex-start'
+    justifyContent: 'center'
   },
 });
 
