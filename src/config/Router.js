@@ -96,43 +96,43 @@ const RouterComponent = () => {
               component={More}
               title="More Options"
               leftTitle="Back"
-            />
+              />
             <Scene key="Leaderboard"
               component={Leaderboard}
               title="Leaderboard"
-            />
+              />
             <Scene key="JobBoard"
               component={JobBoard}
               title="Job Board"
-            />
+              />
             <Scene key="Resources"
               component={Resources}
               title="Resources"
-            />
+              />
               <Scene key="WebPageShow"
-                    component={WebPageShow}
-                    passProps
-                  />
+                component={WebPageShow}
+                passProps
+                />
             <Scene key="CheckIn"
               component={CheckIn}
               title="Check In"
-            />
+              />
             <Scene key="Forms"
-                component={Forms}
-                title="Forms"
+              component={Forms}
+              title="Forms"
               />
             <Scene key="About"
               component={About}
               title="About"
-            />
+              />
               <Scene key="EBoard"
-                        component={EBoard}
-                        passProps
-                      />
+                component={EBoard}
+                passProps
+                />
               <Scene key="ComingSoon"
-                    component={ComingSoon}
-                    passProps
-                  />
+                component={ComingSoon}
+                passProps
+                />
           </Stack>
         </Stack>
       </Stack>
