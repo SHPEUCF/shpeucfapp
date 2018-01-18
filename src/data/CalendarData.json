@@ -1,0 +1,24 @@
+[
+  {
+    "year": 2018,
+    "months": [
+      {
+        "month": "January",
+        "days": [
+          {
+            "day": 22,
+            "event": [
+              {
+                "tag": "gbm",
+                "title": "1st Sprg GBM",
+                "time": "6:30pm - 8:30pm",
+                "location": "HEC 101",
+                "description": "SHPE UCF's first GBM of the semester will be on Monday, January 22nd in HEC 101! Make sure to save the date to attend, free Hispanic food will be provided! Hope to see you there!"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
