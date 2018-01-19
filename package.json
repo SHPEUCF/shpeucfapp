@@ -13,6 +13,7 @@
     "react": "^16.0.0",
     "react-native": "^0.51.0",
     "react-native-beacons-manager": "^1.0.7",
+    "react-native-calendars": "^1.16.1",
     "react-native-elements": "^0.18.5",
     "react-native-router-flux": "^4.0.0-beta.27",
     "react-native-scrollable-tab-view": "^0.8.0",

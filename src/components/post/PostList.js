@@ -9,7 +9,7 @@ class PostList extends Component {
 
   componentWillMount() {
       axios.get('https://api.myjson.com/bins/13curn')
-      .then(response => this.setState({ posts: response.data}));
+      .then(response => this.setState({ posts: response.data }));
   }
 
   renderPosts() {
@@ -19,7 +19,6 @@ class PostList extends Component {
   }
 
   render() {
-    console.log(this.state);
     return (
       <ScrollView>
         {this.renderPosts()}
