@@ -44,7 +44,11 @@ const RouterComponent = () => {
         <Stack key="main"
           tabs
           tabBarPosition="bottom"
-          type={ActionConst.RESET}>
+          type={ActionConst.RESET}
+          activeTintColor={'black'}
+          inactiveTintColor={'gray'}
+          >
+
           <Scene
             key="feed"
             component={Feed}
@@ -52,8 +56,8 @@ const RouterComponent = () => {
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
                 name={focused ? 'ios-paper' : 'ios-paper-outline'}
-                size ={28}
-                style={{ color: tintColor }}
+                size ={30}
+                style={{ color: 'black' }}
               />
             }
           />
@@ -64,8 +68,8 @@ const RouterComponent = () => {
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
                 name={focused ? 'ios-calendar' : 'ios-calendar-outline'}
-                size ={28}
-                style={{ color: tintColor }}
+                size ={30}
+                style={{ color: 'black' }}
               />
             }
           />
@@ -76,8 +80,8 @@ const RouterComponent = () => {
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
                 name={focused ? 'ios-person' : 'ios-person-outline'}
-                size ={28}
-                style={{ color: tintColor }}
+                size ={30}
+                style={{ color: 'black' }}
               />
             }
           />
@@ -87,8 +91,8 @@ const RouterComponent = () => {
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
                 name={focused ? 'ios-menu' : 'ios-menu-outline'}
-                size ={28}
-                style={{ color: tintColor }}
+                size ={30}
+                style={{ color: 'black' }}
               />
             }>
             <Scene
