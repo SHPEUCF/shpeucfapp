@@ -5,6 +5,7 @@ import {
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAIL,
   LOGIN_USER,
+  LOGOUT_USER,
   CREATE_USER,
   CREATE_USER_SUCCESS,
   CREATE_USER_FAIL,
@@ -65,6 +66,10 @@ export default (state = INITIAL_STATE, action) => {
         loading: false,
         email: '',
         password: ''
+      };
+    case LOGOUT_USER:
+      return { ...state,
+        loggedIn: false,
       };
     case GO_TO_LOGIN:
       return INITIAL_STATE;

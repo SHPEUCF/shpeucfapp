@@ -1,6 +1,5 @@
 export * from './Feed';
 export * from './Events';
-export * from './Profile';
 export * from './More';
 export * from './Leaderboard';
 export * from './JobBoard';

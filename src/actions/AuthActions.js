@@ -7,6 +7,7 @@ import {
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAIL,
   LOGIN_USER,
+  LOGOUT_USER,
   CREATE_USER,
   CREATE_USER_SUCCESS,
   CREATE_USER_FAIL,
@@ -131,4 +132,13 @@ const createUserSuccess = (dispatch, user) => {
   });
 
   Actions.main();
+};
+
+export const logoutUser = () => {
+  return (dispatch) => {
+    dispatch({ type: LOGOUT_USER });
+
+    firebase.auth().signOut();
+    Actions.login();
+  };
 };

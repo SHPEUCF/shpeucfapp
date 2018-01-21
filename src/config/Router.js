@@ -8,7 +8,6 @@ import { WebPageShow, ComingSoon } from '../components/general';
 // Screens
 import {
   Feed,
-  Profile,
   Events,
   More,
   Leaderboard,
@@ -19,6 +18,7 @@ import {
   About,
   EBoard,
 } from '../screens/';
+import Profile from '../screens/Profile';
 
 const RouterComponent = () => {
   return (
@@ -44,7 +44,7 @@ const RouterComponent = () => {
         <Stack key="main"
           tabs
           tabBarPosition="bottom"
-          type={ActionConst.RESET}
+          type={ActionConst.REPLACE}
           activeTintColor={'black'}
           inactiveTintColor={'gray'}
           >
