@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import firebase from 'firebase';
 import { connect } from 'react-redux';
+import { logoutUser } from '../actions';
 import {
   Text,
   View, StyleSheet,
@@ -8,7 +8,6 @@ import {
   ScrollView,
   TouchableOpacity } from 'react-native';
 import { Avatar, Divider, Button } from 'react-native-elements';
-import { logoutUser } from '../actions';
 
 class Profile extends Component {
 
@@ -102,7 +101,7 @@ class Profile extends Component {
                 color='#000'
                 fontSize={15}
                 icon={{color: '#000', name: 'exit-to-app'}}
-                onPress={() => this.props.logoutUser() }
+                onPress={() => this.props.logoutUser()}
               />
             </View>
           </View>

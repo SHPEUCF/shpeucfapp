@@ -6,6 +6,8 @@ import LoginForm from '../components/auth/LoginForm'
 import { WebPageShow, ComingSoon } from '../components/general';
 
 // Screens
+// Profile is separate temporarily due to default export from redux connect
+import Profile from '../screens/Profile';
 import {
   Feed,
   Events,
@@ -18,7 +20,6 @@ import {
   About,
   EBoard,
 } from '../screens/';
-import Profile from '../screens/Profile';
 
 const RouterComponent = () => {
   return (

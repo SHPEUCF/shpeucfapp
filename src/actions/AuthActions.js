@@ -70,16 +70,14 @@ export const loginUserSuccess = (dispatch, user) => {
     type: LOGIN_USER_SUCCESS,
     payload: user
   });
-
   Actions.main();
 };
 
 export const goToLogIn = () => {
   return (dispatch) => {
     dispatch({ type: GO_TO_LOGIN });
-
-    Actions.login();
   }
+  Actions.login();
 };
 
 export const goToRegistration = () => {
