@@ -12,12 +12,12 @@ class App extends Component {
   componentWillMount() {
     // Initialize firebase
     const config = {
-      apiKey: 'AIzaSyA_XfvvcvuAXanbBASf_ZOlWOAnieIvWKs',
-      authDomain: 'authentication-d9d53.firebaseapp.com',
-      databaseURL: 'https://authentication-d9d53.firebaseio.com',
-      projectId: 'authentication-d9d53',
-      storageBucket: 'authentication-d9d53.appspot.com',
-      messagingSenderId: '60634673791'
+      apiKey: "AIzaSyCeX5lUZUmQxXsWNO8gNXVHqfJs-kQmSaY",
+      authDomain: "shpe-ucf.firebaseapp.com",
+      databaseURL: "https://shpe-ucf.firebaseio.com",
+      projectId: "shpe-ucf",
+      storageBucket: "shpe-ucf.appspot.com",
+      messagingSenderId: "974032317047"
     };
     firebase.initializeApp(config)
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);

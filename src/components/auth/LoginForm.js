@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser, goToRegistration } from '../../actions';
-import { Button, Card, CardSection, Input, Spinner } from '../general';
+import { Card, CardSection, Spinner } from '../general';
+import {RkAvoidKeyboard, RkTextInput, RkButton} from 'react-native-ui-kitten';
 
 class LoginForm extends Component {
 
@@ -22,7 +23,7 @@ class LoginForm extends Component {
   renderError() {
     if (this.props.error) {
       return (
-        <View style={{ backgroundColor: 'white'}}>
+        <View>
           <Text style={styles.errorTextStyle}>
             {this.props.error}
           </Text>
@@ -32,27 +33,48 @@ class LoginForm extends Component {
   }
 
   renderLogInButton() {
-    if (this.props.loading) {
-      return <Spinner size="small" />
-    };
-
     return (
-      <Button
+      <RkButton rkType='rounded stretch'
+        style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
+        contentStyle={{color: 'white', fontWeight: 'bold'}}
         onPress={this.onButtonPress.bind(this)}>
-        Log In
-      </Button>
+        LOGIN
+      </RkButton>
     );
   }
 
   renderSignUpButton() {
     if (!this.props.loading) {
       return (
-        <TouchableOpacity
-          onPress={this.props.goToRegistration}>
-          <Text style={styles.signUpButton}>Sign Up</Text>
-        </TouchableOpacity>
+        <View>
+          <View style={styles.signUpContainer}>
+            <View>
+              <Text>Don't have an account? </Text>
+            </View>
+          <TouchableOpacity
+            onPress={this.props.goToRegistration}>
+            <Text style={styles.signUpButton}>Sign up now</Text>
+          </TouchableOpacity>
+          </View>
+        </View>
       );
     }
+  }
+
+  renderButtons() {
+    if (this.props.loading) {
+      return (
+        <View style={{ marginTop: 40, marginBottom: 20}}>
+          <Spinner size="large" />
+        </View>
+      );
+    };
+    return (
+      <View>
+        {this.renderLogInButton()}
+        {this.renderSignUpButton()}
+      </View>
+    );
   }
 
   renderContent() {
@@ -60,53 +82,42 @@ class LoginForm extends Component {
       return <Spinner />;
     } else {
       return (
-        <View style={styles.formContainerStyle}>
-
-          <View style={styles.headerStyle}>
-            <Text style={styles.headerTextStyle}>Welcome! Please Log In or Sign Up</Text>
-          </View>
-
-          <View style={styles.formFieldsContainer}>
-            <View style={styles.formField}>
-              <Input
-                label="Email"
-                placeholder="user@knights.ucf.edu"
-                value={this.props.email}
-                autoCapitalize="none"
-                maxLength={45}
-                onChangeText={this.onEmailChange.bind(this)}
-                />
+        <View style={styles.container}>
+          <View style={styles.formContainerStyle}>
+            <RkAvoidKeyboard>
+            <View style={{flexDirection: 'row', justifyContent: 'center', bottom: 10}}>
+              <Image
+                source={require('../../assets/images/Icon_SHPE_UCF_152x152.png')}
+                style={{width: 100, height: 100}}/>
+            </View>
+            <View style={styles.headerStyle}>
+              <Text style={styles.headerTextStyle}>SHPE @ UCF</Text>
+              <Text style={styles.headerSubtitleStyle}>Please Log In or Sign Up</Text>
             </View>
 
-            <View style={styles.formField}>
-              <Input
-                secureTextEntry
-                label="Password"
-                placeholder="password"
-                value={this.props.password}
-                maxLength={45}
-                onChangeText={this.onPasswordChange.bind(this)}
-                />
-            </View>
-          </View>
+            <RkTextInput
+              rkType='rounded'
+              placeholder="Username"
+              value={this.props.email}
+              autoCapitalize="none"
+              maxLength={45}
+              onChangeText={this.onEmailChange.bind(this)}
+              />
 
-          <View>
+            <RkTextInput
+              rkType='rounded'
+              secureTextEntry
+              placeholder="Password"
+              value={this.props.password}
+              maxLength={45}
+              onChangeText={this.onPasswordChange.bind(this)}
+              />
+
             {this.renderError()}
-          </View>
+            {this.renderButtons()}
 
-          <View style={styles.formButton}>
-            {this.renderLogInButton()}
+            </RkAvoidKeyboard>
           </View>
-
-          <View style={styles.signUpContainer}>
-            <View>
-              <Text>Don't have an account? </Text>
-            </View>
-            <View>
-              {this.renderSignUpButton()}
-            </View>
-          </View>
-
         </View>
       );
     }
@@ -118,60 +129,48 @@ class LoginForm extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#E1E1E1',
+    justifyContent: 'flex-end',
+  },
   formContainerStyle: {
     marginLeft: 20,
     marginRight: 20,
-    marginTop: 100,
+    bottom: 70,
   },
   headerStyle: {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 5,
+    marginBottom: 50,
   },
   headerTextStyle: {
-    fontSize: 14,
-  },
-  formFieldsContainer: {
-    borderWidth: 1,
-    borderRadius: 2,
-    borderColor: '#ddd',
-    borderBottomWidth: 0,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    marginBottom: 5,
-  },
-  formField: {
-    borderBottomWidth: 1,
-    backgroundColor: '#fff',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    borderColor: '#ddd',
-    position: 'relative',
+    fontSize: 22,
+    fontWeight: 'bold',
   },
   errorTextStyle: {
     fontSize: 14,
     alignSelf: 'center',
     color: 'red',
+    fontWeight: 'bold',
     padding: 10,
   },
   formButton: {
-    flexDirection: 'row',
-    marginRight: 70,
-    marginLeft: 70,
     marginTop: 10,
     marginBottom: 10
   },
   signUpButton: {
     fontWeight: 'bold',
-    color: '#007aff'
+    color: '#000'
   },
   signUpContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
+    marginTop: 10,
+    marginBottom: 10,
   }
 });
 

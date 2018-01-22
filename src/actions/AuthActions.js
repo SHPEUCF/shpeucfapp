@@ -76,17 +76,15 @@ export const loginUserSuccess = (dispatch, user) => {
 export const goToLogIn = () => {
   return (dispatch) => {
     dispatch({ type: GO_TO_LOGIN });
+    Actions.login();
   }
-  Actions.login();
 };
 
 export const goToRegistration = () => {
   return (dispatch) => {
     dispatch({ type: GO_TO_REGISTRATION });
-
     Actions.registration();
   }
-
 };
 
 export const createUser = ({ email, password }) => {

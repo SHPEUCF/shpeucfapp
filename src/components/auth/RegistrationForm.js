@@ -1,9 +1,10 @@
 import React, { Component} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { emailChanged, passwordChanged, createUser, goToLogIn } from '../../actions';
-import { Button, Card, CardSection, Input, Spinner } from '../general';
+import { Card, CardSection, Input, Spinner } from '../general';
+import {RkAvoidKeyboard, RkTextInput, RkButton} from 'react-native-ui-kitten';
 
 class RegistrationForm extends Component {
 
@@ -24,7 +25,7 @@ class RegistrationForm extends Component {
   renderError() {
     if (this.props.error) {
       return (
-        <View style={{ backgroundColor: 'white'}}>
+        <View>
           <Text style={styles.errorTextStyle}>
             {this.props.error}
           </Text>
@@ -39,10 +40,12 @@ class RegistrationForm extends Component {
     };
 
     return (
-      <Button
+      <RkButton rkType='rounded stretch'
+        style={{backgroundColor: '#FECB00'}}
+        contentStyle={{color: 'white', fontWeight: 'bold'}}
         onPress={this.onButtonPress.bind(this)}>
-        Sign Up
-      </Button>
+        SIGN UP
+      </RkButton>
     );
   }
   renderLogInButton() {
@@ -55,116 +58,106 @@ class RegistrationForm extends Component {
       );
     }
   }
+
   render() {
     return (
-      <View style={styles.formContainerStyle}>
+      <View style={styles.container}>
+        <View style={styles.formContainerStyle}>
+          <RkAvoidKeyboard>
+            <View style={{flexDirection: 'row', justifyContent: 'center', bottom: 10}}>
+              <Image
+                source={require('../../assets/images/Icon_SHPE_UCF_152x152.png')}
+                style={{width: 100, height: 100}}/>
+            </View>
+          <View style={styles.headerStyle}>
+            <Text style={styles.headerTextStyle}>SHPE @ UCF</Text>
+            <Text style={styles.headerSubtitleStyle}>Registration</Text>
+          </View>
 
-        <View style={styles.headerStyle}>
-          <Text style={styles.headerTextStyle}>Create Account</Text>
-        </View>
-
-        <View style={styles.formFieldsContainer}>
-          <View style={styles.formField}>
-            <Input
-              label="Email"
-              placeholder="user@knights.ucf.edu"
+            <RkTextInput
+              rkType='rounded'
+              placeholder="School Email"
               value={this.props.email}
               autoCapitalize="none"
               maxLength={45}
               onChangeText={this.onEmailChange.bind(this)}
               />
-          </View>
 
-          <View style={styles.formField}>
-            <Input
+            <RkTextInput
+              rkType='rounded'
               secureTextEntry
-              label="Password"
-              placeholder="password"
+              placeholder="Password"
               value={this.props.password}
-              maxLength={45}
+              maxLength={30}
               onChangeText={this.onPasswordChange.bind(this)}
               />
-          </View>
-        </View>
 
-        <View>
-          {this.renderError()}
-        </View>
-
-        <View style={styles.formButton}>
-          {this.renderSignUpButton()}
-        </View>
-
-        <View style={styles.logInContainer}>
           <View>
-            {this.renderLogInButton()}
+            {this.renderError()}
           </View>
-          <View>
-            <Text> instead?</Text>
-          </View>
-        </View>
 
+          <View style={styles.formButton}>
+            {this.renderSignUpButton()}
+          </View>
+
+          <View style={styles.logInContainer}>
+            <View>
+              <Text>Already have an account? </Text>
+            </View>
+            <View>
+              {this.renderLogInButton()}
+            </View>
+          </View>
+        </RkAvoidKeyboard>
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#E1E1E1',
+    justifyContent: 'flex-end',
+  },
   formContainerStyle: {
     marginLeft: 20,
     marginRight: 20,
-    marginTop: 100,
-
+    bottom: 70,
   },
   headerStyle: {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 5,
+    marginBottom: 50,
   },
   headerTextStyle: {
-    fontSize: 14,
-  },
-  formFieldsContainer: {
-    borderWidth: 1,
-    borderRadius: 2,
-    borderColor: '#ddd',
-    borderBottomWidth: 0,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    marginBottom: 5,
-  },
-  formField: {
-    borderBottomWidth: 1,
-    backgroundColor: '#fff',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    borderColor: '#ddd',
-    position: 'relative',
+    fontSize: 22,
+    fontWeight: 'bold',
   },
   errorTextStyle: {
     fontSize: 14,
     alignSelf: 'center',
     color: 'red',
+    fontWeight: 'bold',
     padding: 10,
   },
   formButton: {
-    flexDirection: 'row',
-    marginRight: 70,
-    marginLeft: 70,
     marginTop: 10,
     marginBottom: 10
   },
   logInButton: {
     fontWeight: 'bold',
-    color: '#007aff'
+    color: '#000'
   },
   logInContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
+    marginTop: 10,
+    marginBottom: 10
   }
 });
 
