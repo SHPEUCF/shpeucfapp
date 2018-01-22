@@ -7,7 +7,9 @@ import {
   Image,
   ScrollView,
   TouchableOpacity } from 'react-native';
-import { Avatar, Divider, Button } from 'react-native-elements';
+import { Avatar } from 'react-native-elements';
+import { RkButton } from 'react-native-ui-kitten';
+
 
 class Profile extends Component {
 
@@ -46,8 +48,8 @@ class Profile extends Component {
                <Text style={taglineTextStyle}>Turn up!</Text>
             </View>
           </View>
-          <Divider style={{ backgroundColor: '#D9D7CE' }} />
 
+          <View style={{ backgroundColor: '#FFF'}}>
           <View style={contentContainerStyle}>
 
             <View style={contentItemsContainerStyle}>
@@ -79,33 +81,25 @@ class Profile extends Component {
 
           </View>
 
-          <Divider style={{ backgroundColor: '#D9D7CE' }} />
-
           <View style={buttonsContainerStyle}>
             <View style={editButtonContainer}>
-              <Button
-                title='Edit Profile'
-                raised
-                backgroundColor='#FECB00'
-                color='#000'
-                fontSize={15}
-                icon={{color: '#000', name: 'mode-edit' }}
-                onPress={() => alert("Coming Soon")}
-              />
+              <RkButton rkType='rounded stretch'
+                style={{backgroundColor: '#FECB00'}}
+                contentStyle={{color: '#000', fontWeight: 'bold'}}
+                onPress={() => alert("Coming Soon")}>
+                Edit Profile
+              </RkButton>
             </View>
             <View style={logOutButtonContainer}>
-              <Button
-                title='Log Out'
-                raised
-                backgroundColor='#FECB00'
-                color='#000'
-                fontSize={15}
-                icon={{color: '#000', name: 'exit-to-app'}}
-                onPress={() => this.props.logoutUser()}
-              />
+              <RkButton rkType='rounded stretch'
+                style={{backgroundColor: '#FECB00'}}
+                contentStyle={{color: '#000', fontWeight: 'bold'}}
+                onPress={() => this.props.logoutUser()}>
+                Log Out
+              </RkButton>
             </View>
           </View>
-
+          </View>
         </ScrollView>
       </View>
 
@@ -122,7 +116,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 30,
     paddingBottom: 30,
-    backgroundColor: '#D9D7CE'
+    backgroundColor: '#E1E1E1'
   },
   avatarContainerStyle: {
     justifyContent: 'center',
@@ -138,19 +132,20 @@ const styles = StyleSheet.create({
   },
   contentContainerStyle: {
     flex: 1,
-    marginTop: 30,
-    marginBottom: 30,
+    marginTop: 20,
+    marginBottom: 20,
   },
   contentItemsContainerStyle: {
     flexDirection: 'row',
-    padding: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 15,
   },
   itemLabelContainerStyle: {
     flex: 1,
     justifyContent: 'center'
   },
   itemLabelText: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: 'bold'
   },
   itemValueContainerStyle: {
@@ -159,22 +154,21 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start'
   },
   itemValueText: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: '500',
   },
   buttonsContainerStyle: {
-    marginTop: 50,
+    marginTop: 60,
     marginRight: 10,
-    marginBottom: 20,
     marginLeft: 10,
-    justifyContent: 'flex-end',
   },
   editButtonContainer: {
-    flex: 1,
+    marginTop: 10,
     marginBottom: 10,
   },
   logOutButtonContainer: {
-    flex: 1,
+    marginTop: 10,
+    marginBottom: 10
   },
 });
 
