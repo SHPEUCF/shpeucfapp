@@ -8,4 +8,5 @@ export * from './Input';
 export * from './Spinner';
 export * from './SegmentBtn';
 export * from './WebPageShow';
+export * from './PostShow';
 export * from './ComingSoon';

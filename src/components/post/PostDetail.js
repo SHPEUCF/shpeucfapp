@@ -1,10 +1,12 @@
 
 import React, { Component } from 'react';
 import { Text, View, Image, StyleSheet } from 'react-native';
-import { Card, CardSection } from '../general';
+import { Actions } from 'react-native-router-flux';
+import {RkTheme, RkButton} from 'react-native-ui-kitten';
+import { Card, CardSection, Button } from '../general';
 
 const PostDetail = ({ post }) => {
-  const { title, description, imageurl } = post;
+  const { title, description, urlToImage, source, url, publishedAt } = post;
 
   return (
     <Card>
@@ -12,22 +14,29 @@ const PostDetail = ({ post }) => {
         <View style={styles.postHeaderStyle}>
           <View style={styles.postSourceStyle}>
             <Text style={styles.postSourceTextStyle}>Source:</Text>
-            <Text>[SHPE UCF]</Text>
+            <Text>{source.name}</Text>
           </View>
           <View style={styles.postMenuStyle}>
-            <Text>...</Text>
+            <Text>{publishedAt}</Text>
           </View>
         </View>
       </CardSection>
       <CardSection>
         <Image
           style={styles.postImageStyle}
-          source={{ uri: imageurl }} />
+          source={{ uri: urlToImage }}
+          />
       </CardSection>
       <CardSection>
         <View style={styles.postContentStyle}>
           <Text style={styles.postTitleStyle}>{title}</Text>
           <Text>{description}</Text>
+          <RkButton rkType='stretch outline'
+            style={{ marginTop: 10, marginBottom: 10}}
+            contentStyle={{fontWeight: 'bold'}}
+            onPress={() => Actions.PostShow({ title: source.name, uri: url })}>
+            Open
+          </RkButton>
         </View>
       </CardSection>
     </Card>
@@ -48,7 +57,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   postSourceTextStyle: {
-    fontSize: 12,
     color: '#666',
     paddingRight: 5,
   },
@@ -66,6 +74,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-around',
     padding: 5,
+    marginBottom: 8,
   },
   postTitleStyle: {
     fontSize: 16,

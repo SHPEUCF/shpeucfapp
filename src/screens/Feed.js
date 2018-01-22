@@ -8,13 +8,13 @@ class Feed extends Component {
       <View style={styles.container}>
         <PostList />
       </View>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#F8F8F8',
+    backgroundColor: 'transparent',
   }
 });
 

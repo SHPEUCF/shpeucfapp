@@ -3,7 +3,7 @@ import { Router, Scene, Stack, ActionConst, Actions } from 'react-native-router-
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import RegistrationForm from '../components/auth/RegistrationForm';
 import LoginForm from '../components/auth/LoginForm'
-import { WebPageShow, ComingSoon } from '../components/general';
+import { WebPageShow, PostShow, ComingSoon } from '../components/general';
 
 // Screens
 // Profile is separate temporarily due to default export from redux connect
@@ -49,10 +49,9 @@ const RouterComponent = () => {
           activeTintColor={'black'}
           inactiveTintColor={'gray'}
           >
-
-          <Scene
+          <Stack
             key="feed"
-            component={Feed}
+            tabBarLabel="Feed"
             title="Feed"
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
@@ -61,7 +60,16 @@ const RouterComponent = () => {
                 style={{ color: 'black' }}
               />
             }
-          />
+          >
+            <Scene key="feed"
+              component={Feed}
+              leftTitle="Posts"
+            />
+            <Scene key="PostShow"
+              component={PostShow}
+              passProps
+            />
+          </Stack>
           <Scene
             key="events"
             component={Events}

@@ -14,13 +14,6 @@
                 "location": "HEC 101",
                 "description": "SHPE UCF's first GBM of the semester will be on Monday, January 22nd in HEC 101! Make sure to save the date to attend, free Hispanic food will be provided! Hope to see you there!",
                 "tag": "gbm"
-              },
-              {
-                "title": "Dummy Event",
-                "time": "00:00 - infinity",
-                "location": "Universe",
-                "description": "Ready to add more events",
-                "tag": "gbm"
               }
             ]
           }

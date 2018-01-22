@@ -75,7 +75,7 @@ class Profile extends Component {
                 <Text style={itemLabelText}>Major:</Text>
               </View>
               <View style={itemValueContainerStyle}>
-                <Text style={itemValueText}>Computer Engineering</Text>
+                <Text style={itemValueText}>Nuclear Engineering</Text>
               </View>
             </View>
 

@@ -18,7 +18,7 @@ class Events extends Component {
   state = { data: [], items: {} };
 
   componentWillMount() {
-      axios.get('https://api.myjson.com/bins/ncsnp')
+      axios.get('https://api.myjson.com/bins/7jlzt')
       .then(response => this.setState({ data: response.data }))
   }
 
@@ -42,15 +42,16 @@ class Events extends Component {
         renderEmptyData = {this.renderEmptyData.bind(this)}
 
         theme={{
-          agendaTodayColor: 'red',
-          agendaKnobColor: 'blue',
-          calendarBackground: '#FFFFFF',
+          backgroundColor: 'transparent',
+          calendarBackground: '#FFF',
           agendaKnobColor: 'lightgrey',
-          selectedDayTextColor: 'black',
+          agendaDayTextColor: '#333',
+          agendaDayNumColor: '#333',
+          selectedDayTextColor: '#000',
+          todayTextColor: '#CC0000',
           textDayFontSize:18,
           textMonthFontSize:22,
           textDayHeaderFontSize:14,
-          dotColor: 'black',
           selectedDotColor: 'black',
           selectedDayBackgroundColor: '#FECB00',
         }}
@@ -112,7 +113,7 @@ class Events extends Component {
         <Text>{item["time"]}</Text>
         <Text>{item["location"]}</Text>
         <View>
-          <Text style={styles.descrition}>{item["description"]}</Text>
+          <Text style={styles.description}>{item["description"]}</Text>
         </View>
     </View>
     );
@@ -136,11 +137,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     margin: 5,
-    backgroundColor:'white',
   },
   item: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#FFF',
     borderRadius: 5,
     padding: 10,
     marginRight: 10,
@@ -163,24 +163,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 17
   },
-  descrition: {
-    marginTop: 5,
+  description: {
+    marginTop: 7,
   },
-  overlay:{
-    flex:1,
-    position:'absolute',
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-    backgroundColor: '#00000095',
-  },
-  display:{
-    flex:1,
-    margin:20,
-    backgroundColor:'white',
-    borderRadius:10,
-  }
 });
 
 export { Events };
