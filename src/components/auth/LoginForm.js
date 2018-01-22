@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser, goToRegistration } from '../../actions';
 import { Card, CardSection, Spinner } from '../general';
-import {RkAvoidKeyboard, RkTextInput, RkButton} from 'react-native-ui-kitten';
+import {RkTheme, RkAvoidKeyboard, RkTextInput, RkButton} from 'react-native-ui-kitten';
 
 class LoginForm extends Component {
 
@@ -44,21 +44,19 @@ class LoginForm extends Component {
   }
 
   renderSignUpButton() {
-    if (!this.props.loading) {
-      return (
-        <View>
-          <View style={styles.signUpContainer}>
-            <View>
-              <Text>Don't have an account? </Text>
-            </View>
-          <TouchableOpacity
-            onPress={this.props.goToRegistration}>
-            <Text style={styles.signUpButton}>Sign up now</Text>
-          </TouchableOpacity>
+    return (
+      <View>
+        <View style={styles.signUpContainer}>
+          <View>
+            <Text>Don't have an account? </Text>
           </View>
+        <TouchableOpacity
+          onPress={this.props.goToRegistration}>
+          <Text style={styles.signUpButton}>Sign up now</Text>
+        </TouchableOpacity>
         </View>
-      );
-    }
+      </View>
+    );
   }
 
   renderButtons() {
@@ -127,6 +125,17 @@ class LoginForm extends Component {
     return this.renderContent();
   }
 }
+
+RkTheme.setType('RkTextInput','rounded', {
+  input: {
+    borderRadius: 5
+  },
+  color: 'gray',
+  container: {
+    borderWidth: 2,
+    backgroundColor: '#FFF'
+  }
+});
 
 const styles = StyleSheet.create({
   container: {

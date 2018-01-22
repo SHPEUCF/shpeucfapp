@@ -35,28 +35,46 @@ class RegistrationForm extends Component {
   }
 
   renderSignUpButton() {
-    if (this.props.loading) {
-      return <Spinner size="small" />
-    };
-
     return (
       <RkButton rkType='rounded stretch'
-        style={{backgroundColor: '#FECB00'}}
+        style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
         contentStyle={{color: 'white', fontWeight: 'bold'}}
         onPress={this.onButtonPress.bind(this)}>
         SIGN UP
       </RkButton>
     );
   }
+
   renderLogInButton() {
-    if (!this.props.loading) {
-      return (
+    return (
+      <View>
+        <View style={styles.logInContainer}>
+          <View>
+            <Text>Already have an account? </Text>
+          </View>
         <TouchableOpacity
           onPress={this.props.goToLogIn}>
           <Text style={styles.logInButton}>Log In</Text>
         </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
+  renderButtons() {
+    if (this.props.loading) {
+      return (
+        <View style={{ marginTop: 40, marginBottom: 20}}>
+          <Spinner size="large" />
+        </View>
       );
-    }
+    };
+    return (
+      <View>
+        {this.renderSignUpButton()}
+        {this.renderLogInButton()}
+      </View>
+    );
   }
 
   render() {
@@ -92,22 +110,8 @@ class RegistrationForm extends Component {
               onChangeText={this.onPasswordChange.bind(this)}
               />
 
-          <View>
-            {this.renderError()}
-          </View>
-
-          <View style={styles.formButton}>
-            {this.renderSignUpButton()}
-          </View>
-
-          <View style={styles.logInContainer}>
-            <View>
-              <Text>Already have an account? </Text>
-            </View>
-            <View>
-              {this.renderLogInButton()}
-            </View>
-          </View>
+          {this.renderError()}
+          {this.renderButtons()}
         </RkAvoidKeyboard>
         </View>
       </View>
