@@ -15,6 +15,7 @@ class Profile extends Component {
 
   render() {
     const {
+      bottomHalfContainerStyle,
       containerStyle,
       headerInfoContainer,
       avatarContainerStyle,
@@ -31,7 +32,7 @@ class Profile extends Component {
       logOutButtonContainer } = styles;
 
     return (
-      <View style={containerStyle}>
+
         <ScrollView>
 
           <View style={headerInfoContainer}>
@@ -39,7 +40,7 @@ class Profile extends Component {
               <Avatar
                 large
                 rounded
-                title="FL"
+                title="AL"
                 onPress={() => alert("Coming Soon")}
                 activeOpacity={0.7}
                 />
@@ -49,7 +50,8 @@ class Profile extends Component {
             </View>
           </View>
 
-          <View style={{ backgroundColor: '#FFF'}}>
+         <View style={bottomHalfContainerStyle}>
+
           <View style={contentContainerStyle}>
 
             <View style={contentItemsContainerStyle}>
@@ -75,7 +77,16 @@ class Profile extends Component {
                 <Text style={itemLabelText}>Major:</Text>
               </View>
               <View style={itemValueContainerStyle}>
-                <Text style={itemValueText}>Nuclear Engineering</Text>
+                <Text style={itemValueText}>Computer Engineering</Text>
+              </View>
+            </View>
+
+            <View style={contentItemsContainerStyle}>
+              <View style={itemLabelContainerStyle}>
+                <Text style={itemLabelText}>Year:</Text>
+              </View>
+              <View style={itemValueContainerStyle}>
+                <Text style={itemValueText}>Junior</Text>
               </View>
             </View>
 
@@ -99,24 +110,23 @@ class Profile extends Component {
               </RkButton>
             </View>
           </View>
-          </View>
+        </View>
         </ScrollView>
-      </View>
+
 
     )
   }
 }
 
 const styles = StyleSheet.create({
-  containerStyle: {
-    flex: 1,
-    backgroundColor: '#FFF'
+  bottomHalfContainerStyle: {
+    backgroundColor: 'rgb(240,240,240)'
   },
   headerInfoContainer: {
     flex: 1,
     paddingTop: 30,
     paddingBottom: 30,
-    backgroundColor: '#E1E1E1'
+    backgroundColor: '#FFF'
   },
   avatarContainerStyle: {
     justifyContent: 'center',
@@ -134,6 +144,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 20,
     marginBottom: 20,
+
   },
   contentItemsContainerStyle: {
     flexDirection: 'row',
@@ -158,7 +169,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   buttonsContainerStyle: {
-    marginTop: 60,
     marginRight: 10,
     marginLeft: 10,
   },
@@ -168,7 +178,7 @@ const styles = StyleSheet.create({
   },
   logOutButtonContainer: {
     marginTop: 10,
-    marginBottom: 10
+    marginBottom: 60
   },
 });
 
