@@ -14,6 +14,8 @@ import { RkButton } from 'react-native-ui-kitten';
 class Profile extends Component {
 
   render() {
+    const { firstName, lastName, email } = this.props;
+
     const {
       bottomHalfContainerStyle,
       containerStyle,
@@ -32,9 +34,7 @@ class Profile extends Component {
       logOutButtonContainer } = styles;
 
     return (
-
         <ScrollView>
-
           <View style={headerInfoContainer}>
             <View style={avatarContainerStyle}>
               <Avatar
@@ -59,7 +59,7 @@ class Profile extends Component {
                 <Text style={itemLabelText}>Name:</Text>
               </View>
               <View style={itemValueContainerStyle}>
-                <Text style={itemValueText}>John Doe</Text>
+                <Text style={itemValueText}>{`${firstName} ${lastName}`}</Text>
               </View>
             </View>
 
@@ -68,7 +68,7 @@ class Profile extends Component {
                 <Text style={itemLabelText}>Email:</Text>
               </View>
               <View style={itemValueContainerStyle}>
-                <Text style={itemValueText}>user@knights.ucf.edu</Text>
+                <Text style={itemValueText}>{email}</Text>
               </View>
             </View>
 
@@ -112,8 +112,6 @@ class Profile extends Component {
           </View>
         </View>
         </ScrollView>
-
-
     )
   }
 }
@@ -183,9 +181,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ auth }) => {
-  const { loggedIn } = auth;
+  const { firstName, lastName, email } = auth;
 
-  return { loggedIn };
+  return { firstName, lastName, email };
 };
 
 const mapDispatchToProps = { logoutUser };
