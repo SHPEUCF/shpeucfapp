@@ -1,25 +1,49 @@
 import React, { Component} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { emailChanged, passwordChanged, createUser, goToLogIn } from '../../actions';
+import {
+  firstNameChanged,
+  lastNameChanged,
+  emailChanged,
+  passwordChanged,
+  confirmPasswordChanged,
+  registrationError,
+  createUser,
+  goToLogIn } from '../../actions';
 import { Card, CardSection, Input, Spinner } from '../general';
 import {RkAvoidKeyboard, RkTextInput, RkButton} from 'react-native-ui-kitten';
 
 class RegistrationForm extends Component {
 
+  onFirstNameChange(text) {
+    this.props.firstNameChanged(text);
+  }
+  onLastNameChange(text) {
+    this.props.lastNameChanged(text);
+  }
   onEmailChange(text) {
     this.props.emailChanged(text);
   }
-
   onPasswordChange(text) {
     this.props.passwordChanged(text);
   }
+  onConfirmPasswordChange(text) {
+    this.props.confirmPasswordChanged(text);
+  }
 
   onButtonPress() {
-    const { email, password } = this.props;
+    const { email, password, confirmPassword } = this.props;
 
-    this.props.createUser({ email, password });
+    if (password === '') {
+      this.props.registrationError('Please enter password');
+    } else if (confirmPassword === '') {
+      this.props.registrationError('Please confirm password');
+    } else if (password !== confirmPassword) {
+      this.props.registrationError('Passwords do not match, please try again');
+    } else if (password === confirmPassword) {
+      this.props.createUser({ email, password });
+    }
   }
 
   renderError() {
@@ -82,16 +106,27 @@ class RegistrationForm extends Component {
       <View style={styles.container}>
         <View style={styles.formContainerStyle}>
           <RkAvoidKeyboard>
-            <View style={{flexDirection: 'row', justifyContent: 'center', bottom: 10}}>
-              <Image
-                source={require('../../assets/images/Icon_SHPE_UCF_152x152.png')}
-                style={{width: 100, height: 100}}/>
-            </View>
           <View style={styles.headerStyle}>
             <Text style={styles.headerTextStyle}>SHPE @ UCF</Text>
             <Text style={styles.headerSubtitleStyle}>Registration</Text>
           </View>
 
+            <RkTextInput
+              rkType='rounded'
+              placeholder="First Name"
+              value={this.props.firstName}
+              autoCapitalize="words"
+              maxLength={45}
+              onChangeText={this.onFirstNameChange.bind(this)}
+              />
+            <RkTextInput
+              rkType='rounded'
+              placeholder="Last Name"
+              value={this.props.lastName}
+              autoCapitalize="words"
+              maxLength={45}
+              onChangeText={this.onLastNameChange.bind(this)}
+              />
             <RkTextInput
               rkType='rounded'
               placeholder="School Email"
@@ -100,7 +135,6 @@ class RegistrationForm extends Component {
               maxLength={45}
               onChangeText={this.onEmailChange.bind(this)}
               />
-
             <RkTextInput
               rkType='rounded'
               secureTextEntry
@@ -109,7 +143,14 @@ class RegistrationForm extends Component {
               maxLength={30}
               onChangeText={this.onPasswordChange.bind(this)}
               />
-
+            <RkTextInput
+              rkType='rounded'
+              secureTextEntry
+              placeholder="Confirm Password"
+              value={this.props.confirmPassword}
+              maxLength={30}
+              onChangeText={this.onConfirmPasswordChange.bind(this)}
+              />
           {this.renderError()}
           {this.renderButtons()}
         </RkAvoidKeyboard>
@@ -135,7 +176,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 5,
-    marginBottom: 50,
+    marginBottom: 10,
   },
   headerTextStyle: {
     fontSize: 22,
@@ -166,14 +207,25 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ auth }) => {
-  const { email, password, error, loading } = auth;
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    confirmPassword,
+    error,
+    loading } = auth;
 
-  return { email, password, error, loading };
+  return { email, password, confirmPassword, error, loading };
 };
 
 const mapDispatchToProps = {
+  firstNameChanged,
+  lastNameChanged,
   emailChanged,
   passwordChanged,
+  confirmPasswordChanged,
+  registrationError,
   createUser,
   goToLogIn }
 

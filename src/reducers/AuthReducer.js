@@ -1,7 +1,11 @@
 // handle all things related to authentication
 import {
+  FIRST_NAME_CHANGED,
+  LAST_NAME_CHANGED,
   EMAIL_CHANGED,
   PASSWORD_CHANGED,
+  CONFIRM_PASSWORD_CHANGED,
+  REGISTRATION_ERROR,
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAIL,
   LOGIN_USER,
@@ -13,18 +17,29 @@ import {
   GO_TO_REGISTRATION } from '../actions/types';
 
 const INITIAL_STATE = {
+  firstName: '',
+  lastName: '',
   email: '',
   password: '',
+  confirmPassword: '',
   user: null,
   loggedIn: null,
-  error: '',
   loading: false,
+  error: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
   const { payload } = action;
 
   switch (action.type) {
+    case FIRST_NAME_CHANGED:
+      return { ...state,
+        firstName: payload
+      };
+    case LAST_NAME_CHANGED:
+      return { ...state,
+        lastName: payload
+      };
     case EMAIL_CHANGED:
       return { ...state,
         email: payload
@@ -32,6 +47,14 @@ export default (state = INITIAL_STATE, action) => {
     case PASSWORD_CHANGED:
       return { ...state,
         password: payload
+      };
+    case CONFIRM_PASSWORD_CHANGED:
+      return { ...state,
+        confirmPassword: payload
+      };
+    case REGISTRATION_ERROR:
+      return { ...state,
+        error: payload,
       };
     case LOGIN_USER:
       return { ...state,
@@ -64,8 +87,6 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state,
         error: payload,
         loading: false,
-        email: '',
-        password: ''
       };
     case LOGOUT_USER:
       return { ...state,

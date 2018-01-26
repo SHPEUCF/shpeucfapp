@@ -1,9 +1,14 @@
+import { Alert } from 'react-native';
 import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 
 import {
+  FIRST_NAME_CHANGED,
+  LAST_NAME_CHANGED,
   EMAIL_CHANGED,
   PASSWORD_CHANGED,
+  CONFIRM_PASSWORD_CHANGED,
+  REGISTRATION_ERROR,
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAIL,
   LOGIN_USER,
@@ -14,6 +19,18 @@ import {
   GO_TO_LOGIN,
   GO_TO_REGISTRATION } from './types';
 
+export const firstNameChanged = (text) => {
+  return {
+    type: FIRST_NAME_CHANGED,
+    payload: text
+  };
+};
+export const lastNameChanged = (text) => {
+  return {
+    type: LAST_NAME_CHANGED,
+    payload: text
+  };
+};
 export const emailChanged = (text) => {
   return {
     type: EMAIL_CHANGED,
@@ -25,6 +42,19 @@ export const passwordChanged = (text) => {
   return {
     type: PASSWORD_CHANGED,
     payload: text
+  };
+};
+
+export const confirmPasswordChanged = (text) => {
+  return {
+    type: CONFIRM_PASSWORD_CHANGED,
+    payload: text
+  };
+};
+export const registrationError = (error) => {
+  return {
+    type: REGISTRATION_ERROR,
+    payload: error
   };
 };
 
@@ -126,7 +156,7 @@ const createUserSuccess = (dispatch, user) => {
     type: CREATE_USER_SUCCESS,
     payload: user
   });
-
+  Alert.alert('Account Created', 'Welcome to SHPE UCF Mobile');
   Actions.main();
 };
 
@@ -134,7 +164,8 @@ export const logoutUser = () => {
   return (dispatch) => {
     dispatch({ type: LOGOUT_USER });
 
-    firebase.auth().signOut();
-    Actions.login();
+    firebase.auth().signOut()
+      .then(Actions.login())
+      .then(Alert.alert('Signed Out', 'Have a great day!'));
   };
 };
