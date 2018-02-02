@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Button, View} from 'react';
 import { Router, Scene, Stack, ActionConst, Actions } from 'react-native-router-flux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import RegistrationForm from '../components/auth/RegistrationForm';
@@ -7,6 +7,9 @@ import { WebPageShow, PostShow, ComingSoon } from '../components/general';
 
 // Screens
 // Profile is separate temporarily due to default export from redux connect
+
+/* look at this page https://github.com/aksonov/react-native-router-flux/issues/2121
+to set button on the navBar */
 import Profile from '../screens/Profile';
 import {
   Feed,
@@ -74,6 +77,7 @@ const RouterComponent = () => {
             key="events"
             component={Events}
             title="Events"
+            rightTitle="Today"
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
                 name={focused ? 'ios-calendar' : 'ios-calendar-outline'}

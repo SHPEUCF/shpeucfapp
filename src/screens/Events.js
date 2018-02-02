@@ -10,23 +10,30 @@ import {
   ScrollView
   } from 'react-native';
 import axios from 'axios';
+import { Scene, Router, Actions } from 'react-native-router-flux';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 
 
 class Events extends Component {
 
-  state = { data: [], items: {} };
+  state = { data: [], items: {}, todaySelected: new Date() };
 
   componentWillMount() {
       axios.get('https://api.myjson.com/bins/7jlzt')
       .then(response => this.setState({ data: response.data }))
+
   }
+
+  static onRight = function(){
+    this.alert(new Date());
+  }
+
 
   render() {
 
     return (
       <Agenda
-        selected={new Date()}
+        selected={this.state.todaySelected}
         onDayChange={(day)=>{alert('day pressed')}}
         showWeekNumbers={true}
         pastScrollRange={24}
@@ -50,7 +57,7 @@ class Events extends Component {
           selectedDayTextColor: '#000',
           todayTextColor: '#CC0000',
           textDayFontSize:18,
-          textMonthFontSize:22,
+          textMonthFontSize:20,
           textDayHeaderFontSize:14,
           selectedDotColor: 'black',
           selectedDayBackgroundColor: '#FECB00',
