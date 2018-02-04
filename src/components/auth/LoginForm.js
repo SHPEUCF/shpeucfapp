@@ -192,6 +192,6 @@ const mapDispatchToProps = {
   emailChanged,
   passwordChanged,
   loginUser,
-  goToRegistration }
+  goToRegistration };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
