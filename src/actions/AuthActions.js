@@ -117,13 +117,13 @@ export const goToRegistration = () => {
   }
 };
 
-export const createUser = ({ email, password }) => {
+export const createUser = ({ firstName, lastName, email, password }) => {
   return (dispatch) => {
     dispatch({ type: CREATE_USER });
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then(user => createUserSuccess(dispatch, user))
-      .catch((error) => createUserFail(dispatch, error));
+      .then((user) => createUserSuccess(dispatch, user, firstName, lastName, email))
+      .catch((error) => createUserFail(dispatch, error))
   };
 };
 
@@ -151,13 +151,18 @@ const createUserFail = (dispatch, error) => {
   });
 };
 
-const createUserSuccess = (dispatch, user) => {
+const createUserSuccess = (dispatch, user, firstName, lastName, email) => {
+  const { currentUser } = firebase.auth();
+
+  firebase.database().ref(`/users/${currentUser.uid}/`)
+    .set({ firstName, lastName, email })
+    .then(() => Alert.alert('Account Created', 'Welcome to SHPE UCF Mobile'))
+    .then(() => Actions.main());
+
   dispatch({
     type: CREATE_USER_SUCCESS,
     payload: user
   });
-  Alert.alert('Account Created', 'Welcome to SHPE UCF Mobile');
-  Actions.main();
 };
 
 export const logoutUser = () => {
