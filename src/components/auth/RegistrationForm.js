@@ -33,16 +33,23 @@ class RegistrationForm extends Component {
   }
 
   onButtonPress() {
-    const { email, password, confirmPassword } = this.props;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+      registrationError,
+      createUser } = this.props;
 
     if (password === '') {
-      this.props.registrationError('Please enter password');
+      registrationError('Please enter password');
     } else if (confirmPassword === '') {
-      this.props.registrationError('Please confirm password');
+      registrationError('Please confirm password');
     } else if (password !== confirmPassword) {
-      this.props.registrationError('Passwords do not match, please try again');
+      registrationError('Passwords do not match, please try again');
     } else if (password === confirmPassword) {
-      this.props.createUser({ email, password });
+      createUser({ firstName, lastName, email, password });
     }
   }
 
@@ -216,7 +223,7 @@ const mapStateToProps = ({ auth }) => {
     error,
     loading } = auth;
 
-  return { email, password, confirmPassword, error, loading };
+  return { firstName, lastName, email, password, confirmPassword, error, loading };
 };
 
 const mapDispatchToProps = {

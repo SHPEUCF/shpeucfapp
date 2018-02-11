@@ -1,3 +1,4 @@
+// AuthActions
 export const FIRST_NAME_CHANGED = 'first_name_changed';
 export const LAST_NAME_CHANGED = 'last_name_changed';
 export const EMAIL_CHANGED = 'email_changed';
@@ -15,3 +16,6 @@ export const CREATE_USER_SUCCESS = 'create_user_sucess';
 export const CREATE_USER_FAIL = 'create_user_fail';
 export const GO_TO_LOGIN = 'go_to_login';
 export const GO_TO_REGISTRATION = 'go_to_registration';
+
+// AccountActions
+export const USER_FETCH = 'user_fetch';

@@ -80,8 +80,8 @@ export default (state = INITIAL_STATE, action) => {
       };
     case CREATE_USER_SUCCESS:
       return { ...state,
-        ...INITIAL_STATE,
-        user: payload
+        user: payload,
+        loggedIn: true,
       };
     case CREATE_USER_FAIL:
       return { ...state,
@@ -90,7 +90,7 @@ export default (state = INITIAL_STATE, action) => {
       };
     case LOGOUT_USER:
       return { ...state,
-        loggedIn: false,
+        ...INITIAL_STATE,
       };
     case GO_TO_LOGIN:
       return INITIAL_STATE;
