@@ -41,6 +41,7 @@ class RegistrationForm extends Component {
       firstName,
       lastName,
       email,
+      major,
       password,
       confirmPassword,
       registrationError,
@@ -53,7 +54,7 @@ class RegistrationForm extends Component {
     } else if (password !== confirmPassword) {
       registrationError('Passwords do not match, please try again');
     } else if (password === confirmPassword) {
-      createUser({ firstName, lastName, email, password });
+      createUser({ firstName, lastName, email, major, password });
     }
   }
 
@@ -231,12 +232,13 @@ const mapStateToProps = ({ auth }) => {
     firstName,
     lastName,
     email,
+    major,
     password,
     confirmPassword,
     error,
     loading } = auth;
 
-  return { firstName, lastName, email, password, confirmPassword, error, loading };
+  return { firstName, lastName, email, major, password, confirmPassword, error, loading };
 };
 
 const mapDispatchToProps = {
