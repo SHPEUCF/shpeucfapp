@@ -6,6 +6,7 @@ import {
   FIRST_NAME_CHANGED,
   LAST_NAME_CHANGED,
   EMAIL_CHANGED,
+  MAJOR_CHANGED,
   PASSWORD_CHANGED,
   CONFIRM_PASSWORD_CHANGED,
   REGISTRATION_ERROR,
@@ -34,6 +35,12 @@ export const lastNameChanged = (text) => {
 export const emailChanged = (text) => {
   return {
     type: EMAIL_CHANGED,
+    payload: text
+  };
+};
+export const majorChanged = (text) => {
+  return {
+    type: MAJOR_CHANGED,
     payload: text
   };
 };

@@ -2,6 +2,7 @@
 export const FIRST_NAME_CHANGED = 'first_name_changed';
 export const LAST_NAME_CHANGED = 'last_name_changed';
 export const EMAIL_CHANGED = 'email_changed';
+export const MAJOR_CHANGED = 'major_changed';
 export const PASSWORD_CHANGED = 'password_changed';
 export const CONFIRM_PASSWORD_CHANGED = 'confirm_password_changed';
 export const REGISTRATION_ERROR = 'registration_error';

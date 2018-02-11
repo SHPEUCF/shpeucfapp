@@ -6,6 +6,7 @@ import {
   firstNameChanged,
   lastNameChanged,
   emailChanged,
+  majorChanged,
   passwordChanged,
   confirmPasswordChanged,
   registrationError,
@@ -24,6 +25,9 @@ class RegistrationForm extends Component {
   }
   onEmailChange(text) {
     this.props.emailChanged(text);
+  }
+  onMajorChange(text) {
+    this.props.majorChanged(text);
   }
   onPasswordChange(text) {
     this.props.passwordChanged(text);
@@ -137,10 +141,19 @@ class RegistrationForm extends Component {
             <RkTextInput
               rkType='rounded'
               placeholder="School Email"
+              keyboardType="email-address"
               value={this.props.email}
               autoCapitalize="none"
               maxLength={45}
               onChangeText={this.onEmailChange.bind(this)}
+              />
+            <RkTextInput
+              rkType='rounded'
+              placeholder="Major"
+              value={this.props.major}
+              autoCapitalize="words"
+              maxLength={45}
+              onChangeText={this.onMajorChange.bind(this)}
               />
             <RkTextInput
               rkType='rounded'
@@ -230,6 +243,7 @@ const mapDispatchToProps = {
   firstNameChanged,
   lastNameChanged,
   emailChanged,
+  majorChanged,
   passwordChanged,
   confirmPasswordChanged,
   registrationError,
