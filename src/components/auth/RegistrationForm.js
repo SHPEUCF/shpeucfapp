@@ -12,9 +12,13 @@ import {
   createUser,
   goToLogIn } from '../../actions';
 import { Card, CardSection, Input, Spinner } from '../general';
-import {RkAvoidKeyboard, RkTextInput, RkButton} from 'react-native-ui-kitten';
+import {RkAvoidKeyboard, RkTextInput, RkButton, RkPicker} from 'react-native-ui-kitten';
+import Icon from 'react-native-vector-icons/Ionicons';
+
+const colleges = require('../../data/Colleges.json');
 
 class RegistrationForm extends Component {
+  state = {collegeSelected:'', majorSelected:''};
 
   onFirstNameChange(text) {
     this.props.firstNameChanged(text);
@@ -134,6 +138,13 @@ class RegistrationForm extends Component {
               maxLength={45}
               onChangeText={this.onLastNameChange.bind(this)}
               />
+
+            <RkTextInput rkType='rounded'
+              placeholder="College"
+              label={<Icon name={'ios-search'}/>}
+              value={this.state.majorSelected}
+              onFocus={()=>{alert("hello")}}/>
+
             <RkTextInput
               rkType='rounded'
               placeholder="School Email"
