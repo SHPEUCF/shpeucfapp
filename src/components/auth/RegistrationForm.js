@@ -47,7 +47,15 @@ class RegistrationForm extends Component {
       registrationError,
       createUser } = this.props;
 
-    if (password === '') {
+    const ucfStudentEmail = new RegExp("^[A-Za-z0-9._%+-]+@knights.ucf.edu$");
+
+    if (email === '') {
+      registrationError('Please enter email');
+    } else if (!ucfStudentEmail.test(email)) {
+      registrationError('Must use a @knigths.ucf.edu email for registration');
+    } else if (major === '') {
+      registrationError('Please enter major');
+    } else if (password === '') {
       registrationError('Please enter password');
     } else if (confirmPassword === '') {
       registrationError('Please confirm password');
@@ -238,7 +246,15 @@ const mapStateToProps = ({ auth }) => {
     error,
     loading } = auth;
 
-  return { firstName, lastName, email, major, password, confirmPassword, error, loading };
+  return {
+    firstName,
+    lastName,
+    email,
+    major,
+    password,
+    confirmPassword,
+    error,
+    loading };
 };
 
 const mapDispatchToProps = {
