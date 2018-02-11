@@ -7,6 +7,7 @@ const INITIAL_STATE = {
   firstName: '',
   lastName: '',
   email: '',
+  major: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
