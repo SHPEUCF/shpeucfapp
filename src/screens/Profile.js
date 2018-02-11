@@ -17,7 +17,7 @@ class Profile extends Component {
   }
 
   render() {
-    const { firstName, lastName, email } = this.props;
+    const { firstName, lastName, email, major } = this.props;
 
     const {
       bottomHalfContainerStyle,
@@ -80,7 +80,7 @@ class Profile extends Component {
                 <Text style={itemLabelText}>Major:</Text>
               </View>
               <View style={itemValueContainerStyle}>
-                <Text style={itemValueText}>From Registration (coming soon)</Text>
+                <Text style={itemValueText}>{major}</Text>
               </View>
             </View>
 
@@ -184,9 +184,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ account }) => {
-  const { firstName, lastName, email } = account;
+  const { firstName, lastName, email, major } = account;
 
-  return { firstName, lastName, email };
+  return { firstName, lastName, email, major };
 };
 
 const mapDispatchToProps = {
