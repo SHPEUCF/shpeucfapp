@@ -6,6 +6,7 @@ import {
   firstNameChanged,
   lastNameChanged,
   emailChanged,
+  majorChanged,
   passwordChanged,
   confirmPasswordChanged,
   registrationError,
@@ -29,6 +30,9 @@ class RegistrationForm extends Component {
   onEmailChange(text) {
     this.props.emailChanged(text);
   }
+  onMajorChange(text) {
+    this.props.majorChanged(text);
+  }
   onPasswordChange(text) {
     this.props.passwordChanged(text);
   }
@@ -41,19 +45,28 @@ class RegistrationForm extends Component {
       firstName,
       lastName,
       email,
+      major,
       password,
       confirmPassword,
       registrationError,
       createUser } = this.props;
 
-    if (password === '') {
+    const ucfStudentEmail = new RegExp("^[A-Za-z0-9._%+-]+@knights.ucf.edu$");
+
+    if (email === '') {
+      registrationError('Please enter email');
+    } else if (!ucfStudentEmail.test(email)) {
+      registrationError('Must use a @knigths.ucf.edu email for registration');
+    } else if (major === '') {
+      registrationError('Please enter major');
+    } else if (password === '') {
       registrationError('Please enter password');
     } else if (confirmPassword === '') {
       registrationError('Please confirm password');
     } else if (password !== confirmPassword) {
       registrationError('Passwords do not match, please try again');
     } else if (password === confirmPassword) {
-      createUser({ firstName, lastName, email, password });
+      createUser({ firstName, lastName, email, major, password });
     }
   }
 
@@ -148,10 +161,19 @@ class RegistrationForm extends Component {
             <RkTextInput
               rkType='rounded'
               placeholder="School Email"
+              keyboardType="email-address"
               value={this.props.email}
               autoCapitalize="none"
               maxLength={45}
               onChangeText={this.onEmailChange.bind(this)}
+              />
+            <RkTextInput
+              rkType='rounded'
+              placeholder="Major"
+              value={this.props.major}
+              autoCapitalize="words"
+              maxLength={45}
+              onChangeText={this.onMajorChange.bind(this)}
               />
             <RkTextInput
               rkType='rounded'
@@ -229,18 +251,28 @@ const mapStateToProps = ({ auth }) => {
     firstName,
     lastName,
     email,
+    major,
     password,
     confirmPassword,
     error,
     loading } = auth;
 
-  return { firstName, lastName, email, password, confirmPassword, error, loading };
+  return {
+    firstName,
+    lastName,
+    email,
+    major,
+    password,
+    confirmPassword,
+    error,
+    loading };
 };
 
 const mapDispatchToProps = {
   firstNameChanged,
   lastNameChanged,
   emailChanged,
+  majorChanged,
   passwordChanged,
   confirmPasswordChanged,
   registrationError,
