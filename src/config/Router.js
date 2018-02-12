@@ -1,6 +1,7 @@
 import React from 'react';
 import { Router, Scene, Stack, ActionConst, Actions } from 'react-native-router-flux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Spinner } from '../components/general';
 import RegistrationForm from '../components/auth/RegistrationForm';
 import LoginForm from '../components/auth/LoginForm'
 import { WebPageShow, PostShow, ComingSoon } from '../components/general';
@@ -26,6 +27,12 @@ const RouterComponent = () => {
     <Router>
       <Stack key="root" hideNavBar>
         <Stack key="auth">
+          <Scene
+            key="loading"
+            component={Spinner}
+            type={ActionConst.REPLACE}
+            hideNavBar
+             />
           <Scene
             key="login"
             component={LoginForm}

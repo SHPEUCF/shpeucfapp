@@ -20,7 +20,6 @@ class App extends Component {
       messagingSenderId: "974032317047"
     };
     firebase.initializeApp(config)
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
