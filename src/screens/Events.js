@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   TouchableOpacity,
   Button,
+  Alert,
   Image,
   Text,
   View,
@@ -27,7 +28,7 @@ class Events extends Component {
     return (
       <Agenda
         selected={new Date()}
-        onDayChange={(day)=>{alert('day pressed')}}
+        //onDayChange={(day)=>{alert('day pressed')}}
         showWeekNumbers={true}
         pastScrollRange={24}
         futureScrollRange={24}
@@ -108,14 +109,16 @@ class Events extends Component {
 
   renderItem(item) {
     return (
-      <View style={[styles.item, {height: item.height}]}>
-        <Text style={{ fontWeight: 'bold' }}>{item["title"]}</Text>
-        <Text>{item["time"]}</Text>
-        <Text>{item["location"]}</Text>
-        <View>
-          <Text style={styles.description}>{item["description"]}</Text>
+      <TouchableOpacity onPress={() => Alert.alert('Event Clicked','Event Details')}>
+          <View style={[styles.item, {height: item.height}]}>
+            <Text style={{ fontWeight: 'bold' }}>{item["title"]}</Text>
+            <Text>{item["time"]}</Text>
+            <Text>{item["location"]}</Text>
+            <View>
+              <Text style={styles.description}>{item["description"]}</Text>
+            </View>
         </View>
-    </View>
+      </TouchableOpacity>
     );
   }
 
