@@ -34,13 +34,9 @@ class Events extends Component {
 
     return (
       <Agenda
-<<<<<<< HEAD
-        selected={this.state.todaySelected}
-        onDayChange={(day)=>{alert('day pressed')}}
-=======
+
         selected={new Date()}
         //onDayChange={(day)=>{alert('day pressed')}}
->>>>>>> 141b13aeedfb4a6b3514c3ccb0efaf27750ff40f
         showWeekNumbers={true}
         pastScrollRange={24}
         futureScrollRange={24}
