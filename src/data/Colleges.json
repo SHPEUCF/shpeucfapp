@@ -1,7 +1,14 @@
 [
   {
-    "college": "College of Arts & Humanities (CAH)",
+    "key":1,
+    "collegeName":"Select College",
+    "degrees":"Select a Major",
+  },
+  {
+    "key":2,
+    "collegeName": "College of Arts & Humanities (CAH)",
     "degrees": [
+
       "Architecture",
       "Art - Emerging Media Track",
       "Art - History Track",
@@ -37,8 +44,10 @@
     ]
   },
   {
-    "college": "College of Business Administration (CBA)",
+    "key":3,
+    "collegeName": "College of Business Administration (CBA)",
     "degrees": [
+
       "Accounting",
       "Business Economics",
       "Economics",
@@ -50,8 +59,10 @@
     ]
   },
   {
-    "college": "College of Education & Human Performance (CEDHP)",
+    "key":4,
+    "collegeName": "College of Education & Human Performance (CEDHP)",
     "degrees": [
+
       "Early Childhood Development and Education Track 1: Education: Pre-Kindergarten - Primary (PK-3)",
       "Early Childhood Development and Education Track 2: Early Childhood Development",
       "Elementary Education",
@@ -70,8 +81,10 @@
     ]
   },
   {
-    "college": "College of Engineering & Computer Science (CECS)",
+    "key":5,
+    "collegeName": "College of Engineering & Computer Science (CECS)",
     "degrees": [
+
       "Aerospace Engineering",
       "Civil Engineering",
       "Computer Engineering - Comprehensive Track",
@@ -89,8 +102,10 @@
     ]
   },
   {
-    "college": "College of Health & Public Affairs (COHPA)",
+    "key":6,
+    "collegeName": "College of Health & Public Affairs (COHPA)",
     "degrees": [
+
       "Athletic Training",
       "Criminal Justice",
       "Criminal Justice - Scholar's Track",
@@ -104,16 +119,20 @@
     ]
   },
   {
-    "college": "Rosen College of Hospitality Management (RCHM)",
+    "key":7,
+    "collegeName": "Rosen College of Hospitality Management (RCHM)",
     "degrees": [
+
       "Entertainment Management",
       "Hospitality Management",
       "Restaurant and Foodservice Management"
     ]
   },
   {
-    "college": "College of Medicine (COM)",
+    "key":8,
+    "collegeName": "College of Medicine (COM)",
     "degrees": [
+
       "Biomedical Sciences",
       "Biomedical Sciences - Molecular and Cellular Biology Track",
       "Biomedical Sciences - Molecular Microbiology Track",
@@ -124,22 +143,28 @@
     ]
   },
   {
-    "college": "College of Nursing (CON)",
+    "key":9,
+    "collegeName": "College of Nursing (CON)",
     "degrees": [
+
       "Nursing",
       "Nursing - Concurrent A.S.N. to B.S.N. Enrollment Option",
       "Nursing - R.N. to B.S.N. Program"
     ]
   },
   {
-    "college": "College of Optics & Photonics (CREOL)",
+    "key":10,
+    "collegeName": "College of Optics & Photonics (CREOL)",
     "degrees": [
+
       "Photonic Science and Engineering"
     ]
   },
   {
-    "college": "College of Sciences (COS)",
+    "key":11,
+    "collegeName": "College of Sciences (COS)",
     "degrees": [
+
       "Actuarial Science",
       "Advertising - Public Relations",
       "Anthropology",
@@ -165,8 +190,10 @@
     ]
   },
   {
-    "college": "Undergraduate Studies (UGST)",
+    "key":12,
+    "collegeName": "Undergraduate Studies (UGST)",
     "degrees": [
+    
       "Applied Science B.A.S.",
       "Environmental Studies",
       "Interdisciplinary Studies",
