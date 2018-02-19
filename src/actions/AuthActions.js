@@ -6,6 +6,7 @@ import {
   FIRST_NAME_CHANGED,
   LAST_NAME_CHANGED,
   EMAIL_CHANGED,
+  COLLEGE_CHANGED,
   MAJOR_CHANGED,
   PASSWORD_CHANGED,
   CONFIRM_PASSWORD_CHANGED,
@@ -35,6 +36,12 @@ export const lastNameChanged = (text) => {
 export const emailChanged = (text) => {
   return {
     type: EMAIL_CHANGED,
+    payload: text
+  };
+};
+export const collegeChanged = (text) => {
+  return {
+    type: COLLEGE_CHANGED,
     payload: text
   };
 };
@@ -124,12 +131,12 @@ export const goToRegistration = () => {
   }
 };
 
-export const createUser = ({ firstName, lastName, email, major, password }) => {
+export const createUser = ({ firstName, lastName, email, college, major, password }) => {
   return (dispatch) => {
     dispatch({ type: CREATE_USER });
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then((user) => createUserSuccess(dispatch, user, firstName, lastName, email, major))
+      .then((user) => createUserSuccess(dispatch, user, firstName, lastName, email, college, major))
       .catch((error) => createUserFail(dispatch, error))
   };
 };
@@ -158,11 +165,11 @@ const createUserFail = (dispatch, error) => {
   });
 };
 
-const createUserSuccess = (dispatch, user, firstName, lastName, email, major) => {
+const createUserSuccess = (dispatch, user, firstName, lastName, email, college, major) => {
   const { currentUser } = firebase.auth();
 
   firebase.database().ref(`/users/${currentUser.uid}/`)
-    .set({ firstName, lastName, email, major })
+    .set({ firstName, lastName, email, college, major })
     .then(() => Alert.alert('Account Created', 'Welcome to SHPE UCF Mobile'))
     .then(() => Actions.main());
 

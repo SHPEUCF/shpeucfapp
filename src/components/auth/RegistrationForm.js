@@ -6,6 +6,7 @@ import {
   firstNameChanged,
   lastNameChanged,
   emailChanged,
+  collegeChanged,
   majorChanged,
   passwordChanged,
   confirmPasswordChanged,
@@ -41,6 +42,9 @@ class RegistrationForm extends Component {
   onEmailChange(text) {
     this.props.emailChanged(text);
   }
+  onCollegeChange(text) {
+    this.props.collegeChanged(text);
+  }
   onMajorChange(text) {
     this.props.majorChanged(text);
   }
@@ -56,6 +60,7 @@ class RegistrationForm extends Component {
       firstName,
       lastName,
       email,
+      college,
       major,
       password,
       confirmPassword,
@@ -72,6 +77,8 @@ class RegistrationForm extends Component {
       registrationError('Please enter your school email');
     } else if (!ucfStudentEmail.test(email)) {
       registrationError('Please use a "knights.ucf.edu", or "ucf.edu" email for registration');
+    } else if (college === '') {
+      registrationError('Please enter college');
     } else if (major === '') {
       registrationError('Please enter major');
     } else if (password === '') {
@@ -81,7 +88,7 @@ class RegistrationForm extends Component {
     } else if (password !== confirmPassword) {
       registrationError('Passwords do not match, please try again');
     } else if (password === confirmPassword) {
-      createUser({ firstName, lastName, email, major, password });
+      createUser({ firstName, lastName, email, college, major, password });
     }
   }
 
@@ -154,12 +161,14 @@ class RegistrationForm extends Component {
 
   handlePickedValueCollege = (input) =>{
     this.setState({collegeSelected: input});
+    this.onCollegeChange(input[0].value);
     this.populateMajorArray(input);
     this.hidePicker1();
   };
 
   handlePickedValueMajor = (input2) =>{
     this.setState({majorSelected: input2});
+    this.onMajorChange(input2[0]);
     this.hidePicker2();
   };
   populateMajorArray(cName){
@@ -360,6 +369,7 @@ const mapStateToProps = ({ auth }) => {
     firstName,
     lastName,
     email,
+    college,
     major,
     password,
     confirmPassword,
@@ -370,6 +380,7 @@ const mapStateToProps = ({ auth }) => {
     firstName,
     lastName,
     email,
+    college, 
     major,
     password,
     confirmPassword,
@@ -381,6 +392,7 @@ const mapDispatchToProps = {
   firstNameChanged,
   lastNameChanged,
   emailChanged,
+  collegeChanged, 
   majorChanged,
   passwordChanged,
   confirmPasswordChanged,

@@ -4,6 +4,7 @@ import {
   LAST_NAME_CHANGED,
   EMAIL_CHANGED,
   MAJOR_CHANGED,
+  COLLEGE_CHANGED,
   PASSWORD_CHANGED,
   CONFIRM_PASSWORD_CHANGED,
   REGISTRATION_ERROR,
@@ -21,6 +22,7 @@ const INITIAL_STATE = {
   firstName: '',
   lastName: '',
   email: '',
+  college: '',
   major: '',
   password: '',
   confirmPassword: '',
@@ -45,6 +47,10 @@ export default (state = INITIAL_STATE, action) => {
     case EMAIL_CHANGED:
       return { ...state,
         email: payload
+      };
+    case COLLEGE_CHANGED:
+      return { ...state,
+        college: payload
       };
     case MAJOR_CHANGED:
       return { ...state,
