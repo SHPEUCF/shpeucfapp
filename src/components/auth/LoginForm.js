@@ -45,16 +45,12 @@ class LoginForm extends Component {
 
   renderSignUpButton() {
     return (
-      <View>
-        <View style={styles.signUpContainer}>
-          <View>
-            <Text>Don't have an account? </Text>
-          </View>
+      <View style={styles.signUpContainer}>
+        <Text>Don't have an account? </Text>
         <TouchableOpacity
           onPress={this.props.goToRegistration}>
           <Text style={styles.signUpButton}>Sign up now</Text>
         </TouchableOpacity>
-        </View>
       </View>
     );
   }
@@ -175,7 +171,6 @@ const styles = StyleSheet.create({
     color: '#000'
   },
   signUpContainer: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 10,

@@ -111,16 +111,12 @@ class RegistrationForm extends Component {
 
   renderLogInButton() {
     return (
-      <View>
-        <View style={styles.logInContainer}>
-          <View>
-            <Text>Already have an account? </Text>
-          </View>
+      <View style={styles.logInContainer}>
+        <Text>Already have an account? </Text>
         <TouchableOpacity
           onPress={this.props.goToLogIn}>
           <Text style={styles.logInButton}>Log In</Text>
         </TouchableOpacity>
-        </View>
       </View>
     );
   }
@@ -187,21 +183,17 @@ class RegistrationForm extends Component {
   render() {
     return (
       <View style={styles.container}>
-
-       <View style={styles.formContainerStyle}>
-
-
+        <View style={styles.formContainerStyle}>
+         
           <View style={styles.headerStyle}>
             <Text style={styles.headerTextStyle}>SHPE @ UCF</Text>
             <Text style={styles.headerSubtitleStyle}>Registration</Text>
           </View>
 
-
           <ScrollView
           ref={'scrollView'}
           style={{flex:0, paddingTop:10, paddingBottom:10}}>
-
-
+          
           <RkAvoidKeyboard>
             <RkTextInput
               rkType='rounded'
@@ -246,81 +238,78 @@ class RegistrationForm extends Component {
               maxLength={30}
               onChangeText={this.onConfirmPasswordChange.bind(this)}
               />
+            
+            <View style={styles.pickerTextInput}>
+              <RkTextInput style={{flex:1}}
+                rkType='rounded'
+                maxLength={45}
+                editable={false}
+                value={this.state.collegeSelected[0].value }/>
+                <TouchableOpacity
+                  style={{alignItems:'flex-end', margin: 10}}
+                  onPress={this.showPicker1}>
+                  <Ionicons name={iconName} size={45}/>
+                </TouchableOpacity>
+            </View>
 
+            <RkPicker
+              rkType='rounded'
+              optionHeight={80}
+              optionRkType={'large'}
+              selectedOptionRkType={'xlarge info'}
+              confirmButtonText={'Select'}
+              title="Colleges"
+              titleTextRkType={'xxlarge'}
+              data={[collegeNames]}
+              visible={this.state.pickerVisible}
+              onConfirm={this.handlePickedValueCollege}
+              onCancel={this.hidePicker1}
+              selectedOptions={this.state.collegeSelected}
+              />
 
+            <View style={styles.pickerTextInput}>
+              <RkTextInput style={{flex:1}}
+                rkType='rounded'
+                maxLength={45}
+                editable={false}
+                value={this.state.majorSelected[0] }/>
+                <TouchableOpacity
+                  style={{alignItems:'flex-end', margin: 10}}
+                  onPress={this.showPicker2}>
+                  <Ionicons name={iconName} size={45}/>
+                </TouchableOpacity>
+            </View>
 
-  <View style={styles.pickerTextInput}>
-      <RkTextInput style={{flex:1}}
-        rkType='rounded'
-        maxLength={45}
-        editable={false}
-        value={this.state.collegeSelected[0].value }/>
-        <TouchableOpacity
-          style={{alignItems:'flex-end', margin: 10}}
-          onPress={this.showPicker1}>
-          <Ionicons name={iconName} size={45}/>
-        </TouchableOpacity>
-    </View>
-
-    <RkPicker
-      rkType='rounded'
-      optionHeight={80}
-      optionRkType={'large'}
-      selectedOptionRkType={'xlarge info'}
-      confirmButtonText={'Select'}
-      title="Colleges"
-      titleTextRkType={'xxlarge'}
-      data={[collegeNames]}
-      visible={this.state.pickerVisible}
-      onConfirm={this.handlePickedValueCollege}
-      onCancel={this.hidePicker1}
-      selectedOptions={this.state.collegeSelected}
-      />
-
-<View style={styles.pickerTextInput}>
-  <RkTextInput style={{flex:1}}
-    rkType='rounded'
-    maxLength={45}
-    editable={false}
-    value={this.state.majorSelected[0] }/>
-    <TouchableOpacity
-      style={{alignItems:'flex-end', margin: 10}}
-      onPress={this.showPicker2}>
-      <Ionicons name={iconName} size={45}/>
-    </TouchableOpacity>
-</View>
-
-<RkPicker
-  rkType='rounded'
-  optionHeight={80}
-  optionRkType={'large'}
-  selectedOptionRkType={'xlarge info'}
-  confirmButtonText={'Select'}
-  title="Degrees"
-  titleTextRkType={'xxlarge'}
-  data={[majorNames]}
-  visible={this.state.pickerVisible2}
-  onConfirm={(major) => {
-    console.log('major ', major)
-    this.setState({majorSelected: major})
-    this.setState({pickerVisible2: false})
-  }}
-  onCancel={this.hidePicker2}
-  selectedOptions={this.state.majorSelected}
-  />
-
-
-  </RkAvoidKeyboard>
-
-  </ScrollView>
-  {this.renderError()}
-  {this.renderButtons()}
-
-      </View>
+            <RkPicker
+              rkType='rounded'
+              optionHeight={80}
+              optionRkType={'large'}
+              selectedOptionRkType={'xlarge info'}
+              confirmButtonText={'Select'}
+              title="Degrees"
+              titleTextRkType={'xxlarge'}
+              data={[majorNames]}
+              visible={this.state.pickerVisible2}
+              onConfirm={(major) => {
+                console.log('major ', major)
+                this.setState({majorSelected: major})
+                this.setState({pickerVisible2: false})
+              }}
+              onCancel={this.hidePicker2}
+              selectedOptions={this.state.majorSelected}
+              />
+          </RkAvoidKeyboard>
+          </ScrollView>
+          
+          {this.renderError()}
+          {this.renderButtons()}
+          
+        </View>
       </View>
     );
   }
 }
+
 const { height: D_HEIGHT, width: D_WIDTH } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
@@ -363,7 +352,6 @@ const styles = StyleSheet.create({
     color: '#000'
   },
   logInContainer: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 10,
