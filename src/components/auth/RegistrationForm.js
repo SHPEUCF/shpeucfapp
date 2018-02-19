@@ -18,24 +18,19 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import data from '../../data/Colleges.json';
 
 const collegeNames = [];
+data.map(college => {
+  collegeNames.push({key:college.key, value:college.collegeName});
+});
 var majorNames =  [];
 majorNames.push(data[0].degrees);
-data.map((college) =>
-{
-  collegeNames.push({key:college.key, value:college.collegeName});
-}
-);
+
 const iconName= Platform.OS === 'ios'?'ios-arrow-dropdown':'md-arrow-dropdown';
-//collegeNames.slice(1, 2)
+
 class RegistrationForm extends Component {
-  state = {collegeSelected:collegeNames.slice(0,1),
-    majorSelected:majorNames.slice(0,1),
+  state = {collegeSelected: collegeNames.slice(0,1),
+    majorSelected: majorNames.slice(0,1),
     pickerVisible: false,
     pickerVisible2: false};
-
-  componentWillMount(){
-    console.log(collegeNames);
-  }
 
   onFirstNameChange(text) {
     this.props.firstNameChanged(text);
@@ -161,25 +156,20 @@ class RegistrationForm extends Component {
 
   handlePickedValueMajor = (input2) =>{
     this.setState({majorSelected: input2});
-    console.log('state', input2);
     this.hidePicker2();
   };
   populateMajorArray(cName){
-    console.log('cName', cName);
       majorNames = [];
       majorNames.push('Select a Major');
       var i = 2;
 
       var temp = data.slice(cName[0].key-1, cName[0].key);
       console.log('temp ', temp);
-      temp[0].degrees.map((aDegree, k)=>{
+      temp[0].degrees.map((aDegree)=>{
         majorNames.push(aDegree);
       });
-      console.log('majorNames ', majorNames);
   }
-
-
-
+  
   render() {
     return (
       <View style={styles.container}>
@@ -255,11 +245,11 @@ class RegistrationForm extends Component {
             <RkPicker
               rkType='rounded'
               optionHeight={80}
-              optionRkType={'large'}
-              selectedOptionRkType={'xlarge info'}
+              optionRkType={'medium'}
+              selectedOptionRkType={'medium danger'}
               confirmButtonText={'Select'}
               title="Colleges"
-              titleTextRkType={'xxlarge'}
+              titleTextRkType={'large'}
               data={[collegeNames]}
               visible={this.state.pickerVisible}
               onConfirm={this.handlePickedValueCollege}
@@ -283,18 +273,14 @@ class RegistrationForm extends Component {
             <RkPicker
               rkType='rounded'
               optionHeight={80}
-              optionRkType={'large'}
-              selectedOptionRkType={'xlarge info'}
+              optionRkType={'medium'}
+              selectedOptionRkType={'medium danger'}
               confirmButtonText={'Select'}
               title="Degrees"
-              titleTextRkType={'xxlarge'}
+              titleTextRkType={'large'}
               data={[majorNames]}
               visible={this.state.pickerVisible2}
-              onConfirm={(major) => {
-                console.log('major ', major)
-                this.setState({majorSelected: major})
-                this.setState({pickerVisible2: false})
-              }}
+              onConfirm={this.handlePickedValueMajor}
               onCancel={this.hidePicker2}
               selectedOptions={this.state.majorSelected}
               />
