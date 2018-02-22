@@ -91,7 +91,7 @@ class LoginForm extends Component {
 
             <RkTextInput
               rkType='rounded'
-              placeholder="School Email"
+              placeholder="Username"
               value={this.props.email}
               autoCapitalize="none"
               maxLength={45}
