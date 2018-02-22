@@ -148,23 +148,6 @@ export const createUser = ({ firstName, lastName, email, college, major, passwor
   };
 };
 
-const createUserSuccess = (dispatch, user, firstName, lastName, email, major) => {
-  const { currentUser } = firebase.auth();
-
-  firebase.database().ref(`/users/${currentUser.uid}/`)
-    .set({ firstName, lastName, email, major })
-    .then(() => currentUser.sendEmailVerification())
-    .then(() => firebase.auth().signOut())
-    .then(() => Alert.alert('Account Created',
-      `Please verify your email ${email} then log in using your credentials.`))
-
-  dispatch({
-    type: CREATE_USER_SUCCESS,
-    payload: user
-  });
-
-};
-
 const createUserFail = (dispatch, error) => {
   let errorMessage;
 
@@ -189,13 +172,15 @@ const createUserFail = (dispatch, error) => {
   });
 };
 
-<<<<<<< Updated upstream
 const createUserSuccess = (dispatch, user, firstName, lastName, email, college, major) => {
   const { currentUser } = firebase.auth();
 
   firebase.database().ref(`/users/${currentUser.uid}/`)
     .set({ firstName, lastName, email, college, major })
-    .then(() => Alert.alert('Account Created', 'Welcome to SHPE UCF Mobile'))
+    .then(() => currentUser.sendEmailVerification())
+    .then(() => firebase.auth().signOut())
+    .then(() => Alert.alert('Account Created',
+      `Please verify your email ${email} then log in using your credentials.`))
     .then(() => Actions.main());
 
   dispatch({
@@ -203,8 +188,6 @@ const createUserSuccess = (dispatch, user, firstName, lastName, email, college, 
     payload: user
   });
 };
-=======
->>>>>>> Stashed changes
 
 export const logoutUser = () => {
   return (dispatch) => {

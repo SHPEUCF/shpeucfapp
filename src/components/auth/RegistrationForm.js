@@ -70,7 +70,6 @@ class RegistrationForm extends Component {
 
     const ucfStudentEmail = new RegExp(/^[A-Za-z0-9._%+-]+@(knights.|)ucf.edu$/i);
 
-<<<<<<< Updated upstream
     if (firstName === '') {
       registrationError('Please enter your first name');
     } else if (lastName === '') {
@@ -82,15 +81,6 @@ class RegistrationForm extends Component {
     } else if (college === '') {
       registrationError('Please enter college');
     } else if (major === '') {
-=======
-    if (email === '') {
-      registrationError('Please enter email');
-    }
-    // else if (!ucfStudentEmail.test(email)) {
-    //   registrationError('Please use a "knights.ucf.edu", or "ucf.edu" email for registration');
-    // }
-     else if (major === '') {
->>>>>>> Stashed changes
       registrationError('Please enter major');
     } else if (password === '') {
       registrationError('Please enter password');
