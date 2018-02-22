@@ -2,7 +2,6 @@ import React, { Component} from 'react';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { Spinner } from './components/general';
 import { goToLogIn } from './actions';
 import Router from './config/Router';
 

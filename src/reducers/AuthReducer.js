@@ -7,6 +7,7 @@ import {
   COLLEGE_CHANGED,
   PASSWORD_CHANGED,
   CONFIRM_PASSWORD_CHANGED,
+  VERIFIED_USER,
   REGISTRATION_ERROR,
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAIL,
@@ -92,8 +93,7 @@ export default (state = INITIAL_STATE, action) => {
       };
     case CREATE_USER_SUCCESS:
       return { ...state,
-        user: payload,
-        loggedIn: true,
+        ... INITIAL_STATE,
       };
     case CREATE_USER_FAIL:
       return { ...state,

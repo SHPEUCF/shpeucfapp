@@ -11,6 +11,7 @@ import {
   PASSWORD_CHANGED,
   CONFIRM_PASSWORD_CHANGED,
   REGISTRATION_ERROR,
+  VERIFIED_USER,
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAIL,
   LOGIN_USER,
@@ -72,14 +73,28 @@ export const registrationError = (error) => {
   };
 };
 
+export const isVerifiedUser = ({ email, password }) => {
+  return (dispatch) => {
+    dispatch({ type: VERIFIED_USER });
+  }
+}
+
 export const loginUser = ({ email, password }) => {
   return (dispatch) => {
     dispatch({ type: LOGIN_USER });
 
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then(user => loginUserSuccess(dispatch, user))
-      .catch((error) => loginUserFail(dispatch, error));
+      .catch(error => loginUserFail(dispatch, error));
   };
+};
+
+export const loginUserSuccess = (dispatch, user) => {
+  dispatch({
+    type: LOGIN_USER_SUCCESS,
+    payload: user
+  });
+  Actions.main();
 };
 
 export const loginUserFail = (dispatch, error) => {
@@ -109,14 +124,6 @@ export const loginUserFail = (dispatch, error) => {
   });
 };
 
-export const loginUserSuccess = (dispatch, user) => {
-  dispatch({
-    type: LOGIN_USER_SUCCESS,
-    payload: user
-  });
-  Actions.main();
-};
-
 export const goToLogIn = () => {
   return (dispatch) => {
     dispatch({ type: GO_TO_LOGIN });
@@ -139,6 +146,23 @@ export const createUser = ({ firstName, lastName, email, college, major, passwor
       .then((user) => createUserSuccess(dispatch, user, firstName, lastName, email, college, major))
       .catch((error) => createUserFail(dispatch, error))
   };
+};
+
+const createUserSuccess = (dispatch, user, firstName, lastName, email, major) => {
+  const { currentUser } = firebase.auth();
+
+  firebase.database().ref(`/users/${currentUser.uid}/`)
+    .set({ firstName, lastName, email, major })
+    .then(() => currentUser.sendEmailVerification())
+    .then(() => firebase.auth().signOut())
+    .then(() => Alert.alert('Account Created',
+      `Please verify your email ${email} then log in using your credentials.`))
+
+  dispatch({
+    type: CREATE_USER_SUCCESS,
+    payload: user
+  });
+
 };
 
 const createUserFail = (dispatch, error) => {
@@ -165,6 +189,7 @@ const createUserFail = (dispatch, error) => {
   });
 };
 
+<<<<<<< Updated upstream
 const createUserSuccess = (dispatch, user, firstName, lastName, email, college, major) => {
   const { currentUser } = firebase.auth();
 
@@ -178,6 +203,8 @@ const createUserSuccess = (dispatch, user, firstName, lastName, email, college, 
     payload: user
   });
 };
+=======
+>>>>>>> Stashed changes
 
 export const logoutUser = () => {
   return (dispatch) => {
