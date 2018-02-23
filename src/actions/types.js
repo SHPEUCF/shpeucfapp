@@ -22,3 +22,6 @@ export const GO_TO_REGISTRATION = 'go_to_registration';
 
 // AccountActions
 export const USER_FETCH = 'user_fetch';
+
+// MembersActions
+export const FETCH_MEMBERS = 'fetch_members';

@@ -191,6 +191,7 @@ const mapStateToProps = ({ account }) => {
 
 const mapDispatchToProps = {
   userFetch,
-  logoutUser };
+  logoutUser
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

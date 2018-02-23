@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {Text, View, StyleSheet, TouchableOpacity, Dimensions }from 'react-native';
-import { Slider } from 'react-native-elements'
+import { Slider } from 'react-native-elements';
+import { fetchMembers } from '../actions';
 
 const dimension = Dimensions.get('window');
 
 class Leaderboard extends Component {
-
+  componentWillMount() {
+    this.props.fetchMembers();
+  }
   render() {
     const {
       containerStyle,
@@ -14,18 +18,10 @@ class Leaderboard extends Component {
     return (
       <View style={containerStyle}>
         <View style={contentContainerStyle}>
-          <Text>Member Name</Text>
+          <Text>{this.props.firstName} {this.props.lastName}</Text>
+          <Text>Points: {this.props.points}</Text>
           <Slider
-            value={.5}
-            disabled
-            Style={{ width: (dimension.width * .9)}}
-            thumbTintColor='transparent'
-            onValueChange={(value) => alert('slide')} />
-        </View>
-        <View style={contentContainerStyle}>
-          <Text>Member Name</Text>
-          <Slider
-            value={.5}
+            value= {this.props.points}
             disabled
             Style={{ width: (dimension.width * .9)}}
             thumbTintColor='transparent'
@@ -48,4 +44,14 @@ const styles = StyleSheet.create({
   }
 });
 
-export { Leaderboard };
+const mapStateToProps = ({ members }) => {
+  const { firstName, lastName, points } = members;
+
+  return { firstName, lastName, points };
+};
+
+const mapDispatchToProps = {
+  fetchMembers,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Leaderboard);

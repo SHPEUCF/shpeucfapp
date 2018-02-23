@@ -12,11 +12,13 @@ import { WebPageShow, PostShow, ComingSoon } from '../components/general';
 /* look at this page https://github.com/aksonov/react-native-router-flux/issues/2121
 to set button on the navBar */
 import Profile from '../screens/Profile';
+import Leaderboard from '../screens/Leaderboard';
+
+
 import {
   Feed,
   Events,
   More,
-  Leaderboard,
   JobBoard,
   Resources,
   CheckIn,
