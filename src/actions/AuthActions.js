@@ -1,6 +1,6 @@
-import { Alert } from 'react-native';
 import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
+import { Alert } from 'react-native';
 
 import {
   FIRST_NAME_CHANGED,
@@ -124,20 +124,6 @@ export const loginUserFail = (dispatch, error) => {
   });
 };
 
-export const goToLogIn = () => {
-  return (dispatch) => {
-    dispatch({ type: GO_TO_LOGIN });
-    Actions.login();
-  }
-};
-
-export const goToRegistration = () => {
-  return (dispatch) => {
-    dispatch({ type: GO_TO_REGISTRATION });
-    Actions.registration();
-  }
-};
-
 export const createUser = ({ firstName, lastName, email, college, major, password }) => {
   return (dispatch) => {
     dispatch({ type: CREATE_USER });
@@ -197,4 +183,18 @@ export const logoutUser = () => {
       .then(Actions.login())
       .then(Alert.alert('Signed Out', 'Have a great day!'));
   };
+};
+
+export const goToLogIn = () => {
+  return (dispatch) => {
+    dispatch({ type: GO_TO_LOGIN });
+    Actions.login();
+  }
+};
+
+export const goToRegistration = () => {
+  return (dispatch) => {
+    dispatch({ type: GO_TO_REGISTRATION });
+    Actions.registration();
+  }
 };

@@ -1,33 +1,40 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Text, View, StyleSheet, TouchableOpacity, Dimensions }from 'react-native';
+import {ScrollView, Text, View, StyleSheet, TouchableOpacity, Dimensions }from 'react-native';
 import { Slider } from 'react-native-elements';
-import { fetchMembers } from '../actions';
+import { fetchMembersPoints } from '../actions';
 
 const dimension = Dimensions.get('window');
 
 class Leaderboard extends Component {
   componentWillMount() {
-    this.props.fetchMembers();
+    this.props.fetchMembersPoints();
   }
+
   render() {
     const {
       containerStyle,
       contentContainerStyle } = styles;
+    const members = this.props.membersPoints;
 
     return (
-      <View style={containerStyle}>
-        <View style={contentContainerStyle}>
-          <Text>{this.props.firstName} {this.props.lastName}</Text>
-          <Text>Points: {this.props.points}</Text>
-          <Slider
-            value= {this.props.points}
-            disabled
-            Style={{ width: (dimension.width * .9)}}
-            thumbTintColor='transparent'
-            onValueChange={(value) => alert('slide')} />
-        </View>
-      </View>
+      <ScrollView>
+        {
+          members.map((member, i) => (
+            <View key={i} style={containerStyle}>
+              <View style={contentContainerStyle}>
+                <Text>{`${member.firstName} ${member.lastName} `}</Text>
+                <Text>Points:{member.points}</Text>
+                <Slider
+                  value= {member.points}
+                  disabled
+                  Style={{ width: (dimension.width * .9)}}
+                  thumbTintColor='transparent'/>
+              </View>
+            </View>
+          ))
+        }
+      </ScrollView>
     )
   }
 }
@@ -45,13 +52,13 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ members }) => {
-  const { firstName, lastName, points } = members;
+  const { membersPoints } = members;
 
-  return { firstName, lastName, points };
+  return { membersPoints };
 };
 
 const mapDispatchToProps = {
-  fetchMembers,
+  fetchMembersPoints,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Leaderboard);

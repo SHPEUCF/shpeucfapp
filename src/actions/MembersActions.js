@@ -1,18 +1,20 @@
 import firebase from 'firebase';
+import _ from 'lodash';
 
 import {
-  FETCH_MEMBERS
+  FETCH_MEMBERS_POINTS
 } from './types.js';
 
-export const fetchMembers = () => {
-  const { currentUser } = firebase.auth();
+export const fetchMembersPoints = () => {
 
   return (dispatch) => {
-  firebase.database().ref(`/users/${currentUser.uid}/`)
+  firebase.database().ref(`/points`)
     .on('value', snapshot => {
+      const membersPoints = _.values(snapshot.val());
+
       dispatch({
-        type: FETCH_MEMBERS,
-        payload: snapshot.val(),
+        type: FETCH_MEMBERS_POINTS,
+        payload: membersPoints,
       });
     });
   };

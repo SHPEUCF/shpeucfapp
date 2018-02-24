@@ -24,4 +24,4 @@ export const GO_TO_REGISTRATION = 'go_to_registration';
 export const USER_FETCH = 'user_fetch';
 
 // MembersActions
-export const FETCH_MEMBERS = 'fetch_members';
+export const FETCH_MEMBERS_POINTS = 'fetch_members_points';
