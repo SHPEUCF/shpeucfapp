@@ -2,7 +2,6 @@ export * from './Feed';
 export * from './Events';
 export * from './More';
 export * from './Leaderboard';
-export * from './JobBoard';
 export * from './Resources';
 export * from './CheckIn';
 export * from './Forms';

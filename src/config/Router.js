@@ -18,7 +18,6 @@ import {
   Feed,
   Events,
   More,
-  JobBoard,
   Resources,
   CheckIn,
   Forms,
@@ -125,10 +124,6 @@ const RouterComponent = () => {
             <Scene key="Leaderboard"
               component={Leaderboard}
               title="Leaderboard"
-              />
-            <Scene key="JobBoard"
-              component={JobBoard}
-              title="Job Board"
               />
             <Scene key="Resources"
               component={Resources}

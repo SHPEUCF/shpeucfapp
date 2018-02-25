@@ -12,11 +12,6 @@ import { List, ListItem } from 'react-native-elements';
       screen: 'Leaderboard'
     },
     {
-      title: 'Job Board',
-      icon: 'card-travel',
-      screen: 'JobBoard'
-    },
-    {
       title: 'Resources',
       icon: 'layers',
       screen: 'Resources'
