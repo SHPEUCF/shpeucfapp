@@ -6,11 +6,12 @@ export const COLLEGE_CHANGED = 'college_changed';
 export const MAJOR_CHANGED = 'major_changed';
 export const PASSWORD_CHANGED = 'password_changed';
 export const CONFIRM_PASSWORD_CHANGED = 'confirm_password_changed';
-export const VERIFIED_USER = 'verify_user';
 export const REGISTRATION_ERROR = 'registration_error';
-export const LOGIN_USER_SUCCESS = 'login_user_success';
-export const LOGIN_USER_FAIL = 'login_user_fail';
+export const VERIFIED_USER = 'verify_user';
 export const LOGIN_USER = 'login_user';
+export const ENTER_APP = 'enter_app';
+export const LOAD_USER = 'load_user';
+export const LOGIN_USER_FAIL = 'login_user_fail';
 export const LOGOUT_USER = 'logout_user';
 
 
@@ -19,9 +20,6 @@ export const CREATE_USER_SUCCESS = 'create_user_sucess';
 export const CREATE_USER_FAIL = 'create_user_fail';
 export const GO_TO_LOGIN = 'go_to_login';
 export const GO_TO_REGISTRATION = 'go_to_registration';
-
-// AccountActions
-export const USER_FETCH = 'user_fetch';
 
 // MembersActions
 export const FETCH_MEMBERS_POINTS = 'fetch_members_points';

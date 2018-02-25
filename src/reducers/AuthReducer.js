@@ -7,11 +7,12 @@ import {
   COLLEGE_CHANGED,
   PASSWORD_CHANGED,
   CONFIRM_PASSWORD_CHANGED,
-  VERIFIED_USER,
   REGISTRATION_ERROR,
-  LOGIN_USER_SUCCESS,
-  LOGIN_USER_FAIL,
+  VERIFIED_USER,
   LOGIN_USER,
+  ENTER_APP,
+  LOAD_USER,
+  LOGIN_USER_FAIL,
   LOGOUT_USER,
   CREATE_USER,
   CREATE_USER_SUCCESS,
@@ -69,23 +70,6 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state,
         error: payload,
       };
-    case LOGIN_USER:
-      return { ...state,
-        loading: true,
-        error: ''
-      };
-    case LOGIN_USER_SUCCESS:
-      return { ...state,
-        ...INITIAL_STATE,
-        user: payload,
-        loggedIn: true
-      };
-    case LOGIN_USER_FAIL:
-      return { ...state,
-        error: payload,
-        loading: false,
-        password: ''
-      };
     case CREATE_USER:
       return { ...state,
         loading: true,
@@ -100,10 +84,35 @@ export default (state = INITIAL_STATE, action) => {
         error: payload,
         loading: false,
       };
-    case LOGOUT_USER:
+    case LOGIN_USER:
+      return { ...state,
+        loading: true,
+        error: ''
+      };
+    case ENTER_APP:
       return { ...state,
         ...INITIAL_STATE,
+        user: payload,
+        loggedIn: true
       };
+    case LOAD_USER:
+      return { ...state,
+        ...INITIAL_STATE,
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        email: payload.email,
+        major: payload.major,
+      };
+    case LOGIN_USER_FAIL:
+      return { ...state,
+        error: payload,
+        loading: false,
+        password: ''
+      };
+      case LOGOUT_USER:
+        return { ...state,
+          ...INITIAL_STATE,
+        };
     case GO_TO_LOGIN:
       return INITIAL_STATE;
     case GO_TO_REGISTRATION:

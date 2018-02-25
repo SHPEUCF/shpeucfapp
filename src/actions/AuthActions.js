@@ -12,15 +12,18 @@ import {
   CONFIRM_PASSWORD_CHANGED,
   REGISTRATION_ERROR,
   VERIFIED_USER,
-  LOGIN_USER_SUCCESS,
-  LOGIN_USER_FAIL,
+  ENTER_APP,
   LOGIN_USER,
+  LOAD_USER,
+  LOGIN_USER_FAIL,
   LOGOUT_USER,
   CREATE_USER,
   CREATE_USER_SUCCESS,
   CREATE_USER_FAIL,
   GO_TO_LOGIN,
   GO_TO_REGISTRATION } from './types';
+
+
 
 export const firstNameChanged = (text) => {
   return {
@@ -73,57 +76,7 @@ export const registrationError = (error) => {
   };
 };
 
-export const isVerifiedUser = ({ email, password }) => {
-  return (dispatch) => {
-    dispatch({ type: VERIFIED_USER });
-  }
-}
-
-export const loginUser = ({ email, password }) => {
-  return (dispatch) => {
-    dispatch({ type: LOGIN_USER });
-
-    firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(user => loginUserSuccess(dispatch, user))
-      .catch(error => loginUserFail(dispatch, error));
-  };
-};
-
-export const loginUserSuccess = (dispatch, user) => {
-  dispatch({
-    type: LOGIN_USER_SUCCESS,
-    payload: user
-  });
-  Actions.main();
-};
-
-export const loginUserFail = (dispatch, error) => {
-  let errorMessage;
-
-  switch (error.code) {
-    case 'auth/user-not-found':
-      errorMessage = 'There is no user record corresponding to this identifier';
-      break;
-    case 'auth/invalid-email':
-      errorMessage = 'Enter a valid email';
-      break;
-    case 'auth/wrong-password':
-      errorMessage = 'Incorrect credentials';
-      break;
-    case 'auth/network-request-failed':
-      errorMessage = 'Network error. Check your Internet connectivity.';
-      break;
-    default:
-    errorMessage = error.message;
-  }
-  console.log(error);
-
-  dispatch({
-    type: LOGIN_USER_FAIL,
-    payload: errorMessage
-  });
-};
-
+// Registration Actions
 export const createUser = ({ firstName, lastName, email, college, major, password }) => {
   return (dispatch) => {
     dispatch({ type: CREATE_USER });
@@ -150,7 +103,6 @@ const createUserFail = (dispatch, error) => {
     default:
     errorMessage = error.message;
   }
-  console.log(error);
 
   dispatch({
     type: CREATE_USER_FAIL,
@@ -166,12 +118,77 @@ const createUserSuccess = (dispatch, user, firstName, lastName, email, college, 
     .then(() => currentUser.sendEmailVerification())
     .then(() => firebase.auth().signOut())
     .then(() => Alert.alert('Account Created',
-      `Please verify your email ${email} then log in using your credentials.`))
-    .then(() => Actions.main());
+      `Please verify your email ${email} then log in using your credentials.`));
 
   dispatch({
     type: CREATE_USER_SUCCESS,
+  });
+};
+
+// Login Actions
+export const isVerifiedUser = ({ email, password }) => {
+  return (dispatch) => {
+    dispatch({ type: VERIFIED_USER });
+  }
+}
+
+export const loginUser = ({ email, password }) => {
+  return (dispatch) => {
+    dispatch({ type: LOGIN_USER });
+
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(user => loginUserSuccess(dispatch, user))
+      .catch(error => loginUserFail(dispatch, error));
+  };
+};
+
+const loginUserSuccess = (dispatch, user) => {
+  dispatch({
+    type: ENTER_APP,
     payload: user
+  });
+};
+
+export const loadUser = () => {
+  const { currentUser } = firebase.auth();
+
+  return (dispatch) => {
+    if ( currentUser != null ) {
+      firebase.database().ref(`/users/${currentUser.uid}/`)
+        .on('value', snapshot => {
+          dispatch({
+            type: LOAD_USER,
+            payload: snapshot.val(),
+          });
+      });
+    };
+  };
+};
+
+export const loginUserFail = (dispatch, error) => {
+  let errorMessage;
+
+  switch (error.code) {
+    case 'auth/user-not-found':
+      errorMessage = 'There is no user record corresponding to this identifier';
+      break;
+    case 'auth/invalid-email':
+      errorMessage = 'Enter a valid email';
+      break;
+    case 'auth/wrong-password':
+      errorMessage = 'Incorrect credentials';
+      break;
+    case 'auth/network-request-failed':
+      errorMessage = 'Network error. Check your Internet connectivity.';
+      break;
+    default:
+    errorMessage = error.message;
+  }
+  console.log(error);
+
+  dispatch({
+    type: LOGIN_USER_FAIL,
+    payload: errorMessage
   });
 };
 

@@ -14,7 +14,6 @@ to set button on the navBar */
 import Profile from '../screens/Profile';
 import Leaderboard from '../screens/Leaderboard';
 
-
 import {
   Feed,
   Events,

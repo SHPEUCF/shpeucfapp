@@ -2,6 +2,10 @@ import React, { Component} from 'react';
 import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+import { Card, CardSection, Input, Spinner } from '../general';
+import {RkAvoidKeyboard, RkTextInput, RkButton, RkPicker, RkText} from 'react-native-ui-kitten';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import data from '../../data/Colleges.json';
 import {
   firstNameChanged,
   lastNameChanged,
@@ -13,15 +17,9 @@ import {
   registrationError,
   createUser,
   goToLogIn } from '../../actions';
-import { Card, CardSection, Input, Spinner } from '../general';
-import {RkAvoidKeyboard, RkTextInput, RkButton, RkPicker, RkText} from 'react-native-ui-kitten';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import data from '../../data/Colleges.json';
 
 const collegeNames = [];
-data.map(college => {
-  collegeNames.push({key:college.key, value:college.collegeName});
-});
+data.map(college => {collegeNames.push({key:college.key, value:college.collegeName})});
 var majorNames =  [];
 majorNames.push(data[0].degrees);
 
@@ -76,8 +74,8 @@ class RegistrationForm extends Component {
       registrationError('Please enter your last name');
     } else if (email === '') {
       registrationError('Please enter your school email');
-    } else if (!ucfStudentEmail.test(email)) {
-      registrationError('Please use a "knights.ucf.edu", or "ucf.edu" email for registration');
+    // } else if (!ucfStudentEmail.test(email)) {
+    //   registrationError('Please use a "knights.ucf.edu", or "ucf.edu" email for registration');
     } else if (college === '') {
       registrationError('Please enter college');
     } else if (major === '') {
@@ -183,12 +181,12 @@ class RegistrationForm extends Component {
         majorNames.push(aDegree);
       });
   }
-  
+
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.formContainerStyle}>
-         
+
           <View style={styles.headerStyle}>
             <Text style={styles.headerTextStyle}>SHPE @ UCF</Text>
             <Text style={styles.headerSubtitleStyle}>Registration</Text>
@@ -197,7 +195,7 @@ class RegistrationForm extends Component {
           <ScrollView
           ref={'scrollView'}
           style={{flex:0, paddingTop:10, paddingBottom:10}}>
-          
+
           <RkAvoidKeyboard>
             <RkTextInput
               rkType='rounded'
@@ -242,7 +240,7 @@ class RegistrationForm extends Component {
               maxLength={30}
               onChangeText={this.onConfirmPasswordChange.bind(this)}
               />
-            
+
             <View style={styles.pickerTextInput}>
               <RkTextInput style={{flex:1}}
                 rkType='rounded'
@@ -300,10 +298,10 @@ class RegistrationForm extends Component {
               />
           </RkAvoidKeyboard>
           </ScrollView>
-          
+
           {this.renderError()}
           {this.renderButtons()}
-          
+
         </View>
       </View>
     );
@@ -381,7 +379,7 @@ const mapStateToProps = ({ auth }) => {
     firstName,
     lastName,
     email,
-    college, 
+    college,
     major,
     password,
     confirmPassword,
@@ -393,7 +391,7 @@ const mapDispatchToProps = {
   firstNameChanged,
   lastNameChanged,
   emailChanged,
-  collegeChanged, 
+  collegeChanged,
   majorChanged,
   passwordChanged,
   confirmPasswordChanged,

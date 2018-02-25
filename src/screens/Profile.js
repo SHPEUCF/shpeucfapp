@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { userFetch, logoutUser } from '../actions';
+import { loadUser, logoutUser } from '../actions';
 import {
   Text,
   View, StyleSheet,
@@ -13,7 +13,7 @@ import { RkButton } from 'react-native-ui-kitten';
 
 class Profile extends Component {
   componentWillMount() {
-    this.props.userFetch();
+    this.props.loadUser();
   }
 
   render() {
@@ -43,7 +43,7 @@ class Profile extends Component {
               <Avatar
                 large
                 rounded
-                title="AL"
+                title={`${firstName[0]}${lastName[0]}`}
                 onPress={() => alert("Coming Soon")}
                 activeOpacity={0.7}
                 />
@@ -81,15 +81,6 @@ class Profile extends Component {
               </View>
               <View style={itemValueContainerStyle}>
                 <Text style={itemValueText}>{major}</Text>
-              </View>
-            </View>
-
-            <View style={contentItemsContainerStyle}>
-              <View style={itemLabelContainerStyle}>
-                <Text style={itemLabelText}>Year:</Text>
-              </View>
-              <View style={itemValueContainerStyle}>
-                <Text style={itemValueText}>From Registration (coming soon)</Text>
               </View>
             </View>
 
@@ -183,15 +174,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ account }) => {
-  const { firstName, lastName, email, major } = account;
+const mapStateToProps = ({ auth }) => {
+  const { firstName, lastName, email, major } = auth;
 
   return { firstName, lastName, email, major };
 };
 
 const mapDispatchToProps = {
-  userFetch,
-  logoutUser
-};
+  loadUser,
+  logoutUser };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
