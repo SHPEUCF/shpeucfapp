@@ -4,6 +4,7 @@ import {
   View,
   StyleSheet,
   ScrollView,
+  Platform,
   LayoutAnimation,
   DeviceEventEmitter,
   Alert } from 'react-native';
@@ -13,47 +14,53 @@ import Beacons from 'react-native-beacons-manager';
 class CheckIn extends Component {
 
   state = {
-    identifier: '',
-    uuid: '',
     beacons: [],
   };
 
   componentWillMount() {
     const region = {
-      identifier: 'SHPEUCF_1st_GBM',
+      identifier: 'SHPEUCF_RadBeacon_Dot',
       uuid: '2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6'
     }
     // Request for authorization while the app is open
-    Beacons.requestWhenInUseAuthorization();
+    /* Checking for both ios or android just in case the 
+     app is ran on another type of OS */
+    if (Platform.OS === 'ios') {
+      Beacons.requestWhenInUseAuthorization();
+      Beacons.startUpdatingLocation();
+    }
+    if (Platform.OS === 'android') {
+      Beacons.detectIBeacons();
+    }
     Beacons.startRangingBeaconsInRegion(region);
-    Beacons.startUpdatingLocation();
-  }
+  };
 
   componentDidMount() {
     // Listen for beacon changes every time beacon emits (every second)
-    const subscription = DeviceEventEmitter.addListener(
+    this.subscription = DeviceEventEmitter.addListener(
       'beaconsDidRange',
       (data) => {
         this.setState({
-          identifier: data.region.identifier,
-          uuid: data.region.uuid,
           beacons: data.beacons,
       })
     })
-  }
+  };
   componentWillUpdate() {
     LayoutAnimation.spring();
-  }
+  };
 
   componentWillUnmount() {
     const region = {
-      identifier: 'SHPEUCF_1st_GBM',
+      identifier: 'SHPEUCF_RadBeacon_Dot',
       uuid: '2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6'
     };
-
+    if (Platform.OS === 'ios') {
+      Beacons.requestWhenInUseAuthorization();
+      Beacons.stopUpdatingLocation(region);
+    }
     Beacons.stopRangingBeaconsInRegion(region)
-    Beacons.stopUpdatingLocation(region);
-  }
+    this.subscription.remove();
+  };
 
   render() {
     const {
@@ -95,7 +102,6 @@ class CheckIn extends Component {
                     <Text style={{ fontSize: 15, fontWeight: 'bold', marginBottom: 10 }}>
                       Beacon Information
                     </Text>
-                  <Text style={signalInfoLabel}>Identifier: {this.state.identifier}</Text>
                   <Text style={signalInfoLabel}>Approx. Distance (meters): {beacon.accuracy.toFixed(3)}</Text>
                   <Text style={signalInfoLabel}>Proximity: {beacon.proximity}</Text>
                   <Text style={signalInfoLabel}>RSSI (signal strength): {beacon.rssi}</Text>
