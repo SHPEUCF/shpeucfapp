@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {ScrollView, Text, View, StyleSheet, TouchableOpacity, Dimensions }from 'react-native';
-import { Slider } from 'react-native-elements';
+import {ScrollView, Text, View, StyleSheet, TouchableOpacity, Dimensions, ProgressViewIOS }from 'react-native';
+import _ from 'lodash';
 import { fetchMembersPoints } from '../actions';
 
 const dimension = Dimensions.get('window');
@@ -11,24 +11,24 @@ class Leaderboard extends Component {
     this.props.fetchMembersPoints();
   }
 
+
   render() {
     const {
       containerStyle,
       contentContainerStyle } = styles;
-    const members = this.props.membersPoints;
+    const sortedMembers = _.orderBy(this.props.membersPoints,['points','lastName','firstName'],['desc','asc','asc']);
 
     return (
       <ScrollView>
         {
-          members.map((member, i) => (
+          sortedMembers.map((member, i) => (
             <View key={i} style={containerStyle}>
               <View style={contentContainerStyle}>
                 <Text>{`${member.firstName} ${member.lastName} `}</Text>
                 <Text>Points:{member.points}</Text>
-                <Slider
-                  value= {member.points}
+                <ProgressViewIOS
+                  progress = {member.points / 100}
                   disabled
-                  Style={{ width: (dimension.width * .9)}}
                   thumbTintColor='transparent'/>
               </View>
             </View>
