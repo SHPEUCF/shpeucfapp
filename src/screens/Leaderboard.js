@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {ScrollView, Text, View, StyleSheet, TouchableOpacity, Dimensions, ProgressViewIOS }from 'react-native';
-import _ from 'lodash';
+import {FlatList, Text, View, StyleSheet, TouchableOpacity, Dimensions, ProgressViewIOS }from 'react-native';
 import { fetchMembersPoints } from '../actions';
+import _ from 'lodash';
+
 
 const dimension = Dimensions.get('window');
+const iteratees = ['points','lastName','firstName'];
+const order = ['desc','asc','asc'];
 
 class Leaderboard extends Component {
   componentWillMount() {
@@ -12,29 +15,29 @@ class Leaderboard extends Component {
   }
 
 
+
   render() {
     const {
       containerStyle,
       contentContainerStyle } = styles;
-    const sortedMembers = _.orderBy(this.props.membersPoints,['points','lastName','firstName'],['desc','asc','asc']);
+    const sortedMembers = _.orderBy(this.props.membersPoints,iteratees,order);
+
 
     return (
-      <ScrollView>
-        {
-          sortedMembers.map((member, i) => (
-            <View key={i} style={containerStyle}>
-              <View style={contentContainerStyle}>
-                <Text>{`${member.firstName} ${member.lastName} `}</Text>
-                <Text>Points:{member.points}</Text>
-                <ProgressViewIOS
-                  progress = {member.points / 100}
-                  disabled
-                  thumbTintColor='transparent'/>
-              </View>
+      <FlatList
+          data={sortedMembers}
+          extraData={this.state}
+          renderItem={({item, separators}) => (
+          <View style={contentContainerStyle}>
+              <Text>{`${item.firstName} ${item.lastName} `}</Text>
+              <Text>Points:{item.points}</Text>
+              <ProgressViewIOS
+                progress = {item.points / sortedMembers[0].points}
+                disabled
+                thumbTintColor='transparent'/>
             </View>
-          ))
-        }
-      </ScrollView>
+          )}
+      />
     )
   }
 }
@@ -48,6 +51,8 @@ const styles = StyleSheet.create({
   contentContainerStyle: {
     paddingLeft: dimension.width * .05,
     paddingRight: dimension.width * .05,
+    margin: 1,
+    backgroundColor: '#abc',
   }
 });
 
