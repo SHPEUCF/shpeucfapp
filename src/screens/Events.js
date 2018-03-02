@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { fetchEvents } from '../actions';
+import { Scene, Router, Actions } from 'react-native-router-flux';
+import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import {
   TouchableOpacity,
   Button,
@@ -10,31 +14,21 @@ import {
   Dimensions,
   ScrollView
   } from 'react-native';
-import axios from 'axios';
-import { Scene, Router, Actions } from 'react-native-router-flux';
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
-
 
 class Events extends Component {
 
-  state = { data: [], items: {}, todaySelected: new Date() };
-
   componentWillMount() {
-      axios.get('https://api.myjson.com/bins/7jlzt')
-      .then(response => this.setState({ data: response.data }))
-
+    this.props.fetchEvents();
   }
 
   static onRight = function(){
     this.alert(new Date());
   }
 
-
   render() {
-
+    
     return (
       <Agenda
-
         selected={new Date()}
         //onDayChange={(day)=>{alert('day pressed')}}
         showWeekNumbers={true}
@@ -42,9 +36,9 @@ class Events extends Component {
         futureScrollRange={24}
         showScrollIndicator={true}
         markedItems={this.markedItems.bind(this)}
-
-        items={this.state.items}
-        loadItemsForMonth={(this.loadItems.bind(this))}
+        items={this.props.eventList}
+        // Will only load items for visible month to improve performance later
+        // loadItemsForMonth={this.loadItemsForMonth.bind(this)}
         renderItem={this.renderItem.bind(this)}
         rowHasChanged={this.rowHasChanged.bind(this)}
         renderEmptyDate={ this.renderEmptyDate.bind(this) }
@@ -84,47 +78,24 @@ class Events extends Component {
     );
   }
 
-  loadItems() {
-    const newItems = {};
-
-    setTimeout(() => {
-      // Transform date to form 'YYYY-MM-DD' from current JSON format
-      this.state.data.map((calendar) => {
-        const year = calendar.year;
-        calendar.months.map((aMonth) => {
-          const month = (aMonth.month >= 1 && aMonth.month <= 9) ?
-          `0${aMonth.month}` : `${aMonth.month}`
-          aMonth.days.map((aDay) => {
-            const day = (aDay.day >= 1 && aDay.day <= 9) ?
-            `0${aDay.day}` : `${aDay.day}`
-            // Create items object
-            const date = `${year}-${month}-${day}`;
-            newItems[date] = aDay.events;
-            this.setState({
-              items: newItems
-            });
-          });
-        });
-      });
-    }, 1000);
-  }
-
   markedItems() {
     const markedItems = {};
-    Object.keys(this.state.items).forEach(key => { markedItems[key] = {selected: true, marked: true}});
+    Object.keys(items).forEach(key => { markedItems[key] = {selected: true, marked: true}});
     return markedItems;
   }
 
   renderItem(item) {
     return (
       <TouchableOpacity onPress={() => Alert.alert('Event Clicked','Event Details')}>
-          <View style={[styles.item, {height: item.height}]}>
-            <Text style={{ fontWeight: 'bold' }}>{item["title"]}</Text>
-            <Text>{item["time"]}</Text>
-            <Text>{item["location"]}</Text>
+          <View style={styles.item}>
+            <Text style={{ fontWeight: 'bold' }}>{item.title}</Text>
+            <Text>Time: {item.time}</Text>
+            <Text>Location: {item.location}</Text>
             <View>
-              <Text style={styles.description}>{item["description"]}</Text>
+              <Text style={styles.description}>Description: {item.description}</Text>
             </View>
+            <Text>Points: {item.value}</Text>
+            <Text>Event ID: {item.id}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -133,12 +104,6 @@ class Events extends Component {
   rowHasChanged(r1, r2) {
     return r1.name !== r2.name;
   }
-
-  timeToString(time) {
-    const date = new Date(time);
-    return date.toISOString().split('T')[0];
-  }
-
 
 } // End of component class
 
@@ -179,4 +144,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export { Events };
+const mapStateToProps = ({ events }) => {
+  const { eventList } = events;
+
+  return { eventList };
+};
+
+const mapDispatchToProps = {
+  fetchEvents
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Events);
+
