@@ -31,6 +31,7 @@ const INITIAL_STATE = {
   user: null,
   loggedIn: null,
   loading: false,
+  picture: '',
   error: '',
 };
 
@@ -102,6 +103,7 @@ export default (state = INITIAL_STATE, action) => {
         lastName: payload.lastName,
         email: payload.email,
         major: payload.major,
+        picture: payload.picture,
       };
     case LOGIN_USER_FAIL:
       return { ...state,
