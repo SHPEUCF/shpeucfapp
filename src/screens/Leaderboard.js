@@ -1,40 +1,43 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {ScrollView, Text, View, StyleSheet, TouchableOpacity, Dimensions }from 'react-native';
-import { Slider } from 'react-native-elements';
+import {FlatList, Text, View, StyleSheet, TouchableOpacity, Dimensions, ProgressViewIOS }from 'react-native';
 import { fetchMembersPoints } from '../actions';
+import _ from 'lodash';
+
 
 const dimension = Dimensions.get('window');
+const iteratees = ['points','lastName','firstName'];
+const order = ['desc','asc','asc'];
 
 class Leaderboard extends Component {
   componentWillMount() {
     this.props.fetchMembersPoints();
   }
 
+
+
   render() {
     const {
       containerStyle,
       contentContainerStyle } = styles;
-    const members = this.props.membersPoints;
+    const sortedMembers = _.orderBy(this.props.membersPoints,iteratees,order);
+
 
     return (
-      <ScrollView>
-        {
-          members.map((member, i) => (
-            <View key={i} style={containerStyle}>
-              <View style={contentContainerStyle}>
-                <Text>{`${member.firstName} ${member.lastName} `}</Text>
-                <Text>Points:{member.points}</Text>
-                <Slider
-                  value= {member.points}
-                  disabled
-                  Style={{ width: (dimension.width * .9)}}
-                  thumbTintColor='transparent'/>
-              </View>
+      <FlatList
+          data={sortedMembers}
+          extraData={this.state}
+          renderItem={({item, separators}) => (
+          <View style={contentContainerStyle}>
+              <Text>{`${item.firstName} ${item.lastName} `}</Text>
+              <Text>Points:{item.points}</Text>
+              <ProgressViewIOS
+                progress = {item.points / sortedMembers[0].points}
+                disabled
+                thumbTintColor='transparent'/>
             </View>
-          ))
-        }
-      </ScrollView>
+          )}
+      />
     )
   }
 }
@@ -48,6 +51,8 @@ const styles = StyleSheet.create({
   contentContainerStyle: {
     paddingLeft: dimension.width * .05,
     paddingRight: dimension.width * .05,
+    margin: 1,
+    backgroundColor: '#abc',
   }
 });
 

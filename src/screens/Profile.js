@@ -17,7 +17,7 @@ class Profile extends Component {
   }
 
   render() {
-    const { firstName, lastName, email, major } = this.props;
+    const { firstName, lastName, email, major, picture } = this.props;
 
     const {
       bottomHalfContainerStyle,
@@ -43,6 +43,7 @@ class Profile extends Component {
               <Avatar
                 large
                 rounded
+                source={{uri: picture}}
                 title={`${firstName[0]}${lastName[0]}`}
                 onPress={() => alert("Coming Soon")}
                 activeOpacity={0.7}
@@ -175,9 +176,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ auth }) => {
-  const { firstName, lastName, email, major } = auth;
+  const { firstName, lastName, email, major, picture } = auth;
 
-  return { firstName, lastName, email, major };
+  return { firstName, lastName, email, major, picture };
 };
 
 const mapDispatchToProps = {
