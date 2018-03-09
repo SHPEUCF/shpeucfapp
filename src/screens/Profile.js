@@ -17,7 +17,7 @@ class Profile extends Component {
   }
 
   render() {
-    const { firstName, lastName, email, major, picture } = this.props;
+    const { firstName, lastName, email, major, points, picture } = this.props;
 
     const {
       bottomHalfContainerStyle,
@@ -82,6 +82,14 @@ class Profile extends Component {
               </View>
               <View style={itemValueContainerStyle}>
                 <Text style={itemValueText}>{major}</Text>
+              </View>
+            </View>
+            <View style={contentItemsContainerStyle}>
+              <View style={itemLabelContainerStyle}>
+                <Text style={itemLabelText}>Points:</Text>
+              </View>
+              <View style={itemValueContainerStyle}>
+                <Text style={itemValueText}>{points}</Text>
               </View>
             </View>
 
@@ -176,9 +184,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ auth }) => {
-  const { firstName, lastName, email, major, picture } = auth;
+  const { firstName, lastName, email, major, points, picture } = auth;
 
-  return { firstName, lastName, email, major, picture };
+  return { firstName, lastName, email, major, points, picture };
 };
 
 const mapDispatchToProps = {

@@ -26,6 +26,7 @@ const INITIAL_STATE = {
   email: '',
   college: '',
   major: '',
+  points: '',
   password: '',
   confirmPassword: '',
   user: null,
@@ -103,6 +104,7 @@ export default (state = INITIAL_STATE, action) => {
         lastName: payload.lastName,
         email: payload.email,
         major: payload.major,
+        points: payload.points,
         picture: payload.picture,
       };
     case LOGIN_USER_FAIL:

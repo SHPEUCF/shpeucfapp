@@ -10,10 +10,10 @@ import {
 
 const createEvent = (dispatch, type, title, description, date, time, location, value ) => {
 
-  firebase.database().ref(`/events`)
+  firebase.database().ref('events')
     .push({ type, title, description, date, time, location, value })
     .then(() => Alert.alert('Event Created',
-      `Successful`));
+      'Successful'));
 
   dispatch({
     type: CREATE_EVENT_SUCCESS,
@@ -34,11 +34,11 @@ export const fetchEvents = () => {
   };
 };
 
-// Use this function to update keys or duplicate/copy test data on Firebase - 
+// Use this function to update keys or duplicate/copy test data on Firebase -
 // Be careful, especially if setting anything to null as it will delete it on Firebase.
 // Delete in production
 /* export const updateDuplicateDeleteOnFirebase = () => {
-  
+
   return() => {
     let update = {
       "2018-01-22": [
@@ -55,6 +55,3 @@ export const fetchEvents = () => {
   }
 };
 */
-
-
-
