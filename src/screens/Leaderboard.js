@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {FlatList, Text, View, StyleSheet, TouchableOpacity, Dimensions, ProgressViewIOS }from 'react-native';
+import {FlatList, Platform, Text, View, StyleSheet, TouchableOpacity, Dimensions, ProgressViewIOS, ProgressBar }from 'react-native';
 import { fetchMembersPoints } from '../actions';
 import _ from 'lodash';
 
@@ -23,7 +23,7 @@ class Leaderboard extends Component {
     const sortedMembers = _.orderBy(this.props.membersPoints,iteratees,order);
 
 
-    return (
+    return Platform.OS === 'ios' ?(
       <FlatList
           data={sortedMembers}
           extraData={this.state}
@@ -38,7 +38,23 @@ class Leaderboard extends Component {
             </View>
           )}
       />
-    )
+  ) :
+  (
+    <FlatList
+        data={sortedMembers}
+        extraData={this.state}
+        renderItem={({item, separators}) => (
+        <View style={contentContainerStyle}>
+            <Text>{`${item.firstName} ${item.lastName} `}</Text>
+            <Text>Points:{item.points}</Text>
+            <ProgressViewIOS
+              progress = {item.points / sortedMembers[0].points}
+              disabled
+              thumbTintColor='transparent'/>
+          </View>
+        )}
+    />
+)
   }
 }
 
