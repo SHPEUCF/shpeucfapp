@@ -26,12 +26,15 @@ const INITIAL_STATE = {
   email: '',
   college: '',
   major: '',
+  // Using URL below to avoid RN warning of empty source.uri as there's a delay fetching.
+  // Will improve fetching later, just need to get rid of the warning for now.
+  picture: 'https://cdn0.iconfinder.com/data/icons/superuser-web-kit/512/686909-user_people_man_human_head_person-512.png',
+  points: '',
   password: '',
   confirmPassword: '',
   user: null,
   loggedIn: null,
   loading: false,
-  picture: '',
   error: '',
 };
 
@@ -103,6 +106,7 @@ export default (state = INITIAL_STATE, action) => {
         lastName: payload.lastName,
         email: payload.email,
         major: payload.major,
+        points: payload.points,
         picture: payload.picture,
       };
     case LOGIN_USER_FAIL:

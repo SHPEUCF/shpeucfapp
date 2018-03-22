@@ -23,3 +23,7 @@ export const GO_TO_REGISTRATION = 'go_to_registration';
 
 // MembersActions
 export const FETCH_MEMBERS_POINTS = 'fetch_members_points';
+
+// EventActions
+export const CREATE_EVENT_SUCCESS = 'create_event_success';
+export const FETCH_EVENTS = 'fetch_events';

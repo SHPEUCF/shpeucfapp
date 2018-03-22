@@ -28,8 +28,7 @@ class CheckIn extends Component {
     if (Platform.OS === 'ios') {
       Beacons.requestWhenInUseAuthorization();
       Beacons.startUpdatingLocation();
-    }
-    if (Platform.OS === 'android') {
+    } else if (Platform.OS === 'android') {
       Beacons.detectIBeacons();
     }
     Beacons.startRangingBeaconsInRegion(region);
@@ -102,7 +101,6 @@ class CheckIn extends Component {
                     <Text style={{ fontSize: 15, fontWeight: 'bold', marginBottom: 10 }}>
                       Beacon Information
                     </Text>
-                  <Text style={signalInfoLabel}>Approx. Distance (meters): {beacon.accuracy.toFixed(3)}</Text>
                   <Text style={signalInfoLabel}>Proximity: {beacon.proximity}</Text>
                   <Text style={signalInfoLabel}>RSSI (signal strength): {beacon.rssi}</Text>
                 </View>

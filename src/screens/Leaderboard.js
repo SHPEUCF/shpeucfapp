@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+<<<<<<< HEAD
 import {FlatList, Platform, Text, View, StyleSheet, TouchableOpacity, Dimensions, ProgressViewIOS, ProgressBar }from 'react-native';
+=======
+>>>>>>> 840c6af6f637ffc6fa79ea9c22581e9f62673be1
 import { fetchMembersPoints } from '../actions';
 import _ from 'lodash';
-
+import {
+  FlatList,
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+  ProgressViewIOS } from 'react-native';
 
 const dimension = Dimensions.get('window');
 const iteratees = ['points','lastName','firstName'];
@@ -14,22 +24,23 @@ class Leaderboard extends Component {
     this.props.fetchMembersPoints();
   }
 
-
+   _keyExtractor = (item, index) => index;
 
   render() {
     const {
       containerStyle,
       contentContainerStyle } = styles;
-    const sortedMembers = _.orderBy(this.props.membersPoints,iteratees,order);
+    const sortedMembers = _.orderBy(this.props.membersPoints, iteratees, order);
 
 
     return Platform.OS === 'ios' ?(
       <FlatList
           data={sortedMembers}
           extraData={this.state}
+          keyExtractor={this._keyExtractor}
           renderItem={({item, separators}) => (
           <View style={contentContainerStyle}>
-              <Text>{`${item.firstName} ${item.lastName} `}</Text>
+              <Text>{`${item.firstName} ${item.lastName}`}</Text>
               <Text>Points:{item.points}</Text>
               <ProgressViewIOS
                 progress = {item.points / sortedMembers[0].points}
