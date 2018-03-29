@@ -156,7 +156,6 @@ export const loadUser = () => {
     if ( currentUser != null ) {
       firebase.database().ref(`/users/${currentUser.uid}/`)
         .on('value', snapshot => {
-          console.log(snapshot.val());
           dispatch({
             type: LOAD_USER,
             payload: snapshot.val(),
@@ -185,7 +184,6 @@ export const loginUserFail = (dispatch, error) => {
     default:
     errorMessage = error.message;
   }
-  console.log(error);
 
   dispatch({
     type: LOGIN_USER_FAIL,

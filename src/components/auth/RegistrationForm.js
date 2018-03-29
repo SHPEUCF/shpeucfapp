@@ -176,7 +176,6 @@ class RegistrationForm extends Component {
       var i = 2;
 
       var temp = data.slice(cName[0].key-1, cName[0].key);
-      console.log('temp ', temp);
       temp[0].degrees.map((aDegree)=>{
         majorNames.push(aDegree);
       });
