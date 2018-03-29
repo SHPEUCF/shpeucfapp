@@ -112,9 +112,9 @@ const createUserFail = (dispatch, error) => {
 
 const createUserSuccess = (dispatch, user, firstName, lastName, email, college, major) => {
   const { currentUser } = firebase.auth();
-
+  emailVerified = false;
   firebase.database().ref(`/users/${currentUser.uid}/`)
-    .set({ firstName, lastName, email, college, major })
+    .set({ firstName, lastName, email, college, major, emailVerified})
     .then(() => currentUser.sendEmailVerification())
     .then(() => firebase.auth().signOut())
     .then(() => Alert.alert('Account Created',
@@ -126,7 +126,7 @@ const createUserSuccess = (dispatch, user, firstName, lastName, email, college, 
 };
 
 // Login Actions
-export const isVerifiedUser = ({ email, password }) => {
+const isVerifiedUser = ({ email, password }) => {
   return (dispatch) => {
     dispatch({ type: VERIFIED_USER });
   }
