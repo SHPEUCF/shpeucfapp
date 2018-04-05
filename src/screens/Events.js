@@ -26,7 +26,7 @@ class Events extends Component {
   }
 
   render() {
-    
+
     return (
       <Agenda
         selected={new Date()}
@@ -44,6 +44,9 @@ class Events extends Component {
         renderEmptyDate={ this.renderEmptyDate.bind(this) }
         renderEmptyData = {this.renderEmptyData.bind(this)}
 
+        style={{
+          height: 1000
+        }}
         theme={{
           backgroundColor: 'transparent',
           calendarBackground: '#FFF',
@@ -52,8 +55,8 @@ class Events extends Component {
           agendaDayNumColor: '#333',
           selectedDayTextColor: '#000',
           todayTextColor: '#CC0000',
-          textDayFontSize:18,
-          textMonthFontSize:20,
+          textDayFontSize:15,
+          textMonthFontSize:16,
           textDayHeaderFontSize:14,
           selectedDotColor: 'black',
           selectedDayBackgroundColor: '#FECB00',
@@ -155,4 +158,3 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Events);
-
