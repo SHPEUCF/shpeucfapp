@@ -27,7 +27,8 @@ import { List, ListItem } from 'react-native-elements';
     {
       title: 'Privacy Policy',
       icon: 'insert-drive-file',
-      screen: 'ComingSoon'
+      screen: 'WebPageShow',
+      uri:"http://www.shpeucf.com/privacy-policy/"
     },
     {
       title: 'Version',
@@ -48,7 +49,7 @@ class About extends Component {
                 key={i}
                 title={menuItem.title}
                 leftIcon={{name: menuItem.icon}}
-                onPress={() => Actions[menuItem.screen]({ title: menuItem.title })}
+                onPress={() => Actions[menuItem.screen]({ title: menuItem.title, uri: menuItem.uri  })}
               />
             ))
           }
