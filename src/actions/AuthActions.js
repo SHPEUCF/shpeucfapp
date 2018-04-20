@@ -168,6 +168,7 @@ export const resetPassword = ({ email }) => {
     firebase.auth().sendPasswordResetEmail(email)
       .then(() => Alert.alert('Reset Started',
         `If an account with email ${email} exists, a reset password email will be sent. Please check your email.`))
+      .then(() => Actions.login())
       .catch(error => showFirebaseError(dispatch, error));
   };
 }
