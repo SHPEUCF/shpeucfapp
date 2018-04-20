@@ -1,23 +1,19 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
-import { emailChanged, passwordChanged, loginUser, goToResetPassword, goToRegistration } from '../../actions';
+import { emailChanged, resetPassword, goToLogIn } from '../../actions';
 import { Card, CardSection, Spinner } from '../general';
 import {RkTheme, RkAvoidKeyboard, RkTextInput, RkButton} from 'react-native-ui-kitten';
 
-class LoginForm extends Component {
+class ResetPasswordForm extends Component {
 
   onEmailChange(text) {
     this.props.emailChanged(text);
   }
 
-  onPasswordChange(text) {
-    this.props.passwordChanged(text);
-  }
-
   onButtonPress() {
-    const { email, password } = this.props;
-    this.props.loginUser({ email, password });
+    const { email, resetPassword } = this.props;
+    resetPassword({ email })
   }
 
   renderError() {
@@ -32,35 +28,25 @@ class LoginForm extends Component {
     }
   }
 
-  renderLogInButton() {
+  ResetPasswordButton() {
     return (
       <RkButton rkType='rounded stretch'
         style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
         contentStyle={{color: 'white', fontWeight: 'bold'}}
         onPress={this.onButtonPress.bind(this)}>
-        LOGIN
+        RESET
       </RkButton>
     );
   }
 
-  renderResetPassword() {
+  LogInButton() {
     return (
       <View style={styles.resetPasswordContainer}>
         <TouchableOpacity
-          onPress={this.props.goToResetPassword}>
-          <Text style={styles.resetPasswordButton}>Reset Password</Text>
+          onPress={this.props.goToLogIn}>
+          <Text style={styles.loginButton}>Log In </Text>
         </TouchableOpacity>
-      </View>
-    );
-  }
-  renderSignUpButton() {
-    return (
-      <View style={styles.signUpContainer}>
-        <Text>Don't have an account? </Text>
-        <TouchableOpacity
-          onPress={this.props.goToRegistration}>
-          <Text style={styles.signUpButton}>Sign up now</Text>
-        </TouchableOpacity>
+        <Text>instead?</Text>
       </View>
     );
   }
@@ -75,9 +61,8 @@ class LoginForm extends Component {
     };
     return (
       <View>
-        {this.renderLogInButton()}
-        {this.renderResetPassword()}
-        {this.renderSignUpButton()}
+        {this.ResetPasswordButton()}
+        {this.LogInButton()}
       </View>
     );
   }
@@ -96,26 +81,17 @@ class LoginForm extends Component {
                 style={{width: 100, height: 100}}/>
             </View>
             <View style={styles.headerStyle}>
-              <Text style={styles.headerTextStyle}>SHPE @ UCF</Text>
-              <Text style={styles.headerSubtitleStyle}>Please Log In or Sign Up</Text>
+              <Text style={styles.headerTextStyle}>Reset Password</Text>
+              <Text style={styles.headerSubtitleStyle}>Enter your email below</Text>
             </View>
 
             <RkTextInput
               rkType='rounded'
-              placeholder="Username"
+              placeholder="Email"
               value={this.props.email}
               autoCapitalize="none"
               maxLength={45}
               onChangeText={this.onEmailChange.bind(this)}
-              />
-
-            <RkTextInput
-              rkType='rounded'
-              secureTextEntry
-              placeholder="Password"
-              value={this.props.password}
-              maxLength={45}
-              onChangeText={this.onPasswordChange.bind(this)}
               />
 
             {this.renderError()}
@@ -183,34 +159,23 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
   },
-  resetPasswordButton: {
+  loginButton: {
     fontWeight: 'bold',
-    color: '#0099ff',
+    color: '#000',
     flexDirection: 'row',
     justifyContent: 'center',
-  },
-  signUpButton: {
-    fontWeight: 'bold',
-    color: '#000'
-  },
-  signUpContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: 10,
   }
 });
 
 const mapStateToProps = ({ auth }) => {
-  const { email, password, error, loading, loggedIn } = auth;
+  const { email, error } = auth;
 
-  return { email, password, error, loading, loggedIn };
+  return { email, error };
 };
 
 const mapDispatchToProps = {
   emailChanged,
-  passwordChanged,
-  loginUser,
-  goToResetPassword, 
-  goToRegistration};
+  resetPassword,
+  goToLogIn };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ResetPasswordForm);

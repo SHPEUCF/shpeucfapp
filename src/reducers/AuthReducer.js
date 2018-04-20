@@ -8,6 +8,7 @@ import {
   PASSWORD_CHANGED,
   CONFIRM_PASSWORD_CHANGED,
   REGISTRATION_ERROR,
+  SHOW_FIREBASE_ERROR,
   VERIFIED_USER,
   LOGIN_USER,
   ENTER_APP,
@@ -17,6 +18,7 @@ import {
   CREATE_USER,
   CREATE_USER_SUCCESS,
   CREATE_USER_FAIL,
+  GO_TO_RESET_PASSWORD,
   GO_TO_LOGIN,
   GO_TO_REGISTRATION } from '../actions/types';
 
@@ -74,6 +76,10 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state,
         error: payload,
       };
+      case SHOW_FIREBASE_ERROR:
+        return { ...state,
+          error: payload,
+        };
     case CREATE_USER:
       return { ...state,
         loading: true,
@@ -119,6 +125,8 @@ export default (state = INITIAL_STATE, action) => {
         return { ...state,
           ...INITIAL_STATE,
         };
+    case GO_TO_RESET_PASSWORD:
+      return INITIAL_STATE;
     case GO_TO_LOGIN:
       return INITIAL_STATE;
     case GO_TO_REGISTRATION:

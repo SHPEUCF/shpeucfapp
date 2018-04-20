@@ -10,7 +10,9 @@ import {
   MAJOR_CHANGED,
   PASSWORD_CHANGED,
   CONFIRM_PASSWORD_CHANGED,
+  RESET_PASSWORD,
   REGISTRATION_ERROR,
+  SHOW_FIREBASE_ERROR,
   VERIFIED_USER,
   ENTER_APP,
   LOGIN_USER,
@@ -20,6 +22,7 @@ import {
   CREATE_USER,
   CREATE_USER_SUCCESS,
   CREATE_USER_FAIL,
+  GO_TO_RESET_PASSWORD,
   GO_TO_LOGIN,
   GO_TO_REGISTRATION } from './types';
 
@@ -69,11 +72,37 @@ export const confirmPasswordChanged = (text) => {
     payload: text
   };
 };
-export const registrationError = (error) => {
-  return {
-    type: REGISTRATION_ERROR,
-    payload: error
-  };
+
+export const registrationError = (dispatch, error) => {
+  return (dispatch) => {
+    dispatch({
+      type: REGISTRATION_ERROR,
+      payload: error
+    });
+  }
+};
+
+const showFirebaseError = (dispatch, error) => {
+  let errorMessage;
+
+  switch (error.code) {
+    case 'auth/user-not-found':
+      errorMessage = 'There is no user record corresponding to this identifier';
+      break;
+    case 'auth/invalid-email':
+      errorMessage = 'Enter a valid email';
+      break;
+    case 'auth/wrong-password':
+      errorMessage = 'Incorrect credentials';
+      break;
+    default:
+    errorMessage = error.message;
+  }
+
+  dispatch({
+    type: SHOW_FIREBASE_ERROR,
+    payload: errorMessage
+  });
 };
 
 // Registration Actions
@@ -130,6 +159,17 @@ const isVerifiedUser = ({ email, password }) => {
   return (dispatch) => {
     dispatch({ type: VERIFIED_USER });
   }
+}
+
+export const resetPassword = ({ email }) => {
+  return (dispatch) => {
+    dispatch({ type: RESET_PASSWORD });
+
+    firebase.auth().sendPasswordResetEmail(email)
+      .then(() => Alert.alert('Reset Started',
+        `If an account with email ${email} exists, a reset password email will be sent. Please check your email.`))
+      .catch(error => showFirebaseError(dispatch, error));
+  };
 }
 
 export const loginUser = ({ email, password }) => {
@@ -201,6 +241,12 @@ export const logoutUser = () => {
   };
 };
 
+export const goToResetPassword = () => {
+  return (dispatch) => {
+    dispatch({ type: GO_TO_RESET_PASSWORD });
+    Actions.resetPassword();
+  }
+};
 export const goToLogIn = () => {
   return (dispatch) => {
     dispatch({ type: GO_TO_LOGIN });

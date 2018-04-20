@@ -3,7 +3,8 @@ import { Router, Scene, Stack, ActionConst, Actions } from 'react-native-router-
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Spinner } from '../components/general';
 import RegistrationForm from '../components/auth/RegistrationForm';
-import LoginForm from '../components/auth/LoginForm'
+import LoginForm from '../components/auth/LoginForm';
+import ResetPasswordForm from '../components/auth/ResetPasswordForm';
 import { WebPageShow, PostShow, ComingSoon } from '../components/general';
 
 // Screens
@@ -48,6 +49,13 @@ const RouterComponent = () => {
             key="registration"
             component={RegistrationForm}
             title="Create Account"
+            type={ActionConst.REPLACE}
+            hideNavBar
+          />
+          <Scene
+            key="resetPassword"
+            component={ResetPasswordForm}
+            title="Reset Password"
             type={ActionConst.REPLACE}
             hideNavBar
           />

@@ -74,8 +74,8 @@ class RegistrationForm extends Component {
       registrationError('Please enter your last name');
     } else if (email === '') {
       registrationError('Please enter your school email');
-    // } else if (!ucfStudentEmail.test(email)) {
-    //   registrationError('Please use a "knights.ucf.edu", or "ucf.edu" email for registration');
+    } else if (!ucfStudentEmail.test(email)) {
+       registrationError('Please use a "knights.ucf.edu", or "ucf.edu" email for registration');
     } else if (college === '') {
       registrationError('Please enter college');
     } else if (major === '') {
