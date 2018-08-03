@@ -9,13 +9,19 @@ class PostList extends Component {
 
   componentDidMount() {
     const url = 'https://newsapi.org/v2/everything?' +
-              'q=nasa,engineering&' +
+              'q=tech&' +
               'sortBy=popularity&' +
               'language=en&' +
-              'apiKey=4d7dea8dc4e24d7f98e8912afea15a49';
+              'apiKey=c7fc6bd31a9b4ddd8c617c2bf9e82ebd';
 
     axios.get(url)
-    .then((response) => {this.setState({posts: response.data.articles})})
+    .then(response => Promise.resolve(response))
+    .then(response => new Promise(resolve => {
+      setTimeout(() => {
+        resolve(response);
+        this.setState({posts: response.data.articles})
+      }, 3000)
+    }))
     .catch((error) => {console.log(error)});
   }
 
