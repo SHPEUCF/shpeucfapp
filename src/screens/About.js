@@ -33,7 +33,9 @@ import { List, ListItem } from 'react-native-elements';
     {
       title: 'Version',
       icon: 'beenhere',
-      screen: 'ComingSoon'
+      screen: 'Version',
+      content: "Current version: v1.0-alpha",
+      footer: 'Check our GitHub Page - SHPEUCF'
     }
     ];
 
@@ -49,7 +51,10 @@ class About extends Component {
                 key={i}
                 title={menuItem.title}
                 leftIcon={{name: menuItem.icon}}
-                onPress={() => Actions[menuItem.screen]({ title: menuItem.title, uri: menuItem.uri  })}
+                onPress={() => Actions[menuItem.screen]({ title: menuItem.title,
+                                                          uri: menuItem.uri,
+                                                          content: menuItem.content,
+                                                          footer: menuItem.footer })}
               />
             ))
           }

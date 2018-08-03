@@ -24,6 +24,7 @@ import {
   Forms,
   About,
   EBoard,
+  Version
 } from '../screens/';
 
 const RouterComponent = () => {
@@ -155,6 +156,10 @@ const RouterComponent = () => {
               />
               <Scene key="EBoard"
                 component={EBoard}
+                passProps
+                />
+              <Scene key="Version"
+                component={Version}
                 passProps
                 />
               <Scene key="ComingSoon"
