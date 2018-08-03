@@ -9,4 +9,5 @@ export * from './Spinner';
 export * from './SegmentBtn';
 export * from './WebPageShow';
 export * from './PostShow';
+export * from './GeneralContent';
 export * from './ComingSoon';
