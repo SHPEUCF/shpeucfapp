@@ -1,6 +1,6 @@
 {
   "name": "shpeucfapp",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
@@ -15,7 +15,7 @@
     "moment": "^2.20.1",
     "npm": "^5.7.1",
     "react": "^16.2.0",
-    "react-native": "^0.51.0",
+    "react-native": "^0.51.1",
     "react-native-beacons-manager": "^1.0.7",
     "react-native-calendars": "^1.16.1",
     "react-native-camera": "^1.0.1",
