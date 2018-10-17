@@ -32,4 +32,4 @@ Mobile Applications (iOS & Android) for the Society of Hispanic Professional Eng
   * Download JDK version 8, not 10 or 11 because those are buggy
   * Make sure that you download the JDK which is not the same as JRE. The website gives you an example of the path but your path will almost certainly be different. It will be in 'Users/ProgramFiles/Java/jdk-whateverversionhere'
 * If you have an issue with licenses contact someone who knows about it cause I don't want to write down all the steps here
-* If you have an issue with xCode try going into xCode->preferences->Locations then go to Command Line Tools and set the command line tools(The option should be there already if it's not google what to do)
+* If you have an issue with xCode where it says you are missing a "developer tool" try going into xCode->preferences->Locations then go to Command Line Tools and set the command line tools(The option should be there already if it's not google what to do)
