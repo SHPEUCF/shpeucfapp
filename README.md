@@ -31,3 +31,5 @@ Mobile Applications (iOS & Android) for the Society of Hispanic Professional Eng
 * If JAVA_HOME is not set as an environment variable then you need to set it up: https://confluence.atlassian.com/doc/setting-the-java_home-variable-in-windows-8895.html   
   * Download JDK version 8, not 10 or 11 because those are buggy
   * Make sure that you download the JDK which is not the same as JRE. The website gives you an example of the path but your path will almost certainly be different. It will be in 'Users/ProgramFiles/Java/jdk-whateverversionhere'
+* If you have an issue with licenses contact someone who knows about it cause I don't want to write down all the steps here
+* If you have an issue with xCode try going into xCode->preferences->Locations then go to Command Line Tools and set the command line tools(They should be)
