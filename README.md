@@ -20,8 +20,8 @@ Mobile Applications (iOS & Android) for the Society of Hispanic Professional Eng
 * Mac: 'react-native run-ios'
 * If you have android studio installed: 
   * First open Android Studio, then click open existing project and choose 'shpeucfapp/android'
-  * Then run the emulator by going into the AVD(Android device manager and clicking the run arrow)
-  * Now you can finally run 'react-native run-android'
+  * Then run the emulator by going into the AVD(Looks like a purple screen with an android on the bottom right of it) and click the arrow.
+  * Now you can finally run 'react-native run-android' on your command prompt
 * The app will launch a packager, building the app and opening it for you. If you get an error, close the terminal window that's named React Packager and run the command above again, it might fail because it is building the app for the first time and simulator does not synch with packager. 
 * Now you should have the app
 
