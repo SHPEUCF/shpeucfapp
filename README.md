@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # SHPE UCF Mobile Apps
 Mobile Applications (iOS & Android) for the Society of Hispanic Professional Engineers - UCF Chapter
 
@@ -20,3 +21,7 @@ Mobile Applications (iOS & Android) for the Society of Hispanic Professional Eng
 The steps above are a bit vague, but should get you going if you've been to meetings or have experience with Node.js or React. We will improve this docs soon. 
 
 
+=======
+# shpeucfwebsite
+Working on the new shpeucfwebsite in React
+>>>>>>> 1409e1fcb5bc03c7268fee12a942673e93dd6edc
