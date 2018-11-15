@@ -51,9 +51,11 @@ class Leaderboard extends Component {
               <Text>Points:{item.points}</Text>
               <Progress.Bar
                 style={styles.progress}
-                progress={.03}
-                indeterminate={this.state.indeterminate}
+                progress={item.points / sortedMembers[0].points}
+                indeterminate={false}
                 width={dimension.width * .9}
+								color= {'#ffd700'}
+
               />
             </View>
           </View>
