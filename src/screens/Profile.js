@@ -63,7 +63,7 @@ class Profile extends Component {
                 <Text style={itemLabelText}>Name:</Text>
               </View>
               <View style={itemValueContainerStyle}>
-                <Text style={itemValueText}>{`poop`}</Text>
+                <Text style={itemValueText}>{firstName + ' ' + lastName}</Text>
               </View>
             </View>
 
