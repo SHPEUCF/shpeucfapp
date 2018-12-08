@@ -210,7 +210,18 @@ class RegistrationForm extends Component {
 
           <ScrollView
           ref={'scrollView'}
-          style={{flex:0, paddingTop:10, paddingBottom:10}}>
+          decelerationRate={0}
+          snapToAInterval={300}
+          snapToAlignment={"center"}
+          contentInset = {
+            {
+              top: 30,
+              left: 0,
+              bottom: 30,
+              right: 0,
+            }
+          }
+          style={styles.scrollView}>
 
           <RkAvoidKeyboard>
             <RkTextInput
@@ -376,6 +387,12 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  scrollView: {
+    flex: 0,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingRight: 10,
   }
 });
 
