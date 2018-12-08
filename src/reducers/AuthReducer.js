@@ -5,6 +5,9 @@ import {
   EMAIL_CHANGED,
   MAJOR_CHANGED,
   COLLEGE_CHANGED,
+  POINTS_CHANGED,
+  PRIVILEGE_CHANGED,
+  PICTURE_CHANGED,
   PASSWORD_CHANGED,
   CONFIRM_PASSWORD_CHANGED,
   REGISTRATION_ERROR,
@@ -31,7 +34,8 @@ const INITIAL_STATE = {
   // Using URL below to avoid RN warning of empty source.uri as there's a delay fetching.
   // Will improve fetching later, just need to get rid of the warning for now.
   picture: 'https://cdn0.iconfinder.com/data/icons/superuser-web-kit/512/686909-user_people_man_human_head_person-512.png',
-  points: '',
+  points: 0,
+  privilege: 'student',
   password: '',
   confirmPassword: '',
   user: null,
@@ -67,6 +71,18 @@ export default (state = INITIAL_STATE, action) => {
     case PASSWORD_CHANGED:
       return { ...state,
         password: payload
+      };
+    case POINTS_CHANGED:
+      return { ...state,
+        points: payload
+      };
+    case PRIVILEGE_CHANGED:
+      return { ...state,
+        privilege: payload
+      };
+    case PICTURE_CHANGED:
+      return { ...state,
+        picture: payload
       };
     case CONFIRM_PASSWORD_CHANGED:
       return { ...state,
@@ -114,6 +130,7 @@ export default (state = INITIAL_STATE, action) => {
         major: payload.major,
         points: payload.points,
         picture: payload.picture,
+        privilege: payload.privilege
       };
     case LOGIN_USER_FAIL:
       return { ...state,

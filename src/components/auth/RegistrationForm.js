@@ -13,6 +13,9 @@ import {
   collegeChanged,
   majorChanged,
   passwordChanged,
+  pointsChanged,
+  privilegeChanged,
+  pictureChanged,
   confirmPasswordChanged,
   registrationError,
   createUser,
@@ -46,6 +49,15 @@ class RegistrationForm extends Component {
   onMajorChange(text) {
     this.props.majorChanged(text);
   }
+  onPointsChange(text) {
+    this.props.pointsChanged(text);
+  }
+  onPrivilegeChange(text) {
+    this.props.privilegeChanged(text);
+  }
+  onPictureChange(text) {
+    this.props.pictureChanged(text);
+  }
   onPasswordChange(text) {
     this.props.passwordChanged(text);
   }
@@ -59,6 +71,9 @@ class RegistrationForm extends Component {
       lastName,
       email,
       college,
+      points,
+      picture,
+      privilege,
       major,
       password,
       confirmPassword,
@@ -87,7 +102,9 @@ class RegistrationForm extends Component {
     } else if (password !== confirmPassword) {
       registrationError('Passwords do not match, please try again');
     } else if (password === confirmPassword) {
-      createUser({ firstName, lastName, email, college, major, password });
+      this.onPointsChange(0);
+      this.onPrivilegeChange('student');
+      createUser({ firstName, lastName, email, college, major, points, picture, privilege, password });
     }
   }
 
@@ -369,6 +386,9 @@ const mapStateToProps = ({ auth }) => {
     email,
     college,
     major,
+    picture,
+    points,
+    privilege,
     password,
     confirmPassword,
     error,
@@ -380,6 +400,9 @@ const mapStateToProps = ({ auth }) => {
     email,
     college,
     major,
+    picture,
+    points,
+    privilege,
     password,
     confirmPassword,
     error,
@@ -392,6 +415,9 @@ const mapDispatchToProps = {
   emailChanged,
   collegeChanged,
   majorChanged,
+  pointsChanged,
+  privilegeChanged,
+  pictureChanged,
   passwordChanged,
   confirmPasswordChanged,
   registrationError,

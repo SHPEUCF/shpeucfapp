@@ -8,6 +8,9 @@ import {
   EMAIL_CHANGED,
   COLLEGE_CHANGED,
   MAJOR_CHANGED,
+  POINTS_CHANGED,
+  PRIVILEGE_CHANGED,
+  PICTURE_CHANGED,
   PASSWORD_CHANGED,
   CONFIRM_PASSWORD_CHANGED,
   RESET_PASSWORD,
@@ -65,6 +68,24 @@ export const passwordChanged = (text) => {
     payload: text
   };
 };
+export const pointsChanged = (text) => {
+  return {
+    type: POINTS_CHANGED,
+    payload: text
+  };
+};
+export const privilegeChanged = (text) => {
+  return {
+    type: PRIVILEGE_CHANGED,
+    payload: text
+  };
+};
+export const pictureChanged = (text) => {
+  return {
+    type: PICTURE_CHANGED,
+    payload: text
+  };
+};
 
 export const confirmPasswordChanged = (text) => {
   return {
@@ -106,19 +127,19 @@ const showFirebaseError = (dispatch, error) => {
 };
 
 // Registration Actions
-export const createUser = ({ firstName, lastName, email, college, major, password }) => {
+export const createUser = ({ firstName, lastName, email, college, major, points, picture, privilege, password }) => {
   return (dispatch) => {
     dispatch({ type: CREATE_USER });
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then((user) => createUserSuccess(dispatch, user, firstName, lastName, email, college, major))
+      .then((user) => createUserSuccess(dispatch, firstName, lastName, email, college, major, points, picture, privilege))
       .catch((error) => createUserFail(dispatch, error))
   };
 };
 
 const createUserFail = (dispatch, error) => {
+  firebase.auth().signOut();
   let errorMessage;
-
   switch (error.code) {
     case 'auth/user-not-found':
       errorMessage = 'There is no user record corresponding to this identifier';
@@ -132,22 +153,35 @@ const createUserFail = (dispatch, error) => {
     default:
     errorMessage = error.message;
   }
-
+  
   dispatch({
     type: CREATE_USER_FAIL,
     payload: errorMessage
   });
 };
 
-const createUserSuccess = (dispatch, user, firstName, lastName, email, college, major) => {
+const createUserSuccess = (dispatch, firstNameU, lastNameU, emailU, collegeU, majorU, pointsU, pictureU, privilegeU) => {
   const { currentUser } = firebase.auth();
-  emailVerified = false;
-  firebase.database().ref(`/users/${currentUser.uid}/`)
-    .set({ firstName, lastName, email, college, major, emailVerified})
+  
+  firebase.database().ref(`/users/${currentUser.uid}/`).set({
+      firstName: firstNameU,
+      lastName: lastNameU,
+      email: emailU,
+      college: collegeU,
+      major: majorU,
+      points: pointsU,
+      picture: pictureU,
+      privilege: privilegeU,
+    })
+    .then(() => firebase.database().ref(`/points/${currentUser.uid}/`).set({
+      firstName: firstNameU,
+      lastName: lastNameU,
+      points: pointsU,
+    }))
     .then(() => currentUser.sendEmailVerification())
     .then(() => firebase.auth().signOut())
     .then(() => Alert.alert('Account Created',
-      `Please verify your email ${email} then log in using your credentials.`));
+      `Please verify your email ${emailU} then log in using your credentials.`));
 
   dispatch({
     type: CREATE_USER_SUCCESS,
