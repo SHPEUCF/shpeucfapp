@@ -230,7 +230,7 @@ export const loadUser = () => {
   return (dispatch) => {
     if ( currentUser != null ) {
       firebase.database().ref(`/users/${currentUser.uid}/`)
-        .on('value', snapshot => {
+        .once('value', snapshot => {
           dispatch({
             type: LOAD_USER,
             payload: snapshot.val(),
