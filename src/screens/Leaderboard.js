@@ -45,7 +45,7 @@ class Leaderboard extends Component {
               <Text>Points:{item.points}</Text>
               <Progress.Bar
                 style={progress}
-                progress={item.points / sortedMembers[0].points}
+                progress={Math.max(item.points,1) / Math.max(sortedMembers[0].points,1)}
                 indeterminate={false}
                 width={dimension.width * .9}
 								color= {'#ffd700'}
