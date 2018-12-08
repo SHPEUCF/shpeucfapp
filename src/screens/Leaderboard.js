@@ -18,12 +18,6 @@ const order = ['desc','asc','asc'];
 class Leaderboard extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      animated: false,
-      indeterminate: true,
-      progress: .5
-    };
   }
 
   componentWillMount() {
@@ -50,12 +44,11 @@ class Leaderboard extends Component {
               <Text>{`${item.firstName} ${item.lastName}`}</Text>
               <Text>Points:{item.points}</Text>
               <Progress.Bar
-                style={styles.progress}
+                style={progress}
                 progress={item.points / sortedMembers[0].points}
                 indeterminate={false}
                 width={dimension.width * .9}
 								color= {'#ffd700'}
-
               />
             </View>
           </View>
@@ -72,12 +65,14 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     backgroundColor: '#fff',
     paddingVertical: 30,
+    paddingHorizontal: 15,
   },
   contentContainerStyle: {
     margin: 1,
     backgroundColor: '#abc',
   },
   progress: {
+    flex: 1,
     justifyContent: 'center',
   }
 });
