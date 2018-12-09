@@ -4,6 +4,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Spinner } from '../components/general';
 import RegistrationForm from '../components/auth/RegistrationForm';
 import LoginForm from '../components/auth/LoginForm';
+import CreateEventForm from '../components/event/CreateEvent';
 import ResetPasswordForm from '../components/auth/ResetPasswordForm';
 import { WebPageShow, PostShow, ComingSoon } from '../components/general';
 
@@ -60,7 +61,17 @@ const RouterComponent = () => {
             type={ActionConst.REPLACE}
             hideNavBar
           />
-         </Stack>
+        </Stack>
+        <Stack key = "events">
+          <Scene
+          key="createEvent"
+          component={CreateEventForm}
+          title="Event Creation"
+          type={ActionConst.REPLACE}
+          hideNavBar
+          passProps
+          /> 
+          </Stack>
         <Stack key="main"
           tabs
           tabBarPosition="bottom"
@@ -90,7 +101,7 @@ const RouterComponent = () => {
             />
           </Stack>
           <Scene
-            key="events"
+            key="event"
             component={Events}
             title="Events"
             rightTitle="Today"

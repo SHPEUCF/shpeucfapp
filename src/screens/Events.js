@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchEvents } from '../actions';
+import { fetchEvents, goToCreateEvent } from '../actions';
 import { Scene, Router, Actions } from 'react-native-router-flux';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import { RkButton } from 'react-native-ui-kitten';
 import {
   TouchableOpacity,
-  Button,
   Alert,
   Image,
   Text,
@@ -17,10 +17,6 @@ import {
 
 class Events extends Component {
 
-  componentWillMount() {
-    this.props.fetchEvents();
-  }
-
   static onRight = function(){
     this.alert(new Date());
   }
@@ -28,40 +24,51 @@ class Events extends Component {
   render() {
 
     return (
-      <Agenda
-        selected={new Date()}
-        //onDayChange={(day)=>{alert('day pressed')}}
-        showWeekNumbers={true}
-        pastScrollRange={24}
-        futureScrollRange={24}
-        showScrollIndicator={true}
-        markedItems={this.markedItems.bind(this)}
-        items={this.props.eventList}
-        // Will only load items for visible month to improve performance later
-        // loadItemsForMonth={this.loadItemsForMonth.bind(this)}
-        renderItem={this.renderItem.bind(this)}
-        rowHasChanged={this.rowHasChanged.bind(this)}
-        renderEmptyDate={ this.renderEmptyDate.bind(this) }
-        renderEmptyData = {this.renderEmptyData.bind(this)}
+      <ScrollView>
+        <Agenda
+          selected={new Date()}
+          //onDayChange={(day)=>{alert('day pressed')}}
+          showWeekNumbers={true}
+          pastScrollRange={24}
+          futureScrollRange={24}
+          showScrollIndicator={true}
+          markedItems={this.markedItems.bind(this)}
+          items={this.props.eventList}
+          // Will only load items for visible month to improve performance later
+          // loadItemsForMonth={this.loadItemsForMonth.bind(this)}
+          renderItem={this.renderItem.bind(this)}
+          rowHasChanged={this.rowHasChanged.bind(this)}
+          renderEmptyDate={ this.renderEmptyDate.bind(this) }
+          renderEmptyData = {this.renderEmptyData.bind(this)}
 
-        style={{
-          height: 1000
-        }}
-        theme={{
-          backgroundColor: 'transparent',
-          calendarBackground: '#FFF',
-          agendaKnobColor: 'lightgrey',
-          agendaDayTextColor: '#333',
-          agendaDayNumColor: '#333',
-          selectedDayTextColor: '#000',
-          todayTextColor: '#CC0000',
-          textDayFontSize:15,
-          textMonthFontSize:16,
-          textDayHeaderFontSize:14,
-          selectedDotColor: 'black',
-          selectedDayBackgroundColor: '#FECB00',
-        }}
-      />
+          style={{
+            height: 475
+          }}
+          theme={{
+            backgroundColor: 'transparent',
+            calendarBackground: '#FFF',
+            agendaKnobColor: 'lightgrey',
+            agendaDayTextColor: '#333',
+            agendaDayNumColor: '#333',
+            selectedDayTextColor: '#000',
+            todayTextColor: '#CC0000',
+            textDayFontSize: 15,
+            textMonthFontSize: 16,
+            textDayHeaderFontSize: 14,
+            selectedDotColor: 'black',
+            selectedDayBackgroundColor: '#FECB00',
+          }}
+        />
+        <View style={{paddingTop:20}}>
+          <RkButton rkType='rounded stretch'
+                style={{backgroundColor: '#FECB00'}}
+                contentStyle={{color: '#000', fontWeight: 'bold'}}
+                onPress={this.props.goToCreateEvent.bind(this)}
+                >
+                Create Event
+          </RkButton>
+        </View>
+      </ScrollView>
     );
   }
 
@@ -154,7 +161,8 @@ const mapStateToProps = ({ events }) => {
 };
 
 const mapDispatchToProps = {
-  fetchEvents
+  fetchEvents,
+  goToCreateEvent
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Events);

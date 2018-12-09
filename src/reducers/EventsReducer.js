@@ -1,20 +1,80 @@
-// handle all things related to authentication
+// handle all things related to events
 import {
   FETCH_EVENTS,
+  CREATE_EVENT,
+  TYPE_CHANGED,
+  NAME_CHANGED,
+  DESCRIPTION_CHANGED,
+  DATE_CHANGED,
+  TIME_CHANGED,
+  LOCATION_CHANGED,
+  E_POINTS_CHANGED,
+  EVENT_ERROR,
+  GO_TO_CREATE_EVENT,
+  GO_TO_EVENT
  } from '../actions/types';
 
 const INITIAL_STATE = {
   eventList: {},
+  type: '',
+  name: '',
+  description: '',
+  date: '',
+  time: '',
+  location: '',
+  points: 0,
+  error: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
   const { payload } = action;
-
+  
   switch (action.type) {
     case FETCH_EVENTS:
       return { ...state,
         eventList: payload
       };
+    case CREATE_EVENT:
+      return { ...state,
+        loading: true,
+        error: ''
+      };
+    case TYPE_CHANGED:
+      return { ...state,
+        type: payload
+      };
+    case NAME_CHANGED:
+      return { ...state,
+        name: payload
+      };
+    case DESCRIPTION_CHANGED:
+      return { ...state,
+        description: payload
+      };
+    case DATE_CHANGED:
+      return { ...state,
+        date: payload
+      };
+    case TIME_CHANGED:
+      return { ...state,
+        time: payload
+      };
+    case LOCATION_CHANGED:
+      return { ...state,
+        location: payload
+      };
+    case E_POINTS_CHANGED:
+      return { ...state,
+        points: payload
+      };
+    case EVENT_ERROR:
+      return { ...state,
+        error: payload,
+      };
+    case GO_TO_CREATE_EVENT:
+      return INITIAL_STATE;
+    case GO_TO_EVENT:
+      return INITIAL_STATE;
     default:
       return state;
   }
