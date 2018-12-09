@@ -101,14 +101,14 @@ class CreateEvent extends Component {
                         {/* <Text style={styles.headerSubtitleStyle}>Registration</Text> */}
                     </View>
                     <ScrollView
+                    ref={(ref)=> (this.scrollView=ref)}
                     style={styles.scrollView}>
-                    <RkAvoidKeyboard>
+                    {/* <RkAvoidKeyboard> */}
                         <View>
                             <RkTextInput
                             rkType='rounded'
                             placeholder="Event Type"
                             value={this.props.type}
-                            autoCapitalize="words"
                             maxLength={45}
                             onChangeText={this.onTypeChange.bind(this)}
                             />
@@ -124,7 +124,7 @@ class CreateEvent extends Component {
                             rkType='rounded'
                             placeholder="Description"
                             value={this.props.description}
-                            autoCapitalize="words"
+                            autoCapitalize="sentences"
                             maxLength={200}
                             onChangeText={this.onDescriptionChange.bind(this)}
                             />
@@ -151,17 +151,24 @@ class CreateEvent extends Component {
                             autoCapitalize="words"
                             maxLength={45}
                             onChangeText={this.onLocationChange.bind(this)}
+                            // onFocus={this.scrollView.scrollTo({x:100,y:100,animated: true})}
                             />
-                            <RkTextInput
+                            {/* <RkPicker
                             rkType='rounded'
-                            placeholder="Value"
-                            value={this.props.value}
-                            autoCapitalize="words"
-                            maxLength={45}
-                            onChangeText={this.onPointsChange.bind(this)}
-                            />
+                            optionHeight={80}
+                            optionRkType={'medium'}
+                            selectedOptionRkType={'medium danger'}
+                            confirmButtonText={'Select'}
+                            title="Colleges"
+                            titleTextRkType={'large'}
+                            data={[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]}
+                            visible={this.state.pickerVisible}
+                            onConfirm={this.handlePickedValueCollege}
+                            onCancel={this.hidePicker1}
+                            selectedOptions={this.state.collegeSelected}
+                            /> */}
                         </View>
-                    </RkAvoidKeyboard>
+                    {/* </RkAvoidKeyboard> */}
                         {this.renderError()}
                         <RkButton rkType='rounded stretch'
                             style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}

@@ -59,7 +59,7 @@ class Events extends Component {
             selectedDayBackgroundColor: '#FECB00',
           }}
         />
-        <View style={{paddingTop:20}}>
+        <View style={{paddingTop:20, paddingHorizontal:10}}>
           <RkButton rkType='rounded stretch'
                 style={{backgroundColor: '#FECB00'}}
                 contentStyle={{color: '#000', fontWeight: 'bold'}}
