@@ -153,6 +153,15 @@ class CreateEvent extends Component {
                             onChangeText={this.onLocationChange.bind(this)}
                             // onFocus={this.scrollView.scrollTo({x:100,y:100,animated: true})}
                             />
+                            <RkTextInput
+                            rkType='rounded'
+                            placeholder="Value"
+                            value={(this.props.points ==0)  ? "" : this.props.points.toString()}
+                            autoCapitalize="words"
+                            maxLength={45}
+                            onChangeText={this.onPointsChange.bind(this)}
+                            // onFocus={this.scrollView.scrollTo({x:100,y:100,animated: true})}
+                            />
                             {/* <RkPicker
                             rkType='rounded'
                             optionHeight={80}

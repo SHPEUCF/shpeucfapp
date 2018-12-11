@@ -21,6 +21,10 @@ class Events extends Component {
     this.alert(new Date());
   }
 
+  componentWillMount() {
+    this.props.fetchEvents();
+  }
+
   render() {
 
     return (
@@ -33,7 +37,7 @@ class Events extends Component {
           futureScrollRange={24}
           showScrollIndicator={true}
           markedItems={this.markedItems.bind(this)}
-          items={this.props.eventList}
+          items = {this.getFormattedEventList()}
           // Will only load items for visible month to improve performance later
           // loadItemsForMonth={this.loadItemsForMonth.bind(this)}
           renderItem={this.renderItem.bind(this)}
@@ -67,15 +71,29 @@ class Events extends Component {
                 >
                 Create Event
           </RkButton>
+          
         </View>
       </ScrollView>
     );
   }
 
+  getFormattedEventList() {
+    var events = this.props.eventList;
+    var dates = {};
+
+    for(props in events){
+      if (dates[events[props].date] === undefined)
+        dates[events[props].date] = [events[props]]
+      else
+        dates[events[props].date].push(events[props]);
+    }
+
+    return dates;
+  }
+
   renderEmptyDate(){
     return(
       <View>
-        <Text>There are not events today.</Text>
       </View>
     );
   }
@@ -98,14 +116,12 @@ class Events extends Component {
     return (
       <TouchableOpacity onPress={() => Alert.alert('Event Clicked','Event Details')}>
           <View style={styles.item}>
-            <Text style={{ fontWeight: 'bold' }}>{item.title}</Text>
+            <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
+            <Text>Date: {item.date}</Text>
             <Text>Time: {item.time}</Text>
             <Text>Location: {item.location}</Text>
-            <View>
-              <Text style={styles.description}>Description: {item.description}</Text>
-            </View>
-            <Text>Points: {item.value}</Text>
-            <Text>Event ID: {item.id}</Text>
+            <Text style={styles.description}>Description: {item.description}</Text>
+            <Text>Points: {item.points}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -150,7 +166,7 @@ const styles = StyleSheet.create({
     marginTop: 17
   },
   description: {
-    marginTop: 7,
+    // marginTop: 7,
   },
 });
 

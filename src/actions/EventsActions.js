@@ -21,7 +21,7 @@ import {
 
 export const createEvent = (typeU, nameU, descriptionU, dateU, timeU, locationU, pointsU ) => {
 
-  firebase.database().ref('/events')
+  firebase.database().ref('/events/' + dateU)
     .push({ 
       type: typeU,
       name: nameU,
