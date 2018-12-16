@@ -27,13 +27,13 @@ class EventDetails extends Component {
                     </View>
                     <ScrollView
                     ref={(ref)=> (this.scrollView=ref)}
-                    style={styles.scrollView}>
+                    style={styles.item}>
                     {/* <RkAvoidKeyboard> */}
                         <View>
                             <TextInput
                             rkType='rounded'
                             placeholder="Event Type"
-                            value={this.props.type}
+                            value={"Type: " + this.props.type}
                             maxLength={45}
                             editable={true}
                             // onChangeText={this.onTypeChange.bind(this)}
@@ -41,7 +41,7 @@ class EventDetails extends Component {
                             <TextInput
                             rkType='rounded'
                             placeholder="Name"
-                            value={this.props.name}
+                            value={"Name: " + this.props.name}
                             autoCapitalize="words"
                             maxLength={45}
                             // onChangeText={this.onNameChange.bind(this)}
@@ -49,7 +49,7 @@ class EventDetails extends Component {
                             <TextInput
                             rkType='rounded'
                             placeholder="Description"
-                            value={this.props.description}
+                            value={"Description: " + this.props.description}
                             autoCapitalize="sentences"
                             maxLength={200}
                             // onChangeText={this.onDescriptionChange.bind(this)}
@@ -57,7 +57,7 @@ class EventDetails extends Component {
                             <TextInput
                             rkType='rounded'
                             placeholder="Date"
-                            value={this.props.date}
+                            value={"Date: " + this.props.date}
                             autoCapitalize="words"
                             maxLength={45}
                             // onChangeText={this.onDateChange.bind(this)}
@@ -65,15 +65,7 @@ class EventDetails extends Component {
                             <TextInput
                             rkType='rounded'
                             placeholder="Time"
-                            value={this.props.time}
-                            autoCapitalize="words"
-                            maxLength={45}
-                            // onChangeText={this.onTimeChange.bind(this)}
-                            />
-                            <TextInput
-                            rkType='rounded'
-                            placeholder="ID"
-                            value={this.props.eventID.toString()}
+                            value={"Time: " + this.props.time}
                             autoCapitalize="words"
                             maxLength={45}
                             // onChangeText={this.onTimeChange.bind(this)}
@@ -81,7 +73,7 @@ class EventDetails extends Component {
                             <TextInput
                             rkType='rounded'
                             placeholder="Location"
-                            value={this.props.location}
+                            value={"Location: " + this.props.location}
                             autoCapitalize="words"
                             maxLength={45}
                             // onChangeText={this.onLocationChange.bind(this)}
@@ -90,7 +82,7 @@ class EventDetails extends Component {
                             <TextInput
                             rkType='rounded'
                             placeholder="Value"
-                            value={(this.props.points === 0 || this.props.points === undefined)  ? "" : this.props.points.toString()}
+                            value={"Point value: " +  ((this.props.points === undefined)  ? "" : this.props.points.toString())}
                             autoCapitalize="words"
                             maxLength={45}
                             // onChangeText={this.onPointsChange.bind(this)}
@@ -113,6 +105,13 @@ class EventDetails extends Component {
                         </View>
                     {/* </RkAvoidKeyboard> */}
                         {/* {this.renderError()} */}
+                        <RkButton rkType='rounded stretch'
+                            style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
+                            contentStyle={{color: 'black', fontWeight: 'bold'}}
+                            onPress={this.deleteButton.bind(this)}
+                            >
+                            Check In
+                        </RkButton>
                         <RkButton rkType='rounded stretch'
                             style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
                             contentStyle={{color: 'black', fontWeight: 'bold'}}
@@ -175,6 +174,14 @@ const styles = StyleSheet.create({
         paddingTop: 0,
         paddingBottom: 0,
         paddingRight: 10,
+    },
+    item: {
+        flex: 1,
+        backgroundColor: '#FFF',
+        borderRadius: 5,
+        padding: 10,
+        marginRight: 10,
+        marginTop: 17
     }
 });
 

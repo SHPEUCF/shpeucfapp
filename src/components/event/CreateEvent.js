@@ -156,7 +156,7 @@ class CreateEvent extends Component {
                             <RkTextInput
                             rkType='rounded'
                             placeholder="Value"
-                            value={(this.props.points === 0)  ? "" : this.props.points.toString()}
+                            value={(this.props.points === 0 || this.props.points === undefined)  ? "" : this.props.points.toString()}
                             autoCapitalize="words"
                             maxLength={45}
                             onChangeText={this.onPointsChange.bind(this)}
