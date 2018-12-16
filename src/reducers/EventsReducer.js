@@ -2,6 +2,7 @@
 import {
   FETCH_EVENTS,
   CREATE_EVENT,
+  DELETE_EVENTS,
   TYPE_CHANGED,
   NAME_CHANGED,
   DESCRIPTION_CHANGED,
@@ -9,9 +10,11 @@ import {
   TIME_CHANGED,
   LOCATION_CHANGED,
   E_POINTS_CHANGED,
+  EVENT_ID_CHANGED,
   EVENT_ERROR,
   GO_TO_CREATE_EVENT,
-  GO_TO_EVENT
+  GO_TO_EVENT,
+  GO_TO_VIEW_EVENT
  } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -23,6 +26,7 @@ const INITIAL_STATE = {
   time: '',
   location: '',
   points: 0,
+  eventID: {},
   error: ''
 };
 
@@ -37,6 +41,19 @@ export default (state = INITIAL_STATE, action) => {
     case CREATE_EVENT:
       return { ...state,
         loading: true,
+        error: ''
+      };
+    case DELETE_EVENTS:
+      return { ...state,
+        loading: true,
+        type: '',
+        name: '',
+        description: '',
+        date: '',
+        time: '',
+        location: '',
+        points: 0,
+        eventID: [],
         error: ''
       };
     case TYPE_CHANGED:
@@ -67,6 +84,10 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state,
         points: payload
       };
+    case EVENT_ID_CHANGED:
+      return { ...state,
+        eventID: payload
+      };
     case EVENT_ERROR:
       return { ...state,
         error: payload,
@@ -75,6 +96,8 @@ export default (state = INITIAL_STATE, action) => {
       return INITIAL_STATE;
     case GO_TO_EVENT:
       return INITIAL_STATE;
+    case GO_TO_VIEW_EVENT:
+      return state;
     default:
       return state;
   }

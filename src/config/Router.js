@@ -4,7 +4,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Spinner } from '../components/general';
 import RegistrationForm from '../components/auth/RegistrationForm';
 import LoginForm from '../components/auth/LoginForm';
-import CreateEventForm from '../components/event/CreateEvent';
+import CreateEvent from '../components/event/CreateEvent';
+import EventDetailsForm from '../components/event/EventDetails';
 import ResetPasswordForm from '../components/auth/ResetPasswordForm';
 import { WebPageShow, PostShow, ComingSoon } from '../components/general';
 
@@ -38,7 +39,7 @@ const RouterComponent = () => {
             component={Spinner}
             type={ActionConst.REPLACE}
             hideNavBar
-             />
+          />
           <Scene
             key="login"
             component={LoginForm}
@@ -46,7 +47,7 @@ const RouterComponent = () => {
             type={ActionConst.REPLACE}
             hideNavBar
             passProps
-             />
+          />
           <Scene
             key="registration"
             component={RegistrationForm}
@@ -64,21 +65,29 @@ const RouterComponent = () => {
         </Stack>
         <Stack key = "events">
           <Scene
-          key="createEvent"
-          component={CreateEventForm}
-          title="Event Creation"
-          type={ActionConst.REPLACE}
-          hideNavBar
-          passProps
+            key="createEvent"
+            component={CreateEvent}
+            title="Event Creation"
+            type={ActionConst.REPLACE}
+            hideNavBar
+            passProps
           /> 
-          </Stack>
+          <Scene
+            key="eventDetails"
+            component={EventDetailsForm}
+            title="Event Details"
+            type={ActionConst.REPLACE}
+            hideNavBar
+            passProps
+          /> 
+        </Stack>
         <Stack key="main"
           tabs
           tabBarPosition="bottom"
           type={ActionConst.REPLACE}
           activeTintColor={'black'}
           inactiveTintColor={'gray'}
-          >
+        >
           <Stack
             key="feed"
             tabBarLabel="Feed"
@@ -91,14 +100,14 @@ const RouterComponent = () => {
               />
             }
           >
-            <Scene key="feed"
-              component={Feed}
-              leftTitle="Posts"
-            />
-            <Scene key="PostShow"
-              component={PostShow}
-              passProps
-            />
+          <Scene key="feed"
+            component={Feed}
+            leftTitle="Posts"
+          />
+          <Scene key="PostShow"
+            component={PostShow}
+            passProps
+          />
           </Stack>
           <Scene
             key="event"
@@ -140,43 +149,43 @@ const RouterComponent = () => {
               component={More}
               title="More Options"
               leftTitle="Back"
-              />
+            />
             <Scene key="Leaderboard"
               component={Leaderboard}
               title="Leaderboard"
-              />
+            />
             <Scene key="Resources"
               component={Resources}
               title="Resources"
-              />
-              <Scene key="WebPageShow"
-                component={WebPageShow}
-                passProps
-                />
+            />
+            <Scene key="WebPageShow"
+              component={WebPageShow}
+              passProps
+            />
             <Scene key="CheckIn"
               component={CheckIn}
               title="Check In"
-              />
+            />
             <Scene key="Forms"
               component={Forms}
               title="Forms"
-              />
+            />
             <Scene key="About"
               component={About}
               title="About"
-              />
-              <Scene key="EBoard"
-                component={EBoard}
-                passProps
-                />
-              <Scene key="Version"
-                component={Version}
-                passProps
-                />
-              <Scene key="ComingSoon"
-                component={ComingSoon}
-                passProps
-                />
+            />
+            <Scene key="EBoard"
+              component={EBoard}
+              passProps
+            />
+            <Scene key="Version"
+              component={Version}
+              passProps
+            />
+            <Scene key="ComingSoon"
+              component={ComingSoon}
+              passProps
+            />
           </Stack>
         </Stack>
       </Stack>

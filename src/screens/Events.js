@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchEvents, goToCreateEvent } from '../actions';
+
 import { Scene, Router, Actions } from 'react-native-router-flux';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { RkButton } from 'react-native-ui-kitten';
@@ -14,7 +14,19 @@ import {
   Dimensions,
   ScrollView
   } from 'react-native';
-
+import {
+  fetchEvents,
+  typeChanged,
+  nameChanged,
+  descriptionChanged,
+  dateChanged,
+  timeChanged,
+  locationChanged,
+  epointsChanged,
+  eventIDChanged,
+  goToCreateEvent,
+  goToViewEvent
+} from '../actions';
 class Events extends Component {
 
   static onRight = function(){
@@ -25,6 +37,9 @@ class Events extends Component {
     this.props.fetchEvents();
   }
 
+  renderAgenda(){
+
+  }
   render() {
 
     return (
@@ -82,6 +97,7 @@ class Events extends Component {
     var dates = {};
 
     for(props in events){
+      events[props]["eventID"] = props;
       if (dates[events[props].date] === undefined)
         dates[events[props].date] = [events[props]]
       else
@@ -112,9 +128,21 @@ class Events extends Component {
     return markedItems;
   }
 
+  viewEvent(item) {
+    this.props.typeChanged(item.type);
+    this.props.nameChanged(item.name)
+    this.props.descriptionChanged(item.description)
+    this.props.dateChanged(item.date)
+    this.props.timeChanged(item.time)
+    this.props.locationChanged(item.location)
+    this.props.epointsChanged(item.points)
+    this.props.eventIDChanged(item.eventID)
+    this.props.goToViewEvent();
+  }
+
   renderItem(item) {
     return (
-      <TouchableOpacity onPress={() => Alert.alert('Event Clicked','Event Details')}>
+      <TouchableOpacity onPress={this.viewEvent.bind(this,item)}>
           <View style={styles.item}>
             <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
             <Text>Date: {item.date}</Text>
@@ -177,8 +205,17 @@ const mapStateToProps = ({ events }) => {
 };
 
 const mapDispatchToProps = {
-  fetchEvents,
-  goToCreateEvent
+  fetchEvents, 
+  typeChanged,
+  nameChanged,
+  descriptionChanged,
+  dateChanged,
+  timeChanged,
+  locationChanged,
+  epointsChanged,
+  eventIDChanged,
+  goToCreateEvent,
+  goToViewEvent
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Events);

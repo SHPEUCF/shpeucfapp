@@ -32,6 +32,7 @@ export const FETCH_MEMBERS_POINTS = 'fetch_members_points';
 
 // EventActions
 export const CREATE_EVENT = 'create_event';
+export const DELETE_EVENTS = 'delete_events';
 export const FETCH_EVENTS = 'fetch_events';
 export const TYPE_CHANGED = 'type_changed';
 export const NAME_CHANGED = 'name_changed';
@@ -40,6 +41,8 @@ export const DATE_CHANGED = 'date_changed';
 export const TIME_CHANGED = 'time_changed';
 export const LOCATION_CHANGED = 'location_changed';
 export const E_POINTS_CHANGED = 'e_points_changed';
+export const EVENT_ID_CHANGED = 'event_id_changed';
 export const EVENT_ERROR = 'event_error';
 export const GO_TO_CREATE_EVENT = 'go_to_create_event';
 export const GO_TO_EVENT = 'go_to_event';
+export const GO_TO_VIEW_EVENT = 'go_to_view_event';

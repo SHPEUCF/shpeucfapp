@@ -6,6 +6,7 @@ import { Alert } from 'react-native';
 import {
   FETCH_EVENTS,
   CREATE_EVENT,
+  DELETE_EVENTS,
   TYPE_CHANGED,
   NAME_CHANGED,
   DESCRIPTION_CHANGED,
@@ -13,15 +14,17 @@ import {
   TIME_CHANGED,
   LOCATION_CHANGED,
   E_POINTS_CHANGED,
+  EVENT_ID_CHANGED,
   EVENT_ERROR,
   GO_TO_CREATE_EVENT,
-  GO_TO_EVENT
+  GO_TO_EVENT,
+  GO_TO_VIEW_EVENT
 } from './types';
 
 
 export const createEvent = (typeU, nameU, descriptionU, dateU, timeU, locationU, pointsU ) => {
 
-  firebase.database().ref('/events/' + dateU)
+  firebase.database().ref('/events/')
     .push({ 
       type: typeU,
       name: nameU,
@@ -37,13 +40,24 @@ export const createEvent = (typeU, nameU, descriptionU, dateU, timeU, locationU,
     dispatch({
       type: CREATE_EVENT,
     });
+    Actions.event();
   }
 };
+
+export const deleteEvents = (eventIDs) => {
+    firebase.database().ref('events/' + ID).update(eventIDs);
+  return (dispatch) => {
+    dispatch({
+      type: DELETE_EVENTS,
+    });
+  }
+}
+
 
 export const fetchEvents = () => {
 
   return (dispatch) => {
-  firebase.database().ref('events')
+  firebase.database().ref('events/')
     .on('value', snapshot => {
       const eventList = (snapshot.val());
       dispatch({
@@ -96,6 +110,12 @@ export const epointsChanged = (text) => {
     payload: text
   };
 };
+export const eventIDChanged = (text) => {
+  return {
+    type: EVENT_ID_CHANGED,
+    payload: text
+  };
+};
 
 export const eventError = (text) => {
   return {
@@ -119,6 +139,15 @@ export const goToEvents = () => {
       type: GO_TO_EVENT
     });
     Actions.event();
+  }
+};
+
+export const goToViewEvent = ()  => {
+  return (dispatch) => {
+    dispatch({
+      type: GO_TO_VIEW_EVENT
+    });
+    Actions.eventDetails();
   }
 };
 
