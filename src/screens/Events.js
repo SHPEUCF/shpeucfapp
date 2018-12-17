@@ -16,6 +16,7 @@ import {
   } from 'react-native';
 import {
   fetchEvents,
+  getPrivilege,
   typeChanged,
   nameChanged,
   descriptionChanged,
@@ -35,49 +36,12 @@ class Events extends Component {
 
   componentWillMount() {
     this.props.fetchEvents();
+    this.props.getPrivilege();
   }
 
-  renderAgenda(){
-
-  }
-  render() {
-
-    return (
-      <ScrollView>
-        <Agenda
-          selected={new Date()}
-          //onDayChange={(day)=>{alert('day pressed')}}
-          showWeekNumbers={true}
-          pastScrollRange={24}
-          futureScrollRange={24}
-          showScrollIndicator={true}
-          markedItems={this.markedItems.bind(this)}
-          items = {this.getFormattedEventList()}
-          // Will only load items for visible month to improve performance later
-          // loadItemsForMonth={this.loadItemsForMonth.bind(this)}
-          renderItem={this.renderItem.bind(this)}
-          rowHasChanged={this.rowHasChanged.bind(this)}
-          renderEmptyDate={ this.renderEmptyDate.bind(this) }
-          renderEmptyData = {this.renderEmptyData.bind(this)}
-
-          style={{
-            height: 475
-          }}
-          theme={{
-            backgroundColor: 'transparent',
-            calendarBackground: '#FFF',
-            agendaKnobColor: 'lightgrey',
-            agendaDayTextColor: '#333',
-            agendaDayNumColor: '#333',
-            selectedDayTextColor: '#000',
-            todayTextColor: '#CC0000',
-            textDayFontSize: 15,
-            textMonthFontSize: 16,
-            textDayHeaderFontSize: 14,
-            selectedDotColor: 'black',
-            selectedDayBackgroundColor: '#FECB00',
-          }}
-        />
+  renderButton(){
+    if(this.props.privilege !== undefined && this.props.privilege.board === true){
+      return (
         <View style={{paddingTop:20, paddingHorizontal:10}}>
           <RkButton rkType='rounded stretch'
                 style={{backgroundColor: '#FECB00'}}
@@ -86,9 +50,63 @@ class Events extends Component {
                 >
                 Create Event
           </RkButton>
-          
         </View>
-      </ScrollView>
+      )
+    }else
+    return(
+      <View style={{paddingTop:20, paddingHorizontal:10}}>
+        <RkButton rkType='rounded stretch'
+              style={{backgroundColor: '#FECB00'}}
+              contentStyle={{color: '#000', fontWeight: 'bold'}}
+              onPress={this.props.goToCreateEvent.bind(this)}
+              >
+              Check in
+        </RkButton>
+      </View>
+    )
+  }
+  render() {
+
+    return (
+      <View>
+        <ScrollView>
+          <Agenda
+            selected={new Date()}
+            //onDayChange={(day)=>{alert('day pressed')}}
+            showWeekNumbers={true}
+            pastScrollRange={24}
+            futureScrollRange={24}
+            showScrollIndicator={true}
+            markedItems={this.markedItems.bind(this)}
+            items = {this.getFormattedEventList()}
+            // Will only load items for visible month to improve performance later
+            // loadItemsForMonth={this.loadItemsForMonth.bind(this)}
+            renderItem={this.renderItem.bind(this)}
+            rowHasChanged={this.rowHasChanged.bind(this)}
+            renderEmptyDate={ this.renderEmptyDate.bind(this) }
+            renderEmptyData = {this.renderEmptyData.bind(this)}
+
+            style={{
+              height: 475
+            }}
+            theme={{
+              backgroundColor: 'transparent',
+              calendarBackground: '#FFF',
+              agendaKnobColor: 'lightgrey',
+              agendaDayTextColor: '#333',
+              agendaDayNumColor: '#333',
+              selectedDayTextColor: '#000',
+              todayTextColor: '#CC0000',
+              textDayFontSize: 15,
+              textMonthFontSize: 16,
+              textDayHeaderFontSize: 14,
+              selectedDotColor: 'black',
+              selectedDayBackgroundColor: '#FECB00',
+            }}
+          />
+        </ScrollView>
+        {this.renderButton()}
+      </View>
     );
   }
 
@@ -198,14 +216,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ events }) => {
+const mapStateToProps = ({ events, auth }) => {
   const { eventList } = events;
-
-  return { eventList };
+  const { privilege } = auth;
+  return { eventList, privilege };
 };
 
 const mapDispatchToProps = {
   fetchEvents, 
+  getPrivilege,
   typeChanged,
   nameChanged,
   descriptionChanged,

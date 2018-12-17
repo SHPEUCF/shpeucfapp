@@ -10,15 +10,58 @@ import {
 } from 'react-native-ui-kitten';
 import {
     goToEvents,
-    deleteEvents
+    deleteEvents,
+    getPrivilege,
+    checkIn
 } from '../../actions'
 
 class EventDetails extends Component {
+
+    componentWillMount() {
+        this.props.getPrivilege();
+    }
+
     deleteButton(eventID){
         this.props.deleteEvents(eventID);
         this.props.goToEvents();
     }
-  render() {
+    checkinButton(ID, points){
+        this.props.checkIn(ID, points);
+    }
+    renderButtons(){
+        if(this.props.privilege.board === true){
+            return (
+                <View>
+                    <RkButton rkType='rounded stretch'
+                        style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
+                        contentStyle={{color: 'black', fontWeight: 'bold'}}
+                        onPress={this.deleteButton.bind(this,{[this.props.eventID] : null})}
+                        >
+                        Delete Event
+                    </RkButton>
+                    <RkButton rkType='rounded stretch'
+                        style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
+                        contentStyle={{color: 'black', fontWeight: 'bold'}}
+                        // onPress={this.deleteButton.bind(this,{[this.props.eventID] : null})}
+                        >
+                        Edit Event
+                    </RkButton>
+                </View>
+            )
+            }else
+            return(
+            <View style={{paddingTop:20, paddingHorizontal:10}}>
+                <RkButton rkType='rounded stretch'
+                    style={{backgroundColor: '#FECB00'}}
+                    contentStyle={{color: '#000', fontWeight: 'bold'}}
+                    onPress={this.checkinButton.bind(this,this.props.eventID,this.props.points)}
+                    >
+                    Check in
+                </RkButton>
+            </View>
+        )
+    }
+    render() {
             return (
                 <View style={styles.formContainerStyle}>
                     <View style={styles.headerStyle}>
@@ -105,28 +148,15 @@ class EventDetails extends Component {
                         </View>
                     {/* </RkAvoidKeyboard> */}
                         {/* {this.renderError()} */}
-                        <RkButton rkType='rounded stretch'
-                            style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
-                            contentStyle={{color: 'black', fontWeight: 'bold'}}
-                            onPress={this.deleteButton.bind(this)}
-                            >
-                            Check In
-                        </RkButton>
-                        <RkButton rkType='rounded stretch'
-                            style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
-                            contentStyle={{color: 'black', fontWeight: 'bold'}}
-                            onPress={this.deleteButton.bind(this,{[this.props.eventID] : null})}
-                            >
-                            Delete Event
-                        </RkButton>
-                        <RkButton rkType='rounded stretch'
-                            style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
-                            contentStyle={{color: 'black', fontWeight: 'bold'}}
-                            onPress={this.props.goToEvents.bind(this)}
-                            >
-                            Cancel
-                        </RkButton>
                     </ScrollView>
+                    {this.renderButtons()}
+                    <RkButton rkType='rounded stretch'
+                        style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
+                        contentStyle={{color: 'black', fontWeight: 'bold'}}
+                        onPress={this.props.goToEvents.bind(this)}
+                        >
+                        Cancel
+                    </RkButton>
                 </View>
             )
         }
@@ -185,15 +215,18 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = ({ events }) => {
+const mapStateToProps = ({ events, auth }) => {
   const { type, name, description, date, time, location, points, eventID, error } = events;
+  const { privilege } = auth;
 
-  return { type, name, description, date, time, location, points, eventID, error };
+  return { type, name, description, date, time, location, points, eventID, error, privilege };
 };
 
 const mapDispatchToProps = {
     goToEvents,
-    deleteEvents
+    deleteEvents,
+    getPrivilege,
+    checkIn
 }
 
 

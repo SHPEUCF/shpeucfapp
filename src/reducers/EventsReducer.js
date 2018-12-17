@@ -3,6 +3,7 @@ import {
   FETCH_EVENTS,
   CREATE_EVENT,
   DELETE_EVENTS,
+  CHECK_IN,
   TYPE_CHANGED,
   NAME_CHANGED,
   DESCRIPTION_CHANGED,
@@ -56,6 +57,8 @@ export default (state = INITIAL_STATE, action) => {
         eventID: [],
         error: ''
       };
+    case CHECK_IN:
+      return {...state};
     case TYPE_CHANGED:
       return { ...state,
         type: payload

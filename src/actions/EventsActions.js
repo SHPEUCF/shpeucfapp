@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+import firebase, { auth } from 'firebase';
 import _ from 'lodash';
 import { Actions } from 'react-native-router-flux';
 import { Alert } from 'react-native';
@@ -6,6 +6,7 @@ import { Alert } from 'react-native';
 import {
   FETCH_EVENTS,
   CREATE_EVENT,
+  CHECK_IN,
   DELETE_EVENTS,
   TYPE_CHANGED,
   NAME_CHANGED,
@@ -45,7 +46,7 @@ export const createEvent = (typeU, nameU, descriptionU, dateU, timeU, locationU,
 };
 
 export const deleteEvents = (eventIDs) => {
-    firebase.database().ref('events/' + ID).update(eventIDs);
+  firebase.database().ref('events/').update(eventIDs);
   return (dispatch) => {
     dispatch({
       type: DELETE_EVENTS,
@@ -53,9 +54,24 @@ export const deleteEvents = (eventIDs) => {
   }
 }
 
+export const checkIn = (ID, val) => {
+  const { currentUser } = firebase.auth();
+  var points;
+  return (dispatch) => {
+    firebase.database().ref('points/' + currentUser.uid + '/points').once('value',snapshot => {
+      points = parseInt(snapshot.val()) + parseInt(val);
+      firebase.database().ref('events/' + ID + '/attendance').set({[currentUser.uid]: true})
+      .then(() => firebase.database().ref('points/' + currentUser.uid + '/points').set(points)
+      .then(() => firebase.database().ref('users/' + currentUser.uid + '/points').set(points)))
+      dispatch({
+        type: CHECK_IN,
+      });
+    })
+  };
+}
+
 
 export const fetchEvents = () => {
-
   return (dispatch) => {
   firebase.database().ref('events/')
     .on('value', snapshot => {
