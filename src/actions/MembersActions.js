@@ -9,7 +9,7 @@ export const fetchMembersPoints = () => {
 
   return (dispatch) => {
   firebase.database().ref(`/points`)
-    .once('value', snapshot => {
+    .on('value', snapshot => {
       const membersPoints = _.values(snapshot.val());
 
       dispatch({
