@@ -29,7 +29,7 @@ class EventDetails extends Component {
         this.props.checkIn(ID, points);
     }
     renderButtons(){
-        if(this.props.privilege.board === true){
+        if(this.props.privilege !== undefined && this.props.privilege.board === true){
             return (
                 <View>
                     <RkButton rkType='rounded stretch'
