@@ -23,7 +23,8 @@ import {
   CREATE_USER_FAIL,
   GO_TO_RESET_PASSWORD,
   GO_TO_LOGIN,
-  GO_TO_REGISTRATION } from '../actions/types';
+  GO_TO_REGISTRATION, 
+  GET_PRIVILEGE} from '../actions/types';
 
 const INITIAL_STATE = {
   firstName: '',
@@ -35,7 +36,7 @@ const INITIAL_STATE = {
   // Will improve fetching later, just need to get rid of the warning for now.
   picture: 'https://cdn0.iconfinder.com/data/icons/superuser-web-kit/512/686909-user_people_man_human_head_person-512.png',
   points: 0,
-  privilege: 'student',
+  privilege: {},
   password: '',
   confirmPassword: '',
   user: null,
@@ -110,6 +111,10 @@ export default (state = INITIAL_STATE, action) => {
         error: payload,
         loading: false,
       };
+    case GET_PRIVILEGE:
+      return { ...state,
+        privilege: payload
+      };
     case LOGIN_USER:
       return { ...state,
         loading: true,
@@ -126,6 +131,7 @@ export default (state = INITIAL_STATE, action) => {
         ...INITIAL_STATE,
         firstName: payload.firstName,
         lastName: payload.lastName,
+        college: payload.college,
         email: payload.email,
         major: payload.major,
         points: payload.points,

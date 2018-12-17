@@ -25,6 +25,7 @@ import {
   CREATE_USER,
   CREATE_USER_SUCCESS,
   CREATE_USER_FAIL,
+  GET_PRIVILEGE,
   GO_TO_RESET_PASSWORD,
   GO_TO_LOGIN,
   GO_TO_REGISTRATION } from './types';
@@ -127,12 +128,12 @@ const showFirebaseError = (dispatch, error) => {
 };
 
 // Registration Actions
-export const createUser = ({ firstName, lastName, email, college, major, points, picture, privilege, password }) => {
+export const createUser = ({ firstName, lastName, email, college, major, points, picture, password }) => {
   return (dispatch) => {
     dispatch({ type: CREATE_USER });
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then((user) => createUserSuccess(dispatch, firstName, lastName, email, college, major, points, picture, privilege))
+      .then((user) => createUserSuccess(dispatch, firstName, lastName, email, college, major, points, picture))
       .catch((error) => createUserFail(dispatch, error))
   };
 };
@@ -160,7 +161,7 @@ const createUserFail = (dispatch, error) => {
   });
 };
 
-const createUserSuccess = (dispatch, firstNameU, lastNameU, emailU, collegeU, majorU, pointsU, pictureU, privilegeU) => {
+const createUserSuccess = (dispatch, firstNameU, lastNameU, emailU, collegeU, majorU, pointsU, pictureU) => {
   const { currentUser } = firebase.auth();
   
   firebase.database().ref(`/users/${currentUser.uid}/`).set({
@@ -171,12 +172,19 @@ const createUserSuccess = (dispatch, firstNameU, lastNameU, emailU, collegeU, ma
       major: majorU,
       points: pointsU,
       picture: pictureU,
-      privilege: privilegeU,
     })
     .then(() => firebase.database().ref(`/points/${currentUser.uid}/`).set({
       firstName: firstNameU,
       lastName: lastNameU,
       points: pointsU,
+    }))
+    .then(() => firebase.database().ref(`/privileges/${currentUser.uid}/`).set({
+      firstName: firstNameU,
+      lastName: lastNameU,
+      user: true,
+      board: false,
+      eboard: false,
+      president: false
     }))
     .then(() => currentUser.sendEmailVerification())
     .then(() => firebase.auth().signOut())
@@ -187,6 +195,23 @@ const createUserSuccess = (dispatch, firstNameU, lastNameU, emailU, collegeU, ma
     type: CREATE_USER_SUCCESS,
   });
 };
+
+
+export const getPrivilege = () => {
+  const { currentUser } = firebase.auth();
+
+  return (dispatch) => {
+    if ( currentUser != null ) {
+      firebase.database().ref(`/privileges/${currentUser.uid}/`)
+        .on('value', snapshot => {
+          dispatch({
+            type: GET_PRIVILEGE,
+            payload: snapshot.val(),
+          });
+      });
+    };
+  };
+}
 
 // Login Actions
 const isVerifiedUser = ({ email, password }) => {
@@ -230,7 +255,7 @@ export const loadUser = () => {
   return (dispatch) => {
     if ( currentUser != null ) {
       firebase.database().ref(`/users/${currentUser.uid}/`)
-        .once('value', snapshot => {
+        .on('value', snapshot => {
           dispatch({
             type: LOAD_USER,
             payload: snapshot.val(),

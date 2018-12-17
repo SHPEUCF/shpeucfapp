@@ -103,8 +103,7 @@ class RegistrationForm extends Component {
       registrationError('Passwords do not match, please try again');
     } else if (password === confirmPassword) {
       this.onPointsChange(0);
-      this.onPrivilegeChange('student');
-      createUser({ firstName, lastName, email, college, major, points, picture, privilege, password });
+      createUser({ firstName, lastName, email, college, major, points, picture, password });
     }
   }
 

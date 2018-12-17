@@ -18,6 +18,8 @@ export const ENTER_APP = 'enter_app';
 export const LOAD_USER = 'load_user';
 export const LOGIN_USER_FAIL = 'login_user_fail';
 export const LOGOUT_USER = 'logout_user';
+export const GET_PRIVILEGE = 'get_privilege';
+
 
 
 export const CREATE_USER = 'create_user';
@@ -34,6 +36,7 @@ export const FETCH_MEMBERS_POINTS = 'fetch_members_points';
 export const CREATE_EVENT = 'create_event';
 export const DELETE_EVENTS = 'delete_events';
 export const FETCH_EVENTS = 'fetch_events';
+export const CHECK_IN = 'check_in';
 export const TYPE_CHANGED = 'type_changed';
 export const NAME_CHANGED = 'name_changed';
 export const DESCRIPTION_CHANGED = 'description_changed';
