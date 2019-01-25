@@ -6,6 +6,7 @@ Mobile Applications (iOS & Android) for the Society of Hispanic Professional Eng
 ### Step 1 - Install
 * Install Node.js: https://nodejs.org/en/
 * Open up either Terminal(Mac) or Command Prompt(Windows) idk anything about linux
+* Download React-Native https://facebook.github.io/react-native/docs/getting-started
 * If you want an android emulator or are on Windows then you need Android Studio. https://developer.android.com/studio/
 * After downloading android studio you need to download an emulator. https://developer.android.com/studio/run/managing-avds
 * Clone this in your desired folder, change directory to do so. Ex. 'cd Desktop/whateverdirectoryyouwantorjustindesktop'
