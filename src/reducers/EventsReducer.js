@@ -61,7 +61,7 @@ export default (state = INITIAL_STATE, action) => {
         error: ''
       };
     case CHECK_IN:
-      return {...state};
+      return state;
     case TYPE_CHANGED:
       return { ...state,
         type: payload
