@@ -95,7 +95,7 @@ export const checkIn = (ID, val) => {
   var points;
   return (dispatch) => {
     firebase.database().ref('events/' + ID + 'attendance/' + currentUser.uid).once('value',snapshot => {
-       if (!snapshot.exists()){
+       if (snapshot.exists()){
          firebase.database().ref('points/' + currentUser.uid + '/points').once('value', snapshot => {
           points = parseInt(snapshot.val()) + parseInt(val);
           firebase.database().ref('events/' + ID + '/attendance').set({[currentUser.uid]: true })
