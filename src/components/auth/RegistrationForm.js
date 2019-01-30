@@ -73,7 +73,6 @@ class RegistrationForm extends Component {
       college,
       points,
       picture,
-      privilege,
       major,
       password,
       confirmPassword,
