@@ -3,16 +3,17 @@ import { connect } from 'react-redux';
 
 import { Scene, Router, Actions } from 'react-native-router-flux';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
-import { RkButton } from 'react-native-ui-kitten';
+import { RkButton, RkTextInput } from 'react-native-ui-kitten';
 import {
   TouchableOpacity,
   Alert,
-  Image,
   Text,
+  TextInput,
   View,
   StyleSheet,
-  Dimensions,
-  ScrollView
+  ScrollView,
+  Modal,
+  Dimensions
   } from 'react-native';
 import {
   fetchEvents,
@@ -28,6 +29,9 @@ import {
   goToCreateEvent,
   goToViewEvent
 } from '../actions';
+
+const dimension = Dimensions.get('window');
+
 class Events extends Component {
 
   static onRight = function(){
@@ -35,6 +39,7 @@ class Events extends Component {
   }
 
   componentWillMount() {
+    {this.setState({modalVisible: false})}
     this.props.fetchEvents();
     this.props.getPrivilege();
   }
@@ -58,7 +63,7 @@ class Events extends Component {
         <RkButton rkType='rounded stretch'
               style={{backgroundColor: '#FECB00'}}
               contentStyle={{color: '#000', fontWeight: 'bold'}}
-              onPress={this.props.goToCreateEvent.bind(this)}
+              onPress={() => {this.setState({modalVisible: true})}}
               >
               Check in
         </RkButton>
@@ -105,6 +110,36 @@ class Events extends Component {
             }}
           />
         </ScrollView>
+        <Modal
+        transparent={true}
+        animationType={'fade'}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+        }}
+        visible={this.state.modalVisible}
+        >
+          <View style={styles.modalBackground}>
+            <View style={styles.modalContent}>
+              <TouchableOpacity onPress={() => {this.setState({modalVisible: false})}}>
+                <Text>X</Text>
+              </TouchableOpacity>
+              <View style={styles.container}>
+                <Text style={styles.headerTextStyle}>Enter Code</Text>
+                <TextInput
+                style={styles.modalTextInput}
+                onChangeText={(text) => this.setState({text})}
+                value={this.state.text}
+                autoCapitalize={'characters'}
+                autoCorrect={false}
+                maxLength={4}
+                // editable={true}
+                // style={{marginTop:dimension.height*.1}}
+                // inputStyle={styles.modalTextInput}
+                />
+              </View>
+            </View>
+          </View>
+        </Modal>
         {this.renderButton()}
       </View>
     );
@@ -186,6 +221,34 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     margin: 5,
   },
+  modalTextInput: {
+    marginTop: dimension.height*.05,
+    height: 80,
+    textAlign: 'center',
+    width: dimension.width*.6,
+    backgroundColor: '#FECB0022',
+    borderColor: '#FECB00',
+    borderRadius: 16,
+    borderWidth: 3,
+    borderStyle: 'solid',
+    fontWeight: 'bold',
+    fontSize: 60
+  },
+  modalContent: {
+    height: dimension.height*.3,
+    width: dimension.width*.8,
+    padding: 12,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+  },
+  modalBackground: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 0,
+    height: dimension.height,
+    width: dimension.width,
+    backgroundColor: '#000a'
+  },
   item: {
     flex: 1,
     backgroundColor: '#FFF',
@@ -193,6 +256,10 @@ const styles = StyleSheet.create({
     padding: 10,
     marginRight: 10,
     marginTop: 17
+  },
+  headerTextStyle: {
+    fontSize: 22,
+    fontWeight: 'bold',
   },
   emptyDate: {
     flex:1,

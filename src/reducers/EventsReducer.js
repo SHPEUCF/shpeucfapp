@@ -5,6 +5,7 @@ import {
   DELETE_EVENTS,
   CHECK_IN,
   TYPE_CHANGED,
+  TITLE_CHANGED,
   NAME_CHANGED,
   DESCRIPTION_CHANGED,
   DATE_CHANGED,
@@ -14,6 +15,7 @@ import {
   EVENT_ID_CHANGED,
   EVENT_ERROR,
   GO_TO_CREATE_EVENT,
+  GO_TO_CREATE_EVENT_FROM_EDIT,
   GO_TO_EVENT,
   GO_TO_VIEW_EVENT
  } from '../actions/types';
@@ -21,6 +23,7 @@ import {
 const INITIAL_STATE = {
   eventList: {},
   type: '',
+  title: 'Create Event',
   name: '',
   description: '',
   date: '',
@@ -63,6 +66,10 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state,
         type: payload
       };
+    case TITLE_CHANGED:
+      return { ...state,
+        title: payload
+      };
     case NAME_CHANGED:
       return { ...state,
         name: payload
@@ -97,6 +104,8 @@ export default (state = INITIAL_STATE, action) => {
       };
     case GO_TO_CREATE_EVENT:
       return INITIAL_STATE;
+    case GO_TO_CREATE_EVENT_FROM_EDIT:
+      return state;
     case GO_TO_EVENT:
       return INITIAL_STATE;
     case GO_TO_VIEW_EVENT:

@@ -10,7 +10,9 @@ import {
 } from 'react-native-ui-kitten';
 import {
     createEvent,
+    editEvent,
     typeChanged,
+    titleChanged,
     nameChanged,
     descriptionChanged,
     dateChanged,
@@ -24,7 +26,11 @@ import {
 
 
 class CreateEvent extends Component {
-
+    componentWillMount() {
+        if(this.props.name !== '')
+            this.props.titleChanged("Edit Event");
+            
+    }
     onTypeChange(text) {
         this.props.typeChanged(text);
     }
@@ -70,7 +76,8 @@ class CreateEvent extends Component {
             date,
             time,
             location,
-            points
+            points,
+            eventID
         } = this.props;
 
         if (type === '') {
@@ -88,7 +95,10 @@ class CreateEvent extends Component {
         } else if (points === 0){
             this.EventCreationError('Please enter how many points the event is worth');
         }else{
-            createEvent(type,name,description,date,time,location,points);
+            if(this.props.title === "Create Event")
+                createEvent(type,name,description,date,time,location,points);
+            else
+                editEvent(type, name, description, date, time, location, points, eventID);
             this.props.goToEvents();
         }
     }
@@ -97,7 +107,7 @@ class CreateEvent extends Component {
             return (
                 <View style={styles.formContainerStyle}>
                     <View style={styles.headerStyle}>
-                        <Text style={styles.headerTextStyle}>Create Event</Text>
+                        <Text style={styles.headerTextStyle}>{this.props.title}</Text>
                         {/* <Text style={styles.headerSubtitleStyle}>Registration</Text> */}
                     </View>
                     <ScrollView
@@ -184,7 +194,7 @@ class CreateEvent extends Component {
                             contentStyle={{color: 'black', fontWeight: 'bold'}}
                             onPress={this.onButtonPress.bind(this)}
                             >
-                            Create Event
+                            {this.props.title}
                         </RkButton>
                         <RkButton rkType='rounded stretch'
                             style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
@@ -245,14 +255,16 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ events }) => {
-  const { type, name, description, date, time, location, points, error } = events;
+    const { type, title, name, description, date, time, location, points, error, eventID } = events;
 
-  return { type, name, description, date, time, location, points, error };
+    return { type, title, name, description, date, time, location, points, error, eventID };
 };
 
 const mapDispatchToProps = {
     createEvent,
+    editEvent,
     typeChanged,
+    titleChanged,
     nameChanged,
     descriptionChanged,
     dateChanged,

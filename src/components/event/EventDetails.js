@@ -9,6 +9,8 @@ import {
     RkText
 } from 'react-native-ui-kitten';
 import {
+    goToCreateEvent,
+    goToCreateEventFromEdit,
     goToEvents,
     deleteEvents,
     getPrivilege,
@@ -42,7 +44,7 @@ class EventDetails extends Component {
                     <RkButton rkType='rounded stretch'
                         style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
                         contentStyle={{color: 'black', fontWeight: 'bold'}}
-                        // onPress={this.deleteButton.bind(this,{[this.props.eventID] : null})}
+                        onPress={this.props.goToCreateEventFromEdit.bind(this)}
                         >
                         Edit Event
                     </RkButton>
@@ -65,7 +67,7 @@ class EventDetails extends Component {
             return (
                 <View style={styles.formContainerStyle}>
                     <View style={styles.headerStyle}>
-                        <Text style={styles.headerTextStyle}>Create Event</Text>
+                        <Text style={styles.headerTextStyle}>{this.props.name}</Text>
                         {/* <Text style={styles.headerSubtitleStyle}>Registration</Text> */}
                     </View>
                     <ScrollView
@@ -223,6 +225,8 @@ const mapStateToProps = ({ events, auth }) => {
 };
 
 const mapDispatchToProps = {
+    goToCreateEvent,
+    goToCreateEventFromEdit,
     goToEvents,
     deleteEvents,
     getPrivilege,
