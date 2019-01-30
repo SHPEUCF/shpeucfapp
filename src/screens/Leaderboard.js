@@ -24,6 +24,30 @@ class Leaderboard extends Component {
     this.props.fetchMembersPoints();
   }
 
+  renderComponent(item, sortedMembers) {
+    const {
+      containerStyle,
+      contentContainerStyle,
+      progress
+    } = styles;
+    if(item.points !== 0){
+      return (
+      <View style={contentContainerStyle}>
+          <View style={containerStyle}>
+            <Text>{`${item.firstName} ${item.lastName}`}</Text>
+            <Text>Points:{item.points}</Text>
+            <Progress.Bar
+              style={progress}
+              progress={item.points / Math.max(sortedMembers[0].points,1)}
+              indeterminate={false}
+              width={dimension.width * .9}
+              color= {'#ffd700'}
+            />
+          </View>
+        </View>)
+    }
+  }
+
    _keyExtractor = (item, index) => index;
 
   render() {
@@ -39,19 +63,7 @@ class Leaderboard extends Component {
           extraData={this.state}
           keyExtractor={this._keyExtractor}
           renderItem={({item, separators}) => (
-          <View style={contentContainerStyle}>
-            <View style={containerStyle}>
-              <Text>{`${item.firstName} ${item.lastName}`}</Text>
-              <Text>Points:{item.points}</Text>
-              <Progress.Bar
-                style={progress}
-                progress={item.points / Math.max(sortedMembers[0].points,1)}
-                indeterminate={false}
-                width={dimension.width * .9}
-								color= {'#ffd700'}
-              />
-            </View>
-          </View>
+          this.renderComponent(item, sortedMembers)
         )}
       />
     )
