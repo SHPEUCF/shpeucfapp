@@ -4,6 +4,7 @@ import {
   CREATE_EVENT,
   DELETE_EVENTS,
   CHECK_IN,
+  FETCH_CODE,
   TYPE_CHANGED,
   TITLE_CHANGED,
   NAME_CHANGED,
@@ -31,6 +32,7 @@ const INITIAL_STATE = {
   location: '',
   points: 0,
   eventID: {},
+  code: 'AAAA',
   error: ''
 };
 
@@ -41,6 +43,10 @@ export default (state = INITIAL_STATE, action) => {
     case FETCH_EVENTS:
       return { ...state,
         eventList: payload
+      };
+    case FETCH_CODE:
+      return { ...state,
+        code: payload
       };
     case CREATE_EVENT:
       return { ...state,

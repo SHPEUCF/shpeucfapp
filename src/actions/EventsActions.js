@@ -4,10 +4,11 @@ import { Actions } from 'react-native-router-flux';
 import { Alert } from 'react-native';
 
 import {
-  FETCH_EVENTS,
   CREATE_EVENT,
-  CHECK_IN,
   DELETE_EVENTS,
+  CHECK_IN,
+  FETCH_EVENTS,
+  FETCH_CODE,
   TYPE_CHANGED,
   TITLE_CHANGED,
   NAME_CHANGED,
@@ -26,7 +27,7 @@ import {
 
 function makeCode(length) {
   var text = "";
-  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
   for (var i = 0; i < length; i++)
     text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -58,7 +59,7 @@ export const createEvent = (typeU, nameU, descriptionU, dateU, timeU, locationU,
 
 export const editEvent = (typeU, nameU, descriptionU, dateU, timeU, locationU, pointsU, eventIDU ) => {
 
-  firebase.database().ref('/events/' + eventIDU).set({ 
+  firebase.database().ref(`/events/${eventIDU}`).update({ 
       type: typeU,
       name: nameU,
       description: descriptionU,
@@ -66,7 +67,7 @@ export const editEvent = (typeU, nameU, descriptionU, dateU, timeU, locationU, p
       time: timeU,
       location: locationU,
       points: pointsU,
-      code:  makeCode(4)})
+    })
     .then(() => Alert.alert('Event Edited','Successful'))
     .catch((error) => Alert.alert('Event edit Failed', 'Failure'));
 
@@ -90,39 +91,51 @@ export const deleteEvents = (eventIDs) => {
   }
 }
 
-export const checkIn = (ID, val) => {
+export const checkIn = (eventID, val) => {
   const { currentUser } = firebase.auth();
   var points;
   return (dispatch) => {
-    firebase.database().ref('events/' + ID + 'attendance/' + currentUser.uid).once('value',snapshot => {
-       if (snapshot.exists()){
-         firebase.database().ref('points/' + currentUser.uid + '/points').once('value', snapshot => {
+    firebase.database().ref(`events/${eventID}/attendance/${currentUser.uid}`).once('value',snapshot => {
+      if (!snapshot.exists()){
+         firebase.database().ref(`points/${currentUser.uid}/points`).once('value', snapshot => {
           points = parseInt(snapshot.val()) + parseInt(val);
-          firebase.database().ref('events/' + ID + '/attendance').set({[currentUser.uid]: true })
-          .then(() => firebase.database().ref('points/' + currentUser.uid + '/points').set(points)
-          .then(() => firebase.database().ref('users/' + currentUser.uid + '/points').set(points)))
+          firebase.database().ref(`events/${eventID}/attendance`).set({[currentUser.uid]: true })
+          .then(() => firebase.database().ref(`points/${currentUser.uid}/points`).set(points)
+          .then(() => firebase.database().ref(`users/${currentUser.uid}/points`).set(points)))
           .then(() => Alert.alert('Checked In', 'Successful'))
           .catch((error) => Alert.alert('Check In Failed', 'Failure'));
           dispatch({
             type: CHECK_IN,
           });
          })
-    }
-    else
-      Alert.alert('You have already Attended this Event!', 'Failure');
-  })
+      }
+      else
+        Alert.alert('You have already Attended this Event!', 'Failure');
+    })
   };
 }
 
 
 export const fetchEvents = () => {
   return (dispatch) => {
-  firebase.database().ref('events/')
-    .on('value', snapshot => {
+  firebase.database().ref('events/').on('value', snapshot => {
       const eventList = (snapshot.val());
       dispatch({
         type: FETCH_EVENTS,
         payload: eventList,
+      });
+    });
+  };
+};
+
+export const fetchCode = (eventID) => {
+  return (dispatch) => {
+  firebase.database().ref(`events/${eventID}/code`).on('value', snapshot => {
+      const code = snapshot.val();
+      // Alert.alert(`${eventID} ${code}`)
+      dispatch({
+        type: FETCH_CODE,
+        payload: code,
       });
     });
   };

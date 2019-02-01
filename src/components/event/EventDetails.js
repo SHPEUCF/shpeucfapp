@@ -1,27 +1,85 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,StyleSheet,Text,TextInput,ScrollView} from 'react-native';
 import {
-    RkAvoidKeyboard,
-    RkTextInput,
+    View,
+    TouchableOpacity,
+    Modal,
+    StyleSheet,
+    Text,
+    TextInput,
+    Dimensions,
+    ScrollView
+} from 'react-native';
+import {
     RkButton,
-    RkPicker,
-    RkText
 } from 'react-native-ui-kitten';
 import {
     goToCreateEvent,
     goToCreateEventFromEdit,
+    fetchCode,
     goToEvents,
     deleteEvents,
     getPrivilege,
     checkIn
 } from '../../actions'
 
+const dimension = Dimensions.get('window');
+
 class EventDetails extends Component {
+    
 
     componentWillMount() {
+        {this.setState({modalVisible: false})}
         this.props.getPrivilege();
     }
+
+    renderCodeBox(){
+        return (
+        <Modal
+        transparent={true}
+        animationType={'fade'}
+        onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+        }}
+        visible={this.state.modalVisible}
+        >
+            <View style={styles.modalBackground}>
+                <View style={styles.modalContent}>
+                    <TouchableOpacity onPress={() => {this.setState({modalVisible: false})}}>
+                    <Text>X</Text>
+                    </TouchableOpacity>
+                    <View style={styles.container}>
+                        <Text style={styles.headerTextStyle}>Enter Code</Text>
+                        <TextInput
+                        style={styles.modalTextInput}
+                        onChangeText={(text) => this.setState({text})}
+                        value={this.state.text}
+                        autoCapitalize={'characters'}
+                        autoCorrect={false}
+                        maxLength={4}
+                        // editable={true}
+                        // style={{marginTop:dimension.height*.1}}
+                        // inputStyle={styles.modalTextInput}
+                        />
+                        <RkButton rkType='rounded stretch'
+                        style={{backgroundColor: '#FECB00', marginTop: 30}}
+                        contentStyle={{color: '#000', fontWeight: 'bold'}}
+                        onPress = {() => {
+                            this.setState({text: this.props.code})
+                            if(this.props.code === this.state.text){
+                                this.checkinButton(this.props.eventID, this.props.points)
+                                {this.setState({modalVisible: false})}
+                            }
+                        }}
+                        >
+                        Check in
+                        </RkButton>
+                    </View>
+                </View>
+            </View>
+        </Modal>
+    )
+  }
 
     deleteButton(eventID){
         this.props.deleteEvents(eventID);
@@ -56,7 +114,10 @@ class EventDetails extends Component {
                 <RkButton rkType='rounded stretch'
                     style={{backgroundColor: '#FECB00'}}
                     contentStyle={{color: '#000', fontWeight: 'bold'}}
-                    onPress={this.checkinButton.bind(this,this.props.eventID,this.props.points)}
+                    onPress = {() => {
+                    this.setState({modalVisible: true})
+                    this.props.fetchCode(this.props.eventID)}
+                    }
                     >
                     Check in
                 </RkButton>
@@ -152,6 +213,7 @@ class EventDetails extends Component {
                         {/* {this.renderError()} */}
                     </ScrollView>
                     {this.renderButtons()}
+                    {this.renderCodeBox()}
                     <RkButton rkType='rounded stretch'
                         style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
                         contentStyle={{color: 'black', fontWeight: 'bold'}}
@@ -167,8 +229,37 @@ class EventDetails extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E1E1E1',
-        justifyContent: 'flex-end',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        margin: 5,
+    },
+    modalTextInput: {
+        marginTop: dimension.height*.05,
+        height: 80,
+        textAlign: 'center',
+        width: dimension.width*.6,
+        backgroundColor: '#FECB0022',
+        borderColor: '#FECB00',
+        borderRadius: 16,
+        borderWidth: 3,
+        borderStyle: 'solid',
+        fontWeight: 'bold',
+        fontSize: 60
+    },
+    modalContent: {
+        height: dimension.height*.4,
+        width: dimension.width*.8,
+        padding: 12,
+        backgroundColor: '#fff',
+        borderRadius: 12,
+    },
+    modalBackground: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 0,
+        height: dimension.height,
+        width: dimension.width,
+        backgroundColor: '#000a'
     },
     formContainerStyle: {
         flex: 1,
@@ -218,15 +309,16 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ events, auth }) => {
-  const { type, name, description, date, time, location, points, eventID, error } = events;
+  const { type, name, description, date, time, location, points, eventID, error, code } = events;
   const { privilege } = auth;
 
-  return { type, name, description, date, time, location, points, eventID, error, privilege };
+  return { type, name, description, date, time, location, points, eventID, error, privilege, code};
 };
 
 const mapDispatchToProps = {
     goToCreateEvent,
     goToCreateEventFromEdit,
+    fetchCode,
     goToEvents,
     deleteEvents,
     getPrivilege,
