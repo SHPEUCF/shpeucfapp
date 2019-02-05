@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchMembersPoints } from '../actions';
+import { fetchMembersPoints, loadUser, goToProfile} from '../actions';
 import _ from 'lodash';
 import * as Progress from 'react-native-progress';
 import {
@@ -24,6 +24,13 @@ class Leaderboard extends Component {
     this.props.fetchMembersPoints();
   }
 
+  callUser(id){
+
+    this.props.loadUser(id);
+    this.props.goToProfile();
+    
+  }
+
   renderComponent(item, sortedMembers) {
     const {
       containerStyle,
@@ -32,19 +39,22 @@ class Leaderboard extends Component {
     } = styles;
     if(item.points !== 0){
       return (
-      <View style={contentContainerStyle}>
-          <View style={containerStyle}>
-            <Text>{`${item.firstName} ${item.lastName}`}</Text>
-            <Text>Points:{item.points}</Text>
-            <Progress.Bar
-              style={progress}
-              progress={item.points / Math.max(sortedMembers[0].points,1)}
-              indeterminate={false}
-              width={dimension.width * .9}
-              color= {'#ffd700'}
-            />
+      <TouchableOpacity onPress = {this.callUser.bind(this, item.id)}>
+        <View style={contentContainerStyle}>
+            <View style={containerStyle}>
+              <Text>{`${item.firstName} ${item.lastName}`}</Text>
+              <Text>Points:{item.points}</Text>
+              <Progress.Bar
+                style={progress}
+                progress={item.points / Math.max(sortedMembers[0].points,1)}
+                indeterminate={false}
+                width={dimension.width * .9}
+                color= {'#ffd700'}
+              />
+            </View>
           </View>
-        </View>)
+        </TouchableOpacity>
+      )
     }
   }
 
@@ -97,6 +107,9 @@ const mapStateToProps = ({ members }) => {
 
 const mapDispatchToProps = {
   fetchMembersPoints,
+  loadUser,
+  goToProfile
+
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Leaderboard);

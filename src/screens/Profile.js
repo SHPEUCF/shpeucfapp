@@ -13,7 +13,8 @@ import { RkButton } from 'react-native-ui-kitten';
 
 class Profile extends Component {
   componentWillMount() {
-    this.props.loadUser();
+    if(this.props.firstName === '')
+      this.props.loadUser();
   }
 
   render() {
