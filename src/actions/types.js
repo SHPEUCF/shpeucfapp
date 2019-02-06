@@ -28,7 +28,8 @@ export const CREATE_USER_FAIL = 'create_user_fail';
 export const GO_TO_RESET_PASSWORD = 'go_to_reset_password';
 export const GO_TO_LOGIN = 'go_to_login';
 export const GO_TO_PROFILE = 'go_to_profile';
-export const GO_TO_REGISTRATION = 'go_to_registration';
+export const GO_TO_REGISTRATION = 'go_to_registration' ;
+export const GO_TO_EDIT_PROFILE_FORM = 'go_to_edit_profile_form';
 
 // MembersActions
 export const FETCH_MEMBERS_POINTS = 'fetch_members_points';

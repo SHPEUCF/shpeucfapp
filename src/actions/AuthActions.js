@@ -29,7 +29,9 @@ import {
   GO_TO_RESET_PASSWORD,
   GO_TO_LOGIN,
   GO_TO_PROFILE,
-  GO_TO_REGISTRATION } from './types';
+  GO_TO_REGISTRATION,
+  GO_TO_EDIT_PROFILE_FORM
+ } from './types';
 
 
 
@@ -327,5 +329,17 @@ export const goToRegistration = () => {
   return (dispatch) => {
     dispatch({ type: GO_TO_REGISTRATION });
     Actions.registration();
+    
   }
 };
+
+
+  export const goToEditProfileForm = () => {
+    return (dispatch) => {
+      dispatch({
+        type: GO_TO_EDIT_PROFILE_FORM
+      });
+      Actions.EditProfileForm();
+
+    }
+  };

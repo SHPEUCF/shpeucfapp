@@ -3,6 +3,7 @@ import { Router, Scene, Stack, ActionConst, Actions } from 'react-native-router-
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Spinner } from '../components/general';
 import RegistrationForm from '../components/auth/RegistrationForm';
+import EditProfileForm from '../components/auth/EditProfileForm';
 import LoginForm from '../components/auth/LoginForm';
 import CreateEvent from '../components/event/CreateEvent';
 import EventDetailsForm from '../components/event/EventDetails';
@@ -182,8 +183,8 @@ const RouterComponent = () => {
               component={Version}
               passProps
             />
-            <Scene key="ComingSoon"
-              component={ComingSoon}
+            <Scene key="EditProfileForm"
+              component={EditProfileForm}
               passProps
             />
           </Stack>

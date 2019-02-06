@@ -25,6 +25,7 @@ import {
   GO_TO_LOGIN,
   GO_TO_PROFILE,
   GO_TO_REGISTRATION,
+  GO_TO_EDIT_PROFILE_FORM,
   GET_PRIVILEGE} from '../actions/types';
 
 const INITIAL_STATE = {
@@ -157,6 +158,8 @@ export default (state = INITIAL_STATE, action) => {
       return state;
     case GO_TO_REGISTRATION:
       return INITIAL_STATE;
+    case GO_TO_EDIT_PROFILE_FORM:
+      return state;
     default:
       return state;
   }

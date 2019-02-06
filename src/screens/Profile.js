@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { loadUser, logoutUser } from '../actions';
+import { loadUser, logoutUser, goToEditProfileForm } from '../actions';
 import {
   Text,
   View, StyleSheet,
@@ -46,7 +46,7 @@ class Profile extends Component {
                 rounded
                 source={{uri: picture}}
                 title={`${firstName[0]}${lastName[0]}`}
-                onPress={() => alert("Coming Soon")}
+                onPress={() => alert("Coming Soon") }
                 activeOpacity={0.7}
                 />
             </View>
@@ -101,7 +101,9 @@ class Profile extends Component {
               <RkButton rkType='rounded stretch'
                 style={{backgroundColor: '#FECB00'}}
                 contentStyle={{color: '#000', fontWeight: 'bold'}}
-                onPress={() => alert("Coming Soon")}>
+                onPress = {
+                  () => this.props.goToEditProfileForm()
+                } >
                 Edit Profile
               </RkButton>
             </View>
@@ -192,6 +194,8 @@ const mapStateToProps = ({ auth }) => {
 
 const mapDispatchToProps = {
   loadUser,
-  logoutUser };
+  logoutUser,
+  goToEditProfileForm
+ };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
