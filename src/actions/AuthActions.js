@@ -28,6 +28,7 @@ import {
   GET_PRIVILEGE,
   GO_TO_RESET_PASSWORD,
   GO_TO_LOGIN,
+  GO_TO_PROFILE,
   GO_TO_REGISTRATION } from './types';
 
 
@@ -154,7 +155,7 @@ const createUserFail = (dispatch, error) => {
     default:
     errorMessage = error.message;
   }
-  
+
   dispatch({
     type: CREATE_USER_FAIL,
     payload: errorMessage
@@ -163,7 +164,7 @@ const createUserFail = (dispatch, error) => {
 
 const createUserSuccess = (dispatch, firstNameU, lastNameU, emailU, collegeU, majorU, pointsU, pictureU) => {
   const { currentUser } = firebase.auth();
-  
+
   firebase.database().ref(`/users/${currentUser.uid}/`).set({
       firstName: firstNameU,
       lastName: lastNameU,
@@ -249,12 +250,13 @@ const loginUserSuccess = (dispatch, user) => {
   });
 };
 
-export const loadUser = () => {
+export const loadUser = (userID) => {
   const { currentUser } = firebase.auth();
-
+  var id = (typeof userID === "undefined") ? currentUser.uid : userID;
+  // alert(id)
   return (dispatch) => {
     if ( currentUser != null ) {
-      firebase.database().ref(`/users/${currentUser.uid}/`)
+      firebase.database().ref(`/users/${id}/`)
         .on('value', snapshot => {
           dispatch({
             type: LOAD_USER,
@@ -311,6 +313,13 @@ export const goToLogIn = () => {
   return (dispatch) => {
     dispatch({ type: GO_TO_LOGIN });
     Actions.login();
+  }
+};
+
+export const goToProfile= () => {
+  return (dispatch) => {
+    dispatch({ type: GO_TO_PROFILE });
+    Actions.profile();
   }
 };
 
