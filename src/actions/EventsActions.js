@@ -104,13 +104,14 @@ export const checkIn = (eventID, val) => {
           .then(() => firebase.database().ref(`users/${currentUser.uid}/points`).set(points)))
           .then(() => Alert.alert('Checked In', 'Successful'))
           .catch((error) => Alert.alert('Check In Failed', 'Failure'));
-          dispatch({
-            type: CHECK_IN,
-          });
          })
       }
       else
         Alert.alert('You have already Attended this Event!', 'Failure');
+
+      dispatch({
+        type: CHECK_IN,
+      });
     })
   };
 }

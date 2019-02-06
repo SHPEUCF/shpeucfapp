@@ -39,7 +39,7 @@ class EventDetails extends Component {
         transparent={true}
         animationType={'fade'}
         onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
+            alert('Modal has been closed.');
         }}
         visible={this.state.modalVisible}
         >
@@ -65,10 +65,9 @@ class EventDetails extends Component {
                         style={{backgroundColor: '#FECB00', marginTop: 30}}
                         contentStyle={{color: '#000', fontWeight: 'bold'}}
                         onPress = {() => {
-                            this.setState({text: this.props.code})
                             if(this.props.code === this.state.text){
                                 this.checkinButton(this.props.eventID, this.props.points)
-                                {this.setState({modalVisible: false})}
+                                // this.setState({modalVisible: false})
                             }
                         }}
                         >
