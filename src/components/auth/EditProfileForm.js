@@ -12,14 +12,13 @@ import {
   emailChanged,
   collegeChanged,
   majorChanged,
-  passwordChanged,
   pointsChanged,
   privilegeChanged,
   pictureChanged,
-  confirmPasswordChanged,
   registrationError,
-  createUser,
-  goToLogIn } from '../../actions';
+  editUser,
+  goToLogIn,
+  goToProfile } from '../../actions';
 
 const collegeNames = [];
 data.map(college => {collegeNames.push({key:college.key, value:college.collegeName})});
@@ -58,12 +57,6 @@ class EditProfileForm extends Component {
   onPictureChange(text) {
     this.props.pictureChanged(text);
   }
-  onPasswordChange(text) {
-    this.props.passwordChanged(text);
-  }
-  onConfirmPasswordChange(text) {
-    this.props.confirmPasswordChanged(text);
-  }
 
   onButtonPress() {
     const {
@@ -74,10 +67,8 @@ class EditProfileForm extends Component {
       points,
       picture,
       major,
-      password,
-      confirmPassword,
       registrationError,
-      createUser,
+      editUser,
       goToLogIn } = this.props;
 
     const ucfStudentEmail = new RegExp(/^[A-Za-z0-9._%+-]+@(knights.|)ucf.edu$/i);
@@ -94,15 +85,10 @@ class EditProfileForm extends Component {
       registrationError('Please enter college');
     } else if (major === '') {
       registrationError('Please enter major');
-    } else if (password === '') {
-      registrationError('Please enter password');
-    } else if (confirmPassword === '') {
-      registrationError('Please confirm password');
-    } else if (password !== confirmPassword) {
-      registrationError('Passwords do not match, please try again');
-    } else if (password === confirmPassword) {
+    } 
+    else {
       this.onPointsChange(0);
-      createUser({ firstName, lastName, email, college, major, points, picture, password });
+      editUser( firstName, lastName, email, college, major, points );
     }
   }
 
@@ -118,26 +104,26 @@ class EditProfileForm extends Component {
     }
   }
 
-  renderSignUpButton() {
+  renderConfirmButton() {
     return (
       <RkButton rkType='rounded stretch'
         style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
-        contentStyle={{color: 'white', fontWeight: 'bold'}}
+        contentStyle={{color: 'black', fontWeight: 'bold'}}
         onPress={this.onButtonPress.bind(this)}>
-        SIGN UP
+        Confirm
       </RkButton>
     );
   }
 
-  renderLogInButton() {
+  renderCancelButton() {
     return (
-      <View style={styles.logInContainer}>
-        <Text>Already have an account? </Text>
-        <TouchableOpacity
-          onPress={this.props.goToLogIn}>
-          <Text style={styles.logInButton}>Log In</Text>
-        </TouchableOpacity>
-      </View>
+      <RkButton rkType='rounded stretch'
+        style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
+        contentStyle={{color: 'black', fontWeight: 'bold'}}
+        onPress={this.props.goToProfile.bind(this)}>
+
+        Cancel
+      </RkButton>
     );
   }
 
@@ -151,8 +137,8 @@ class EditProfileForm extends Component {
     };
     return (
       <View>
-        {this.renderSignUpButton()}
-        {this.renderLogInButton()}
+        {this.renderConfirmButton()}
+        {this.renderCancelButton()}
       </View>
     );
   }
@@ -200,10 +186,9 @@ class EditProfileForm extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.formContainerStyle}>
-
           <View style={styles.headerStyle}>
-            <Text style={styles.headerTextStyle}>SHPE @ UCF</Text>
-            <Text style={styles.headerSubtitleStyle}>Registration</Text>
+            <Text style={styles.headerTextStyle}>Edit Profile</Text>
+          
           </View>
 
           <ScrollView
@@ -241,23 +226,7 @@ class EditProfileForm extends Component {
               onChangeText={this.onEmailChange.bind(this)}
               />
 
-            <RkTextInput
-              rkType='rounded'
-              secureTextEntry
-              placeholder="Password"
-              value={this.props.password}
-              maxLength={30}
-              onChangeText={this.onPasswordChange.bind(this)}
-              />
-            <RkTextInput
-              rkType='rounded'
-              secureTextEntry
-              placeholder="Confirm Password"
-              value={this.props.confirmPassword}
-              maxLength={30}
-              onChangeText={this.onConfirmPasswordChange.bind(this)}
-              />
-
+           
             <View style={styles.pickerTextInput}>
               <RkTextInput style={{flex:1}}
                 rkType='rounded'
@@ -318,6 +287,7 @@ class EditProfileForm extends Component {
 
           {this.renderError()}
           {this.renderButtons()}
+
 
         </View>
       </View>
@@ -396,8 +366,6 @@ const mapStateToProps = ({ auth }) => {
     picture,
     points,
     privilege,
-    password,
-    confirmPassword,
     error,
     loading } = auth;
 
@@ -410,8 +378,6 @@ const mapStateToProps = ({ auth }) => {
     picture,
     points,
     privilege,
-    password,
-    confirmPassword,
     error,
     loading };
 };
@@ -425,10 +391,9 @@ const mapDispatchToProps = {
   pointsChanged,
   privilegeChanged,
   pictureChanged,
-  passwordChanged,
-  confirmPasswordChanged,
   registrationError,
-  createUser,
-  goToLogIn }
+  editUser,
+  goToLogIn,
+  goToProfile }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditProfileForm);
