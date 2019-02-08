@@ -21,6 +21,7 @@ import {
   CREATE_USER,
   CREATE_USER_SUCCESS,
   CREATE_USER_FAIL,
+  EDIT_USER,
   GO_TO_RESET_PASSWORD,
   GO_TO_LOGIN,
   GO_TO_PROFILE,
@@ -113,6 +114,10 @@ export default (state = INITIAL_STATE, action) => {
         error: payload,
         loading: false,
       };
+
+    case EDIT_USER:
+      return state;
+
     case GET_PRIVILEGE:
       return { ...state,
         privilege: payload

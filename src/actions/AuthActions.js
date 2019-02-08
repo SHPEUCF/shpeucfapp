@@ -25,6 +25,7 @@ import {
   CREATE_USER,
   CREATE_USER_SUCCESS,
   CREATE_USER_FAIL,
+  EDIT_USER,
   GET_PRIVILEGE,
   GO_TO_RESET_PASSWORD,
   GO_TO_LOGIN,
@@ -199,6 +200,40 @@ const createUserSuccess = (dispatch, firstNameU, lastNameU, emailU, collegeU, ma
   });
 };
 
+export const editUser = ( firstNameU, lastNameU, emailU, collegeU, majorU, pointsU ) => {
+  return (dispatch) => {
+  const {
+    currentUser
+  } = firebase.auth();
+
+  firebase.database().ref(`/users/${currentUser.uid}/`).update({
+      firstName: firstNameU,
+      lastName: lastNameU,
+      email: emailU,
+      college: collegeU,
+      major: majorU,
+      points: pointsU,
+    })
+    .then(() => firebase.database().ref(`/points/${currentUser.uid}/`).update({
+      firstName: firstNameU,
+      lastName: lastNameU,
+      points: pointsU,
+    }))
+    .then(() => firebase.database().ref(`/privileges/${currentUser.uid}/`).update({
+      firstName: firstNameU,
+      lastName: lastNameU,
+      user: true,
+      board: false,
+      eboard: false,
+      president: false
+    }))
+    .then(() => Alert.alert('Account Updated'));
+  
+  dispatch({
+    type: EDIT_USER,
+  });
+}
+};
 
 export const getPrivilege = () => {
   const { currentUser } = firebase.auth();
