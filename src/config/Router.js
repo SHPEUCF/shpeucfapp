@@ -185,6 +185,7 @@ const RouterComponent = () => {
             />
             <Scene key="EditProfileForm"
               component={EditProfileForm}
+              hideNavBar
               passProps
             />
           </Stack>
