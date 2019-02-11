@@ -28,8 +28,11 @@ Mobile Applications (iOS & Android) for the Society of Hispanic Professional Eng
 
 ### Debugging installation
 * JAVA_HOME missing on:
- *MacOS - https://dalanzg.github.io/tips-tutorials/mac/2016/03/21/how-to-set-java_home-on-mac-os-x/
- *Windows - https://docs.oracle.com/cd/E19182-01/820-7851/inst_cli_jdk_javahome_t/
+    * MacOS - https://dalanzg.github.io/tips-tutorials/mac/2016/03/21/how-to-set-java_home-on-mac-os-x/
+    * Windows - https://docs.oracle.com/cd/E19182-01/820-7851/inst_cli_jdk_javahome_t/
 * ANDROID_HOME missing on:
- *MacOS(user2993582) - https://stackoverflow.com/questions/19986214/setting-android-home-enviromental-variable-on-mac-os-x
- *Windows(Hoque MD Zahidul) - https://stackoverflow.com/questions/27620262/sdk-location-not-found-define-location-with-sdk-dir-in-the-local-properties-fil
+    * MacOS(user2993582) - https://stackoverflow.com/questions/19986214/setting-android-home-enviromental-variable-on-mac-os-x
+    * Windows(Hoque MD Zahidul) - https://stackoverflow.com/questions/27620262/sdk-location-not-found-define-location-with-sdk-dir-in-the-local-properties-fil
+* Print: Entry, ":CFBundleIdentifier", Does Not Exist:
+    *IDK UPDATE HERE WITH FIX
+
