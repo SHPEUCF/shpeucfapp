@@ -1,9 +1,9 @@
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { Card, CardSection, Input, Spinner } from '../general';
-import {RkAvoidKeyboard, RkTextInput, RkButton, RkPicker, RkText} from 'react-native-ui-kitten';
+import { RkAvoidKeyboard, RkTextInput, RkButton, RkPicker, RkText } from 'react-native-ui-kitten';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import data from '../../data/Colleges.json';
 import {
@@ -18,14 +18,15 @@ import {
   registrationError,
   editUser,
   goToLogIn,
-  goToProfile } from '../../actions';
+  goToProfile,
+  quoteChanged } from '../../actions';
 
 const collegeNames = [];
 data.map(college => {collegeNames.push({key:college.key, value:college.collegeName})});
 var majorNames =  [];
 majorNames.push(data[0].degrees);
 
-const iconName= Platform.OS === 'ios'?'ios-arrow-dropdown':'md-arrow-dropdown';
+const iconName = Platform.OS === 'ios'?'ios-arrow-dropdown':'md-arrow-dropdown';
 
 class EditProfileForm extends Component {
   state = {collegeSelected: collegeNames.slice(0,1),
@@ -57,6 +58,9 @@ class EditProfileForm extends Component {
   onPictureChange(text) {
     this.props.pictureChanged(text);
   }
+  onQuoteChange(text) {
+    this.props.quoteChanged(text);
+  }
 
   onButtonPress() {
     const {
@@ -69,7 +73,8 @@ class EditProfileForm extends Component {
       major,
       registrationError,
       editUser,
-      goToLogIn } = this.props;
+      goToLogIn,
+      quote } = this.props;
 
     const ucfStudentEmail = new RegExp(/^[A-Za-z0-9._%+-]+@(knights.|)ucf.edu$/i);
 
@@ -85,10 +90,10 @@ class EditProfileForm extends Component {
       registrationError('Please enter college');
     } else if (major === '') {
       registrationError('Please enter major');
-    } 
+    }
     else {
       this.onPointsChange(0);
-      editUser( firstName, lastName, email, college, major, points );
+      editUser( firstName, lastName, email, college, major, points, quote );
     }
   }
 
@@ -121,7 +126,6 @@ class EditProfileForm extends Component {
         style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
         contentStyle={{color: 'black', fontWeight: 'bold'}}
         onPress={this.props.goToProfile.bind(this)}>
-
         Cancel
       </RkButton>
     );
@@ -188,7 +192,7 @@ class EditProfileForm extends Component {
         <View style={styles.formContainerStyle}>
           <View style={styles.headerStyle}>
             <Text style={styles.headerTextStyle}>Edit Profile</Text>
-          
+
           </View>
 
           <ScrollView
@@ -226,7 +230,7 @@ class EditProfileForm extends Component {
               onChangeText={this.onEmailChange.bind(this)}
               />
 
-           
+
             <View style={styles.pickerTextInput}>
               <RkTextInput style={{flex:1}}
                 rkType='rounded'
@@ -282,6 +286,19 @@ class EditProfileForm extends Component {
               onCancel={this.hidePicker2}
               selectedOptions={this.state.majorSelected}
               />
+
+              <RkTextInput
+                rkType='bordered'
+                placeholder="Quote"
+                value={this.props.quote}
+                autoCapitalize='sentences'
+                maxLength={175}
+                numberOfLines={5}
+                multiline={true}
+                textAlignVertical='top'
+                onChangeText={this.onQuoteChange.bind(this)}
+                />
+
           </RkAvoidKeyboard>
           </ScrollView>
 
@@ -367,7 +384,8 @@ const mapStateToProps = ({ auth }) => {
     points,
     privilege,
     error,
-    loading } = auth;
+    loading,
+    quote } = auth;
 
   return {
     firstName,
@@ -379,7 +397,8 @@ const mapStateToProps = ({ auth }) => {
     points,
     privilege,
     error,
-    loading };
+    loading,
+    quote };
 };
 
 const mapDispatchToProps = {
@@ -394,6 +413,7 @@ const mapDispatchToProps = {
   registrationError,
   editUser,
   goToLogIn,
-  goToProfile }
+  goToProfile,
+  quoteChanged }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditProfileForm);

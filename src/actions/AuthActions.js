@@ -31,10 +31,8 @@ import {
   GO_TO_LOGIN,
   GO_TO_PROFILE,
   GO_TO_REGISTRATION,
-  GO_TO_EDIT_PROFILE_FORM
- } from './types';
-
-
+  GO_TO_EDIT_PROFILE_FORM,
+  QUOTE_CHANGED } from './types';
 
 export const firstNameChanged = (text) => {
   return {
@@ -99,6 +97,13 @@ export const confirmPasswordChanged = (text) => {
   };
 };
 
+export const quoteChanged = (text) => {
+  return {
+    type: QUOTE_CHANGED,
+    payload: text
+  };
+};
+
 export const registrationError = (dispatch, error) => {
   return (dispatch) => {
     dispatch({
@@ -132,12 +137,12 @@ const showFirebaseError = (dispatch, error) => {
 };
 
 // Registration Actions
-export const createUser = ({ firstName, lastName, email, college, major, points, picture, password }) => {
+export const createUser = ({ firstName, lastName, email, college, major, points, picture, password, quote }) => {
   return (dispatch) => {
     dispatch({ type: CREATE_USER });
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then((user) => createUserSuccess(dispatch, firstName, lastName, email, college, major, points, picture))
+      .then((user) => createUserSuccess(dispatch, firstName, lastName, email, college, major, points, picture, quote))
       .catch((error) => createUserFail(dispatch, error))
   };
 };
@@ -165,7 +170,7 @@ const createUserFail = (dispatch, error) => {
   });
 };
 
-const createUserSuccess = (dispatch, firstNameU, lastNameU, emailU, collegeU, majorU, pointsU, pictureU) => {
+const createUserSuccess = (dispatch, firstNameU, lastNameU, emailU, collegeU, majorU, pointsU, pictureU, quoteU) => {
   const { currentUser } = firebase.auth();
 
   firebase.database().ref(`/users/${currentUser.uid}/`).set({
@@ -176,6 +181,7 @@ const createUserSuccess = (dispatch, firstNameU, lastNameU, emailU, collegeU, ma
       major: majorU,
       points: pointsU,
       picture: pictureU,
+      quote: quoteU
     })
     .then(() => firebase.database().ref(`/points/${currentUser.uid}/`).set({
       firstName: firstNameU,
@@ -200,7 +206,7 @@ const createUserSuccess = (dispatch, firstNameU, lastNameU, emailU, collegeU, ma
   });
 };
 
-export const editUser = ( firstNameU, lastNameU, emailU, collegeU, majorU, pointsU ) => {
+export const editUser = ( firstNameU, lastNameU, emailU, collegeU, majorU, pointsU, quoteU ) => {
   return (dispatch) => {
   const {
     currentUser
@@ -213,6 +219,7 @@ export const editUser = ( firstNameU, lastNameU, emailU, collegeU, majorU, point
       college: collegeU,
       major: majorU,
       points: pointsU,
+      quote: quoteU
     })
     .then(() => firebase.database().ref(`/points/${currentUser.uid}/`).update({
       firstName: firstNameU,
@@ -228,7 +235,7 @@ export const editUser = ( firstNameU, lastNameU, emailU, collegeU, majorU, point
       president: false
     }))
     .then(() => Alert.alert('Account Updated'));
-  
+
   dispatch({
     type: EDIT_USER,
   });
@@ -353,7 +360,7 @@ export const goToLogIn = () => {
   }
 };
 
-export const goToProfile= () => {
+export const goToProfile = () => {
   return (dispatch) => {
     dispatch({ type: GO_TO_PROFILE });
     Actions.profile();
@@ -364,17 +371,15 @@ export const goToRegistration = () => {
   return (dispatch) => {
     dispatch({ type: GO_TO_REGISTRATION });
     Actions.registration();
-    
+
   }
 };
 
-
-  export const goToEditProfileForm = () => {
-    return (dispatch) => {
-      dispatch({
-        type: GO_TO_EDIT_PROFILE_FORM
-      });
-      Actions.EditProfileForm();
-
-    }
-  };
+export const goToEditProfileForm = () => {
+  return (dispatch) => {
+    dispatch({
+      type: GO_TO_EDIT_PROFILE_FORM
+    });
+    Actions.EditProfileForm();
+  }
+};

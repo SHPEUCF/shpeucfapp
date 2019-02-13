@@ -19,6 +19,7 @@ export const LOAD_USER = 'load_user';
 export const LOGIN_USER_FAIL = 'login_user_fail';
 export const LOGOUT_USER = 'logout_user';
 export const GET_PRIVILEGE = 'get_privilege';
+export const QUOTE_CHANGED = 'quote_changed';
 
 
 
