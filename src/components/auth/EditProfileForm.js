@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Platform } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity,TextInput, Image, Dimensions, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { Card, CardSection, Input, Spinner } from '../general';
@@ -204,6 +204,7 @@ class EditProfileForm extends Component {
 
           <RkAvoidKeyboard>
             <RkTextInput
+              style={styles.blackText}
               rkType='rounded'
               placeholder="First Name"
               value={this.props.firstName}
@@ -212,6 +213,7 @@ class EditProfileForm extends Component {
               onChangeText={this.onFirstNameChange.bind(this)}
               />
             <RkTextInput
+              style={styles.blackText}
               rkType='rounded'
               placeholder="Last Name"
               value={this.props.lastName}
@@ -221,6 +223,7 @@ class EditProfileForm extends Component {
               />
 
             <RkTextInput
+              style={styles.blackText}
               rkType='rounded'
               placeholder="School Email"
               keyboardType="email-address"
@@ -260,7 +263,8 @@ class EditProfileForm extends Component {
               />
 
             <View style={styles.pickerTextInput}>
-              <RkTextInput style={{flex:1}}
+              <RkTextInput 
+                style={{flex:1}}
                 rkType='rounded'
                 maxLength={45}
                 editable={false}
@@ -287,8 +291,8 @@ class EditProfileForm extends Component {
               selectedOptions={this.state.majorSelected}
               />
 
-              <RkTextInput
-                rkType='bordered'
+              <TextInput
+                style={styles.quoteBox}
                 placeholder="Quote"
                 value={this.props.quote}
                 autoCapitalize='sentences'
@@ -358,6 +362,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 10,
     marginBottom: 10
+  },
+  blackText: {
+    color: 'black'
+  },
+  quoteBox: {
+    height: 100,
+    padding: 15,
+    color:'gray',
+    paddingTop: 20,
+    backgroundColor: 'white',
+    borderRadius: 25
   },
   pickerTextInput:{
     flex:1,
