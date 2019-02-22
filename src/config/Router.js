@@ -72,7 +72,7 @@ const RouterComponent = () => {
             type={ActionConst.REPLACE}
             hideNavBar
             passProps
-          /> 
+          />
           <Scene
             key="eventDetails"
             component={EventDetailsForm}
@@ -80,7 +80,15 @@ const RouterComponent = () => {
             type={ActionConst.REPLACE}
             hideNavBar
             passProps
-          /> 
+          />
+        </Stack>
+        <Stack key = "Profiles">
+        <Scene
+          key="EditProfileForm"
+          component={EditProfileForm}
+          hideNavBar
+          passProps
+        />
         </Stack>
         <Stack key="main"
           tabs
@@ -181,11 +189,6 @@ const RouterComponent = () => {
             />
             <Scene key="Version"
               component={Version}
-              passProps
-            />
-            <Scene key="EditProfileForm"
-              component={EditProfileForm}
-              hideNavBar
               passProps
             />
           </Stack>

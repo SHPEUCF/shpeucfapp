@@ -104,7 +104,7 @@ export const quoteChanged = (text) => {
   };
 };
 
-export const registrationError = (dispatch, error) => {
+export const registrationError = (error) => {
   return (dispatch) => {
     dispatch({
       type: REGISTRATION_ERROR,
