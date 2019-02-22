@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { ScrollView, View, Text, StyleSheet, TouchableOpacity,TextInput, Image, Dimensions, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { Card, CardSection, Input, Spinner } from '../general';
-import { RkAvoidKeyboard, RkTextInput, RkButton, RkPicker, RkText } from 'react-native-ui-kitten';
+import { Card, CardSection, Input, Button, Spinner } from '../general';
+import { RkAvoidKeyboard, RkButton, RkPicker } from 'react-native-ui-kitten';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import data from '../../data/Colleges.json';
 import {
@@ -115,23 +115,19 @@ class EditProfileForm extends Component {
 
   renderConfirmButton() {
     return (
-      <RkButton rkType='rounded stretch'
-        style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
-        contentStyle={{color: 'black', fontWeight: 'bold'}}
-        onPress={this.onButtonPress.bind(this)}>
-        Confirm
-      </RkButton>
+      <Button
+        title={"Confirm"}
+        onPress={this.onButtonPress.bind(this)}
+      />
     );
   }
 
   renderCancelButton() {
     return (
-      <RkButton rkType='rounded stretch'
-        style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
-        contentStyle={{color: 'black', fontWeight: 'bold'}}
-        onPress={this.props.goToProfile.bind(this)}>
-        Cancel
-      </RkButton>
+      <Button
+        title={"Cancel"}
+        onPress={this.props.goToProfile.bind(this)}
+      />
     );
   }
 
@@ -207,41 +203,26 @@ class EditProfileForm extends Component {
           style={styles.scrollView}>
 
           <RkAvoidKeyboard>
-            <RkTextInput
-              style={styles.blackText}
-              rkType='rounded'
+            <Input
               placeholder="First Name"
               value={this.props.firstName}
-              autoCapitalize="words"
-              maxLength={45}
               onChangeText={this.onFirstNameChange.bind(this)}
-              />
-            <RkTextInput
-              style={styles.blackText}
-              rkType='rounded'
+            />
+            <Input
               placeholder="Last Name"
               value={this.props.lastName}
-              autoCapitalize="words"
-              maxLength={45}
               onChangeText={this.onLastNameChange.bind(this)}
-              />
-
-            <RkTextInput
-              style={styles.blackText}
-              rkType='rounded'
+            />
+            <Input
               placeholder="School Email"
               keyboardType="email-address"
               value={this.props.email}
-              autoCapitalize="none"
-              maxLength={45}
               onChangeText={this.onEmailChange.bind(this)}
-              />
-
+            />
 
             <View style={styles.pickerTextInput}>
-              <RkTextInput style={{flex:1}}
-                rkType='rounded'
-                maxLength={45}
+              <Input
+                style={{flex: 1}}
                 editable={false}
                 value={this.state.collegeSelected[0].value }/>
                 <TouchableOpacity
@@ -267,10 +248,8 @@ class EditProfileForm extends Component {
               />
 
             <View style={styles.pickerTextInput}>
-              <RkTextInput
-                style={{flex:1}}
-                rkType='rounded'
-                maxLength={45}
+              <Input
+                style={{flex: 1}}
                 editable={false}
                 value={this.state.majorSelected[0] }/>
                 <TouchableOpacity
@@ -295,17 +274,16 @@ class EditProfileForm extends Component {
               selectedOptions={this.state.majorSelected}
               />
 
-              <TextInput
-                style={styles.quoteBox}
-                placeholder="Quote"
-                value={this.props.quote}
+              <Input
+                placeholder='Quote'
                 autoCapitalize='sentences'
                 maxLength={175}
                 numberOfLines={5}
                 multiline={true}
-                textAlignVertical='top'
+                value={this.props.quote}
                 onChangeText={this.onQuoteChange.bind(this)}
-                />
+                textAlignVertical='top'
+              />
 
           </RkAvoidKeyboard>
           </ScrollView>
