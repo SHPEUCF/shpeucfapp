@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser, goToResetPassword, goToRegistration } from '../../actions';
-import { Card, CardSection, Spinner } from '../general';
-import {RkTheme, RkAvoidKeyboard, RkTextInput, RkButton} from 'react-native-ui-kitten';
+import { Card, CardSection, Button, Spinner } from '../general';
+import {RkTheme, RkAvoidKeyboard, RkTextInput, } from 'react-native-ui-kitten';
 
 class LoginForm extends Component {
 
@@ -34,12 +34,10 @@ class LoginForm extends Component {
 
   renderLogInButton() {
     return (
-      <RkButton rkType='rounded stretch'
-        style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
-        contentStyle={{color: 'white', fontWeight: 'bold'}}
-        onPress={this.onButtonPress.bind(this)}>
-        LOGIN
-      </RkButton>
+      <Button 
+        title = "LOG IN"
+        onPress={this.onButtonPress.bind(this)}
+      />
     );
   }
 

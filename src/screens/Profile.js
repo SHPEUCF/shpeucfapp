@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
+import {Button} from '../components/general'
 import { loadUser, logoutUser, goToEditProfileForm,} from '../actions';
 import {
   Text,
@@ -10,13 +11,30 @@ import {
   ScrollView,
   TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-elements';
-import { RkButton } from 'react-native-ui-kitten';
 
 
 class Profile extends Component {
   componentWillMount() {
     if(this.props.firstName === '')
       this.props.loadUser();
+  }
+  renderSocialMedia(){
+    return (
+			<View style={styles.editLogoContainer}>
+        <View style={styles.editLogoContainer}>
+          <TouchableOpacity 
+            onPress={() => Actions.PostShow({ title: 'Linkedin', uri: 'https://www.linkedin.com/'})}>
+            <Ionicons name="logo-linkedin" size={30}/>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.editLogoContainer}>
+          <TouchableOpacity 
+            onPress={() => Actions.PostShow({ title: 'Github', uri: 'https://www.github.com/'})}>
+            <Ionicons name="logo-github" size={30}/>
+          </TouchableOpacity>
+        </View>
+      </View>
+    )
   }
 
   render() {
@@ -57,30 +75,7 @@ class Profile extends Component {
                <Text style={taglineTextStyle}>Turn up!</Text>
                <Text style={taglineTextStyle}>{quote}</Text>
             </View>
-				<View style={editLogoContainer}>
-						<View style={editLogoContainer}>
-							<RkButton rkType='rounded'
-								style={{ backgroundColor: '#fff0', width: 60}}
-								contentStyle={{color: '#000', fontWeight: 'bold'}}
-								onPress={() => Actions.PostShow({ title: 'Linkedin', uri: 'https://www.linkedin.com/'})}>
-								<Ionicons
-								name="logo-linkedin"
-								size={30}
-								/>
-							</RkButton>
-						</View>
-						<View style={editLogoContainer}>
-							<RkButton rkType='rounded'
-								style={{backgroundColor: '#fff0', width: 60}}
-								contentStyle={{color: '#000', fontWeight: 'bold'}}
-								onPress={() => Actions.PostShow({ title: 'Github', uri: 'https://github.com/'})}>
-								<Ionicons
-								name="logo-github"
-								size={30}
-								/>
-							</RkButton>
-						</View>
-						</View>
+              {this.renderSocialMedia()}
           </View>
 
          <View style={bottomHalfContainerStyle}>
@@ -125,27 +120,14 @@ class Profile extends Component {
           </View>
 
 					<View style={buttonsContainerStyle}>
-
-          <View style={buttonsContainerStyle}>
-            <View style={editButtonContainer}>
-              <RkButton rkType='rounded stretch'
-                style={{backgroundColor: '#FECB00'}}
-                contentStyle={{color: '#000', fontWeight: 'bold'}}
-                onPress = {
-                  () => this.props.goToEditProfileForm()
-                } >
-                Edit Profile
-              </RkButton>
-            </View>
-						</View>
-            <View style={logOutButtonContainer}>
-              <RkButton rkType='rounded stretch'
-                style={{backgroundColor: '#FECB00'}}
-                contentStyle={{color: '#000', fontWeight: 'bold'}}
-                onPress={() => this.props.logoutUser()}>
-                Log Out
-              </RkButton>
-            </View>
+              <Button 
+                title = "EDIT PROFILE"
+                onPress={this.props.goToEditProfileForm.bind(this)}
+              />
+              <Button 
+                title = "LOG OUT"
+                onPress={this.props.logoutUser.bind(this)}
+              />
           </View>
         </View>
         </ScrollView>
@@ -213,6 +195,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 	editLogoContainer: {
+    flex: 1,
 		marginTop: 3,
 		flexDirection: 'row',
 		justifyContent: 'center'

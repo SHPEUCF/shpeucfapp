@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
+import {Button} from '../general'
 import {
     RkAvoidKeyboard,
     RkTextInput,
@@ -189,20 +190,14 @@ class CreateEvent extends Component {
                         </View>
                     {/* </RkAvoidKeyboard> */}
                         {this.renderError()}
-                        <RkButton rkType='rounded stretch'
-                            style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
-                            contentStyle={{color: 'black', fontWeight: 'bold'}}
+                        <Button 
+                            title = {this.props.title}
                             onPress={this.onButtonPress.bind(this)}
-                            >
-                            {this.props.title}
-                        </RkButton>
-                        <RkButton rkType='rounded stretch'
-                            style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
-                            contentStyle={{color: 'black', fontWeight: 'bold'}}
+                        />
+                        <Button 
+                            title = "CANCEL"
                             onPress={this.props.goToEvents.bind(this)}
-                            >
-                            Cancel
-                        </RkButton>
+                        />
                     </ScrollView>
                 </View>
             )

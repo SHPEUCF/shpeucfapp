@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
+import {Button} from '../components/general'
 import { Scene, Router, Actions } from 'react-native-router-flux';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
-import { RkButton, RkTextInput } from 'react-native-ui-kitten';
 import {
   TouchableOpacity,
   Alert,
@@ -82,27 +81,17 @@ class Events extends Component {
   renderButton(){
     if(this.props.privilege !== undefined && this.props.privilege.board === true){
       return (
-        <View style={{paddingTop:20, paddingHorizontal:10}}>
-          <RkButton rkType='rounded stretch'
-                style={{backgroundColor: '#FECB00'}}
-                contentStyle={{color: '#000', fontWeight: 'bold'}}
-                onPress={this.props.goToCreateEvent.bind(this)}
-                >
-                Create Event
-          </RkButton>
-        </View>
+          <Button 
+              title = "CREATE EVENT"
+              onPress={this.props.goToCreateEvent.bind(this)}
+          />
       )
     }else
     return(
-      <View style={{paddingTop:20, paddingHorizontal:10}}>
-        <RkButton rkType='rounded stretch'
-              style={{backgroundColor: '#FECB00'}}
-              contentStyle={{color: '#000', fontWeight: 'bold'}}
-              onPress={() => {this.setState({modalVisible: true})}}
-              >
-              Check in
-        </RkButton>
-      </View>
+       < Button
+          title = "CHECK IN"
+          onPress={() => {this.setState({modalVisible: true})}}
+        />
     )
   }
   render() {
@@ -146,7 +135,9 @@ class Events extends Component {
           />
         </ScrollView>
         {this.renderCodeBox()}
-        {this.renderButton()}
+        <View style={{paddingTop:20, paddingHorizontal:10}}>
+          {this.renderButton()}
+        </View>
       </View>
     );
   }

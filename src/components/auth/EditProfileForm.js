@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { ScrollView, View, Text, StyleSheet, TouchableOpacity,TextInput, Image, Dimensions, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { Card, CardSection, Input, Spinner } from '../general';
-import { RkAvoidKeyboard, RkTextInput, RkButton, RkPicker, RkText } from 'react-native-ui-kitten';
+import { Card, CardSection, Input, Button, Spinner } from '../general';
+import {RkAvoidKeyboard, RkTextInput, RkPicker, RkText } from 'react-native-ui-kitten';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import data from '../../data/Colleges.json';
 import {
@@ -111,23 +111,19 @@ class EditProfileForm extends Component {
 
   renderConfirmButton() {
     return (
-      <RkButton rkType='rounded stretch'
-        style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
-        contentStyle={{color: 'black', fontWeight: 'bold'}}
-        onPress={this.onButtonPress.bind(this)}>
-        Confirm
-      </RkButton>
+      <Button 
+        title={"Confirm"}
+        onPress={this.onButtonPress.bind(this)}
+      />
     );
   }
 
   renderCancelButton() {
     return (
-      <RkButton rkType='rounded stretch'
-        style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
-        contentStyle={{color: 'black', fontWeight: 'bold'}}
-        onPress={this.props.goToProfile.bind(this)}>
-        Cancel
-      </RkButton>
+      <Button 
+        title={"Cancel"}
+        onPress={this.props.goToProfile.bind(this)}
+      />
     );
   }
 
