@@ -19,12 +19,14 @@ export const LOAD_USER = 'load_user';
 export const LOGIN_USER_FAIL = 'login_user_fail';
 export const LOGOUT_USER = 'logout_user';
 export const GET_PRIVILEGE = 'get_privilege';
+export const QUOTE_CHANGED = 'quote_changed';
 
 
 
 export const CREATE_USER = 'create_user';
 export const CREATE_USER_SUCCESS = 'create_user_sucess';
 export const CREATE_USER_FAIL = 'create_user_fail';
+export const EDIT_USER = 'edit_user';
 export const GO_TO_RESET_PASSWORD = 'go_to_reset_password';
 export const GO_TO_LOGIN = 'go_to_login';
 export const GO_TO_PROFILE = 'go_to_profile';

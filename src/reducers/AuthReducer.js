@@ -21,12 +21,14 @@ import {
   CREATE_USER,
   CREATE_USER_SUCCESS,
   CREATE_USER_FAIL,
+  EDIT_USER,
   GO_TO_RESET_PASSWORD,
   GO_TO_LOGIN,
   GO_TO_PROFILE,
   GO_TO_REGISTRATION,
   GO_TO_EDIT_PROFILE_FORM,
-  GET_PRIVILEGE} from '../actions/types';
+  QUOTE_CHANGED,
+  GET_PRIVILEGE } from '../actions/types';
 
 const INITIAL_STATE = {
   firstName: '',
@@ -34,6 +36,7 @@ const INITIAL_STATE = {
   email: '',
   college: '',
   major: '',
+  quote: '',
   // Using URL below to avoid RN warning of empty source.uri as there's a delay fetching.
   // Will improve fetching later, just need to get rid of the warning for now.
   picture: 'https://cdn0.iconfinder.com/data/icons/superuser-web-kit/512/686909-user_people_man_human_head_person-512.png',
@@ -91,6 +94,10 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state,
         confirmPassword: payload
       };
+    case QUOTE_CHANGED:
+      return { ...state,
+        quote: payload
+     };
     case REGISTRATION_ERROR:
       return { ...state,
         error: payload,
@@ -113,6 +120,10 @@ export default (state = INITIAL_STATE, action) => {
         error: payload,
         loading: false,
       };
+
+    case EDIT_USER:
+      return state;
+
     case GET_PRIVILEGE:
       return { ...state,
         privilege: payload
@@ -136,6 +147,7 @@ export default (state = INITIAL_STATE, action) => {
         college: payload.college,
         email: payload.email,
         major: payload.major,
+        quote: payload.quote,
         points: payload.points,
         picture: payload.picture,
         privilege: payload.privilege

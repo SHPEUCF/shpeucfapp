@@ -1,9 +1,9 @@
-import React, { Component} from 'react';
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Platform } from 'react-native';
+import React, { Component } from 'react';
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity,TextInput, Image, Dimensions, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { Card, CardSection, Input, Spinner } from '../general';
-import {RkAvoidKeyboard, RkTextInput, RkButton, RkPicker, RkText} from 'react-native-ui-kitten';
+import { RkAvoidKeyboard, RkTextInput, RkButton, RkPicker, RkText } from 'react-native-ui-kitten';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import data from '../../data/Colleges.json';
 import {
@@ -12,21 +12,21 @@ import {
   emailChanged,
   collegeChanged,
   majorChanged,
-  passwordChanged,
   pointsChanged,
   privilegeChanged,
   pictureChanged,
-  confirmPasswordChanged,
   registrationError,
-  createUser,
-  goToLogIn } from '../../actions';
+  editUser,
+  goToLogIn,
+  goToProfile,
+  quoteChanged } from '../../actions';
 
 const collegeNames = [];
 data.map(college => {collegeNames.push({key:college.key, value:college.collegeName})});
 var majorNames =  [];
 majorNames.push(data[0].degrees);
 
-const iconName= Platform.OS === 'ios'?'ios-arrow-dropdown':'md-arrow-dropdown';
+const iconName = Platform.OS === 'ios'?'ios-arrow-dropdown':'md-arrow-dropdown';
 
 class EditProfileForm extends Component {
   state = {collegeSelected: collegeNames.slice(0,1),
@@ -58,11 +58,8 @@ class EditProfileForm extends Component {
   onPictureChange(text) {
     this.props.pictureChanged(text);
   }
-  onPasswordChange(text) {
-    this.props.passwordChanged(text);
-  }
-  onConfirmPasswordChange(text) {
-    this.props.confirmPasswordChanged(text);
+  onQuoteChange(text) {
+    this.props.quoteChanged(text);
   }
 
   onButtonPress() {
@@ -74,11 +71,10 @@ class EditProfileForm extends Component {
       points,
       picture,
       major,
-      password,
-      confirmPassword,
       registrationError,
-      createUser,
-      goToLogIn } = this.props;
+      editUser,
+      goToLogIn,
+      quote } = this.props;
 
     const ucfStudentEmail = new RegExp(/^[A-Za-z0-9._%+-]+@(knights.|)ucf.edu$/i);
 
@@ -94,15 +90,10 @@ class EditProfileForm extends Component {
       registrationError('Please enter college');
     } else if (major === '') {
       registrationError('Please enter major');
-    } else if (password === '') {
-      registrationError('Please enter password');
-    } else if (confirmPassword === '') {
-      registrationError('Please confirm password');
-    } else if (password !== confirmPassword) {
-      registrationError('Passwords do not match, please try again');
-    } else if (password === confirmPassword) {
+    }
+    else {
       this.onPointsChange(0);
-      createUser({ firstName, lastName, email, college, major, points, picture, password });
+      editUser( firstName, lastName, email, college, major, points, quote );
     }
   }
 
@@ -118,26 +109,25 @@ class EditProfileForm extends Component {
     }
   }
 
-  renderSignUpButton() {
+  renderConfirmButton() {
     return (
       <RkButton rkType='rounded stretch'
         style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
-        contentStyle={{color: 'white', fontWeight: 'bold'}}
+        contentStyle={{color: 'black', fontWeight: 'bold'}}
         onPress={this.onButtonPress.bind(this)}>
-        SIGN UP
+        Confirm
       </RkButton>
     );
   }
 
-  renderLogInButton() {
+  renderCancelButton() {
     return (
-      <View style={styles.logInContainer}>
-        <Text>Already have an account? </Text>
-        <TouchableOpacity
-          onPress={this.props.goToLogIn}>
-          <Text style={styles.logInButton}>Log In</Text>
-        </TouchableOpacity>
-      </View>
+      <RkButton rkType='rounded stretch'
+        style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
+        contentStyle={{color: 'black', fontWeight: 'bold'}}
+        onPress={this.props.goToProfile.bind(this)}>
+        Cancel
+      </RkButton>
     );
   }
 
@@ -151,8 +141,8 @@ class EditProfileForm extends Component {
     };
     return (
       <View>
-        {this.renderSignUpButton()}
-        {this.renderLogInButton()}
+        {this.renderConfirmButton()}
+        {this.renderCancelButton()}
       </View>
     );
   }
@@ -200,10 +190,9 @@ class EditProfileForm extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.formContainerStyle}>
-
           <View style={styles.headerStyle}>
-            <Text style={styles.headerTextStyle}>SHPE @ UCF</Text>
-            <Text style={styles.headerSubtitleStyle}>Registration</Text>
+            <Text style={styles.headerTextStyle}>Edit Profile</Text>
+
           </View>
 
           <ScrollView
@@ -215,6 +204,7 @@ class EditProfileForm extends Component {
 
           <RkAvoidKeyboard>
             <RkTextInput
+              style={styles.blackText}
               rkType='rounded'
               placeholder="First Name"
               value={this.props.firstName}
@@ -223,6 +213,7 @@ class EditProfileForm extends Component {
               onChangeText={this.onFirstNameChange.bind(this)}
               />
             <RkTextInput
+              style={styles.blackText}
               rkType='rounded'
               placeholder="Last Name"
               value={this.props.lastName}
@@ -232,6 +223,7 @@ class EditProfileForm extends Component {
               />
 
             <RkTextInput
+              style={styles.blackText}
               rkType='rounded'
               placeholder="School Email"
               keyboardType="email-address"
@@ -241,22 +233,6 @@ class EditProfileForm extends Component {
               onChangeText={this.onEmailChange.bind(this)}
               />
 
-            <RkTextInput
-              rkType='rounded'
-              secureTextEntry
-              placeholder="Password"
-              value={this.props.password}
-              maxLength={30}
-              onChangeText={this.onPasswordChange.bind(this)}
-              />
-            <RkTextInput
-              rkType='rounded'
-              secureTextEntry
-              placeholder="Confirm Password"
-              value={this.props.confirmPassword}
-              maxLength={30}
-              onChangeText={this.onConfirmPasswordChange.bind(this)}
-              />
 
             <View style={styles.pickerTextInput}>
               <RkTextInput style={{flex:1}}
@@ -287,7 +263,8 @@ class EditProfileForm extends Component {
               />
 
             <View style={styles.pickerTextInput}>
-              <RkTextInput style={{flex:1}}
+              <RkTextInput 
+                style={{flex:1}}
                 rkType='rounded'
                 maxLength={45}
                 editable={false}
@@ -313,11 +290,25 @@ class EditProfileForm extends Component {
               onCancel={this.hidePicker2}
               selectedOptions={this.state.majorSelected}
               />
+
+              <TextInput
+                style={styles.quoteBox}
+                placeholder="Quote"
+                value={this.props.quote}
+                autoCapitalize='sentences'
+                maxLength={175}
+                numberOfLines={5}
+                multiline={true}
+                textAlignVertical='top'
+                onChangeText={this.onQuoteChange.bind(this)}
+                />
+
           </RkAvoidKeyboard>
           </ScrollView>
 
           {this.renderError()}
           {this.renderButtons()}
+
 
         </View>
       </View>
@@ -372,6 +363,17 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10
   },
+  blackText: {
+    color: 'black'
+  },
+  quoteBox: {
+    height: 100,
+    padding: 15,
+    color:'gray',
+    paddingTop: 20,
+    backgroundColor: 'white',
+    borderRadius: 25
+  },
   pickerTextInput:{
     flex:1,
     flexDirection:'row',
@@ -396,10 +398,9 @@ const mapStateToProps = ({ auth }) => {
     picture,
     points,
     privilege,
-    password,
-    confirmPassword,
     error,
-    loading } = auth;
+    loading,
+    quote } = auth;
 
   return {
     firstName,
@@ -410,10 +411,9 @@ const mapStateToProps = ({ auth }) => {
     picture,
     points,
     privilege,
-    password,
-    confirmPassword,
     error,
-    loading };
+    loading,
+    quote };
 };
 
 const mapDispatchToProps = {
@@ -425,10 +425,10 @@ const mapDispatchToProps = {
   pointsChanged,
   privilegeChanged,
   pictureChanged,
-  passwordChanged,
-  confirmPasswordChanged,
   registrationError,
-  createUser,
-  goToLogIn }
+  editUser,
+  goToLogIn,
+  goToProfile,
+  quoteChanged }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditProfileForm);

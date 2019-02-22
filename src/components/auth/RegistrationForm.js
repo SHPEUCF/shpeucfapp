@@ -19,7 +19,8 @@ import {
   confirmPasswordChanged,
   registrationError,
   createUser,
-  goToLogIn } from '../../actions';
+  goToLogIn,
+  quoteChanged } from '../../actions';
 
 const collegeNames = [];
 data.map(college => {collegeNames.push({key:college.key, value:college.collegeName})});
@@ -64,6 +65,9 @@ class RegistrationForm extends Component {
   onConfirmPasswordChange(text) {
     this.props.confirmPasswordChanged(text);
   }
+  onQuoteChange(text) {
+    this.props.quoteChanged(text);
+  }
 
   onButtonPress() {
     const {
@@ -78,7 +82,8 @@ class RegistrationForm extends Component {
       confirmPassword,
       registrationError,
       createUser,
-      goToLogIn } = this.props;
+      goToLogIn,
+      quote } = this.props;
 
     const ucfStudentEmail = new RegExp(/^[A-Za-z0-9._%+-]+@(knights.|)ucf.edu$/i);
 
@@ -102,7 +107,7 @@ class RegistrationForm extends Component {
       registrationError('Passwords do not match, please try again');
     } else if (password === confirmPassword) {
       this.onPointsChange(0);
-      createUser({ firstName, lastName, email, college, major, points, picture, password });
+      createUser({ firstName, lastName, email, college, major, points, picture, password, quote });
     }
   }
 
@@ -399,7 +404,8 @@ const mapStateToProps = ({ auth }) => {
     password,
     confirmPassword,
     error,
-    loading } = auth;
+    loading,
+    quote } = auth;
 
   return {
     firstName,
@@ -413,7 +419,8 @@ const mapStateToProps = ({ auth }) => {
     password,
     confirmPassword,
     error,
-    loading };
+    loading,
+    quote };
 };
 
 const mapDispatchToProps = {
@@ -429,6 +436,7 @@ const mapDispatchToProps = {
   confirmPasswordChanged,
   registrationError,
   createUser,
-  goToLogIn }
+  goToLogIn,
+  quoteChanged }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegistrationForm);
