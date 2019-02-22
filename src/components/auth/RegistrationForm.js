@@ -217,43 +217,32 @@ class RegistrationForm extends Component {
           style={styles.scrollView}>
 
           <RkAvoidKeyboard>
-            <RkTextInput
-              rkType='rounded'
+            <Input
               placeholder="First Name"
               value={this.props.firstName}
-              autoCapitalize="words"
-              maxLength={45}
               onChangeText={this.onFirstNameChange.bind(this)}
               />
-            <RkTextInput
-              rkType='rounded'
+            <Input
               placeholder="Last Name"
               value={this.props.lastName}
-              autoCapitalize="words"
-              maxLength={45}
               onChangeText={this.onLastNameChange.bind(this)}
               />
 
-            <RkTextInput
-              rkType='rounded'
+            <Input
               placeholder="School Email"
               keyboardType="email-address"
               value={this.props.email}
-              autoCapitalize="none"
-              maxLength={45}
               onChangeText={this.onEmailChange.bind(this)}
               />
 
-            <RkTextInput
-              rkType='rounded'
+            <Input
               secureTextEntry
               placeholder="Password"
               value={this.props.password}
               maxLength={30}
               onChangeText={this.onPasswordChange.bind(this)}
               />
-            <RkTextInput
-              rkType='rounded'
+            <Input
               secureTextEntry
               placeholder="Confirm Password"
               value={this.props.confirmPassword}
@@ -262,9 +251,8 @@ class RegistrationForm extends Component {
               />
 
             <View style={styles.pickerTextInput}>
-              <RkTextInput style={{flex:1}}
-                rkType='rounded'
-                maxLength={45}
+              <Input
+                style={{flex: 1}}
                 editable={false}
                 value={this.state.collegeSelected[0].value }/>
                 <TouchableOpacity
@@ -290,9 +278,8 @@ class RegistrationForm extends Component {
               />
 
             <View style={styles.pickerTextInput}>
-              <RkTextInput style={{flex:1}}
-                rkType='rounded'
-                maxLength={45}
+              <Input
+                style={{flex: 1}}
                 editable={false}
                 value={this.state.majorSelected[0] }/>
                 <TouchableOpacity

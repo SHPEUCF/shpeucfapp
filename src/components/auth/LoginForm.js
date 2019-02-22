@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser, goToResetPassword, goToRegistration } from '../../actions';
-import { Card, CardSection, Button, Spinner } from '../general';
-import {RkTheme, RkAvoidKeyboard, RkTextInput, } from 'react-native-ui-kitten';
+import { Card, CardSection, Spinner, Button, Input } from '../general';
+import {RkTheme, RkAvoidKeyboard, RkButton} from 'react-native-ui-kitten';
 
 class LoginForm extends Component {
 
@@ -46,7 +46,7 @@ class LoginForm extends Component {
       <View style={styles.resetPasswordContainer}>
         <TouchableOpacity
           onPress={this.props.goToResetPassword}>
-          <Text style={styles.resetPasswordButton}>Reset Password</Text>
+          <Text style={styles.resetPasswordButton}>Forgot Password?</Text>
         </TouchableOpacity>
       </View>
     );
@@ -54,10 +54,10 @@ class LoginForm extends Component {
   renderSignUpButton() {
     return (
       <View style={styles.signUpContainer}>
-        <Text>Don't have an account? </Text>
+        <Text style={styles.question}>Don't have an account? </Text>
         <TouchableOpacity
           onPress={this.props.goToRegistration}>
-          <Text style={styles.signUpButton}>Sign up now</Text>
+          <Text style={styles.signUpButton}> Register</Text>
         </TouchableOpacity>
       </View>
     );
@@ -93,28 +93,26 @@ class LoginForm extends Component {
                 source={require('../../assets/images/Icon_SHPE_UCF_152x152.png')}
                 style={{width: 100, height: 100}}/>
             </View>
+				<View style= {styles.headercolumn}>
             <View style={styles.headerStyle}>
-              <Text style={styles.headerTextStyle}>SHPE @ UCF</Text>
-              <Text style={styles.headerSubtitleStyle}>Please Log In or Sign Up</Text>
+              <Text style={styles.headerTextStyle}>S H P E  </Text>
+							<Text style={styles.headerlowerTextStyle}>U C F </Text>
             </View>
-
-            <RkTextInput
-              rkType='rounded'
+						<Text style={styles.headerSubtitleStyle}>Society of Hispanic Professional Engineers</Text>
+						</View>
+            <Input
               placeholder="Knights Email"
               value={this.props.email}
               autoCapitalize="none"
-              maxLength={45}
+              keyboardType="email-address"
               onChangeText={this.onEmailChange.bind(this)}
-              />
-
-            <RkTextInput
-              rkType='rounded'
-              secureTextEntry
+            />
+            <Input
+              secureTextEntry={true}
               placeholder="Password"
               value={this.props.password}
-              maxLength={45}
               onChangeText={this.onPasswordChange.bind(this)}
-              />
+            />
 
             {this.renderError()}
             {this.renderButtons()}
@@ -131,39 +129,46 @@ class LoginForm extends Component {
   }
 }
 
-RkTheme.setType('RkTextInput','rounded', {
-  input: {
-    borderRadius: 5
-  },
-  color: 'gray',
-  container: {
-    borderWidth: 2,
-    backgroundColor: '#FFF'
-  }
-});
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E1E1E1',
+    backgroundColor: '#0c0b0b',
     justifyContent: 'flex-end',
   },
   formContainerStyle: {
     marginLeft: 20,
     marginRight: 20,
-    bottom: 70,
+    bottom: 90,
   },
-  headerStyle: {
-    flexDirection: 'column',
+  headerStyle:{
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 5,
-    marginBottom: 50,
+		marginTop: 5,
+    marginBottom: 5,
   },
   headerTextStyle: {
-    fontSize: 22,
-    fontWeight: 'bold',
+		color: 'white',
+    fontSize: 40,
   },
+	headercolumn: {
+	 flexDirection: 'column',
+	 alignItems: 'center',
+	 justifyContent: 'center',
+	 padding: 5,
+	 marginBottom: 10,
+
+	},
+	headerlowerTextStyle: {
+		color: 'yellow',
+    fontSize: 40,
+  },
+	headerSubtitleStyle: {
+		color: 'gray',
+		fontWeight: 'bold',
+		marginBottom: 50
+	},
   errorTextStyle: {
     fontSize: 14,
     alignSelf: 'center',
@@ -180,17 +185,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 10,
     marginBottom: 10,
+		//color: 'white',
   },
   resetPasswordButton: {
     fontWeight: 'bold',
-    color: '#0099ff',
+    color: 'white',
     flexDirection: 'row',
     justifyContent: 'center',
   },
   signUpButton: {
     fontWeight: 'bold',
-    color: '#000'
+    color: 'white',
   },
+	question: {
+		fontWeight: 'bold',
+		color: 'grey',
+	},
   signUpContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
