@@ -27,7 +27,8 @@ import {
   Forms,
   About,
   EBoard,
-  Version
+  Version,
+  Election
 } from '../screens/';
 
 const RouterComponent = () => {
@@ -178,6 +179,10 @@ const RouterComponent = () => {
             <Scene key="Forms"
               component={Forms}
               title="Forms"
+            />
+            <Scene key="Election"
+             component={Election}
+             title="Election"
             />
             <Scene key="About"
               component={About}

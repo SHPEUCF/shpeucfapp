@@ -8,3 +8,4 @@ export * from './Forms';
 export * from './About';
 export * from './EBoard';
 export * from './Version';
+export * from './Election';
