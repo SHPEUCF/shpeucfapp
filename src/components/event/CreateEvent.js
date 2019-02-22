@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
-import {
-    RkAvoidKeyboard,
-    RkTextInput,
-    RkButton,
-    RkPicker,
-    RkText
-} from 'react-native-ui-kitten';
+import { Input } from '../general';
+import { RkAvoidKeyboard, RkButton, RkPicker } from 'react-native-ui-kitten';
 import {
     createEvent,
     editEvent,
@@ -29,7 +24,7 @@ class CreateEvent extends Component {
     componentWillMount() {
         if(this.props.name !== '')
             this.props.titleChanged("Edit Event");
-            
+
     }
     onTypeChange(text) {
         this.props.typeChanged(text);
@@ -115,60 +110,42 @@ class CreateEvent extends Component {
                     style={styles.scrollView}>
                     {/* <RkAvoidKeyboard> */}
                         <View>
-                            <RkTextInput
-                            rkType='rounded'
+                            <Input
                             placeholder="Event Type"
                             value={this.props.type}
-                            maxLength={45}
                             onChangeText={this.onTypeChange.bind(this)}
                             />
-                            <RkTextInput
-                            rkType='rounded'
+                            <Input
                             placeholder="Name"
                             value={this.props.name}
-                            autoCapitalize="words"
-                            maxLength={45}
                             onChangeText={this.onNameChange.bind(this)}
                             />
-                            <RkTextInput
-                            rkType='rounded'
+                            <Input
                             placeholder="Description"
                             value={this.props.description}
                             autoCapitalize="sentences"
                             maxLength={200}
                             onChangeText={this.onDescriptionChange.bind(this)}
                             />
-                            <RkTextInput
-                            rkType='rounded'
+                            <Input
                             placeholder="Date"
                             value={this.props.date}
-                            autoCapitalize="words"
-                            maxLength={45}
                             onChangeText={this.onDateChange.bind(this)}
                             />
-                            <RkTextInput
-                            rkType='rounded'
+                            <Input
                             placeholder="Time"
                             value={this.props.time}
-                            autoCapitalize="words"
-                            maxLength={45}
                             onChangeText={this.onTimeChange.bind(this)}
                             />
-                            <RkTextInput
-                            rkType='rounded'
+                            <Input
                             placeholder="Location"
                             value={this.props.location}
-                            autoCapitalize="words"
-                            maxLength={45}
                             onChangeText={this.onLocationChange.bind(this)}
                             // onFocus={this.scrollView.scrollTo({x:100,y:100,animated: true})}
                             />
-                            <RkTextInput
-                            rkType='rounded'
+                            <Input
                             placeholder="Value"
                             value={(this.props.points === 0 || this.props.points === undefined)  ? "" : this.props.points.toString()}
-                            autoCapitalize="words"
-                            maxLength={45}
                             onChangeText={this.onPointsChange.bind(this)}
                             // onFocus={this.scrollView.scrollTo({x:100,y:100,animated: true})}
                             />

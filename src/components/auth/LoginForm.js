@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser, goToResetPassword, goToRegistration } from '../../actions';
-import { Card, CardSection, Spinner } from '../general';
-import {RkTheme, RkAvoidKeyboard, RkTextInput, RkButton} from 'react-native-ui-kitten';
+import { Card, CardSection, Spinner, Input } from '../general';
+import {RkTheme, RkAvoidKeyboard, RkButton} from 'react-native-ui-kitten';
 
 class LoginForm extends Component {
 
@@ -102,23 +102,19 @@ class LoginForm extends Component {
             </View>
 						<Text style={styles.headerSubtitleStyle}>Society of Hispanic Professional Engineers</Text>
 						</View>
-            <RkTextInput
-              rkType='rounded'
+            <Input
               placeholder="Knights Email"
               value={this.props.email}
               autoCapitalize="none"
-              maxLength={45}
+              keyboardType="email-address"
               onChangeText={this.onEmailChange.bind(this)}
-              />
-
-            <RkTextInput
-              rkType='rounded'
-              secureTextEntry
+            />
+            <Input
+              secureTextEntry={true}
               placeholder="Password"
               value={this.props.password}
-              maxLength={45}
               onChangeText={this.onPasswordChange.bind(this)}
-              />
+            />
 
             {this.renderError()}
             {this.renderButtons()}
@@ -134,17 +130,6 @@ class LoginForm extends Component {
     return this.renderContent();
   }
 }
-
-RkTheme.setType('RkTextInput','rounded', {
-  input: {
-    borderRadius: 5
-  },
-  color: 'gray',
-  container: {
-    borderWidth: 2,
-    backgroundColor: '#FFF'
-  }
-});
 
 const styles = StyleSheet.create({
   container: {
