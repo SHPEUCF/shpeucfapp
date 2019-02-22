@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { Actions } from 'react-native-router-flux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
-import { loadUser, logoutUser, goToEditProfileForm } from '../actions';
+import { loadUser, logoutUser, goToEditProfileForm,} from '../actions';
 import {
   Text,
   View, StyleSheet,
@@ -35,6 +37,7 @@ class Profile extends Component {
       itemValueText,
       buttonsContainerStyle,
       editButtonContainer,
+			editLogoContainer,
       logOutButtonContainer } = styles;
 
     return (
@@ -53,6 +56,30 @@ class Profile extends Component {
             <View style={taglineContainer}>
                <Text style={taglineTextStyle}>Turn up!</Text>
             </View>
+				<View style={editLogoContainer}>
+						<View style={editLogoContainer}>
+							<RkButton rkType='rounded'
+								style={{ backgroundColor: '#fff0', width: 60}}
+								contentStyle={{color: '#000', fontWeight: 'bold'}}
+								onPress={() => Actions.PostShow({ title: 'Linkedin', uri: 'https://www.linkedin.com/'})}>
+								<Ionicons
+								name="logo-linkedin"
+								size={30}
+								/>
+							</RkButton>
+						</View>
+						<View style={editLogoContainer}>
+							<RkButton rkType='rounded'
+								style={{backgroundColor: '#fff0', width: 60}}
+								contentStyle={{color: '#000', fontWeight: 'bold'}}
+								onPress={() => Actions.PostShow({ title: 'Github', uri: 'https://github.com/'})}>
+								<Ionicons
+								name="logo-github"
+								size={30}
+								/>
+							</RkButton>
+						</View>
+						</View>
           </View>
 
          <View style={bottomHalfContainerStyle}>
@@ -96,6 +123,8 @@ class Profile extends Component {
 
           </View>
 
+					<View style={buttonsContainerStyle}>
+
           <View style={buttonsContainerStyle}>
             <View style={editButtonContainer}>
               <RkButton rkType='rounded stretch'
@@ -107,6 +136,7 @@ class Profile extends Component {
                 Edit Profile
               </RkButton>
             </View>
+						</View>
             <View style={logOutButtonContainer}>
               <RkButton rkType='rounded stretch'
                 style={{backgroundColor: '#FECB00'}}
@@ -128,6 +158,7 @@ const styles = StyleSheet.create({
   },
   headerInfoContainer: {
     flex: 1,
+		//flexDirection: "row",
     paddingTop: 30,
     paddingBottom: 30,
     backgroundColor: '#FFF'
@@ -180,6 +211,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
   },
+	editLogoContainer: {
+		marginTop: 3,
+		flexDirection: 'row',
+		justifyContent: 'center'
+	},
   logOutButtonContainer: {
     marginTop: 10,
     marginBottom: 60
