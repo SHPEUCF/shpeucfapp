@@ -150,7 +150,7 @@ export default (state = INITIAL_STATE, action) => {
         quote: payload.quote,
         points: payload.points,
         picture: payload.picture,
-        privilege: payload.privilege
+        privilege: payload.privilege,
       };
     case LOGIN_USER_FAIL:
       return { ...state,

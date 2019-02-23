@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
-import {Button} from '../components/general'
-import { loadUser, logoutUser, goToEditProfileForm,} from '../actions';
+import {Button, Spinner} from '../components/general'
+import { loadUser, logoutUser, goToEditProfileForm, pageLoad} from '../actions';
 import {
   Text,
   View, StyleSheet,
@@ -15,8 +15,98 @@ import { Avatar } from 'react-native-elements';
 
 class Profile extends Component {
   componentWillMount() {
-    if(this.props.firstName === '')
-      this.props.loadUser();
+    this.props.pageLoad();
+    this.props.loadUser();
+  }
+  renderContent(){
+    const { firstName, lastName, email, major, points, picture, quote } = this.props;
+
+    const {
+      bottomHalfContainerStyle,
+      containerStyle,
+      headerInfoContainer,
+      avatarContainerStyle,
+      taglineContainer,
+      taglineTextStyle,
+      contentContainerStyle,
+      contentItemsContainerStyle,
+      itemLabelContainerStyle,
+      itemLabelText,
+      itemValueContainerStyle,
+      itemValueText,
+      buttonsContainerStyle,
+      editButtonContainer,
+			editLogoContainer,
+      logOutButtonContainer } = styles;
+  
+      return (
+        <ScrollView>
+          <View style={headerInfoContainer}>
+            <View style={avatarContainerStyle}>
+              <Avatar
+                large
+                rounded
+                source={{uri: picture}}
+                title={`${firstName[0]}${lastName[0]}`}
+                onPress={() => alert("Coming Soon") }
+                activeOpacity={0.7}
+                />
+            </View>
+            <View style={taglineContainer}>
+               <Text style={taglineTextStyle}>Turn up!</Text>
+               <Text style={taglineTextStyle}>{quote}</Text>
+            </View>
+              {this.renderSocialMedia()}
+          </View>
+         <View style={bottomHalfContainerStyle}>
+          <View style={contentContainerStyle}>
+            <View style={contentItemsContainerStyle}>
+              <View style={itemLabelContainerStyle}>
+                <Text style={itemLabelText}>Name:</Text>
+              </View>
+              <View style={itemValueContainerStyle}>
+                <Text style={itemValueText}>{firstName + ' ' + lastName}</Text>
+              </View>
+            </View>
+            <View style={contentItemsContainerStyle}>
+              <View style={itemLabelContainerStyle}>
+                <Text style={itemLabelText}>Email:</Text>
+              </View>
+              <View style={itemValueContainerStyle}>
+                <Text style={itemValueText}>{email}</Text>
+              </View>
+            </View>
+            <View style={contentItemsContainerStyle}>
+              <View style={itemLabelContainerStyle}>
+                <Text style={itemLabelText}>Major:</Text>
+              </View>
+              <View style={itemValueContainerStyle}>
+                <Text style={itemValueText}>{major}</Text>
+              </View>
+            </View>
+            <View style={contentItemsContainerStyle}>
+              <View style={itemLabelContainerStyle}>
+                <Text style={itemLabelText}>Points:</Text>
+              </View>
+              <View style={itemValueContainerStyle}>
+                <Text style={itemValueText}>{points}</Text>
+              </View>
+            </View>
+          </View>
+					<View style={buttonsContainerStyle}>
+              <Button 
+                title = "EDIT PROFILE"
+                onPress={this.props.goToEditProfileForm.bind(this)}
+              />
+              <Button 
+                title = "LOG OUT"
+                onPress={this.props.logoutUser.bind(this)}
+              />
+          </View>
+        </View>
+        </ScrollView>
+    )
+
   }
   renderSocialMedia(){
     return (
@@ -38,99 +128,14 @@ class Profile extends Component {
   }
 
   render() {
-    const { firstName, lastName, email, major, points, picture, quote } = this.props;
-
-    const {
-      bottomHalfContainerStyle,
-      containerStyle,
-      headerInfoContainer,
-      avatarContainerStyle,
-      taglineContainer,
-      taglineTextStyle,
-      contentContainerStyle,
-      contentItemsContainerStyle,
-      itemLabelContainerStyle,
-      itemLabelText,
-      itemValueContainerStyle,
-      itemValueText,
-      buttonsContainerStyle,
-      editButtonContainer,
-			editLogoContainer,
-      logOutButtonContainer } = styles;
-
-    return (
-        <ScrollView>
-          <View style={headerInfoContainer}>
-            <View style={avatarContainerStyle}>
-              <Avatar
-                large
-                rounded
-                source={{uri: picture}}
-                title={`${firstName[0]}${lastName[0]}`}
-                onPress={() => alert("Coming Soon") }
-                activeOpacity={0.7}
-                />
-            </View>
-            <View style={taglineContainer}>
-               <Text style={taglineTextStyle}>Turn up!</Text>
-               <Text style={taglineTextStyle}>{quote}</Text>
-            </View>
-              {this.renderSocialMedia()}
-          </View>
-
-         <View style={bottomHalfContainerStyle}>
-
-          <View style={contentContainerStyle}>
-
-            <View style={contentItemsContainerStyle}>
-              <View style={itemLabelContainerStyle}>
-                <Text style={itemLabelText}>Name:</Text>
-              </View>
-              <View style={itemValueContainerStyle}>
-                <Text style={itemValueText}>{firstName + ' ' + lastName}</Text>
-              </View>
-            </View>
-
-            <View style={contentItemsContainerStyle}>
-              <View style={itemLabelContainerStyle}>
-                <Text style={itemLabelText}>Email:</Text>
-              </View>
-              <View style={itemValueContainerStyle}>
-                <Text style={itemValueText}>{email}</Text>
-              </View>
-            </View>
-
-            <View style={contentItemsContainerStyle}>
-              <View style={itemLabelContainerStyle}>
-                <Text style={itemLabelText}>Major:</Text>
-              </View>
-              <View style={itemValueContainerStyle}>
-                <Text style={itemValueText}>{major}</Text>
-              </View>
-            </View>
-            <View style={contentItemsContainerStyle}>
-              <View style={itemLabelContainerStyle}>
-                <Text style={itemLabelText}>Points:</Text>
-              </View>
-              <View style={itemValueContainerStyle}>
-                <Text style={itemValueText}>{points}</Text>
-              </View>
-            </View>
-
-          </View>
-
-					<View style={buttonsContainerStyle}>
-              <Button 
-                title = "EDIT PROFILE"
-                onPress={this.props.goToEditProfileForm.bind(this)}
-              />
-              <Button 
-                title = "LOG OUT"
-                onPress={this.props.logoutUser.bind(this)}
-              />
-          </View>
-        </View>
-        </ScrollView>
+    // alert(this.props.loading)
+     if(this.props.loading){
+      return <Spinner>{this.renderContent}</Spinner>
+    }
+    else return (
+      <View>
+        {this.renderContent()}
+      </View>
     )
   }
 }
@@ -141,7 +146,6 @@ const styles = StyleSheet.create({
   },
   headerInfoContainer: {
     flex: 1,
-		//flexDirection: "row",
     paddingTop: 30,
     paddingBottom: 30,
     backgroundColor: '#FFF'
@@ -206,16 +210,18 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ auth, general }) => {
   const { firstName, lastName, email, major, points, picture, quote } = auth;
+  const { loading } = general;
 
-  return { firstName, lastName, email, major, points, picture, quote };
+  return { firstName, lastName, email, major, points, picture, quote, loading };
 };
 
 const mapDispatchToProps = {
   loadUser,
   logoutUser,
-  goToEditProfileForm
+  goToEditProfileForm,
+  pageLoad
  };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
