@@ -137,10 +137,10 @@ class RegistrationForm extends Component {
   renderLogInButton() {
     return (
       <View style={styles.logInContainer}>
-        <Text>Already have an account? </Text>
+        <Text style={styles.Alreadyaccount}>Already have an account? </Text>
         <TouchableOpacity
           onPress={this.props.goToLogIn}>
-          <Text style={styles.logInButton}>Log In</Text>
+          <Text style={styles.logInButton}> Log In</Text>
         </TouchableOpacity>
       </View>
     );
@@ -207,8 +207,9 @@ class RegistrationForm extends Component {
         <View style={styles.formContainerStyle}>
 
           <View style={styles.headerStyle}>
-            <Text style={styles.headerTextStyle}>SHPE @ UCF</Text>
+            <Text style={styles.headerTextStyle}>SHPE UCF</Text>
             <Text style={styles.headerSubtitleStyle}>Registration</Text>
+						<Text style={styles.underheaderSubtitleStyle}> </Text>
           </View>
 
           <ScrollView
@@ -298,7 +299,7 @@ class RegistrationForm extends Component {
                 editable={false}
                 value={this.state.majorSelected[0] }/>
                 <TouchableOpacity
-                  style={{alignItems:'flex-end', margin: 10}}
+                  style={{alignItems:'flex-end', margin: 10,}}
                   onPress={this.showPicker2}>
                   <Ionicons name={iconName} size={45}/>
                 </TouchableOpacity>
@@ -335,7 +336,7 @@ const { height: D_HEIGHT, width: D_WIDTH } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E1E1E1',
+    backgroundColor: 'gray',
     justifyContent: 'flex-end',
   },
   formContainerStyle: {
@@ -355,7 +356,18 @@ const styles = StyleSheet.create({
   headerTextStyle: {
     fontSize: 22,
     fontWeight: 'bold',
+		color: 'white',
   },
+	headerSubtitleStyle:{
+		marginTop: 3,
+		color: 'white',
+	},
+	underheaderSubtitleStyle:{
+		marginTop: 4,
+		borderBottomColor: 'black',
+		borderBottomWidth: 1,
+		width: '100%'
+	},
   errorTextStyle: {
     fontSize: 14,
     alignSelf: 'center',
@@ -369,7 +381,7 @@ const styles = StyleSheet.create({
   },
   logInButton: {
     fontWeight: 'bold',
-    color: '#000'
+    color: 'white',
   },
   logInContainer: {
     flexDirection: 'row',
@@ -388,7 +400,10 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     paddingRight: 10,
-  }
+  },
+	Alreadyaccount: {
+		color: 'black',
+	}
 });
 
 const mapStateToProps = ({ auth }) => {

@@ -46,7 +46,7 @@ class ResetPasswordForm extends Component {
           onPress={this.props.goToLogIn}>
           <Text style={styles.loginButton}>Log In </Text>
         </TouchableOpacity>
-        <Text>instead?</Text>
+        <Text style={styles.insteadButton}> instead?</Text>
       </View>
     );
   }
@@ -78,7 +78,7 @@ class ResetPasswordForm extends Component {
             <View style={{flexDirection: 'row', justifyContent: 'center', bottom: 10}}>
               <Image
                 source={require('../../assets/images/Icon_SHPE_UCF_152x152.png')}
-                style={{width: 100, height: 100}}/>
+                style={{width: 150, height: 150}}/>
             </View>
             <View style={styles.headerStyle}>
               <Text style={styles.headerTextStyle}>Reset Password</Text>
@@ -123,25 +123,30 @@ RkTheme.setType('RkTextInput','rounded', {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E1E1E1',
+    backgroundColor: '#0c0b0b',
     justifyContent: 'flex-end',
   },
   formContainerStyle: {
     marginLeft: 20,
     marginRight: 20,
-    bottom: 70,
+    bottom: 90,
   },
   headerStyle: {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 5,
-    marginBottom: 50,
+    marginBottom: 30,
   },
   headerTextStyle: {
+		color: 'white',
     fontSize: 22,
-    fontWeight: 'bold',
   },
+	headerSubtitleStyle: {
+		color: 'gray',
+		marginTop: 10,
+		marginBottom: 10,
+	},
   errorTextStyle: {
     fontSize: 14,
     alignSelf: 'center',
@@ -160,11 +165,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   loginButton: {
-    fontWeight: 'bold',
     color: '#000',
     flexDirection: 'row',
     justifyContent: 'center',
-  }
+		color: 'white',
+  },
+	insteadButton:{
+		color: 'gray',
+		marginBottom: 20,
+	}
 });
 
 const mapStateToProps = ({ auth }) => {
