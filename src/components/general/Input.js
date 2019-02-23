@@ -32,6 +32,7 @@ const Input = ({
       textAlignVertical={textAlignVertical}
       keyboardType={keyboardType}
       editable={editable}
+      underlineColorAndroid='transparent'
       />
   );
 };
@@ -50,7 +51,7 @@ const styles = {
     marginBottom: 8,
     padding: 15,
     backgroundColor: 'white',
-    borderRadius: 25,
+    borderRadius: 25
   }
 };
 export { Input };
