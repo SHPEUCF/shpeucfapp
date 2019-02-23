@@ -27,7 +27,8 @@ import {
   Forms,
   About,
   EBoard,
-  Version
+  Version,
+  Election
 } from '../screens/';
 
 const RouterComponent = () => {
@@ -72,7 +73,7 @@ const RouterComponent = () => {
             type={ActionConst.REPLACE}
             hideNavBar
             passProps
-          /> 
+          />
           <Scene
             key="eventDetails"
             component={EventDetailsForm}
@@ -80,7 +81,15 @@ const RouterComponent = () => {
             type={ActionConst.REPLACE}
             hideNavBar
             passProps
-          /> 
+          />
+        </Stack>
+        <Stack key = "Profiles">
+        <Scene
+          key="EditProfileForm"
+          component={EditProfileForm}
+          hideNavBar
+          passProps
+        />
         </Stack>
         <Stack key="main"
           tabs
@@ -171,6 +180,10 @@ const RouterComponent = () => {
               component={Forms}
               title="Forms"
             />
+            <Scene key="Election"
+             component={Election}
+             title="Election"
+            />
             <Scene key="About"
               component={About}
               title="About"
@@ -181,11 +194,6 @@ const RouterComponent = () => {
             />
             <Scene key="Version"
               component={Version}
-              passProps
-            />
-            <Scene key="EditProfileForm"
-              component={EditProfileForm}
-              hideNavBar
               passProps
             />
           </Stack>

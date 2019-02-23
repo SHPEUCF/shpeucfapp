@@ -6,47 +6,51 @@ const Input = ({
   value,
   onChangeText,
   placeholder,
-  autoCapitalize, 
+  autoCapitalize,
   maxLength,
-  secureTextEntry }) =>  {
-  const { inputStyle, labelStyle, containerStyle} = styles;
+  secureTextEntry,
+  numberOfLines,
+  multiline,
+  textAlignVertical,
+  keyboardType,
+  editable,
+  style }) =>  {
+  const { inputStyle } = styles;
 
   return (
-    <View style={containerStyle}>
-      <Text style={labelStyle}>{label}</Text>
-      <TextInput
-        value={value}
-        onChangeText={onChangeText}
-        style={inputStyle}
-        autoCorrect={false}
-        autoCapitalize={autoCapitalize}
-        placeholder={placeholder}
-        secureTextEntry={secureTextEntry}
-        maxLength={maxLength}
-        />
-    </View>
+    <TextInput
+      value={value}
+      onChangeText={onChangeText}
+      style={[inputStyle, style]}
+      autoCorrect={false}
+      autoCapitalize={autoCapitalize}
+      placeholder={placeholder}
+      secureTextEntry={secureTextEntry}
+      maxLength={maxLength}
+      numberOfLines={numberOfLines}
+      multiline={multiline}
+      textAlignVertical={textAlignVertical}
+      keyboardType={keyboardType}
+      editable={editable}
+      />
   );
 };
+
+Input.defaultProps = {
+  maxLength: 45,
+  autoCapitalize: 'words',
+  placeholder: 'Enter text here'
+}
 
 const styles = {
   inputStyle: {
     color: '#000',
-    paddingRight: 5,
-    paddingLeft: 5,
     fontSize: 16,
-    lineHeight: 23,
-    flex: 2
-  },
-  labelStyle: {
-    fontSize: 16,
-    paddingLeft: 20,
-    flex: 1
-  },
-  containerStyle: {
-    height: 40,
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
+    marginTop: 8,
+    marginBottom: 8,
+    padding: 15,
+    backgroundColor: 'white',
+    borderRadius: 25,
+  }
 };
 export { Input };

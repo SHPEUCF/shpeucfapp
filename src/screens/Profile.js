@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
-import { loadUser, logoutUser, goToEditProfileForm,} from '../actions';
+import {Button, Spinner} from '../components/general'
+import { loadUser, logoutUser, goToEditProfileForm, pageLoad} from '../actions';
 import {
   Text,
   View, StyleSheet,
@@ -10,16 +11,14 @@ import {
   ScrollView,
   TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-elements';
-import { RkButton } from 'react-native-ui-kitten';
 
 
 class Profile extends Component {
   componentWillMount() {
-    if(this.props.firstName === '')
-      this.props.loadUser();
+    this.props.pageLoad();
+    this.props.loadUser();
   }
-
-  render() {
+  renderContent(){
     const { firstName, lastName, email, major, points, picture, quote } = this.props;
 
     const {
@@ -39,8 +38,8 @@ class Profile extends Component {
       editButtonContainer,
 			editLogoContainer,
       logOutButtonContainer } = styles;
-
-    return (
+  
+      return (
         <ScrollView>
           <View style={headerInfoContainer}>
             <View style={avatarContainerStyle}>
@@ -57,36 +56,10 @@ class Profile extends Component {
                <Text style={taglineTextStyle}>Turn up!</Text>
                <Text style={taglineTextStyle}>{quote}</Text>
             </View>
-				<View style={editLogoContainer}>
-						<View style={editLogoContainer}>
-							<RkButton rkType='rounded'
-								style={{ backgroundColor: '#fff0', width: 60}}
-								contentStyle={{color: '#000', fontWeight: 'bold'}}
-								onPress={() => Actions.PostShow({ title: 'Linkedin', uri: 'https://www.linkedin.com/'})}>
-								<Ionicons
-								name="logo-linkedin"
-								size={30}
-								/>
-							</RkButton>
-						</View>
-						<View style={editLogoContainer}>
-							<RkButton rkType='rounded'
-								style={{backgroundColor: '#fff0', width: 60}}
-								contentStyle={{color: '#000', fontWeight: 'bold'}}
-								onPress={() => Actions.PostShow({ title: 'Github', uri: 'https://github.com/'})}>
-								<Ionicons
-								name="logo-github"
-								size={30}
-								/>
-							</RkButton>
-						</View>
-						</View>
+              {this.renderSocialMedia()}
           </View>
-
          <View style={bottomHalfContainerStyle}>
-
           <View style={contentContainerStyle}>
-
             <View style={contentItemsContainerStyle}>
               <View style={itemLabelContainerStyle}>
                 <Text style={itemLabelText}>Name:</Text>
@@ -95,7 +68,6 @@ class Profile extends Component {
                 <Text style={itemValueText}>{firstName + ' ' + lastName}</Text>
               </View>
             </View>
-
             <View style={contentItemsContainerStyle}>
               <View style={itemLabelContainerStyle}>
                 <Text style={itemLabelText}>Email:</Text>
@@ -104,7 +76,6 @@ class Profile extends Component {
                 <Text style={itemValueText}>{email}</Text>
               </View>
             </View>
-
             <View style={contentItemsContainerStyle}>
               <View style={itemLabelContainerStyle}>
                 <Text style={itemLabelText}>Major:</Text>
@@ -121,34 +92,50 @@ class Profile extends Component {
                 <Text style={itemValueText}>{points}</Text>
               </View>
             </View>
-
           </View>
-
 					<View style={buttonsContainerStyle}>
-
-          <View style={buttonsContainerStyle}>
-            <View style={editButtonContainer}>
-              <RkButton rkType='rounded stretch'
-                style={{backgroundColor: '#FECB00'}}
-                contentStyle={{color: '#000', fontWeight: 'bold'}}
-                onPress = {
-                  () => this.props.goToEditProfileForm()
-                } >
-                Edit Profile
-              </RkButton>
-            </View>
-						</View>
-            <View style={logOutButtonContainer}>
-              <RkButton rkType='rounded stretch'
-                style={{backgroundColor: '#FECB00'}}
-                contentStyle={{color: '#000', fontWeight: 'bold'}}
-                onPress={() => this.props.logoutUser()}>
-                Log Out
-              </RkButton>
-            </View>
+              <Button 
+                title = "EDIT PROFILE"
+                onPress={this.props.goToEditProfileForm.bind(this)}
+              />
+              <Button 
+                title = "LOG OUT"
+                onPress={this.props.logoutUser.bind(this)}
+              />
           </View>
         </View>
         </ScrollView>
+    )
+
+  }
+  renderSocialMedia(){
+    return (
+			<View style={styles.editLogoContainer}>
+        <View style={styles.editLogoContainer}>
+          <TouchableOpacity 
+            onPress={() => Actions.PostShow({ title: 'Linkedin', uri: 'https://www.linkedin.com/'})}>
+            <Ionicons name="logo-linkedin" size={30}/>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.editLogoContainer}>
+          <TouchableOpacity 
+            onPress={() => Actions.PostShow({ title: 'Github', uri: 'https://www.github.com/'})}>
+            <Ionicons name="logo-github" size={30}/>
+          </TouchableOpacity>
+        </View>
+      </View>
+    )
+  }
+
+  render() {
+    // alert(this.props.loading)
+     if(this.props.loading){
+      return <Spinner>{this.renderContent}</Spinner>
+    }
+    else return (
+      <View>
+        {this.renderContent()}
+      </View>
     )
   }
 }
@@ -159,7 +146,6 @@ const styles = StyleSheet.create({
   },
   headerInfoContainer: {
     flex: 1,
-		//flexDirection: "row",
     paddingTop: 30,
     paddingBottom: 30,
     backgroundColor: '#FFF'
@@ -213,6 +199,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 	editLogoContainer: {
+    flex: 1,
 		marginTop: 3,
 		flexDirection: 'row',
 		justifyContent: 'center'
@@ -223,16 +210,18 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ auth, general }) => {
   const { firstName, lastName, email, major, points, picture, quote } = auth;
+  const { loading } = general;
 
-  return { firstName, lastName, email, major, points, picture, quote };
+  return { firstName, lastName, email, major, points, picture, quote, loading };
 };
 
 const mapDispatchToProps = {
   loadUser,
   logoutUser,
-  goToEditProfileForm
+  goToEditProfileForm,
+  pageLoad
  };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

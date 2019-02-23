@@ -32,7 +32,8 @@ import {
   GO_TO_PROFILE,
   GO_TO_REGISTRATION,
   GO_TO_EDIT_PROFILE_FORM,
-  QUOTE_CHANGED } from './types';
+  QUOTE_CHANGED,
+  PAGE_LOAD } from './types';
 
 export const firstNameChanged = (text) => {
   return {
@@ -104,7 +105,7 @@ export const quoteChanged = (text) => {
   };
 };
 
-export const registrationError = (dispatch, error) => {
+export const registrationError = (error) => {
   return (dispatch) => {
     dispatch({
       type: REGISTRATION_ERROR,
@@ -300,14 +301,20 @@ export const loadUser = (userID) => {
   // alert(id)
   return (dispatch) => {
     if ( currentUser != null ) {
-      firebase.database().ref(`/users/${id}/`)
-        .on('value', snapshot => {
+      firebase.database().ref(`/users/${id}/`).on('value', snapshot => {
           dispatch({
             type: LOAD_USER,
-            payload: snapshot.val(),
-          });
-      });
-    };
+            payload: snapshot.val()
+          }
+        );
+          dispatch({
+            type: PAGE_LOAD,
+            payload: false
+          }
+        );
+
+      })
+    }
   };
 };
 

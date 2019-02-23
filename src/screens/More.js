@@ -27,6 +27,11 @@ import { List, ListItem } from 'react-native-elements';
       screen: 'Forms'
     },
     {
+      title: 'Election',
+      icon: 'done',
+      screen: 'Election'
+    },
+    {
       title: 'About',
       icon: 'info',
       screen: 'About'

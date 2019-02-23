@@ -10,9 +10,7 @@ import {
     Dimensions,
     ScrollView
 } from 'react-native';
-import {
-    RkButton,
-} from 'react-native-ui-kitten';
+import {Button} from '../general'
 import {
     goToCreateEvent,
     goToCreateEventFromEdit,
@@ -61,18 +59,15 @@ class EventDetails extends Component {
                         // style={{marginTop:dimension.height*.1}}
                         // inputStyle={styles.modalTextInput}
                         />
-                        <RkButton rkType='rounded stretch'
-                        style={{backgroundColor: '#FECB00', marginTop: 30}}
-                        contentStyle={{color: '#000', fontWeight: 'bold'}}
-                        onPress = {() => {
+                        <Button 
+                            title = "CHECK IN"
+                            onPress={() => {
                             if(this.props.code === this.state.text){
                                 this.checkinButton(this.props.eventID, this.props.points)
                                 // this.setState({modalVisible: false})
                             }
                         }}
-                        >
-                        Check in
-                        </RkButton>
+                        />
                     </View>
                 </View>
             </View>
@@ -91,35 +86,26 @@ class EventDetails extends Component {
         if(this.props.privilege !== undefined && this.props.privilege.board === true){
             return (
                 <View>
-                    <RkButton rkType='rounded stretch'
-                        style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
-                        contentStyle={{color: 'black', fontWeight: 'bold'}}
-                        onPress={this.deleteButton.bind(this,{[this.props.eventID] : null})}
-                        >
-                        Delete Event
-                    </RkButton>
-                    <RkButton rkType='rounded stretch'
-                        style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
-                        contentStyle={{color: 'black', fontWeight: 'bold'}}
+                     <Button 
+                        title = "DELETE EVENT"
+                        onPress={this.deleteButton.bind(this)}
+                    />
+                    <Button 
+                        title = "EDIT EVENT"
                         onPress={this.props.goToCreateEventFromEdit.bind(this)}
-                        >
-                        Edit Event
-                    </RkButton>
+                    />
                 </View>
             )
             }else
             return(
             <View style={{paddingTop:20, paddingHorizontal:10}}>
-                <RkButton rkType='rounded stretch'
-                    style={{backgroundColor: '#FECB00'}}
-                    contentStyle={{color: '#000', fontWeight: 'bold'}}
-                    onPress = {() => {
-                    this.setState({modalVisible: true})
-                    this.props.fetchCode(this.props.eventID)}
+                <Button 
+                    title = "CHECK IN"
+                    onPress={() => {
+                        this.setState({modalVisible: true})
+                        this.props.fetchCode(this.props.eventID)}
                     }
-                    >
-                    Check in
-                </RkButton>
+                />
             </View>
         )
     }
@@ -213,13 +199,10 @@ class EventDetails extends Component {
                     </ScrollView>
                     {this.renderButtons()}
                     {this.renderCodeBox()}
-                    <RkButton rkType='rounded stretch'
-                        style={{backgroundColor: '#FECB00', marginTop: 10, marginBottom: 10}}
-                        contentStyle={{color: 'black', fontWeight: 'bold'}}
+                    <Button 
+                        title = "CANCEL"
                         onPress={this.props.goToEvents.bind(this)}
-                        >
-                        Cancel
-                    </RkButton>
+                    />
                 </View>
             )
         }

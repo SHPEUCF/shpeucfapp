@@ -36,6 +36,9 @@ export const GO_TO_EDIT_PROFILE_FORM = 'go_to_edit_profile_form';
 // MembersActions
 export const FETCH_MEMBERS_POINTS = 'fetch_members_points';
 
+// GeneralActions
+export const PAGE_LOAD = 'page_load';
+
 // EventActions
 export const CREATE_EVENT = 'create_event';
 export const DELETE_EVENTS = 'delete_events';
