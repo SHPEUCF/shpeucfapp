@@ -74,6 +74,7 @@ class EditProfileForm extends Component {
       registrationError,
       editUser,
       goToLogIn,
+      goToProfile,
       quote } = this.props;
 
     const ucfStudentEmail = new RegExp(/^[A-Za-z0-9._%+-]+@(knights.|)ucf.edu$/i);
@@ -90,10 +91,13 @@ class EditProfileForm extends Component {
       registrationError('Please enter college');
     } else if (major === '') {
       registrationError('Please enter major');
+    } else if (quote === '') {
+      registrationError('Please enter a quote');
     }
     else {
       this.onPointsChange(0);
       editUser( firstName, lastName, email, college, major, points, quote );
+      goToProfile();
     }
   }
 
@@ -111,7 +115,7 @@ class EditProfileForm extends Component {
 
   renderConfirmButton() {
     return (
-      <Button 
+      <Button
         title={"Confirm"}
         onPress={this.onButtonPress.bind(this)}
       />
@@ -120,7 +124,7 @@ class EditProfileForm extends Component {
 
   renderCancelButton() {
     return (
-      <Button 
+      <Button
         title={"Cancel"}
         onPress={this.props.goToProfile.bind(this)}
       />
