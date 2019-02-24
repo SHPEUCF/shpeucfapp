@@ -23,7 +23,7 @@ class CheckIn extends Component {
       uuid: '2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6'
     }
     // Request for authorization while the app is open
-    /* Checking for both ios or android just in case the 
+    /* Checking for both ios or android just in case the
      app is ran on another type of OS */
     if (Platform.OS === 'ios') {
       Beacons.requestWhenInUseAuthorization();
@@ -113,6 +113,7 @@ class CheckIn extends Component {
               backgroundColor='#FECB00'
               color='#000'
               fontSize={15}
+              padding={10}
               onPress={() => Alert.alert("Event Signal Not Found",
                 "Must be in event to check in or please talk to SHPE representative.")} />
           </Card>

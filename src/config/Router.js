@@ -18,6 +18,7 @@ to set button on the navBar */
 import Events from '../screens/Events';
 import Profile from '../screens/Profile';
 import Leaderboard from '../screens/Leaderboard';
+import Election from '../screens/Election';
 
 import {
   Feed,
@@ -27,8 +28,7 @@ import {
   Forms,
   About,
   EBoard,
-  Version,
-  Election
+  Version
 } from '../screens/';
 
 const RouterComponent = () => {

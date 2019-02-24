@@ -55,7 +55,8 @@ class Events extends Component {
       >
         <View style={styles.modalBackground}>
           <View style={styles.modalContent}>
-            <TouchableOpacity onPress={() => {this.setState({modalVisible: false})}}>
+            <TouchableOpacity
+              onPress={() => {this.setState({modalVisible: false})}}>
               <Text>X</Text>
             </TouchableOpacity>
             <View style={styles.container}>
@@ -71,6 +72,7 @@ class Events extends Component {
               // style={{marginTop:dimension.height*.1}}
               // inputStyle={styles.modalTextInput}
               />
+            <Button title = "OK" width={70}/>
             </View>
           </View>
         </View>
@@ -91,6 +93,7 @@ class Events extends Component {
        < Button
           title = "CHECK IN"
           onPress={() => {this.setState({modalVisible: true})}}
+
         />
     )
   }
@@ -233,7 +236,7 @@ const styles = StyleSheet.create({
     fontSize: 60
   },
   modalContent: {
-    height: dimension.height*.3,
+    height: dimension.height*.35,
     width: dimension.width*.8,
     padding: 12,
     backgroundColor: '#fff',

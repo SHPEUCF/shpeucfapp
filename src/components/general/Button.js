@@ -1,5 +1,6 @@
 import React from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, Dimensions } from 'react-native';
+
 
 const Button = ({
   onPress,
@@ -10,14 +11,16 @@ const Button = ({
   numberOfLines,
   disabled,
   testID,
+  height,
+  width
 }) =>{
   const {bStyle, tStyle} = styles;
 
   return (
-    <TouchableOpacity 
+    <TouchableOpacity
       onPress={onPress}>
-      <View style={[bStyle,buttonStyle]}>
-        <Text 
+      <View style={[bStyle,buttonStyle, {height}, {width}]}>
+        <Text
           style={[tStyle,textStyle]}
           accessibilityLabel={accessibilityLabel}
           numberOfLines={numberOfLines}
@@ -45,9 +48,7 @@ const styles = {
     borderColor: '#0000',
     borderWidth: 1,
     marginTop: 10,
-    padding:3,
-    width: 300,
-    height: 35
+    padding:5
   }
 };
 
@@ -55,8 +56,10 @@ Button.defaultProps = {
   buttonStyle: styles.bStyle,
   textStyle: styles.tStyle,
   numberOfLines:1,
-  title: "Put a Title!"
-  
+  title: "Put a Title!",
+  width: Dimensions.get("screen").width / 1.1,
+  height: Dimensions.get("screen").height / 17
+
 }
 
 export { Button };
