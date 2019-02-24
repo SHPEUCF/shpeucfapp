@@ -135,7 +135,7 @@ class Events extends Component {
           />
         </ScrollView>
         {this.renderCodeBox()}
-        <View style={{backgroundColor: '#0c0b0b'}}>
+        <View style={{height: dimension.height *5, backgroundColor: '#0c0b0b'}}>
 
           {this.renderButton()}
         </View>
