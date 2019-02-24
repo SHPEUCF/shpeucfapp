@@ -9,8 +9,10 @@ import {
   View, StyleSheet,
   Image,
   ScrollView,
-  TouchableOpacity } from 'react-native';
-import { Avatar } from 'react-native-elements';
+  TouchableOpacity,
+ 	Dimensions
+	} from 'react-native';
+import { Avatar, Divider } from 'react-native-elements';
 
 
 class Profile extends Component {
@@ -37,8 +39,9 @@ class Profile extends Component {
       buttonsContainerStyle,
       editButtonContainer,
 			editLogoContainer,
-      logOutButtonContainer } = styles;
-  
+      logOutButtonContainer } = styles,
+			dimension = Dimensions.get('window');
+
       return (
         <ScrollView>
           <View style={headerInfoContainer}>
@@ -53,19 +56,32 @@ class Profile extends Component {
                 />
             </View>
             <View style={taglineContainer}>
-               <Text style={taglineTextStyle}>Turn up!</Text>
-               <Text style={taglineTextStyle}>{quote}</Text>
+               <Text
+							 		style={{
+										color: 'white',
+										fontSize: 20,
+										fontWeight: 'bold',
+										textAlign: 'center'}}
+										>{firstName + ' ' + lastName}</Text>
+               <Text
+							 		style={{
+										color: 'white',
+										fontSize: 16,
+										textAlign: 'center',
+										lineHeight: 25,
+										width: 400}}
+										>{quote}</Text>
             </View>
               {this.renderSocialMedia()}
           </View>
-         <View style={bottomHalfContainerStyle}>
+         <View style={{backgroundColor: '#0c0b0b'}}>
           <View style={contentContainerStyle}>
             <View style={contentItemsContainerStyle}>
-              <View style={itemLabelContainerStyle}>
-                <Text style={itemLabelText}>Name:</Text>
+              <View style={{ height: dimension.height *.1, backgroundColor: '#0c0b0b'}}>
+                <Text style={itemLabelText}></Text>
               </View>
               <View style={itemValueContainerStyle}>
-                <Text style={itemValueText}>{firstName + ' ' + lastName}</Text>
+                <Text style={itemValueText}>{/*firstName + ' ' + lastName*/}</Text>
               </View>
             </View>
             <View style={contentItemsContainerStyle}>
@@ -94,11 +110,11 @@ class Profile extends Component {
             </View>
           </View>
 					<View style={buttonsContainerStyle}>
-              <Button 
+              <Button
                 title = "EDIT PROFILE"
                 onPress={this.props.goToEditProfileForm.bind(this)}
               />
-              <Button 
+              <Button
                 title = "LOG OUT"
                 onPress={this.props.logoutUser.bind(this)}
               />
@@ -111,16 +127,16 @@ class Profile extends Component {
   renderSocialMedia(){
     return (
 			<View style={styles.editLogoContainer}>
-        <View style={styles.editLogoContainer}>
-          <TouchableOpacity 
+        <View style= {styles.editLogoContainer}>
+          <TouchableOpacity
             onPress={() => Actions.PostShow({ title: 'Linkedin', uri: 'https://www.linkedin.com/'})}>
-            <Ionicons name="logo-linkedin" size={30}/>
+            <Ionicons name="logo-linkedin" size={40} color='#fff'/>
           </TouchableOpacity>
         </View>
         <View style={styles.editLogoContainer}>
-          <TouchableOpacity 
+          <TouchableOpacity
             onPress={() => Actions.PostShow({ title: 'Github', uri: 'https://www.github.com/'})}>
-            <Ionicons name="logo-github" size={30}/>
+            <Ionicons name="logo-github" size={40} color='#fff'/>
           </TouchableOpacity>
         </View>
       </View>
@@ -147,8 +163,8 @@ const styles = StyleSheet.create({
   headerInfoContainer: {
     flex: 1,
     paddingTop: 30,
-    paddingBottom: 30,
-    backgroundColor: '#FFF'
+    paddingBottom: 15,
+    backgroundColor: '#2C3239'
   },
   avatarContainerStyle: {
     justifyContent: 'center',
@@ -163,6 +179,7 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   contentContainerStyle: {
+		height: 350,
     flex: 1,
     marginTop: 20,
     marginBottom: 20,
@@ -178,8 +195,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   itemLabelText: {
-    fontSize: 16,
-    fontWeight: 'bold'
+    fontSize: 18,
+    fontWeight: 'bold',
+		color: '#fff',
+		lineHeight: 26
   },
   itemValueContainerStyle: {
     flex: 4,
@@ -189,6 +208,8 @@ const styles = StyleSheet.create({
   itemValueText: {
     fontSize: 16,
     fontWeight: '500',
+		color: '#fff',
+		lineHeight: 26
   },
   buttonsContainerStyle: {
     marginRight: 10,
