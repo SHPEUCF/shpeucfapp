@@ -81,7 +81,7 @@ class Events extends Component {
   renderButton(){
     if(this.props.privilege !== undefined && this.props.privilege.board === true){
       return (
-          <Button 
+          <Button
               title = "CREATE EVENT"
               onPress={this.props.goToCreateEvent.bind(this)}
           />
@@ -116,14 +116,14 @@ class Events extends Component {
             renderEmptyData = {this.renderEmptyData.bind(this)}
 
             style={{
-              height: 475
+              height: dimension.height *.75
             }}
             theme={{
-              backgroundColor: 'transparent',
+              backgroundColor: '#0c0b0b',
               calendarBackground: '#FFF',
               agendaKnobColor: 'lightgrey',
-              agendaDayTextColor: '#333',
-              agendaDayNumColor: '#333',
+              agendaDayTextColor: '#F7F7F2',
+              agendaDayNumColor: '#F7F7F2',
               selectedDayTextColor: '#000',
               todayTextColor: '#CC0000',
               textDayFontSize: 15,
@@ -135,7 +135,8 @@ class Events extends Component {
           />
         </ScrollView>
         {this.renderCodeBox()}
-        <View style={{paddingTop:20, paddingHorizontal:10}}>
+        <View style={{backgroundColor: '#0c0b0b'}}>
+
           {this.renderButton()}
         </View>
       </View>
@@ -287,7 +288,7 @@ const mapStateToProps = ({ events, auth }) => {
 };
 
 const mapDispatchToProps = {
-  fetchEvents, 
+  fetchEvents,
   getPrivilege,
   typeChanged,
   nameChanged,
