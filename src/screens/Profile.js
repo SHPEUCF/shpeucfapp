@@ -69,7 +69,7 @@ class Profile extends Component {
 										fontSize: 16,
 										textAlign: 'center',
 										lineHeight: 25,
-										width: 400}}
+										width: dimension.width *.9}}
 										>{quote}</Text>
             </View>
               {this.renderSocialMedia()}
