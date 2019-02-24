@@ -1,5 +1,6 @@
 import React from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, Dimensions } from 'react-native';
+
 
 const Button = ({
   onPress,
@@ -19,7 +20,6 @@ const Button = ({
     <TouchableOpacity
       onPress={onPress}>
       <View style={[bStyle,buttonStyle, {height}, {width}]}>
-
         <Text
           style={[tStyle,textStyle]}
           accessibilityLabel={accessibilityLabel}
@@ -57,8 +57,8 @@ Button.defaultProps = {
   textStyle: styles.tStyle,
   numberOfLines:1,
   title: "Put a Title!",
-  width:300,
-  height: 35
+  width: Dimensions.get("screen").width / 1.1,
+  height: Dimensions.get("screen").height / 17
 
 }
 

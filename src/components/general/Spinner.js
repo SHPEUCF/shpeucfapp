@@ -1,13 +1,15 @@
 import React from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Dimensions } from 'react-native';
 
 const Spinner = ({ 
   style,
   size,
   color,
+  width,
+  height
  }) => {
   return (
-    <View style={style}>
+    <View style={[style, {height}, {width}]}>
       <ActivityIndicator 
       size={size}
       color={color}
@@ -28,6 +30,8 @@ const styles = {
 
 Spinner.defaultProps = {
   style: styles.spinnerStyle,
+  width: Dimensions.get("screen").width,
+  height: Dimensions.get("screen").height,
   size: 'large',
 }
 
