@@ -34,7 +34,22 @@ export const GO_TO_REGISTRATION = 'go_to_registration' ;
 export const GO_TO_EDIT_PROFILE_FORM = 'go_to_edit_profile_form';
 
 // MembersActions
+export const FIRST_NAME_CHANGED_MEMBER = 'first_name_changed_member';
+export const LAST_NAME_CHANGED_MEMBER = 'last_name_changed_member';
+export const EMAIL_CHANGED_MEMBER = 'email_changed_member';
+export const COLLEGE_CHANGED_MEMBER = 'college_changed_member';
+export const MAJOR_CHANGED_MEMBER = 'major_changed_member';
+export const POINTS_CHANGED_MEMBER = "points_changed_member";
+export const PRIVILEGE_CHANGED_MEMBER = "privilege_changed_member";
+export const PICTURE_CHANGED_MEMBER = "picture_changed_member";
+export const PASSWORD_CHANGED_MEMBER = 'password_changed_member';
+export const CONFIRM_PASSWORD_CHANGED_MEMBER = 'confirm_password_changed_member';
 export const FETCH_MEMBERS_POINTS = 'fetch_members_points';
+export const FETCH_MEMBER_PROFILE= 'fetch_member_profile';
+export const EDIT_MEMBER= 'edit_member';
+export const GO_TO_OTHER_PROFILE= 'go_to_other_profile';
+export const GO_TO_EDIT_OTHER_PROFILE_FORM = 'go_to_edit_other_profile_form';
+export const QUOTE_CHANGED_MEMBER = 'quote_changed_member';
 
 // GeneralActions
 export const PAGE_LOAD = 'page_load';

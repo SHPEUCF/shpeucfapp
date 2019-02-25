@@ -4,6 +4,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Spinner } from '../components/general';
 import RegistrationForm from '../components/auth/RegistrationForm';
 import EditProfileForm from '../components/auth/EditProfileForm';
+import EditOtherProfileForm from '../components/auth/EditOtherProfileForm';
 import LoginForm from '../components/auth/LoginForm';
 import CreateEvent from '../components/event/CreateEvent';
 import EventDetailsForm from '../components/event/EventDetails';
@@ -17,6 +18,7 @@ import { WebPageShow, PostShow, ComingSoon } from '../components/general';
 to set button on the navBar */
 import Events from '../screens/Events';
 import Profile from '../screens/Profile';
+import OtherProfile from '../screens/OtherProfile';
 import Leaderboard from '../screens/Leaderboard';
 import Election from '../screens/Election';
 
@@ -163,6 +165,20 @@ const RouterComponent = () => {
             <Scene key="Leaderboard"
               component={Leaderboard}
               title="Leaderboard"
+              hideTabBar
+            />
+            <Scene
+              key="OtherProfile"
+              component={OtherProfile}
+              hideTabBar
+              hideNavBar
+              passProps
+            />
+            <Scene
+              key="EditOtherProfileForm"
+              component={EditOtherProfileForm}
+              hideNavBar
+              passProps
             />
             <Scene key="Resources"
               component={Resources}
