@@ -182,7 +182,8 @@ const createUserSuccess = (dispatch, firstNameU, lastNameU, emailU, collegeU, ma
       major: majorU,
       points: pointsU,
       picture: pictureU,
-      quote: quoteU
+      quote: quoteU,
+      id: currentUser.uid
     })
     .then(() => firebase.database().ref(`/points/${currentUser.uid}/`).set({
       firstName: firstNameU,
@@ -289,6 +290,7 @@ export const loginUser = ({ email, password }) => {
 };
 
 const loginUserSuccess = (dispatch, user) => {
+  loadUser();
   dispatch({
     type: ENTER_APP,
     payload: user
@@ -298,7 +300,6 @@ const loginUserSuccess = (dispatch, user) => {
 export const loadUser = (userID) => {
   const { currentUser } = firebase.auth();
   var id = (typeof userID === "undefined") ? currentUser.uid : userID;
-  // alert(id)
   return (dispatch) => {
     if ( currentUser != null ) {
       firebase.database().ref(`/users/${id}/`).on('value', snapshot => {

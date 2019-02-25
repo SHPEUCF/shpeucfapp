@@ -48,6 +48,7 @@ const INITIAL_STATE = {
   loggedIn: null,
   loading: false,
   error: '',
+  id: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
