@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { fetchMembersPoints, fetchMemberProfile, goToOtherProfile, pageLoad} from '../actions';
+import { fetchMembersPoints, fetchMemberProfile, goToOtherProfile, pageLoad, getPrivilege} from '../actions';
 import _ from 'lodash';
 import * as Progress from 'react-native-progress';
 import {
@@ -27,6 +27,7 @@ class Leaderboard extends Component {
 
   callUser(id){
     this.props.pageLoad();
+    this.props.getPrivilege();
     this.props.fetchMemberProfile(id);
     this.props.goToOtherProfile();
   }
@@ -109,8 +110,8 @@ const mapDispatchToProps = {
   fetchMembersPoints,
   fetchMemberProfile,
   goToOtherProfile,
-  pageLoad
-
+  pageLoad,
+  getPrivilege
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Leaderboard);

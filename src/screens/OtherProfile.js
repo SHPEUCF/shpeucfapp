@@ -3,7 +3,7 @@ import { Actions } from 'react-native-router-flux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import {Button, Spinner} from '../components/general'
-import { goToEditOtherProfileForm, pageLoad } from '../actions';
+import { goToEditOtherProfileForm } from '../actions';
 import {
   Text,
   View, StyleSheet,
@@ -17,6 +17,7 @@ import { Avatar, Divider } from 'react-native-elements';
 const dimension = Dimensions.get('window');
 
 class OtherProfile extends Component {
+
   renderContent(){
     const { firstName, lastName, email, major, points, picture, quote } = this.props;
 
@@ -38,7 +39,6 @@ class OtherProfile extends Component {
 			editLogoContainer,
       logOutButtonContainer } = styles,
 			dimension = Dimensions.get('window');
-      const {goBack} = this.props.navigation;
 
       return (
         <ScrollView>
@@ -108,20 +108,52 @@ class OtherProfile extends Component {
             </View>
           </View>
 					<View style={buttonsContainerStyle}>
-              <Button
-                title = "EDIT PROFILE"
-                onPress={this.props.goToEditOtherProfileForm.bind(this)}
-              />
-              <Button
-                title = "BACK TO LEADERBOARD"
-                onPress={() => goBack()}
-              />
+              {this.renderButtons()}
           </View>
         </View>
         </ScrollView>
     )
 
   }
+
+  renderButtons() {
+    const {
+      privilege,
+      goToEditOtherProfileForm,
+      } = this.props;
+
+    const {goBack} = this.props.navigation;
+
+    if (privilege.board || privilege.eboard || privilege.president) {
+    return (
+      <View>
+        <View>
+          <Button
+            title = "EDIT PROFILE"
+            onPress = {() => goToEditOtherProfileForm()}
+          />
+        </View>
+        <View>
+          <Button
+            title = "BACK TO LEADERBOARD"
+            onPress={() => goBack()}
+          />
+        </View>
+      </View>
+    )
+    }
+    else {
+    return (
+      <View>
+        <Button
+          title = "BACK TO LEADERBOARD"
+          onPress={() => goBack()}
+        />
+      </View>
+    )
+    }
+  }
+
   renderSocialMedia(){
     return (
 			<View style={styles.editLogoContainer}>
@@ -229,16 +261,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ members, general }) => {
+const mapStateToProps = ({ members, general, auth }) => {
   const { firstName, lastName, email, major, points, picture, quote } = members;
   const { loading } = general;
+  const { privilege } = auth;
 
-  return { firstName, lastName, email, major, points, picture, quote, loading };
+  return { firstName, lastName, email, major, points, picture, quote, loading, privilege };
 };
 
 const mapDispatchToProps = {
-  goToEditOtherProfileForm,
-  pageLoad
+  goToEditOtherProfileForm
  };
 
 export default connect(mapStateToProps, mapDispatchToProps)(OtherProfile);
