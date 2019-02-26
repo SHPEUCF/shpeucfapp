@@ -90,9 +90,10 @@ A step by step series of examples that tell you how to get a development env run
 ![alt text](https://user-images.githubusercontent.com/2400215/45737941-92981200-bc08-11e8-80fc-978147db7a9a.png)
 5. In xCode: Product -> clean
 6. In xCode: Click on the project folder on the left side-bar
+![alt text](https://imgur.com/a/iH9TK3Ig)
 7. Make sure there are no errors by selecting a team and changing the bundle identifier if it's giving you an error
-8. Close xCode and try running the simulator using react-native run-ios
-9. If step 6 doesn't work then try running react-native run-ios at least 2 more times
+8. Close xCode and try running the simulator putting `react-native run-ios` on your terminal in the project folder
+9. If step 6 doesn't work then try running `react-native run-ios` at least 2 more times
 
  
 
