@@ -26,7 +26,7 @@ What things you need to install the software and how to install them
 #### XCode version 9.1+
 * You can only download this on **MacOS** through the App store
 * If you want to use a physical device follow [this](https://facebook.github.io/react-native/docs/running-on-device)
-* Make sure you are signed in to your apple account and that your account is a developer account!
+* Make sure you are signed in to your apple account and that your account is a [developer account](https://9to5mac.com/2016/03/27/how-to-create-free-apple-developer-account-sideload-apps/)!
 
 #### Node 6
 * MacOS:
