@@ -44,13 +44,12 @@ class BackEnd extends Component {
   }
 
   render() {
-      const {
-          tabBar,
-          tabBarText,
-          buttonContainerStyling,
-          page
-          
-      } = styles;
+    const {
+        tabBar,
+        tabBarText,
+        buttonContainerStyling,
+        page
+    } = styles;
     return (
       <View style={page}>
         <View style={tabBar}>
