@@ -14,8 +14,8 @@ What things you need to install the software and how to install them
 * To check your version open your Command Prompt/Terminal and run `java -version`
 * Download [here](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 * You need to set up **Java_Home** if this is your first time running java or have never done it before.
-   * [MacOS](https://dalanzg.github.io/tips-tutorials/mac/2016/03/21/how-to-set-java_home-on-mac-os-x/)
-   * [Windows](https://docs.oracle.com/cd/E19182-01/820-7851/inst_cli_jdk_javahome_t/)
+    * [MacOS](https://dalanzg.github.io/tips-tutorials/mac/2016/03/21/how-to-set-java_home-on-mac-os-x/) :desktop_computer:
+    * [Windows](https://docs.oracle.com/cd/E19182-01/820-7851/inst_cli_jdk_javahome_t/) :computer:
 
 #### Android Studio to use an Android Virtual Device
 
@@ -50,7 +50,7 @@ A step by step series of examples that tell you how to get a development env run
 
 #### Install the repository
 * open the terminal/Command Prompt and use `cd /path` to go to a folder. Preferably Desktop
-* Type: `git clone https://github.com/SHPEUCF/shpeucfapp.git`
+* Type: `git clone https://github.com/SHPEUCF/shpeucfapp.git` :octocat:
 
 #### Open the folder on the terminal/Command Prompt
 * open the terminal/Command Prompt and type: `cd {location of the repo}`
@@ -62,7 +62,7 @@ A step by step series of examples that tell you how to get a development env run
 
 ## Running the app
 
-#### Running on an Android simulator:
+#### :robot:Running on an Android simulator:
 
 * Open up Android Studio
 * Open up the AVD(Android Virtual Device) manager
@@ -70,10 +70,10 @@ A step by step series of examples that tell you how to get a development env run
 * open the terminal/Command Prompt, go to the repo and type: `react-native run-android`
 
 
-#### Running on an iOS simulator:
+#### :iphone:Running on an iOS simulator:
 * open the terminal/Command Prompt, go to the repo and type: `react-native run-ios`
 
-### Debugging Setup
+### Debugging Setup :man_technologist:
 #### JAVA_HOME missing on:
 * [MacOS](https://dalanzg.github.io/tips-tutorials/mac/2016/03/21/how-to-set-java_home-on-mac-os-x/)
 * [Windows](https://docs.oracle.com/cd/E19182-01/820-7851/inst_cli_jdk_javahome_t/)
@@ -84,7 +84,7 @@ A step by step series of examples that tell you how to get a development env run
 
 #### Print: Entry, ":CFBundleIdentifier", Does Not Exist:
 1. Open the project on xCode which means to open: shpeucfapp/ios/shpeucfapp.xcodeproj
-2. In xCode: File ->Workspace setting
+2. In xCode: File ->Workspace setting :hammer:
 3. Change Build System to Legacy Build System and click OK
 4. Follow these instructions: 
 ![alt text](https://user-images.githubusercontent.com/2400215/45737941-92981200-bc08-11e8-80fc-978147db7a9a.png)
@@ -99,14 +99,14 @@ A step by step series of examples that tell you how to get a development env run
 
 ## Deployment
 
-Coming Soon..
+### :trollface: Coming Soon..
 
 ## Built With
 
 * [React Native](https://facebook.github.io/react-native/) - The framework used
 * [Node](https://nodejs.org/en/) - Package Manager
 
-## Authors
+## Authors :man_technologist:
 
 * **Luis Benavides** - *Initial work* - [Github Repo](https://github.com/luisbenan)
 * **Haniel Diaz** - *Continued work* - [Github Repo](https://github.com/HanielDiaz)
@@ -120,4 +120,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
+* Hat tip to anyone whose code was used :tada: :tada: :tada:
