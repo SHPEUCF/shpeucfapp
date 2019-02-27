@@ -12,6 +12,10 @@ What things you need to install the software and how to install them
 
 #### Java 8 jdk if running an Android Virtual Device (Will not work with higher version as of when this was made) 
 * To check your version open your Command Prompt/Terminal and run `java -version`
+```bash
+:shpeucfapp your_username$ java -version
+java version "1.8.x"
+```
 * Download [here](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 * You need to set up **Java_Home** if this is your first time running java or have never done it before.
    * [MacOS](https://dalanzg.github.io/tips-tutorials/mac/2016/03/21/how-to-set-java_home-on-mac-os-x/)
