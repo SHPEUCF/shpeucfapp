@@ -4,41 +4,50 @@ import {
   ScrollView,
   FlatList } from 'react-native';
 import { connect } from 'react-redux';
-import { List, ListItem } from 'react-native-elements';
+import { ListItem } from 'react-native-elements';
+import { Spinner} from '../components/general'
+
 import {
   getPrivilege,
+  pageLoad
 } from "../actions"
 
   const menuItems = [
     {
       title: 'Leaderboard',
       icon: 'format-align-left',
-      screen: 'Leaderboard'
+      screen: 'Leaderboard',
+      privilege: "user"
     },
     {
       title: 'Resources',
       icon: 'layers',
-      screen: 'Resources'
+      screen: 'Resources',
+      privilege: "user"
     },
     {
       title: 'Check In',
       icon: 'done',
-      screen: 'CheckIn'
+      screen: 'CheckIn',
+      privilege: "user"
     },
     {
       title: 'Forms',
       icon: 'assignment',
-      screen: 'Forms'
+      screen: 'Forms',
+      privilege: "user"
     },
     {
       title: 'Election',
       icon: 'done',
-      screen: 'Election'
+      screen: 'Election',
+      privilege: "user"
     },
     {
       title: 'About',
       icon: 'info',
-      screen: 'About'
+      screen: 'About',
+      privilege: "user"
     },
     {
       title: 'BackEnd',
@@ -46,11 +55,12 @@ import {
       screen: 'BackEnd',
       privilege: "eboard"
     }
-    ];
+  ];
 
 class More extends Component {
 
-  componentDidMount(){
+  componentWillMount(){
+    this.props.pageLoad();
     this.props.getPrivilege();
   }
 
@@ -58,8 +68,8 @@ class More extends Component {
  
   renderItem  = ({item}) => {
     
-      if (!('privilege' in item) || this.props.privilege[item.privilege] === true ) {
-        return(
+    if (this.props.privilege !== undefined && this.props.privilege[item.privilege] === true ) {
+      return(
         <ListItem
           title={item.title}
           leftIcon={{name: item.icon}}
@@ -70,6 +80,10 @@ class More extends Component {
   }
 
   render() {
+  if(this.props.loading){
+    return <Spinner>{this.renderContent}</Spinner>
+  }
+  else
     return (
       <ScrollView>
         <FlatList
@@ -82,14 +96,16 @@ class More extends Component {
   };
 }
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ auth, general }) => {
   const { privilege } = auth;
+  const { loading } = general;
 
-  return { privilege };
+  return { privilege, loading };
 };
 
 const mapDispatchToProps = {
-  getPrivilege
+  getPrivilege,
+  pageLoad
  };
 
 

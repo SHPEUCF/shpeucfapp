@@ -10,60 +10,37 @@ import {
   TouchableOpacity,
   Dimensions } from 'react-native';
 import { Button } from '../components/general'
-import { ListItem } from 'react-native-elements';
-
-
 
 const dimension = Dimensions.get('window');
 
 const menuItems = [
     {
       title: 'Election',
-      icon: 'check',
+      icon: 'checkbox-outline"',
       screen: 'ElectionBackEnd'
     },    
 ];
 
-class BackEnd extends Component {
+class ElectionBackEnd extends Component {
   constructor(props) {
     super(props);
   }
 
-  keyExtractor = (item, index) => index
- 
-  renderItem  = ({item}) => {
-      if (!('privilege' in item) || this.props.privilege[item.privilege] === true ) {
-        return(
-        <ListItem
-          title={item.title}
-          leftIcon={{name: item.icon}}
-          onPress={() => Actions[item.screen]()}
-        />
-      )
-    }
-  }
-
   render() {
-      const {
-          tabBar,
-          tabBarText,
-          buttonContainerStyling,
-          page
-          
-      } = styles;
+    const {
+        tabBar,
+        tabBarText,
+        buttonContainerStyling,
+        page
+    } = styles;
     return (
-      <View style={page}>
+     <View style={page}>
         <View style={tabBar}>
-            <Text style={tabBarText}>Back End</Text>
+            <Text style={tabBarText}>Election</Text>
         </View>
-        <FlatList
-          keyExtractor = {this.keyExtractor}
-          data = {menuItems}
-          renderItem={this.renderItem}
-        />
         <View style={buttonContainerStyling}>
             <Button 
-            onPress={() => Actions.more()}
+            onPress={() => Actions.BackEnd()}
             title={"BACK"}
             > 
             </Button>
@@ -105,4 +82,4 @@ const mapDispatchToProps = {
 
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BackEnd);
+export default connect(mapStateToProps, mapDispatchToProps)(ElectionBackEnd);

@@ -22,6 +22,7 @@ import OtherProfile from '../screens/OtherProfile';
 import Leaderboard from '../screens/Leaderboard';
 import Election from '../screens/Election';
 import BackEnd from '../screens/BackEnd'
+import ElectionBackEnd from '../screens/ElectionBackEnd'
 import More from '../screens/More'
 
 import {
@@ -150,6 +151,7 @@ const RouterComponent = () => {
           <Stack
             key="more"
             tabBarLabel="More"
+            passProps
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
                 name={focused ? 'ios-menu' : 'ios-menu-outline'}
@@ -162,17 +164,27 @@ const RouterComponent = () => {
               component={More}
               title="More Options"
               leftTitle="Back"
+              passProps
             />
             <Scene key="Leaderboard"
               component={Leaderboard}
               title="Leaderboard"
               hideTabBar
             />
-            <Scene key="BackEnd"
-              component={BackEnd}
-              title="BackEnd"
-              hideTabBar
-            />
+            <Stack
+            key="BackEnd"
+            hideNavBar
+           >
+              <Scene key="BackEnd"
+                component={BackEnd}
+                hideNavBar
+              />
+              < Scene key = "ElectionBackEnd"
+                component={ElectionBackEnd}
+                title="Election"
+                hideTabBar
+              />
+            </Stack>
             <Scene
               key="OtherProfile"
               component={OtherProfile}
