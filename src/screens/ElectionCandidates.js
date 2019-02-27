@@ -13,33 +13,15 @@ import { Button } from '../components/general'
 import {
     openElection,
     closeElection,
+    deleteCandidates,
+    goToCandidateForm
 } from '../actions'
 
 const dimension = Dimensions.get('window');
 
-class ElectionBackEnd extends Component {
+class ElectionCandidates extends Component {
   constructor(props) {
     super(props);
-  }
-
-  openOrClose(){
-      if(this.props.election){
-        return (
-        <Button 
-        onPress={() => this.props.closeElection()}
-        title={"CLOSE ELECTION"}
-        > 
-        </Button>
-        )
-      }
-      else
-      return (
-        <Button 
-        onPress={() => this.props.openElection()}
-        title={"OPEN ELECTION"}
-        > 
-        </Button>
-        )
   }
 
   render() {
@@ -53,36 +35,25 @@ class ElectionBackEnd extends Component {
     return (
      <View style={page}>
         <View style={tabBar}>
-            <Text style={tabBarText}>Election</Text>
+            <Text style={tabBarText}>Candidates</Text>
         </View>
          <View style={content}>
-            <Text>Maybe put how many people have voted here</Text>
-            <Text>how long the election has been on</Text>
-            <Text>how long the election has been on</Text>
-            <Text>who's currently in the lead</Text>
+            <Text>FlatList of all candidates here</Text>
+            <Text>when you click on a candidate gives you options to edit</Text>
+            <Text>and remove them kind of like how events does</Text>
+            <Text>How many votes they have (maybe? idk if that's too much but definitely need it for testing)</Text>
         </View>
         
         <View style={buttonContainerStyling}>
-            {this.openOrClose()}
-        </View>
-         <View style={buttonContainerStyling}>
             <Button 
-            onPress={() => Actions.ElectionPositions()}
-            title={"MANAGE POSITIONS"}
+            onPress={() => this.props.goToCandidateForm("ADD")}
+            title={"ADD CANDIDATES"}
             > 
             </Button>
         </View>
         <View style={buttonContainerStyling}>
             <Button 
-            onPress={() => Actions.ElectionCandidates()}
-            title={"MANAGE CANDIDATES"}
-            > 
-            </Button>
-        </View>
-       
-        <View style={buttonContainerStyling}>
-            <Button 
-            onPress={() => Actions.BackEnd()}
+            onPress={() => Actions.ElectionBackEnd("")}
             title={"BACK"}
             > 
             </Button>
@@ -129,6 +100,8 @@ const mapStateToProps = ({ elect }) => {
 const mapDispatchToProps = {
     openElection,
     closeElection,
+    deleteCandidates,
+    goToCandidateForm
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ElectionBackEnd);
+export default connect(mapStateToProps, mapDispatchToProps)(ElectionCandidates);

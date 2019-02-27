@@ -13,11 +13,13 @@ import { Button } from '../components/general'
 import {
     openElection,
     closeElection,
+    deletePosition,
+    goToPositionForm
 } from '../actions'
 
 const dimension = Dimensions.get('window');
 
-class ElectionBackEnd extends Component {
+class ElectionPosition extends Component {
   constructor(props) {
     super(props);
   }
@@ -53,36 +55,25 @@ class ElectionBackEnd extends Component {
     return (
      <View style={page}>
         <View style={tabBar}>
-            <Text style={tabBarText}>Election</Text>
+            <Text style={tabBarText}>Positions</Text>
         </View>
          <View style={content}>
-            <Text>Maybe put how many people have voted here</Text>
-            <Text>how long the election has been on</Text>
-            <Text>how long the election has been on</Text>
-            <Text>who's currently in the lead</Text>
-        </View>
+            <Text>FlatList of all positions here</Text>
+            <Text>when you click on a position gives you options to edit</Text>
+            <Text>and remove them kind of like how events does</Text>
+            <Text>Positions and candidates are very similar maybe make a component that creates most of the page and use it for both</Text>
+         </View>
         
-        <View style={buttonContainerStyling}>
-            {this.openOrClose()}
-        </View>
          <View style={buttonContainerStyling}>
             <Button 
-            onPress={() => Actions.ElectionPositions()}
-            title={"MANAGE POSITIONS"}
+            onPress={() => this.props.goToPositionForm("ADD")}
+            title={"ADD POSITIONS"}
             > 
             </Button>
         </View>
         <View style={buttonContainerStyling}>
             <Button 
-            onPress={() => Actions.ElectionCandidates()}
-            title={"MANAGE CANDIDATES"}
-            > 
-            </Button>
-        </View>
-       
-        <View style={buttonContainerStyling}>
-            <Button 
-            onPress={() => Actions.BackEnd()}
+            onPress={() => Actions.ElectionBackEnd()}
             title={"BACK"}
             > 
             </Button>
@@ -129,6 +120,8 @@ const mapStateToProps = ({ elect }) => {
 const mapDispatchToProps = {
     openElection,
     closeElection,
+    deletePosition,
+    goToPositionForm
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ElectionBackEnd);
+export default connect(mapStateToProps, mapDispatchToProps)(ElectionPosition);

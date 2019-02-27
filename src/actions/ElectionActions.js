@@ -14,69 +14,162 @@ import {
     EDIT_POSITION,
     ADD_CANDIDATES,
     DELETE_CANDIDATES,
-    EDIT_CANDIDATES
+    EDIT_CANDIDATES,
+    CANDIDATE_FNAME_CHANGED,
+    CANDIDATE_LNAME_CHANGED,
+    CANDIDATE_PLAN_CHANGED,
+    CANDIDATE_POSITION_CHANGED,
+    POSITION_TITLE_CHANGED,
+    POSITION_DESCRIPTION_CHANGED,
+    GO_TO_CANDIDATE_FORM,
+    GO_TO_POSITION_FORM
 } from './types';
 
 export const openElection = () => {
     return (dispatch) => {
-    firebase.database().ref(`/election/`).update({
-        election: true
-    })
-    .then(() => {
-         dispatch({
-             type: OPEN_ELECTION,
-             payload: true
-         });
-    })
-    .then(() => alert('Election Started!', 'Successful'))
-    .catch((error) => alert('Election could not be Started!', 'Failure'))
-}
+        firebase.database().ref(`/election/`).update({
+            election: true
+        })
+        .then(() => {
+            dispatch({
+                type: OPEN_ELECTION,
+                payload: true
+            });
+        })
+        .then(() => alert('Election Started!', 'Successful'))
+        .catch((error) => alert('Election could not be Started!', 'Failure'))
+    }
 };
 export const closeElection = () => {
-    firebase.database().ref(`/election/`).update({
-        election: false
-    })
-    .then(() => alert('Election Closed!', 'Successful'))
-    .catch((error) => alert('Election could not be Closed!', 'Failure'))
-
-    return {
-        type: CLOSE_ELECTION,
-        payload: false
-    };
+    return (dispatch) => {
+        firebase.database().ref(`/election/`).update({
+            election: false
+        })
+        .then(() => {
+            dispatch({
+                type: OPEN_ELECTION,
+                payload: false
+            });
+        })
+        .then(() => alert('Election Closed!', 'Successful'))
+        .catch((error) => alert('Election could not be Closed!', 'Failure'))
+    }
 };
-export const addPosition = (text) => {
-    return {
-        type: ADD_POSITION,
-        payload: text
-    };
+export const addPosition = (title, description) => {
+    return (dispatch) => {
+        firebase.database().ref(`/election/positions/${title}`).set({
+                title: title,
+                description: description
+            })
+            .then(() => {
+                dispatch({
+                    type: ADD_POSITION,
+                });
+            })
+            .then(() => alert('Position Added!', 'Successful'))
+            .catch((error) => alert('Position could not be Added!', 'Failure'))
+    }
 };
 export const deletePosition = (text) => {
-    return {
-        type: DELETE_POSITION,
-        payload: text
-    };
+    return (dispatch) => {
+        firebase.database().ref(`/election/positions/${title}`).update({
+                title: "",
+                description: ""
+            })
+            .then(() => {
+                dispatch({
+                    type: DELETE_POSITION,
+                });
+            })
+            .then(() => alert('Position Added!', 'Successful'))
+            .catch((error) => alert('Position could not be Added!', 'Failure'))
+    }
 };
-export const editPosition = (text) => {
-    return {
-        type: EDIT_POSITION,
-        payload: text
-    };
+export const editPosition = (title, description) => {
+    return (dispatch) => {
+        firebase.database().ref(`/election/positions/${title}`).update({
+                title: title,
+                description: description
+            })
+            .then(() => {
+                dispatch({
+                    type: EDIT_POSITION,
+                });
+            })
+            .then(() => alert('Position Edited!', 'Successful'))
+            .catch((error) => alert('Position could not be Edited!', 'Failure'))
+    }
 };
-export const addCandidates = (text) => {
-    return {
-        type: ADD_CANDIDATES,
-        payload: text
-    };
+export const addCandidates = (fName, lName, plan, position) => {
+    return (dispatch) => {
+        //this needs to find the person but it needs to check for duplicates somehow
+        // firebase().database().ref('/users/').orderByChild("firstName").equalTo(fName).on('value', (snapshot) => {
+        //     
+        // })
+
+               
+    }
 };
 export const deleteCandidates = (text) => {
     return {
         type: DELETE_CANDIDATES,
-        payload: text
     };
 };
 export const editCandidates = (text) => {
     return {
         type: EDIT_CANDIDATES,
+    };
+};
+export const candidateFNameChanged = (text) => {
+    return {
+        type: CANDIDATE_FNAME_CHANGED,
         payload: text
     };
+};
+export const candidateLNameChanged = (text) => {
+    return {
+        type: CANDIDATE_LNAME_CHANGED,
+        payload: text
+    };
+};
+export const candidatePlanChanged = (text) => {
+    return {
+        type: CANDIDATE_PLAN_CHANGED,
+        payload: text
+    };
+};
+export const candidatePositionChanged = (text) => {
+    return {
+        type: CANDIDATE_POSITION_CHANGED,
+        payload: text
+    };
+};
+
+export const positionTitleChanged = (text) => {
+    return {
+        type: POSITION_TITLE_CHANGED,
+        payload: text
+    };
+};
+export const positionDescriptionChanged = (text) => {
+    return {
+        type: POSITION_DESCRIPTION_CHANGED,
+        payload: text
+    };
+};
+
+export const goToCandidateForm = (text) => {
+    Actions.CandidateForm()
+    return {
+        type: GO_TO_CANDIDATE_FORM,
+        payload: text
+    }
+};
+
+export const goToPositionForm = (text) => {
+    Actions.PositionForm()
+    return {
+        type: GO_TO_POSITION_FORM,
+        payload: text
+    }
 };
