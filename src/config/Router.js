@@ -21,10 +21,11 @@ import Profile from '../screens/Profile';
 import OtherProfile from '../screens/OtherProfile';
 import Leaderboard from '../screens/Leaderboard';
 import Election from '../screens/Election';
+import BackEnd from '../screens/BackEnd'
+import More from '../screens/More'
 
 import {
   Feed,
-  More,
   Resources,
   CheckIn,
   Forms,
@@ -165,6 +166,11 @@ const RouterComponent = () => {
             <Scene key="Leaderboard"
               component={Leaderboard}
               title="Leaderboard"
+              hideTabBar
+            />
+            <Scene key="BackEnd"
+              component={BackEnd}
+              title="BackEnd"
               hideTabBar
             />
             <Scene
