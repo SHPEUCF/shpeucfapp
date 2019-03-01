@@ -9,6 +9,9 @@ import LoginForm from '../components/auth/LoginForm';
 import CreateEvent from '../components/event/CreateEvent';
 import EventDetailsForm from '../components/event/EventDetails';
 import ResetPasswordForm from '../components/auth/ResetPasswordForm';
+import CandidateForm from '../components/elect/CandidateForm'
+import PositionForm from '../components/elect/PositionForm'
+
 import { WebPageShow, PostShow, ComingSoon } from '../components/general';
 
 // Screens
@@ -21,10 +24,14 @@ import Profile from '../screens/Profile';
 import OtherProfile from '../screens/OtherProfile';
 import Leaderboard from '../screens/Leaderboard';
 import Election from '../screens/Election';
+import BackEnd from '../screens/BackEnd'
+import ElectionBackEnd from '../screens/ElectionBackEnd'
+import ElectionPositions from '../screens/ElectionPositions'
+import ElectionCandidates from '../screens/ElectionCandidates'
+import More from '../screens/More'
 
 import {
   Feed,
-  More,
   Resources,
   CheckIn,
   Forms,
@@ -84,6 +91,41 @@ const RouterComponent = () => {
             hideNavBar
             passProps
           />
+        </Stack>
+
+        <Stack key = "election">
+        <Scene
+           key="ElectionCandidates"
+            component={ElectionCandidates}
+            title="Election Candidates"
+            type={ActionConst.REPLACE}
+            hideNavBar
+            passProps
+        />
+        <Scene
+           key="CandidateForm"
+            component={CandidateForm}
+            title="Candidate Forms"
+            type={ActionConst.REPLACE}
+            hideNavBar
+            passProps
+        />
+        <Scene
+           key="ElectionPositions"
+            component={ElectionPositions}
+            title="Election Positions"
+            type={ActionConst.REPLACE}
+            hideNavBar
+            passProps
+        />
+        <Scene
+           key="PositionForm"
+            component={PositionForm}
+            title="Position Forms"
+            type={ActionConst.REPLACE}
+            hideNavBar
+            passProps
+        />
         </Stack>
         <Stack key = "Profiles">
         <Scene
@@ -149,6 +191,7 @@ const RouterComponent = () => {
           <Stack
             key="more"
             tabBarLabel="More"
+            passProps
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
                 name={focused ? 'ios-menu' : 'ios-menu-outline'}
@@ -161,12 +204,26 @@ const RouterComponent = () => {
               component={More}
               title="More Options"
               leftTitle="Back"
+              passProps
             />
             <Scene key="Leaderboard"
               component={Leaderboard}
               title="Leaderboard"
               hideTabBar
             />
+            <Stack
+            key="BackEnd"
+            hideNavBar
+           >
+              <Scene key="BackEnd"
+                component={BackEnd}
+              />
+              <Scene key = "ElectionBackEnd"
+                component={ElectionBackEnd}
+                title="Election"
+                hideTabBar
+              />
+            </Stack>
             <Scene
               key="OtherProfile"
               component={OtherProfile}

@@ -74,3 +74,22 @@ export const GO_TO_CREATE_EVENT = 'go_to_create_event';
 export const GO_TO_CREATE_EVENT_FROM_EDIT = 'go_to_create_event_from_edit';
 export const GO_TO_EVENT = 'go_to_event';
 export const GO_TO_VIEW_EVENT = 'go_to_view_event';
+
+
+// ElectionActions
+export const OPEN_ELECTION = 'open_election';
+export const CLOSE_ELECTION = 'close_election';
+export const ADD_POSITION = 'add_position';
+export const DELETE_POSITION = 'delete_position';
+export const EDIT_POSITION = 'edit_position';
+export const ADD_CANDIDATES = 'add_candidates';
+export const DELETE_CANDIDATES = 'delete_candidates';
+export const EDIT_CANDIDATES = 'edit_candidates';
+export const CANDIDATE_FNAME_CHANGED = "candidate_fname_changed"
+export const CANDIDATE_LNAME_CHANGED = "candidate_lname_changed"
+export const CANDIDATE_PLAN_CHANGED = "candidate_plan_changed"
+export const CANDIDATE_POSITION_CHANGED = "candidate_position_changed"
+export const POSITION_TITLE_CHANGED = "position_title_changed"
+export const POSITION_DESCRIPTION_CHANGED = "position_description_changed"
+export const GO_TO_CANDIDATE_FORM = "go_to_candidate_form"
+export const GO_TO_POSITION_FORM = "go_to_position_form"
