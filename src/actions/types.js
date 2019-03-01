@@ -50,6 +50,7 @@ export const EDIT_MEMBER= 'edit_member';
 export const GO_TO_OTHER_PROFILE= 'go_to_other_profile';
 export const GO_TO_EDIT_OTHER_PROFILE_FORM = 'go_to_edit_other_profile_form';
 export const QUOTE_CHANGED_MEMBER = 'quote_changed_member';
+export const FETCH_FILTERS = 'fetch_filters';
 
 // GeneralActions
 export const PAGE_LOAD = 'page_load';
@@ -74,6 +75,7 @@ export const GO_TO_CREATE_EVENT = 'go_to_create_event';
 export const GO_TO_CREATE_EVENT_FROM_EDIT = 'go_to_create_event_from_edit';
 export const GO_TO_EVENT = 'go_to_event';
 export const GO_TO_VIEW_EVENT = 'go_to_view_event';
+
 
 
 // ElectionActions
