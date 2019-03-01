@@ -59,7 +59,7 @@ import {
 
 class More extends Component {
 
-  componentWillMount(){
+  componentDidMount(){
     this.props.pageLoad();
     this.props.getPrivilege();
   }

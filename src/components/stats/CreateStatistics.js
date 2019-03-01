@@ -96,7 +96,7 @@ class CreateStatistics extends Component {
                         />
                         <Button 
                             title = "CANCEL"
-                            onPress={Actions.Statistics.bind(this)}
+                            onPress={Actions.popTo.bind(this,'Statistics')}
                         />
                 </View>
             )

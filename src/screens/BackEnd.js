@@ -67,7 +67,7 @@ class BackEnd extends Component {
         />
         <View style={buttonContainerStyling}>
             <Button
-            onPress={() => Actions.more()}
+            onPress={() => Actions.popTo('more')}
             title={"BACK"}
             >
             </Button>

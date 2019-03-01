@@ -71,7 +71,7 @@ render() {
         </View>
         <View style={buttonContainerStyling}>
             <Button
-            onPress={() => Actions.BackEnd()}
+            onPress={() => Actions.popTo('BackEnd')}
             title={"BACK"}
             >
             </Button>
