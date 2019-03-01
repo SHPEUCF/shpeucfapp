@@ -4,19 +4,7 @@ import {View, StyleSheet, Text, ScrollView} from 'react-native';
 import { Input, Button } from '../general';
 import { RkAvoidKeyboard, RkButton, RkPicker } from 'react-native-ui-kitten';
 import {
-    createEvent,
-    editEvent,
-    typeChanged,
-    titleChanged,
-    nameChanged,
-    descriptionChanged,
-    dateChanged,
-    timeChanged,
-    locationChanged,
-    epointsChanged,
-    eventError,
-    goToCreateEvent,
-    goToEvents
+    
 } from '../../actions'
 import { Actions } from 'react-native-router-flux';
 
@@ -108,7 +96,7 @@ class CreateStatistics extends Component {
                         />
                         <Button 
                             title = "CANCEL"
-                            onPress={Actions.Statistics()}
+                            onPress={Actions.Statistics.bind(this)}
                         />
                 </View>
             )
@@ -160,26 +148,13 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = ({ events }) => {
-    const { type, title, name, description, date, time, location, points, error, eventID } = events;
+const mapStateToProps = ({ members }) => {
 
-    return { type, title, name, description, date, time, location, points, error, eventID };
+    return {  };
 };
 
 const mapDispatchToProps = {
-    createEvent,
-    editEvent,
-    typeChanged,
-    titleChanged,
-    nameChanged,
-    descriptionChanged,
-    dateChanged,
-    timeChanged,
-    locationChanged,
-    epointsChanged,
-    eventError,
-    goToCreateEvent,
-    goToEvents
+  
 }
 
 

@@ -25,18 +25,6 @@ const dimension = Dimensions.get('window');
 class Statistics extends Component {
 
 
- renderComponent(item) {
-     return (
-     <TouchableOpacity onPress = {() => Actions[item.screen]()}>
-       <View style={{backgroundColor: "#fff", height: 10, flex: 1}}>
-           <View style={{backgroundColor: "#fff", height: 10, flex: 1}}>
-             <Text>{`${item.title} ${item.icon}`}</Text>
-           </View>
-         </View>
-       </TouchableOpacity>
-     )
- }
-
  renderItem  = ({item}) => {
       if (!('privilege' in item) || this.props.privilege[item.privilege] === true ) {
         return(
@@ -48,6 +36,10 @@ class Statistics extends Component {
       )
     }
   }
+
+
+_keyExtractor = (item, index) => index;
+
 
 render() {
     const {
