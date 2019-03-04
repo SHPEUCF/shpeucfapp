@@ -50,6 +50,7 @@ export const EDIT_MEMBER= 'edit_member';
 export const GO_TO_OTHER_PROFILE= 'go_to_other_profile';
 export const GO_TO_EDIT_OTHER_PROFILE_FORM = 'go_to_edit_other_profile_form';
 export const QUOTE_CHANGED_MEMBER = 'quote_changed_member';
+export const FETCH_FILTERS = 'fetch_filters';
 
 // GeneralActions
 export const PAGE_LOAD = 'page_load';
@@ -76,6 +77,7 @@ export const GO_TO_EVENT = 'go_to_event';
 export const GO_TO_VIEW_EVENT = 'go_to_view_event';
 
 
+
 // ElectionActions
 export const OPEN_ELECTION = 'open_election';
 export const CLOSE_ELECTION = 'close_election';
@@ -93,4 +95,7 @@ export const POSITION_TITLE_CHANGED = "position_title_changed"
 export const POSITION_DESCRIPTION_CHANGED = "position_description_changed"
 export const GO_TO_CANDIDATE_FORM = "go_to_candidate_form"
 export const GO_TO_POSITION_FORM = "go_to_position_form"
+<<<<<<< HEAD
 export const GET_POSITIONS = "get_positions"
+=======
+>>>>>>> f6fc622ac6626cd5cc9a8ac2be700e649be0b0bb

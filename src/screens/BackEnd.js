@@ -21,7 +21,12 @@ const menuItems = [
       title: 'Election',
       icon: 'check',
       screen: 'ElectionBackEnd'
-    },    
+    },
+    {
+      title: 'Statistics',
+      icon: 'check',
+      screen: 'Statistics'
+    },
 ];
 
 class BackEnd extends Component {
@@ -30,7 +35,7 @@ class BackEnd extends Component {
   }
 
   keyExtractor = (item, index) => index
- 
+
   renderItem  = ({item}) => {
       if (!('privilege' in item) || this.props.privilege[item.privilege] === true ) {
         return(
@@ -61,10 +66,10 @@ class BackEnd extends Component {
           renderItem={this.renderItem}
         />
         <View style={buttonContainerStyling}>
-            <Button 
-            onPress={() => Actions.more()}
+            <Button
+            onPress={() => Actions.popTo('more')}
             title={"BACK"}
-            > 
+            >
             </Button>
         </View>
       </View>

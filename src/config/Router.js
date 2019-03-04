@@ -11,6 +11,7 @@ import EventDetailsForm from '../components/event/EventDetails';
 import ResetPasswordForm from '../components/auth/ResetPasswordForm';
 import CandidateForm from '../components/elect/CandidateForm'
 import PositionForm from '../components/elect/PositionForm'
+import CreateStatistics from '../components/stats/CreateStatistics'
 
 import { WebPageShow, PostShow, ComingSoon } from '../components/general';
 
@@ -28,6 +29,7 @@ import BackEnd from '../screens/BackEnd'
 import ElectionBackEnd from '../screens/ElectionBackEnd'
 import ElectionPositions from '../screens/ElectionPositions'
 import ElectionCandidates from '../screens/ElectionCandidates'
+import Statistics from '../screens/Statistics'
 import More from '../screens/More'
 
 import {
@@ -92,7 +94,18 @@ const RouterComponent = () => {
             passProps
           />
         </Stack>
-
+        <Stack key = "stats" hideNavBar>
+          <Scene
+            key="Statistics"
+            component={Statistics}
+            title="Statistics"
+          />
+          <Scene
+            key="createStatistics"
+            component={CreateStatistics}
+            title="Statistics"
+          />
+        </Stack>
         <Stack key = "election">
         <Scene
            key="ElectionCandidates"

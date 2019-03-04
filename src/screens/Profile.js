@@ -14,9 +14,9 @@ import {
 	} from 'react-native';
 import { Avatar, Divider } from 'react-native-elements';
 
-
+const dimension = Dimensions.get('window');
 class Profile extends Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.pageLoad();
     this.props.loadUser();
   }
@@ -39,8 +39,7 @@ class Profile extends Component {
       buttonsContainerStyle,
       editButtonContainer,
 			editLogoContainer,
-      logOutButtonContainer } = styles,
-			dimension = Dimensions.get('window');
+      logOutButtonContainer } = styles
 
       return (
         <ScrollView>
@@ -55,31 +54,34 @@ class Profile extends Component {
                 activeOpacity={0.7}
                 />
             </View>
+					</View>
+					<View style={styles.bioContainer}>
             <View style={taglineContainer}>
                <Text
 							 		style={{
-										color: 'white',
+										color: '#b4b7ba',
 										fontSize: 20,
 										fontWeight: 'bold',
 										textAlign: 'center'}}
 										>{firstName + ' ' + lastName}</Text>
                <Text
 							 		style={{
-										color: 'white',
+										color: '#b4b7ba',
 										fontSize: 16,
 										textAlign: 'center',
 										lineHeight: 25,
+										marginTop: 5,
 										width: dimension.width *.9}}
 										>{quote}</Text>
             </View>
-              {this.renderSocialMedia()}
-          </View>
+					</View>
          <View style={{backgroundColor: '#0c0b0b'}}>
           <View style={contentContainerStyle}>
             <View style={contentItemsContainerStyle}>
-              <View style={{ height: dimension.height *.1, backgroundColor: '#0c0b0b'}}>
+              <View style={{ height: dimension.height *.01, backgroundColor: '#0c0b0b'}}>
                 <Text style={itemLabelText}></Text>
               </View>
+
               <View style={itemValueContainerStyle}>
                 <Text style={itemValueText}>{/*firstName + ' ' + lastName*/}</Text>
               </View>
@@ -109,6 +111,10 @@ class Profile extends Component {
               </View>
             </View>
           </View>
+          <View style={styles.socialmediarow}>
+					{this.renderSocialMedia()}
+					</View>
+				<View style={styles.buttonEdit}>
 					<View style={buttonsContainerStyle}>
               <Button
                 title = "EDIT PROFILE"
@@ -119,6 +125,7 @@ class Profile extends Component {
                 onPress={this.props.logoutUser.bind(this)}
               />
           </View>
+				</View>
         </View>
         </ScrollView>
     )
@@ -126,20 +133,23 @@ class Profile extends Component {
   }
   renderSocialMedia(){
     return (
+			<View>
+			<Text style={styles.socialmediatext}> Social Media</Text>
 			<View style={styles.editLogoContainer}>
         <View style= {styles.editLogoContainer}>
           <TouchableOpacity
             onPress={() => Actions.PostShow({ title: 'Linkedin', uri: 'https://www.linkedin.com/'})}>
-            <Ionicons name="logo-linkedin" size={40} color='#fff'/>
+            <Ionicons name="logo-linkedin" size={40} color='#000000'/>
           </TouchableOpacity>
         </View>
         <View style={styles.editLogoContainer}>
           <TouchableOpacity
             onPress={() => Actions.PostShow({ title: 'Github', uri: 'https://www.github.com/'})}>
-            <Ionicons name="logo-github" size={40} color='#fff'/>
+            <Ionicons name="logo-github" size={40} color='#000000'/>
           </TouchableOpacity>
         </View>
       </View>
+			</View>
     )
   }
 
@@ -162,33 +172,34 @@ const styles = StyleSheet.create({
   },
   headerInfoContainer: {
     flex: 1,
-    paddingTop: 30,
-    paddingBottom: 15,
+    paddingTop: dimension.height * .02,
+    paddingBottom: dimension.height * .02,
     backgroundColor: '#2C3239'
   },
   avatarContainerStyle: {
     justifyContent: 'center',
     alignItems: 'center',
+		backgroundColor: '#2C3239',
+		paddingTop: dimension.height * .03,
   },
   taglineContainer: {
     alignItems: 'center',
-    marginTop: 10,
+		marginTop: dimension.height * .02,
   },
   taglineTextStyle:{
     fontSize: 16,
     fontWeight: '600'
   },
   contentContainerStyle: {
-		height: 350,
+		height: dimension.height *.27,
     flex: 1,
-    marginTop: 20,
-    marginBottom: 20,
-
+		paddingTop: dimension.height *.01,
+	  paddingBottom: dimension.height *.01,
   },
   contentItemsContainerStyle: {
     flexDirection: 'row',
-    paddingHorizontal: 15,
-    paddingVertical: 15,
+    paddingHorizontal: dimension.height *.015,
+    paddingVertical: dimension.height * .015,
   },
   itemLabelContainerStyle: {
     flex: 1,
@@ -198,7 +209,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
 		color: '#fff',
-		lineHeight: 26
+		lineHeight: dimension.height * .03
   },
   itemValueContainerStyle: {
     flex: 4,
@@ -209,26 +220,43 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
 		color: '#fff',
-		lineHeight: 26
+		lineHeight: dimension.height *.03,
   },
   buttonsContainerStyle: {
-    marginRight: 10,
-    marginLeft: 10,
+    marginRight: dimension.height * .015,
+    marginLeft: dimension.height * .015,
   },
+	buttonEdit: {
+		backgroundColor: '#8b95a5',
+		paddingTop: dimension.height * .015,
+		paddingBottom: dimension.height * .015,
+	},
   editButtonContainer: {
-    marginTop: 10,
-    marginBottom: 10,
+    marginTop: dimension.height * .015,
+    marginBottom: dimension.height * .015,
   },
 	editLogoContainer: {
-    flex: 1,
-		marginTop: 3,
+    flex: 2,
+		marginTop: dimension.height * .002,
 		flexDirection: 'row',
 		justifyContent: 'center'
 	},
   logOutButtonContainer: {
-    marginTop: 10,
-    marginBottom: 60
+    marginTop: dimension.height * .015,
+    marginBottom: dimension.height * .006,
   },
+	socialmediarow: {
+		paddingTop: dimension.height * .015,
+		paddingBottom: dimension.height * .015,
+		backgroundColor: '#dee0e2',
+	},
+	bioContainer: {
+		backgroundColor: '#000000'
+	},
+	socialmediatext: {
+		flex:1,
+		alignSelf: 'center'
+	},
 });
 
 const mapStateToProps = ({ auth, general }) => {
