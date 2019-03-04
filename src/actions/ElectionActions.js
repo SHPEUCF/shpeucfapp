@@ -22,7 +22,8 @@ import {
     POSITION_TITLE_CHANGED,
     POSITION_DESCRIPTION_CHANGED,
     GO_TO_CANDIDATE_FORM,
-    GO_TO_POSITION_FORM
+    GO_TO_POSITION_FORM,
+    GET_POSITIONS,
 } from './types';
 
 export const openElection = () => {
@@ -104,10 +105,10 @@ export const addCandidates = (fName, lName, plan, position) => {
     return (dispatch) => {
         //this needs to find the person but it needs to check for duplicates somehow
         // firebase().database().ref('/users/').orderByChild("firstName").equalTo(fName).on('value', (snapshot) => {
-        //     
+        //
         // })
 
-               
+
     }
 };
 export const deleteCandidates = (text) => {
@@ -172,4 +173,19 @@ export const goToPositionForm = (text) => {
         type: GO_TO_POSITION_FORM,
         payload: text
     }
+};
+
+export const getPositions = () => {
+
+  return (dispatch) => {
+  firebase.database().ref(`/election/positions`)
+    .on('value', snapshot => {
+      const positions = (snapshot.val());
+
+      dispatch({
+        type: GET_POSITIONS,
+        payload: positions,
+      });
+    });
+  };
 };

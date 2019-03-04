@@ -1,52 +1,141 @@
 import React, { Component } from 'react';
-import { Scene, Router, Actions } from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { Button } from '../components/general/';
-import {Text, View, Modal, Dimensions, TouchableOpacity }from 'react-native';
+import { getPositions, goToOtherProfile, pageLoad, getPrivilege} from '../actions';
+import _ from 'lodash';
 import {
-  fetchEvents,
-  getPrivilege,
-  typeChanged } from '../actions';
+  FlatList,
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions } from 'react-native';
+
 const dimension = Dimensions.get('window');
+const iteratees = ['points','lastName','firstName'];
+const order = ['desc','asc','asc'];
 
 class Election extends Component {
 
-  omponentWillMount() {
-    {this.setState({modalVisible: false})}
-    this.props.fetchEvents();
-    this.props.getPrivilege();
+  componentWillMount() {
+      this.props.getPositions();
   }
 
-  eboardBtn(){
-    if(this.props.privilege !== undefined && this.props.privilege.eboard == true){
-      return(
-        <View style={{flexDirection:'row', justifyContent:'space-between', backgroundColor:'grey', paddingBottom:10, paddingHorizontal:20}}>
-        <Button title="Time" width={95}/>
-        <Button title="Candidate" width={95}/>
-        <Button title="Analytics" width={95}/>
-        </View>
+  getCandidates(title){
+
+  /*return {<FlatList
+      data={positionsArray}
+      extraData={this.state}
+      keyExtractor={this._keyExtractor}
+      renderItem={({item, separators}) => (
+      this.renderComponent(item)
+    )}
+  />};*/
+
+  }
+
+
+  selectCandidate(){
+
+  }
+
+
+
+  renderCandidates(){
+    const {
+      containerStyle,
+      contentContainerStyle,
+    } = styles;
+
+
+      return (
+      <TouchableOpacity onPress = {this.selectCandidate.bind(this)}>
+        <View style={contentContainerStyle}>
+            <View style={containerStyle}>
+              <Text>{`${Hello}`}</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
       )
-    }
+
   }
 
-  render(){
-    return(
+  
 
-<View style={{flex: 1}}>
-{this.eboardBtn()}
-</View>
-    );
+  renderComponent(item) {
+    const {
+      containerStyle,
+      contentContainerStyle,
+    } = styles;
+
+      return (
+      <TouchableOpacity onPress = {this.getCandidates.bind(this, item.title)}>
+        <View style={contentContainerStyle}>
+            <View style={containerStyle}>
+              <Text>{`${item.title}`}</Text>
+              <Text>{`${item.description}`}</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      )
+
+  }
+
+
+   _keyExtractor = (item, index) => index;
+
+
+  render() {
+    const {
+      containerStyle,
+      contentContainerStyle } = styles;
+
+    const {
+      positions,
+    } = this.props;
+
+    const positionsArray = _.toArray(positions)
+
+    //alert(positions.title);
+    return (
+      <FlatList
+          data={positionsArray}
+          extraData={this.state}
+          keyExtractor={this._keyExtractor}
+          renderItem={({item, separators}) => (
+          this.renderComponent(item)
+        )}
+      />
+    )
   }
 }
 
-const mapStateToProps = ({ auth }) => {
-  const { privilege } = auth;
-  return { privilege };
+const styles = StyleSheet.create({
+  containerStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    backgroundColor: '#fff',
+    paddingVertical: 30,
+    paddingHorizontal: 15,
+  },
+  contentContainerStyle: {
+    margin: 1,
+    backgroundColor: '#abc',
+  }
+});
+
+const mapStateToProps = ({ elect }) => {
+  const { positions } = elect;
+
+  return { positions };
 };
 
 const mapDispatchToProps = {
+  getPositions,
+  goToOtherProfile,
+  pageLoad,
   getPrivilege,
-  typeChanged,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Election);

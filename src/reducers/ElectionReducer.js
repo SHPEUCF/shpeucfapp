@@ -15,7 +15,8 @@ import {
     POSITION_TITLE_CHANGED,
     POSITION_DESCRIPTION_CHANGED,
     GO_TO_CANDIDATE_FORM,
-    GO_TO_POSITION_FORM
+    GO_TO_POSITION_FORM,
+    GET_POSITIONS,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -26,7 +27,8 @@ const INITIAL_STATE = {
     candidatePlan: "",
     positionTitle: "",
     positionDescription: "",
-    title: "ADD"
+    title: "ADD",
+    positions: [],
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -47,7 +49,7 @@ export default (state = INITIAL_STATE, action) => {
             }
         case ADD_POSITION:
             return state
-            
+
         case DELETE_POSITION:
             return {
                 ...state,
@@ -67,32 +69,32 @@ export default (state = INITIAL_STATE, action) => {
             }
         case EDIT_CANDIDATES:
             return state
-        case CANDIDATE_FNAME_CHANGED: 
+        case CANDIDATE_FNAME_CHANGED:
             return {
                 ...state,
                 candidateName: payload
             }
-        case CANDIDATE_LNAME_CHANGED: 
+        case CANDIDATE_LNAME_CHANGED:
             return {
                 ...state,
                 candidateName: payload
             }
-        case CANDIDATE_PLAN_CHANGED: 
+        case CANDIDATE_PLAN_CHANGED:
             return {
                 ...state,
                 candidatePlan: payload
             }
-        case CANDIDATE_POSITION_CHANGED: 
+        case CANDIDATE_POSITION_CHANGED:
             return {
                 ...state,
                 candidatePosition: payload
             }
-        case POSITION_TITLE_CHANGED: 
+        case POSITION_TITLE_CHANGED:
             return {
                 ...state,
                 positionTitle: payload
             }
-        case POSITION_DESCRIPTION_CHANGED: 
+        case POSITION_DESCRIPTION_CHANGED:
             return {
                 ...state,
                 positionDescription: payload
@@ -106,6 +108,11 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 title: payload
+            }
+        case GET_POSITIONS:
+            return {
+                ...state,
+                positions: payload
             }
         default:
             return state;
