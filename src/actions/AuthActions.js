@@ -255,6 +255,10 @@ export const getPrivilege = () => {
             type: GET_PRIVILEGE,
             payload: snapshot.val(),
           });
+          dispatch({
+            type: PAGE_LOAD,
+            payload: false
+          });
       });
     };
   };
@@ -303,17 +307,14 @@ export const loadUser = (userID) => {
   return (dispatch) => {
     if ( currentUser != null ) {
       firebase.database().ref(`/users/${id}/`).on('value', snapshot => {
-          dispatch({
-            type: LOAD_USER,
-            payload: snapshot.val()
-          }
-        );
-          dispatch({
-            type: PAGE_LOAD,
-            payload: false
-          }
-        );
-
+        dispatch({
+          type: LOAD_USER,
+          payload: snapshot.val()
+        });
+        dispatch({
+          type: PAGE_LOAD,
+          payload: false
+        });
       })
     }
   };

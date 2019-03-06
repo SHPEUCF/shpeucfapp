@@ -16,6 +16,7 @@ import {
   EDIT_MEMBER,
   GO_TO_OTHER_PROFILE,
   GO_TO_EDIT_OTHER_PROFILE_FORM,
+  FETCH_FILTERS
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -38,6 +39,7 @@ const INITIAL_STATE = {
   loading: false,
   error: '',
   id: '',
+  filters: {}
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -91,6 +93,10 @@ export default (state = INITIAL_STATE, action) => {
     case FETCH_MEMBERS_POINTS:
       return { ...state,
         membersPoints: payload,
+      }
+    case FETCH_FILTERS:
+      return { ...state,
+        filters: payload,
       }
     default:
       return state;

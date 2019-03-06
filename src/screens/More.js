@@ -2,62 +2,111 @@ import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import {
   ScrollView,
-  StyleSheet } from 'react-native';
-import { List, ListItem } from 'react-native-elements';
+  FlatList } from 'react-native';
+import { connect } from 'react-redux';
+import { ListItem } from 'react-native-elements';
+import { Spinner} from '../components/general'
+
+import {
+  getPrivilege,
+  pageLoad
+} from "../actions"
 
   const menuItems = [
     {
       title: 'Leaderboard',
       icon: 'format-align-left',
-      screen: 'Leaderboard'
+      screen: 'Leaderboard',
+      privilege: "user"
     },
     {
       title: 'Resources',
       icon: 'layers',
-      screen: 'Resources'
+      screen: 'Resources',
+      privilege: "user"
     },
     {
       title: 'Check In',
       icon: 'done',
-      screen: 'CheckIn'
+      screen: 'CheckIn',
+      privilege: "user"
     },
     {
       title: 'Forms',
       icon: 'assignment',
-      screen: 'Forms'
+      screen: 'Forms',
+      privilege: "user"
     },
     {
       title: 'Election',
       icon: 'done',
-      screen: 'Election'
+      screen: 'Election',
+      privilege: "user"
     },
     {
       title: 'About',
       icon: 'info',
-      screen: 'About'
+      screen: 'About',
+      privilege: "user"
+    },
+    {
+      title: 'BackEnd',
+      icon: 'settings',
+      screen: 'BackEnd',
+      privilege: "eboard"
     }
-    ];
+  ];
 
 class More extends Component {
 
+  componentDidMount(){
+    this.props.pageLoad();
+    this.props.getPrivilege();
+  }
+
+  keyExtractor = (item, index) => index
+ 
+  renderItem  = ({item}) => {
+    
+    if (this.props.privilege !== undefined && this.props.privilege[item.privilege] === true ) {
+      return(
+        <ListItem
+          title={item.title}
+          leftIcon={{name: item.icon}}
+          onPress={() => Actions[item.screen]()}
+        />
+      )
+    }
+  }
+
   render() {
+  if(this.props.loading){
+    return <Spinner>{this.renderContent}</Spinner>
+  }
+  else
     return (
       <ScrollView>
-        <List>
-          {
-            menuItems.map((menuItem, i) => (
-              <ListItem
-                key={i}
-                title={menuItem.title}
-                leftIcon={{name: menuItem.icon}}
-                onPress={() => Actions[menuItem.screen]()}
-              />
-            ))
-          }
-        </List>
+        <FlatList
+          keyExtractor = {this.keyExtractor}
+          data = {menuItems}
+          renderItem={this.renderItem}
+        />
       </ScrollView>
     );
   };
 }
 
-export { More };
+const mapStateToProps = ({ auth, general }) => {
+  const { privilege } = auth;
+  const { loading } = general;
+
+  return { privilege, loading };
+};
+
+const mapDispatchToProps = {
+  getPrivilege,
+  pageLoad
+ };
+
+
+export default connect(mapStateToProps, mapDispatchToProps)( More );
