@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import {Button, Spinner} from '../components/general'
+import {Button, Spinner} from '../components/general';
 import { getPositions, goToOtherProfile, pageLoad, getPrivilege, addApplication, goToCandidateForm} from '../actions';
 import _ from 'lodash';
 import {
@@ -13,8 +13,16 @@ import {
   Dimensions } from 'react-native';
 
 const dimension = Dimensions.get('window');
-const iteratees = ['points','lastName','firstName'];
+const iteratees = ['points','lastName','firstName','picture', 'plan'];
 const order = ['desc','asc','asc'];
+const vColor = '#00ff7f';
+
+this.state = {president:null, eVP:null, iVP:null, treasurer:null, secretaty:null, gradAmb:null};
+
+      /* Color idea doesnt work
+         the color is annoying maybe a check box  */
+
+
 
 class Election extends Component {
 
@@ -94,7 +102,15 @@ class Election extends Component {
                 />
       				</View>
             </View>
-          </View>
+              <View style={{flex:1}}>
+                <View style={contentContainerStyle}>
+                    <View style={containerStyle}>
+
+                      <Text style={{fontSize:14}}>Plan: {`${item.plan}`}</Text>
+                    </View>
+                  </View>
+              </View>
+            </View>
         </TouchableOpacity>
       )
 
@@ -103,6 +119,28 @@ class Election extends Component {
 
    _keyExtractor = (item, index) => index;
 
+ renderFlatlist(positionsArray){
+   return(
+     <FlatList
+         data={positionsArray}
+         extraData={this.state}
+         keyExtractor={this._keyExtractor}
+         renderItem={({item, separators}) => (
+         this.renderComponent(item)
+       )}
+     />
+   )
+ }
+
+ loadNextPositions(){
+   /*
+   Checks if a candidate has been chosen if
+   not confirm that no vote for position.
+   This function gets the next position
+   (e.g. External Vice President) and passed
+   to the renderFlatlist function.
+    */
+ }
 
   render() {
     const {
@@ -117,14 +155,11 @@ class Election extends Component {
 
     //alert(positions.title);
     return (
-      <FlatList
-          data={positionsArray}
-          extraData={this.state}
-          keyExtractor={this._keyExtractor}
-          renderItem={({item, separators}) => (
-          this.renderComponent(item)
-        )}
-      />
+      <View style={{flex:1, marginBottom:10}}>
+        {this.renderFlatlist(positionsArray)}
+        <Button/>
+      </View>
+
     )
   }
 }
@@ -134,8 +169,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    backgroundColor: '#fff',
-    paddingVertical: 30,
+
+    paddingVertical: 10,
     paddingHorizontal: 15,
   },
   contentContainerStyle: {
