@@ -4,7 +4,7 @@ import {View, StyleSheet, Text, ScrollView} from 'react-native';
 import { Input, Button } from '../general';
 import { RkAvoidKeyboard, RkButton, RkPicker } from 'react-native-ui-kitten';
 import {
-    addCandidates,
+    addApplication,
     editCandidates,
     candidateFNameChanged,
     candidateLNameChanged,
@@ -34,24 +34,25 @@ class CandidateForm extends Component {
 
     onButtonPress() {
         const {
-            candidateName,
+            addApplication,
+            firstName,
+            lastName,
             candidatePlan,
-            candidatePosition
+            applyPosition,
+            id
         } = this.props;
-        alert("Still need to implement this action")
-        return;
-        if (candidateName === '') {
+        //alert("Still need to implement this action")
+
+        /*if (candidateName === '') {
             // this.EventCreationError('Please enter a Candidate Name');
-        } else if (candidatePlan === '') {
+        }*/ if (candidatePlan === '') {
             // this.EventCreationError('Please enter a Plan of action');
-        } else if (candidatePosition === '') {
-            // this.EventCreationError('Please enter a position');
         } else{
             if(this.props.title === "ADD")
-                this.props.addCandidates(candidateFName, candidateLName, candidatePlan, candidatePosition);
-            else
-                this.props.editCandidates(candidateName, candidatePlan, candidatePosition);
-            Actions.ElectionCandidates();
+                this.props.addApplication(firstName, lastName, candidatePlan, applyPosition, id);
+            /*else
+                this.props.editCandidates(candidateName, candidatePlan, candidatePosition);*/
+            //Actions.ElectionCandidates();
         }
     }
 
@@ -59,7 +60,7 @@ class CandidateForm extends Component {
             return (
                 <View style={styles.formContainerStyle}>
                     <View style={styles.headerStyle}>
-                        <Text style={styles.headerTextStyle}>{this.props.title + " CANDIDATE"}</Text>
+                        <Text style={styles.headerTextStyle}>{"Candidate Plan"}</Text>
                         {/* <Text style={styles.headerSubtitleStyle}>Registration</Text> */}
                     </View>
                     <ScrollView
@@ -68,34 +69,17 @@ class CandidateForm extends Component {
                     {/* <RkAvoidKeyboard> */}
                         <View>
                             <Input
-                            placeholder="Candidate First Name"
-                            value={this.props.candidateFName}
-                            onChangeText={this.props.candidateFNameChanged.bind(this)}
-                            />
-                            <Input
-                            placeholder="Candidate Last Name"
-                            value={this.props.candidateLName}
-                            onChangeText={this.props.candidateLNameChanged.bind(this)}
-                            />
-                            <Input
                             placeholder="Candidate Plan"
                             value={this.props.candidatePlan}
                             onChangeText={this.props.candidatePlanChanged.bind(this)}
                             />
-                            <Input
-                            placeholder="position needs to be picker"
-                            value={this.props.candidatePosition}
-                            autoCapitalize="sentences"
-                            maxLength={200}
-                            onChangeText={this.props.candidatePositionChanged.bind(this)}
-                            />
                         </View>
                         {this.renderError()}
-                        <Button 
-                            title = {this.props.title + " CANDIDATE"}
+                        <Button
+                            title = {"APPLY"}
                             onPress={this.onButtonPress.bind(this)}
                         />
-                        <Button 
+                        <Button
                             title = "CANCEL"
                             onPress={Actions.ElectionCandidates.bind(this)}
                         />
@@ -150,14 +134,15 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = ({ elect }) => {
-    const { candidateFName, candidateLName, candidatePosition, candidatePlan, title } = elect;
+const mapStateToProps = ({ elect, auth }) => {
+    const {candidatePlan, title, applyPosition} = elect;
+    const {firstName, lastName, id} = auth;
 
-    return { candidateFName,candidateLName, candidatePosition, candidatePlan, title };
+    return { firstName , lastName, applyPosition, candidatePlan, title, id };
 };
 
 const mapDispatchToProps = {
-    addCandidates,
+    addApplication,
     editCandidates,
     candidateFNameChanged,
     candidateLNameChanged,

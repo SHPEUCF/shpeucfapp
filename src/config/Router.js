@@ -226,6 +226,7 @@ const RouterComponent = () => {
             />
             <Stack
             key="BackEnd"
+            title="BackEnd"
             hideNavBar
            >
               <Scene key="BackEnd"

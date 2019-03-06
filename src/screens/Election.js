@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { getPositions, goToOtherProfile, pageLoad, getPrivilege} from '../actions';
+import {Button, Spinner} from '../components/general'
+import { getPositions, goToOtherProfile, pageLoad, getPrivilege, addApplication, goToCandidateForm} from '../actions';
 import _ from 'lodash';
 import {
   FlatList,
@@ -21,27 +22,39 @@ class Election extends Component {
       this.props.getPositions();
   }
 
-  getCandidates(title){
 
-  /*return {<FlatList
-      data={positionsArray}
+  apply(position){
+      const {
+      goToCandidateForm,
+      firstName,
+      lastName,
+      id } = this.props;
+
+
+      goToCandidateForm("ADD", position);
+  }
+  /*getCandidates(candidates){
+
+    const candidatesArray = _.toArray(candidates)
+
+  return <FlatList
+      data={candidatesArray}
       extraData={this.state}
       keyExtractor={this._keyExtractor}
       renderItem={({item, separators}) => (
-      this.renderComponent(item)
+      this.renderCandidates(item)
     )}
-  />};*/
-
+  />;
   }
 
 
   selectCandidate(){
 
-  }
+  }*/
 
 
 
-  renderCandidates(){
+  /*renderCandidates(item){
     const {
       containerStyle,
       contentContainerStyle,
@@ -58,9 +71,9 @@ class Election extends Component {
         </TouchableOpacity>
       )
 
-  }
+  }*/
 
-  
+
 
   renderComponent(item) {
     const {
@@ -69,11 +82,17 @@ class Election extends Component {
     } = styles;
 
       return (
-      <TouchableOpacity onPress = {this.getCandidates.bind(this, item.title)}>
+      <TouchableOpacity onPress = {this.apply.bind(this, item.candidates)}>
         <View style={contentContainerStyle}>
             <View style={containerStyle}>
               <Text>{`${item.title}`}</Text>
               <Text>{`${item.description}`}</Text>
+                <View style={styles.button}>
+                <Button
+                  title = "Apply"
+                  onPress={this.apply.bind(this, item.title)}
+                />
+      				</View>
             </View>
           </View>
         </TouchableOpacity>
@@ -122,13 +141,19 @@ const styles = StyleSheet.create({
   contentContainerStyle: {
     margin: 1,
     backgroundColor: '#abc',
-  }
+  },
+  button: {
+  //  backgroundColor: '#8b95a5',
+    paddingTop: dimension.height * .015,
+    paddingBottom: dimension.height * .015,
+  },
 });
 
-const mapStateToProps = ({ elect }) => {
+const mapStateToProps = ({ elect, auth }) => {
   const { positions } = elect;
+  const { firstName, lastName, id} = auth
 
-  return { positions };
+  return { positions, firstName, lastName, id};
 };
 
 const mapDispatchToProps = {
@@ -136,6 +161,8 @@ const mapDispatchToProps = {
   goToOtherProfile,
   pageLoad,
   getPrivilege,
+  addApplication,
+  goToCandidateForm
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Election);
