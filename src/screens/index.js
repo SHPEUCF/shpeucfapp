@@ -9,3 +9,4 @@ export * from './About';
 export * from './EBoard';
 export * from './Version';
 export * from './Election';
+export * from './Dashboard';

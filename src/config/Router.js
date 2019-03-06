@@ -30,7 +30,8 @@ import {
   Forms,
   About,
   EBoard,
-  Version
+  Version,
+  Dashboard
 } from '../screens/';
 
 const RouterComponent = () => {
@@ -100,10 +101,11 @@ const RouterComponent = () => {
           activeTintColor={'black'}
           inactiveTintColor={'gray'}
         >
-          <Stack
-            key="feed"
-            tabBarLabel="Feed"
-            title="Feed"
+          <Scene
+            key="dashboard"
+            component={Dashboard}
+            tabBarLabel="Dashboard"
+            title="Dashboard"
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
                 name={focused ? 'ios-paper' : 'ios-paper-outline'}
@@ -111,16 +113,9 @@ const RouterComponent = () => {
                 style={{ color: 'black' }}
               />
             }
-          >
-          <Scene key="feed"
-            component={Feed}
-            leftTitle="Posts"
           />
-          <Scene key="PostShow"
-            component={PostShow}
-            passProps
-          />
-          </Stack>
+
+
           <Scene
             key="event"
             component={Events}
