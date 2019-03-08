@@ -102,7 +102,6 @@ export default (state = INITIAL_STATE, action) => {
       return state;
     case FETCH_MEMBER_PROFILE:
       return { ...state,
-        ...INITIAL_STATE,
         firstName: payload.firstName,
         lastName: payload.lastName,
         college: payload.college,
