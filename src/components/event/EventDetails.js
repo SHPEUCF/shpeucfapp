@@ -10,7 +10,7 @@ import {
     Dimensions,
     ScrollView
 } from 'react-native';
-import {Button} from '../general'
+import {Button, Input} from '../general'
 import {
     goToCreateEvent,
     goToCreateEventFromEdit,
@@ -21,7 +21,7 @@ import {
     checkIn
 } from '../../actions'
 
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 
 class EventDetails extends Component {
     
@@ -55,12 +55,10 @@ class EventDetails extends Component {
                         autoCapitalize={'characters'}
                         autoCorrect={false}
                         maxLength={4}
-                        // editable={true}
-                        // style={{marginTop:dimension.height*.1}}
-                        // inputStyle={styles.modalTextInput}
                         />
                         <Button 
                             title = "CHECK IN"
+                            width = {dimension.width * .6}
                             onPress={() => {
                             if(this.props.code === this.state.text){
                                 this.checkinButton(this.props.eventID, this.props.points)
