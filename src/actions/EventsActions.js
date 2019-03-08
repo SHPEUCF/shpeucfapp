@@ -100,10 +100,11 @@ export const checkIn = (eventID, val) => {
          firebase.database().ref(`points/${currentUser.uid}/points`).once('value', snapshot => {
           points = parseInt(snapshot.val()) + parseInt(val);
           firebase.database().ref(`events/${eventID}/attendance`).set({[currentUser.uid]: true })
-          .then(() => firebase.database().ref(`points/${currentUser.uid}/points`).set(points)
-          .then(() => firebase.database().ref(`users/${currentUser.uid}/points`).set(points)))
+          .then(() => firebase.database().ref(`points/${currentUser.uid}/points`).set(points))
+          .then(() => firebase.database().ref(`users/${currentUser.uid}/events`).set({[eventID]: true }))
+          .then(() => firebase.database().ref(`users/${currentUser.uid}/points`).set(points))
           .then(() => Alert.alert('Checked In', 'Successful'))
-          .catch((error) => Alert.alert('Check In Failed', 'Failure'));
+          .catch((error) => Alert.alert('Check In Failed', 'Failure'))
          })
       }
       else
