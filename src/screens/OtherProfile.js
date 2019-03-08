@@ -116,42 +116,36 @@ class OtherProfile extends Component {
 
   }
 
+  renderEditButton(privilege){
+    if (privilege.board)
+      return (
+          <View>
+            <Button
+              title = "EDIT PROFILE"
+              onPress = {() => goToEditOtherProfileForm()}
+            />
+          </View>
+      )
+  }
+
   renderButtons() {
     const {
       privilege,
       goToEditOtherProfileForm,
       } = this.props;
 
-    const {goBack} = this.props.navigation;
-
-    if (privilege.board || privilege.eboard || privilege.president) {
     return (
       <View>
-        <View>
-          <Button
-            title = "EDIT PROFILE"
-            onPress = {() => goToEditOtherProfileForm()}
-          />
-        </View>
+      {this.renderEditButton(privilege)}
         <View>
           <Button
             title = "BACK TO LEADERBOARD"
-            onPress={() => goBack()}
+            onPress={() => Actions.popTo("Leaderboard")}
           />
         </View>
       </View>
     )
-    }
-    else {
-    return (
-      <View>
-        <Button
-          title = "BACK TO LEADERBOARD"
-          onPress={() => goBack()}
-        />
-      </View>
-    )
-    }
+
   }
 
   renderSocialMedia(){
