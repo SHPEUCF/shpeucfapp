@@ -224,13 +224,13 @@ const styles = StyleSheet.create({
   },
   modalTextInput: {
     marginTop: dimension.height*.05,
-    height: 80,
+    height: dimension.height * .091,
     textAlign: 'center',
     width: dimension.width*.6,
     backgroundColor: '#FECB0022',
     borderColor: '#FECB00',
-    borderRadius: 16,
-    borderWidth: 3,
+    borderRadius: dimension.height * .01,
+    borderWidth: dimension.width *.01,
     borderStyle: 'solid',
     fontWeight: 'bold',
     fontSize: 60
@@ -254,9 +254,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
     borderRadius: 5,
-    padding: 10,
-    marginRight: 10,
-    marginTop: 17
+    padding: dimension.height *.020,
+    marginRight: dimension.height *.010,
+    marginTop: dimension.height *.02
   },
   headerTextStyle: {
     fontSize: 22,
@@ -264,20 +264,20 @@ const styles = StyleSheet.create({
   },
   emptyDate: {
     flex:1,
-    height: 15,
-    paddingTop: 30,
+    height: dimension.height * .015,
+    paddingTop: dimension.height *.030,
   },
   emptyData: {
-    height: 15,
-    paddingTop: 30,
-    paddingBottom: 30,
-    marginRight: 10,
-    marginLeft: 10,
+    height: dimension.height * .015,
+    paddingTop: dimension.height * .030,
+    paddingBottom: dimension.height *.04,
+    marginRight: dimension.height *.010,
+    marginLeft: dimension.height *.010,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
     borderRadius: 5,
-    marginTop: 17
+    marginTop: dimension.height *.017
   },
   description: {
     // marginTop: 7,

@@ -50,6 +50,7 @@ export const EDIT_MEMBER= 'edit_member';
 export const GO_TO_OTHER_PROFILE= 'go_to_other_profile';
 export const GO_TO_EDIT_OTHER_PROFILE_FORM = 'go_to_edit_other_profile_form';
 export const QUOTE_CHANGED_MEMBER = 'quote_changed_member';
+export const FETCH_FILTERS = 'fetch_filters';
 
 // GeneralActions
 export const PAGE_LOAD = 'page_load';
@@ -74,3 +75,26 @@ export const GO_TO_CREATE_EVENT = 'go_to_create_event';
 export const GO_TO_CREATE_EVENT_FROM_EDIT = 'go_to_create_event_from_edit';
 export const GO_TO_EVENT = 'go_to_event';
 export const GO_TO_VIEW_EVENT = 'go_to_view_event';
+
+
+
+// ElectionActions
+export const OPEN_ELECTION = 'open_election';
+export const CLOSE_ELECTION = 'close_election';
+export const ADD_APPLICATION = 'add_application';
+export const APPROVE_APPLICATION = 'approve_application';
+export const CHANGE_POSITION = "change_positions"
+export const DELETE_POSITION = 'delete_position';
+export const EDIT_POSITION = 'edit_position';
+export const ADD_CANDIDATES = 'add_candidates';
+export const DELETE_CANDIDATES = 'delete_candidates';
+export const EDIT_CANDIDATES = 'edit_candidates';
+export const CANDIDATE_FNAME_CHANGED = "candidate_fname_changed"
+export const CANDIDATE_LNAME_CHANGED = "candidate_lname_changed"
+export const CANDIDATE_PLAN_CHANGED = "candidate_plan_changed"
+export const CANDIDATE_POSITION_CHANGED = "candidate_position_changed"
+export const POSITION_TITLE_CHANGED = "position_title_changed"
+export const POSITION_DESCRIPTION_CHANGED = "position_description_changed"
+export const GO_TO_CANDIDATE_FORM = "go_to_candidate_form"
+export const GO_TO_POSITION_FORM = "go_to_position_form"
+export const GET_POSITIONS = "get_positions"

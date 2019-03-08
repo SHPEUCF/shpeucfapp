@@ -19,7 +19,8 @@ import {
   GO_TO_OTHER_PROFILE,
   GO_TO_EDIT_OTHER_PROFILE_FORM,
   QUOTE_CHANGED_MEMBER,
-  PAGE_LOAD
+  PAGE_LOAD,
+  FETCH_FILTERS
 } from './types.js';
 
 export const firstNameChangedMember = (text) => {
@@ -78,6 +79,13 @@ export const pictureChangedMember = (text) => {
   };
 };
 
+export const fetchFilters = (text) => {
+  return {
+    type: FETCH_FILTERS,
+    payload: text
+  };
+};
+
 export const confirmPasswordChangedMember = (text) => {
   return {
     type: CONFIRM_PASSWORD_CHANGED_MEMBER,
@@ -91,6 +99,7 @@ export const quoteChangedMember = (text) => {
     payload: text
   };
 };
+
 
 export const fetchMembersPoints = () => {
 

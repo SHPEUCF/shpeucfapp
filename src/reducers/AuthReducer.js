@@ -149,6 +149,7 @@ export default (state = INITIAL_STATE, action) => {
         email: payload.email,
         major: payload.major,
         quote: payload.quote,
+        id: payload.id,
         points: payload.points,
         picture: payload.picture,
         privilege: payload.privilege,
