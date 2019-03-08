@@ -119,7 +119,7 @@ class Events extends Component {
             renderEmptyData = {this.renderEmptyData.bind(this)}
 
             style={{
-              height: dimension.height *.75
+              height: dimension.height *.73
             }}
             theme={{
               backgroundColor: '#0c0b0b',
