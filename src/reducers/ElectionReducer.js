@@ -31,7 +31,8 @@ const INITIAL_STATE = {
     positionDescription: "",
     title: "ADD",
     positions: [],
-    applyPosition: ""
+    applyPosition: "",
+    approved: false
 };
 
 export default (state = INITIAL_STATE, action) => {
