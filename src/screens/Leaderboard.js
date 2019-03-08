@@ -27,7 +27,6 @@ class Leaderboard extends Component {
 
   callUser(id){
     this.props.pageLoad();
-    this.props.getPrivilege();
     this.props.fetchMemberProfile(id);
     this.props.goToOtherProfile();
   }

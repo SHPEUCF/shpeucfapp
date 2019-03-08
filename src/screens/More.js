@@ -59,15 +59,10 @@ import {
 
 class More extends Component {
 
-  componentDidMount(){
-    this.props.pageLoad();
-    this.props.getPrivilege();
-  }
-
   keyExtractor = (item, index) => index
- 
+
   renderItem  = ({item}) => {
-    
+
     if (this.props.privilege !== undefined && this.props.privilege[item.privilege] === true ) {
       return(
         <ListItem
