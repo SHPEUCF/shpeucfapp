@@ -112,6 +112,8 @@ export const addApplication = (fName, lName, plans, position, id) => {
               lastName: lName,
               plan: plans,
               id: id,
+              position: position,
+              approved: false,
           })
           .then(() => {
               dispatch({
