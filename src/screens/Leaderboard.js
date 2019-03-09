@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { fetchMembersPoints, fetchMemberProfile, goToOtherProfile, pageLoad, getPrivilege} from '../actions';
+import {
+  fetchMembersPoints,
+  fetchMemberProfile,
+  goToOtherProfile,
+  pageLoad,
+  getPrivilege,
+  loadUser
+} from '../actions';
 import _ from 'lodash';
 import * as Progress from 'react-native-progress';
 import {
@@ -22,7 +29,13 @@ class Leaderboard extends Component {
   }
 
   componentWillMount() {
+    this.props.loadUser()
     this.props.fetchMembersPoints();
+  }
+
+  viewBreakDown() {
+    this.props.pageLoad();
+    //getPointsBreakDown
   }
 
   callUser(id){
@@ -36,15 +49,25 @@ class Leaderboard extends Component {
     const {
       containerStyle,
       contentContainerStyle,
-      progress
+      progress,
+      curUserHighlight
     } = styles;
+    var action
+    if(item.id === this.props.id){
+      var curUser = curUserHighlight
+      action = this.viewBreakDown
+    }
+    else{
+      action = this.callUser
+    }
+
     if(item.points !== 0){
       return (
-      <TouchableOpacity onPress = {this.callUser.bind(this, item.id)}>
+      <TouchableOpacity onPress = {action.bind(this, item.id)}>
         <View style={contentContainerStyle}>
             <View style={containerStyle}>
-              <Text>{`${item.firstName} ${item.lastName}`}</Text>
-              <Text>Points:{item.points}</Text>
+              <Text style={curUser}>{`${item.firstName} ${item.lastName}`}</Text>
+              <Text style={curUser}>Points: {item.points}</Text>
               <Progress.Bar
                 style={progress}
                 progress={item.points / Math.max(sortedMembers[0].points,1)}
@@ -90,9 +113,13 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     paddingHorizontal: 15,
   },
+  curUserHighlight: {
+    // backgroundColor: '#ffd70024',
+    color: '#aa9100'
+  },
   contentContainerStyle: {
     margin: 1,
-    backgroundColor: '#abc',
+    backgroundColor: '#fff',
   },
   progress: {
     flex: 1,
@@ -100,10 +127,11 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = ({ members }) => {
+const mapStateToProps = ({ auth,members }) => {
   const { membersPoints } = members;
+  const { id } = auth
 
-  return { membersPoints };
+  return { membersPoints, id };
 };
 
 const mapDispatchToProps = {
@@ -111,7 +139,8 @@ const mapDispatchToProps = {
   fetchMemberProfile,
   goToOtherProfile,
   pageLoad,
-  getPrivilege
+  getPrivilege,
+  loadUser
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Leaderboard);

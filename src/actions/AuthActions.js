@@ -27,6 +27,7 @@ import {
   CREATE_USER_FAIL,
   EDIT_USER,
   GET_PRIVILEGE,
+  GET_POINTS_BREAKDOWN,
   GO_TO_RESET_PASSWORD,
   GO_TO_LOGIN,
   GO_TO_PROFILE,
@@ -263,6 +264,33 @@ export const getPrivilege = () => {
     };
   };
 }
+
+export const getPointsBreakDown = () => {
+  const { currentUser } = firebase.auth();
+
+  return (dispatch) => {
+    //Actions.PointsBreakDown()
+    if ( currentUser != null ) {
+      firebase.database().ref(`/points/${currentUser.uid}/events`)
+        .on('value', snapshot => {
+          dispatch({
+            type: GET_POINTS_BREAKDOWN,
+            payload: snapshot.val(),
+          });
+        })
+        .then(() => {
+          dispatch({
+            type: PAGE_LOAD,
+            payload: false
+          });
+        });
+    };
+  };
+}
+
+
+
+
 
 // Login Actions
 const isVerifiedUser = ({ email, password }) => {
