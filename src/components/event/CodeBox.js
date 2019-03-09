@@ -1,3 +1,12 @@
+/*
+* Can't figure out how to get this to work. It just fills the screen.
+* An example of desired outcome is shown when you click the check in buttons
+* in the events page
+*/
+
+
+
+
 import {View, Modal, TouchableOpacity, Dimensions, Text, TextInput} from 'react-native';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -66,7 +75,7 @@ const CodeBox = ({
                     <Button 
                         title = "CHECK IN"
                         width = {dimension.width * .6}
-                        onPress={onPress(code)}
+                        onPress= {(code, eventID, points) => {}}
                     />
                 </View>
             </Modal>

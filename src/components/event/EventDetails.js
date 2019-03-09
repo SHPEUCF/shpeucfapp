@@ -18,7 +18,9 @@ import {
     goToEvents,
     deleteEvents,
     getPrivilege,
-    checkIn
+    checkIn,
+    openCheckIn,
+    closeCheckIn
 } from '../../actions'
 
 const dimension = Dimensions.get('screen');
@@ -28,10 +30,35 @@ class EventDetails extends Component {
 
     componentWillMount() {
         {this.setState({modalVisible: false})}
+        this.props.fetchCode(this.props.eventID)
         this.props.getPrivilege();
     }
 
+
     renderCodeBox(){
+        if(this.props.privilege.board){
+            return (
+                <Modal
+                transparent={true}
+                visible={this.state.modalVisible}>
+                     <View style={styles.modalBackground}>
+                        <View style={styles.modalContent}>
+                            <TouchableOpacity onPress={() => {
+                                            this.setState({modalVisible: false})
+                                            this.props.closeCheckIn(this.props.eventID)}}>
+                            <Text>X</Text>
+                            </TouchableOpacity>
+                            <Text style={styles.modalText}>The event check-in is now open!</Text>
+                            <Text style={styles.modalText}>Please provide everyone this code</Text>
+                            <Text style={styles.codeText}>{this.props.code}</Text>
+                            <Text style={styles.modalText}>When you close this box the event check-in will close</Text>
+
+                        </View>
+                    </View>
+                </Modal>
+            )
+        }
+        else
         return (
         <Modal
         transparent={true}
@@ -75,9 +102,12 @@ class EventDetails extends Component {
         </Modal>
     )
   }
-
-    deleteButton(eventID){
-        this.props.deleteEvents(eventID);
+    openCheckInButton(){
+        this.props.openCheckIn(this.props.eventID)
+        this.setState({modalVisible: true})
+    }
+    deleteButton(){
+        this.props.deleteEvents(this.props.eventID);
         this.props.goToEvents();
     }
     checkinButton(ID, points){
@@ -87,7 +117,11 @@ class EventDetails extends Component {
         if(this.props.privilege !== undefined && this.props.privilege.board === true){
             return (
                 <View>
-                     <Button 
+                    <Button 
+                        title = "OPEN CHECK-IN"
+                        onPress={this.openCheckInButton.bind(this)}
+                    />
+                    <Button 
                         title = "DELETE EVENT"
                         onPress={this.deleteButton.bind(this)}
                     />
@@ -104,8 +138,7 @@ class EventDetails extends Component {
                     title = "CHECK IN"
                     onPress={() => {
                         this.setState({modalVisible: true})
-                        this.props.fetchCode(this.props.eventID)}
-                    }
+                    }}
                 />
             </View>
         )
@@ -216,6 +249,17 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         margin: 5,
     },
+    codeText: {
+        margin:60,
+        color: '#FECB00',
+        alignSelf: 'center',
+        fontWeight: 'bold',
+        fontSize: 50,
+    },
+    modalText: {
+        alignSelf: 'center',
+        fontSize: 16
+    },
     modalTextInput: {
         marginTop: dimension.height*.05,
         height: 80,
@@ -230,7 +274,7 @@ const styles = StyleSheet.create({
         fontSize: 60
     },
     modalContent: {
-        height: dimension.height*.4,
+        height: dimension.height*.5,
         width: dimension.width*.8,
         padding: 12,
         backgroundColor: '#fff',
@@ -305,7 +349,9 @@ const mapDispatchToProps = {
     goToEvents,
     deleteEvents,
     getPrivilege,
-    checkIn
+    checkIn,
+    openCheckIn,
+    closeCheckIn
 }
 
 
