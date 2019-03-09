@@ -33,6 +33,9 @@ const CodeBox = ({
         modal
     } = styles;
     return (
+        <View style = {[modal]}
+            visible={visible}
+            >
             <Modal
             supportedOrientations={supportedOrientations}
             onRequestClose={onRequestClose}
@@ -47,28 +50,27 @@ const CodeBox = ({
             visible={visible}
             style={[modal,modalContent,containerStyle,modalStyle]}
             >
-                {/* <View style={[modalContent,containerStyle]}> */}
-                    <TouchableOpacity onPress={() => {this.setState({modalVisible: false})}}>
-                    <Text>X</Text>
-                    </TouchableOpacity>
-                    <View style={[container]}>
-                        <Text style={[text,textStyle]}>Enter Code</Text>
-                        <TextInput
-                        style={[input,textStyle]}
-                        onChangeText={(text) => this.setState({text})}
-                        value={this.state.text}
-                        autoCapitalize={'characters'}
-                        autoCorrect={false}
-                        maxLength={4}
-                        />
-                        <Button 
-                            title = "CHECK IN"
-                            width = {dimension.width * .6}
-                            onPress={onPress(code)}
-                        />
-                    </View>
-                {/* </View> */}
+                <TouchableOpacity onPress={() => {this.setState({visible: false})}}>
+                <Text>X</Text>
+                </TouchableOpacity>
+                <View style={[container]}>
+                    <Text style={[text,textStyle]}>Enter Code</Text>
+                    <TextInput
+                    style={[input,textStyle]}
+                    onChangeText={(text) => this.setState({text})}
+                    value={this.state.text}
+                    autoCapitalize={'characters'}
+                    autoCorrect={false}
+                    maxLength={4}
+                    />
+                    <Button 
+                        title = "CHECK IN"
+                        width = {dimension.width * .6}
+                        onPress={onPress(code)}
+                    />
+                </View>
             </Modal>
+        </View>
     )
 }
 
@@ -90,12 +92,13 @@ const styles = {
         fontSize: 60,
     },
     modal: {
+        padding: 100,
+        margin: 100,
         width: Dimensions.get("screen").width * .4,
         height: Dimensions.get("screen").height * .8,
     },
     modalContent: {
         padding: 12,
-        flex: 1,
         backgroundColor: '#fff',
         borderRadius: 12,
         justifyContent: 'center',
