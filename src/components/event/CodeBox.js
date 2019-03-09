@@ -33,7 +33,6 @@ const CodeBox = ({
         modal
     } = styles;
     return (
-        <View style={{flex: 1, backgroundColor: '#fff1'}}>
             <Modal
             supportedOrientations={supportedOrientations}
             onRequestClose={onRequestClose}
@@ -46,7 +45,7 @@ const CodeBox = ({
             presentationStyle={presentationStyle}
             animated={animated}
             visible={visible}
-            style={[modal,modalStyle]}
+            style={[modal,modalContent,containerStyle,modalStyle]}
             >
                 {/* <View style={[modalContent,containerStyle]}> */}
                     <TouchableOpacity onPress={() => {this.setState({modalVisible: false})}}>
@@ -70,7 +69,6 @@ const CodeBox = ({
                     </View>
                 {/* </View> */}
             </Modal>
-        </View>
     )
 }
 
