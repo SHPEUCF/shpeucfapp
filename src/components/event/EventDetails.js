@@ -10,8 +10,7 @@ import {
     Dimensions,
     ScrollView
 } from 'react-native';
-import {Button, Input} from '../general'
-import CodeBox from '../event/CodeBox'
+import {Button} from '../general'
 import {
     goToCreateEvent,
     goToCreateEventFromEdit,
@@ -22,6 +21,7 @@ import {
     checkIn
 } from '../../actions'
 
+const dimension = Dimensions.get('screen');
 
 class EventDetails extends Component {
     
@@ -32,8 +32,48 @@ class EventDetails extends Component {
     }
 
     renderCodeBox(){
-        return <CodeBox
-                visible={this.state.modalVisible}/>
+        return (
+        <Modal
+        transparent={true}
+        animationType={'fade'}
+        onRequestClose={() => {
+            alert('Modal has been closed.');
+        }}
+        visible={this.state.modalVisible}
+        >
+            <View style={styles.modalBackground}>
+                <View style={styles.modalContent}>
+                    <TouchableOpacity onPress={() => {this.setState({modalVisible: false})}}>
+                    <Text>X</Text>
+                    </TouchableOpacity>
+                    <View style={styles.container}>
+                        <Text style={styles.headerTextStyle}>Enter Code</Text>
+                        <TextInput
+                        style={styles.modalTextInput}
+                        onChangeText={(text) => this.setState({text})}
+                        value={this.state.text}
+                        autoCapitalize={'characters'}
+                        autoCorrect={false}
+                        maxLength={4}
+                        // editable={true}
+                        // style={{marginTop:dimension.height*.1}}
+                        // inputStyle={styles.modalTextInput}
+                        />
+                        <Button 
+                            title = "CHECK IN"
+                            width = {dimension.width * .6}
+                            onPress={() => {
+                            if(this.props.code === this.state.text){
+                                this.checkinButton(this.props.eventID, this.props.points)
+                                // this.setState({modalVisible: false})
+                            }
+                        }}
+                        />
+                    </View>
+                </View>
+            </View>
+        </Modal>
+    )
   }
 
     deleteButton(eventID){
@@ -170,6 +210,40 @@ class EventDetails extends Component {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        margin: 5,
+    },
+    modalTextInput: {
+        marginTop: dimension.height*.05,
+        height: 80,
+        textAlign: 'center',
+        width: dimension.width*.6,
+        backgroundColor: '#FECB0022',
+        borderColor: '#FECB00',
+        borderRadius: 16,
+        borderWidth: 3,
+        borderStyle: 'solid',
+        fontWeight: 'bold',
+        fontSize: 60
+    },
+    modalContent: {
+        height: dimension.height*.4,
+        width: dimension.width*.8,
+        padding: 12,
+        backgroundColor: '#fff',
+        borderRadius: 12,
+    },
+    modalBackground: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 0,
+        height: dimension.height,
+        width: dimension.width,
+        backgroundColor: '#000a'
+    },
     formContainerStyle: {
         flex: 1,
         marginLeft: 20,
@@ -231,6 +305,7 @@ const mapDispatchToProps = {
     goToEvents,
     deleteEvents,
     getPrivilege,
+    checkIn
 }
 
 
