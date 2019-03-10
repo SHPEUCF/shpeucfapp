@@ -33,9 +33,12 @@ class ElectionCandidates extends Component {
       this.props.getPositions();
   }
 
-  approve(){
-
-  }
+  /*viewPosition(item) {
+    this.props.candidateFNameChanged(item.firstName);
+    this.props.candidateLNameChanged(item.lastName);
+    this.props.candidatePlanChanged(iten.plan);
+    this.props.goToCandidateForm("EDIT");
+  }*/
 
   renderCandidates(item) {
     const {
@@ -45,18 +48,12 @@ class ElectionCandidates extends Component {
       candidateContainer
     } = styles;
 
-    if (!(item.approved)){
     return (
       <View style={contentContainerStyle}>
-          <View style={candidateContainer}>
-            <View style={containerTextStyle}>
-              <Text>{item.firstName + ' ' + item.lastName}</Text>
-            </View>
             {this.renderDecisions(item)}
-          </View>
       </View>
     )
-  }
+
   }
 
   renderPositions(item) {
@@ -85,25 +82,58 @@ class ElectionCandidates extends Component {
   }
 
   renderDecisions(item){
-    return (
 
+    const {
+      containerStyle,
+      contentContainerStyle,
+      containerTextStyle,
+      candidateContainer,
+      containerCandidateTextStyle
+    } = styles;
+
+    if (!(item.approved)){
+    return (
+      <View style={candidateContainer}>
+      <View style={containerTextStyle}>
+        <Text>{item.firstName + ' ' + item.lastName}</Text>
+      </View>
         <View style={styles.approveContainer}>
-          <View style= {styles.candidateContainer}>
+          <View style= {styles.candidateGrayContainer}>
             <TouchableOpacity
             onPress={this.props.approveApplication.bind(this, item.position, item.id)}>
               <Ionicons name="md-checkmark-circle" size={40} color='#000000'/>
             </TouchableOpacity>
           </View>
-          <View style= {styles.candidateContainer}>
+          <View style= {styles.candidateGrayContainer}>
             <TouchableOpacity
             onPress={this.props.deleteApplication.bind(this, item.position, item.id)}>
               <Ionicons name="md-close-circle" size={40} color='#000000'/>
             </TouchableOpacity>
           </View>
         </View>
+        </View>
 
     )
   }
+
+  else{
+    return (
+      <View style={candidateContainer}>
+      <View style={containerCandidateTextStyle}>
+        <Text>{item.firstName + ' ' + item.lastName}</Text>
+      </View>
+      <View style={styles.deleteContainer}>
+        <View style= {styles.candidateContainer}>
+          <TouchableOpacity
+          onPress={this.props.deleteApplication.bind(this, item.position, item.id)}>
+            <Ionicons name="md-remove-circle" size={40} color='#000000'/>
+          </TouchableOpacity>
+        </View>
+      </View>
+      </View>
+    )
+  }
+}
 
 
   _keyExtractor = (item, index) => index;
@@ -147,14 +177,6 @@ class ElectionCandidates extends Component {
 
         {this.renderFlatlist(positionsArray)}
 
-
-        <View style={buttonContainerStyling}>
-            <Button
-            onPress={() => this.props.goToCandidateForm("ADD")}
-            title={"ADD CANDIDATES"}
-            >
-            </Button>
-        </View>
         <View style={buttonContainerStyling}>
             <Button
             onPress={() => Actions.ElectionBackEnd("")}
@@ -185,6 +207,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   containerTextStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    backgroundColor: '#ebebf1',
+
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  containerCandidateTextStyle: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
@@ -222,7 +253,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#ffd700',
   },
+  candidateGrayContainer: {
+    flex: 2,
+    marginTop: dimension.height * .002,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    backgroundColor: '#ebebf1',
+  },
   approveContainer: {
+    flex: 2,
+    marginTop: dimension.height * .002,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    backgroundColor: '#ebebf1',
+  },
+  deleteContainer: {
     flex: 2,
     marginTop: dimension.height * .002,
     flexDirection: 'row',

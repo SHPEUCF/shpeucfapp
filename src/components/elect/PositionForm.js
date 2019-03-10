@@ -73,14 +73,14 @@ class PositionForm extends Component {
                             value={this.props.positionDescription}
                             onChangeText={this.props.positionDescriptionChanged.bind(this)}
                             />
-                           
+
                         </View>
                         {this.renderError()}
-                        <Button 
+                        <Button
                             title = {this.props.title + " POSITION"}
                             onPress={this.onButtonPress.bind(this)}
                         />
-                        <Button 
+                        <Button
                             title = "CANCEL"
                             onPress={Actions.ElectionPositions.bind(this)}
                         />

@@ -68,6 +68,7 @@ export default (state = INITIAL_STATE, action) => {
         case DELETE_CANDIDATES:
             return {
                 ...state,
+                candidateFName: "",
                 candidateName : "",
                 candidatePlan : "",
                 candidatePosition : ""
