@@ -34,8 +34,7 @@ class Leaderboard extends Component {
   }
 
   viewBreakDown() {
-    this.props.pageLoad();
-    //getPointsBreakDown
+    Actions.pointsBreakDown();
   }
 
   callUser(id){

@@ -1,112 +1,138 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
-import {
-  ScrollView,
-  FlatList } from 'react-native';
 import { connect } from 'react-redux';
-import { ListItem } from 'react-native-elements';
-import { Spinner} from '../components/general'
-
 import {
+  fetchMembersPoints,
+  fetchMemberProfile,
+  goToOtherProfile,
+  pageLoad,
   getPrivilege,
-  pageLoad
-} from "../actions"
+  loadUser
+} from '../actions';
+import _ from 'lodash';
+import * as Progress from 'react-native-progress';
+import {
+  FlatList,
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions } from 'react-native';
 
-  const menuItems = [
-    {
-      title: 'Leaderboard',
-      icon: 'format-align-left',
-      screen: 'Leaderboard',
-      privilege: "user"
-    },
-    {
-      title: 'Resources',
-      icon: 'layers',
-      screen: 'Resources',
-      privilege: "user"
-    },
-    {
-      title: 'Check In',
-      icon: 'done',
-      screen: 'CheckIn',
-      privilege: "user"
-    },
-    {
-      title: 'Forms',
-      icon: 'assignment',
-      screen: 'Forms',
-      privilege: "user"
-    },
-    {
-      title: 'Election',
-      icon: 'done',
-      screen: 'Election',
-      privilege: "user"
-    },
-    {
-      title: 'About',
-      icon: 'info',
-      screen: 'About',
-      privilege: "user"
-    },
-    {
-      title: 'BackEnd',
-      icon: 'settings',
-      screen: 'BackEnd',
-      privilege: "eboard"
+const dimension = Dimensions.get('window');
+const iteratees = ['points','lastName','firstName'];
+const order = ['desc','asc','asc'];
+
+class PointsBreakDown extends Component {
+
+    renderInnerComponent(item){
+        const {
+            containerStyle,
+            contentContainerStyle,
+            progress,
+            curUserHighlight
+        } = styles;
+        return(
+        <TouchableOpacity onPress = {console.log("wut")}>
+        <View style={contentContainerStyle}>
+            <View style={containerStyle}>
+              <Text>{item}</Text>
+            </View>
+        </View>
+        </TouchableOpacity>
+        )
     }
-  ];
 
-class More extends Component {
+  renderComponent(item, breakdown) {
+    const {
+      containerStyle,
+      contentContainerStyle,
+      progress,
+      curUserHighlight
+    } = styles;    
 
-  componentDidMount(){
-    this.props.pageLoad();
-    this.props.getPrivilege();
-  }
 
-  keyExtractor = (item, index) => index
- 
-  renderItem  = ({item}) => {
-    
-    if (this.props.privilege !== undefined && this.props.privilege[item.privilege] === true ) {
-      return(
-        <ListItem
-          title={item.title}
-          leftIcon={{name: item.icon}}
-          onPress={() => Actions[item.screen]()}
-        />
+    return (
+      <TouchableOpacity onPress = {console.log("wut")}>
+        <View style={contentContainerStyle}>
+            <View style={containerStyle}>
+                <Text>{item}</Text>
+                <FlatList
+                data={_.values(breakdown)}
+                keyExtractor={this._keyExtractor}
+                renderItem={({item, separators}) => (
+                this.renderInnerComponent(item)
+                )}/>
+            </View>
+        </View>
+        </TouchableOpacity>
       )
-    }
   }
+
+   _keyExtractor = (item, index) => index;
 
   render() {
-  if(this.props.loading){
-    return <Spinner>{this.renderContent}</Spinner>
-  }
-  else
+    const {
+      containerStyle,
+      contentContainerStyle,
+      progress } = styles;
+    const breakdownKeys = Object.keys(this.props.membersPoints[this.props.id].breakdown);
+    const breakdown = _.values(this.props.membersPoints[this.props.id].breakdown);
+
     return (
-      <ScrollView>
+    <View>
+        <View>
+        </View>
         <FlatList
-          keyExtractor = {this.keyExtractor}
-          data = {menuItems}
-          renderItem={this.renderItem}
+            data={breakdown}
+            extraData={this.state}
+            keyExtractor={this._keyExtractor}
+            renderItem={({item, separators}) => (
+            this.renderComponent(breakdownKeys,item)
+            )}
         />
-      </ScrollView>
-    );
-  };
+      </View>
+    )
+  }
 }
 
-const mapStateToProps = ({ auth, general }) => {
-  const { privilege } = auth;
-  const { loading } = general;
+const styles = StyleSheet.create({
+  containerStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    backgroundColor: '#fff',
+    paddingVertical: 30,
+    paddingHorizontal: 15,
+  },
+  curUserHighlight: {
+    // backgroundColor: '#ffd70024',
+    color: '#aa9100'
+  },
+  contentContainerStyle: {
+    margin: 1,
+    backgroundColor: '#fff',
+  },
+  progress: {
+    flex: 1,
+    justifyContent: 'center',
+  }
+});
 
-  return { privilege, loading };
+const mapStateToProps = ({ auth,members }) => {
+  const { membersPoints } = members;
+  const { id } = auth
+
+  return { membersPoints, id };
 };
 
 const mapDispatchToProps = {
+  fetchMembersPoints,
+  fetchMemberProfile,
+  goToOtherProfile,
+  pageLoad,
   getPrivilege,
-  pageLoad
- };
+  loadUser
+};
 
-
-export default connect(mapStateToProps, mapDispatchToProps)( More );
+export default connect(mapStateToProps, mapDispatchToProps)(PointsBreakDown);
