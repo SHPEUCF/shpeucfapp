@@ -1,9 +1,23 @@
  import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import {Button, Spinner} from '../components/general';
+import { Card, CardSection, Button, Spinner, Input } from '../components/general';
+import { RkAvoidKeyboard } from 'react-native-ui-kitten';
+
 import { ListItem } from 'react-native-elements';
-import { getPositions, goToOtherProfile, pageLoad, getPrivilege, addApplication, goToCandidateForm} from '../actions';
+import {
+  getPositions,
+  goToOtherProfile,
+  pageLoad,
+  getPrivilege,
+  addApplication,
+  editCandidates,
+  candidateFNameChanged,
+  candidateLNameChanged,
+  candidatePlanChanged,
+  candidatePositionChanged,
+  goToCandidateForm
+} from '../actions';
 import _ from 'lodash';
 import {
   FlatList,
@@ -13,7 +27,8 @@ import {
   TouchableOpacity,
   Dimensions,
   Modal,
-  TextInput} from 'react-native';
+  TextInput
+  } from 'react-native';
 
 const dimension = Dimensions.get('window');
 const iteratees = ['points','lastName','firstName','picture', 'plan'];
@@ -46,6 +61,46 @@ state = {president:null, eVP:null, iVP:null, treasurer:null,
 
 
       goToCandidateForm("ADD", position);
+  }
+
+  onButtonPress() {
+      const {
+          addApplication,
+          firstName,
+          lastName,
+          candidatePlan,
+          applyPosition,
+          id
+      } = this.props;
+      //alert("Still need to implement this action")
+
+      /*if (candidateName === '') {
+          // this.EventCreationError('Please enter a Candidate Name');
+      }*/ if (candidatePlan === '') {
+          // this.EventCreationError('Please enter a Plan of action');
+      } else{
+          if(this.props.title === "ADD")
+              this.props.addApplication(firstName, lastName, candidatePlan, applyPosition, id);
+          /*else
+              this.props.editCandidates(candidateName, candidatePlan, candidatePosition);*/
+          //Actions.ElectionCandidates();
+      }
+  }
+
+  renderError() {
+      if (this.props.error) {
+          return (
+          <View>
+              <Text style={styles.errorTextStyle}>
+                  {this.props.error}
+              </Text>
+          </View>
+          );
+      }
+  }
+
+  onPlanChange(text){
+    this.props.candidatePlanChanged(text);
   }
   /*getCandidates(candidates){
 
@@ -174,10 +229,15 @@ state = {president:null, eVP:null, iVP:null, treasurer:null,
    if(which==2){
      this.setState((prevState) => { return { isApplyShow: !prevState.isApplyShow }});
    }
+
  }
 
  showApplyPosition(){
-   const {modalTopStyle} = styles;
+   const {modalTopStyle, inputApply} = styles;
+
+   if(this.state.isApplyShow == false){
+     return (null);
+   }
    return(
      <Modal
        transparent = {false}
@@ -186,29 +246,68 @@ state = {president:null, eVP:null, iVP:null, treasurer:null,
        >
        <View style={modalTopStyle}>
          <View style={{flex:1, alignItems:'flex-start', marginLeft:8, justifyContent:'center'}}>
-           <Text onPress = {()=>{this.changeModalState(2); this.changeModalState(1);}} style={{fontSize:16}}>Back</Text>
+           <Text onPress = {()=>{ this.changeModalState(2); this.changeModalState(1); }} style={{fontSize:16}}>Back</Text>
          </View>
-           <View style={{flex:1.5, alignItems:'flex-start', justifyContent:'center'}}>
-             <Text style={{fontWeight:'bold', fontSize:18}}>{this.state.applyPos}</Text>
+           <View style={{flex:3, alignItems:'flex-start', justifyContent:'center'}}>
+             <Text style={{fontWeight:'bold', fontSize:18}}>Candidate Application</Text>
            </View>
        </View>
+       <View style={{flex:1, margin: 8}}>
+         <View style={{alignItems:'center'}}>
+           <Text style={{fontSize:20}}>Applying for {`${this.state.applyPos}`} position</Text>
+         </View>
 
-       <View>
-         <TextInput/>
+         <View style={{marginTop:10, marginBottom:8}}>
+           <Text style={{fontSize:18}}>Name:</Text>
+           <View style={{marginTop:8, marginLeft:16}}><Text>{`${this.firstName} ${this.lastName}`}</Text></View>
+         </View>
+
+          <Text style={{fontSize:18}}>Plan:</Text>
+          {this.renderError()}
+         <View style={{flex:1, margin:16 }}>
+           <RkAvoidKeyboard>
+           <TextInput style={{borderWidth:5,
+           borderRadius:10,
+           borderColor:"lightgrey",
+           textAlignVertical: "top", height: dimension.height * 0.50} }
+             multiline = {true}
+             placeholder="Please write your plan for members to read."
+             value={this.props.candidatePlan}
+             onChangeText={this.onPlanChange.bind(this)}
+             />
+         </RkAvoidKeyboard>
+         </View>
+         <View >
+           <Button
+             title="Submit"
+             onPress={()=>{this.onButtonPress();}}
+             /> // what to do after submit vote
+           <Button
+             title="Cancel"
+             onPress={()=>{
+               this.changeModalState(2);
+               this.setState({applyPos:null});}}
+               />
        </View>
-
+       </View>
      </Modal>
    )
  }
 
  showListPosition(positionsArray){
-   const {modalTopStyle} = styles;
+   const {modalTopStyle, inputApply} = styles;
+   if(this.state.isListShow == false){
+     return (null);
+   }
    return(
        <Modal
          transparent = {false}
          visible={this.state.isListShow}
          animationType = "none"
          >
+
+
+
      <View style={modalTopStyle}>
        <View style={{flex:1, alignItems:'flex-start', marginLeft:8, justifyContent:'center'}}>
          <Text onPress = {()=>{this.changeModalState(1)}} style={{fontSize:16}}>Cancel</Text>
@@ -245,7 +344,7 @@ state = {president:null, eVP:null, iVP:null, treasurer:null,
           <View style={button} >
             <Button
               title={`Apply for ${item.title}`}
-              onPress={()=>{this.changeModalState(1);this.changeModalState(2); this.setState({applyPos:item.title});}}/>
+              onPress={()=>{this.changeModalState(1); this.changeModalState(2); this.setState({applyPos:item.title});}}/>
           </View>
      </View>
    )
@@ -274,9 +373,9 @@ state = {president:null, eVP:null, iVP:null, treasurer:null,
       </View>*/
 
       <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-        {this.state.isApplyShow && this.showApplyPosition()}
 
         {this.state.isListShow && this.showListPosition(positionsArray)}
+        {this.state.isApplyShow && this.showApplyPosition()}
 
         {!this.state.isListShow && !this.state.isApplyShow && this.optionButtons()}
       </View>
@@ -310,6 +409,12 @@ const styles = StyleSheet.create({
     elevation:1,
     borderBottomWidth: 2,
     borderColor:'lightgrey'
+  },
+  inputApply: {
+    borderWidth:5,
+    borderRadius:10,
+    borderColor:"grey",
+    textAlignVertical: "top"
   }
 });
 
@@ -326,7 +431,11 @@ const mapDispatchToProps = {
   pageLoad,
   getPrivilege,
   addApplication,
-  goToCandidateForm
+  goToCandidateForm,
+  candidateFNameChanged,
+  candidateLNameChanged,
+  candidatePlanChanged,
+  candidatePositionChanged
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Election);
