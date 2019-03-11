@@ -3,14 +3,13 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import {
   fetchMembersPoints,
-  pageLoad,
   loadUser,
   fetchEvents,
   goToViewEvent
 } from '../actions';
 import _ from 'lodash';
 import * as Progress from 'react-native-progress';
-import { Button } from '../components/general/Button'
+import { Button, Spinner } from '../components/general'
 import {
   FlatList,
   Text,
@@ -29,6 +28,7 @@ class PointsBreakDown extends Component {
     componentWillMount() {
         {this.setState({show: ""})}
         this.props.fetchEvents()
+        this.props.fetchMembersPoints()
     }
 
     countPoints(item) {
@@ -106,27 +106,32 @@ class PointsBreakDown extends Component {
    _keyExtractor = (item, index) => item;
 
   render() {
-    const {
-        page } = styles;
-    const breakdown = Object.entries(this.props.membersPoints[this.props.id].breakdown)
-    const breakdownarr = _.values(breakdown);
-
-
-    return (
-        <View style ={page}>
-            <FlatList
-                data={breakdown}
-                extraData={this.state}
-                keyExtractor={this._keyExtractor}
-                renderItem={({item, separators}) => (
-                this.renderComponent(item)
-                )}
-            />
-            <Button
-            title={"Return to Leaderboard"}
-            onPress={()=> Actions.popTo("Leaderboard")}/>
-        </View>
-    )
+  
+    // alert(this.props.loading)
+    if(this.props.loading){
+      return <Spinner/>
+    }
+    else{
+        const {
+            page
+        } = styles;
+        const breakdown = Object.entries(this.props.membersPoints[this.props.id].breakdown)
+        return (
+            <View style ={page}>
+                <FlatList
+                    data={breakdown}
+                    extraData={this.state}
+                    keyExtractor={this._keyExtractor}
+                    renderItem={({item, separators}) => (
+                    this.renderComponent(item)
+                    )}
+                />
+                <Button
+                title={"Return"}
+                onPress={()=> Actions.pop()}/>
+            </View>
+        )
+    }
   }
 }
 
@@ -166,17 +171,17 @@ const styles = StyleSheet.create({
     },
 });
 
-const mapStateToProps = ({ auth,members, events }) => {
+const mapStateToProps = ({ auth, members, events, general }) => {
   const { membersPoints } = members;
   const { id } = auth
   const { eventList } = events
+  const { loading } = general
 
-  return { membersPoints, id, eventList };
+  return { membersPoints, id, eventList,loading };
 };
 
 const mapDispatchToProps = {
   fetchMembersPoints,
-  pageLoad,
   loadUser,
   fetchEvents,
   goToViewEvent

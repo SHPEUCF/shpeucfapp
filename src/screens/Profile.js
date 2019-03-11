@@ -102,14 +102,18 @@ class Profile extends Component {
                 <Text style={itemValueText}>{major}</Text>
               </View>
             </View>
-            <View style={contentItemsContainerStyle}>
-              <View style={itemLabelContainerStyle}>
-                <Text style={itemLabelText}>Points:</Text>
+            <TouchableOpacity onPress={() => {
+                this.props.pageLoad()
+                Actions.pointsBreakDown()}}>
+              <View style={contentItemsContainerStyle}>
+                  <View style={itemLabelContainerStyle}>
+                    <Text style={itemLabelText}>Points:</Text>
+                  </View>
+                <View style={itemValueContainerStyle}>
+                  <Text style={itemValueText}>{points}</Text>
+                </View>
               </View>
-              <View style={itemValueContainerStyle}>
-                <Text style={itemValueText}>{points}</Text>
-              </View>
-            </View>
+            </TouchableOpacity>
           </View>
           <View style={styles.socialmediarow}>
 					{this.renderSocialMedia()}
