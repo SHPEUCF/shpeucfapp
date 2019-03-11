@@ -76,12 +76,12 @@ class CandidateForm extends Component {
                         </View>
                         {this.renderError()}
                         <Button
-                            title = {"APPLY"}
+                            title = "APPLY"
                             onPress={this.onButtonPress.bind(this)}
                         />
                         <Button
                             title = "CANCEL"
-                            onPress={Actions.ElectionCandidates.bind(this)}
+                            onPress={Actions.popTo.bind(this,"Election")}
                         />
                     </ScrollView>
                 </View>

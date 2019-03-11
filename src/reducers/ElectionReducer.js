@@ -31,7 +31,8 @@ const INITIAL_STATE = {
     positionDescription: "",
     title: "ADD",
     positions: [],
-    applyPosition: ""
+    applyPosition: "",
+    approved: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -67,6 +68,7 @@ export default (state = INITIAL_STATE, action) => {
         case DELETE_CANDIDATES:
             return {
                 ...state,
+                candidateFName: "",
                 candidateName : "",
                 candidatePlan : "",
                 candidatePosition : ""

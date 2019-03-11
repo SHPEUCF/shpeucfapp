@@ -294,7 +294,6 @@ export const loginUser = ({ email, password }) => {
 };
 
 const loginUserSuccess = (dispatch, user) => {
-  loadUser();
   dispatch({
     type: ENTER_APP,
     payload: user

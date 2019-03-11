@@ -105,13 +105,14 @@ export const editPosition = (title, description) => {
 
 export const addApplication = (fName, lName, plans, position, id) => {
 
-  Alert.alert(id);
   return (dispatch) => {
       firebase.database().ref(`/election/positions/${position}/candidates/${id}`).set({
               firstName: fName,
               lastName: lName,
               plan: plans,
               id: id,
+              position: position,
+              approved: false,
           })
           .then(() => {
               dispatch({
@@ -124,30 +125,40 @@ export const addApplication = (fName, lName, plans, position, id) => {
 };
 
 
-export const approveApplication = (fName, lName, plans, position, id) => {
+export const approveApplication = (position, candidateId) => {
     return (dispatch) => {
         //this needs to find the person but it needs to check for duplicates somehow
 
         //Alert.alert(candidateId);
-        firebase.database().ref(`/election/positions/${position}/candidates/${candidateId}`).set({
-                firstName: fName,
-                lastName: lName,
-                plan: plans,
+        firebase.database().ref(`/election/positions/${position}/candidates/${candidateId}`).update({
+                approved: true
             })
             .then(() => {
                 dispatch({
-                    type: ADD_POSITION,
+                    type: APPROVE_APPLICATION,
                 });
             })
-            .then(() => alert('Candidate Added!', 'Successful'))
-            .catch((error) => alert('Candidate could not be Added!', 'Failure'))
+            .then(() => alert('Candidate Approved!', 'Successful'))
+            .catch((error) => alert('Candidate could not be Approved!', 'Failure'))
 
     }
 };
-export const deleteCandidates = (text) => {
-    return {
-        type: DELETE_CANDIDATES,
-    };
+
+export const deleteApplication = (position, candidateId) => {
+  return (dispatch) => {
+      //this needs to find the person but it needs to check for duplicates somehow
+
+      //Alert.alert(candidateId);
+      firebase.database().ref(`/election/positions/${position}/candidates/${candidateId}`).remove()
+          .then(() => {
+              dispatch({
+                  type: DELETE_APPLICATION,
+              });
+          })
+          .then(() => alert('Candidate Removed!', 'Successful'))
+          .catch((error) => alert('Candidate could not be removed!', 'Failure'))
+
+  }
 };
 export const editCandidates = (text) => {
     return {
