@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Card, CardSection, Button, Spinner, Input } from '../components/general';
 import { RkAvoidKeyboard } from 'react-native-ui-kitten';
 
-import { ListItem } from 'react-native-elements';
+import { Avatar } from 'react-native-elements';
 import {
   getPositions,
   goToOtherProfile,
@@ -43,9 +43,10 @@ const vColor = '#00ff7f';
 
 
 class Election extends Component {
-state = {president:null, eVP:null, iVP:null, treasurer:null,
-  secretaty:null, gradAmb:null, isApplyShow: false,
-  isListShow: false, applyPos: null};
+state = { isApplyShow: false,
+  isListShow: false, isBallotShow: false, isCand: false, applyPos: null, listCandidates:null};
+
+
 
   componentWillMount() {
       this.props.getPositions();
@@ -144,64 +145,138 @@ state = {president:null, eVP:null, iVP:null, treasurer:null,
 
 
 
-  renderComponent(item) {
+  renderCadidatesComponent(item) {
     const {
       containerStyle,
       contentContainerStyle,
     } = styles;
 
       return (
-      <TouchableOpacity onPress = {this.apply.bind(this, item.candidates)}>
-        <View style={contentContainerStyle}>
-            <View style={containerStyle}>
-              <Text>{`${item.title}`}</Text>
-              <Text>{`${item.description}`}</Text>
-                <View style={styles.button}>
-                <Button
-                  title = "Apply"
-                  onPress={this.apply.bind(this, item.title)}
-                />
-      				</View>
-            </View>
-              <View style={{flex:1}}>
-                <View style={contentContainerStyle}>
-                    <View style={containerStyle}>
+        <View style={{marginBottom:8, marginLeft:8, marginRight:8}}>
+        <Card>
 
-                      <Text style={{fontSize:14}}>Plan: {`${item.plan}`}</Text>
-                    </View>
-                  </View>
+              <View>
+                <View style={{margin:10, flex:1, alignItems:'center'}}>
+
+
+                    <Text style={{ fontWeight:'bold', fontSize: 20}}>{item.firstName+' '+item.lastName}</Text>
+
+
               </View>
-            </View>
-        </TouchableOpacity>
+
+                <View style={{flex:1}}>
+                  <View style={contentContainerStyle}>
+                      <View style={containerStyle}>
+
+                        <Text style={{fontSize:16}}>Plan: {item.plan}</Text>
+                      </View>
+                    </View>
+                </View>
+              </View>
+
+          </Card>
+        </View>
       )
 
+  }
+renderCand(){
+const {modalTopStyle, inputApply} = styles;
+  if(this.state.isCand == false){
+    neturn (null);
+  }
+  return(
+    <Modal
+      transparent = { false }
+      visible = { this.state.isCand }
+      animationType = "none"
+      >
+      <View style={modalTopStyle}>
+        <View style={{flex:1.5, alignItems:'flex-start', marginLeft:8, justifyContent:'center'}}>
+          <Text onPress = {()=>{  this.changeModalState(3);this.changeModalState(4); }} style={{fontSize:16}}>Back</Text>
+        </View>
+          <View style={{flex:2, alignItems:'flex-start', justifyContent:'center'}}>
+            <Text style={{fontWeight:'bold', fontSize:18}}>Ballot</Text>
+          </View>
+      </View>
+      <View style={{flex:1}}>
+  <FlatList
+    data={this.state.listCandidates}
+    extraData={this.state}
+    keyExtractor={this._keyExtractor}
+    renderItem={({item, separators}) => (
+    this.renderCadidatesComponent(item)
+  )}
+    />
+</View>
+</Modal>
+)
+}
+
+  renderCandidatesList(item){
+    //this.setState({ listCandidates: _.toArray(item.candidates)});
+    return(
+
+        <View>
+            <TouchableOpacity onPress={() => {this.changeModalState(4); this.changeModalState(3);this.setState({ listCandidates: _.toArray(item.candidates)});}}>
+        <View style={{
+        margin:4,
+        padding:8,
+        backgroundColor:'lightgrey',
+      flexDirection:'row'
+    }}>
+    <View style={{flex:1, alignItems:'flex-start'}}>
+          <Text style={{fontSize:16}}>{`${item.title}`}</Text>
+          </View>
+          <View style={{flex:1, alignItems:'flex-end'}}>
+            <Text >></Text>
+          </View>
+        </View>
+</TouchableOpacity>
+
+      </View>
+
+
+    )
   }
 
 
    _keyExtractor = (item, index) => index;
 
- renderFlatlist(positionsArray){
+ showBallot(positionsArray){
+   const {modalTopStyle, inputApply} = styles;
+
+   if(this.state.isBallotShow == false){
+     return (null);
+   }
    return(
-     <FlatList
-         data={positionsArray}
-         extraData={this.state}
-         keyExtractor={this._keyExtractor}
-         renderItem={({item, separators}) => (
-         this.renderComponent(item)
-       )}
-     />
+     <Modal
+       transparent = { false }
+       visible = { this.state.isBallotShow }
+       animationType = "none"
+       >
+       <View style={modalTopStyle}>
+         <View style={{flex:1.5, alignItems:'flex-start', marginLeft:8, justifyContent:'center'}}>
+           <Text onPress = {()=>{ this.changeModalState(3); }} style={{fontSize:16}}>Back</Text>
+         </View>
+           <View style={{flex:2, alignItems:'flex-start', justifyContent:'center'}}>
+             <Text style={{fontWeight:'bold', fontSize:18}}>Ballot</Text>
+           </View>
+       </View>
+       <View style={{flex:1}}>
+         <FlatList
+             data={positionsArray}
+             extraData={this.state}
+             keyExtractor={this._keyExtractor}
+             renderItem={({item, separators}) => (
+             this.renderCandidatesList(item)
+           )}
+         />
+     </View>
+   </Modal>
    )
  }
 
- loadNextPositions(){
-   /*
-   Checks if a candidate has been chosen if
-   not confirm that no vote for position.
-   This function gets the next position
-   (e.g. External Vice President) and passed
-   to the renderFlatlist function.
-    */
- }
+
 
  optionButtons(){
    return (
@@ -216,7 +291,7 @@ state = {president:null, eVP:null, iVP:null, treasurer:null,
       { /* open a modal page whre the person can vote for the candidates */}
        <Button
          title="Vote"
-
+         onPress = {() => { this.changeModalState(3);}}
          />
      </View>
    )
@@ -229,10 +304,17 @@ state = {president:null, eVP:null, iVP:null, treasurer:null,
    if(which==2){
      this.setState((prevState) => { return { isApplyShow: !prevState.isApplyShow }});
    }
+   if(which==3){
+     this.setState((prevState) => { return { isBallotShow: !prevState.isBallotShow }});
+   }
+   if(which == 4){
+     this.setState((prevState) => { return { isCand: !prevState.isCand}});
+   }
 
  }
 
  showApplyPosition(){
+
    const {modalTopStyle, inputApply} = styles;
 
    if(this.state.isApplyShow == false){
@@ -259,7 +341,7 @@ state = {president:null, eVP:null, iVP:null, treasurer:null,
 
          <View style={{marginTop:10, marginBottom:8}}>
            <Text style={{fontSize:18}}>Name:</Text>
-           <View style={{marginTop:8, marginLeft:16}}><Text>{`${this.firstName} ${this.lastName}`}</Text></View>
+           <View style={{marginTop:8, marginLeft:16}}><Text>{`${this.props.firstName} ${this.props.lastName}`}</Text></View>
          </View>
 
           <Text style={{fontSize:18}}>Plan:</Text>
@@ -281,7 +363,8 @@ state = {president:null, eVP:null, iVP:null, treasurer:null,
            <Button
              title="Submit"
              onPress={()=>{this.onButtonPress();}}
-             /> // what to do after submit vote
+             />
+
            <Button
              title="Cancel"
              onPress={()=>{
@@ -306,8 +389,6 @@ state = {president:null, eVP:null, iVP:null, treasurer:null,
          animationType = "none"
          >
 
-
-
      <View style={modalTopStyle}>
        <View style={{flex:1, alignItems:'flex-start', marginLeft:8, justifyContent:'center'}}>
          <Text onPress = {()=>{this.changeModalState(1)}} style={{fontSize:16}}>Cancel</Text>
@@ -325,7 +406,6 @@ state = {president:null, eVP:null, iVP:null, treasurer:null,
        )}
        />
    </Modal>
-
    )
  }
 
@@ -364,20 +444,15 @@ state = {president:null, eVP:null, iVP:null, treasurer:null,
 
     //alert(positions.title);
     return (
-      /*
-
-
-      <View style={{flex:1, marginBottom:10}}>
-        {this.renderFlatlist(positionsArray)}
-        <Button/>
-      </View>*/
 
       <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
 
         {this.state.isListShow && this.showListPosition(positionsArray)}
         {this.state.isApplyShow && this.showApplyPosition()}
+        {this.state.isBallotShow && this.showBallot(positionsArray)}
+        {this.state.isCand && this.renderCand()}
 
-        {!this.state.isListShow && !this.state.isApplyShow && this.optionButtons()}
+        {!this.state.isListShow && !this.state.isApplyShow && !this.isCand && this.optionButtons()}
       </View>
     )
   }
@@ -388,13 +463,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
-
     paddingVertical: 10,
     paddingHorizontal: 15,
   },
   contentContainerStyle: {
     margin: 1,
-    backgroundColor: '#abc',
   },
   button: {
   //  backgroundColor: '#8b95a5',
@@ -419,10 +492,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ elect, auth }) => {
-  const { positions } = elect;
+  const { election, positions } = elect;
   const { firstName, lastName, id} = auth
 
-  return { positions, firstName, lastName, id};
+  return { election, positions, firstName, lastName, id};
 };
 
 const mapDispatchToProps = {
