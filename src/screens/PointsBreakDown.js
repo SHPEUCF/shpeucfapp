@@ -53,7 +53,8 @@ class PointsBreakDown extends Component {
             innerContainerStyle,
             innerContentContainerStyle,
             title,
-            points
+            points,
+            botLevelText
         } = styles;
 
         if (JSON.stringify(this.state.show) === JSON.stringify(section)) {
@@ -61,8 +62,8 @@ class PointsBreakDown extends Component {
             <TouchableOpacity>
             <View style={innerContentContainerStyle}>
                 <View style={innerContainerStyle}>
-                    <Text style={title}>{item.name}</Text>
-                    <Text style={points}>{item.points}</Text>
+                    <Text style={[title,botLevelText]}>{item.name}</Text>
+                    <Text style={[points,botLevelText]}>{item.points}</Text>
                 </View>
             </View>
             </TouchableOpacity>
@@ -77,7 +78,8 @@ class PointsBreakDown extends Component {
       containerStyle,
       contentContainerStyle,
       title,
-      points
+      points,
+      midLevelText
     } = styles;   
     // alert(item[0])
     var count = this.countPoints(section)
@@ -87,14 +89,15 @@ class PointsBreakDown extends Component {
         <TouchableOpacity onPress = {() => this.toggleShow(section[0])}>
             <View style={contentContainerStyle}>
                 <View style={containerStyle}>
-                    <Text style={title}>{section[0]}</Text>
-                    <Text style={points}>{count}</Text>
+                    <Text style={[title,midLevelText]}>{section[0]}</Text>
+                    <Text style={[points,midLevelText]}>{count}</Text>
                 </View>
             </View>
             </TouchableOpacity>
             <FlatList
                 visible={false}
                 data={Object.values(section[1])}
+                extraData={this.state}
                 keyExtractor={this._keyExtractor}
                 renderItem={({item, separators}) => (
                 this.renderInnerComponent(item,section[0])
@@ -113,11 +116,20 @@ class PointsBreakDown extends Component {
     }
     else{
         const {
-            page
+            page,
+            containerStyle,
+            contentContainerStyle,
+            title,
+            points,
+            topLevelText
         } = styles;
         const breakdown = Object.entries(this.props.membersPoints[this.props.id].breakdown)
         return (
             <View style ={page}>
+                <View style={[contentContainerStyle,containerStyle]}>
+                    <Text style={[title, topLevelText]}>Total Points</Text>
+                    <Text style={[points, topLevelText]}>{this.props.membersPoints[this.props.id].points}</Text>
+                </View>
                 <FlatList
                     data={breakdown}
                     extraData={this.state}
@@ -138,25 +150,32 @@ class PointsBreakDown extends Component {
 const styles = StyleSheet.create({
     page: {
         marginBottom: 10,
+        flexDirection: 'column',
         flex: 1
     },
     containerStyle: {
-        flex: 1,
-        justifyContent: 'center',
         flexDirection: 'row',
         backgroundColor: '#fff',
         paddingVertical: 30,
         paddingHorizontal: 15,
     },
+    topLevelText: {
+        fontSize: 18
+    },
+    midLevelText: {
+        fontSize: 16
+    },
+    botLevelText: {
+        fontSize: 12
+    },
     contentContainerStyle: {
         margin: 1,
-        backgroundColor: '#fff',
     },
     title: {
         flex: 1
     },
     points: {
-        flex: .1
+        flex: .15
     },
     innerContainerStyle: {
         flex: 1,
