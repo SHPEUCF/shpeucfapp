@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import DraggableFlatList from 'react-native-draggable-flatlist';
 import {
   FlatList,
   ScrollView,
@@ -32,6 +33,16 @@ class ElectionPosition extends Component {
       this.props.getPositions();
   }
 
+  state = {
+    data: (_.toArray(this.props.positions)).map((d, index) => ({
+      position: d,
+      key: `item-${index}`,
+      label: index,
+      backgroundColor: '#fff',
+    }))
+  }
+
+
   openOrClose(){
       if(this.props.election){
         return (
@@ -52,45 +63,45 @@ class ElectionPosition extends Component {
         )
   }
 
-  renderPositions(item) {
+  renderPositions({ item, index, move, moveEnd, isActive }) {
     const {
       containerStyle,
       contentContainerStyle,
     } = styles;
 
-    const candidatesArray = _.toArray(item.candidates)
-
+    const color = (isActive) ? {backgroundColor: '#ffd700'} : {backgroundColor: item.backgroundColor}
     return (
-      <TouchableOpacity onPress = {this.viewPosition.bind(this, item)}>
-      <View style={contentContainerStyle}>
-          <View style={containerStyle}>
-            <Text>{`${item.title}`}</Text>
-          </View>
-      </View>
+      <TouchableOpacity
+        style={[contentContainerStyle, color]}
+        onLongPress={move}
+        onPressOut={moveEnd}>
+        <View style={containerStyle}>
+          <Text>{`${(item.position).title}`}</Text>
+        </View>
       </TouchableOpacity>
     )
   }
 
-  _keyExtractor = (item, index) => index;
 
   renderFlatlist(positions){
     return(
-      <FlatList
-          data={positions}
-          extraData={this.state}
-          keyExtractor={this._keyExtractor}
-          renderItem={({item, separators}) => (
-          this.renderPositions(item)
-        )}
+      <View style={{ flex: 1 }}>
+      <DraggableFlatList
+          data={this.state.data}
+          keyExtractor={(item, index) => `draggable-item-${item.key}`}
+          renderItem={this.renderPositions}
+          scrollPercent={5}
+          onMoveEnd={({ data }) => this.setState({ data })}
       />
+      </View>
     )
   }
 
-  viewPosition(item) {
+  /*viewPosition(item) {
     this.props.positionTitleChanged(item.title);
     this.props.positionDescriptionChanged(item.description);
     this.props.goToPositionForm("EDIT");
-  }
+  }*/
 
   render() {
     const {
@@ -108,6 +119,8 @@ class ElectionPosition extends Component {
     } = this.props;
 
     const positionsArray = _.toArray(positions)
+
+
     return (
      <View style={page}>
         <View style={tabBar}>
@@ -149,7 +162,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    backgroundColor: '#fff',
 
     paddingVertical: 10,
     paddingHorizontal: 15,
@@ -165,7 +177,6 @@ const styles = StyleSheet.create({
   },
   contentContainerStyle: {
     margin: 1,
-    backgroundColor: '#abc',
     height: dimension.height * .09,
   },
   tabBarText : {

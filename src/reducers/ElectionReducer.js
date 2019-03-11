@@ -19,6 +19,7 @@ import {
     GO_TO_CANDIDATE_FORM,
     GO_TO_POSITION_FORM,
     GET_POSITIONS,
+    GET_VOTES,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -32,7 +33,8 @@ const INITIAL_STATE = {
     title: "ADD",
     positions: [],
     applyPosition: "",
-    approved: false
+    approved: false,
+    votes: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -125,6 +127,11 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 positions: payload
+            }
+        case GET_VOTES:
+            return {
+                ...state,
+                votes: payload
             }
         default:
             return state;

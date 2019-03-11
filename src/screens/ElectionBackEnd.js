@@ -13,6 +13,8 @@ import { Button } from '../components/general'
 import {
     openElection,
     closeElection,
+    getVotes,
+    getPositions
 } from '../actions'
 
 const dimension = Dimensions.get('window');
@@ -22,22 +24,26 @@ class ElectionBackEnd extends Component {
     super(props);
   }
 
+  componentWillMount() {
+      this.props.getPositions();
+  }
+
   openOrClose(){
       if(this.props.election){
         return (
-        <Button 
+        <Button
         onPress={() => this.props.closeElection()}
         title={"CLOSE ELECTION"}
-        > 
+        >
         </Button>
         )
       }
       else
       return (
-        <Button 
+        <Button
         onPress={() => this.props.openElection()}
         title={"OPEN ELECTION"}
-        > 
+        >
         </Button>
         )
   }
@@ -61,30 +67,30 @@ class ElectionBackEnd extends Component {
             <Text>how long the election has been on</Text>
             <Text>who's currently in the lead</Text>
         </View>
-        
+
         <View style={buttonContainerStyling}>
             {this.openOrClose()}
         </View>
          <View style={buttonContainerStyling}>
-            <Button 
+            <Button
             onPress={() => Actions.ElectionPositions()}
             title={"MANAGE POSITIONS"}
-            > 
+            >
             </Button>
         </View>
         <View style={buttonContainerStyling}>
-            <Button 
+            <Button
             onPress={() => Actions.ElectionCandidates()}
             title={"MANAGE CANDIDATES"}
-            > 
+            >
             </Button>
         </View>
-       
+
         <View style={buttonContainerStyling}>
-            <Button 
+            <Button
             onPress={() => Actions.popTo('BackEnd')}
             title={"BACK"}
-            > 
+            >
             </Button>
         </View>
       </View>
@@ -106,7 +112,7 @@ const styles = StyleSheet.create({
     margin: 20,
     alignSelf: "center"
   },
-  content: { 
+  content: {
     flex: 1,
     margin: 10
   },
@@ -121,14 +127,16 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ elect }) => {
-    const { election } = elect
-    
-    return { election };
+    const { election, votes } = elect
+
+    return { election, votes };
 };
 
 const mapDispatchToProps = {
     openElection,
     closeElection,
+    getVotes,
+    getPositions
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ElectionBackEnd);
