@@ -133,6 +133,11 @@ export const approveApplication = (position, candidateId) => {
         firebase.database().ref(`/election/positions/${position}/candidates/${candidateId}`).update({
                 approved: true
             })
+            .then(()=> {
+              firebase.database().ref(`/voting/${position}/${candidateId}`).set({
+                      votes: 0,
+                    })
+            })
             .then(() => {
                 dispatch({
                     type: APPROVE_APPLICATION,
@@ -223,6 +228,25 @@ export const goToPositionForm = (text) => {
         type: GO_TO_POSITION_FORM,
         payload: text
     }
+};
+
+export const vote = (userId, position, candidateId) => {
+    var votes;
+    return () => {
+      firebase.database().ref(`/voting/${position}/${candidateId}/${userId}`).once('value',snapshot => {
+        if (!snapshot.exists()){
+            firebase.database().ref(`/voting/${position}/${candidateId}/votes`).once('value', snapshot => {
+            votes = parseInt(snapshot.val()) + 1;
+            firebase.database().ref(`/voting/${position}/${candidateId}/votes`).set(votes)
+            .then(() => firebase.database().ref(`/voting/${position}/${candidateId}/${userId}`).set(true))
+            .then(() => alert('Vote Cast!', 'Successful'))
+            .catch((error) => alert('Vote could not be cast!', 'Failure'))
+            })
+        }
+        else
+          Alert.alert('You have already voted for this person!', 'Failure');
+     })
+   }
 };
 
 export const getPositions = () => {
