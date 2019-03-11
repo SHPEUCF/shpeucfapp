@@ -230,7 +230,7 @@ export const goToPositionForm = (text) => {
     }
 };
 
-export const vote = (userId, position, candidateId) => {
+export const vote = (userId, dictionary) => {
     var votes;
     return () => {
       firebase.database().ref(`/voting/${position}/${candidateId}/${userId}`).once('value',snapshot => {

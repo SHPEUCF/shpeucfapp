@@ -16,7 +16,8 @@ import {
   candidateLNameChanged,
   candidatePlanChanged,
   candidatePositionChanged,
-  goToCandidateForm
+  goToCandidateForm,
+  vote
 } from '../actions';
 import _ from 'lodash';
 import {
@@ -40,7 +41,7 @@ const vColor = '#00ff7f';
       /* Color idea doesnt work
          the color is annoying maybe a check box  */
 
-
+var dict = [];
 
 class Election extends Component {
 state = { isApplyShow: false,
@@ -48,8 +49,11 @@ state = { isApplyShow: false,
 
 
 
+
+
   componentWillMount() {
       this.props.getPositions();
+
   }
 
 
@@ -153,9 +157,13 @@ state = { isApplyShow: false,
 
       return (
         <View style={{marginBottom:8, marginLeft:8, marginRight:8}}>
-        <Card>
+        <Card >
 
               <View>
+                <TouchableOpacity
+                  onPress={()=>{dict.push({key:item.position , value:item.id});
+                this.changeModalState(4); this.changeModalState(3);}}>
+
                 <View style={{margin:10, flex:1, alignItems:'center'}}>
 
 
@@ -172,6 +180,7 @@ state = { isApplyShow: false,
                       </View>
                     </View>
                 </View>
+                </TouchableOpacity>
               </View>
 
           </Card>
@@ -217,7 +226,8 @@ const {modalTopStyle, inputApply} = styles;
     return(
 
         <View>
-            <TouchableOpacity onPress={() => {this.changeModalState(4); this.changeModalState(3);this.setState({ listCandidates: _.toArray(item.candidates)});}}>
+            <TouchableOpacity onPress={() => {this.changeModalState(4); this.changeModalState(3);this.setState({ listCandidates: _.toArray(item.candidates)});
+            }}>
         <View style={{
         margin:4,
         padding:8,
@@ -271,6 +281,7 @@ const {modalTopStyle, inputApply} = styles;
              this.renderCandidatesList(item)
            )}
          />
+       <Button title="Submit" onPress={() => {this.props.vote(this.props.id, dict)}}/>
      </View>
    </Modal>
    )
@@ -362,7 +373,8 @@ const {modalTopStyle, inputApply} = styles;
          <View >
            <Button
              title="Submit"
-             onPress={()=>{this.onButtonPress();}}
+             onPress={()=>{this.props.addApplication(this.props.firstName,this.props.lastName,this.props.candidatePlan, this.state.applyPos, this.props.id );
+             this.changeModalState(2);}}
              />
 
            <Button
@@ -401,9 +413,9 @@ const {modalTopStyle, inputApply} = styles;
          data={positionsArray}
          extraData={this.state}
          keyExtractor={this._keyExtractor}
-         renderItem={({item, separators}) => (
-         this.renderListPositionComponent(item)
-       )}
+         renderItem={({item, separators}) => {
+             return (this.renderListPositionComponent(item));
+         }}
        />
    </Modal>
    )
@@ -492,10 +504,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ elect, auth }) => {
-  const { election, positions } = elect;
+  const { election, positions, candidatePlan } = elect;
   const { firstName, lastName, id} = auth
 
-  return { election, positions, firstName, lastName, id};
+  return { election, positions, candidatePlan, firstName, lastName, id};
 };
 
 const mapDispatchToProps = {
@@ -508,7 +520,8 @@ const mapDispatchToProps = {
   candidateFNameChanged,
   candidateLNameChanged,
   candidatePlanChanged,
-  candidatePositionChanged
+  candidatePositionChanged,
+  vote
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Election);
