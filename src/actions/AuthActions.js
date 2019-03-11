@@ -27,7 +27,6 @@ import {
   CREATE_USER_FAIL,
   EDIT_USER,
   GET_PRIVILEGE,
-  GET_POINTS_BREAKDOWN,
   GO_TO_RESET_PASSWORD,
   GO_TO_LOGIN,
   GO_TO_PROFILE,
@@ -255,12 +254,12 @@ export const getPrivilege = () => {
           dispatch({
             type: GET_PRIVILEGE,
             payload: snapshot.val(),
-          });
+          })
           dispatch({
             type: PAGE_LOAD,
             payload: false
           });
-      });
+      })
     };
   };
 }

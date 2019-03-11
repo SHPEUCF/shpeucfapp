@@ -121,7 +121,7 @@ export const checkIn = (eventID, val) => {
             firebase.database().ref(`points/${currentUser.uid}/points`).once('value', snapshot => {
               points = parseInt(snapshot.val()) + parseInt(val);
               firebase.database().ref(`events/${eventID}`).once('value', snapshot => {
-              firebase.database().ref(`events/${eventID}/attendance`).set({[currentUser.uid]: true })
+              firebase.database().ref(`events/${eventID}/attendance`).update({[currentUser.uid]: true })
               .then(() => firebase.database().ref(`points/${currentUser.uid}/points`).set(points))
               .then(() => firebase.database().ref(`points/${currentUser.uid}/breakdown/${snapshot.val().type}/${eventID}`).update({
                 points: val,
