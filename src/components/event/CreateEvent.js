@@ -110,6 +110,10 @@ class CreateEvent extends Component {
                     style={styles.scrollView}>
                     {/* <RkAvoidKeyboard> */}
                         <View>
+                            {/* 
+                            Event type should only be Committee, event, volunteer,
+                            GBM, other 
+                            */}
                             <Input
                             placeholder="Event Type"
                             value={this.props.type}

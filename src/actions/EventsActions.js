@@ -120,9 +120,14 @@ export const checkIn = (eventID, val) => {
           if (!snapshot.exists()){
             firebase.database().ref(`points/${currentUser.uid}/points`).once('value', snapshot => {
               points = parseInt(snapshot.val()) + parseInt(val);
+              firebase.database().ref(`events/${eventID}`).once('value', snapshot => {
               firebase.database().ref(`events/${eventID}/attendance`).set({[currentUser.uid]: true })
               .then(() => firebase.database().ref(`points/${currentUser.uid}/points`).set(points))
-              .then(() => firebase.database().ref(`points/${currentUser.uid}/breakdown/events`).update({[eventID]: val }))
+              .then(() => firebase.database().ref(`points/${currentUser.uid}/breakdown/${snapshot.val().type}/${eventID}`).update({
+                points: val,
+                name: snapshot.val().name
+               }))
+              })
               .then(() => firebase.database().ref(`users/${currentUser.uid}/points`).set(points))
               .then(() => Alert.alert('Checked In', 'Successful'))
               .catch((error) => Alert.alert('Check In Failed', 'Failure'))
@@ -130,10 +135,6 @@ export const checkIn = (eventID, val) => {
           }
           else
             Alert.alert('You have already attended this event!', 'Failure');
-
-          dispatch({
-            type: CHECK_IN,
-          });
         })
       else
         Alert.alert('Event check-in for this event is not open', 'Failure')
