@@ -40,22 +40,6 @@ class ElectionCandidates extends Component {
     this.props.goToCandidateForm("EDIT");
   }*/
 
-  renderCandidates(item) {
-    const {
-      containerStyle,
-      contentContainerStyle,
-      containerTextStyle,
-      candidateContainer
-    } = styles;
-
-    return (
-      <View style={contentContainerStyle}>
-            {this.renderDecisions(item)}
-      </View>
-    )
-
-  }
-
   renderPositions(item) {
     const {
       containerStyle,
@@ -65,23 +49,25 @@ class ElectionCandidates extends Component {
     const candidatesArray = _.toArray(item.candidates)
 
     return (
+      <View>
       <View style={contentContainerStyle}>
           <View style={containerStyle}>
             <Text>{`${item.title}`}</Text>
           </View>
-          <FlatList
-              data={candidatesArray}
-              extraData={this.state}
-              keyExtractor={this._keyExtractor}
-              renderItem={({item, separators}) => (
-              this.renderCandidates(item)
-            )}
-          />
+      </View>
+      <FlatList
+          data={candidatesArray}
+          extraData={this.state}
+          keyExtractor={this._keyExtractor}
+          renderItem={({item, separators}) => (
+          this.renderCandidates(item)
+        )}
+      />
       </View>
     )
   }
 
-  renderDecisions(item){
+  renderCandidates(item){
 
     const {
       containerStyle,
@@ -91,49 +77,58 @@ class ElectionCandidates extends Component {
       containerCandidateTextStyle
     } = styles;
 
-    if (!(item.approved)){
-    return (
-      <View style={candidateContainer}>
-      <View style={containerTextStyle}>
-        <Text>{item.firstName + ' ' + item.lastName}</Text>
-      </View>
-        <View style={styles.approveContainer}>
-          <View style= {styles.candidateGrayContainer}>
-            <TouchableOpacity
-            onPress={this.props.approveApplication.bind(this, item.position, item.id)}>
-              <Ionicons name="md-checkmark-circle" size={40} color='#000000'/>
-            </TouchableOpacity>
-          </View>
-          <View style= {styles.candidateGrayContainer}>
-            <TouchableOpacity
-            onPress={this.props.deleteApplication.bind(this, item.position, item.id)}>
-              <Ionicons name="md-close-circle" size={40} color='#000000'/>
-            </TouchableOpacity>
-          </View>
-        </View>
-        </View>
+    const color = (item.approved) ? {backgroundColor: '#ffd700'} : {backgroundColor: '#ebebf1'}
 
+    return (
+      <View style={[styles.candidateContainer, color]}>
+          <View style={containerTextStyle}>
+            <Text>{item.firstName + ' ' + item.lastName}</Text>
+          </View>
+          {this.renderbuttons(item)}
+        </View>
     )
   }
 
-  else{
-    return (
-      <View style={candidateContainer}>
-      <View style={containerCandidateTextStyle}>
-        <Text>{item.firstName + ' ' + item.lastName}</Text>
-      </View>
-      <View style={styles.deleteContainer}>
-        <View style= {styles.candidateContainer}>
+  renderbuttons(item){
+
+    const {
+      containerStyle,
+      contentContainerStyle,
+      containerTextStyle,
+      candidateContainer,
+      containerCandidateTextStyle
+    } = styles;
+
+    if(!item.approved){
+      return (
+        <View style = {[{flexDirection: 'row', flex: 1}]}>
+            <View style= {styles.buttonContainerStyle}>
+              <TouchableOpacity
+              onPress={this.props.approveApplication.bind(this, item.position, item.id)}>
+                <Ionicons name="md-checkmark-circle" size={40} color='#000000'/>
+              </TouchableOpacity>
+            </View>
+            <View style= {styles.buttonContainerStyle}>
+              <TouchableOpacity
+              onPress={this.props.deleteApplication.bind(this, item.position, item.id)}>
+                <Ionicons name="md-close-circle" size={40} color='#000000'/>
+              </TouchableOpacity>
+            </View>
+          </View>
+      )
+    }
+
+    else{
+      return (
+        <View style= {styles.buttonContainerStyle}>
           <TouchableOpacity
           onPress={this.props.deleteApplication.bind(this, item.position, item.id)}>
             <Ionicons name="md-remove-circle" size={40} color='#000000'/>
           </TouchableOpacity>
         </View>
-      </View>
-      </View>
-    )
+      )
+    }
   }
-}
 
 
   _keyExtractor = (item, index) => index;
@@ -207,19 +202,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   containerTextStyle: {
-    flex: 1,
+    flex: 3,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    backgroundColor: '#ebebf1',
-
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  containerCandidateTextStyle: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    backgroundColor: '#ffd700',
 
     paddingVertical: 10,
     paddingHorizontal: 15,
@@ -227,6 +212,7 @@ const styles = StyleSheet.create({
   contentContainerStyle: {
     margin: 1,
     backgroundColor: '#abc',
+    height: dimension.height * .09,
   },
   tabBarText : {
     color: '#000',
@@ -239,40 +225,19 @@ const styles = StyleSheet.create({
     margin: 10
   },
   buttonContainerStyle: {
-      flex: 5,
-      margin: 5
+    flex: .5,
+    justifyContent: 'center',
   },
   page: {
     flex: 1,
     backgroundColor: '#ebebf1',
   },
   candidateContainer: {
-    flex: 2,
+    flex: .5,
     marginTop: dimension.height * .002,
     flexDirection: 'row',
     justifyContent: 'center',
-    backgroundColor: '#ffd700',
-  },
-  candidateGrayContainer: {
-    flex: 2,
-    marginTop: dimension.height * .002,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    backgroundColor: '#ebebf1',
-  },
-  approveContainer: {
-    flex: 2,
-    marginTop: dimension.height * .002,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    backgroundColor: '#ebebf1',
-  },
-  deleteContainer: {
-    flex: 2,
-    marginTop: dimension.height * .002,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    backgroundColor: '#ffd700',
+    height: dimension.height * .09,
   },
 });
 

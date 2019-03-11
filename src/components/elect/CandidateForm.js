@@ -51,8 +51,8 @@ class CandidateForm extends Component {
             if(this.props.title === "ADD")
                 this.props.addApplication(firstName, lastName, candidatePlan, applyPosition, id);
             /*else
-                this.props.editCandidates(candidateName, candidatePlan, candidatePosition);*/
-            //Actions.ElectionCandidates();
+                this.props.editCandidates(candidateName, candidatePlan, candidatePosition);
+            Actions.ElectionCandidates();*/
         }
     }
 

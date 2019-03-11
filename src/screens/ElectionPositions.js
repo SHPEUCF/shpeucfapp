@@ -166,6 +166,7 @@ const styles = StyleSheet.create({
   contentContainerStyle: {
     margin: 1,
     backgroundColor: '#abc',
+    height: dimension.height * .09,
   },
   tabBarText : {
     color: '#000',

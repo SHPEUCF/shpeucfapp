@@ -8,7 +8,7 @@ import {
     ADD_APPLICATION,
     CHANGE_POSITION,
     APPROVE_APPLICATION,
-    DELETE_CANDIDATES,
+    DELETE_APPLICATION,
     EDIT_CANDIDATES,
     CANDIDATE_FNAME_CHANGED,
     CANDIDATE_LNAME_CHANGED,
@@ -65,7 +65,7 @@ export default (state = INITIAL_STATE, action) => {
             }
         case EDIT_POSITION:
             return state
-        case DELETE_CANDIDATES:
+        case DELETE_APPLICATION:
             return {
                 ...state,
                 candidateFName: "",
