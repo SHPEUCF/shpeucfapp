@@ -25,6 +25,7 @@ import {
     GO_TO_CANDIDATE_FORM,
     GO_TO_POSITION_FORM,
     GET_POSITIONS,
+    GET_VOTES,
 } from './types';
 
 export const openElection = () => {
@@ -259,6 +260,21 @@ export const getPositions = () => {
       dispatch({
         type: GET_POSITIONS,
         payload: positions,
+      });
+    });
+  };
+};
+
+export const getVotes = () => {
+
+  return (dispatch) => {
+  firebase.database().ref(`votes`)
+    .on('value', snapshot => {
+      const votes = (snapshot.val());
+
+      dispatch({
+        type: GET_VOTES,
+        payload: votes,
       });
     });
   };
