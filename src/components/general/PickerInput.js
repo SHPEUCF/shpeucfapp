@@ -27,7 +27,12 @@ class PickerInput extends Component {
             PropTypes.shape({})
         ]).isRequired,
         placeholder: PropTypes.string,
-        onChangeText: PropTypes.func.isRequired
+        onSelect: PropTypes.func.isRequired
+    }
+
+    clickAction(item) {
+        this.props.onSelect(item)
+        this.setState({text: item, modalVisible: false})
     }
 
     renderComponent(item) {
@@ -36,11 +41,14 @@ class PickerInput extends Component {
             itemStyle,
             itemTextStyle
         } = styles
-        last = (item[1] == this.props.data[item.length]) ? 
+
+        const dataArr = Object.keys(this.props.data)
+
+        last = (item[0] == dataArr[dataArr.length - 1]) ? 
             {borderBottomColor: '#0000'} : {}
         return(
             <TouchableOpacity
-            onPress={() => this.setState({text: item[1], modalVisible: false})}>
+            onPress={() => this.clickAction(item[1])}>
                 <View style={[itemStyle,last]}>
                     <Text style={itemTextStyle}>{item[1]}</Text>
                 </View>
@@ -67,7 +75,6 @@ class PickerInput extends Component {
             title,
             data,
             placeholder,
-            onChangeText
         } = this.props
 
 
@@ -77,7 +84,6 @@ class PickerInput extends Component {
                     <Input
                     style={inputStyle}
                     value={this.state.text}
-                    onChangeText={onChangeText}
                     placeholder={placeholder}
                     editable={false}
                     />
@@ -127,7 +133,7 @@ PickerInput.defaultProps = {
 const styles = {
     itemStyle: {
         flex: 1,
-        height: dimension.height *.1,
+        height: dimension.height *.15,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
@@ -135,7 +141,7 @@ const styles = {
         borderBottomWidth: 1
     },
     itemTextStyle: {
-        padding: dimension.height * .028,
+        paddingTop: dimension.height * .03,
         flex: 1,
         fontSize: 16,
         alignSelf:'center',

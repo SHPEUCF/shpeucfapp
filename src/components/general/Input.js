@@ -10,7 +10,7 @@ class Input extends Component {
   static propTypes = {
     children: PropTypes.any,
     value: PropTypes.string.isRequired,
-    onChangeText: PropTypes.func.isRequired,
+    onChangeText: PropTypes.func,
     placeholder: PropTypes.string,
     autoCorrect: PropTypes.any,
     autoCapitalize: PropTypes.any,
