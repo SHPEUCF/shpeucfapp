@@ -23,6 +23,8 @@ import {
 } from '../actions'
 
 const dimension = Dimensions.get('window');
+const iteratees = ['level'];
+const order = ['asc'];
 
 class ElectionCandidates extends Component {
   constructor(props) {
@@ -161,7 +163,7 @@ class ElectionCandidates extends Component {
       positions,
     } = this.props;
 
-    const positionsArray = _.toArray(positions)
+    const positionsArray = _.orderBy(positions, iteratees, order)
 
     //alert(positions.title);
     return (

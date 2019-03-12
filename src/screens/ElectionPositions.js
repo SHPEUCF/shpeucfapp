@@ -19,10 +19,13 @@ import {
     goToPositionForm,
     getPositions,
     positionDescriptionChanged,
-    positionTitleChanged
+    positionTitleChanged,
+    changeLevels
 } from '../actions'
 
 const dimension = Dimensions.get('window');
+const iteratees = ['level'];
+const order = ['asc'];
 
 class ElectionPosition extends Component {
   constructor(props) {
@@ -34,7 +37,7 @@ class ElectionPosition extends Component {
   }
 
   state = {
-    data: (_.toArray(this.props.positions)).map((d, index) => ({
+    data: (_.orderBy(this.props.positions, iteratees, order)).map((d, index) => ({
       position: d,
       key: `item-${index}`,
       label: index,
@@ -61,6 +64,16 @@ class ElectionPosition extends Component {
         >
         </Button>
         )
+  }
+
+  setLevels(){
+    const {
+      changeLevels,
+    } = this.props;
+
+      this.state.data.forEach(function(item, index){
+          changeLevels((item.position).title, index);
+      });
   }
 
   renderPositions({ item, index, move, moveEnd, isActive }) {
@@ -145,6 +158,13 @@ class ElectionPosition extends Component {
             >
             </Button>
         </View>
+        <View style={buttonContainerStyling}>
+            <Button
+            onPress={() => this.setLevels()}
+            title={"SET ORDER"}
+            >
+            </Button>
+        </View>
       </View>
     );
   };
@@ -212,7 +232,8 @@ const mapDispatchToProps = {
     goToPositionForm,
     getPositions,
     positionDescriptionChanged,
-    positionTitleChanged
+    positionTitleChanged,
+    changeLevels
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ElectionPosition);

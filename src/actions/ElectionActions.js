@@ -62,7 +62,8 @@ export const addPosition = (title, description) => {
     return (dispatch) => {
         firebase.database().ref(`/election/positions/${title}`).set({
                 title: title,
-                description: description
+                description: description,
+                level: 100
             })
             .then(() => {
                 dispatch({
@@ -262,6 +263,13 @@ export const getPositions = () => {
         payload: positions,
       });
     });
+  };
+};
+
+export const changeLevels = (position, level) => {
+
+  return () => {
+  firebase.database().ref(`/election/positions/${position}/level`).set(level)
   };
 };
 
