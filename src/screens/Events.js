@@ -253,8 +253,8 @@ const styles = StyleSheet.create({
   item: {
     flex: 1,
     backgroundColor: '#FFF',
-    borderRadius: 5,
-    padding: 10,
+    borderRadius: dimension.height * .3,
+    padding: dimension.height * .2,
     marginRight: 10,
     marginTop: 17
   },

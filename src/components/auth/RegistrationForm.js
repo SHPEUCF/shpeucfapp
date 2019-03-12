@@ -16,6 +16,8 @@ import {
   pointsChanged,
   privilegeChanged,
   pictureChanged,
+  nationality_changed, 
+  date_birth_changed,
   confirmPasswordChanged,
   registrationError,
   createUser,
@@ -65,6 +67,12 @@ class RegistrationForm extends Component {
   onConfirmPasswordChange(text) {
     this.props.confirmPasswordChanged(text);
   }
+  onnationality_changed(text) {
+    this.props.nationality_changed(text);
+  }
+  ondate_birth_changed(text) {
+    this.props.date_birth_changed(text);
+  }
   onQuoteChange(text) {
     this.props.quoteChanged(text);
   }
@@ -82,6 +90,8 @@ class RegistrationForm extends Component {
       confirmPassword,
       registrationError,
       createUser,
+      nationality,
+      date_of_birth,
       goToLogIn,
       quote } = this.props;
 
@@ -105,9 +115,13 @@ class RegistrationForm extends Component {
       registrationError('Please confirm password');
     } else if (password !== confirmPassword) {
       registrationError('Passwords do not match, please try again');
+    } else if(nationality == '') {
+      registrationError('Please enter your country of origin');
+    } else if(date_of_birth == ''){
+      registrationError('Please enter your date of birth');
     } else if (password === confirmPassword) {
       this.onPointsChange(0);
-      createUser({ firstName, lastName, email, college, major, points, picture, password, quote });
+      createUser({ firstName, lastName, email, college, major, points, picture, password, quote , nationality, date_of_birth});
     }
   }
 
@@ -250,6 +264,19 @@ class RegistrationForm extends Component {
               maxLength={30}
               onChangeText={this.onConfirmPasswordChange.bind(this)}
               />
+            
+            <Input
+              placeholder="Country of Origin"
+              value={this.props.nationality}
+              onChangeText={this.onnationality_changed.bind(this)}
+              />
+
+            <Input
+              placeholder="Date of Birth"
+              value={this.props.date_of_birth}
+              onChangeText={this.ondate_birth_changed.bind(this)}
+              />
+
 
             <View style={styles.pickerTextInput}>
               <Input
@@ -402,6 +429,8 @@ const mapStateToProps = ({ auth }) => {
     points,
     privilege,
     password,
+    nationality,
+    date_of_birth,
     confirmPassword,
     error,
     loading,
@@ -417,6 +446,8 @@ const mapStateToProps = ({ auth }) => {
     points,
     privilege,
     password,
+    nationality,
+    date_of_birth,
     confirmPassword,
     error,
     loading,
@@ -433,6 +464,8 @@ const mapDispatchToProps = {
   privilegeChanged,
   pictureChanged,
   passwordChanged,
+  nationality_changed,
+  date_birth_changed,
   confirmPasswordChanged,
   registrationError,
   createUser,
