@@ -2,7 +2,13 @@ import React, { Component} from 'react';
 import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { Card, CardSection, Input, Button, Spinner } from '../general';
+import {
+  Card,
+  Input,
+  Button,
+  Spinner,
+  PickerInput
+} from '../general';
 import {RkAvoidKeyboard, RkTextInput, RkPicker, RkText} from 'react-native-ui-kitten';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import data from '../../data/Colleges.json';
@@ -23,17 +29,13 @@ import {
   quoteChanged } from '../../actions';
 
 const collegeNames = [];
-data.map(college => {collegeNames.push({key:college.key, value:college.collegeName})});
-var majorNames =  [];
-majorNames.push(data[0].degrees);
+data.map(college => {collegeNames.push(college.collegeName)});
+var majorNames =  {};
+data.map(college => {majorNames[college.collegeName] = college.degrees});
 
 const iconName= Platform.OS === 'ios'?'ios-arrow-dropdown':'md-arrow-dropdown';
 
 class RegistrationForm extends Component {
-  state = {collegeSelected: collegeNames.slice(0,1),
-    majorSelected: majorNames.slice(0,1),
-    pickerVisible: false,
-    pickerVisible2: false};
 
   onFirstNameChange(text) {
     this.props.firstNameChanged(text);
@@ -123,6 +125,34 @@ class RegistrationForm extends Component {
     }
   }
 
+  renderPickers() {
+    const {
+      college,
+      collegeChanged,
+      major,
+      majorChanged
+    } = this.props
+
+    const p1 = (college !== undefined && college !== null && college !== "") ?
+      (<PickerInput
+            title={"Colleges"}
+            data={majorNames[college]}
+            placeholder={"Select College"}
+            onSelect={(text) => majorChanged(text)}/>) : (<View></View>)
+
+        return(
+        <View>
+          <PickerInput
+            title={"Colleges"}
+            data={collegeNames}
+            placeholder={"Select College"}
+            onSelect={(text) => collegeChanged(text)}/>
+          {p1}
+          
+        </View>
+      )
+  }
+
   renderSignUpButton() {
     return (
       <Button 
@@ -160,44 +190,6 @@ class RegistrationForm extends Component {
     );
   }
 
-  showPicker1 = () => {
-    this.setState({pickerVisible: true})
-  };
-
-  hidePicker1 = () => {
-    this.setState({pickerVisible: false});
-  };
-
-  showPicker2 = () => {
-    this.setState({pickerVisible2: true})
-  };
-
-  hidePicker2 = () => {
-    this.setState({pickerVisible2: false});
-  };
-
-  handlePickedValueCollege = (input) =>{
-    this.setState({collegeSelected: input});
-    this.onCollegeChange(input[0].value);
-    this.populateMajorArray(input);
-    this.hidePicker1();
-  };
-
-  handlePickedValueMajor = (input2) =>{
-    this.setState({majorSelected: input2});
-    this.onMajorChange(input2[0]);
-    this.hidePicker2();
-  };
-  populateMajorArray(cName){
-      majorNames = [];
-      majorNames.push('Select a Major');
-      var i = 2;
-
-      var temp = data.slice(cName[0].key-1, cName[0].key);
-      temp[0].degrees.map((aDegree)=>{
-        majorNames.push(aDegree);
-      });
-  }
 
   render() {
     return (
@@ -250,60 +242,7 @@ class RegistrationForm extends Component {
               maxLength={30}
               onChangeText={this.onConfirmPasswordChange.bind(this)}
               />
-
-            <View style={styles.pickerTextInput}>
-              <Input
-                style={{flex: 1}}
-                editable={false}
-                value={this.state.collegeSelected[0].value }/>
-                <TouchableOpacity
-                  style={{alignItems:'flex-end', margin: 10}}
-                  onPress={this.showPicker1}>
-                  <Ionicons name={iconName} size={45}/>
-                </TouchableOpacity>
-            </View>
-
-            <RkPicker
-              rkType='rounded'
-              optionHeight={80}
-              optionRkType={'medium'}
-              selectedOptionRkType={'medium danger'}
-              confirmButtonText={'Select'}
-              title="Colleges"
-              titleTextRkType={'large'}
-              data={[collegeNames]}
-              visible={this.state.pickerVisible}
-              onConfirm={this.handlePickedValueCollege}
-              onCancel={this.hidePicker1}
-              selectedOptions={this.state.collegeSelected}
-              />
-
-            <View style={styles.pickerTextInput}>
-              <Input
-                style={{flex: 1}}
-                editable={false}
-                value={this.state.majorSelected[0] }/>
-                <TouchableOpacity
-                  style={{alignItems:'flex-end', margin: 10,}}
-                  onPress={this.showPicker2}>
-                  <Ionicons name={iconName} size={45}/>
-                </TouchableOpacity>
-            </View>
-
-            <RkPicker
-              rkType='rounded'
-              optionHeight={80}
-              optionRkType={'medium'}
-              selectedOptionRkType={'medium danger'}
-              confirmButtonText={'Select'}
-              title="Degrees"
-              titleTextRkType={'large'}
-              data={[majorNames]}
-              visible={this.state.pickerVisible2}
-              onConfirm={this.handlePickedValueMajor}
-              onCancel={this.hidePicker2}
-              selectedOptions={this.state.majorSelected}
-              />
+            {this.renderPickers()}
           </RkAvoidKeyboard>
           </ScrollView>
 
