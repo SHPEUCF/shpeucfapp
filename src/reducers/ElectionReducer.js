@@ -5,7 +5,9 @@ import {
     ADD_POSITION,
     DELETE_POSITION,
     EDIT_POSITION,
-    ADD_CANDIDATES,
+    ADD_APPLICATION,
+    CHANGE_POSITION,
+    APPROVE_APPLICATION,
     DELETE_CANDIDATES,
     EDIT_CANDIDATES,
     CANDIDATE_FNAME_CHANGED,
@@ -29,6 +31,7 @@ const INITIAL_STATE = {
     positionDescription: "",
     title: "ADD",
     positions: [],
+    applyPosition: ""
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -47,7 +50,10 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 election : payload
             }
-        case ADD_POSITION:
+        case APPROVE_APPLICATION:
+            return state
+
+        case ADD_APPLICATION:
             return state
 
         case DELETE_POSITION:
@@ -57,8 +63,6 @@ export default (state = INITIAL_STATE, action) => {
                 positionDescription : ""
             }
         case EDIT_POSITION:
-            return state
-        case ADD_CANDIDATES:
             return state
         case DELETE_CANDIDATES:
             return {
@@ -72,12 +76,12 @@ export default (state = INITIAL_STATE, action) => {
         case CANDIDATE_FNAME_CHANGED:
             return {
                 ...state,
-                candidateName: payload
+                candidateFName: payload
             }
         case CANDIDATE_LNAME_CHANGED:
             return {
                 ...state,
-                candidateName: payload
+                candidateLName: payload
             }
         case CANDIDATE_PLAN_CHANGED:
             return {
@@ -103,6 +107,12 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 title: payload
+            }
+
+        case CHANGE_POSITION:
+            return {
+                ...state,
+                applyPosition: payload
             }
         case GO_TO_POSITION_FORM:
             return {

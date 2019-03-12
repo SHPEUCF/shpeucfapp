@@ -9,10 +9,11 @@ import {
 import {
     OPEN_ELECTION,
     CLOSE_ELECTION,
-    ADD_POSITION,
+    ADD_APPLICATION,
+    APPROVE_APPLICATION,
     DELETE_POSITION,
     EDIT_POSITION,
-    ADD_CANDIDATES,
+    CHANGE_POSITION,
     DELETE_CANDIDATES,
     EDIT_CANDIDATES,
     CANDIDATE_FNAME_CHANGED,
@@ -75,7 +76,7 @@ export const deletePosition = (text) => {
     return (dispatch) => {
         firebase.database().ref(`/election/positions/${title}`).update({
                 title: "",
-                description: ""
+                description: "",
             })
             .then(() => {
                 dispatch({
@@ -101,13 +102,45 @@ export const editPosition = (title, description) => {
             .catch((error) => alert('Position could not be Edited!', 'Failure'))
     }
 };
-export const addCandidates = (fName, lName, plan, position) => {
+
+export const addApplication = (fName, lName, plans, position, id) => {
+
+  Alert.alert(id);
+  return (dispatch) => {
+      firebase.database().ref(`/election/positions/${position}/candidates/${id}`).set({
+              firstName: fName,
+              lastName: lName,
+              plan: plans,
+              id: id,
+          })
+          .then(() => {
+              dispatch({
+                  type: ADD_APPLICATION,
+              });
+          })
+      .then(() => alert('Application Added!', 'Successful'))
+      .catch((error) => alert('Application could not be Added!', 'Failure'))
+  }
+};
+
+
+export const approveApplication = (fName, lName, plans, position, id) => {
     return (dispatch) => {
         //this needs to find the person but it needs to check for duplicates somehow
-        // firebase().database().ref('/users/').orderByChild("firstName").equalTo(fName).on('value', (snapshot) => {
-        //
-        // })
 
+        //Alert.alert(candidateId);
+        firebase.database().ref(`/election/positions/${position}/candidates/${candidateId}`).set({
+                firstName: fName,
+                lastName: lName,
+                plan: plans,
+            })
+            .then(() => {
+                dispatch({
+                    type: ADD_POSITION,
+                });
+            })
+            .then(() => alert('Candidate Added!', 'Successful'))
+            .catch((error) => alert('Candidate could not be Added!', 'Failure'))
 
     }
 };
@@ -159,11 +192,17 @@ export const positionDescriptionChanged = (text) => {
     };
 };
 
-export const goToCandidateForm = (text) => {
+export const goToCandidateForm = (text, pos) => {
     Actions.CandidateForm()
-    return {
-        type: GO_TO_CANDIDATE_FORM,
-        payload: text
+    return (dispatch) => {
+        dispatch({
+          type: GO_TO_CANDIDATE_FORM,
+          payload: text
+        });
+        dispatch({
+          type: CHANGE_POSITION,
+          payload: pos
+        });
     }
 };
 
