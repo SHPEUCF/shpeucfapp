@@ -51,6 +51,7 @@ export const GO_TO_OTHER_PROFILE= 'go_to_other_profile';
 export const GO_TO_EDIT_OTHER_PROFILE_FORM = 'go_to_edit_other_profile_form';
 export const QUOTE_CHANGED_MEMBER = 'quote_changed_member';
 export const FETCH_FILTERS = 'fetch_filters';
+export const FETCH_ALL_USERS = 'fetch_all_users';
 
 // GeneralActions
 export const PAGE_LOAD = 'page_load';

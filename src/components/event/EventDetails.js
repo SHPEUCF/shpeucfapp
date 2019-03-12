@@ -8,7 +8,8 @@ import {
     Text,
     TextInput,
     Dimensions,
-    FlatList
+    FlatList,
+    Linking
 } from 'react-native';
 import {Button} from '../general'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -24,7 +25,8 @@ import {
     closeCheckIn,
     pageLoad,
     convertNumToDate,
-    fetchMembersPoints
+    fetchAllUsers,
+    emailListUsers,
 } from '../../actions'
 import { Actions } from 'react-native-router-flux';
 
@@ -35,7 +37,7 @@ class EventDetails extends Component {
 
     componentWillMount() {
 
-        this.props.fetchMembersPoints()
+        this.props.fetchAllUsers()
         this.props.pageLoad()
         {this.setState({modalVisible: false})}
         this.props.fetchCode(this.props.eventID)
@@ -114,12 +116,13 @@ class EventDetails extends Component {
   }
 
     renderComponent(item) {
-        if(this.props.membersPoints !== undefined && this.props.membersPoints[item] !== undefined){
+        // alert(Object.keys(this.props.userList))
+        if(this.props.userList !== undefined && this.props.userList[item] !== undefined){
             const {
                 firstName,
                 lastName
-            } = this.props.membersPoints[item]
-
+            } = this.props.userList[item]
+            // alert(this.props.userList)
             return(
                 <View style={{flex: 1}}>
                     <Text style={{fontSize: 16, alignSelf:'center'}}>{firstName} {lastName}</Text>
@@ -127,6 +130,71 @@ class EventDetails extends Component {
             )
         }
     }
+
+    convertArrayOfObjectsToCSV(args) {  
+        var result, ctr, keys, columnDelimiter, lineDelimiter, data;
+
+        data = args.data || null;
+        if (data == null || !data.length) {
+            return null;
+        }
+
+        columnDelimiter = args.columnDelimiter || ',';
+        lineDelimiter = args.lineDelimiter || '\n';
+
+        keys = Object.keys(data[0]);
+
+        result = '';
+        result += keys.join(columnDelimiter);
+        result += lineDelimiter;
+
+        data.forEach(function(item) {
+            ctr = 0;
+            keys.forEach(function(key) {
+                if (ctr > 0) result += columnDelimiter;
+
+                result += String(item[key]).replace('&','and').replace('\n',' ');
+                ctr++;
+            });
+            result += lineDelimiter;
+        });
+
+        return result;
+    }
+
+    sendListToMail(attendants) {
+
+        const {
+            privilege,
+            userList,
+            name,
+        } = this.props
+
+        var users = [];
+        const email = userList[privilege.id].email
+        attendants.map(attendant => {users.push(userList[attendant])})
+
+
+        var csv = this.convertArrayOfObjectsToCSV({
+            data: users
+        });
+
+        if (csv == null) return;
+
+        filename = `${name}.csv` || 'export.csv';
+        
+        alert(csv)
+        data = `Instructions: \n1.Open a plain text Editor(Not microsoft Word)\n2.Copy everything under the line and paste it into the text editor\n3.save the file and change the extension to .csv(Look up how to do this if you dont know how)\n` +
+         `4.Open the file in either Numbers or Excel\n------------------\n\n` + csv
+        var link = `mailto:${email}?subject=event: ${name}&body=`+ data
+        if(!Linking.canOpenURL(link)){
+            alert('Email could not be sent', 'Failure')
+        }else{
+            Linking.openURL(link)
+            alert('Email should be sent')
+        }
+    }
+
     renderAttendance() {
         
         const {
@@ -137,7 +205,9 @@ class EventDetails extends Component {
         
         const {
             lineOnTop,
-            attendance
+            attendance,
+            attendanceContainer,
+            icon
         } = styles
 
         var attendants = Object.keys(eventList[eventID].attendance)
@@ -145,7 +215,16 @@ class EventDetails extends Component {
         if(privilege !== undefined && privilege.board === true){
             return(
                 <View style={[{flex: 1, flexDirection: 'column'}, lineOnTop]}>
-                    <Text style={attendance}>Attendance</Text>
+                    <View style={attendanceContainer}>
+                        <View style={{flex:.5}}/>
+                        <Text style={attendance}>Attendance</Text>
+                        <Ionicons 
+                        style={[icon, {alignSelf: 'center'}]} 
+                        name="md-mail" 
+                        size={35} 
+                        color='#000000'
+                        onPress={() => this.sendListToMail(attendants)}/>
+                    </View>
                     <FlatList
                     data={attendants}
                     extraData={this.state}
@@ -309,11 +388,14 @@ const styles = StyleSheet.create({
     icon: {
         flex: .2
     },
+    attendanceContainer: {
+        flex: .5,
+        flexDirection: 'row',
+    },
     attendance: {
         fontSize: 20,
         alignSelf: 'center', 
-        flex: .15,
-        padding: 8
+        flex: .8,
     },
     text: {
         flex: 1,
@@ -364,9 +446,9 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({ events, auth, members }) => {
   const { type, name, description, date, time, location, points, eventID, error, code, eventList } = events;
   const { privilege } = auth;
-  const { membersPoints } = members
+  const { userList } = members
 
-  return { type, name, description, date, time, location, points, eventID, error, privilege, code, eventList, membersPoints};
+  return { type, name, description, date, time, location, points, eventID, error, privilege, code, eventList, userList};
 };
 
 const mapDispatchToProps = {
@@ -381,7 +463,8 @@ const mapDispatchToProps = {
     closeCheckIn,
     pageLoad,
     convertNumToDate,
-    fetchMembersPoints
+    fetchAllUsers,
+    emailListUsers,
 }
 
 

@@ -20,7 +20,8 @@ import {
   GO_TO_EDIT_OTHER_PROFILE_FORM,
   QUOTE_CHANGED_MEMBER,
   PAGE_LOAD,
-  FETCH_FILTERS
+  FETCH_FILTERS,
+  FETCH_ALL_USERS
 } from './types.js';
 
 export const firstNameChangedMember = (text) => {
@@ -174,6 +175,18 @@ export const editMember = ( firstNameU, lastNameU, emailU, collegeU, majorU, poi
   });
 }
 };
+
+export const fetchAllUsers = () => {
+  return (dispatch) => {
+    firebase.database().ref(`/users/`).once('value', snapshot => {
+      dispatch({
+        type: FETCH_ALL_USERS,
+        payload: snapshot.val()
+      })
+    })
+    .catch(() => alert('could not access database', 'failure'))
+  }
+}
 
 export const goToOtherProfile = () => {
   return (dispatch) => {

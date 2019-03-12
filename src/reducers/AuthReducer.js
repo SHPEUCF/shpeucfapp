@@ -142,7 +142,6 @@ export default (state = INITIAL_STATE, action) => {
       };
     case LOAD_USER:
       return { ...state,
-        ...INITIAL_STATE,
         firstName: payload.firstName,
         lastName: payload.lastName,
         college: payload.college,
