@@ -37,11 +37,13 @@ const Button = ({
 
 const styles = {
   tStyle: {
+    flex: 1,
     color: "#000",
     textAlign: 'center',
     fontSize: 18,
   },
   bStyle: {
+    flexDirection: 'row',
     alignSelf: 'center',
     backgroundColor: '#FECB00',
     borderRadius: 32,
@@ -57,8 +59,6 @@ Button.defaultProps = {
   textStyle: styles.tStyle,
   numberOfLines:1,
   title: "Put a Title!",
-  width: Dimensions.get("screen").width / 1.1,
-  height: Dimensions.get("screen").height / 17
 
 }
 
