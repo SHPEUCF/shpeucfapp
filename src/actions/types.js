@@ -20,6 +20,8 @@ export const LOGIN_USER_FAIL = 'login_user_fail';
 export const LOGOUT_USER = 'logout_user';
 export const GET_PRIVILEGE = 'get_privilege';
 export const QUOTE_CHANGED = 'quote_changed';
+export const NATIONALITY_CHANGED = 'nationality_changed';
+export const DATE_BIRTH_CHANGED = 'date_birth_changed';
 
 
 
@@ -44,6 +46,8 @@ export const PRIVILEGE_CHANGED_MEMBER = "privilege_changed_member";
 export const PICTURE_CHANGED_MEMBER = "picture_changed_member";
 export const PASSWORD_CHANGED_MEMBER = 'password_changed_member';
 export const CONFIRM_PASSWORD_CHANGED_MEMBER = 'confirm_password_changed_member';
+export const NATIONALITY_CHANGED_MEMBER = 'nationality_changed_member';
+export const DATE_BIRTH_CHANGED_MEMBER = 'date_birth_change_member';
 export const FETCH_MEMBERS_POINTS = 'fetch_members_points';
 export const FETCH_MEMBER_PROFILE= 'fetch_member_profile';
 export const EDIT_MEMBER= 'edit_member';

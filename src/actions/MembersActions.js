@@ -20,8 +20,10 @@ import {
   GO_TO_EDIT_OTHER_PROFILE_FORM,
   QUOTE_CHANGED_MEMBER,
   PAGE_LOAD,
-  FETCH_FILTERS,
-  FETCH_ALL_USERS
+  FETCH_ALL_USERS,
+  DATE_BIRTH_CHANGED_MEMBER,
+  NATIONALITY_CHANGED_MEMBER,
+  FETCH_FILTERS
 } from './types.js';
 
 export const firstNameChangedMember = (text) => {
@@ -79,7 +81,18 @@ export const pictureChangedMember = (text) => {
     payload: text
   };
 };
-
+export const nationalitychangedMember = (text) => {
+  return {
+    type: NATIONALITY_CHANGED_MEMBER,
+    payload: text
+  };
+};
+export const datebirthchangedMember = (text) => {
+  return {
+    type: DATE_BIRTH_CHANGED_MEMBER,
+    payload: text
+  };
+};
 export const fetchFilters = (text) => {
   return {
     type: FETCH_FILTERS,
@@ -143,7 +156,7 @@ export const fetchMemberProfile = (userID) => {
   };
 };
 
-export const editMember = ( firstNameU, lastNameU, emailU, collegeU, majorU, pointsU, quoteU, idU ) => {
+export const editMember = ( firstNameU, lastNameU, emailU, collegeU, majorU, pointsU, quoteU, idU, nationalityU, date_birthU ) => {
   return (dispatch) => {
 
   firebase.database().ref(`/users/${idU}/`).update({
@@ -153,7 +166,9 @@ export const editMember = ( firstNameU, lastNameU, emailU, collegeU, majorU, poi
       college: collegeU,
       major: majorU,
       points: pointsU,
-      quote: quoteU
+      quote: quoteU,
+      nationality: nationalityU,
+      date_of_birth: date_birthU
     })
     .then(() => firebase.database().ref(`/points/${idU}/`).update({
       firstName: firstNameU,

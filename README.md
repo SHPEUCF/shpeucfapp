@@ -42,6 +42,9 @@ What things you need to install the software and how to install them
 #### Install react-native command line interface
 * Open your Terminal/Command Prompt and run: `npm i -g react-native-cli`
 
+#### Use this guide for great advice on creating cool UX/UI
+
+* [A Comprehensive Guide To Mobile App Design](https://www.smashingmagazine.com/2018/02/comprehensive-guide-to-mobile-app-design/)
 
 
 ### Installing

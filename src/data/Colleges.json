@@ -1,11 +1,5 @@
 [
   {
-    "key":1,
-    "collegeName":"Select College",
-    "degrees":"Select a Major"
-  },
-  {
-    "key":2,
     "collegeName": "College of Arts & Humanities (CAH)",
     "degrees": [
 
@@ -44,7 +38,6 @@
     ]
   },
   {
-    "key":3,
     "collegeName": "College of Business Administration (CBA)",
     "degrees": [
 
@@ -59,7 +52,6 @@
     ]
   },
   {
-    "key":4,
     "collegeName": "College of Education & Human Performance (CEDHP)",
     "degrees": [
 
@@ -81,7 +73,6 @@
     ]
   },
   {
-    "key":5,
     "collegeName": "College of Engineering & Computer Science (CECS)",
     "degrees": [
 
@@ -102,7 +93,6 @@
     ]
   },
   {
-    "key":6,
     "collegeName": "College of Health & Public Affairs (COHPA)",
     "degrees": [
 
@@ -119,7 +109,6 @@
     ]
   },
   {
-    "key":7,
     "collegeName": "Rosen College of Hospitality Management (RCHM)",
     "degrees": [
 
@@ -129,7 +118,6 @@
     ]
   },
   {
-    "key":8,
     "collegeName": "College of Medicine (COM)",
     "degrees": [
 
@@ -143,7 +131,6 @@
     ]
   },
   {
-    "key":9,
     "collegeName": "College of Nursing (CON)",
     "degrees": [
 
@@ -153,7 +140,6 @@
     ]
   },
   {
-    "key":10,
     "collegeName": "College of Optics & Photonics (CREOL)",
     "degrees": [
 
@@ -161,7 +147,6 @@
     ]
   },
   {
-    "key":11,
     "collegeName": "College of Sciences (COS)",
     "degrees": [
 
@@ -190,10 +175,8 @@
     ]
   },
   {
-    "key":12,
     "collegeName": "Undergraduate Studies (UGST)",
     "degrees": [
-    
       "Applied Science B.A.S.",
       "Environmental Studies",
       "Interdisciplinary Studies",
