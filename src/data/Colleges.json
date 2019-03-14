@@ -4,35 +4,22 @@
     "degrees": [
 
       "Architecture",
-      "Art - Emerging Media Track",
-      "Art - History Track",
-      "Art - Studio Art Track",
-      "Art - Studio Track",
-      "Art - Visual Arts and Emerging Media Management Track",
+      "Art",
       "Digital Media",
-      "English - Creative Writing",
-      "English - Literature",
-      "English - Technical Communication",
+      "English",
       "Entertainment Management",
       "Film",
-      "Film - Cinema Studies Track",
       "French",
       "History",
       "Humanities and Cultural Studies",
       "Latin American Studies",
       "Music",
-      "Music - Jazz Studies Track",
-      "Music - Music Composition Track",
-      "Music - Music Performance Track",
       "Music Education",
       "Philosophy",
       "Photography",
       "Religion and Cultural Studies",
       "Spanish",
-      "Theatre - Acting Track",
-      "Theatre - Design and Technology Track",
-      "Theatre - Musical Theatre Track",
-      "Theatre - Stage Management Track",
+      "Theatre",
       "Theatre Studies",
       "Writing and Rhetoric"
     ]
@@ -55,20 +42,13 @@
     "collegeName": "College of Education & Human Performance (CEDHP)",
     "degrees": [
 
-      "Early Childhood Development and Education Track 1: Education: Pre-Kindergarten - Primary (PK-3)",
+      "Early Childhood Development and Education Track 1: Education: Pr",
       "Early Childhood Development and Education Track 2: Early Childhood Development",
       "Elementary Education",
       "Exceptional Student Education",
-      "Secondary Education - English Language Arts Education Track",
-      "Secondary Education - Mathematics Education Track",
-      "Secondary Education - Science Education Biology Track",
-      "Secondary Education - Science Education Chemistry Track",
-      "Secondary Education - Science Education Physics Track",
-      "Secondary Education - Social Science Education Track",
+      "Secondary Education",
       "Sport and Exercise Science",
-      "Teacher Education - Art Education Track",
-      "Teacher Education - Physical Education Track",
-      "Teacher Education - World Languages Education Spanish Track",
+      "Teacher Education",
       "Technical Education and Industry Training"
     ]
   },
@@ -78,14 +58,10 @@
 
       "Aerospace Engineering",
       "Civil Engineering",
-      "Computer Engineering - Comprehensive Track",
-      "Computer Engineering - Digital Circuits Track",
+      "Computer Engineering",
       "Computer Science",
       "Construction Engineering",
-      "Electrical Engineering - Communication and Signal Processing Track",
-      "Electrical Engineering - Comprehensive Track",
-      "Electrical Engineering - Power and Renewable Energy Track",
-      "Electrical Engineering - RF and Microwaves track",
+      "Electrical Engineering",
       "Environmental Engineering",
       "Industrial Engineering",
       "Information Technology",
@@ -98,7 +74,6 @@
 
       "Athletic Training",
       "Criminal Justice",
-      "Criminal Justice - Scholar's Track",
       "Health Informatics and Information Management",
       "Health Sciences",
       "Health Services Administration",
@@ -122,10 +97,6 @@
     "degrees": [
 
       "Biomedical Sciences",
-      "Biomedical Sciences - Molecular and Cellular Biology Track",
-      "Biomedical Sciences - Molecular Microbiology Track",
-      "Biomedical Sciences - Neuroscience Track",
-      "Biomedical Sciences - Preprofessional Concentration",
       "Biotechnology",
       "Medical Laboratory Sciences"
     ]
@@ -134,9 +105,7 @@
     "collegeName": "College of Nursing (CON)",
     "degrees": [
 
-      "Nursing",
-      "Nursing - Concurrent A.S.N. to B.S.N. Enrollment Option",
-      "Nursing - R.N. to B.S.N. Program"
+      "Nursing"
     ]
   },
   {
@@ -151,24 +120,21 @@
     "degrees": [
 
       "Actuarial Science",
-      "Advertising - Public Relations",
+      "Advertising",
       "Anthropology",
       "Biology",
       "Chemistry",
-      "Chemistry - Biochemistry Track",
       "Communication & Conflict",
       "Communication Sciences and Disorders",
-      "Forensic Science - Biochemistry Track",
-      "Forensic Science - Chemistry Track",
+      "Forensic Science",
       "Human Communication",
       "International and Global Studies",
       "Journalism",
       "Mathematics",
       "Physics B.A. & B.S.",
       "Political Science",
-      "Political Science - Prelaw Track",
       "Psychology",
-      "Radio - Television",
+      "Radio",
       "Social Sciences",
       "Sociology",
       "Statistics"
@@ -179,8 +145,7 @@
     "degrees": [
       "Applied Science B.A.S.",
       "Environmental Studies",
-      "Interdisciplinary Studies",
-      "Interdisciplinary Studies - Transnational Gender, Race, and Sexuality Studies Track"
+      "Interdisciplinary Studies"
     ]
   }
 ]
