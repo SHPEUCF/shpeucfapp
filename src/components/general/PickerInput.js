@@ -90,7 +90,7 @@ class PickerInput extends Component {
             dropDownArrowStyle,
             iconSize
         } = this.props
-        if(this.state.text !== String(value)){
+        if(value !== undefined && value !== null && this.state.text !== String(value)){
             this.setState({text: String(value)})
         }
 
