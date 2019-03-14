@@ -13,7 +13,7 @@ import { PickerInput } from './PickerInput'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
-const dimension = Dimensions.get('window');
+
 
 class DatePicker extends Component {
 
@@ -22,12 +22,17 @@ class DatePicker extends Component {
         this.state = {
             month: "",
             day: "",
-            year: ""
+            year: "",
+            monthArr: Array.from({length: 12}, (v, k) => k+1),
+            dayArr: Array.from({length: 31}, (v, k) => k+1),
+            yearArr: Array.from({length: 101}, (v, k) => (new Date().getFullYear()) - k),
+            focused: false
         }
     }
     static propTypes = {
-        value: PropTypes.object.isRequired,
-        onConfirm: PropTypes.func.isRequired
+        value: PropTypes.object,
+        placeholder: PropTypes.string.isRequired,
+        onSelect: PropTypes.func.isRequired
     }
 
     clickAction(item) {
@@ -40,45 +45,73 @@ class DatePicker extends Component {
     render = () => {
         const {
             style,
-            iconStyle,
+            datePickerStyle,
             fieldContainer,
             inputBoxStyle,
-
+            dropDownArrowStyle
         } = styles;
 
         const {
-            title,
-            data,
+            value,
+            placeholder
         } = this.props
 
+        const {
+            month,
+            day,
+            year,
+            monthArr,
+            dayArr,
+            yearArr,
+            focused
+        } = this.state
 
+        var iconSize = 32
+        if(!focused){
+            return(
+            <View>
+                <Input
+                placeholder={placeholder}
+                onFocus={() => this.setState({focused: true})}/>
+            </View>
+            )
+        } else
         return (
             <View>
-                <View style={{flexDirection:'row'}}>
+                <View style={datePickerStyle}>
                     <View style={fieldContainer}>
                         <PickerInput
-                        data={[1,2,3,4,5,6,7,8,9,10,11,12]}
+                        data={monthArr}
                         style={style}
+                        title={"Enter a Month"}
                         inputBoxStyle={inputBoxStyle}
-                        value={this.state.month}
+                        dropDownArrowStyle={dropDownArrowStyle}
+                        iconSize={iconSize}
+                        value={month}
                         placeholder={"MM"}
                         />
                     </View>
                    <View style={fieldContainer}>
                         <PickerInput
-                        data={[1,2,3,4]}
+                        data={dayArr}
                         style={style}
+                        title={"Enter a Day"}
                         inputBoxStyle={inputBoxStyle}
-                        value={this.state.day}
+                        dropDownArrowStyle={dropDownArrowStyle}
+                        iconSize={iconSize}
+                        value={day}
                         placeholder={"DD"}
                         />
                     </View>
                     <View style={fieldContainer}>
                         <PickerInput
-                        data={[2019,2020,2021]}
+                        data={yearArr}
                         style={style}
+                        title={"Enter a Year"}
                         inputBoxStyle={inputBoxStyle}
-                        value={this.state.year}
+                        iconSize={iconSize}  
+                        dropDownArrowStyle={dropDownArrowStyle}
+                        value={year}
                         placeholder={"YYYY"}
                         />
                     </View>
@@ -90,8 +123,7 @@ class DatePicker extends Component {
 
 
 DatePicker.defaultProps = {
-    title: 'Give me a title!',
-    placeholder: 'Choose an Option'
+    placeholder: 'Choose a Date'
 }
 
 const styles = {
@@ -110,11 +142,28 @@ const styles = {
         alignItems: 'center'
     },
     style: {
-        width: 100,
+        flex: 1,
+        width: 130,
     },
     inputBoxStyle: {
-        width: 10,
-        borderRadius: 0
+        flex: .42,
+        borderRadius: 15,
+        margin: 5,
+        padding: 7,
+    },
+    dropDownArrowStyle: {
+        flex: .3,
+        paddingLeft: 0,
+    },
+    datePickerStyle: {
+        flex: 1,
+        color: '#000',
+        fontSize: 16,
+        backgroundColor: 'white',
+        borderRadius: 25,
+        flexDirection: 'row',
+        marginTop: 5,
+        marginBottom: 5
     }
 }
 

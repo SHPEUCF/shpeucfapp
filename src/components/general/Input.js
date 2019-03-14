@@ -42,7 +42,8 @@ class Input extends Component {
       textAlignVertical,
       keyboardType,
       editable,
-      style
+      style,
+      onFocus
     } = this.props
 
     return (
@@ -60,6 +61,7 @@ class Input extends Component {
         textAlignVertical={textAlignVertical}
         keyboardType={keyboardType}
         editable={editable}
+        onFocus={onFocus}
         underlineColorAndroid='transparent'
       >
       {children}

@@ -31,7 +31,9 @@ class PickerInput extends Component {
         onSelect: PropTypes.func.isRequired,
         inputBoxStyle: PropTypes.shape({}),
         style: PropTypes.shape({}),
-        pickerItemStyle: PropTypes.shape({})
+        pickerItemStyle: PropTypes.shape({}),
+        dropDownArrowStyle: PropTypes.shape({}),
+        iconSize: PropTypes.number
     }
 
     clickAction(item) {
@@ -80,7 +82,9 @@ class PickerInput extends Component {
             data,
             placeholder,
             style,
-            inputBoxStyle
+            inputBoxStyle,
+            dropDownArrowStyle,
+            iconSize
         } = this.props
 
 
@@ -95,9 +99,9 @@ class PickerInput extends Component {
                     />
                     <Ionicons
                     onPress={() => this.setState({modalVisible: true})}
-                    style={iconStyle}
+                    style={[iconStyle, dropDownArrowStyle]}
                     name={'ios-arrow-dropdown'}
-                    size={50}/>
+                    size={iconSize}/>
                 </View>
                 <Modal
                 transparent={true}
@@ -133,7 +137,8 @@ class PickerInput extends Component {
 
 PickerInput.defaultProps = {
     title: 'Give me a title!',
-    placeholder: 'Choose an Option'
+    placeholder: 'Choose an Option',
+    iconSize: 50
 }
 
 const styles = {
