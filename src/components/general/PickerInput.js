@@ -22,7 +22,10 @@ class PickerInput extends Component {
     }
     static propTypes = {
         title: PropTypes.string.isRequired,
-        value: PropTypes.string.isRequired,
+        value: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+        ]).isRequired,
         data: PropTypes.oneOfType([
             PropTypes.array,
             PropTypes.shape({})
@@ -38,7 +41,7 @@ class PickerInput extends Component {
 
     clickAction(item) {
         this.props.onSelect(item)
-        this.setState({text: item, modalVisible: false})
+        this.setState({text: String(item), modalVisible: false})
     }
 
     renderComponent(item) {
@@ -79,6 +82,7 @@ class PickerInput extends Component {
 
         const {
             title,
+            value,
             data,
             placeholder,
             style,
@@ -86,7 +90,9 @@ class PickerInput extends Component {
             dropDownArrowStyle,
             iconSize
         } = this.props
-
+        if(this.state.text !== String(value)){
+            this.setState({text: String(value)})
+        }
 
         return (
             <View>
