@@ -35,9 +35,80 @@ class DatePicker extends Component {
         onSelect: PropTypes.func.isRequired
     }
 
-    clickAction(item) {
-        this.props.onConfirm(item)
-        this.setState({ modalVisible: false})
+
+
+    leapYear(year){
+        return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+    }
+
+
+    onSelect() {
+        const {
+            month,
+            day,
+            year
+        } = this.state
+        
+        this.props.onSelect(`${year}-${month}-${day}`)
+    }
+
+    clickActionMonth(item) {
+        const {
+            day,
+            month,
+            year
+        } = this.state
+        
+        this.setState({month: item})
+        const Month30 = [false,false,false,true,false,true,false,false,true,false,true,false]
+        
+        if(item === 2){
+            if(year != 0 && this.leapYear(year)){
+                this.setState({dayArr: Array.from({length: 29}, (v, k) => k+1)})
+                if(day > 29) this.setState({day: 29})
+            }
+            else{
+                this.setState({dayArr: Array.from({length: 28}, (v, k) => k+1)})
+                if(day > 28) this.setState({day: 28})
+            }
+        }
+        if(Month30[item]){
+            this.setState({dayArr: Array.from({length: 30}, (v, k) => k+1)})
+            if(day > 30) this.setState({day: 30})
+        }
+        else if(item !== 2){
+            this.setState({dayArr: Array.from({length: 31}, (v, k) => k+1)})
+        }
+        if(month !== "" && day !== "" && year !== "")
+            this.onSelect()
+            
+    }
+    clickActionDay(item) {
+        const {
+            month,
+            day,
+            year
+        } = this.state
+
+        this.setState({day: item})
+        if(month !== "" && day !== "" && year !== "")
+            this.onSelect()
+    }
+    clickActionYear(item) {
+        const {
+            month,
+            day,
+            year
+        } = this.state
+        this.setState({year: item})
+
+        if(month === "2" && this.leapYear(item)){
+            this.setState({dayArr: Array.from({length: 29}, (v, k) => k+1)})
+            if(day > 29) this.setState({day: "29"})
+        }
+
+        if(month !== "" && day !== "" && year !== "")
+            this.onSelect()
     }
 
    _keyExtractor = (item, index) => index;
@@ -65,7 +136,6 @@ class DatePicker extends Component {
             yearArr,
             focused
         } = this.state
-
         var iconSize = 32
         if(!focused){
             return(
@@ -88,6 +158,7 @@ class DatePicker extends Component {
                         dropDownArrowStyle={dropDownArrowStyle}
                         iconSize={iconSize}
                         value={month}
+                        onSelect={(text) => this.clickActionMonth(text)}
                         placeholder={"MM"}
                         />
                     </View>
@@ -100,6 +171,7 @@ class DatePicker extends Component {
                         dropDownArrowStyle={dropDownArrowStyle}
                         iconSize={iconSize}
                         value={day}
+                        onSelect={(text) => this.clickActionDay(text)}
                         placeholder={"DD"}
                         />
                     </View>
@@ -112,6 +184,7 @@ class DatePicker extends Component {
                         iconSize={iconSize}  
                         dropDownArrowStyle={dropDownArrowStyle}
                         value={year}
+                        onSelect={(text) => this.clickActionYear(text)}
                         placeholder={"YYYY"}
                         />
                     </View>
@@ -162,8 +235,8 @@ const styles = {
         backgroundColor: 'white',
         borderRadius: 25,
         flexDirection: 'row',
-        marginTop: 5,
-        marginBottom: 5
+        marginTop: 8,
+        marginBottom: 8,
     }
 }
 
