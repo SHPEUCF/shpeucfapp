@@ -24,7 +24,7 @@ import {
   privilegeChanged,
   pictureChanged,
   nationality_changed, 
-  date_birth_changed,
+  dateBirthChanged,
   confirmPasswordChanged,
   registrationError,
   createUser,
@@ -73,8 +73,8 @@ class RegistrationForm extends Component {
   onnationality_changed(text) {
     this.props.nationality_changed(text);
   }
-  ondate_birth_changed(text) {
-    this.props.date_birth_changed(text);
+  onDateBirthChanged(text) {
+    this.props.dateBirthChanged(text);
   }
   onQuoteChange(text) {
     this.props.quoteChanged(text);
@@ -94,7 +94,7 @@ class RegistrationForm extends Component {
       registrationError,
       createUser,
       nationality,
-      date_of_birth,
+      birthday,
       goToLogIn,
       quote } = this.props;
 
@@ -120,11 +120,11 @@ class RegistrationForm extends Component {
       registrationError('Passwords do not match, please try again');
     } else if(nationality == '') {
       registrationError('Please enter your country of origin');
-    } else if(date_of_birth == ''){
+    } else if(birthday == ''){
       registrationError('Please enter your date of birth');
     } else if (password === confirmPassword) {
       this.onPointsChange(0);
-      createUser({ firstName, lastName, email, college, major, points, picture, password, quote , nationality, date_of_birth});
+      createUser({ firstName, lastName, email, college, major, points, picture, password, quote , nationality, birthday});
     }
   }
 
@@ -264,13 +264,9 @@ class RegistrationForm extends Component {
               onChangeText={this.onnationality_changed.bind(this)}
               />
             <DatePicker
-            />
-            <Input
-              placeholder="Date of Birth"
-              value={this.props.date_of_birth}
-              onChangeText={this.ondate_birth_changed.bind(this)}
+              placeholder={"Birthday"}
+              onSelect={(text) => this.onDateBirthChanged(text)}
               />
-
             {this.renderPickers()}
           </RkAvoidKeyboard>
           </ScrollView>
@@ -371,7 +367,7 @@ const mapStateToProps = ({ auth }) => {
     privilege,
     password,
     nationality,
-    date_of_birth,
+    birthday,
     confirmPassword,
     error,
     loading,
@@ -388,7 +384,7 @@ const mapStateToProps = ({ auth }) => {
     privilege,
     password,
     nationality,
-    date_of_birth,
+    birthday,
     confirmPassword,
     error,
     loading,
@@ -406,7 +402,7 @@ const mapDispatchToProps = {
   pictureChanged,
   passwordChanged,
   nationality_changed,
-  date_birth_changed,
+  dateBirthChanged,
   confirmPasswordChanged,
   registrationError,
   createUser,

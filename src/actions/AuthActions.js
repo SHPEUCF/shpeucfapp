@@ -80,13 +80,13 @@ export const pointsChanged = (text) => {
     payload: text
   };
 };
-export const date_birth_changed = (text) => {
+export const dateBirthChanged = (text) => {
   return {
     type: DATE_BIRTH_CHANGED,
     payload: text
   };
 }
-export const nationality_changed = (text) => {
+export const nationalityChanged = (text) => {
   return {
     type: NATIONALITY_CHANGED,
     payload: text
@@ -152,12 +152,12 @@ const showFirebaseError = (dispatch, error) => {
 };
 
 // Registration Actions
-export const createUser = ({ firstName, lastName, email, college, major, points, picture, password, quote, nationality, date_of_birth }) => {
+export const createUser = ({ firstName, lastName, email, college, major, points, picture, password, quote, nationality, birthday }) => {
   return (dispatch) => {
     dispatch({ type: CREATE_USER });
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then((user) => createUserSuccess(dispatch, firstName, lastName, email, college, major, points, picture, quote, nationality, date_of_birth))
+      .then((user) => createUserSuccess(dispatch, firstName, lastName, email, college, major, points, picture, quote, nationality, birthday))
       .catch((error) => createUserFail(dispatch, error))
   };
 };
@@ -185,30 +185,30 @@ const createUserFail = (dispatch, error) => {
   });
 };
 
-const createUserSuccess = (dispatch, firstNameU, lastNameU, emailU, collegeU, majorU, pointsU, pictureU, quoteU, nationalityU, date_birthU) => {
+const createUserSuccess = (dispatch, firstName, lastName, email, college, major, points, picture, quote, nationality, birthday) => {
   const { currentUser } = firebase.auth();
 
   firebase.database().ref(`/users/${currentUser.uid}/`).set({
-      firstName: firstNameU,
-      lastName: lastNameU,
-      email: emailU,
-      college: collegeU,
-      major: majorU,
-      points: pointsU,
-      picture: pictureU,
-      quote: quoteU,
-      nationality: nationalityU,
-      date_of_birth: date_birthU,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      college: college,
+      major: major,
+      points: points,
+      picture: picture,
+      quote: quote,
+      nationality: nationality,
+      birthday: birthday,
       id: currentUser.uid
     })
     .then(() => firebase.database().ref(`/points/${currentUser.uid}/`).set({
-      firstName: firstNameU,
-      lastName: lastNameU,
-      points: pointsU,
+      firstName: firstName,
+      lastName: lastName,
+      points: points,
     }))
     .then(() => firebase.database().ref(`/privileges/${currentUser.uid}/`).set({
-      firstName: firstNameU,
-      lastName: lastNameU,
+      firstName: firstName,
+      lastName: lastName,
       user: true,
       board: false,
       eboard: false,
@@ -224,31 +224,31 @@ const createUserSuccess = (dispatch, firstNameU, lastNameU, emailU, collegeU, ma
   });
 };
 
-export const editUser = ( firstNameU, lastNameU, emailU, collegeU, majorU, pointsU, quoteU, nationalityU, date_birthU ) => {
+export const editUser = ( firstName, lastName, email, college, major, points, quote, nationality, birthday ) => {
   return (dispatch) => {
   const {
     currentUser
   } = firebase.auth();
 
   firebase.database().ref(`/users/${currentUser.uid}/`).update({
-      firstName: firstNameU,
-      lastName: lastNameU,
-      email: emailU,
-      college: collegeU,
-      major: majorU,
-      points: pointsU,
-      quote: quoteU,
-      nationality: nationalityU,
-      date_of_birth: date_birthU
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      college: college,
+      major: major,
+      points: points,
+      quote: quote,
+      nationality: nationality,
+      birthday: birthday
     })
     .then(() => firebase.database().ref(`/points/${currentUser.uid}/`).update({
-      firstName: firstNameU,
-      lastName: lastNameU,
-      points: pointsU,
+      firstName: firstName,
+      lastName: lastName,
+      points: points,
     }))
     .then(() => firebase.database().ref(`/privileges/${currentUser.uid}/`).update({
-      firstName: firstNameU,
-      lastName: lastNameU,
+      firstName: firstName,
+      lastName: lastName,
       user: true,
       board: false,
       eboard: false,
