@@ -7,7 +7,8 @@ import {
   Input,
   Button,
   Spinner,
-  PickerInput
+  PickerInput,
+  DatePicker
 } from '../general';
 import {RkAvoidKeyboard, RkTextInput, RkPicker, RkText} from 'react-native-ui-kitten';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -262,7 +263,8 @@ class RegistrationForm extends Component {
               value={this.props.nationality}
               onChangeText={this.onnationality_changed.bind(this)}
               />
-
+            <DatePicker
+            />
             <Input
               placeholder="Date of Birth"
               value={this.props.date_of_birth}

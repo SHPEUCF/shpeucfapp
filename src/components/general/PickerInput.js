@@ -22,12 +22,16 @@ class PickerInput extends Component {
     }
     static propTypes = {
         title: PropTypes.string.isRequired,
+        value: PropTypes.string.isRequired,
         data: PropTypes.oneOfType([
             PropTypes.array,
             PropTypes.shape({})
         ]).isRequired,
         placeholder: PropTypes.string,
-        onSelect: PropTypes.func.isRequired
+        onSelect: PropTypes.func.isRequired,
+        inputBoxStyle: PropTypes.shape({}),
+        style: PropTypes.shape({}),
+        pickerItemStyle: PropTypes.shape({})
     }
 
     clickAction(item) {
@@ -49,7 +53,7 @@ class PickerInput extends Component {
         return(
             <TouchableOpacity
             onPress={() => this.clickAction(item[1])}>
-                <View style={[itemStyle,last]}>
+                <View style={[itemStyle, this.props.pickerItemStyle,last]}>
                     <Text style={itemTextStyle}>{item[1]}</Text>
                 </View>
             </TouchableOpacity>
@@ -75,14 +79,16 @@ class PickerInput extends Component {
             title,
             data,
             placeholder,
+            style,
+            inputBoxStyle
         } = this.props
 
 
         return (
             <View>
-                <View style={{flexDirection:'row'}}>
+                <View style={[{flexDirection:'row'}, style]}>
                     <Input
-                    style={inputStyle}
+                    style={[inputStyle, inputBoxStyle]}
                     value={this.state.text}
                     placeholder={placeholder}
                     editable={false}
@@ -157,8 +163,7 @@ const styles = {
         alignSelf: 'center'
     },
     flatlistStyle: {
-        flex: .8,
-        // backgroundColor: '#000a'
+        flex: .8
     },
     buttonContainer:{
         flex:.2,
