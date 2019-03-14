@@ -18,7 +18,7 @@ class PickerInput extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {text: '', modalVisible: false}
+        this.state = {text: this.props.value, modalVisible: false}
     }
     static propTypes = {
         title: PropTypes.string.isRequired,
@@ -133,7 +133,6 @@ PickerInput.defaultProps = {
 const styles = {
     itemStyle: {
         flex: 1,
-        height: dimension.height *.15,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
@@ -142,6 +141,7 @@ const styles = {
     },
     itemTextStyle: {
         paddingTop: dimension.height * .03,
+        paddingBottom: dimension.height * .03,
         flex: 1,
         fontSize: 16,
         alignSelf:'center',
