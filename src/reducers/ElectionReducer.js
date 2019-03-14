@@ -2,6 +2,8 @@
 import {
     OPEN_ELECTION,
     CLOSE_ELECTION,
+    OPEN_APPLICATIONS,
+    CLOSE_APPLICATIONS,
     ADD_POSITION,
     DELETE_POSITION,
     EDIT_POSITION,
@@ -20,10 +22,12 @@ import {
     GO_TO_POSITION_FORM,
     GET_POSITIONS,
     GET_VOTES,
+    UPDATE_ELECTION
 } from '../actions/types';
 
 const INITIAL_STATE = {
     election: false,
+    apply: false,
     candidateFName: "",
     candidateLName: "",
     candidatePosition: "",
@@ -52,6 +56,16 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 election : payload
+            }
+        case OPEN_APPLICATIONS:
+            return {
+                ...state,
+                apply : payload
+            }
+        case CLOSE_APPLICATIONS:
+            return {
+                ...state,
+                apply : payload
             }
         case APPROVE_APPLICATION:
             return state
@@ -132,6 +146,12 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 votes: payload
+            }
+        case UPDATE_ELECTION:
+            return {
+                ...state,
+                apply: payload.apply,
+                election: payload.election
             }
         default:
             return state;

@@ -81,6 +81,8 @@ export const GO_TO_VIEW_EVENT = 'go_to_view_event';
 // ElectionActions
 export const OPEN_ELECTION = 'open_election';
 export const CLOSE_ELECTION = 'close_election';
+export const OPEN_APPLICATIONS = 'open_applications';
+export const CLOSE_APPLICATIONS = 'close_applications';
 export const ADD_APPLICATION = 'add_application';
 export const APPROVE_APPLICATION = 'approve_application';
 export const CHANGE_POSITION = "change_positions"
@@ -99,3 +101,4 @@ export const GO_TO_CANDIDATE_FORM = "go_to_candidate_form"
 export const GO_TO_POSITION_FORM = "go_to_position_form"
 export const GET_POSITIONS = "get_positions"
 export const GET_VOTES = "get_votes"
+export const UPDATE_ELECTION = "update_election"

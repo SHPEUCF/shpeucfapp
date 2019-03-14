@@ -11,3 +11,4 @@ export * from './WebPageShow';
 export * from './PostShow';
 export * from './GeneralContent';
 export * from './ComingSoon';
+export * from './DraggableFlatList';

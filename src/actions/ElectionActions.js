@@ -9,6 +9,8 @@ import {
 import {
     OPEN_ELECTION,
     CLOSE_ELECTION,
+    OPEN_APPLICATIONS,
+    CLOSE_APPLICATIONS,
     ADD_APPLICATION,
     APPROVE_APPLICATION,
     DELETE_POSITION,
@@ -26,6 +28,8 @@ import {
     GO_TO_POSITION_FORM,
     GET_POSITIONS,
     GET_VOTES,
+    UPDATE_ELECTION
+
 } from './types';
 
 export const openElection = () => {
@@ -50,7 +54,7 @@ export const closeElection = () => {
         })
         .then(() => {
             dispatch({
-                type: OPEN_ELECTION,
+                type: CLOSE_ELECTION,
                 payload: false
             });
         })
@@ -58,22 +62,62 @@ export const closeElection = () => {
         .catch((error) => alert('Election could not be Closed!', 'Failure'))
     }
 };
-export const addPosition = (title, description) => {
+export const openApplications = () => {
     return (dispatch) => {
+        firebase.database().ref(`/election/`).update({
+            apply: true
+        })
+        .then(() => {
+            dispatch({
+                type: OPEN_APPLICATIONS,
+                payload: true
+            });
+        })
+        .then(() => alert('Applications Started!', 'Successful'))
+        .catch((error) => alert('Applications could not be Started!', 'Failure'))
+    }
+};
+export const closeApplications = () => {
+    return (dispatch) => {
+        firebase.database().ref(`/election/`).update({
+            apply: false
+        })
+        .then(() => {
+            dispatch({
+                type: CLOSE_APPLICATIONS,
+                payload: false
+            });
+        })
+        .then(() => alert('Applications Closed!', 'Successful'))
+        .catch((error) => alert('Applications could not be Closed!', 'Failure'))
+    }
+};
+export const addPosition = (title, description) => {
+    return () => {
         firebase.database().ref(`/election/positions/${title}`).set({
                 title: title,
                 description: description,
                 level: 100
             })
-            .then(() => {
-                dispatch({
-                    type: ADD_POSITION,
-                });
-            })
             .then(() => alert('Position Added!', 'Successful'))
             .catch((error) => alert('Position could not be Added!', 'Failure'))
     }
 };
+
+export const updateElection = () => {
+    return (dispatch) => {
+      firebase.database().ref(`/election/`)
+        .on('value', snapshot => {
+          const info = (snapshot.val());
+
+          dispatch({
+            type: UPDATE_ELECTION,
+            payload: info,
+          });
+        });
+      };
+}
+
 export const deletePosition = (text) => {
     return (dispatch) => {
         firebase.database().ref(`/election/positions/${title}`).update({
@@ -232,22 +276,21 @@ export const goToPositionForm = (text) => {
     }
 };
 
-export const vote = (userId, position, candidateId) => {
+export const vote = (userId, dict) => {
     var votes;
     return () => {
-      firebase.database().ref(`/voting/${position}/${candidateId}/${userId}`).once('value',snapshot => {
-        if (!snapshot.exists()){
-            firebase.database().ref(`/voting/${position}/${candidateId}/votes`).once('value', snapshot => {
+        dict.forEach(function(item){
+            firebase.database().ref(`/voting/${item.key}/${item.value}/votes`).once('value', snapshot => {
             votes = parseInt(snapshot.val()) + 1;
-            firebase.database().ref(`/voting/${position}/${candidateId}/votes`).set(votes)
-            .then(() => firebase.database().ref(`/voting/${position}/${candidateId}/${userId}`).set(true))
-            .then(() => alert('Vote Cast!', 'Successful'))
-            .catch((error) => alert('Vote could not be cast!', 'Failure'))
+            firebase.database().ref(`/voting/${item.key}/${item.value}/votes`).set(votes)
+            .then(() => firebase.database().ref(`/voting/${item.key}/${item.value}/${userId}`).set(true))
+
             })
-        }
-        else
-          Alert.alert('You have already voted for this person!', 'Failure');
-     })
+          })
+
+          firebase.database().ref(`/users/${userId}/voted/`).set(true)
+          /*.then(() => alert('Vote Cast!', 'Successful'))
+          .catch((error) => alert('Vote could not be cast!', 'Failure'))*/
    }
 };
 

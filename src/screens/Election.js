@@ -292,20 +292,35 @@ const {modalTopStyle, inputApply} = styles;
  optionButtons(){
    return (
      <View>
-       <Text>Write an aspiring message for member to run for office</Text>
-       {/* open a modal page whre the person can apply for a position */}
-       <Button
-         title="Run For Office"
-         onPress = {() => {this.changeModalState(1);}}
-         />
+       {this.applyButton()}
        <Text>Write a message to tell the importance of voting for the chapter</Text>
       { /* open a modal page whre the person can vote for the candidates */}
        <Button
          title="Vote"
-         onPress = {() => { this.changeModalState(3);}}
+         onPress = {() => {
+           if (!this.props.voted)
+           this.changeModalState(3);
+          else {
+            alert("You already voted!");
+          }}}
          />
      </View>
    )
+ }
+
+ applyButton(){
+   if (this.apply.props){
+     return (
+       <View>
+         <Text>Write an aspiring message for member to run for office</Text>
+         {/* open a modal page whre the person can apply for a position */}
+         <Button
+           title="Run For Office"
+           onPress = {() => {this.changeModalState(1);}}
+           />
+       </View>
+     )
+   }
  }
 
  changeModalState(which){
@@ -504,10 +519,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ elect, auth }) => {
-  const { election, positions, candidatePlan } = elect;
-  const { firstName, lastName, id} = auth
+  const { election, positions, candidatePlan, apply } = elect;
+  const { firstName, lastName, id, voted} = auth
 
-  return { election, positions, candidatePlan, firstName, lastName, id};
+  return { election, positions, candidatePlan, firstName, lastName, id, voted};
 };
 
 const mapDispatchToProps = {

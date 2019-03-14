@@ -17,7 +17,7 @@ import {
       title: 'Leaderboard',
       icon: 'format-align-left',
       screen: 'Leaderboard',
-      privilege: "user"
+      privilege: "user",
     },
     {
       title: 'Resources',
@@ -91,11 +91,12 @@ class More extends Component {
   };
 }
 
-const mapStateToProps = ({ auth, general }) => {
+const mapStateToProps = ({ auth, general, elect }) => {
   const { privilege } = auth;
   const { loading } = general;
+  const { election } = elect;
 
-  return { privilege, loading };
+  return { privilege, loading, election };
 };
 
 const mapDispatchToProps = {

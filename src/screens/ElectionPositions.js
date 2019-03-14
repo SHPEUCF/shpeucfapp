@@ -3,7 +3,6 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import DraggableFlatList from 'react-native-draggable-flatlist';
 import {
   FlatList,
   ScrollView,
@@ -12,7 +11,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions } from 'react-native';
-import { Button } from '../components/general'
+import { Button, SortableFlatList } from '../components/general'
 import {
     openElection,
     closeElection,
@@ -113,7 +112,7 @@ class ElectionPosition extends Component {
   renderFlatlist(positions){
     return(
       <View style={{ flex: 1 }}>
-      <DraggableFlatList
+      <SortableFlatList
           data={this.state.data}
           keyExtractor={(item, index) => `draggable-item-${item.key}`}
           renderItem={this.renderPositions}
