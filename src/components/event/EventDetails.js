@@ -116,13 +116,11 @@ class EventDetails extends Component {
   }
 
     renderComponent(item) {
-        // alert(Object.keys(this.props.userList))
         if(this.props.userList !== undefined && this.props.userList[item] !== undefined){
             const {
                 firstName,
                 lastName
             } = this.props.userList[item]
-            // alert(this.props.userList)
             return(
                 <View style={{flex: 1}}>
                     <Text style={{fontSize: 16, alignSelf:'center'}}>{firstName} {lastName}</Text>
@@ -183,7 +181,6 @@ class EventDetails extends Component {
 
         filename = `${name}.csv` || 'export.csv';
         
-        alert(csv)
         data = `Instructions: \n1.Open a plain text Editor(Not microsoft Word)\n2.Copy everything under the line and paste it into the text editor\n3.save the file and change the extension to .csv(Look up how to do this if you dont know how)\n` +
          `4.Open the file in either Numbers or Excel\n------------------\n\n` + csv
         var link = `mailto:${email}?subject=event: ${name}&body=`+ data
@@ -191,7 +188,7 @@ class EventDetails extends Component {
             alert('Email could not be sent', 'Failure')
         }else{
             Linking.openURL(link)
-            alert('Email should be sent')
+            alert('Email app should be Opened')
         }
     }
 
