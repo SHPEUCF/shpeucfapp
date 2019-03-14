@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import {
   FlatList,
@@ -30,6 +31,7 @@ const order = ['asc'];
 class ElectionPosition extends Component {
   constructor(props) {
     super(props);
+    this.renderPositions = this.renderPositions.bind(this);
   }
 
   componentWillMount() {
@@ -76,11 +78,18 @@ class ElectionPosition extends Component {
       });
   }
 
+  viewPosition(item) {
+    this.props.positionTitleChanged(item.title);
+    this.props.positionDescriptionChanged(item.description);
+    this.props.goToPositionForm("EDIT");
+  }
+
   renderPositions({ item, index, move, moveEnd, isActive }) {
     const {
       containerStyle,
       contentContainerStyle,
     } = styles;
+
 
     const color = (isActive) ? {backgroundColor: '#ffd700'} : {backgroundColor: item.backgroundColor}
     return (
@@ -90,6 +99,11 @@ class ElectionPosition extends Component {
         onPressOut={moveEnd}>
         <View style={containerStyle}>
           <Text>{`${(item.position).title}`}</Text>
+        </View>
+        <View style= {styles.buttonContainerStyle}>
+          <TouchableOpacity onPress={() => this.viewPosition(item.position)}>
+            <Ionicons name="md-create" size={40} color='#000000'/>
+          </TouchableOpacity>
         </View>
       </TouchableOpacity>
     )
@@ -110,11 +124,7 @@ class ElectionPosition extends Component {
     )
   }
 
-  /*viewPosition(item) {
-    this.props.positionTitleChanged(item.title);
-    this.props.positionDescriptionChanged(item.description);
-    this.props.goToPositionForm("EDIT");
-  }*/
+
 
   render() {
     const {
@@ -150,18 +160,18 @@ class ElectionPosition extends Component {
             title={"ADD POSITIONS"}
             >
             </Button>
-        </View>
+            </View>
         <View style={buttonContainerStyling}>
             <Button
-            onPress={() => Actions.ElectionBackEnd()}
-            title={"BACK"}
+            onPress={() => this.setLevels()}
+            title={"SET ORDER"}
             >
             </Button>
         </View>
         <View style={buttonContainerStyling}>
             <Button
-            onPress={() => this.setLevels()}
-            title={"SET ORDER"}
+            onPress={() => Actions.ElectionBackEnd()}
+            title={"BACK"}
             >
             </Button>
         </View>
@@ -179,7 +189,7 @@ const styles = StyleSheet.create({
     borderColor: "#0005",
   },
   containerStyle: {
-    flex: 1,
+    flex: 25,
     justifyContent: 'center',
     alignItems: 'flex-start',
 
@@ -198,6 +208,10 @@ const styles = StyleSheet.create({
   contentContainerStyle: {
     margin: 1,
     height: dimension.height * .09,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+
   },
   tabBarText : {
     color: '#000',
@@ -211,7 +225,8 @@ const styles = StyleSheet.create({
   },
   buttonContainerStyle: {
       flex: 5,
-      margin: 5
+      margin: 5,
+      justifyContent: 'center',
   },
   page: {
     flex: 1,
