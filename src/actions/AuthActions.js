@@ -184,7 +184,8 @@ const createUserSuccess = (dispatch, firstNameU, lastNameU, emailU, collegeU, ma
       picture: pictureU,
       quote: quoteU,
       id: currentUser.uid,
-      voted: false
+      voted: false,
+      applied: false
     })
     .then(() => firebase.database().ref(`/points/${currentUser.uid}/`).set({
       firstName: firstNameU,

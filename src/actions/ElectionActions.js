@@ -11,6 +11,7 @@ import {
     CLOSE_ELECTION,
     OPEN_APPLICATIONS,
     CLOSE_APPLICATIONS,
+    CANDIDATE_ID_CHANGED,
     ADD_APPLICATION,
     APPROVE_APPLICATION,
     DELETE_POSITION,
@@ -160,6 +161,7 @@ export const addApplication = (fName, lName, plans, position, id) => {
               position: position,
               approved: false,
           })
+          .then(() => firebase.database().ref(`/users/${id}/applied/`).set(true))
           .then(() => {
               dispatch({
                   type: ADD_APPLICATION,
@@ -167,6 +169,17 @@ export const addApplication = (fName, lName, plans, position, id) => {
           })
       .then(() => alert('Application Added!', 'Successful'))
       .catch((error) => alert('Application could not be Added!', 'Failure'))
+  }
+};
+
+export const editApplication = (position, plans, id) => {
+
+  return () => {
+      firebase.database().ref(`/election/positions/${position}/candidates/${id}`).update({
+              plan: plans,
+          })
+      .then(() => alert('Application Edited!', 'Successful'))
+      .catch((error) => alert('Application could not be Edited!', 'Failure'))
   }
 };
 
@@ -214,6 +227,12 @@ export const deleteApplication = (position, candidateId) => {
 export const editCandidates = (text) => {
     return {
         type: EDIT_CANDIDATES,
+    };
+};
+export const candidateIdChanged = (text) => {
+    return {
+        type: CANDIDATE_ID_CHANGED,
+        payload: text
     };
 };
 export const candidateFNameChanged = (text) => {

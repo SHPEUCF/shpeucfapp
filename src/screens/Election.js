@@ -17,7 +17,8 @@ import {
   candidatePlanChanged,
   candidatePositionChanged,
   goToCandidateForm,
-  vote
+  vote,
+  editApplication
 } from '../actions';
 import _ from 'lodash';
 import {
@@ -32,8 +33,12 @@ import {
   } from 'react-native';
 
 const dimension = Dimensions.get('window');
-const iteratees = ['points','lastName','firstName','picture', 'plan'];
-const order = ['desc','asc','asc'];
+const iterateesPos = ['level'];
+const orderPos = ['asc'];
+
+const iterateesCan = ['lastName','firstName'];
+const orderCan = ['asc','asc'];
+
 const vColor = '#00ff7f';
 
 
@@ -45,7 +50,7 @@ var dict = [];
 
 class Election extends Component {
 state = { isApplyShow: false,
-  isListShow: false, isBallotShow: false, isCand: false, applyPos: null, listCandidates:null};
+  isListShow: false, isBallotShow: false, isCand: false, applyPos: null, listCandidates: null, application: 'Submit'};
 
 
 
@@ -161,12 +166,16 @@ state = { isApplyShow: false,
 
               <View>
                 <TouchableOpacity
-                  onPress={()=>{dict.push({key:item.position , value:item.id});
-                this.changeModalState(4); this.changeModalState(3);}}>
+                  onPress={()=>{
+                    if (!(dict.length == 0) && dict[(dict.length-1)].key == item.position){
+                        dict[(dict.length-1)].value = item.id;
+                    }
+                    else {
+                      dict.push({key:item.position , value:item.id});}
+                    this.changeModalState(4);
+                    }}>
 
                 <View style={{margin:10, flex:1, alignItems:'center'}}>
-
-
                     <Text style={{ fontWeight:'bold', fontSize: 20}}>{item.firstName+' '+item.lastName}</Text>
 
 
@@ -201,7 +210,7 @@ const {modalTopStyle, inputApply} = styles;
       >
       <View style={modalTopStyle}>
         <View style={{flex:1.5, alignItems:'flex-start', marginLeft:8, justifyContent:'center'}}>
-          <Text onPress = {()=>{  this.changeModalState(3);this.changeModalState(4); }} style={{fontSize:16}}>Back</Text>
+          <Text onPress = {()=>{ this.changeModalState(4); }} style={{fontSize:16}}>Back</Text>
         </View>
           <View style={{flex:2, alignItems:'flex-start', justifyContent:'center'}}>
             <Text style={{fontWeight:'bold', fontSize:18}}>Ballot</Text>
@@ -226,7 +235,7 @@ const {modalTopStyle, inputApply} = styles;
     return(
 
         <View>
-            <TouchableOpacity onPress={() => {this.changeModalState(4); this.changeModalState(3);this.setState({ listCandidates: _.toArray(item.candidates)});
+            <TouchableOpacity onPress={() => {this.changeModalState(4);this.setState({ listCandidates: _.orderBy(item.candidates, iterateesCan, orderCan)});
             }}>
         <View style={{
         margin:4,
@@ -281,7 +290,7 @@ const {modalTopStyle, inputApply} = styles;
              this.renderCandidatesList(item)
            )}
          />
-       <Button title="Submit" onPress={() => {this.props.vote(this.props.id, dict)}}/>
+       <Button title="Submit" onPress={() => {this.props.vote(this.props.id, dict); this.changeModalState(3);}}/>
      </View>
    </Modal>
    )
@@ -309,7 +318,7 @@ const {modalTopStyle, inputApply} = styles;
  }
 
  applyButton(){
-   if (this.apply.props){
+   if (this.props.apply){
      return (
        <View>
          <Text>Write an aspiring message for member to run for office</Text>
@@ -354,7 +363,7 @@ const {modalTopStyle, inputApply} = styles;
        >
        <View style={modalTopStyle}>
          <View style={{flex:1, alignItems:'flex-start', marginLeft:8, justifyContent:'center'}}>
-           <Text onPress = {()=>{ this.changeModalState(2); this.changeModalState(1); }} style={{fontSize:16}}>Back</Text>
+           <Text onPress = {()=>{ this.changeModalState(2);}} style={{fontSize:16}}>Back</Text>
          </View>
            <View style={{flex:3, alignItems:'flex-start', justifyContent:'center'}}>
              <Text style={{fontWeight:'bold', fontSize:18}}>Candidate Application</Text>
@@ -362,7 +371,7 @@ const {modalTopStyle, inputApply} = styles;
        </View>
        <View style={{flex:1, margin: 8}}>
          <View style={{alignItems:'center'}}>
-           <Text style={{fontSize:20}}>Applying for {`${this.state.applyPos}`} position</Text>
+           <Text style={{fontSize:20}}> {`${this.state.applyPos}`}</Text>
          </View>
 
          <View style={{marginTop:10, marginBottom:8}}>
@@ -387,9 +396,16 @@ const {modalTopStyle, inputApply} = styles;
          </View>
          <View >
            <Button
-             title="Submit"
-             onPress={()=>{this.props.addApplication(this.props.firstName,this.props.lastName,this.props.candidatePlan, this.state.applyPos, this.props.id );
-             this.changeModalState(2);}}
+             title={this.state.application}
+             onPress={()=>{
+             if (this.state.application == "Submit"){
+               this.props.addApplication(this.props.firstName,this.props.lastName,this.props.candidatePlan, this.state.applyPos, this.props.id );}
+             else {
+               this.props.editApplication(this.state.applyPos, this.props.candidatePlan, this.props.id);
+             }
+
+             this.changeModalState(2);
+             this.changeModalState(1);}}
              />
 
            <Button
@@ -429,7 +445,11 @@ const {modalTopStyle, inputApply} = styles;
          extraData={this.state}
          keyExtractor={this._keyExtractor}
          renderItem={({item, separators}) => {
-             return (this.renderListPositionComponent(item));
+             if (this.props.applied){
+               return (this.renderListPositionApplied(item));
+             }
+             else {
+               return (this.renderListPositionComponent(item));}
          }}
        />
    </Modal>
@@ -438,6 +458,8 @@ const {modalTopStyle, inputApply} = styles;
 
  renderListPositionComponent(item){
    const {button} = styles;
+
+   this.state.application = 'Submit';
    return(
      <View style={{flex:1, margin: 8, borderBottomWidth:1, borderColor:'grey'}}>
 
@@ -451,11 +473,57 @@ const {modalTopStyle, inputApply} = styles;
           <View style={button} >
             <Button
               title={`Apply for ${item.title}`}
-              onPress={()=>{this.changeModalState(1); this.changeModalState(2); this.setState({applyPos:item.title});}}/>
+              onPress={()=>{this.changeModalState(2); this.setState({applyPos:item.title});}}/>
           </View>
      </View>
    )
 
+ }
+
+ renderListPositionApplied(item){
+   const {button} = styles;
+   return(
+     <View style={{flex:1, margin: 8, borderBottomWidth:1, borderColor:'grey'}}>
+
+
+         <View style={{marginBottom:10}}>
+            <Text style={{fontSize:18, fontWeight:'500'}}>Position:  {`${item.title}`}</Text>
+          </View>
+          <View style={{marginLeft: 12, marginRight: 10, marginBottom:8}}>
+            <Text style={{fontSize:16, fontWeight:'400', lineHeight: 25}}>Role:  {`${item.description}`}</Text>
+          </View>
+          {this.renderEditButton(item)}
+     </View>
+   )
+
+ }
+
+ renderEditButton(item){
+   const {button} = styles;
+   const {
+   id
+   } = this.props;
+
+   var query = _.get(item, ['candidates',id], null);
+
+   this.state.application = 'Edit';
+
+   if (query != null && query.approved != true ){
+     return(
+          <View style={button} >
+            <Button
+              title={`Edit Application`}
+              onPress={()=>{this.changeModalState(2); this.setState({applyPos:item.title}); this.props.candidatePlanChanged(query.plan);}}/>
+          </View>
+     )}
+
+    else if ( query != null && query.approved == true ){
+      return(
+        <View style={{marginLeft: 12, marginRight: 10, marginBottom:8}}>
+          <Text style={{fontSize:16, fontWeight:'400', lineHeight: 25}}>You've been approved! Good Luck!</Text>
+        </View>
+      )
+    }
  }
 
   render() {
@@ -467,7 +535,7 @@ const {modalTopStyle, inputApply} = styles;
       positions,
     } = this.props;
 
-    const positionsArray = _.toArray(positions)
+    const positionsArray =  _.orderBy(positions, iterateesPos, orderPos)
 
     //alert(positions.title);
     return (
@@ -520,9 +588,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ elect, auth }) => {
   const { election, positions, candidatePlan, apply } = elect;
-  const { firstName, lastName, id, voted} = auth
+  const { firstName, lastName, id, voted, applied} = auth
 
-  return { election, positions, candidatePlan, firstName, lastName, id, voted};
+  return { election, positions, candidatePlan, firstName, lastName, id, voted, apply, applied};
 };
 
 const mapDispatchToProps = {
@@ -536,7 +604,8 @@ const mapDispatchToProps = {
   candidateLNameChanged,
   candidatePlanChanged,
   candidatePositionChanged,
-  vote
+  vote,
+  editApplication
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Election);
