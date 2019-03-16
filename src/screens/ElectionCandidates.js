@@ -19,7 +19,9 @@ import {
     goToCandidateForm,
     getPositions,
     approveApplication,
-    deleteApplication
+    deleteApplication,
+    candidatePlanChanged,
+    candidateIdChanged
 } from '../actions'
 
 const dimension = Dimensions.get('window');
@@ -122,14 +124,27 @@ class ElectionCandidates extends Component {
 
     else{
       return (
-        <View style= {styles.buttonContainerStyle}>
-          <TouchableOpacity
-          onPress={this.props.deleteApplication.bind(this, item.position, item.id)}>
-            <Ionicons name="md-remove-circle" size={40} color='#000000'/>
+        <View style = {[{flexDirection: 'row', flex: 1}]}>
+          <View style= {styles.buttonContainerStyle}>
+          <TouchableOpacity onPress={() => this.viewCandidate(item)}>
+            <Ionicons name="md-create" size={40} color='#000000'/>
           </TouchableOpacity>
+          </View>
+          <View style= {styles.buttonContainerStyle}>
+            <TouchableOpacity
+            onPress={this.props.deleteApplication.bind(this, item.position, item.id)}>
+              <Ionicons name="md-remove-circle" size={40} color='#000000'/>
+            </TouchableOpacity>
+          </View>
         </View>
       )
     }
+  }
+
+  viewCandidate(item){
+    this.props.candidateIdChanged(item.id);
+    this.props.candidatePlanChanged(item.plan);
+    this.props.goToCandidateForm("EDIT", item.position);
   }
 
 
@@ -256,7 +271,9 @@ const mapDispatchToProps = {
     goToCandidateForm,
     getPositions,
     approveApplication,
-    deleteApplication
+    deleteApplication,
+    candidatePlanChanged,
+    candidateIdChanged
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ElectionCandidates);

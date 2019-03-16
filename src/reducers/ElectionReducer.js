@@ -4,6 +4,7 @@ import {
     CLOSE_ELECTION,
     OPEN_APPLICATIONS,
     CLOSE_APPLICATIONS,
+    CANDIDATE_ID_CHANGED,
     ADD_POSITION,
     DELETE_POSITION,
     EDIT_POSITION,
@@ -29,6 +30,7 @@ const INITIAL_STATE = {
     election: false,
     apply: false,
     candidateFName: "",
+    candidateId: "",
     candidateLName: "",
     candidatePosition: "",
     candidatePlan: "",
@@ -66,6 +68,11 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 apply : payload
+            }
+        case CANDIDATE_ID_CHANGED:
+            return {
+                ...state,
+                candidateId : payload
             }
         case APPROVE_APPLICATION:
             return state
