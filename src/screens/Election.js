@@ -56,6 +56,8 @@ state = { isApplyShow: false,
 
 
 
+
+
   componentWillMount() {
       this.props.getPositions();
 
@@ -172,7 +174,7 @@ state = { isApplyShow: false,
                     }
                     else {
                       dict.push({key:item.position , value:item.id});}
-                    this.changeModalState(4);
+                    this.changeModalState(3); this.changeModalState(4);
                     }}>
 
                 <View style={{margin:10, flex:1, alignItems:'center'}}>
@@ -210,7 +212,7 @@ const {modalTopStyle, inputApply} = styles;
       >
       <View style={modalTopStyle}>
         <View style={{flex:1.5, alignItems:'flex-start', marginLeft:8, justifyContent:'center'}}>
-          <Text onPress = {()=>{ this.changeModalState(4); }} style={{fontSize:16}}>Back</Text>
+          <Text onPress = {()=>{ this.changeModalState(4); this.changeModalState(3);}} style={{fontSize:16}}>Back</Text>
         </View>
           <View style={{flex:2, alignItems:'flex-start', justifyContent:'center'}}>
             <Text style={{fontWeight:'bold', fontSize:18}}>Ballot</Text>
@@ -235,7 +237,7 @@ const {modalTopStyle, inputApply} = styles;
     return(
 
         <View>
-            <TouchableOpacity onPress={() => {this.changeModalState(4);this.setState({ listCandidates: _.orderBy(item.candidates, iterateesCan, orderCan)});
+            <TouchableOpacity onPress={() => {this.changeModalState(3);this.changeModalState(4);this.setState({ listCandidates: _.orderBy(item.candidates, iterateesCan, orderCan)});
             }}>
         <View style={{
         margin:4,
@@ -473,7 +475,7 @@ const {modalTopStyle, inputApply} = styles;
           <View style={button} >
             <Button
               title={`Apply for ${item.title}`}
-              onPress={()=>{this.changeModalState(2); this.setState({applyPos:item.title});}}/>
+              onPress={()=>{this.changeModalState(1);this.changeModalState(2); this.setState({applyPos:item.title});}}/>
           </View>
      </View>
    )
@@ -513,7 +515,7 @@ const {modalTopStyle, inputApply} = styles;
           <View style={button} >
             <Button
               title={`Edit Application`}
-              onPress={()=>{this.changeModalState(2); this.setState({applyPos:item.title}); this.props.candidatePlanChanged(query.plan);}}/>
+              onPress={()=>{this.changeModalState(1); this.changeModalState(2); this.setState({applyPos:item.title}); this.props.candidatePlanChanged(query.plan);}}/>
           </View>
      )}
 
@@ -542,12 +544,12 @@ const {modalTopStyle, inputApply} = styles;
 
       <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
 
-        {this.state.isListShow && this.showListPosition(positionsArray)}
-        {this.state.isApplyShow && this.showApplyPosition()}
-        {this.state.isBallotShow && this.showBallot(positionsArray)}
-        {this.state.isCand && this.renderCand()}
+        {!this.state.isApplyShow && !this.state.isBallotShow && !this.isCand && this.state.isListShow && this.showListPosition(positionsArray)}
+        {!this.state.isListShow && !this.state.isBallotShow && !this.isCand && this.state.isApplyShow && this.showApplyPosition()}
+        {!this.state.isListShow && !this.state.isApplyShow && !this.isCand && this.state.isBallotShow && this.showBallot(positionsArray)}
+        {!this.state.isListShow && !this.state.isApplyShow && !this.state.isBallotShow && this.state.isCand && this.renderCand()}
 
-        {!this.state.isListShow && !this.state.isApplyShow && !this.isCand && this.optionButtons()}
+        {!this.state.isListShow && !this.state.isApplyShow && !this.state.isBallotShow && !this.isCand && this.optionButtons()}
       </View>
     )
   }
