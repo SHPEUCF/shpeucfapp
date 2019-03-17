@@ -308,6 +308,11 @@ export const vote = (userId, dict) => {
           })
 
           firebase.database().ref(`/users/${userId}/voted/`).set(true)
+
+          firebase.database().ref(`/election/votes`).once('value', snapshot => {
+            votes = parseInt(snapshot.val()) + 1;
+            firebase.database().ref(`/election/votes`).set(votes)
+          })
           /*.then(() => alert('Vote Cast!', 'Successful'))
           .catch((error) => alert('Vote could not be cast!', 'Failure'))*/
    }
@@ -338,7 +343,7 @@ export const changeLevels = (position, level) => {
 export const getVotes = () => {
 
   return (dispatch) => {
-  firebase.database().ref(`votes`)
+  firebase.database().ref(`voting`)
     .on('value', snapshot => {
       const votes = (snapshot.val());
 

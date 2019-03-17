@@ -29,6 +29,7 @@ import {
 const INITIAL_STATE = {
     election: false,
     apply: false,
+    numOfVotes: 0,
     candidateFName: "",
     candidateId: "",
     candidateLName: "",
@@ -158,7 +159,8 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 apply: payload.apply,
-                election: payload.election
+                election: payload.election,
+                numOfVotes: payload.votes
             }
         default:
             return state;

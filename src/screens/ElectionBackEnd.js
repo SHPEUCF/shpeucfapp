@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import {
   FlatList,
   ScrollView,
@@ -16,10 +17,17 @@ import {
     getVotes,
     getPositions,
     closeApplications,
-    openApplications
+    openApplications,
+    fetchMemberProfile
 } from '../actions'
 
 const dimension = Dimensions.get('window');
+
+const iterateesPos = ['level'];
+const orderPos = ['asc'];
+
+const iterateesCan = ['votes'];
+const orderCan = ['desc'];
 
 class ElectionBackEnd extends Component {
   constructor(props) {
@@ -27,7 +35,7 @@ class ElectionBackEnd extends Component {
   }
 
   componentWillMount() {
-      this.props.getPositions();
+      this.props.getVotes();
   }
 
   openOrClose(){
@@ -70,6 +78,33 @@ class ElectionBackEnd extends Component {
         )
   }
 
+  renderVotes(item, position) {
+    const {
+      containerStyle,
+      contentContainerStyle,
+    } = styles;
+
+    var candidateName;
+    const candidatesArray = _.orderBy(item, iterateesCan, orderCan)
+
+    if(candidatesArray[0] == undefined){
+      candidateName = "";
+    }
+    else {
+      this.props.fetchMemberProfile(Object.entries(item)[0][0]);
+    }
+
+    return (
+      <View>
+      <View style={contentContainerStyle}>
+          <View style={containerStyle}>
+            <Text>{position + ": " + this.props.firstName + " " + this.props.lastName}</Text>
+          </View>
+      </View>
+      </View>
+    )
+  }
+
   render() {
     const {
         tabBar,
@@ -78,17 +113,20 @@ class ElectionBackEnd extends Component {
         buttonContainerStyling,
         page
     } = styles;
+
+
+
     return (
      <View style={page}>
         <View style={tabBar}>
             <Text style={tabBarText}>Election</Text>
         </View>
          <View style={content}>
-            <Text>Maybe put how many people have voted here</Text>
-            <Text>how long the election has been on</Text>
-            <Text>how long the election has been on</Text>
-            <Text>who's currently in the lead</Text>
+            <Text>Election Start Date: </Text>
+            <Text>{"Total Votes: " + this.props.numOfVotes}</Text>
         </View>
+
+        {this.renderFlatlist()}
 
         <View style={buttonContainerStyling}>
             {this.openOrClose()}
@@ -121,6 +159,23 @@ class ElectionBackEnd extends Component {
       </View>
     );
   };
+
+
+  _keyExtractor = (item, index) => index;
+
+  renderFlatlist(){
+    const votesArray = _.orderBy(this.props.votes, iterateesPos, orderPos)
+    return(
+      <FlatList
+          data={votesArray}
+          extraData={this.state}
+          keyExtractor={this._keyExtractor}
+          renderItem={({item, separators, index}) => (
+          this.renderVotes(item, Object.entries(this.props.votes)[index][0])
+        )}
+      />
+    )
+  }
 }
 
 const styles = StyleSheet.create({
@@ -141,6 +196,31 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 10
   },
+  containerStyle: {
+    flex: 25,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  containerTextStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    backgroundColor: '#ffd700',
+
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  contentContainerStyle: {
+    margin: 1,
+    height: dimension.height * .09,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+
+  },
   buttonContainerStyle: {
       flex: 5,
       margin: 5
@@ -151,10 +231,11 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = ({ elect }) => {
-    const { election, votes, apply } = elect
+const mapStateToProps = ({ elect, members }) => {
+    const { election, votes, apply, numOfVotes } = elect
+    const { firstName, lastName } = members
 
-    return { election, votes, apply };
+    return { election, votes, apply, numOfVotes, firstName, lastName };
 };
 
 const mapDispatchToProps = {
@@ -163,7 +244,8 @@ const mapDispatchToProps = {
     getVotes,
     getPositions,
     closeApplications,
-    openApplications
+    openApplications,
+    fetchMemberProfile
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ElectionBackEnd);
