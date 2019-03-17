@@ -5,7 +5,7 @@ import { Input, Button } from '../general';
 import { RkAvoidKeyboard, RkButton, RkPicker } from 'react-native-ui-kitten';
 import {
     addApplication,
-    editCandidates,
+    editApplication,
     candidateFNameChanged,
     candidateLNameChanged,
     candidatePlanChanged,
@@ -39,7 +39,8 @@ class CandidateForm extends Component {
             lastName,
             candidatePlan,
             applyPosition,
-            id
+            id,
+            candidateId
         } = this.props;
         //alert("Still need to implement this action")
 
@@ -48,11 +49,11 @@ class CandidateForm extends Component {
         }*/ if (candidatePlan === '') {
             // this.EventCreationError('Please enter a Plan of action');
         } else{
-            if(this.props.title === "ADD")
-                this.props.addApplication(firstName, lastName, candidatePlan, applyPosition, id);
-            /*else
-                this.props.editCandidates(candidateName, candidatePlan, candidatePosition);
-            Actions.ElectionCandidates();*/
+            if(this.props.title === "ADD") {
+                this.props.addApplication(firstName, lastName, candidatePlan, applyPosition, id);}
+            else {
+                this.props.editApplication(applyPosition, candidatePlan, candidateId);}
+            Actions.ElectionCandidates();
         }
     }
 
@@ -76,12 +77,12 @@ class CandidateForm extends Component {
                         </View>
                         {this.renderError()}
                         <Button
-                            title = "APPLY"
+                            title = "EDIT"
                             onPress={this.onButtonPress.bind(this)}
                         />
                         <Button
                             title = "CANCEL"
-                            onPress={Actions.popTo.bind(this,"Election")}
+                            onPress={Actions.ElectionCandidates.bind(this)}
                         />
                     </ScrollView>
                 </View>
@@ -135,15 +136,15 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ elect, auth }) => {
-    const {candidatePlan, title, applyPosition} = elect;
+    const {candidatePlan, title, applyPosition, candidateId} = elect;
     const {firstName, lastName, id} = auth;
 
-    return { firstName , lastName, applyPosition, candidatePlan, title, id };
+    return { firstName , lastName, applyPosition, candidatePlan, title, id, candidateId };
 };
 
 const mapDispatchToProps = {
     addApplication,
-    editCandidates,
+    editApplication,
     candidateFNameChanged,
     candidateLNameChanged,
     candidatePlanChanged,

@@ -14,7 +14,9 @@ import {
     openElection,
     closeElection,
     getVotes,
-    getPositions
+    getPositions,
+    closeApplications,
+    openApplications
 } from '../actions'
 
 const dimension = Dimensions.get('window');
@@ -48,6 +50,26 @@ class ElectionBackEnd extends Component {
         )
   }
 
+  applyOpenOrClose(){
+      if(this.props.apply){
+        return (
+        <Button
+        onPress={() => this.props.closeApplications()}
+        title={"CLOSE APPLICATIONS"}
+        >
+        </Button>
+        )
+      }
+      else
+      return (
+        <Button
+        onPress={() => this.props.openApplications()}
+        title={"OPEN APPLICATIONS"}
+        >
+        </Button>
+        )
+  }
+
   render() {
     const {
         tabBar,
@@ -70,6 +92,9 @@ class ElectionBackEnd extends Component {
 
         <View style={buttonContainerStyling}>
             {this.openOrClose()}
+        </View>
+        <View style={buttonContainerStyling}>
+            {this.applyOpenOrClose()}
         </View>
          <View style={buttonContainerStyling}>
             <Button
@@ -127,16 +152,18 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ elect }) => {
-    const { election, votes } = elect
+    const { election, votes, apply } = elect
 
-    return { election, votes };
+    return { election, votes, apply };
 };
 
 const mapDispatchToProps = {
     openElection,
     closeElection,
     getVotes,
-    getPositions
+    getPositions,
+    closeApplications,
+    openApplications
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ElectionBackEnd);

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import DraggableFlatList from 'react-native-draggable-flatlist';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   FlatList,
   ScrollView,
@@ -11,7 +11,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions } from 'react-native';
-import { Button } from '../components/general'
+import { Button, SortableFlatList } from '../components/general'
 import {
     openElection,
     closeElection,
@@ -19,14 +19,18 @@ import {
     goToPositionForm,
     getPositions,
     positionDescriptionChanged,
-    positionTitleChanged
+    positionTitleChanged,
+    changeLevels
 } from '../actions'
 
 const dimension = Dimensions.get('window');
+const iteratees = ['level'];
+const order = ['asc'];
 
 class ElectionPosition extends Component {
   constructor(props) {
     super(props);
+    this.renderPositions = this.renderPositions.bind(this);
   }
 
   componentWillMount() {
@@ -34,7 +38,7 @@ class ElectionPosition extends Component {
   }
 
   state = {
-    data: (_.toArray(this.props.positions)).map((d, index) => ({
+    data: (_.orderBy(this.props.positions, iteratees, order)).map((d, index) => ({
       position: d,
       key: `item-${index}`,
       label: index,
@@ -63,11 +67,28 @@ class ElectionPosition extends Component {
         )
   }
 
+  setLevels(){
+    const {
+      changeLevels,
+    } = this.props;
+
+      this.state.data.forEach(function(item, index){
+          changeLevels((item.position).title, index);
+      });
+  }
+
+  viewPosition(item) {
+    this.props.positionTitleChanged(item.title);
+    this.props.positionDescriptionChanged(item.description);
+    this.props.goToPositionForm("EDIT");
+  }
+
   renderPositions({ item, index, move, moveEnd, isActive }) {
     const {
       containerStyle,
       contentContainerStyle,
     } = styles;
+
 
     const color = (isActive) ? {backgroundColor: '#ffd700'} : {backgroundColor: item.backgroundColor}
     return (
@@ -78,6 +99,11 @@ class ElectionPosition extends Component {
         <View style={containerStyle}>
           <Text>{`${(item.position).title}`}</Text>
         </View>
+        <View style= {styles.buttonContainerStyle}>
+          <TouchableOpacity onPress={() => this.viewPosition(item.position)}>
+            <Ionicons name="md-create" size={40} color='#000000'/>
+          </TouchableOpacity>
+        </View>
       </TouchableOpacity>
     )
   }
@@ -86,7 +112,7 @@ class ElectionPosition extends Component {
   renderFlatlist(positions){
     return(
       <View style={{ flex: 1 }}>
-      <DraggableFlatList
+      <SortableFlatList
           data={this.state.data}
           keyExtractor={(item, index) => `draggable-item-${item.key}`}
           renderItem={this.renderPositions}
@@ -97,11 +123,7 @@ class ElectionPosition extends Component {
     )
   }
 
-  /*viewPosition(item) {
-    this.props.positionTitleChanged(item.title);
-    this.props.positionDescriptionChanged(item.description);
-    this.props.goToPositionForm("EDIT");
-  }*/
+
 
   render() {
     const {
@@ -137,6 +159,13 @@ class ElectionPosition extends Component {
             title={"ADD POSITIONS"}
             >
             </Button>
+            </View>
+        <View style={buttonContainerStyling}>
+            <Button
+            onPress={() => this.setLevels()}
+            title={"SET ORDER"}
+            >
+            </Button>
         </View>
         <View style={buttonContainerStyling}>
             <Button
@@ -159,7 +188,7 @@ const styles = StyleSheet.create({
     borderColor: "#0005",
   },
   containerStyle: {
-    flex: 1,
+    flex: 25,
     justifyContent: 'center',
     alignItems: 'flex-start',
 
@@ -178,6 +207,10 @@ const styles = StyleSheet.create({
   contentContainerStyle: {
     margin: 1,
     height: dimension.height * .09,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+
   },
   tabBarText : {
     color: '#000',
@@ -191,7 +224,8 @@ const styles = StyleSheet.create({
   },
   buttonContainerStyle: {
       flex: 5,
-      margin: 5
+      margin: 5,
+      justifyContent: 'center',
   },
   page: {
     flex: 1,
@@ -212,7 +246,8 @@ const mapDispatchToProps = {
     goToPositionForm,
     getPositions,
     positionDescriptionChanged,
-    positionTitleChanged
+    positionTitleChanged,
+    changeLevels
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ElectionPosition);

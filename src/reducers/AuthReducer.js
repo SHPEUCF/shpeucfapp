@@ -49,6 +49,8 @@ const INITIAL_STATE = {
   loading: false,
   error: '',
   id: '',
+  voted: false,
+  applied: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -153,6 +155,8 @@ export default (state = INITIAL_STATE, action) => {
         points: payload.points,
         picture: payload.picture,
         privilege: payload.privilege,
+        voted: payload.voted,
+        applied: payload.applied
       };
     case LOGIN_USER_FAIL:
       return { ...state,
