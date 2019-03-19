@@ -31,6 +31,7 @@ import ElectionPositions from '../screens/ElectionPositions'
 import ElectionCandidates from '../screens/ElectionCandidates'
 import Statistics from '../screens/Statistics'
 import More from '../screens/More'
+import PointsBreakDown from '../screens/PointsBreakDown'
 
 import {
   Feed,
@@ -76,6 +77,13 @@ const RouterComponent = () => {
             type={ActionConst.REPLACE}
             hideNavBar
           />
+          <Scene
+            key="pointsBreakDown"
+            component={PointsBreakDown}
+            title="Points"
+            type={ActionConst.REPLACE}
+            showNavBar
+          />        
         </Stack>
         <Stack key = "events">
           <Scene

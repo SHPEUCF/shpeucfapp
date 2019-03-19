@@ -22,6 +22,8 @@ import {
   CREATE_USER_SUCCESS,
   CREATE_USER_FAIL,
   EDIT_USER,
+  NATIONALITY_CHANGED,
+  DATE_BIRTH_CHANGED,
   GO_TO_RESET_PASSWORD,
   GO_TO_LOGIN,
   GO_TO_PROFILE,
@@ -44,6 +46,8 @@ const INITIAL_STATE = {
   privilege: {},
   password: '',
   confirmPassword: '',
+  nationality: '',
+  date_of_birth: '',
   user: null,
   loggedIn: null,
   loading: false,
@@ -99,6 +103,14 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state,
         quote: payload
      };
+     case NATIONALITY_CHANGED:
+      return { ...state,
+        nationality: payload
+      };
+      case DATE_BIRTH_CHANGED:
+      return { ...state,
+        date_of_birth: payload
+      };
     case REGISTRATION_ERROR:
       return { ...state,
         error: payload,
@@ -142,14 +154,14 @@ export default (state = INITIAL_STATE, action) => {
       };
     case LOAD_USER:
       return { ...state,
-        ...INITIAL_STATE,
         firstName: payload.firstName,
         lastName: payload.lastName,
         college: payload.college,
         email: payload.email,
         major: payload.major,
         quote: payload.quote,
-        id: payload.id,
+        nationality: payload.nationality,
+        date_of_birth: payload.date_of_birth,
         points: payload.points,
         picture: payload.picture,
         privilege: payload.privilege,

@@ -33,6 +33,8 @@ import {
   GO_TO_REGISTRATION,
   GO_TO_EDIT_PROFILE_FORM,
   QUOTE_CHANGED,
+  NATIONALITY_CHANGED,
+  DATE_BIRTH_CHANGED,
   PAGE_LOAD } from './types';
 
 export const firstNameChanged = (text) => {
@@ -78,6 +80,18 @@ export const pointsChanged = (text) => {
     payload: text
   };
 };
+export const dateBirthChanged = (text) => {
+  return {
+    type: DATE_BIRTH_CHANGED,
+    payload: text
+  };
+}
+export const nationalityChanged = (text) => {
+  return {
+    type: NATIONALITY_CHANGED,
+    payload: text
+  };
+}
 export const privilegeChanged = (text) => {
   return {
     type: PRIVILEGE_CHANGED,
@@ -138,12 +152,12 @@ const showFirebaseError = (dispatch, error) => {
 };
 
 // Registration Actions
-export const createUser = ({ firstName, lastName, email, college, major, points, picture, password, quote }) => {
+export const createUser = ({ firstName, lastName, email, college, major, points, picture, password, quote, nationality, birthday }) => {
   return (dispatch) => {
     dispatch({ type: CREATE_USER });
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then((user) => createUserSuccess(dispatch, firstName, lastName, email, college, major, points, picture, quote))
+      .then((user) => createUserSuccess(dispatch, firstName, lastName, email, college, major, points, picture, quote, nationality, birthday))
       .catch((error) => createUserFail(dispatch, error))
   };
 };
@@ -171,28 +185,30 @@ const createUserFail = (dispatch, error) => {
   });
 };
 
-const createUserSuccess = (dispatch, firstNameU, lastNameU, emailU, collegeU, majorU, pointsU, pictureU, quoteU) => {
+const createUserSuccess = (dispatch, firstName, lastName, email, college, major, points, picture, quote, nationality, birthday) => {
   const { currentUser } = firebase.auth();
 
   firebase.database().ref(`/users/${currentUser.uid}/`).set({
-      firstName: firstNameU,
-      lastName: lastNameU,
-      email: emailU,
-      college: collegeU,
-      major: majorU,
-      points: pointsU,
-      picture: pictureU,
-      quote: quoteU,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      college: college,
+      major: major,
+      points: points,
+      picture: picture,
+      quote: quote,
+      nationality: nationality,
+      birthday: birthday,
       id: currentUser.uid
     })
     .then(() => firebase.database().ref(`/points/${currentUser.uid}/`).set({
-      firstName: firstNameU,
-      lastName: lastNameU,
-      points: pointsU,
+      firstName: firstName,
+      lastName: lastName,
+      points: points,
     }))
     .then(() => firebase.database().ref(`/privileges/${currentUser.uid}/`).set({
-      firstName: firstNameU,
-      lastName: lastNameU,
+      firstName: firstName,
+      lastName: lastName,
       user: true,
       board: false,
       eboard: false,
@@ -208,29 +224,31 @@ const createUserSuccess = (dispatch, firstNameU, lastNameU, emailU, collegeU, ma
   });
 };
 
-export const editUser = ( firstNameU, lastNameU, emailU, collegeU, majorU, pointsU, quoteU ) => {
+export const editUser = ( firstName, lastName, email, college, major, points, quote, nationality, birthday ) => {
   return (dispatch) => {
   const {
     currentUser
   } = firebase.auth();
 
   firebase.database().ref(`/users/${currentUser.uid}/`).update({
-      firstName: firstNameU,
-      lastName: lastNameU,
-      email: emailU,
-      college: collegeU,
-      major: majorU,
-      points: pointsU,
-      quote: quoteU
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      college: college,
+      major: major,
+      points: points,
+      quote: quote,
+      nationality: nationality,
+      birthday: birthday
     })
     .then(() => firebase.database().ref(`/points/${currentUser.uid}/`).update({
-      firstName: firstNameU,
-      lastName: lastNameU,
-      points: pointsU,
+      firstName: firstName,
+      lastName: lastName,
+      points: points,
     }))
     .then(() => firebase.database().ref(`/privileges/${currentUser.uid}/`).update({
-      firstName: firstNameU,
-      lastName: lastNameU,
+      firstName: firstName,
+      lastName: lastName,
       user: true,
       board: false,
       eboard: false,
@@ -254,15 +272,19 @@ export const getPrivilege = () => {
           dispatch({
             type: GET_PRIVILEGE,
             payload: snapshot.val(),
-          });
+          })
           dispatch({
             type: PAGE_LOAD,
             payload: false
           });
-      });
+      })
     };
   };
 }
+
+
+
+
 
 // Login Actions
 const isVerifiedUser = ({ email, password }) => {

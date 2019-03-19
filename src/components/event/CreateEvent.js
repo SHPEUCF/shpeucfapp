@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
-import { Input, Button } from '../general';
+import { Input, Button, PickerInput } from '../general';
 import { RkAvoidKeyboard, RkButton, RkPicker } from 'react-native-ui-kitten';
 import {
     createEvent,
@@ -103,17 +103,17 @@ class CreateEvent extends Component {
                 <View style={styles.formContainerStyle}>
                     <View style={styles.headerStyle}>
                         <Text style={styles.headerTextStyle}>{this.props.title}</Text>
-                        {/* <Text style={styles.headerSubtitleStyle}>Registration</Text> */}
                     </View>
                     <ScrollView
                     ref={(ref)=> (this.scrollView=ref)}
                     style={styles.scrollView}>
-                    {/* <RkAvoidKeyboard> */}
+                    <RkAvoidKeyboard>
                         <View>
-                            <Input
+                            <PickerInput
                             placeholder="Event Type"
                             value={this.props.type}
-                            onChangeText={this.onTypeChange.bind(this)}
+                            data={["Committee","Event","Volunteer Event", "GBM", "Other"]}
+                            onSelect={this.onTypeChange.bind(this)}
                             />
                             <Input
                             placeholder="Name"
@@ -141,30 +141,15 @@ class CreateEvent extends Component {
                             placeholder="Location"
                             value={this.props.location}
                             onChangeText={this.onLocationChange.bind(this)}
-                            // onFocus={this.scrollView.scrollTo({x:100,y:100,animated: true})}
                             />
                             <Input
                             placeholder="Value"
                             value={(this.props.points === 0 || this.props.points === undefined)  ? "" : this.props.points.toString()}
                             onChangeText={this.onPointsChange.bind(this)}
-                            // onFocus={this.scrollView.scrollTo({x:100,y:100,animated: true})}
                             />
-                            {/* <RkPicker
-                            rkType='rounded'
-                            optionHeight={80}
-                            optionRkType={'medium'}
-                            selectedOptionRkType={'medium danger'}
-                            confirmButtonText={'Select'}
-                            title="Colleges"
-                            titleTextRkType={'large'}
-                            data={[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]}
-                            visible={this.state.pickerVisible}
-                            onConfirm={this.handlePickedValueCollege}
-                            onCancel={this.hidePicker1}
-                            selectedOptions={this.state.collegeSelected}
-                            /> */}
                         </View>
-                    {/* </RkAvoidKeyboard> */}
+
+                    </RkAvoidKeyboard>
                         {this.renderError()}
                         <Button 
                             title = {this.props.title}
@@ -188,10 +173,7 @@ const styles = StyleSheet.create({
     },
     formContainerStyle: {
         flex: 1,
-        marginLeft: 20,
-        marginRight: 20,
-        paddingTop: 30,
-        paddingBottom: 10,
+        padding: 20,
     },
     headerStyle: {
         flexDirection: 'column',

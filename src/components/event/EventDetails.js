@@ -8,9 +8,11 @@ import {
     Text,
     TextInput,
     Dimensions,
-    ScrollView
+    FlatList,
+    Linking
 } from 'react-native';
 import {Button} from '../general'
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
     goToCreateEvent,
     goToCreateEventFromEdit,
@@ -18,20 +20,60 @@ import {
     goToEvents,
     deleteEvents,
     getPrivilege,
-    checkIn
+    checkIn,
+    openCheckIn,
+    closeCheckIn,
+    pageLoad,
+    convertNumToDate,
+    fetchAllUsers,
+    emailListUsers,
 } from '../../actions'
+import { Actions } from 'react-native-router-flux';
 
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 
 class EventDetails extends Component {
     
 
     componentWillMount() {
+
+        this.props.fetchAllUsers()
+        this.props.pageLoad()
         {this.setState({modalVisible: false})}
-        this.props.getPrivilege();
+        this.props.fetchCode(this.props.eventID)
+        this.props.getPrivilege()
+    }
+
+    convertNumToDate(date) {
+        var months = ["Jan", "Feb", "Mar", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        temp_date = date.split("-");
+        return months[Number(temp_date[1]) - 1] + " " + temp_date[2];
     }
 
     renderCodeBox(){
+        if (this.props.privilege !== undefined && this.props.privilege.board) {
+            return (
+                <Modal
+                transparent={true}
+                visible={this.state.modalVisible}>
+                     <View style={styles.modalBackground}>
+                        <View style={styles.modalContent}>
+                            <TouchableOpacity onPress={() => {
+                                            this.setState({modalVisible: false})
+                                            this.props.closeCheckIn(this.props.eventID)}}>
+                            <Text>X</Text>
+                            </TouchableOpacity>
+                            <Text style={styles.modalText}>The event check-in is now open!</Text>
+                            <Text style={styles.modalText}>Please provide everyone this code</Text>
+                            <Text style={styles.codeText}>{this.props.code}</Text>
+                            <Text style={styles.modalText}>When you close this box the event check-in will close</Text>
+
+                        </View>
+                    </View>
+                </Modal>
+            )
+        }
+        else
         return (
         <Modal
         transparent={true}
@@ -55,12 +97,10 @@ class EventDetails extends Component {
                         autoCapitalize={'characters'}
                         autoCorrect={false}
                         maxLength={4}
-                        // editable={true}
-                        // style={{marginTop:dimension.height*.1}}
-                        // inputStyle={styles.modalTextInput}
                         />
                         <Button 
                             title = "CHECK IN"
+                            width = {dimension.width * .6}
                             onPress={() => {
                             if(this.props.code === this.state.text){
                                 this.checkinButton(this.props.eventID, this.props.points)
@@ -75,8 +115,131 @@ class EventDetails extends Component {
     )
   }
 
-    deleteButton(eventID){
-        this.props.deleteEvents(eventID);
+    renderComponent(item) {
+        if(this.props.userList !== undefined && this.props.userList[item] !== undefined){
+            const {
+                firstName,
+                lastName
+            } = this.props.userList[item]
+            return(
+                <View style={{flex: 1}}>
+                    <Text style={{fontSize: 16, alignSelf:'center'}}>{firstName} {lastName}</Text>
+                </View>
+            )
+        }
+    }
+
+    convertArrayOfObjectsToCSV(args) {  
+        var result, ctr, keys, columnDelimiter, lineDelimiter, data;
+
+        data = args.data || null;
+        if (data == null || !data.length) {
+            return null;
+        }
+
+        columnDelimiter = args.columnDelimiter || ',';
+        lineDelimiter = args.lineDelimiter || '\n';
+
+        keys = Object.keys(data[0]);
+
+        result = '';
+        result += keys.join(columnDelimiter);
+        result += lineDelimiter;
+
+        data.forEach(function(item) {
+            ctr = 0;
+            keys.forEach(function(key) {
+                if (ctr > 0) result += columnDelimiter;
+
+                result += String(item[key]).replace('&','and').replace('\n',' ');
+                ctr++;
+            });
+            result += lineDelimiter;
+        });
+
+        return result;
+    }
+
+    sendListToMail(attendants) {
+
+        const {
+            privilege,
+            userList,
+            name,
+        } = this.props
+
+        var users = [];
+        const email = userList[privilege.id].email
+        attendants.map(attendant => {users.push(userList[attendant])})
+
+
+        var csv = this.convertArrayOfObjectsToCSV({
+            data: users
+        });
+
+        if (csv == null) return;
+
+        filename = `${name}.csv` || 'export.csv';
+        
+        data = `Instructions: \n1.Open a plain text Editor(Not microsoft Word)\n2.Copy everything under the line and paste it into the text editor\n3.save the file and change the extension to .csv(Look up how to do this if you dont know how)\n` +
+         `4.Open the file in either Numbers or Excel\n------------------\n\n` + csv
+        var link = `mailto:${email}?subject=event: ${name}&body=`+ data
+        if(!Linking.canOpenURL(link)){
+            alert('Email could not be sent', 'Failure')
+        }else{
+            Linking.openURL(link)
+            alert('Email app should be Opened')
+        }
+    }
+
+    renderAttendance() {
+        
+        const {
+            privilege,
+            eventList,
+            eventID
+        } = this.props
+        
+        const {
+            lineOnTop,
+            attendance,
+            attendanceContainer,
+            icon
+        } = styles
+
+        var attendants = Object.keys(eventList[eventID].attendance)
+
+        if(privilege !== undefined && privilege.board === true){
+            return(
+                <View style={[{flex: 1, flexDirection: 'column'}, lineOnTop]}>
+                    <View style={attendanceContainer}>
+                        <View style={{flex:.5}}/>
+                        <Text style={attendance}>Attendance</Text>
+                        <Ionicons 
+                        style={[icon, {alignSelf: 'center'}]} 
+                        name="md-mail" 
+                        size={35} 
+                        color='#000000'
+                        onPress={() => this.sendListToMail(attendants)}/>
+                    </View>
+                    <FlatList
+                    data={attendants}
+                    extraData={this.state}
+                    numColumns={2}
+                    keyExtractor={this._keyExtractor}
+                    renderItem={({item, separators}) => (
+                    this.renderComponent(item)
+                    )}/>
+                </View>
+            )
+        }
+    }
+    openCheckInButton(){
+        this.props.openCheckIn(this.props.eventID)
+        this.setState({modalVisible: true})
+    }
+    deleteButton(){
+        this.props.deleteEvents(this.props.eventID);
         this.props.goToEvents();
     }
     checkinButton(ID, points){
@@ -86,7 +249,11 @@ class EventDetails extends Component {
         if(this.props.privilege !== undefined && this.props.privilege.board === true){
             return (
                 <View>
-                     <Button 
+                    <Button 
+                        title = "OPEN CHECK-IN"
+                        onPress={this.openCheckInButton.bind(this)}
+                    />
+                    <Button 
                         title = "DELETE EVENT"
                         onPress={this.deleteButton.bind(this)}
                     />
@@ -103,117 +270,82 @@ class EventDetails extends Component {
                     title = "CHECK IN"
                     onPress={() => {
                         this.setState({modalVisible: true})
-                        this.props.fetchCode(this.props.eventID)}
-                    }
+                    }}
                 />
             </View>
         )
     }
     render() {
+
+        if (this.props.loading) {
+            return <Spinner/>
+        } 
+        else {
+            const {
+                name,
+                description,
+                date,
+                time,
+                location,
+            } = this.props
+
+            const { 
+                page,
+                tabBar,
+                tabBarText,
+                container,
+                icon_container,
+                icon,
+                text,
+                final
+            } = styles
+
+            var iconSize = 25
             return (
-                <View style={styles.formContainerStyle}>
-                    <View style={styles.headerStyle}>
-                        <Text style={styles.headerTextStyle}>{this.props.name}</Text>
-                        {/* <Text style={styles.headerSubtitleStyle}>Registration</Text> */}
+                <View style={page}>
+                    <View style={tabBar}>
+                        <Text style={tabBarText}>{name}</Text>
                     </View>
-                    <ScrollView
-                    ref={(ref)=> (this.scrollView=ref)}
-                    style={styles.item}>
-                    {/* <RkAvoidKeyboard> */}
-                        <View>
-                            <TextInput
-                            rkType='rounded'
-                            placeholder="Event Type"
-                            value={"Type: " + this.props.type}
-                            maxLength={45}
-                            editable={true}
-                            // onChangeText={this.onTypeChange.bind(this)}
-                            />
-                            <TextInput
-                            rkType='rounded'
-                            placeholder="Name"
-                            value={"Name: " + this.props.name}
-                            autoCapitalize="words"
-                            maxLength={45}
-                            // onChangeText={this.onNameChange.bind(this)}
-                            />
-                            <TextInput
-                            rkType='rounded'
-                            placeholder="Description"
-                            value={"Description: " + this.props.description}
-                            autoCapitalize="sentences"
-                            maxLength={200}
-                            // onChangeText={this.onDescriptionChange.bind(this)}
-                            />
-                            <TextInput
-                            rkType='rounded'
-                            placeholder="Date"
-                            value={"Date: " + this.props.date}
-                            autoCapitalize="words"
-                            maxLength={45}
-                            // onChangeText={this.onDateChange.bind(this)}
-                            />
-                            <TextInput
-                            rkType='rounded'
-                            placeholder="Time"
-                            value={"Time: " + this.props.time}
-                            autoCapitalize="words"
-                            maxLength={45}
-                            // onChangeText={this.onTimeChange.bind(this)}
-                            />
-                            <TextInput
-                            rkType='rounded'
-                            placeholder="Location"
-                            value={"Location: " + this.props.location}
-                            autoCapitalize="words"
-                            maxLength={45}
-                            // onChangeText={this.onLocationChange.bind(this)}
-                            // onFocus={this.scrollView.scrollTo({x:100,y:100,animated: true})}
-                            />
-                            <TextInput
-                            rkType='rounded'
-                            placeholder="Value"
-                            value={"Point value: " +  ((this.props.points === undefined)  ? "" : this.props.points.toString())}
-                            autoCapitalize="words"
-                            maxLength={45}
-                            // onChangeText={this.onPointsChange.bind(this)}
-                            // onFocus={this.scrollView.scrollTo({x:100,y:100,animated: true})}
-                            />
-                            {/* <RkPicker
-                            rkType='rounded'
-                            optionHeight={80}
-                            optionRkType={'medium'}
-                            selectedOptionRkType={'medium danger'}
-                            confirmButtonText={'Select'}
-                            title="Colleges"
-                            titleTextRkType={'large'}
-                            data={[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]}
-                            visible={this.state.pickerVisible}
-                            onConfirm={this.handlePickedValueCollege}
-                            onCancel={this.hidePicker1}
-                            selectedOptions={this.state.collegeSelected}
-                            /> */}
+                    <View style={container}>
+                        <View style={icon_container}>
+                            <Ionicons style={icon} name="md-time" size={iconSize} color='#000000'/>
+                            <Text style={text}>{this.convertNumToDate(date)}  {time}</Text>
                         </View>
-                    {/* </RkAvoidKeyboard> */}
-                        {/* {this.renderError()} */}
-                    </ScrollView>
+                        <View style={icon_container}>
+                            <Ionicons style={icon} name="md-pin" size={iconSize} color='#000000'/>
+                            <Text style={text}>{location}</Text>
+                        </View>
+                        <View style={[icon_container, {flex: .7}]}>
+                            <Ionicons style={icon} name="md-list" size={iconSize} color='#000000'/>
+                            <Text style={text}>{description}</Text>
+                        </View>
+                        <View style = {[icon_container, final]}>
+                            {this.renderAttendance()}
+                        </View>
+                    </View>
                     {this.renderButtons()}
                     {this.renderCodeBox()}
                     <Button 
                         title = "CANCEL"
-                        onPress={this.props.goToEvents.bind(this)}
+                        onPress={() => Actions.pop()}
                     />
                 </View>
             )
         }
+    }
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: .95,
         alignItems: 'center',
+        flexDirection: 'column',
         justifyContent: 'flex-start',
-        margin: 5,
+        padding: 25,
+    },
+    modalText: {
+        alignSelf: 'center',
+        fontSize:16
     },
     modalTextInput: {
         marginTop: dimension.height*.05,
@@ -229,7 +361,7 @@ const styles = StyleSheet.create({
         fontSize: 60
     },
     modalContent: {
-        height: dimension.height*.4,
+        height: dimension.height*.5,
         width: dimension.width*.8,
         padding: 12,
         backgroundColor: '#fff',
@@ -243,12 +375,57 @@ const styles = StyleSheet.create({
         width: dimension.width,
         backgroundColor: '#000a'
     },
-    formContainerStyle: {
+    final: {
+        flex: 1
+    },
+    icon_container: {
+        flex: .2,
+        flexDirection: 'row'
+    },
+    icon: {
+        flex: .2
+    },
+    attendanceContainer: {
+        flex: .5,
+        flexDirection: 'row',
+    },
+    attendance: {
+        fontSize: 20,
+        alignSelf: 'center', 
+        flex: .8,
+    },
+    text: {
         flex: 1,
-        marginLeft: 20,
-        marginRight: 20,
-        paddingTop: 30,
-        paddingBottom: 10,
+        fontSize: 20
+    },
+    lineOnTop: {
+        borderTopColor: 'black',
+        borderTopWidth: 1,
+    },
+    codeText: {
+        margin:60,
+        color: '#FECB00',
+        alignSelf: 'center',
+        fontWeight: 'bold',
+        fontSize: 50,
+    }, 
+    page: {
+        flex: 1,
+        backgroundColor: '#ebebf1',
+    },
+    tabBar: {
+        height: dimension.height * .1,
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderStyle: "solid",
+        borderColor: "#0005",
+        padding: 10
+    },
+    tabBarText: {
+        color: '#000',
+        fontSize: 20,
+        margin: 20,
+        alignSelf: "center"
     },
     headerStyle: {
         flexDirection: 'column',
@@ -260,41 +437,15 @@ const styles = StyleSheet.create({
     headerTextStyle: {
         fontSize: 22,
         fontWeight: 'bold',
-    },
-    errorTextStyle: {
-        fontSize: 14,
-        alignSelf: 'center',
-        color: 'red',
-        fontWeight: 'bold',
-        padding: 10,
-    },
-    pickerTextInput: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    scrollView: {
-        flex: 0,
-        paddingTop: 0,
-        paddingBottom: 0,
-        paddingRight: 10,
-    },
-    item: {
-        flex: 1,
-        backgroundColor: '#FFF',
-        borderRadius: 5,
-        padding: 10,
-        marginRight: 10,
-        marginTop: 17
     }
 });
 
-const mapStateToProps = ({ events, auth }) => {
-  const { type, name, description, date, time, location, points, eventID, error, code } = events;
+const mapStateToProps = ({ events, auth, members }) => {
+  const { type, name, description, date, time, location, points, eventID, error, code, eventList } = events;
   const { privilege } = auth;
+  const { userList } = members
 
-  return { type, name, description, date, time, location, points, eventID, error, privilege, code};
+  return { type, name, description, date, time, location, points, eventID, error, privilege, code, eventList, userList};
 };
 
 const mapDispatchToProps = {
@@ -304,7 +455,13 @@ const mapDispatchToProps = {
     goToEvents,
     deleteEvents,
     getPrivilege,
-    checkIn
+    checkIn,
+    openCheckIn,
+    closeCheckIn,
+    pageLoad,
+    convertNumToDate,
+    fetchAllUsers,
+    emailListUsers,
 }
 
 

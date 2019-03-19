@@ -199,11 +199,8 @@ class Events extends Component {
       <TouchableOpacity onPress={this.viewEvent.bind(this,item)}>
           <View style={styles.item}>
             <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
-            <Text>Date: {item.date}</Text>
             <Text>Time: {item.time}</Text>
             <Text>Location: {item.location}</Text>
-            <Text style={styles.description}>Description: {item.description}</Text>
-            <Text>Points: {item.points}</Text>
         </View>
       </TouchableOpacity>
     );
