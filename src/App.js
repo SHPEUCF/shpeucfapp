@@ -2,7 +2,7 @@ import React, { Component} from 'react';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { goToLogIn } from './actions';
+import { goToLogIn, loadUser, pageLoad, getPrivilege, updateElection} from './actions';
 import Router from './config/Router';
 
 
@@ -23,6 +23,10 @@ class App extends Component {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.props.loggedIn = true;
+        this.props.pageLoad();
+        this.props.loadUser();
+        this.props.getPrivilege();
+        this.props.updateElection();
         Actions.main();
       } else {
         this.props.loggedIn = false;
@@ -41,6 +45,6 @@ const mapStateToProps = ({ auth }) => {
   return { loggedIn };
 };
 
-const mapDispatchToProps = { goToLogIn };
+const mapDispatchToProps = { goToLogIn, loadUser, pageLoad, getPrivilege, updateElection};
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
