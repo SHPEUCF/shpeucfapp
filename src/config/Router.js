@@ -61,7 +61,6 @@ const RouterComponent = () => {
             title="Login"
             type={ActionConst.REPLACE}
             hideNavBar
-            passProps
           />
           <Scene
             key="registration"
@@ -81,7 +80,6 @@ const RouterComponent = () => {
             key="pointsBreakDown"
             component={PointsBreakDown}
             title="Points"
-            type={ActionConst.REPLACE}
             showNavBar
           />        
         </Stack>
@@ -92,7 +90,6 @@ const RouterComponent = () => {
             title="Event Creation"
             type={ActionConst.REPLACE}
             hideNavBar
-            passProps
           />
           <Scene
             key="eventDetails"
@@ -100,7 +97,6 @@ const RouterComponent = () => {
             title="Event Details"
             type={ActionConst.REPLACE}
             hideNavBar
-            passProps
           />
         </Stack>
         <Stack key = "stats" hideNavBar>
@@ -122,7 +118,6 @@ const RouterComponent = () => {
             title="Election Candidates"
             type={ActionConst.REPLACE}
             hideNavBar
-            passProps
         />
         <Scene
            key="CandidateForm"
@@ -130,7 +125,6 @@ const RouterComponent = () => {
             title="Candidate Forms"
             type={ActionConst.REPLACE}
             hideNavBar
-            passProps
         />
         <Scene
            key="ElectionPositions"
@@ -138,7 +132,6 @@ const RouterComponent = () => {
             title="Election Positions"
             type={ActionConst.REPLACE}
             hideNavBar
-            passProps
         />
         <Scene
            key="PositionForm"
@@ -146,7 +139,6 @@ const RouterComponent = () => {
             title="Position Forms"
             type={ActionConst.REPLACE}
             hideNavBar
-            passProps
         />
         </Stack>
         <Stack key = "Profiles">
@@ -154,13 +146,12 @@ const RouterComponent = () => {
           key="EditProfileForm"
           component={EditProfileForm}
           hideNavBar
-          passProps
         />
         </Stack>
         <Stack key="main"
           tabs
           tabBarPosition="bottom"
-          type={ActionConst.REPLACE}
+          type={ActionConst.RESET}
           activeTintColor={'black'}
           inactiveTintColor={'gray'}
         >
@@ -206,8 +197,7 @@ const RouterComponent = () => {
           />
           <Stack
             key="more"
-            tabBarLabel="More"
-            passProps
+            title="More"
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
                 name={focused ? 'ios-menu' : 'ios-menu-outline'}
@@ -220,7 +210,6 @@ const RouterComponent = () => {
               component={More}
               title="More Options"
               leftTitle="Back"
-              passProps
             />
             <Scene key="Leaderboard"
               component={Leaderboard}
@@ -246,13 +235,11 @@ const RouterComponent = () => {
               component={OtherProfile}
               hideTabBar
               hideNavBar
-              passProps
             />
             <Scene
               key="EditOtherProfileForm"
               component={EditOtherProfileForm}
               hideNavBar
-              passProps
             />
             <Scene key="Resources"
               component={Resources}
@@ -260,7 +247,6 @@ const RouterComponent = () => {
             />
             <Scene key="WebPageShow"
               component={WebPageShow}
-              passProps
             />
             <Scene key="CheckIn"
               component={CheckIn}
@@ -280,11 +266,9 @@ const RouterComponent = () => {
             />
             <Scene key="EBoard"
               component={EBoard}
-              passProps
             />
             <Scene key="Version"
               component={Version}
-              passProps
             />
           </Stack>
         </Stack>
