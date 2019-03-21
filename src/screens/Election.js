@@ -1,4 +1,4 @@
- import React, { Component } from 'react';
+import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { Card, CardSection, Button, Spinner, Input } from '../components/general';
@@ -52,7 +52,7 @@ var dict = [];
 
 class Election extends Component {
 state = { isApplyShow: false,
-  isListShow: false, isBallotShow: false, isCand: false, applyPos: null, listCandidates: null, application: 'Submit'};
+  isListShow: false, isBallotShow: true, isCand: false, applyPos: null, listCandidates: null, application: 'Submit'};
 
 
 
@@ -312,7 +312,7 @@ const {modalTopStyle, inputApply} = styles;
          title="Vote"
          onPress = {() => {
            if (!this.props.voted)
-           this.changeModalState(3);
+           Actions.ElectionBallot();
           else {
             alert("You already voted!");
           }}}
@@ -329,7 +329,7 @@ const {modalTopStyle, inputApply} = styles;
          {/* open a modal page whre the person can apply for a position */}
          <Button
            title="Run For Office"
-           onPress = {() => {this.changeModalState(1);}}
+           onPress = {() => {Actions.ElectionApplication()}}
            />
        </View>
      )
@@ -545,13 +545,7 @@ const {modalTopStyle, inputApply} = styles;
     return (
 
       <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-
-        {!this.state.isApplyShow && !this.state.isBallotShow && !this.isCand && this.state.isListShow && this.showListPosition(positionsArray)}
-        {!this.state.isListShow && !this.state.isBallotShow && !this.isCand && this.state.isApplyShow && this.showApplyPosition()}
-        {!this.state.isListShow && !this.state.isApplyShow && !this.isCand && this.state.isBallotShow && this.showBallot(positionsArray)}
-        {!this.state.isListShow && !this.state.isApplyShow && !this.state.isBallotShow && this.state.isCand && this.renderCand()}
-
-        {!this.state.isListShow && !this.state.isApplyShow && !this.state.isBallotShow && !this.isCand && this.optionButtons()}
+        {this.optionButtons()}
       </View>
     )
   }
