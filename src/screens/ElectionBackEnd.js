@@ -28,14 +28,22 @@ const orderPos = ['asc'];
 
 const iterateesCan = ['votes'];
 const orderCan = ['desc'];
+var winners = [];
 
 class ElectionBackEnd extends Component {
   constructor(props) {
     super(props);
   }
 
-  componentWillMount() {
+  state = { fetchMember: false, fetchId: null};
+
+  componentDidMount() {
       this.props.getVotes();
+
+      if (this.state.fetchMember){
+          this.props.fetchMemberProfile(this.state.fetchId);
+          this.setState({fetchMember: false});
+      }
   }
 
   openOrClose(){
@@ -78,27 +86,23 @@ class ElectionBackEnd extends Component {
         )
   }
 
-  renderVotes(item, position) {
+  renderVotes(item, index, position) {
     const {
       containerStyle,
       contentContainerStyle,
     } = styles;
 
-    var candidateName;
     const candidatesArray = _.orderBy(item, iterateesCan, orderCan)
+    var winner = candidatesArray[0]
 
-    if(candidatesArray[0] == undefined){
-      candidateName = "";
-    }
-    else {
-      this.props.fetchMemberProfile(Object.entries(item)[0][0]);
-    }
+    winners[index] = winner.firstName + " " + winner.lastName;
+
 
     return (
       <View>
       <View style={contentContainerStyle}>
           <View style={containerStyle}>
-            <Text>{position + ": " + this.props.firstName + " " + this.props.lastName}</Text>
+            <Text>{position + ": " + winners[index]}</Text>
           </View>
       </View>
       </View>
@@ -171,7 +175,7 @@ class ElectionBackEnd extends Component {
           extraData={this.state}
           keyExtractor={this._keyExtractor}
           renderItem={({item, separators, index}) => (
-          this.renderVotes(item, Object.entries(this.props.votes)[index][0])
+          this.renderVotes(item, index, Object.entries(this.props.votes)[index][0])
         )}
       />
     )
@@ -232,10 +236,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ elect, members }) => {
-    const { election, votes, apply, numOfVotes } = elect
-    const { firstName, lastName } = members
+    const { election, votes, apply, numOfVotes, positions } = elect
+    const { firstName, lastName, id} = members
 
-    return { election, votes, apply, numOfVotes, firstName, lastName };
+    return { election, votes, apply, numOfVotes, firstName, lastName, positions};
 };
 
 const mapDispatchToProps = {

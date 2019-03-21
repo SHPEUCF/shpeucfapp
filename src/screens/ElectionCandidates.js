@@ -108,7 +108,7 @@ class ElectionCandidates extends Component {
         <View style = {[{flexDirection: 'row', flex: 1}]}>
             <View style= {styles.buttonContainerStyle}>
               <TouchableOpacity
-              onPress={this.props.approveApplication.bind(this, item.position, item.id)}>
+              onPress={this.props.approveApplication.bind(this, item.position, item.id, item.firstName, item.lastName)}>
                 <Ionicons name="md-checkmark-circle" size={40} color='#000000'/>
               </TouchableOpacity>
             </View>

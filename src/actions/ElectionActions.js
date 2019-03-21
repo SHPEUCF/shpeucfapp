@@ -184,7 +184,7 @@ export const editApplication = (position, plans, id) => {
 };
 
 
-export const approveApplication = (position, candidateId) => {
+export const approveApplication = (position, candidateId, fName, lName) => {
     return (dispatch) => {
         //this needs to find the person but it needs to check for duplicates somehow
 
@@ -195,6 +195,9 @@ export const approveApplication = (position, candidateId) => {
             .then(()=> {
               firebase.database().ref(`/voting/${position}/${candidateId}`).set({
                       votes: 0,
+                      firstName: fName,
+                      lastName: lName
+
                     })
             })
             .then(() => {
