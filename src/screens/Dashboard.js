@@ -107,19 +107,17 @@ class Dashboard extends Component {
 		  contentContainerStyle,
 		  progress
 		} = styles;
-		if (item.points !== 0){
+		if (item.points !== 0) {
 		  return (
-		  
 			 <View style={contentContainerStyle}>
 					<View style={containerStyle}>
-						<Text>{`${item.firstName} ${item.lastName}`}</Text>
-						<Text>Points:{item.points}</Text>
+						<Text>{`${item.firstName} ${item.lastName === undefined ? '' : item.lastName}`}</Text>
+						<Text>Points: {item.points}</Text>
 						<Progress.Bar
 							style={progress}
-							progress={item.points / Math.max(sortedMembers[0].points,1)}
+							progress={item.points / Math.max(sortedMembers[0].points, 1)}
 							indeterminate={false}
-							width={dimension.width * .4}
-							color= {'#ffd700'}
+							color={'#ffd700'}
 						/>
 					</View>
 				</View>
@@ -139,11 +137,13 @@ class Dashboard extends Component {
 			
 		let sortedMembers = _.orderBy(this.props.membersPoints, iteratees, order);
 		sortedMembers.splice(2);
+		let currentMember = sortedMembers.filter(member => member.firstName == this.props.firstName);
+		sortedMembers = sortedMembers.concat(currentMember);
 
       return (
          <View style={page}>
 				<View style={tabBar}>
-					<Text style={tabBarText}>Dashboard</Text>	
+					<Text style={tabBarText}>Dashboard</Text>
 				</View>
 				<View style={mainContentStyle}>
 					<View style={greetingContainerStyle}>
