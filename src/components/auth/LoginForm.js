@@ -85,7 +85,7 @@ class LoginForm extends Component {
       return <Spinner />;
     } else {
       return (
-          <View style={styles.formContainerStyle}> 
+          <ScrollView style={styles.formContainerStyle}> 
             <View style={{flex: .2}}></View>
 
               <View style={styles.headerContainer}>
@@ -102,14 +102,8 @@ class LoginForm extends Component {
                   <Text style={styles.headerSubtitleStyle}>Society of Hispanic Professional Engineers</Text>
                 </View>
                 </View>
-                <ScrollView
-                ref={'scrollView'}
-                decelerationRate={0}
-                snapToAInterval={300}
-                snapToAlignment={"center"}
-                >
-
-                <RkAvoidKeyboard style={styles.container}>
+                <RkAvoidKeyboard>
+                <ScrollView>
                 <View style={styles.input}>
                   <Input       
                   placeholder="Knights Email"
@@ -126,8 +120,8 @@ class LoginForm extends Component {
                   onChangeText={this.onPasswordChange.bind(this)}
                 />
                 </View>
-                 </RkAvoidKeyboard>
               </ScrollView>
+              </RkAvoidKeyboard>
             
             <View style={styles.buttonContainer}>
                 <View>
@@ -137,7 +131,7 @@ class LoginForm extends Component {
                   {this.renderButtons()}
                 </View>
               </View>
-          </View>
+          </ScrollView>
       );
     }
   }
@@ -150,6 +144,7 @@ class LoginForm extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 40,
   },
   formContainerStyle: {
     backgroundColor: '#0c0b0b',
@@ -163,6 +158,7 @@ const styles = StyleSheet.create({
   },
   headerContainer:{
     flex: 2,
+    paddingTop: 40,
   },
   headerTextStyle: {
 		color: 'white',
@@ -173,8 +169,7 @@ const styles = StyleSheet.create({
    flexDirection: 'column',
 	 alignItems: 'center',
 	 justifyContent: 'center',
-	 flex: .8,
-
+   flex: .8,
 	},
 	headerlowerTextStyle: {
 		color: '#FFC107',
@@ -184,6 +179,7 @@ const styles = StyleSheet.create({
 		color: 'gray',
     fontWeight: 'bold',
     flex: .5,
+    paddingTop: 10,
 	},
   errorTextStyle: {
     fontSize: 14,
@@ -196,24 +192,29 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 1,
+    paddingTop: 10,
   },
   resetPasswordContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
+    paddingTop: 10,
   },
   resetPasswordButton: {
     fontWeight: 'bold',
     color: 'white',
     flexDirection: 'row',
     justifyContent: 'center',
+    paddingTop: 5,
   },
   signUpButton: {
     fontWeight: 'bold',
     color: 'white',
+    paddingTop: 10,
   },
 	question: {
 		fontWeight: 'bold',
     color: 'grey',
+    paddingTop: 10,
 	},
   signUpContainer: {
     flexDirection: 'row',
@@ -222,6 +223,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
+    paddingTop: 50,
   }
 });
 
