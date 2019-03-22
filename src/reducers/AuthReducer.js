@@ -23,7 +23,7 @@ import {
   CREATE_USER_FAIL,
   EDIT_USER,
   NATIONALITY_CHANGED,
-  DATE_BIRTH_CHANGED,
+  BIRTH_DATE_CHANGED,
   GO_TO_RESET_PASSWORD,
   GO_TO_LOGIN,
   GO_TO_PROFILE,
@@ -47,7 +47,7 @@ const INITIAL_STATE = {
   password: '',
   confirmPassword: '',
   nationality: '',
-  date_of_birth: '',
+  birthday: '',
   user: null,
   loggedIn: null,
   loading: false,
@@ -107,9 +107,9 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state,
         nationality: payload
       };
-      case DATE_BIRTH_CHANGED:
+      case BIRTH_DATE_CHANGED:
       return { ...state,
-        date_of_birth: payload
+        birthday: payload
       };
     case REGISTRATION_ERROR:
       return { ...state,
