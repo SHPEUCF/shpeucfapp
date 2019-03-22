@@ -19,14 +19,15 @@ class DatePicker extends Component {
 
     constructor(props) {
         super(props);
+        var date = this.props.value.split("-")
         this.state = {
-            month: "",
-            day: "",
-            year: "",
+            month: (date.length === 3) ? date[1]: "",
+            day: (date.length === 3) ? date[2]: "",
+            year: (date.length === 3) ? date[0]: "",
             monthArr: Array.from({length: 12}, (v, k) => k+1),
             dayArr: Array.from({length: 31}, (v, k) => k+1),
             yearArr: Array.from({length: 101}, (v, k) => (new Date().getFullYear()) - k),
-            focused: false
+            focused: (date.length === 3) ? true : false
         }
     }
     static propTypes = {
@@ -35,7 +36,12 @@ class DatePicker extends Component {
         onSelect: PropTypes.func.isRequired
     }
 
-
+    prepend0(item){
+        if(item < 10){
+            return "0" + item;
+        }
+        return item
+    }
 
     leapYear(year){
         return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
@@ -52,6 +58,7 @@ class DatePicker extends Component {
     }
 
     clickActionMonth(item) {
+        item = this.prepend0(item)
         const {
             day,
             month,
@@ -83,6 +90,7 @@ class DatePicker extends Component {
             
     }
     clickActionDay(item) {
+        item = this.prepend0(item)
         const {
             month,
             year
