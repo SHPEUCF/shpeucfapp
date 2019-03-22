@@ -23,8 +23,8 @@ import {
   pointsChanged,
   privilegeChanged,
   pictureChanged,
-  nationality_changed, 
-  dateBirthChanged,
+  nationalityChanged, 
+  birthDateChanged,
   confirmPasswordChanged,
   registrationError,
   createUser,
@@ -70,11 +70,11 @@ class RegistrationForm extends Component {
   onConfirmPasswordChange(text) {
     this.props.confirmPasswordChanged(text);
   }
-  onnationality_changed(text) {
-    this.props.nationality_changed(text);
+  onNationalityChanged(text) {
+    this.props.nationalityChanged(text);
   }
-  onDateBirthChanged(text) {
-    this.props.dateBirthChanged(text);
+  onBirthDateChanged(text) {
+    this.props.birthDateChanged(text);
   }
   onQuoteChange(text) {
     this.props.quoteChanged(text);
@@ -124,7 +124,7 @@ class RegistrationForm extends Component {
       registrationError('Please enter your date of birth');
     } else if (password === confirmPassword) {
       this.onPointsChange(0);
-      createUser({ firstName, lastName, email, college, major, points, picture, password, quote , nationality, birthday});
+      createUser( firstName, lastName, email, college, major, points, picture, password, quote , nationality, birthday);
     }
   }
 
@@ -261,11 +261,11 @@ class RegistrationForm extends Component {
             <Input
               placeholder="Country of Origin"
               value={this.props.nationality}
-              onChangeText={this.onnationality_changed.bind(this)}
+              onChangeText={(text) => this.onNationalityChanged(text)}
               />
             <DatePicker
               placeholder={"Birthday"}
-              onSelect={(text) => this.onDateBirthChanged(text)}
+              onSelect={(text) => this.onBirthDateChanged(text)}
               />
             {this.renderPickers()}
           </RkAvoidKeyboard>
@@ -401,8 +401,8 @@ const mapDispatchToProps = {
   privilegeChanged,
   pictureChanged,
   passwordChanged,
-  nationality_changed,
-  dateBirthChanged,
+  nationalityChanged,
+  birthDateChanged,
   confirmPasswordChanged,
   registrationError,
   createUser,
