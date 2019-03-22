@@ -36,12 +36,13 @@ class EventDetails extends Component {
     
 
     componentWillMount() {
-
-        this.props.fetchAllUsers()
         this.props.pageLoad()
         {this.setState({modalVisible: false})}
         this.props.fetchCode(this.props.eventID)
         this.props.getPrivilege()
+        if (this.props.privilege !== undefined && this.props.privilege.board) {
+            this.props.fetchAllUsers()
+        }
     }
 
     convertNumToDate(date) {
@@ -193,8 +194,7 @@ class EventDetails extends Component {
     }
 
     renderAttendance() {
-        
-        const {
+            const {
             privilege,
             eventList,
             eventID
@@ -207,10 +207,10 @@ class EventDetails extends Component {
             icon
         } = styles
 
-        var attendants = Object.keys(eventList[eventID].attendance)
+        if(privilege !== undefined && privilege.board === true && eventList !== undefined && eventList[eventID] !== undefined && eventList[eventID].attendance !== undefined) {
+            var attendants = Object.keys(eventList[eventID].attendance)
 
-        if(privilege !== undefined && privilege.board === true){
-            return(
+            return (
                 <View style={[{flex: 1, flexDirection: 'column'}, lineOnTop]}>
                     <View style={attendanceContainer}>
                         <View style={{flex:.5}}/>
@@ -239,8 +239,8 @@ class EventDetails extends Component {
         this.setState({modalVisible: true})
     }
     deleteButton(){
-        this.props.deleteEvents(this.props.eventID);
-        this.props.goToEvents();
+        this.props.deleteEvents(this.props.eventID)
+        Actions.pop()
     }
     checkinButton(ID, points){
         this.props.checkIn(ID, points);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
-import { Input, Button, PickerInput } from '../general';
+import { Input, Button, PickerInput, DatePicker } from '../general';
 import { RkAvoidKeyboard, RkButton, RkPicker } from 'react-native-ui-kitten';
 import {
     createEvent,
@@ -127,10 +127,10 @@ class CreateEvent extends Component {
                             maxLength={200}
                             onChangeText={this.onDescriptionChange.bind(this)}
                             />
-                            <Input
-                            placeholder="Date"
+                            <DatePicker
+                            placeholder={"Date"}
                             value={this.props.date}
-                            onChangeText={this.onDateChange.bind(this)}
+                            onSelect={(text) => this.onDateChange(text)}
                             />
                             <Input
                             placeholder="Time"

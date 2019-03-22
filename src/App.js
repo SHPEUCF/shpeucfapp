@@ -26,7 +26,7 @@ class App extends Component {
         this.props.pageLoad();
         this.props.loadUser();
         this.props.getPrivilege();
-        this.props.updateElection();
+        // this.props.updateElection();
         Actions.main();
       } else {
         this.props.loggedIn = false;
