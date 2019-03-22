@@ -4,11 +4,11 @@ import { Actions } from 'react-native-router-flux';
 import { List, ListItem } from 'react-native-elements';
 
   const menuItems = [
-    {
-      title: 'E-Board',
-      icon: 'people',
-      screen: 'EBoard'
-    },
+    // {
+    //   title: 'E-Board',
+    //   icon: 'people',
+    //   screen: 'EBoard'
+    // },
     {
       title: 'Privacy Policy',
       icon: 'insert-drive-file',
