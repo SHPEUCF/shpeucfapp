@@ -1,3 +1,4 @@
+import firebase from 'firebase';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, ScrollView, FlatList, Dimensions, TouchableOpacity } from 'react-native';
@@ -15,6 +16,7 @@ import { loadUser, pageLoad, fetchMembersPoints, fetchMemberProfile, fetchEvents
 	goToViewEvent } from '../actions';
 import * as Progress from 'react-native-progress';
 import _ from 'lodash';
+import { Actions } from 'react-native-router-flux';
 
 const dimension = Dimensions.get('window');
 const iteratees = ['points','lastName','firstName'];
@@ -115,22 +117,20 @@ class Dashboard extends Component {
 		  contentContainerStyle,
 		  progress
 		} = styles;
-		if (item.points !== 0) {
-		  return (
-			 <View style={contentContainerStyle}>
-			 		<Text style={{alignSelf: 'center', fontWeight: "700", margin: 3}}>{item.index}</Text>
-					<View style={containerStyle}>
-						<Text>{item.firstName} {item.lastName === undefined ? '' : item.lastName}</Text>
-						<Progress.Bar
-							style={progress}
-							progress={item.points / Math.max(sortedMembers[0].points, 1)}
-							indeterminate={false}
-							color={'#ffd700'}
-						/>
-					</View>
+		return (
+			<View style={contentContainerStyle}>
+				<Text style={{alignSelf: 'center', fontWeight: "700", margin: 3}}>{item.index}</Text>
+				<View style={containerStyle}>
+					<Text>{item.firstName} {item.lastName === undefined ? '' : item.lastName}</Text>
+					<Progress.Bar
+						style={progress}
+						progress={item.points / Math.max(sortedMembers[0].points, 1)}
+						indeterminate={false}
+						color={'#ffd700'}
+					/>
 				</View>
-		  )
-		}
+			</View>
+		)		
 	 }
 
 	_keyExtractor = (item, index) => index;
@@ -143,13 +143,13 @@ class Dashboard extends Component {
 			greetingContainerStyle,
 			firstContainerStyle,
 			leaderboardTitle } = styles;
-			
+		  const { currentUser } = firebase.auth();
+
 		let sortedMembers = _.orderBy(this.props.membersPoints, iteratees, order);
 		var currentMember
 		sortedMembers.forEach((x, index) => {
 			x.index = (x.points !== 0) ? index + 1 : sortedMembers.length
-			alert(this.props.id)
-			if(x.id === this.props.id) {
+			if(x.id === currentUser.uid) {
 				currentMember =  x
 			};
 		});
@@ -167,16 +167,16 @@ class Dashboard extends Component {
 						{this.greeting()}
 					</View>
 					<View style={firstContainerStyle}>
-						<View style={{flex: 1, flexDirection:'column', alignItems:'center', paddingRight: 10}}>
-							<Text style={leaderboardTitle}>Leaderboard</Text>
-							<FlatList
-								data={sortedMembers}
-								extraData={this.state}
-								keyExtractor={this._keyExtractor}
-								renderItem={({item}) => (
-								this.renderComponent(item, sortedMembers))}
-							/>
-						</View>
+						<TouchableOpacity style={{flex: 1, flexDirection:'column', alignItems:'center', paddingRight: 10}} onPress={() => Actions.Leaderboard()}>
+								<Text style={leaderboardTitle}>Leaderboard</Text>
+								<FlatList
+									data={sortedMembers}
+									extraData={this.state}
+									keyExtractor={this._keyExtractor}
+									renderItem={({item}) => (
+									this.renderComponent(item, sortedMembers))}
+								/>
+						</TouchableOpacity>
 						<View style={{flex: 1, flexDirection:'column', alignItems:'center'}}>
 							<Text style={{fontSize: 20, paddingBottom: 10}}>Upcoming Events</Text>
 							{this.getFormattedEventList()}
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
 		color: '#000'
 	},
 	progress: {
-		flex: .1,
+		width: dimension.width * .36,
 		justifyContent: 'center',
 	},
 	leaderboardTitle: {
