@@ -9,8 +9,11 @@ import { Spinner} from '../components/general'
 
 import {
   getPrivilege,
-  pageLoad
+  pageLoad,
+  updateElection
 } from "../actions"
+
+
 
   const menuItems = [
     {
@@ -58,6 +61,9 @@ import {
   ];
 
 class More extends Component {
+  componentWillMount() {
+      this.props.updateElection();
+  }
 
   keyExtractor = (item, index) => index
 
@@ -101,7 +107,8 @@ const mapStateToProps = ({ auth, general, elect }) => {
 
 const mapDispatchToProps = {
   getPrivilege,
-  pageLoad
+  pageLoad,
+  updateElection
  };
 
 

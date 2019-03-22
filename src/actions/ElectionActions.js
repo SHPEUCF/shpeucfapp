@@ -110,13 +110,16 @@ export const updateElection = () => {
     return (dispatch) => {
       firebase.database().ref(`/election/`)
         .on('value', snapshot => {
-          const info = (snapshot.val());
+            if (snapshot.exists()){
+            const info = (snapshot.val());
 
-          dispatch({
-            type: UPDATE_ELECTION,
-            payload: info,
-          });
+            dispatch({
+              type: UPDATE_ELECTION,
+              payload: info,
+            });
+          }
         });
+
       };
 }
 

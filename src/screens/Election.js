@@ -61,7 +61,6 @@ state = { isApplyShow: false,
 
 
   componentWillMount() {
-      this.props.updateElection();
       this.props.getPositions();
 
   }
