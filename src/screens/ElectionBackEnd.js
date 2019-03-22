@@ -126,7 +126,6 @@ class ElectionBackEnd extends Component {
             <Text style={tabBarText}>Election</Text>
         </View>
          <View style={content}>
-            <Text>Election Start Date: </Text>
             <Text>{"Total Votes: " + this.props.numOfVotes}</Text>
         </View>
 
