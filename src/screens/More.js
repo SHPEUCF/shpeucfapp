@@ -71,6 +71,7 @@ class More extends Component {
     if (this.props.privilege !== undefined && this.props.privilege[item.privilege] === true ) {
       return(
         <ListItem
+          removeClippedSubviews={false}
           title={item.title}
           leftIcon={{name: item.icon}}
           onPress={() => Actions[item.screen]()}
@@ -80,10 +81,7 @@ class More extends Component {
   }
 
   render() {
-  if(this.props.loading){
-    return <Spinner>{this.renderContent}</Spinner>
-  }
-  else
+  
     return (
       <ScrollView>
         <FlatList
@@ -93,7 +91,7 @@ class More extends Component {
         />
       </ScrollView>
     );
-  };
+  }
 }
 
 const mapStateToProps = ({ auth, general }) => {
