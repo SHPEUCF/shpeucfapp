@@ -47,6 +47,7 @@ class Leaderboard extends Component {
   renderComponent(item, sortedMembers) {
     const {
       containerStyle,
+      screenCointainer,
       contentContainerStyle,
       progress,
       curUserHighlight
@@ -62,6 +63,7 @@ class Leaderboard extends Component {
 
     if(item.points !== 0){
       return (
+    <View style={screenCointainer}>
       <TouchableOpacity onPress = {action.bind(this, item.id)}>
         <View style={contentContainerStyle}>
             <View style={containerStyle}>
@@ -77,7 +79,8 @@ class Leaderboard extends Component {
               />
             </View>
           </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+          </View>
       )
     }
   }
@@ -112,6 +115,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#0c0b0b',
     paddingVertical: 30,
     paddingHorizontal: 15,
+  },
+  screenCointainer: {
+    backgroundColor: '#2C3239',
+    height: dimension.height,
   },
   curUserHighlight: {
     // backgroundColor: '#ffd70024',
