@@ -42,13 +42,12 @@ class DatePicker extends Component {
     }
 
 
-    onSelect() {
+    update(item) {
         const {
             month,
             day,
             year
-        } = this.state
-        
+        } = item
         this.props.onSelect(`${year}-${month}-${day}`)
     }
 
@@ -79,26 +78,25 @@ class DatePicker extends Component {
         else if(item !== 2){
             this.setState({dayArr: Array.from({length: 31}, (v, k) => k+1)})
         }
-        if(month !== "" && day !== "" && year !== "")
-            this.onSelect()
+        if(day !== "" && year !== "")
+            this.update({day: day, month: item, year: year})
             
     }
     clickActionDay(item) {
         const {
             month,
-            day,
             year
         } = this.state
 
         this.setState({day: item})
-        if(month !== "" && day !== "" && year !== "")
-            this.onSelect()
+
+        if(month !== "" && year !== "")
+            this.update({day: item, month: month, year: year})
     }
     clickActionYear(item) {
         const {
             month,
             day,
-            year
         } = this.state
         this.setState({year: item})
 
@@ -107,8 +105,8 @@ class DatePicker extends Component {
             if(day > 29) this.setState({day: "29"})
         }
 
-        if(month !== "" && day !== "" && year !== "")
-            this.onSelect()
+        if(month !== "" && day !== "")
+            this.update({day: day, month: month, year: item})
     }
 
    _keyExtractor = (item, index) => index;

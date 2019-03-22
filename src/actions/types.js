@@ -21,7 +21,7 @@ export const LOGOUT_USER = 'logout_user';
 export const GET_PRIVILEGE = 'get_privilege';
 export const QUOTE_CHANGED = 'quote_changed';
 export const NATIONALITY_CHANGED = 'nationality_changed';
-export const DATE_BIRTH_CHANGED = 'date_birth_changed';
+export const BIRTH_DATE_CHANGED = 'birth_date_changed';
 
 
 

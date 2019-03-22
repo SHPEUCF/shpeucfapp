@@ -34,7 +34,7 @@ import {
   GO_TO_EDIT_PROFILE_FORM,
   QUOTE_CHANGED,
   NATIONALITY_CHANGED,
-  DATE_BIRTH_CHANGED,
+  BIRTH_DATE_CHANGED,
   PAGE_LOAD } from './types';
 
 export const firstNameChanged = (text) => {
@@ -80,9 +80,9 @@ export const pointsChanged = (text) => {
     payload: text
   };
 };
-export const dateBirthChanged = (text) => {
+export const birthDateChanged = (text) => {
   return {
-    type: DATE_BIRTH_CHANGED,
+    type: BIRTH_DATE_CHANGED,
     payload: text
   };
 }
@@ -152,7 +152,7 @@ const showFirebaseError = (dispatch, error) => {
 };
 
 // Registration Actions
-export const createUser = ({ firstName, lastName, email, college, major, points, picture, password, quote, nationality, birthday }) => {
+export const createUser = ( firstName, lastName, email, college, major, points, picture, password, quote, nationality, birthday ) => {
   return (dispatch) => {
     dispatch({ type: CREATE_USER });
 
@@ -214,11 +214,12 @@ const createUserSuccess = (dispatch, firstName, lastName, email, college, major,
       board: false,
       eboard: false,
       president: false,
-      id: currentUser.uid
+      id: currentUser.uid,
+      paidMember: false
     }))
     .then(() => currentUser.sendEmailVerification())
     .then(() => firebase.auth().signOut())
-    .then(() => Alert.alert('Account Created',
+    .then(() => alert('Account Created',
       `Please verify your email ${emailU} then log in using your credentials.`));
 
   dispatch({
