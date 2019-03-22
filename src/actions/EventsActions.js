@@ -99,7 +99,7 @@ export const editEvent = (typeU, nameU, descriptionU, dateU, timeU, locationU, p
 };
 
 export const deleteEvents = (eventIDs) => {
-  firebase.database().ref('events/').update(eventIDs)
+  firebase.database().ref('events/').update({[eventIDs]: {}})
   .then(() => Alert.alert('Event Deleted', 'Successful'))
   .catch((error) => Alert.alert('Event Deletion Failed', 'Failure'));
 

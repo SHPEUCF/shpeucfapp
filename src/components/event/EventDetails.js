@@ -207,7 +207,7 @@ class EventDetails extends Component {
             icon
         } = styles
 
-        if(privilege !== undefined && privilege.board === true && eventList[eventID].attendance !== undefined) {
+        if(privilege !== undefined && privilege.board === true && eventList !== undefined && eventList[eventID] !== undefined && eventList[eventID].attendance !== undefined) {
             var attendants = Object.keys(eventList[eventID].attendance)
 
             return (
@@ -239,8 +239,8 @@ class EventDetails extends Component {
         this.setState({modalVisible: true})
     }
     deleteButton(){
-        this.props.deleteEvents(this.props.eventID);
-        this.props.goToEvents();
+        this.props.deleteEvents(this.props.eventID)
+        Actions.pop()
     }
     checkinButton(ID, points){
         this.props.checkIn(ID, points);
