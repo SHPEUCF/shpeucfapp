@@ -65,12 +65,13 @@ class Leaderboard extends Component {
       <TouchableOpacity onPress = {action.bind(this, item.id)}>
         <View style={contentContainerStyle}>
             <View style={containerStyle}>
-              <Text style={curUser}>{`${item.firstName} ${item.lastName}`}</Text>
-              <Text style={curUser}>Points: {item.points}</Text>
+              <Text style={{color:"white", fontSize: 18}}>{`${item.firstName} ${item.lastName}`}</Text>
+              <Text style={{color:"white", fontSize: 14, paddingBottom: 10}}>Points: {item.points}</Text>
               <Progress.Bar
                 style={progress}
                 progress={item.points / Math.max(sortedMembers[0].points,1)}
                 indeterminate={false}
+                height={dimension.width*.03}
                 width={dimension.width * .9}
                 color= {'#ffd700'}
               />
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    backgroundColor: '#fff',
+    backgroundColor: '#0c0b0b',
     paddingVertical: 30,
     paddingHorizontal: 15,
   },
@@ -123,6 +124,9 @@ const styles = StyleSheet.create({
   progress: {
     flex: 1,
     justifyContent: 'center',
+    height: dimension.width*.03,
+    borderColor: '#2C3239',
+    backgroundColor: '#2C3239',
   }
 });
 

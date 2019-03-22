@@ -26,12 +26,6 @@ import {
       privilege: "user"
     },
     {
-      title: 'Check In',
-      icon: 'done',
-      screen: 'CheckIn',
-      privilege: "user"
-    },
-    {
       title: 'Forms',
       icon: 'assignment',
       screen: 'Forms',

@@ -59,7 +59,7 @@ class Profile extends Component {
             <View style={taglineContainer}>
                <Text
 							 		style={{
-										color: '#b4b7ba',
+										color: 'white',
 										fontSize: 20,
 										fontWeight: 'bold',
 										textAlign: 'center'}}
@@ -138,7 +138,7 @@ class Profile extends Component {
   renderSocialMedia(){
     return (
 			<View>
-			<Text style={styles.socialmediatext}> Social Media</Text>
+			<Text style={{fontSize: 17, alignSelf:"center"}}> Social Media</Text>
 			<View style={styles.editLogoContainer}>
         <View style= {styles.editLogoContainer}>
           <TouchableOpacity
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
 		backgroundColor: '#2C3239',
-		paddingTop: dimension.height * .03,
+    paddingTop: dimension.height * .03,
   },
   taglineContainer: {
     alignItems: 'center',
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
 	},
 	socialmediatext: {
 		flex:1,
-		alignSelf: 'center'
+    alignSelf: 'center'
 	},
 });
 

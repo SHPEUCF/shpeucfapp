@@ -83,7 +83,7 @@ const styles = {
     fontSize: 16,
     marginTop: 8,
     marginBottom: 8,
-    padding: 15,
+    padding: 20,
     backgroundColor: 'white',
     borderRadius: 25
   }
