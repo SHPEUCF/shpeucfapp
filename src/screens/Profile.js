@@ -229,10 +229,11 @@ const styles = StyleSheet.create({
   buttonsContainerStyle: {
     marginRight: dimension.height * .015,
     marginLeft: dimension.height * .015,
+    height: dimension.height * .145,
   },
 	buttonEdit: {
 		backgroundColor: '#8b95a5',
-		paddingTop: dimension.height * .015,
+		paddingTop: dimension.height * .05,
 		paddingBottom: dimension.height * .015,
 	},
   editButtonContainer: {
