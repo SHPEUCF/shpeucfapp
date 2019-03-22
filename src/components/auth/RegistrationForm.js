@@ -258,11 +258,11 @@ class RegistrationForm extends Component {
               onChangeText={this.onConfirmPasswordChange.bind(this)}
               />
 
-            <Input
+            {/* <Input
               placeholder="Country of Origin"
               value={this.props.nationality}
               onChangeText={this.onnationality_changed.bind(this)}
-              />
+              /> */}
             <DatePicker
               placeholder={"Birthday"}
               onSelect={(text) => this.onDateBirthChanged(text)}
