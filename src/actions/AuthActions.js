@@ -205,6 +205,7 @@ const createUserSuccess = (dispatch, firstName, lastName, email, college, major,
       firstName: firstName,
       lastName: lastName,
       points: points,
+      id: currentUser.uid
     }))
     .then(() => firebase.database().ref(`/privileges/${currentUser.uid}/`).set({
       firstName: firstName,
@@ -213,6 +214,7 @@ const createUserSuccess = (dispatch, firstName, lastName, email, college, major,
       board: false,
       eboard: false,
       president: false,
+      id: currentUser.uid,
       paidMember: false
     }))
     .then(() => currentUser.sendEmailVerification())
