@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   contentContainerStyle: {
-		height: dimension.width *.96,
+		height: dimension.width,
     flex: 1,
     marginTop: 20,
     marginBottom: 20,

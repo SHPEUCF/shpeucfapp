@@ -64,13 +64,13 @@ class Leaderboard extends Component {
       action = this.callUser
     }
 
-    if(item.points !== 0){
+    // if(item.points !== 0){
+      // <View style={screenBackground}>
       return (
-      <View style={screenBackground}>
         <TouchableOpacity onPress = {action.bind(this, item.id)}>
           <View style={contentContainerStyle}>
               <View style={containerStyle}>
-              {/* <Image
+              {/* <Image    ***For Profile Picture Update***
                 large
                 rounded
                 style={{alignSelf: 'flex-end', width: dimension.width *.14, height: dimension.height *.085}}
@@ -89,10 +89,9 @@ class Leaderboard extends Component {
               </View>
           </View>
         </TouchableOpacity>
-      </View>
+      // </View>
       )
     }
-  }
 
    _keyExtractor = (item, index) => index;
 
@@ -126,7 +125,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   screenBackground: {
-    height: dimension.height, 
+    height: dimension.height,
     backgroundColor:'#2C3239',
   },
   curUserHighlight: {
