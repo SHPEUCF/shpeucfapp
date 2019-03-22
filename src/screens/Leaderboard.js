@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   },
   contentContainerStyle: {
     margin: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#2C3239',
   },
   progress: {
     // flex: 1,
