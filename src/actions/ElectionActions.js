@@ -36,6 +36,7 @@ import {
 export const openElection = () => {
     return (dispatch) => {
         firebase.database().ref(`/election/`).update({
+            votes: 0,
             election: true
         })
         .then(() => {
