@@ -56,7 +56,7 @@ import {
       title: 'BackEnd',
       icon: 'settings',
       screen: 'BackEnd',
-      privilege: "eboard"
+      privilege: "president"
     }
   ];
 
@@ -68,6 +68,11 @@ class More extends Component {
   keyExtractor = (item, index) => index
 
   renderItem  = ({item}) => {
+
+    if (item.title == "Election" && this.props.election == false){
+      return (null);
+    }
+
 
     if (this.props.privilege !== undefined && this.props.privilege[item.privilege] === true ) {
       return(
