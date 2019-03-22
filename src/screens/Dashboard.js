@@ -203,6 +203,7 @@ const styles = StyleSheet.create({
 	tabBar: {
 		backgroundColor: '#fff',
 		justifyContent: 'center',
+		alignItems:'center',
 		height: dimension.height * .1
 	},
 	tabBarText: {
