@@ -66,6 +66,7 @@ class More extends Component {
       return(
         <ListItem
           title={item.title}
+          titleStyle={{ color: 'white'}}
           leftIcon={{name: item.icon}}
           onPress={() => Actions[item.screen]()}
         />
@@ -79,7 +80,7 @@ class More extends Component {
   }
   else
     return (
-      <ScrollView>
+      <ScrollView style={{backgroundColor: '#2C3239'}}>
         <FlatList
           keyExtractor = {this.keyExtractor}
           data = {menuItems}

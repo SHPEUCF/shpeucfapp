@@ -10,21 +10,6 @@ import { List, ListItem } from 'react-native-elements';
       screen: 'EBoard'
     },
     {
-      title: 'Feedback / Suggestions',
-      icon: 'feedback',
-      screen: 'ComingSoon'
-    },
-    {
-      title: 'Contributors',
-      icon: 'folder-shared',
-      screen: 'ComingSoon'
-    },
-    {
-      title: 'Terms of Service',
-      icon: 'insert-drive-file',
-      screen: 'ComingSoon'
-    },
-    {
       title: 'Privacy Policy',
       icon: 'insert-drive-file',
       screen: 'WebPageShow',
@@ -43,13 +28,15 @@ class About extends Component {
 
   render() {
     return (
-      <View>
+      <View style={{flex: 1, backgroundColor:'#2C3239'}}>
         <List>
+        <View style={{backgroundColor:'#2C3239'}}>
           {
             menuItems.map((menuItem, i) => (
               <ListItem
                 key={i}
                 title={menuItem.title}
+                titleStyle={{ color: 'white'}}
                 leftIcon={{name: menuItem.icon}}
                 onPress={() => Actions[menuItem.screen]({ title: menuItem.title,
                                                           uri: menuItem.uri,
@@ -58,6 +45,7 @@ class About extends Component {
               />
             ))
           }
+          </View>
         </List>
       </View>
     );

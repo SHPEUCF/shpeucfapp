@@ -109,19 +109,20 @@ const resources = [
 class Resources extends Component {
   render() {
     return (
-      <ScrollView>
+      <ScrollView style={{backgroundColor: '#2C3239'}}>
         {
           resources.map((resource, i) => (
             <View key={i}>
               <Text style={styles.sectionTitle}>
                 {resource.group.name}
               </Text>
-              <List containerStyle={{ marginTop: 10 }}>
+              <List containerStyle={{ backgroundColor: '#0c0b0b', marginTop: 10 }}>
                 {
                   resource.group.items.map((item, i) => (
                     <ListItem
                       key={i}
                       title={item.title}
+                      titleStyle={{ color: 'white'}}
                       subtitle={item.description}
                       onPress={() => Actions.WebPageShow(
                         { title: item.title, 
@@ -142,7 +143,9 @@ class Resources extends Component {
 
 const styles = StyleSheet.create({
   sectionTitle: {
-    marginTop: 10,
+    color: 'white', 
+    fontWeight: 'bold', 
+    marginTop: 10, 
     marginLeft: 20,
   }
 });

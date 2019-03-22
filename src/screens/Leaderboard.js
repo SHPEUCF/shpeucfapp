@@ -17,7 +17,8 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Dimensions } from 'react-native';
+  Dimensions,
+  Image } from 'react-native';
 
 const dimension = Dimensions.get('window');
 const iteratees = ['points','lastName','firstName'];
@@ -43,11 +44,13 @@ class Leaderboard extends Component {
     this.props.fetchMemberProfile(id);
     this.props.goToOtherProfile();
   }
+    
 
   renderComponent(item, sortedMembers) {
+    const {picture} = this.props;
     const {
       containerStyle,
-      screenCointainer,
+      screenBackground,
       contentContainerStyle,
       progress,
       curUserHighlight
@@ -63,24 +66,30 @@ class Leaderboard extends Component {
 
     if(item.points !== 0){
       return (
-    <View style={screenCointainer}>
-      <TouchableOpacity onPress = {action.bind(this, item.id)}>
-        <View style={contentContainerStyle}>
-            <View style={containerStyle}>
-              <Text style={{color:"white", fontSize: 18}}>{`${item.firstName} ${item.lastName}`}</Text>
-              <Text style={{color:"white", fontSize: 14, paddingBottom: 10}}>Points: {item.points}</Text>
-              <Progress.Bar
-                style={progress}
-                progress={item.points / Math.max(sortedMembers[0].points,1)}
-                indeterminate={false}
-                height={dimension.width*.03}
-                width={dimension.width * .9}
-                color= {'#ffd700'}
-              />
-            </View>
+      <View style={screenBackground}>
+        <TouchableOpacity onPress = {action.bind(this, item.id)}>
+          <View style={contentContainerStyle}>
+              <View style={containerStyle}>
+              {/* <Image
+                large
+                rounded
+                style={{alignSelf: 'flex-end', width: dimension.width *.14, height: dimension.height *.085}}
+                source={{uri: picture}}
+                /> */}
+                <Text style={{color:"white", fontSize: 18, paddingBottom: 5, fontWeight: 'bold'}}>{`${item.firstName} ${item.lastName}`}</Text>
+                <Text style={{color:"white", fontSize: 16, paddingBottom: 10}}>Points: {item.points}</Text>
+                <Progress.Bar
+                  style={progress}
+                  progress={item.points / Math.max(sortedMembers[0].points,1)}
+                  indeterminate={false}
+                  height={dimension.width*.03}
+                  width={dimension.width * .9}
+                  color= {'#ffd700'}
+                />
+              </View>
           </View>
-          </TouchableOpacity>
-          </View>
+        </TouchableOpacity>
+      </View>
       )
     }
   }
@@ -109,16 +118,16 @@ class Leaderboard extends Component {
 
 const styles = StyleSheet.create({
   containerStyle: {
-    flex: 1,
+    // flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
     backgroundColor: '#0c0b0b',
     paddingVertical: 30,
     paddingHorizontal: 15,
   },
-  screenCointainer: {
-    backgroundColor: '#2C3239',
-    height: dimension.height,
+  screenBackground: {
+    height: dimension.height, 
+    backgroundColor:'#2C3239',
   },
   curUserHighlight: {
     // backgroundColor: '#ffd70024',
@@ -129,7 +138,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   progress: {
-    flex: 1,
+    // flex: 1,
     justifyContent: 'center',
     height: dimension.width*.03,
     borderColor: '#2C3239',
@@ -139,9 +148,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ auth,members }) => {
   const { membersPoints } = members;
-  const { id } = auth
+  const { picture, id } = auth
 
-  return { membersPoints, id };
+  return { membersPoints, id, picture};
 };
 
 const mapDispatchToProps = {

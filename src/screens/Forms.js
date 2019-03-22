@@ -74,19 +74,20 @@ const forms = [
 class Forms extends Component {
   render() {
     return (
-      <ScrollView>
+      <ScrollView style={{backgroundColor: '#2C3239'}}>
         {
           forms.map((form, i) => (
             <View key={i}>
               <Text style={styles.sectionTitle}>
                 {form.group.name}
               </Text>
-              <List containerStyle={{ marginTop: 10 }}>
+              <List containerStyle={{ backgroundColor: '#0c0b0b', marginTop: 10 }}>
                 {
                 form.group.items.map((item, i) => (
                     <ListItem
                       key={i}
                       title={item.title}
+                      titleStyle={{ color: 'white'}}
                       subtitle={item.description}
                       onPress={() => Actions.WebPageShow(
                         { title: item.title,
@@ -107,7 +108,10 @@ class Forms extends Component {
 
 const styles = StyleSheet.create({
   sectionTitle: {
-    marginTop: 10,
+    color: 'white', 
+    fontWeight: 'bold', 
+    fontSize: 15,
+    marginTop: 10, 
     marginLeft: 20,
   }
 });
