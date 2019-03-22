@@ -31,13 +31,14 @@ class Dashboard extends Component {
 	}
 
 	componentDidMount() {
-		this.props.pageLoad();
-		this.props.loadUser();
 	 }
 
 	componentWillMount() {
+		this.props.pageLoad();
 		this.props.fetchMembersPoints();
 		this.props.fetchEvents();
+		this.props.loadUser();
+
 	 }
   
 	callUser(id){
@@ -65,10 +66,14 @@ class Dashboard extends Component {
 		let fields = [];
 
 		for (key in events) {
-			fields.push(Object.keys(events[key]))
-			
+			fields.push(`${events[key].name}  ${events[key].date}`)			
 		}
-		field = fields.pop();
+
+		if(fields.length > 0)
+			field = fields.pop();
+		else{
+			field = "No events coming soon"
+		}
 
 		return <Text>{field}</Text>
 	
@@ -77,7 +82,7 @@ class Dashboard extends Component {
 	}
 
 	viewEvent(item) {
-		this.props.nameChanged(item.name);
+	this.props.nameChanged(item.name);
    	this.props.descriptionChanged(item.description);
    	this.props.dateChanged(item.date);
    	this.props.timeChanged(item.time);
@@ -85,6 +90,9 @@ class Dashboard extends Component {
    	this.props.epointsChanged(item.points);
    	this.props.eventIDChanged(item.eventID);
    	this.props.goToViewEvent();
+	}
+	isDefined(obj){
+		return !(obj === undefined || obj == null || obj.length < 2)
 	}
 
 	renderEvent(item) {
@@ -110,9 +118,9 @@ class Dashboard extends Component {
 		if (item.points !== 0) {
 		  return (
 			 <View style={contentContainerStyle}>
+			 		<Text style={{alignSelf: 'center', fontWeight: "700", margin: 3}}>{item.index}</Text>
 					<View style={containerStyle}>
-						<Text>{`${item.firstName} ${item.lastName === undefined ? '' : item.lastName}`}</Text>
-						<Text>Points: {item.points}</Text>
+						<Text>{item.firstName} {item.lastName === undefined ? '' : item.lastName}</Text>
 						<Progress.Bar
 							style={progress}
 							progress={item.points / Math.max(sortedMembers[0].points, 1)}
@@ -129,16 +137,25 @@ class Dashboard extends Component {
    render() {
       const {
 			page,
-         tabBar,
-         tabBarText,
+			tabBar,
+			tabBarText,
 			mainContentStyle,
 			greetingContainerStyle,
-			firstContainerStyle } = styles;
+			firstContainerStyle,
+			leaderboardTitle } = styles;
 			
 		let sortedMembers = _.orderBy(this.props.membersPoints, iteratees, order);
+		var currentMember
+		sortedMembers.forEach((x, index) => {
+			x.index = (x.points !== 0) ? index + 1 : sortedMembers.length
+			alert(this.props.id)
+			if(x.id === this.props.id) {
+				currentMember =  x
+			};
+		});
 		sortedMembers.splice(2);
-		let currentMember = sortedMembers.filter(member => member.firstName == this.props.firstName);
-		sortedMembers = sortedMembers.concat(currentMember);
+		if (this.isDefined(currentMember) && this.isDefined(sortedMembers) && sortedMembers[0].id !== currentMember.id && sortedMembers[1].id !== currentMember.id)
+			sortedMembers = sortedMembers.concat(currentMember);
 
       return (
          <View style={page}>
@@ -151,12 +168,12 @@ class Dashboard extends Component {
 					</View>
 					<View style={firstContainerStyle}>
 						<View style={{flex: 1, flexDirection:'column', alignItems:'center', paddingRight: 10}}>
-							<Text>Leaderboard</Text>
+							<Text style={leaderboardTitle}>Leaderboard</Text>
 							<FlatList
 								data={sortedMembers}
 								extraData={this.state}
 								keyExtractor={this._keyExtractor}
-								renderItem={({item, separators}) => (
+								renderItem={({item}) => (
 								this.renderComponent(item, sortedMembers))}
 							/>
 						</View>
@@ -197,9 +214,12 @@ const styles = StyleSheet.create({
 	greetingContainerStyle: {
 		padding: '3%'
 	},
+	contentContainerStyle: {
+		flexDirection: 'row'
+	},
 	buttonsContainerStyle: {
-   	marginRight: 10,
-   	marginLeft: 10,
+		marginRight: 10,
+		marginLeft: 10,
 	},
 	firstContainerStyle: {
 		alignItems: 'center',
@@ -214,17 +234,21 @@ const styles = StyleSheet.create({
 		color: '#000'
 	},
 	progress: {
-		flex: 1,
+		flex: .1,
 		justifyContent: 'center',
+	},
+	leaderboardTitle: {
+		fontSize: 16,
+		fontWeight: '700'
 	}
 });
 
 const mapStateToProps = ({ auth, general, members, events }) => {
-	const { firstName } = auth;
+	const { firstName, id} = auth;
 	const { loading } = general;
 	const { membersPoints } = members;
 	const { eventList } = events;
-	return { firstName, loading, membersPoints, eventList };
+	return { firstName, id, loading, membersPoints, eventList };
 };
  
  const mapDispatchToProps = {	loadUser, pageLoad, fetchMembersPoints, fetchMemberProfile, fetchEvents,
