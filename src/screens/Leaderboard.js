@@ -50,7 +50,6 @@ class Leaderboard extends Component {
     const {picture} = this.props;
     const {
       containerStyle,
-      screenBackground,
       contentContainerStyle,
       progress,
       curUserHighlight
@@ -65,7 +64,6 @@ class Leaderboard extends Component {
     }
 
     // if(item.points !== 0){
-      // <View style={screenBackground}>
       return (
         <TouchableOpacity onPress = {action.bind(this, item.id)}>
           <View style={contentContainerStyle}>
@@ -89,7 +87,6 @@ class Leaderboard extends Component {
               </View>
           </View>
         </TouchableOpacity>
-      // </View>
       )
     }
 
@@ -97,20 +94,22 @@ class Leaderboard extends Component {
 
   render() {
     const {
-      containerStyle,
-      contentContainerStyle,
-      progress } = styles;
+      screenBackground,
+       } = styles;
     const sortedMembers = _.orderBy(this.props.membersPoints, iteratees, order);
 
     return (
-      <FlatList
-          data={sortedMembers}
-          extraData={this.state}
-          keyExtractor={this._keyExtractor}
-          renderItem={({item, separators}) => (
-          this.renderComponent(item, sortedMembers)
-        )}
-      />
+      <View style={screenBackground}>
+        <FlatList
+            style={{flex: 1}}
+            data={sortedMembers}
+            extraData={this.state}
+            keyExtractor={this._keyExtractor}
+            renderItem={({item, separators}) => (
+            this.renderComponent(item, sortedMembers)
+          )}
+        />
+      </View>
     )
   }
 }
@@ -125,7 +124,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   screenBackground: {
-    height: dimension.height,
+    flex: 1,
     backgroundColor:'#2C3239',
   },
   curUserHighlight: {

@@ -80,6 +80,8 @@ class More extends Component {
     return (
       <ScrollView style={{backgroundColor: '#2C3239'}}>
         <FlatList
+          removeClippedSubviews={false}
+          extraData={this.state}
           keyExtractor = {this.keyExtractor}
           data = {menuItems}
           renderItem={this.renderItem}
