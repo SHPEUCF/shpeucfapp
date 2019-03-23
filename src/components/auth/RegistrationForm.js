@@ -286,7 +286,7 @@ const { height: D_HEIGHT, width: D_WIDTH } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'gray',
+    backgroundColor: '#0c0b0b',
     justifyContent: 'flex-end',
   },
   formContainerStyle: {
@@ -352,7 +352,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
 	Alreadyaccount: {
-		color: 'black',
+		color: 'grey',
 	}
 });
 

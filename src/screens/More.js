@@ -26,12 +26,6 @@ import {
       privilege: "user"
     },
     {
-      title: 'Check In',
-      icon: 'done',
-      screen: 'CheckIn',
-      privilege: "user"
-    },
-    {
       title: 'Forms',
       icon: 'assignment',
       screen: 'Forms',
@@ -73,6 +67,7 @@ class More extends Component {
         <ListItem
           removeClippedSubviews={false}
           title={item.title}
+          titleStyle={{ color: 'white'}}
           leftIcon={{name: item.icon}}
           onPress={() => Actions[item.screen]()}
         />
@@ -83,7 +78,7 @@ class More extends Component {
   render() {
   
     return (
-      <ScrollView>
+      <ScrollView style={{backgroundColor: '#2C3239'}}>
         <FlatList
           keyExtractor = {this.keyExtractor}
           data = {menuItems}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser, goToResetPassword, goToRegistration } from '../../actions';
 import { Card, CardSection, Spinner, Button, Input } from '../general';
@@ -66,7 +66,7 @@ class LoginForm extends Component {
   renderButtons() {
     if (this.props.loading) {
       return (
-        <View style={{ marginTop: 40, marginBottom: 20}}>
+        <View style={{ marginTop: 40, marginBottom: 200}}>
           <Spinner size="large" />
         </View>
       );
@@ -85,41 +85,53 @@ class LoginForm extends Component {
       return <Spinner />;
     } else {
       return (
-        <View style={styles.container}>
-          <View style={styles.formContainerStyle}>
-            <RkAvoidKeyboard>
-            <View style={{flexDirection: 'row', justifyContent: 'center', bottom: 10}}>
-              <Image
-                source={require('../../assets/images/Icon_SHPE_UCF_152x152.png')}
-                style={{width: 100, height: 100}}/>
-            </View>
-				<View style= {styles.headercolumn}>
-            <View style={styles.headerStyle}>
-              <Text style={styles.headerTextStyle}>S H P E  </Text>
-							<Text style={styles.headerlowerTextStyle}>U C F </Text>
-            </View>
-						<Text style={styles.headerSubtitleStyle}>Society of Hispanic Professional Engineers</Text>
-						</View>
-            <Input
-              placeholder="Knights Email"
-              value={this.props.email}
-              autoCapitalize="none"
-              keyboardType="email-address"
-              onChangeText={this.onEmailChange.bind(this)}
-            />
-            <Input
-              secureTextEntry={true}
-              placeholder="Password"
-              value={this.props.password}
-              onChangeText={this.onPasswordChange.bind(this)}
-            />
+          <ScrollView style={styles.formContainerStyle}> 
+            <View style={{flex: .2}}></View>
 
-            {this.renderError()}
-            {this.renderButtons()}
-
-            </RkAvoidKeyboard>
-          </View>
-        </View>
+              <View style={styles.headerContainer}>
+                <View style={styles.container}>
+                  <Image
+                    source={require('../../assets/images/Icon_SHPE_UCF_152x152.png')}
+                    style={{alignSelf: 'center'}}/>
+                </View>
+                <View style= {styles.headercolumn}>
+                  <View style={styles.headerStyle}>
+                    <Text style={styles.headerTextStyle}>S H P E  </Text>
+                    <Text style={styles.headerlowerTextStyle}>U C F </Text>
+                  </View>
+                  <Text style={styles.headerSubtitleStyle}>Society of Hispanic Professional Engineers</Text>
+                </View>
+                </View>
+                <RkAvoidKeyboard>
+                <ScrollView>
+                <View style={styles.input}>
+                  <Input       
+                  placeholder="Knights Email"
+                  value={this.props.email}
+                  autoCapitalize="none"
+                  keyboardType="email-address"
+                  onChangeText={this.onEmailChange.bind(this)}
+                />
+                <Input
+                  color="black"
+                  secureTextEntry={true}
+                  placeholder="Password"
+                  value={this.props.password}
+                  onChangeText={this.onPasswordChange.bind(this)}
+                />
+                </View>
+              </ScrollView>
+              </RkAvoidKeyboard>
+            
+            <View style={styles.buttonContainer}>
+                <View>
+                  {this.renderError()}
+                </View>
+                <View>
+                  {this.renderButtons()}
+                </View>
+              </View>
+          </ScrollView>
       );
     }
   }
@@ -132,79 +144,86 @@ class LoginForm extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0c0b0b',
-    justifyContent: 'flex-end',
+    paddingTop: 40,
   },
   formContainerStyle: {
-    marginLeft: 20,
-    marginRight: 20,
-    bottom: 90,
+    backgroundColor: '#0c0b0b',
+    flexDirection: 'column',
+    flex: 1,
   },
   headerStyle:{
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    padding: 5,
-		marginTop: 5,
-    marginBottom: 5,
+    flex: .2,
+  },
+  headerContainer:{
+    flex: 2,
+    paddingTop: 40,
   },
   headerTextStyle: {
 		color: 'white',
     fontSize: 40,
+    flex: .45,
   },
 	headercolumn: {
-	 flexDirection: 'column',
+   flexDirection: 'column',
 	 alignItems: 'center',
 	 justifyContent: 'center',
-	 padding: 5,
-	 marginBottom: 10,
-
+   flex: .8,
 	},
 	headerlowerTextStyle: {
-		color: 'yellow',
+		color: '#FFC107',
     fontSize: 40,
   },
 	headerSubtitleStyle: {
 		color: 'gray',
-		fontWeight: 'bold',
-		marginBottom: 50
+    fontWeight: 'bold',
+    flex: .5,
+    paddingTop: 10,
 	},
   errorTextStyle: {
     fontSize: 14,
     alignSelf: 'center',
     color: 'red',
     fontWeight: 'bold',
-    padding: 10,
   },
   formButton: {
-    marginTop: 10,
-    marginBottom: 10
+    flex: 1,
+  },
+  buttonContainer: {
+    flex: 1,
+    paddingTop: 10,
   },
   resetPasswordContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 10,
-		//color: 'white',
+    paddingTop: 10,
   },
   resetPasswordButton: {
     fontWeight: 'bold',
     color: 'white',
     flexDirection: 'row',
     justifyContent: 'center',
+    paddingTop: 5,
   },
   signUpButton: {
     fontWeight: 'bold',
     color: 'white',
+    paddingTop: 10,
   },
 	question: {
 		fontWeight: 'bold',
-		color: 'grey',
+    color: 'grey',
+    paddingTop: 10,
 	},
   signUpContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 10,
+
+  },
+  input: {
+    flex: 1,
+    paddingTop: 50,
   }
 });
 
