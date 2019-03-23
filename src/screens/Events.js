@@ -88,14 +88,7 @@ class Events extends Component {
               onPress={this.props.goToCreateEvent.bind(this)}
           />
       )
-    }else
-    return(
-       < Button
-          title = "CHECK IN"
-          onPress={() => {this.setState({modalVisible: true})}}
-
-        />
-    )
+    }
   }
   render() {
 
