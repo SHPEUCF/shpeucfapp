@@ -225,7 +225,7 @@ const createUserSuccess = (dispatch, firstName, lastName, email, college, major,
   });
 };
 
-export const editUser = ( firstName, lastName, email, college, major, points, quote, nationality, birthday ) => {
+export const editUser = ( firstName, lastName, email, college, major, points, quote ) => {
   return (dispatch) => {
   const {
     currentUser
@@ -239,8 +239,6 @@ export const editUser = ( firstName, lastName, email, college, major, points, qu
       major: major,
       points: points,
       quote: quote,
-      nationality: nationality,
-      birthday: birthday
     })
     .then(() => firebase.database().ref(`/points/${currentUser.uid}/`).update({
       firstName: firstName,

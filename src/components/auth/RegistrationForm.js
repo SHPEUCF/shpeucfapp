@@ -27,9 +27,10 @@ import {
   birthDateChanged,
   confirmPasswordChanged,
   registrationError,
+  quoteChanged,
   createUser,
   goToLogIn,
-  quoteChanged } from '../../actions';
+   } from '../../actions';
 
 const collegeNames = [];
 data.map(college => {collegeNames.push(college.collegeName)});
