@@ -36,7 +36,8 @@ class PickerInput extends Component {
         style: PropTypes.shape({}),
         pickerItemStyle: PropTypes.shape({}),
         dropDownArrowStyle: PropTypes.shape({}),
-        iconSize: PropTypes.number
+        iconSize: PropTypes.number,
+        iconColor: PropTypes.string
     }
 
     clickAction(item) {
@@ -88,7 +89,8 @@ class PickerInput extends Component {
             style,
             inputBoxStyle,
             dropDownArrowStyle,
-            iconSize
+            iconSize,
+            iconColor
         } = this.props
         if(value !== undefined && value !== null && this.state.text !== String(value)){
             this.setState({text: String(value)})
@@ -107,7 +109,9 @@ class PickerInput extends Component {
                     onPress={() => this.setState({modalVisible: true})}
                     style={[iconStyle, dropDownArrowStyle]}
                     name={'ios-arrow-dropdown'}
-                    size={iconSize}/>
+                    size={iconSize}
+                    color={iconColor}
+                    />
                 </View>
                 <Modal
                 transparent={true}
@@ -144,7 +148,8 @@ class PickerInput extends Component {
 PickerInput.defaultProps = {
     title: 'Give me a title!',
     placeholder: 'Choose an Option',
-    iconSize: 50
+    iconSize: 50,
+    iconColor: 'black'
 }
 
 const styles = {
