@@ -52,7 +52,8 @@ class Leaderboard extends Component {
       containerStyle,
       contentContainerStyle,
       progress,
-      curUserHighlight
+      curUserHighlight,
+      textStyle
     } = styles;
     var action
     if(item.id === this.props.id){
@@ -74,8 +75,8 @@ class Leaderboard extends Component {
                 style={{alignSelf: 'flex-end', width: dimension.width *.14, height: dimension.height *.085}}
                 source={{uri: picture}}
                 /> */}
-                <Text style={{color:"white", fontSize: 18, paddingBottom: 5, fontWeight: 'bold'}}>{`${item.firstName} ${item.lastName}`}</Text>
-                <Text style={{color:"white", fontSize: 16, paddingBottom: 10}}>Points: {item.points}</Text>
+                <Text style={ [textStyle, {fontWeight: 'bold'}]}>{`${item.firstName} ${item.lastName}`}</Text>
+                <Text style={[textStyle, {fontSize: 15}]}>Points: {item.points}</Text>
                 <Progress.Bar
                   style={progress}
                   progress={item.points / Math.max(sortedMembers[0].points,1)}
@@ -119,17 +120,22 @@ const styles = StyleSheet.create({
     // flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    backgroundColor: '#0c0b0b',
+    backgroundColor: '#21252b',
     paddingVertical: 30,
     paddingHorizontal: 15,
   },
   screenBackground: {
     flex: 1,
-    backgroundColor:'#2C3239',
+    backgroundColor: '#0c0b0b',
   },
   curUserHighlight: {
     // backgroundColor: '#ffd70024',
     color: '#aa9100'
+  },
+  textStyle: {
+    color: "#e0e6ed",
+    fontSize: 18,
+    paddingBottom: 5,
   },
   contentContainerStyle: {
     margin: 1,
