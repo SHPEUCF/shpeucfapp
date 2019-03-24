@@ -245,6 +245,7 @@ const styles = {
         flexDirection: 'row',
         marginTop: 8,
         marginBottom: 8,
+        padding: 5
     }
 }
 
