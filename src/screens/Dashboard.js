@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
 		padding: '3%'
 	},
 	textColor:{
-		color: '#E0E6ED'
+		color: '#e0e6ed'
 	},
 	contentContainerStyle: {
 		flexDirection: 'row',
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
 	},
 	index: {
 		color: '#000',
-		borderColor: '#E0E6ED',
+		borderColor: '#e0e6ed',
 		borderStyle: 'solid',
 		borderWidth: 1.5,
 		borderRadius: 11,
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
 		alignSelf: 'center',
 		fontWeight: "700",
 		fontSize: 11,
-		color: "#E0E6ED"
+		color: "#e0e6ed"
 	},
 	eventsContainer: {
 		flex: 1,
