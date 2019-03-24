@@ -154,6 +154,7 @@ class RegistrationForm extends Component {
             title={"Colleges"}
             data={majorNames[college]}
             placeholder={"Select College"}
+            iconColor="white"
             onSelect={(text) => majorChanged(text)}/>) : (<View></View>)
 
         return(
@@ -162,6 +163,7 @@ class RegistrationForm extends Component {
             title={"Colleges"}
             data={collegeNames}
             placeholder={"Select College"}
+            iconColor="white"
             onSelect={(text) => collegeChanged(text)}/>
           {p1}
           
