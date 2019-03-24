@@ -69,7 +69,7 @@ class More extends Component {
 
   renderItem  = ({item}) => {
 
-    if (item.title == "Election" && this.props.election == false){
+    if (item.title === "Election" && this.props.election === false){
       return (null);
     }
 

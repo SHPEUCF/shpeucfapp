@@ -29,6 +29,7 @@ const orderPos = ['asc'];
 const iterateesCan = ['votes'];
 const orderCan = ['desc'];
 var winners = [];
+var positionOrder = [];
 
 class ElectionBackEnd extends Component {
   constructor(props) {
@@ -82,23 +83,33 @@ class ElectionBackEnd extends Component {
         )
   }
 
-  renderVotes(item, index, position) {
+  renderVotes(item, index) {
     const {
       containerStyle,
       contentContainerStyle,
     } = styles;
 
-    const candidatesArray = _.orderBy(item, iterateesCan, orderCan)
-    var winner = candidatesArray[0]
+    const candidatesArray = _.orderBy(item[0], iterateesCan, orderCan)
 
-    winners[index] = winner.firstName + " " + winner.lastName;
+    var i = 0;
+    var winnerIds = [candidatesArray[0]];
+    var winnerString = candidatesArray[0].firstName + " " + candidatesArray[0].lastName
 
+
+    while ((i + 1) < candidatesArray.length && (candidatesArray[i].votes === candidatesArray[i+1].votes)){
+      var nextCandidate = candidatesArray[i+1];
+      winnerIds.push(nextCandidate);
+      winnerString = winnerString + " , " + nextCandidate.firstName + " " + nextCandidate.lastName
+      i++;
+    }
+
+    winners[index] = {String: winnerString, Ids: winnerIds};
 
     return (
       <View>
       <View style={contentContainerStyle}>
           <View style={containerStyle}>
-            <Text>{position + ": " + winners[index]}</Text>
+            <Text style={{fontWeight:'bold'}}>{item[1] + ": " + winners[index].String}</Text>
           </View>
       </View>
       </View>
@@ -114,6 +125,17 @@ class ElectionBackEnd extends Component {
         page
     } = styles;
 
+    const {
+      votes,
+      positions
+    } = this.props
+
+    const votesArray = _.toArray(votes)
+
+    votesArray.forEach(function(item, index){
+        var posTitle = Object.entries(votes)[index][0];
+        positionOrder[positions[posTitle].level] = [item, posTitle];
+    });
 
 
     return (
@@ -125,7 +147,9 @@ class ElectionBackEnd extends Component {
             <Text>{"Total Votes: " + this.props.numOfVotes}</Text>
         </View>
 
-        {this.renderFlatlist()}
+        <View style = {{flex: 20}}>
+          {this.renderFlatlist()}
+        </View>
 
         <View style={buttonContainerStyling}>
             {this.openOrClose()}
@@ -163,14 +187,15 @@ class ElectionBackEnd extends Component {
   _keyExtractor = (item, index) => index;
 
   renderFlatlist(){
-    const votesArray = _.orderBy(this.props.votes, iterateesPos, orderPos)
+
     return(
+
       <FlatList
-          data={votesArray}
+          data={positionOrder}
           extraData={this.state}
           keyExtractor={this._keyExtractor}
           renderItem={({item, separators, index}) => (
-          this.renderVotes(item, index, Object.entries(this.props.votes)[index][0])
+          this.renderVotes(item, index)
         )}
       />
     )
