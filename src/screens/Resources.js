@@ -109,14 +109,14 @@ const resources = [
 class Resources extends Component {
   render() {
     return (
-      <ScrollView style={{backgroundColor: '#2C3239'}}>
+      <ScrollView style={{backgroundColor: '#0c0b0b'}}>
         {
           resources.map((resource, i) => (
             <View key={i}>
               <Text style={styles.sectionTitle}>
                 {resource.group.name}
               </Text>
-              <List containerStyle={{ backgroundColor: '#0c0b0b', marginTop: 10 }}>
+              <List containerStyle={{ backgroundColor: '#2C3239', marginTop: 10 }}>
                 {
                   resource.group.items.map((item, i) => (
                     <ListItem
