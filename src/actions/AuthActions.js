@@ -33,7 +33,9 @@ import {
   GO_TO_REGISTRATION,
   GO_TO_EDIT_PROFILE_FORM,
   QUOTE_CHANGED,
+  CONTINENT_CHANGED,
   NATIONALITY_CHANGED,
+  GENDER_CHANGED,
   BIRTH_DATE_CHANGED,
   PAGE_LOAD } from './types';
 
@@ -86,9 +88,21 @@ export const birthDateChanged = (text) => {
     payload: text
   };
 }
+export const continentChanged = (text) => {
+  return {
+    type: CONTINENT_CHANGED,
+    payload: text
+  };
+}
 export const nationalityChanged = (text) => {
   return {
     type: NATIONALITY_CHANGED,
+    payload: text
+  };
+}
+export const genderChanged = (text) => {
+  return {
+    type: GENDER_CHANGED,
     payload: text
   };
 }
@@ -152,12 +166,12 @@ const showFirebaseError = (dispatch, error) => {
 };
 
 // Registration Actions
-export const createUser = ( firstName, lastName, email, college, major, points, picture, password, quote, nationality, birthday ) => {
+export const createUser = ( firstName, lastName, email, college, major, points, picture, password, quote, continent, nationality, gender, birthday) => {
   return (dispatch) => {
     dispatch({ type: CREATE_USER });
-
+    alert(`${firstName}${lastName}${email}${college}${major}${points}${password}${quote}${continent}${nationality}${gender}${birthday}`)
     firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then((user) => createUserSuccess(dispatch, firstName, lastName, email, college, major, points, picture, quote, nationality, birthday))
+      .then((user) => createUserSuccess(dispatch, firstName, lastName, email, college, major, points, picture, quote, continent, nationality, gender, birthday))
       .catch((error) => createUserFail(dispatch, error))
   };
 };
@@ -185,7 +199,7 @@ const createUserFail = (dispatch, error) => {
   });
 };
 
-const createUserSuccess = (dispatch, firstName, lastName, email, college, major, points, picture, quote, nationality, birthday) => {
+const createUserSuccess = (dispatch, firstName, lastName, email, college, major, points, picture, quote, continent, nationality, gender, birthday) => {
   const { currentUser } = firebase.auth();
 
   firebase.database().ref(`/users/${currentUser.uid}/`).set({
@@ -197,7 +211,9 @@ const createUserSuccess = (dispatch, firstName, lastName, email, college, major,
       points: points,
       picture: picture,
       quote: quote,
+      continent: continent,
       nationality: nationality,
+      gender: gender,
       birthday: birthday,
       id: currentUser.uid
     })
@@ -227,7 +243,7 @@ const createUserSuccess = (dispatch, firstName, lastName, email, college, major,
   });
 };
 
-export const editUser = ( firstName, lastName, email, college, major, points, quote ) => {
+export const editUser = ( firstName, lastName, email, college, major, points, quote, continent, nationality, gender, birthday) => {
   return (dispatch) => {
   const {
     currentUser
@@ -241,6 +257,10 @@ export const editUser = ( firstName, lastName, email, college, major, points, qu
       major: major,
       points: points,
       quote: quote,
+      continent: continent,
+      nationality: nationality,
+      gender: gender,
+      birthday: birthday,
     })
     .then(() => firebase.database().ref(`/points/${currentUser.uid}/`).update({
       firstName: firstName,

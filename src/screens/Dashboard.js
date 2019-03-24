@@ -24,6 +24,7 @@ class Dashboard extends Component {
 		this.props.pageLoad();
 		this.props.fetchMembersPoints();
 		this.props.fetchEvents();
+		this.props.getPrivilege();
 		this.props.loadUser();
 	}
   

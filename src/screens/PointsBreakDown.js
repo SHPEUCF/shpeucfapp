@@ -1,3 +1,4 @@
+import firebase from 'firebase';
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -123,12 +124,16 @@ class PointsBreakDown extends Component {
             points,
             topLevelText
         } = styles;
-        const breakdown = Object.entries(this.props.membersPoints[this.props.id].breakdown)
+
+        const { currentUser } = firebase.auth();
+        var breakdown
+        if(this.props.membersPoints !== undefined && this.props.membersPoints[currentUser.uid] !== undefined)
+            breakdown = Object.entries(this.props.membersPoints[currentUser.uid].breakdown)
         return (
             <View style ={page}>
                 <View style={[contentContainerStyle,containerStyle]}>
                     <Text style={[title, topLevelText]}>Total Points</Text>
-                    <Text style={[points, topLevelText]}>{this.props.membersPoints[this.props.id].points}</Text>
+                    <Text style={[points, topLevelText]}>{this.props.membersPoints[currentUser.uid].points}</Text>
                 </View>
                 <FlatList
                     data={breakdown}
