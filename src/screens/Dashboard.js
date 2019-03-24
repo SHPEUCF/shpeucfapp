@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, ScrollView, FlatList, Dimensions, TouchableOpacity, WebView, Linking } from 'react-native';
 import * as Progress from 'react-native-progress';
 import _ from 'lodash';
+import { Spinner } from '../components/general'
 import { Actions } from 'react-native-router-flux';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {
@@ -39,11 +40,13 @@ class Dashboard extends Component {
 		let day = date.getDate();
 		let month = date.getMonth();
 		let greeting = (time >= 12) ? "Good evening" : "Good morning";
-
+		const {
+			textColor
+		} = styles
 		return (
 			<View>
-				<Text style={{fontSize: 20}}>{greeting}, {this.props.firstName}.</Text>
-				<Text>Today is {months[month]} {day}</Text>
+				<Text style={[textColor,{fontSize: 20}]}>{greeting}, {this.props.firstName}.</Text>
+				<Text style={textColor}>Today is {months[month]} {day}</Text>
 			</View>
 		)
 	}
@@ -51,7 +54,9 @@ class Dashboard extends Component {
 	getFormattedEventList() {
 		let events = this.props.eventList;
 		let fields = [];
-
+		const {
+			textColor
+		}= styles
 		for (key in events) {
 			fields.push([`${events[key].name}`, `${events[key].date}`, `${events[key].description}`]);
 		}
@@ -69,9 +74,9 @@ class Dashboard extends Component {
 
 		return(
 			<View style={{alignItems:'center'}}>
-				<Text style={{fontStyle: 'italic', fontSize: 16}}>{eventName}</Text>
-				<Text style={{paddingBottom: '5%'}}>{eventDate}</Text>
-				<Text style={{marginLeft: '10%', marginRight: '10%'}}>{eventDesc}</Text>
+				<Text style={[{fontStyle: 'italic', fontSize: 16}, textColor]}>{eventName}</Text>
+				<Text style={[{paddingBottom: '5%'}, textColor]}>{eventDate}</Text>
+				<Text style={[{marginLeft: '10%', marginRight: '10%'}, textColor]}>{eventDesc}</Text>
 			</View>
 		)
 	}
@@ -85,18 +90,19 @@ class Dashboard extends Component {
 			contentContainerStyle,
 			progress,
 			index,
-			indexText
+			indexText,
+			textColor
 		} = styles;
 
 		return (
 			<View style={contentContainerStyle}>
 				<View style={index}>
-					<Text style={indexText}>{item.index}</Text>
+					<Text style={textColor} style={indexText}>{item.index}</Text>
 				</View>
 				
 				<View>
-					<Text>{item.firstName} {item.lastName === undefined ? '' : item.lastName}</Text>
-					<Text>Points: {item.points}</Text>
+					<Text style={textColor}>{item.firstName} {item.lastName === undefined ? '' : item.lastName}</Text>
+					<Text style={textColor}>Points: {item.points}</Text>
 					<Progress.Bar
 						style={progress}
 						progress={item.points / Math.max(sortedMembers[0].points, 1)}
@@ -110,17 +116,19 @@ class Dashboard extends Component {
 
 	_keyExtractor = (item, index) => index;
 
-   render() {
-      const {
+
+	renderContent() {
+	      const {
 			page,
 			tabBar,
 			tabBarText,
 			mainContentStyle,
 			greetingContainerStyle,
-			firstContainerStyle,
+			ContainerStyle,
 			title,
 			touchLeaderboard,
-			eventsContainer
+			eventsContainer,
+			textColor
 		} = styles;
 		
 		const { currentUser } = firebase.auth();
@@ -137,56 +145,65 @@ class Dashboard extends Component {
 		if (this.isDefined(currentMember) && this.isDefined(sortedMembers) && sortedMembers[0].id !== currentMember.id && sortedMembers[1].id !== currentMember.id)
 			sortedMembers = sortedMembers.concat(currentMember);
 
-      return (
-         <View style={page}>
-				<View style={tabBar}>
-					<Text style={tabBarText}>Dashboard</Text>
-				</View>
-				<ScrollView>
-					<View style={mainContentStyle}>
-						<View style={greetingContainerStyle}>
-							{this.greeting()}
-						</View>
-						<View style={firstContainerStyle}>
-							<View style={{flexDirection: 'row'}}>
-								<TouchableOpacity style={touchLeaderboard} onPress={() => Actions.Leaderboard()}>
-									<Text style={title}>Leaderboard</Text>
-									<FlatList
-										data={sortedMembers}
-										extraData={this.state}
-										keyExtractor={this._keyExtractor}
-										renderItem={({item}) => (this.renderComponent(item, sortedMembers))}
-									/>
-								</TouchableOpacity>
-								<TouchableOpacity style={eventsContainer} onPress={() => alert('Coming soon!')}>
-									<Text style={title}>Upcoming Events</Text>
-									<View style={{alignSelf: 'center'}}>
-										{this.getFormattedEventList()}
-									</View>
-								</TouchableOpacity>
-							</View>
-						</View>
-						<View style={firstContainerStyle}>
-							<Text style={title}>Committees</Text>
-							<Text>Coming soon!</Text>
-						</View>
-						<View style={firstContainerStyle}>
-							<Text style={title}>Join our Slack!</Text>
-							<FontAwesomeIcon name="slack" size={30} onPress={() => Linking.openURL('https://shpeucf2018-2019.slack.com/')}/>
-						</View>
-						<TouchableOpacity style={firstContainerStyle} onPress={() => Linking.openURL('https://www.shpeucf.com/')}>
-							<Text style={[title, {paddingBottom: 0}]}>Visit our website!</Text>
-						</TouchableOpacity>
+		return (
+			<View style={page}>
+					<View style={tabBar}>
+						<Text style={tabBarText}>Dashboard</Text>
 					</View>
-				</ScrollView>
-         </View>
-      );
+					<ScrollView>
+						<View style={mainContentStyle}>
+							<View style={greetingContainerStyle}>
+								{this.greeting()}
+							</View>
+							<View style={ContainerStyle}>
+								<View style={{flexDirection: 'row'}}>
+									<TouchableOpacity style={touchLeaderboard} onPress={() => Actions.Leaderboard()}>
+										<Text style={[title, textColor]}>Leaderboard</Text>
+										<FlatList
+											data={sortedMembers}
+											extraData={this.state}
+											keyExtractor={this._keyExtractor}
+											renderItem={({item}) => (this.renderComponent(item, sortedMembers))}
+										/>
+									</TouchableOpacity>
+									<TouchableOpacity style={eventsContainer} onPress={() => alert('Coming soon!')}>
+										<Text style={[title, textColor]}>Upcoming Events</Text>
+										<View style={{alignSelf: 'center'}}>
+											{this.getFormattedEventList()}
+										</View>
+									</TouchableOpacity>
+								</View>
+							</View>
+							<View style={ContainerStyle}>
+								<Text style={[title, textColor]}>Committees</Text>
+								<Text style={textColor}>Coming soon!</Text>
+							</View>
+							<View style={ContainerStyle}>
+								<Text style={[title, textColor]}>Join our Slack!</Text>
+								<FontAwesomeIcon style={textColor} name="slack" size={30} onPress={() => Linking.openURL('https://shpeucf2018-2019.slack.com/')}/>
+							</View>
+							<TouchableOpacity style={ContainerStyle} onPress={() => Linking.openURL('https://www.shpeucf.com/')}>
+								<Text style={[title, textColor, {paddingBottom: 0}]}>Visit our website!</Text>
+							</TouchableOpacity>
+						</View>
+					</ScrollView>
+			</View>
+		);
 	}
+
+   render() {
+	
+	if(this.props.loading){
+      return <Spinner/>
+    }
+    return this.renderContent()
+  }
 }
 
 const styles = StyleSheet.create({
 	page: {
-		flex: 1
+		flex: 1,
+		backgroundColor: '#0c0b0b'
 	},
 	tabBar: {
 		backgroundColor: '#fff',
@@ -203,15 +220,18 @@ const styles = StyleSheet.create({
 	greetingContainerStyle: {
 		padding: '3%'
 	},
+	textColor:{
+		color: '#E0E6ED'
+	},
 	contentContainerStyle: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingBottom: '5%'
+		paddingBottom: '5%',
 	},
-	firstContainerStyle: {
+	ContainerStyle: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		backgroundColor: '#fff',
+		backgroundColor: '#21252b',
 		borderRadius: 10,
 		paddingTop: '2%',
 		paddingBottom: '2%',
@@ -221,7 +241,7 @@ const styles = StyleSheet.create({
 		marginLeft: '3%',
 		marginRight: '3%',
 		marginBottom: '2%',
-		elevation: 1
+		elevation: 1,
 	 },
 	mainContentStyle: {
 		color: '#000'
@@ -233,7 +253,7 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 18,
 		fontWeight: '500',
-		paddingBottom: '5%'
+		paddingBottom: '5%',
 	},
 	touchLeaderboard: {
 		flex: 1,
@@ -242,7 +262,8 @@ const styles = StyleSheet.create({
 		paddingRight: '3%'
 	},
 	index: {
-		borderColor: 'black',
+		color: '#000',
+		borderColor: '#E0E6ED',
 		borderStyle: 'solid',
 		borderWidth: 1.5,
 		borderRadius: 11,
@@ -255,7 +276,8 @@ const styles = StyleSheet.create({
 	indexText: {
 		alignSelf: 'center',
 		fontWeight: "700",
-		fontSize: 11
+		fontSize: 11,
+		color: "#E0E6ED"
 	},
 	eventsContainer: {
 		flex: 1,
