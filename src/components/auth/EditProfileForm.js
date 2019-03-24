@@ -42,40 +42,6 @@ const iconName = Platform.OS === 'ios'?'ios-arrow-dropdown':'md-arrow-dropdown';
 
 class EditProfileForm extends Component {
 
-    onFirstNameChange(text) {
-      this.props.firstNameChanged(text);
-    }
-    onLastNameChange(text) {
-      this.props.lastNameChanged(text);
-    }
-    onEmailChange(text) {
-      this.props.emailChanged(text);
-    }
-    onCollegeChange(text) {
-      this.props.collegeChanged(text);
-    }
-    onMajorChange(text) {
-      this.props.majorChanged(text);
-    }
-    onPointsChange(text) {
-      this.props.pointsChanged(text);
-    }
-    onPrivilegeChange(text) {
-      this.props.privilegeChanged(text);
-    }
-    onPictureChange(text) {
-      this.props.pictureChanged(text);
-    }
-    onPasswordChange(text) {
-      this.props.passwordChanged(text);
-    }
-    onConfirmPasswordChange(text) {
-      this.props.confirmPasswordChanged(text);
-    }
-    onQuoteChange(text) {
-      this.props.quoteChanged(text);
-    }
-
     checkPrivilege(level){
       return (this.props.privilege !== undefined && this.props.privilege[level])
     }
@@ -118,6 +84,8 @@ class EditProfileForm extends Component {
         registrationError('Please confirm password');
       } else if (password !== confirmPassword) {
         registrationError('Passwords do not match, please try again');
+      } else if (points == '') {
+        registrationError('Please enter your points');
       } else if (nationality == '') {
         registrationError('Please enter your country of origin');
       } else if (birthday == '') {
@@ -251,12 +219,17 @@ class EditProfileForm extends Component {
   renderIfEboard(){
     const {
       firstName,
+      firstNameChanged,
       lastName,
+      lastNameChanged,
       email,
+      emailChanged,
       gender,
       genderChanged,
       birthday,
-      birthDateChanged
+      birthDateChanged,
+      points,
+      pointsChanged
     } = this.props
     if (this.checkPrivilege('eboard')) {
       return (
@@ -264,18 +237,23 @@ class EditProfileForm extends Component {
           <Input
               placeholder="First Name"
               value={firstName}
-              onChangeText={this.onFirstNameChange.bind(this)}
+              onChangeText={(text) => firstNameChanged(text)}
             />
             <Input
               placeholder="Last Name"
               value={lastName}
-              onChangeText={this.onLastNameChange.bind(this)}
+              onChangeText={(text) => lastNameChanged(text)}
             />
             <Input
               placeholder="School Email"
               keyboardType="email-address"
               value={email}
-              onChangeText={this.onEmailChange.bind(this)}
+              onChangeText={(text) => emailChanged(text)}
+            />
+            <Input
+              placeholder="Points"
+              value={points + ""}
+              onChangeText={(text) => pointsChanged(text)}
             />
             <PickerInput
               title={"Gender"}

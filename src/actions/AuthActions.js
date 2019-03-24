@@ -215,7 +215,9 @@ const createUserSuccess = (dispatch, firstName, lastName, email, college, major,
       nationality: nationality,
       gender: gender,
       birthday: birthday,
-      id: currentUser.uid
+      id: currentUser.uid,
+      emailVerfied: false,
+      paidMember: false
     })
     .then(() => firebase.database().ref(`/points/${currentUser.uid}/`).set({
       firstName: firstName,
@@ -266,14 +268,6 @@ export const editUser = ( firstName, lastName, email, college, major, points, qu
       firstName: firstName,
       lastName: lastName,
       points: points,
-    }))
-    .then(() => firebase.database().ref(`/privileges/${currentUser.uid}/`).update({
-      firstName: firstName,
-      lastName: lastName,
-      user: true,
-      board: false,
-      eboard: false,
-      president: false
     }))
     .then(() => Alert.alert('Account Updated'));
 
