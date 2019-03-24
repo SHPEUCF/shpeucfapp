@@ -139,7 +139,10 @@ const styles = StyleSheet.create({
     flex: .6,
     backgroundColor: '#2C3239',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderBottomColor: '#e0e6ed22',
+    borderBottomWidth: 1,
+    padding: 1,
   },
   textColor: {
     color: '#e0e6ed'
@@ -192,7 +195,7 @@ const styles = StyleSheet.create({
 	},
 	bioContainer: {
     flex: 1,
-		backgroundColor: '#000000'
+		backgroundColor: '#2C3239'
 	},
 	socialmediatext: {
 		flex:1,

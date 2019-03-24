@@ -168,12 +168,12 @@ class CreateEvent extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E1E1E1',
         justifyContent: 'flex-end',
     },
     formContainerStyle: {
         flex: 1,
         padding: 20,
+        backgroundColor: '#21252b'
     },
     headerStyle: {
         flexDirection: 'column',
@@ -185,6 +185,7 @@ const styles = StyleSheet.create({
     headerTextStyle: {
         fontSize: 22,
         fontWeight: 'bold',
+        color: '#e0e6ed'
     },
     errorTextStyle: {
         fontSize: 14,

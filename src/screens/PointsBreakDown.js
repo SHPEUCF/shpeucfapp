@@ -55,7 +55,8 @@ class PointsBreakDown extends Component {
             innerContentContainerStyle,
             title,
             points,
-            botLevelText
+            botLevelText,
+            textColor
         } = styles;
 
         if (JSON.stringify(this.state.show) === JSON.stringify(section)) {
@@ -63,8 +64,8 @@ class PointsBreakDown extends Component {
             <TouchableOpacity>
             <View style={innerContentContainerStyle}>
                 <View style={innerContainerStyle}>
-                    <Text style={[title,botLevelText]}>{item.name}</Text>
-                    <Text style={[points,botLevelText]}>{item.points}</Text>
+                    <Text style={[title,botLevelText,textColor]}>{item.name}</Text>
+                    <Text style={[points,botLevelText,textColor]}>{item.points}</Text>
                 </View>
             </View>
             </TouchableOpacity>
@@ -80,7 +81,8 @@ class PointsBreakDown extends Component {
       contentContainerStyle,
       title,
       points,
-      midLevelText
+      midLevelText,
+      textColor
     } = styles;   
     // alert(item[0])
     var count = this.countPoints(section)
@@ -90,8 +92,8 @@ class PointsBreakDown extends Component {
         <TouchableOpacity onPress = {() => this.toggleShow(section[0])}>
             <View style={contentContainerStyle}>
                 <View style={containerStyle}>
-                    <Text style={[title,midLevelText]}>{section[0]}</Text>
-                    <Text style={[points,midLevelText]}>{count}</Text>
+                    <Text style={[title,midLevelText, textColor]}>{section[0]}</Text>
+                    <Text style={[points,midLevelText, textColor]}>{count}</Text>
                 </View>
             </View>
             </TouchableOpacity>
@@ -122,7 +124,8 @@ class PointsBreakDown extends Component {
             contentContainerStyle,
             title,
             points,
-            topLevelText
+            topLevelText,
+            textColor
         } = styles;
 
         const { currentUser } = firebase.auth();
@@ -132,8 +135,8 @@ class PointsBreakDown extends Component {
         return (
             <View style ={page}>
                 <View style={[contentContainerStyle,containerStyle]}>
-                    <Text style={[title, topLevelText]}>Total Points</Text>
-                    <Text style={[points, topLevelText]}>{this.props.membersPoints[currentUser.uid].points}</Text>
+                    <Text style={[title, topLevelText, textColor]}>Total Points</Text>
+                    <Text style={[points, topLevelText, textColor]}>{this.props.membersPoints[currentUser.uid].points}</Text>
                 </View>
                 <FlatList
                     data={breakdown}
@@ -154,18 +157,22 @@ class PointsBreakDown extends Component {
 
 const styles = StyleSheet.create({
     page: {
-        marginBottom: 10,
+        paddingBottom: 10,
         flexDirection: 'column',
-        flex: 1
+        flex: 1,
+        backgroundColor: '#0c0b0b'
     },
     containerStyle: {
         flexDirection: 'row',
-        backgroundColor: '#fff',
         paddingVertical: 30,
         paddingHorizontal: 15,
     },
+    textColor: {
+        color: '#e0e6ed'
+    },
     topLevelText: {
-        fontSize: 18
+        fontSize: 20,
+        fontWeight: 'bold'
     },
     midLevelText: {
         fontSize: 16
@@ -174,10 +181,11 @@ const styles = StyleSheet.create({
         fontSize: 12
     },
     contentContainerStyle: {
-        margin: 1,
+        marginTop: 1,
+        backgroundColor: '#2C3239'
     },
     title: {
-        flex: 1
+        flex: .83
     },
     points: {
         flex: .15
