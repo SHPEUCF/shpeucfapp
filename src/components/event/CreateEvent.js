@@ -150,6 +150,7 @@ class CreateEvent extends Component {
                         </View>
 
                     </RkAvoidKeyboard>
+                    </ScrollView>
                         {this.renderError()}
                         <Button 
                             title = {this.props.title}
@@ -159,7 +160,6 @@ class CreateEvent extends Component {
                             title = "CANCEL"
                             onPress={this.props.goToEvents.bind(this)}
                         />
-                    </ScrollView>
                 </View>
             )
         }

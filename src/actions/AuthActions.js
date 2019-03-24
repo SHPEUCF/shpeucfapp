@@ -169,7 +169,7 @@ const showFirebaseError = (dispatch, error) => {
 export const createUser = ( firstName, lastName, email, college, major, points, picture, password, quote, continent, nationality, gender, birthday) => {
   return (dispatch) => {
     dispatch({ type: CREATE_USER });
-    alert(`${firstName}${lastName}${email}${college}${major}${points}${password}${quote}${continent}${nationality}${gender}${birthday}`)
+
     firebase.auth().createUserWithEmailAndPassword(email, password)
       .then((user) => createUserSuccess(dispatch, firstName, lastName, email, college, major, points, picture, quote, continent, nationality, gender, birthday))
       .catch((error) => createUserFail(dispatch, error))

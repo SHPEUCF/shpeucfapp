@@ -28,8 +28,8 @@ class PointsBreakDown extends Component {
  
     componentWillMount() {
         {this.setState({show: ""})}
-        this.props.fetchEvents()
-        this.props.fetchMembersPoints()
+        // this.props.fetchEvents()
+        // this.props.fetchMembersPoints()
     }
 
     countPoints(item) {
@@ -145,7 +145,7 @@ class PointsBreakDown extends Component {
                 />
                 <Button
                 title={"Return"}
-                onPress={()=> Actions.pop()}/>
+                onPress={()=> Actions.replace('dashboard')}/>
             </View>
         )
     }

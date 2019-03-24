@@ -35,7 +35,7 @@ class Events extends Component {
   }
 
   renderButton(){
-    if(this.props.privilege !== undefined && this.props.privilege.board === true){
+    if(this.props.privilege !== undefined && this.props.privilege.board){
       return (
           <Button
               title = "CREATE EVENT"
@@ -89,7 +89,9 @@ class Events extends Component {
             }}
           />
         </ScrollView>
-        <View style={{height: dimension.height, backgroundColor: '#0c0b0b'}}></View>
+        <View style={{height: dimension.height, backgroundColor: '#0c0b0b'}}>
+            {this.renderButton()}
+        </View>
       </View>
     );
   }

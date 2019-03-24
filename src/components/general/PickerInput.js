@@ -149,7 +149,7 @@ PickerInput.defaultProps = {
     title: 'Give me a title!',
     placeholder: 'Choose an Option',
     iconSize: 50,
-    iconColor: 'black'
+    iconColor: 'white'
 }
 
 const styles = {

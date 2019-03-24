@@ -93,10 +93,9 @@ class Profile extends Component {
       bioContainer,
       taglineContainer,
       fieldContainerStyle,
-      contentStyle,
       itemLabelText,
       itemValueText,
-      socialmediarow,
+      textColor
       } = styles
 
     return (
@@ -104,22 +103,21 @@ class Profile extends Component {
         {this.renderPicture()}
         <View style={bioContainer}>
           <View style={taglineContainer}>
-              <Text style={[itemLabelText, {flex: 1}]}>{firstName + ' ' + lastName}</Text>
+              <Text style={[itemLabelText, textColor, {flex: 1}]}>{firstName + ' ' + lastName}</Text>
           </View>
           <View style={fieldContainerStyle}>
-            <Text style={itemLabelText}>Email:</Text>
-            <Text style={itemValueText}>{email}</Text>
+            <Text style={[itemLabelText, textColor]}>Email:</Text>
+            <Text style={[itemValueText, textColor]}>{email}</Text>
           </View>
           <View style={fieldContainerStyle}>
-            <Text style={itemLabelText}>Major:</Text>
-            <Text style={itemValueText}>{major}</Text>
+            <Text style={[itemLabelText, textColor]}>Major:</Text>
+            <Text style={[itemValueText, textColor]}>{major}</Text>
           </View>
           <TouchableOpacity style = {fieldContainerStyle} onPress={() => {
-            this.props.pageLoad()
             Actions.pointsBreakDown()}}
           >
-            <Text style={itemLabelText}>Points:</Text>
-            <Text style={itemValueText}>{points}</Text>
+            <Text style={[itemLabelText, textColor]}>Points:</Text>
+            <Text style={[itemValueText, textColor]}>{points}</Text>
           </TouchableOpacity>
         </View>
         {this.renderSocialMedia()}
@@ -130,11 +128,7 @@ class Profile extends Component {
   }
 
   render() {
-    // alert(this.props.loading)
-     if(this.props.loading){
-      return <Spinner>{this.renderContent}</Spinner>
-    }
-    else return (
+  return (
         this.renderContent()
     )
   }
@@ -146,6 +140,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#2C3239',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  textColor: {
+    color: '#e0e6ed'
   },
   taglineContainer: {
     flex: .2,

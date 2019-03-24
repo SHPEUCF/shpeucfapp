@@ -174,6 +174,7 @@ export default (state = INITIAL_STATE, action) => {
         quote: payload.quote,
         continent: payload.continent,
         nationality: payload.nationality,
+        gender: payload.gender,
         birthday: payload.birthday,
         points: payload.points,
         picture: payload.picture,

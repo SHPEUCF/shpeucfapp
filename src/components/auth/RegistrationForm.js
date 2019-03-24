@@ -157,7 +157,6 @@ class RegistrationForm extends Component {
             title={"Major"}
             data={majorNames[college]}
             placeholder={"Select major"}
-            iconColor="white"
             onSelect={(text) => majorChanged(text)}/>) : (<View></View>)
 
         return(
@@ -166,7 +165,6 @@ class RegistrationForm extends Component {
             title={"Colleges"}
             data={collegeNames}
             placeholder={"Select college"}
-            iconColor="white"
             onSelect={(text) => collegeChanged(text)}/>
           {p1}
           
@@ -186,7 +184,6 @@ class RegistrationForm extends Component {
             title={"Nationality"}
             data={countries[continent]}
             placeholder={"Select country of origin"}
-            iconColor="white"
             onSelect={(text) => nationalityChanged(text)}/>) : (<View></View>)
 
         return(
@@ -195,7 +192,6 @@ class RegistrationForm extends Component {
             title={"Continent"}
             data={continents}
             placeholder={"Select continent of origin"}
-            iconColor="white"
             onSelect={(text) => continentChanged(text)}/>
           {p1}
           
@@ -278,11 +274,11 @@ class RegistrationForm extends Component {
               onChangeText={this.onEmailChange.bind(this)}
               />
             <PickerInput
-            title={"Gender"}
-            data={["Female","Male","Other","Do not wish to disclose"]}
-            placeholder={"Select your gender"}
-            iconColor="white"
-            onSelect={(text) => this.props.genderChanged(text)}/>            
+              title={"Gender"}
+              data={["Female","Male","Other","Do not wish to disclose"]}
+              placeholder={"Select your gender"}
+              onSelect={(text) => this.props.genderChanged(text)}
+            />            
             {this.renderCountryPickers()}
             {this.renderCollegePickers()}
 

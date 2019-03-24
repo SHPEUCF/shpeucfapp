@@ -80,6 +80,7 @@ const RouterComponent = () => {
             key="pointsBreakDown"
             component={PointsBreakDown}
             title="Points"
+            type={ActionConst.REPLACE}
             showNavBar
           />        
         </Stack>

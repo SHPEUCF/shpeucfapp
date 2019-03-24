@@ -165,6 +165,7 @@ class DatePicker extends Component {
                         inputBoxStyle={inputBoxStyle}
                         dropDownArrowStyle={dropDownArrowStyle}
                         iconSize={iconSize}
+                        iconColor='black'
                         value={month}
                         onSelect={(text) => this.clickActionMonth(text)}
                         placeholder={"MM"}
@@ -178,6 +179,7 @@ class DatePicker extends Component {
                         inputBoxStyle={inputBoxStyle}
                         dropDownArrowStyle={dropDownArrowStyle}
                         iconSize={iconSize}
+                        iconColor='black'
                         value={day}
                         onSelect={(text) => this.clickActionDay(text)}
                         placeholder={"DD"}
@@ -190,6 +192,7 @@ class DatePicker extends Component {
                         title={"Enter a Year"}
                         inputBoxStyle={inputBoxStyle}
                         iconSize={iconSize}  
+                        iconColor='black'
                         dropDownArrowStyle={dropDownArrowStyle}
                         value={year}
                         onSelect={(text) => this.clickActionYear(text)}
