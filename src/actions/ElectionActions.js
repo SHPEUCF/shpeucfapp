@@ -204,8 +204,8 @@ export const editApplication = (position, plans, id) => {
       firebase.database().ref(`/election/positions/${position}/candidates/${id}`).update({
               plan: plans,
           })
-      .then(() => alert('Application Edited!', 'Successful'))
-      .catch((error) => alert('Application could not be Edited!', 'Failure'))
+      .then(() => alert('Candidate Edited!', 'Successful'))
+      .catch((error) => alert('Candidate could not be Edited!', 'Failure'))
   }
 };
 
@@ -248,6 +248,7 @@ export const deleteApplication = (position, candidateId) => {
                   type: DELETE_APPLICATION,
               });
           })
+          .then(() => firebase.database().ref(`/voting/${position}/${candidateId}`).remove())
           .then(() => alert('Candidate Removed!', 'Successful'))
           .catch((error) => alert('Candidate could not be removed!', 'Failure'))
 
