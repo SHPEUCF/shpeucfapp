@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import {
   ScrollView,
-  FlatList } from 'react-native';
+  FlatList,
+  Text } from 'react-native';
 import { connect } from 'react-redux';
 import { ListItem } from 'react-native-elements';
 import { Spinner} from '../components/general'
@@ -52,11 +53,6 @@ import {
   ];
 
 class More extends Component {
-
-  componentDidMount(){
-    this.props.pageLoad();
-    this.props.getPrivilege();
-  }
 
   keyExtractor = (item, index) => index
  
