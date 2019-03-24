@@ -33,6 +33,7 @@ import ElectionPositions from '../screens/ElectionPositions'
 import ElectionCandidates from '../screens/ElectionCandidates'
 import Statistics from '../screens/Statistics'
 import More from '../screens/More'
+import Dashboard from '../screens/Dashboard'
 
 import {
   Feed,
@@ -42,7 +43,6 @@ import {
   About,
   EBoard,
   Version,
-  Dashboard
 } from '../screens/';
 
 const RouterComponent = () => {

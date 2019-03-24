@@ -5,8 +5,17 @@ import { Button } from '../components/general'
 
 const dimension = Dimensions.get('window');
 
+import {
+  updateElection
+} from "../actions"
+
 
 class Dashboard extends Component {
+
+  componentWillMount() {
+      this.props.updateElection();
+  }
+
   render() {
     const {
       buttonsContainerStyle,
@@ -47,4 +56,15 @@ const styles = StyleSheet.create({
 
 });
 
-export { Dashboard };
+const mapStateToProps = ({elect}) => {
+  const { election } = elect;
+
+  return { election };
+};
+
+const mapDispatchToProps = {
+  updateElection
+ };
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
