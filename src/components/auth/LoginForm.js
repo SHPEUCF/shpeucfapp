@@ -23,57 +23,50 @@ class LoginForm extends Component {
   renderError() {
     if (this.props.error) {
       return (
-        <View>
-          <Text style={styles.errorTextStyle}>
-            {this.props.error}
-          </Text>
-        </View>
+        <Text style={styles.errorTextStyle}>
+          {this.props.error}
+        </Text>
       );
     }
   }
-
-  renderLogInButton() {
-    return (
-      <Button 
-        title = "LOG IN"
-        onPress={this.onButtonPress.bind(this)}
-      />
-    );
-  }
-
   renderResetPassword() {
+    const {
+      resetPasswordText,
+      bottomContainer
+    } = styles
     return (
-      <View style={styles.resetPasswordContainer}>
         <TouchableOpacity
-          onPress={this.props.goToResetPassword}>
-          <Text style={styles.resetPasswordButton}>Forgot Password?</Text>
+          style={bottomContainer}
+          onPress={this.props.goToResetPassword}
+        >
+          <Text style={resetPasswordText}>Forgot Password?</Text>
         </TouchableOpacity>
-      </View>
     );
   }
   renderSignUpButton() {
+    const {
+      signUpText,
+      bottomContainer
+    } = styles
     return (
-      <View style={styles.signUpContainer}>
-        <Text style={styles.question}>Don't have an account? </Text>
+      <View style={bottomContainer}>
+        <Text style={{color: '#bbb', fontWeight: 'bold'}}>Don't have an account? </Text>
         <TouchableOpacity
           onPress={this.props.goToRegistration}>
-          <Text style={styles.signUpButton}> Register</Text>
+          <Text style={signUpText}> Register</Text>
         </TouchableOpacity>
       </View>
     );
   }
 
   renderButtons() {
-    if (this.props.loading) {
-      return (
-        <View style={{ marginTop: 40, marginBottom: 200}}>
-          <Spinner size="large" />
-        </View>
-      );
-    };
+    
     return (
-      <View>
-        {this.renderLogInButton()}
+      <View style={styles.buttonContainer}>
+        <Button 
+          title = "LOG IN"
+          onPress={this.onButtonPress.bind(this)}
+        />
         {this.renderResetPassword()}
         {this.renderSignUpButton()}
       </View>
@@ -81,107 +74,90 @@ class LoginForm extends Component {
   }
 
   renderContent() {
-    if (this.props.loggedIn) {
-      return <Spinner />;
-    } else {
-      return (
-          <ScrollView style={styles.formContainerStyle}> 
-            <View style={{flex: .2}}></View>
-
-              <View style={styles.headerContainer}>
-                <View style={styles.container}>
-                  <Image
-                    source={require('../../assets/images/Icon_SHPE_UCF_152x152.png')}
-                    style={{alignSelf: 'center'}}/>
-                </View>
-                <View style= {styles.headercolumn}>
-                  <View style={styles.headerStyle}>
-                    <Text style={styles.headerTextStyle}>S H P E  </Text>
-                    <Text style={styles.headerlowerTextStyle}>U C F </Text>
-                  </View>
-                  <Text style={styles.headerSubtitleStyle}>Society of Hispanic Professional Engineers</Text>
-                </View>
-                </View>
-                <RkAvoidKeyboard>
-                <ScrollView>
-                <View style={styles.input}>
-                  <Input       
-                  placeholder="Knights Email"
-                  value={this.props.email}
-                  autoCapitalize="none"
-                  keyboardType="email-address"
-                  onChangeText={this.onEmailChange.bind(this)}
-                />
-                <Input
-                  color="black"
-                  secureTextEntry={true}
-                  placeholder="Password"
-                  value={this.props.password}
-                  onChangeText={this.onPasswordChange.bind(this)}
-                />
-                </View>
-              </ScrollView>
-              </RkAvoidKeyboard>
-            
-            <View style={styles.buttonContainer}>
-                <View>
-                  {this.renderError()}
-                </View>
-                <View>
-                  {this.renderButtons()}
-                </View>
+    const {
+      formContainerStyle,
+      headerContainer,
+      headerTitle,
+      headerTextStyle,
+      headerSubtitleStyle,
+    } = styles
+    return (
+      <View style={formContainerStyle}> 
+        <RkAvoidKeyboard style={headerContainer}>
+          <ScrollView style= {{flex: 1}}>
+            <Image
+              source={require('../../assets/images/Icon_SHPE_UCF_152x152.png')}
+              style={{alignSelf: 'center'}}
+            />
+            <View style={headerContainer}>
+              <View style={headerTitle}>
+                <Text style={headerTextStyle}>S H P E  </Text>
+                <Text style={[headerTextStyle, {color: '#FFC107'}]}>U C F </Text>
               </View>
+            </View>
+            <Text style={headerSubtitleStyle}>Society of Hispanic Professional Engineers</Text>
           </ScrollView>
-      );
-    }
+        </RkAvoidKeyboard>
+        <RkAvoidKeyboard style={{flex:1}}>
+          <ScrollView style= {{flex: 1}}>
+            <Input       
+              placeholder="Knights Email"
+              value={this.props.email}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              onChangeText={this.onEmailChange.bind(this)}
+            />
+            <Input
+              secureTextEntry={true}
+              placeholder="Password"
+              autoCapitalize="none"
+              value={this.props.password}
+              onChangeText={this.onPasswordChange.bind(this)}
+            />
+          </ScrollView>
+        </RkAvoidKeyboard>
+        {this.renderError()}
+        {this.renderButtons()}
+      </View>
+    );
+
   }
 
   render() {
-    return this.renderContent();
+    if (this.props.loggedIn) {
+      return <Spinner />;
+    } else  return this.renderContent();
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 40,
-  },
   formContainerStyle: {
+    padding: 10,
     backgroundColor: '#0c0b0b',
-    flexDirection: 'column',
     flex: 1,
-  },
-  headerStyle:{
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: .2,
   },
   headerContainer:{
     flex: 2,
+    alignItems: 'center',
     paddingTop: 40,
   },
   headerTextStyle: {
 		color: 'white',
     fontSize: 40,
-    flex: .45,
+    alignSelf: 'center'
   },
-	headercolumn: {
-   flexDirection: 'column',
-	 alignItems: 'center',
-	 justifyContent: 'center',
-   flex: .8,
+	headerTitle: {
+    flex: 1,
+    flexDirection: 'row',
 	},
-	headerlowerTextStyle: {
-		color: '#FFC107',
-    fontSize: 40,
-  },
 	headerSubtitleStyle: {
 		color: 'gray',
     fontWeight: 'bold',
-    flex: .5,
+    flex: 1,
     paddingTop: 10,
 	},
   errorTextStyle: {
+    flex: 1,
     fontSize: 14,
     alignSelf: 'center',
     color: 'red',
@@ -191,40 +167,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttonContainer: {
-    flex: 1,
+    flex: .8,
     paddingTop: 10,
   },
-  resetPasswordContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingTop: 10,
-  },
-  resetPasswordButton: {
+  resetPasswordText: {
     fontWeight: 'bold',
     color: 'white',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingTop: 5,
+    alignSelf: 'center',
   },
-  signUpButton: {
+  signUpText: {
+    flex: 1,
     fontWeight: 'bold',
     color: 'white',
-    paddingTop: 10,
+    // paddingTop: 10,
   },
-	question: {
-		fontWeight: 'bold',
-    color: 'grey',
-    paddingTop: 10,
-	},
-  signUpContainer: {
+  bottomContainer: {
+    flex:.3,
     flexDirection: 'row',
     justifyContent: 'center',
-
+    paddingTop: 10
   },
-  input: {
-    flex: 1,
-    paddingTop: 50,
-  }
 });
 
 const mapStateToProps = ({ auth }) => {
