@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {Button} from '../components/general'
-import { Scene, Router, Actions } from 'react-native-router-flux';
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import { Agenda } from 'react-native-calendars';
 import {
   TouchableOpacity,
   Alert,
   Text,
-  TextInput,
   View,
   StyleSheet,
   ScrollView,
-  Modal,
   Dimensions
   } from 'react-native';
 import {
@@ -48,7 +45,9 @@ class Events extends Component {
     }
   }
   render() {
-
+    const {
+      textColor
+    } = styles
     return (
       <View>
         <ScrollView>
@@ -73,17 +72,20 @@ class Events extends Component {
             }}
             theme={{
               backgroundColor: '#0c0b0b',
-              calendarBackground: '#FFF',
-              agendaKnobColor: 'lightgrey',
-              agendaDayTextColor: '#F7F7F2',
-              agendaDayNumColor: '#F7F7F2',
+              calendarBackground: '#21252b',
+              agendaDayTextColor: '#fff',
+              agendaDayNumColor: '#fff',
+              dayTextColor: '#fff',
+              monthTextColor: '#FECB00',
+              textSectionTitleColor: '#FECB00',
+              textDisabledColor: '#999',
               selectedDayTextColor: '#000',
+              selectedDayBackgroundColor: '#FECB00',
               todayTextColor: '#44a1ff',
               textDayFontSize: 15,
               textMonthFontSize: 16,
               textDayHeaderFontSize: 14,
               selectedDotColor: 'black',
-              selectedDayBackgroundColor: '#FECB00',
             }}
           />
         </ScrollView>
@@ -115,9 +117,14 @@ class Events extends Component {
   }
 
   renderEmptyData(){
+
+    const{
+      textColor,
+      emptyData
+    } = styles
     return (
-      <View style={styles.emptyData}>
-        <Text>No events to display on this day</Text>
+      <View style={emptyData}>
+        <Text style={textColor}>No events to display on this day</Text>
       </View>
     );
   }
@@ -141,12 +148,18 @@ class Events extends Component {
   }
 
   renderItem(item) {
+
+    const {
+      textColor,
+      itemContainer
+    } = styles
+    
     return (
       <TouchableOpacity onPress={this.viewEvent.bind(this,item)}>
-          <View style={styles.item}>
-            <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
-            <Text>Time: {item.time}</Text>
-            <Text>Location: {item.location}</Text>
+          <View style={itemContainer}>
+            <Text style={[{ fontWeight: 'bold'},textColor]}>{item.name}</Text>
+            <Text style={textColor}>Time: {item.time}</Text>
+            <Text style={textColor}>Location: {item.location}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -164,6 +177,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     margin: 5,
+  },
+  textColor: {
+    color: '#e0e6ed'
   },
   modalTextInput: {
     marginTop: dimension.height*.05,
@@ -193,9 +209,9 @@ const styles = StyleSheet.create({
     width: dimension.width,
     backgroundColor: '#000a'
   },
-  item: {
+  itemContainer: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: '#21252b',
     borderRadius: 5,
     padding: dimension.height *.020,
     marginRight: dimension.height *.010,
@@ -205,11 +221,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
   },
-  emptyDate: {
-    flex:1,
-    height: dimension.height * .015,
-    paddingTop: dimension.height *.030,
-  },
   emptyData: {
     height: dimension.height * .015,
     paddingTop: dimension.height * .030,
@@ -218,7 +229,7 @@ const styles = StyleSheet.create({
     marginLeft: dimension.height *.010,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: '#21252b',
     borderRadius: 5,
     marginTop: dimension.height *.017
   },
