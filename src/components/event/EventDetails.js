@@ -46,7 +46,7 @@ class EventDetails extends Component {
     convertNumToDate(date) {
         var months = ["Jan", "Feb", "Mar", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
         temp_date = date.split("-");
-		return `${months[Number(temp_date[1]) - 1]} ${temp_date[2]}, ${temp_date[0]}`;
+		return `${months[Number(temp_date[1]) - 1]} ${temp_date[2]}`;
     }
 
     renderCodeBox(){
