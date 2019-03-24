@@ -37,49 +37,6 @@ class Events extends Component {
     this.alert(new Date());
   }
 
-  componentWillMount() {
-    {this.setState({modalVisible: false})}
-    this.props.fetchEvents();
-    this.props.getPrivilege();
-  }
-
-  renderCodeBox(){
-    return (
-      <Modal
-      transparent={true}
-      animationType={'fade'}
-      onRequestClose={() => {
-        Alert.alert('Modal has been closed.');
-      }}
-      visible={this.state.modalVisible}
-      >
-        <View style={styles.modalBackground}>
-          <View style={styles.modalContent}>
-            <TouchableOpacity
-              onPress={() => {this.setState({modalVisible: false})}}>
-              <Text>X</Text>
-            </TouchableOpacity>
-            <View style={styles.container}>
-              <Text style={styles.headerTextStyle}>Enter Code</Text>
-              <TextInput
-              style={styles.modalTextInput}
-              onChangeText={(text) => this.setState({text})}
-              value={this.state.text}
-              autoCapitalize={'characters'}
-              autoCorrect={false}
-              maxLength={4}
-              // editable={true}
-              // style={{marginTop:dimension.height*.1}}
-              // inputStyle={styles.modalTextInput}
-              />
-            <Button title = "OK" width={70}/>
-            </View>
-          </View>
-        </View>
-      </Modal>
-    )
-  }
-
   renderButton(){
     if(this.props.privilege !== undefined && this.props.privilege.board === true){
       return (
@@ -130,11 +87,7 @@ class Events extends Component {
             }}
           />
         </ScrollView>
-        {this.renderCodeBox()}
-        <View style={{height: dimension.height *5, backgroundColor: '#0c0b0b'}}>
-
-          {this.renderButton()}
-        </View>
+        <View style={{height: dimension.height, backgroundColor: '#0c0b0b'}}></View>
       </View>
     );
   }

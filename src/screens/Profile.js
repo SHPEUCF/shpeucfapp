@@ -16,11 +16,6 @@ import { Avatar, Divider } from 'react-native-elements';
 
 const dimension = Dimensions.get('window');
 class Profile extends Component {
-  componentDidMount() {
-    this.props.pageLoad();
-    this.props.loadUser();
-  }
-
   renderPicture() {
     const {
       headerInfoContainer,
