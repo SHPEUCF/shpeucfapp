@@ -33,6 +33,12 @@ class Dashboard extends Component {
 		this.props.fetchMemberProfile(id);
 	}
 
+	convertNumToDate(date) {
+		var months = ["Jan", "Feb", "Mar", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+		temp_date = date.split("-");
+		return `${months[Number(temp_date[1]) - 1]} ${temp_date[2]}, ${temp_date[0]}`;
+	}
+
 	greeting() {
 		const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
 							 'August', 'September', 'October', 'November', 'December'];
@@ -76,7 +82,7 @@ class Dashboard extends Component {
 		return(
 			<View style={{alignItems:'center'}}>
 				<Text style={[{fontStyle: 'italic', fontSize: 16}, textColor]}>{eventName}</Text>
-				<Text style={[{paddingBottom: '5%'}, textColor]}>{eventDate}</Text>
+				<Text style={[{paddingBottom: '5%'}, textColor]}>{this.convertNumToDate(eventDate)}</Text>
 				<Text style={[{marginLeft: '10%', marginRight: '10%'}, textColor]}>{eventDesc}</Text>
 			</View>
 		)
