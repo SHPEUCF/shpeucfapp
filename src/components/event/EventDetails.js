@@ -228,7 +228,7 @@ class EventDetails extends Component {
                         <View style={{flex:.5}}/>
                         <Text style={[attendance, textColor]}>Attendance</Text>
                         <Ionicons 
-                        style={[icon, {alignSelf: 'center'}]} 
+                        style={[icon, {alignSelf: 'center'}, textColor]} 
                         name="md-mail" 
                         size={35} 
                         color = 'e0e6ed'
