@@ -19,7 +19,9 @@ class DatePicker extends Component {
 
     constructor(props) {
         super(props);
-        var date = this.props.value.split("-")
+        var date = []
+        if(this.props.value !== undefined && this.props.value !== null)
+            var date = this.props.value.split("-")
         this.state = {
             month: (date.length === 3) ? date[1]: "",
             day: (date.length === 3) ? date[2]: "",
