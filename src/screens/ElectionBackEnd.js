@@ -35,15 +35,11 @@ class ElectionBackEnd extends Component {
     super(props);
   }
 
-  state = { fetchMember: false, fetchId: null};
 
   componentDidMount() {
       this.props.getVotes();
+      this.props.getPositions();
 
-      if (this.state.fetchMember){
-          this.props.fetchMemberProfile(this.state.fetchId);
-          this.setState({fetchMember: false});
-      }
   }
 
   openOrClose(){

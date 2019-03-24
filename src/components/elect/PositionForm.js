@@ -7,15 +7,22 @@ import {
     addPosition,
     editPosition,
     positionTitleChanged,
-    positionDescriptionChanged
+    positionDescriptionChanged,
+    deletePosition,
 } from '../../actions'
 import { Actions } from 'react-native-router-flux';
+
+
 
 
 class PositionForm extends Component {
     // EventCreationError(text) {
     //     this.props.eventError(text);
     // }
+    constructor(props) {
+      super(props);
+      this.state = {oldTitle: this.props.positionTitle};
+    }
 
 
     renderError() {
@@ -43,10 +50,18 @@ class PositionForm extends Component {
         } else if (positionDescription === '') {
             // this.EventCreationError('Please enter a position');
         } else{
-            if(this.props.title === "ADD")
-                this.props.addPosition(positionTitle,positionDescription);
-            else
-                this.props.editPosition(positionTitle, positionDescription);
+            if(this.props.title === "ADD"){
+
+                this.props.addPosition(positionTitle, positionDescription);
+              }
+            else {
+                if (this.state.oldTitle !== positionTitle)
+                {
+                  this.props.editPosition(positionTitle, positionDescription, this.state.oldTitle);
+                }
+                else{
+                this.props.editPosition(positionTitle, positionDescription, null);}
+              }
             Actions.ElectionPositions();
         }
     }
@@ -145,7 +160,8 @@ const mapDispatchToProps = {
    addPosition,
    editPosition,
    positionTitleChanged,
-   positionDescriptionChanged
+   positionDescriptionChanged,
+   deletePosition,
 }
 
 

@@ -33,7 +33,7 @@ class ElectionPosition extends Component {
     this.renderPositions = this.renderPositions.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
       this.props.getPositions();
   }
 
@@ -102,6 +102,11 @@ class ElectionPosition extends Component {
         <View style= {styles.buttonContainerStyle}>
           <TouchableOpacity onPress={() => this.viewPosition(item.position)}>
             <Ionicons name="md-create" size={40} color='#000000'/>
+          </TouchableOpacity>
+        </View>
+        <View style= {styles.buttonContainerStyle}>
+          <TouchableOpacity onPress={() => this.props.deletePosition(item.position.title)}>
+            <Ionicons name="md-trash" size={40} color='#000000'/>
           </TouchableOpacity>
         </View>
       </TouchableOpacity>

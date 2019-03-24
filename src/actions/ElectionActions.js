@@ -125,20 +125,41 @@ export const updateElection = () => {
 
 export const deletePosition = (text) => {
     return (dispatch) => {
-        firebase.database().ref(`/election/positions/${title}`).update({
-                title: "",
-                description: "",
-            })
+        firebase.database().ref(`/election/positions/${text}`).remove()
             .then(() => {
                 dispatch({
                     type: DELETE_POSITION,
                 });
             })
-            .then(() => alert('Position Added!', 'Successful'))
-            .catch((error) => alert('Position could not be Added!', 'Failure'))
+            .then(() => alert('Position Deleted!', 'Successful'))
+            .catch((error) => alert('Position could not be deleted!', 'Failure'))
     }
 };
-export const editPosition = (title, description) => {
+export const editPosition = (title, description, oldTitle) => {
+  if (oldTitle !== null){
+    var level;
+    firebase.database().ref(`/election/positions/${oldTitle}/level`).once('value', snapshot => {
+    level = snapshot.val();
+    })
+    return (dispatch) => {
+
+    firebase.database().ref(`/election/positions/${oldTitle}`).remove()
+    .then(() => {
+        dispatch({
+            type: DELETE_POSITION,
+        });
+    })
+    .then(() => firebase.database().ref(`/election/positions/${title}`).set({
+            title: title,
+            description: description,
+            level: level
+    }))
+    .then(() => alert('Position Edited!', 'Successful'))
+    .catch((error) => alert('Position could not be Edited!', 'Failure'))
+  }
+}
+
+  else {
     return (dispatch) => {
         firebase.database().ref(`/election/positions/${title}`).update({
                 title: title,
@@ -152,6 +173,7 @@ export const editPosition = (title, description) => {
             .then(() => alert('Position Edited!', 'Successful'))
             .catch((error) => alert('Position could not be Edited!', 'Failure'))
     }
+  }
 };
 
 export const addApplication = (fName, lName, plans, position, id) => {
