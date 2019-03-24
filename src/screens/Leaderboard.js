@@ -59,13 +59,13 @@ class Leaderboard extends Component {
       var curUser = curUserHighlight
       action = this.viewBreakDown
     }
-    else{
-      action = this.callUser
-    }
+    // else{
+    //   action = this.callUser
+    // }
 
     // if(item.points !== 0){
       return (
-        <TouchableOpacity onPress = {action.bind(this, item.id)}>
+        // <TouchableOpacity onPress = {() => action(item.id)}>
           <View style={contentContainerStyle}>
               <View style={containerStyle}>
               {/* <Image    ***For Profile Picture Update***
@@ -86,7 +86,7 @@ class Leaderboard extends Component {
                 />
               </View>
           </View>
-        </TouchableOpacity>
+        // </TouchableOpacity>
       )
     }
 
