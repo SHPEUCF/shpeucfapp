@@ -32,6 +32,7 @@ import ElectionCandidates from '../screens/ElectionCandidates'
 import Statistics from '../screens/Statistics'
 import More from '../screens/More'
 import PointsBreakDown from '../screens/PointsBreakDown'
+import Dashboard from '../screens/Dashboard'
 
 import {
   Feed,
@@ -40,8 +41,7 @@ import {
   Forms,
   About,
   EBoard,
-  Version,
-  Dashboard
+  Version
 } from '../screens/';
 
 const RouterComponent = () => {
@@ -155,7 +155,7 @@ const RouterComponent = () => {
           activeTintColor={'black'}
           inactiveTintColor={'gray'}
         >
-          <Scene
+          <Scene hideNavBar
             key="dashboard"
             component={Dashboard}
             tabBarLabel="Dashboard"
