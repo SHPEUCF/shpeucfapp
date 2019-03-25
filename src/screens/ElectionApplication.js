@@ -49,9 +49,20 @@ class ElectionApplication extends Component {
 state = { isApplyShow: false, index: null,
   isListShow: true, applyPos: null, application: 'Submit'};
 
-
   componentWillMount() {
       this.props.getPositions();
+  }
+
+  renderError() {
+      if (this.props.error) {
+          return (
+          <View>
+              <Text style={styles.errorTextStyle}>
+                  {this.props.error}
+              </Text>
+          </View>
+          );
+      }
   }
 
   onPlanChange(text){
@@ -129,7 +140,7 @@ state = { isApplyShow: false, index: null,
     const {containerStyle, inputApply, tab} = styles;
     if(this.state.isListShow == false){
       return (null);}
-      
+
     return(
         <View>
           <View style={tab}>

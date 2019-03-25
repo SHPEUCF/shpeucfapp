@@ -181,7 +181,8 @@ export default (state = INITIAL_STATE, action) => {
         points: payload.points,
         picture: payload.picture,
         voted: payload.voted,
-        applied: payload.applied
+        applied: payload.applied,
+        id: payload.id
       };
     case LOGIN_USER_FAIL:
       return { ...state,
