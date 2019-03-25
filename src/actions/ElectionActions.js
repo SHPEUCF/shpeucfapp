@@ -94,12 +94,12 @@ export const closeApplications = () => {
         .catch((error) => alert('Applications could not be Closed!', 'Failure'))
     }
 };
-export const addPosition = (title, description) => {
+export const addPosition = (title, description, length) => {
     return () => {
         firebase.database().ref(`/election/positions/${title}`).set({
                 title: title,
                 description: description,
-                level: 100
+                level: length
             })
             .then(() => alert('Position Added!', 'Successful'))
             .catch((error) => alert('Position could not be Added!', 'Failure'))
@@ -248,6 +248,7 @@ export const deleteApplication = (position, candidateId) => {
                   type: DELETE_APPLICATION,
               });
           })
+          .then(() => firebase.database().ref(`/users/${id}/applied/`).set(false))
           .then(() => firebase.database().ref(`/voting/${position}/${candidateId}`).remove())
           .then(() => alert('Candidate Removed!', 'Successful'))
           .catch((error) => alert('Candidate could not be removed!', 'Failure'))
@@ -328,7 +329,7 @@ export const goToPositionForm = (text) => {
 export const vote = (userId, dict) => {
     var votes;
     return () => {
-       
+
 
         firebase.database().ref(`/voting/`).once('value', snapshot => {
             obj = snapshot.val()
@@ -336,7 +337,7 @@ export const vote = (userId, dict) => {
                 obj[item.key][item.value][userId] = true
                 obj[item.key][item.value].votes = snapshot.val()[item.key][item.value].votes + 1
             })
-            
+
             firebase.database().ref(`/voting/`).update(obj)
         })
         .then(() => firebase.database().ref(`/election/votes`).once('value', snapshot => {
@@ -344,9 +345,8 @@ export const vote = (userId, dict) => {
             firebase.database().ref(`/election/votes`).set(votes)
         }))
         .then(() => firebase.database().ref(`/users/${userId}/voted/`).set(true))
-          
-          /*.then(() => alert('Vote Cast!', 'Successful'))
-          .catch((error) => alert('Vote could not be cast!', 'Failure'))*/
+        .then(() => alert('Vote Cast!', 'Successful'))
+        .catch((error) => alert('Vote could not be cast!', 'Failure'))
    }
 };
 
@@ -365,10 +365,18 @@ export const getPositions = () => {
   };
 };
 
-export const changeLevels = (position, level) => {
+export const changeLevels = (positions) => {
 
   return () => {
-  firebase.database().ref(`/election/positions/${position}/level`).set(level)
+    firebase.database().ref(`/election/`).once('value', snapshot => {
+    obj = snapshot.val()
+    positions.forEach(function(item, index){
+        obj.positions[item.position.title].level = index
+    });
+  firebase.database().ref(`/election/`).update(obj)
+  })
+  .then(() => alert('Order Set!', 'Successful'))
+  .catch((error) => alert('Order could not be set!', 'Failure'))
   };
 };
 

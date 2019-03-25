@@ -61,7 +61,7 @@ class More extends Component {
 
   renderItem  = ({item}) => {
 
-    if (item.title === "Election" && this.props.election === false){
+    if (item.title === "Election" && (this.props.election === false || this.props.election === undefined)){
       return (null);
     }
 
@@ -80,7 +80,7 @@ class More extends Component {
   }
 
   render() {
-  
+
     return (
       <ScrollView style={{backgroundColor: '#2C3239'}}>
         <FlatList

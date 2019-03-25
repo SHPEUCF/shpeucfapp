@@ -72,9 +72,7 @@ class ElectionPosition extends Component {
       changeLevels,
     } = this.props;
 
-      this.state.data.forEach(function(item, index){
-          changeLevels((item.position).title, index);
-      });
+      changeLevels(this.state.data);
   }
 
   viewPosition(item) {
