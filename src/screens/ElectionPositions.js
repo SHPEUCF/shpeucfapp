@@ -11,7 +11,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions } from 'react-native';
-import { Button, SortableFlatList } from '../components/general'
+import { Button, SortableFlatList, NavBar } from '../components/general'
 import {
     openElection,
     closeElection,
@@ -149,9 +149,7 @@ class ElectionPosition extends Component {
 
     return (
      <View style={page}>
-        <View style={tabBar}>
-            <Text style={tabBarText}>Positions</Text>
-        </View>
+        <NavBar title="Positions" back onBack={() => Actions.pop()} />
 
         {this.renderFlatlist(positionsArray)}
 
@@ -168,13 +166,6 @@ class ElectionPosition extends Component {
             <Button
             onPress={() => this.setLevels()}
             title={"SET ORDER"}
-            >
-            </Button>
-        </View>
-        <View style={buttonContainerStyling}>
-            <Button
-            onPress={() => Actions.ElectionBackEnd()}
-            title={"BACK"}
             >
             </Button>
         </View>
