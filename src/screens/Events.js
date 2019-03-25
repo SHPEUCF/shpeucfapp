@@ -49,9 +49,9 @@ class Events extends Component {
       textColor
     } = styles
     return (
-      <View>
+      <View style={{ flex: 1, backgroundColor: '#0c0b0b'}}>
         <NavBar title="Events" />
-        <ScrollView>
+        <ScrollView style={{flex:1}}>
           <Agenda
             selected={new Date()}
             //onDayChange={(day)=>{alert('day pressed')}}
@@ -90,7 +90,7 @@ class Events extends Component {
             }}
           />
         </ScrollView>
-        <View style={{height: dimension.height, backgroundColor: '#0c0b0b'}}>
+        <View style={{flex: .1}}>
             {this.renderButton()}
         </View>
       </View>
