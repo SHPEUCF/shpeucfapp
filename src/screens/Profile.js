@@ -2,16 +2,9 @@ import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
-import {Button, Spinner} from '../components/general'
+import { Button, Spinner, NavBar } from '../components/general'
 import { loadUser, logoutUser, goToEditProfileForm, pageLoad} from '../actions';
-import {
-  Text,
-  View, StyleSheet,
-  Image,
-  ScrollView,
-  TouchableOpacity,
- 	Dimensions
-	} from 'react-native';
+import { Text, View, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { Avatar, Divider } from 'react-native-elements';
 
 const dimension = Dimensions.get('window');
@@ -100,28 +93,32 @@ class Profile extends Component {
 
     return (
       <View style={{flex: 1}}>
+        <NavBar title="Profile" />
         {this.renderPicture()}
-        <View style={bioContainer}>
-          <View style={taglineContainer}>
-              <Text style={[itemLabelText, textColor, {flex: 1}]}>{firstName + ' ' + lastName}</Text>
+        
+          <View style={bioContainer}>
+            <View style={taglineContainer}>
+                <Text style={[itemLabelText, textColor, {flex: 1}]}>{firstName + ' ' + lastName}</Text>
+            </View>
+            <View style={fieldContainerStyle}>
+              <Text style={[itemLabelText, textColor]}>Email:</Text>
+              <Text style={[itemValueText, textColor]}>{email}</Text>
+            </View>
+            <View style={fieldContainerStyle}>
+              <Text style={[itemLabelText, textColor]}>Major:</Text>
+              <Text style={[itemValueText, textColor]}>{major}</Text>
+            </View>
+            <TouchableOpacity style = {fieldContainerStyle} onPress={() => {
+              Actions.pointsBreakDown()}}
+            >
+              <Text style={[itemLabelText, textColor]}>Points:</Text>
+              <Text style={[itemValueText, textColor]}>{points}</Text>
+            </TouchableOpacity>
           </View>
-          <View style={fieldContainerStyle}>
-            <Text style={[itemLabelText, textColor]}>Email:</Text>
-            <Text style={[itemValueText, textColor]}>{email}</Text>
-          </View>
-          <View style={fieldContainerStyle}>
-            <Text style={[itemLabelText, textColor]}>Major:</Text>
-            <Text style={[itemValueText, textColor]}>{major}</Text>
-          </View>
-          <TouchableOpacity style = {fieldContainerStyle} onPress={() => {
-            Actions.pointsBreakDown()}}
-          >
-            <Text style={[itemLabelText, textColor]}>Points:</Text>
-            <Text style={[itemValueText, textColor]}>{points}</Text>
-          </TouchableOpacity>
-        </View>
-        {this.renderSocialMedia()}
-        {this.renderButtons()}
+        <ScrollView>
+          {this.renderSocialMedia()}
+          {this.renderButtons()}
+        </ScrollView>
       </View>
   )
 
@@ -195,7 +192,8 @@ const styles = StyleSheet.create({
 	},
 	bioContainer: {
     flex: 1,
-		backgroundColor: '#2C3239'
+    backgroundColor: '#2C3239',
+    paddingLeft: '5%'
 	},
 	socialmediatext: {
 		flex:1,

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { ScrollView, View, Text, StyleSheet }from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { List, ListItem } from 'react-native-elements';
+import { NavBar } from '../components/general';
 
 const resources = [
   {
@@ -109,34 +110,36 @@ const resources = [
 class Resources extends Component {
   render() {
     return (
-      <ScrollView style={{backgroundColor: '#0c0b0b'}}>
-        {
-          resources.map((resource, i) => (
-            <View key={i}>
-              <Text style={styles.sectionTitle}>
-                {resource.group.name}
-              </Text>
-              <List containerStyle={{ backgroundColor: '#2C3239', marginTop: 10 }}>
-                {
-                  resource.group.items.map((item, i) => (
-                    <ListItem
-                      key={i}
-                      title={item.title}
-                      titleStyle={{ color: 'white'}}
-                      subtitle={item.description}
-                      onPress={() => Actions.WebPageShow(
-                        { title: item.title, 
-                          uri: item.uri }
-                      )}
-                    />
-                  ))
-                }
-              </List>
-            </View>
-          ))
-        }
-      </ScrollView>
-
+      <View style={{flex: 1, backgroundColor: '#0c0b0b'}}>
+        <NavBar title="Resources" back onBack={() => Actions.pop()} />
+        <ScrollView>
+          {
+            resources.map((resource, i) => (
+              <View key={i}>
+                <Text style={styles.sectionTitle}>
+                  {resource.group.name}
+                </Text>
+                <List containerStyle={{ backgroundColor: '#2C3239', marginTop: 10 }}>
+                  {
+                    resource.group.items.map((item, i) => (
+                      <ListItem
+                        key={i}
+                        title={item.title}
+                        titleStyle={{ color: 'white'}}
+                        subtitle={item.description}
+                        onPress={() => Actions.WebPageShow(
+                          { title: item.title, 
+                            uri: item.uri }
+                        )}
+                      />
+                    ))
+                  }
+                </List>
+              </View>
+            ))
+          }
+        </ScrollView>
+      </View>
     );
   };
 }

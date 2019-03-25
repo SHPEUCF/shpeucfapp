@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
-import {
-  ScrollView,
-  FlatList,
-  Text } from 'react-native';
+import { ScrollView, FlatList, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { ListItem } from 'react-native-elements';
-import { Spinner} from '../components/general'
+import { Spinner, NavBar } from '../components/general'
 
 import {
   getPrivilege,
@@ -72,9 +69,10 @@ class More extends Component {
   }
 
   render() {
-  
     return (
-      <ScrollView style={{backgroundColor: '#2C3239'}}>
+      <View style={{backgroundColor: '#2C3239', flex: 1}}>
+        <NavBar title="More Options" />
+        <ScrollView>
         <FlatList
           removeClippedSubviews={false}
           extraData={this.state}
@@ -82,7 +80,8 @@ class More extends Component {
           data = {menuItems}
           renderItem={this.renderItem}
         />
-      </ScrollView>
+        </ScrollView>
+      </View>
     );
   }
 }

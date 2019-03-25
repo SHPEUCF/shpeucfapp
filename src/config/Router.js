@@ -84,7 +84,7 @@ const RouterComponent = () => {
             showNavBar
           />        
         </Stack>
-        <Stack key = "events">
+        <Stack key = "events" hideNavBar>
           <Scene
             key="createEvent"
             component={CreateEvent}
@@ -112,7 +112,7 @@ const RouterComponent = () => {
             title="Statistics"
           />
         </Stack>
-        <Stack key = "election">
+        <Stack key = "election" hideNavBar>
         <Scene
            key="ElectionCandidates"
             component={ElectionCandidates}
@@ -142,7 +142,7 @@ const RouterComponent = () => {
             hideNavBar
         />
         </Stack>
-        <Stack key = "Profiles">
+        <Stack key = "Profiles" hideNavBar>
         <Scene
           key="EditProfileForm"
           component={EditProfileForm}
@@ -153,11 +153,13 @@ const RouterComponent = () => {
           tabs
           tabBarPosition="bottom"
           type={ActionConst.RESET}
-          activeTintColor={'black'}
-          inactiveTintColor={'gray'}
+          activeTintColor={'#E0E6ED'}
+          inactiveTintColor={'#C0CCDA'}
+          tabBarStyle={{backgroundColor: '#21252b'}}
         >
-          <Scene hideNavBar
+          <Scene
             key="dashboard"
+            hideNavBar
             component={Dashboard}
             tabBarLabel="Dashboard"
             title="Dashboard"
@@ -165,7 +167,7 @@ const RouterComponent = () => {
               <Ionicons
                 name={focused ? 'ios-paper' : 'ios-paper-outline'}
                 size ={30}
-                style={{ color: 'black' }}
+                style={{ color: '#FFC107' }}
               />
             }
           />
@@ -173,6 +175,7 @@ const RouterComponent = () => {
 
           <Scene
             key="event"
+            hideNavBar
             component={Events}
             title="Events"
             rightTitle="Today"
@@ -180,30 +183,32 @@ const RouterComponent = () => {
               <Ionicons
                 name={focused ? 'ios-calendar' : 'ios-calendar-outline'}
                 size ={30}
-                style={{ color: 'black' }}
+                style={{ color: '#FFC107' }}
               />
             }
           />
           <Scene
             key="profile"
+            hideNavBar
             component={Profile}
             title="Profile"
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
                 name={focused ? 'ios-person' : 'ios-person-outline'}
                 size ={30}
-                style={{ color: 'black' }}
+                style={{ color: '#FFC107' }}
               />
             }
           />
           <Stack
+            hideNavBar
             key="more"
             title="More"
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
                 name={focused ? 'ios-menu' : 'ios-menu-outline'}
                 size ={30}
-                style={{ color: 'black' }}
+                style={{ color: '#FFC107' }}
               />
             }>
             <Scene
@@ -217,7 +222,7 @@ const RouterComponent = () => {
               title="Leaderboard"
               hideTabBar
             />
-            <Stack
+            <Stack 
             key="BackEnd"
             title="BackEnd"
             hideNavBar

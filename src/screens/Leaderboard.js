@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import { NavBar } from '../components/general'
 import {
   fetchMembersPoints,
   fetchMemberProfile,
@@ -101,6 +102,7 @@ class Leaderboard extends Component {
 
     return (
       <View style={screenBackground}>
+        <NavBar title="Leaderboard" back onBack={() => Actions.pop()} />
         <FlatList
             style={{flex: 1}}
             data={sortedMembers}

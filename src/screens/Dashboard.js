@@ -1,10 +1,10 @@
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, ScrollView, FlatList, Dimensions, TouchableOpacity, WebView, Linking } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, FlatList, Dimensions, TouchableOpacity, Linking } from 'react-native';
 import * as Progress from 'react-native-progress';
 import _ from 'lodash';
-import { Spinner } from '../components/general'
+import { Spinner, NavBar, Input } from '../components/general'
 import { Actions } from 'react-native-router-flux';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {
@@ -59,33 +59,44 @@ class Dashboard extends Component {
 	}
 
 	getFormattedEventList() {
-		let events = this.props.eventList;
-		let fields = [];
 		const {
 			textColor
-		}= styles
-		for (key in events) {
-			fields.push([`${events[key].name}`, `${events[key].date}`, `${events[key].description}`]);
-		}
+		} = styles
+		if (this.props.evenList != undefined) {
+			let events = this.props.eventList;
+			let fields = [];
+			
+			for (key in events) {
+				fields.push([`${events[key].name}`, `${events[key].date}`, `${events[key].description}`]);
+			}
 
-		if (fields.length > 0)
-			field = fields.pop();
-		else
-			field = "No events coming soon"
+			if (fields.length > 0)
+				field = fields.pop();
+			else
+				field = "No events coming soon"
+			
+			let eventName = field[0], eventDate = field[1], eventDesc = field[2];
+			if (eventDesc !== undefined && eventDesc.length > 75) {
+				eventDesc = eventDesc.slice(0, 75);
+				eventDesc += '...'
+			}
+
+			return (
+				<View style={{alignItems:'center'}}>
+					<Text style={[{fontStyle: 'italic', fontSize: 16}, textColor]}>{eventName}</Text>
+					<Text style={[{paddingBottom: '5%'}, textColor]}>{this.convertNumToDate(eventDate)}</Text>
+					<Text style={[{marginLeft: '10%', marginRight: '10%'}, textColor]}>{eventDesc}</Text>
+				</View>
+			)
+		}
+		else {
+			return (
+				<View style={{alignItems:'center'}}>
+					<Text style={[{fontStyle: 'italic', fontSize: 16}, textColor]}>No events coming soon</Text>
+				</View>
+			)
+		}
 		
-		let eventName = field[0], eventDate = field[1], eventDesc = field[2];
-		if (eventDesc !== undefined && eventDesc.length > 75) {
-			eventDesc = eventDesc.slice(0, 75);
-			eventDesc += '...'
-		}
-
-		return(
-			<View style={{alignItems:'center'}}>
-				<Text style={[{fontStyle: 'italic', fontSize: 16}, textColor]}>{eventName}</Text>
-				<Text style={[{paddingBottom: '5%'}, textColor]}>{this.convertNumToDate(eventDate)}</Text>
-				<Text style={[{marginLeft: '10%', marginRight: '10%'}, textColor]}>{eventDesc}</Text>
-			</View>
-		)
 	}
 
 	isDefined(obj) {
@@ -127,8 +138,6 @@ class Dashboard extends Component {
 	renderContent() {
 	      const {
 			page,
-			tabBar,
-			tabBarText,
 			mainContentStyle,
 			greetingContainerStyle,
 			ContainerStyle,
@@ -154,9 +163,7 @@ class Dashboard extends Component {
 
 		return (
 			<View style={page}>
-					<View style={tabBar}>
-						<Text style={tabBarText}>Dashboard</Text>
-					</View>
+				<NavBar title="Dashboard" />
 					<ScrollView>
 						<View style={mainContentStyle}>
 							<View style={greetingContainerStyle}>
@@ -187,7 +194,7 @@ class Dashboard extends Component {
 							</View>
 							<View style={ContainerStyle}>
 								<Text style={[title, textColor]}>Join our Slack!</Text>
-								<FontAwesomeIcon style={textColor} name="slack" size={30} onPress={() => Linking.openURL('https://shpeucf2018-2019.slack.com/')}/>
+								<FontAwesomeIcon style={{color: '#E0E6ED'}} name="slack" size={30} onPress={() => Linking.openURL('https://shpeucf2018-2019.slack.com/')}/>
 							</View>
 							<TouchableOpacity style={ContainerStyle} onPress={() => Linking.openURL('https://www.shpeucf.com/')}>
 								<Text style={[title, textColor, {paddingBottom: 0}]}>Visit our website!</Text>
@@ -212,20 +219,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: '#0c0b0b'
 	},
-	tabBar: {
-		backgroundColor: '#fff',
-		justifyContent: 'center',
-		alignItems:'center',
-		height: dimension.height * 0.1
-	},
-	tabBarText: {
-		color: '#000',
-		fontSize: 20,
-		fontWeight:'bold',
-		paddingLeft: '3%'
-	},
 	greetingContainerStyle: {
-		padding: '3%'
+		padding: '5%'
 	},
 	textColor:{
 		color: '#e0e6ed'

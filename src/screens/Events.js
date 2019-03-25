@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Button} from '../components/general'
+import { Button, NavBar } from '../components/general'
 import { Agenda } from 'react-native-calendars';
 import {
   TouchableOpacity,
@@ -50,6 +50,7 @@ class Events extends Component {
     } = styles
     return (
       <View>
+        <NavBar title="Events" style={{borderBottomWidth: 10, borderBottomColor: 'black'}} />
         <ScrollView>
           <Agenda
             selected={new Date()}
