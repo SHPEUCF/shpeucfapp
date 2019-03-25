@@ -67,7 +67,9 @@ class Dashboard extends Component {
 		const {
 			textColor
 		} = styles
-		if (this.props.evenList != undefined) {
+
+
+		if (this.props.eventList !== undefined) {
 			let events = this.props.eventList;
 			let fields = [];
 			
