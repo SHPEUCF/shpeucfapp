@@ -25,12 +25,19 @@ class LoginForm extends Component {
   }
 
   onButtonPress() {
-    if(firebase.auth().currentUser.emailVerified){
-      const { email, password } = this.props;
+      const {
+        email,
+        password
+      } = this.props;
+
+    if(email === null || email === undefined){
+      this.props.registrationError('Please enter your knights email')
+      return
+    } else if ( password === null || password === undefined){
+      this.props.registrationError('Please enter your password')
+      return
+    } else{
       this.props.loginUser({ email, password });
-    }
-    else{
-      this.props.registrationError('You must verify your email to log in')
     }
   }
 
@@ -170,7 +177,6 @@ const styles = StyleSheet.create({
     flex: 1,
 	},
   errorTextStyle: {
-    flex: 1,
     fontSize: 14,
     alignSelf: 'center',
     color: 'red',

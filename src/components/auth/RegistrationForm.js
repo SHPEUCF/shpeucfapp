@@ -247,15 +247,7 @@ class RegistrationForm extends Component {
             <Text style={styles.headerSubtitleStyle}>Registration</Text>
 						<Text style={styles.underheaderSubtitleStyle}> </Text>
           </View>
-
-          <ScrollView
-          ref={'scrollView'}
-          decelerationRate={0}
-          snapToAInterval={300}
-          snapToAlignment={"center"}
-          style={styles.scrollView}>
-
-          <RkAvoidKeyboard>
+          <ScrollView>
             <Input
               placeholder="First Name"
               value={this.props.firstName}
@@ -274,19 +266,6 @@ class RegistrationForm extends Component {
               value={this.props.email}
               onChangeText={this.onEmailChange.bind(this)}
               />
-            <PickerInput
-              title={"Gender"}
-              data={["Female","Male","Other","Do not wish to disclose"]}
-              placeholder={"Select your gender"}
-              onSelect={(text) => this.props.genderChanged(text)}
-            />            
-            {this.renderCountryPickers()}
-            {this.renderCollegePickers()}
-
-            <DatePicker
-              placeholder={"Birthday"}
-              onSelect={(text) => this.onBirthDateChanged(text)}
-              />
             <Input
               secureTextEntry
               placeholder="Password"
@@ -302,10 +281,21 @@ class RegistrationForm extends Component {
               onChangeText={this.onConfirmPasswordChange.bind(this)}
               />
 
-             
-          </RkAvoidKeyboard>
-          </ScrollView>
 
+            <PickerInput
+              title={"Gender"}
+              data={["Female","Male","Other","Do not wish to disclose"]}
+              placeholder={"Select your gender"}
+              onSelect={(text) => this.props.genderChanged(text)}
+            />            
+            {this.renderCountryPickers()}
+            {this.renderCollegePickers()}
+
+            <DatePicker
+              placeholder={"Birthday"}
+              onSelect={(text) => this.onBirthDateChanged(text)}
+              />
+          </ScrollView>
           {this.renderError()}
           {this.renderButtons()}
 

@@ -237,11 +237,12 @@ const createUserSuccess = (dispatch, firstName, lastName, email, college, major,
       id: currentUser.uid,
       paidMember: false
     }))
-    .then(() => currentUser.sendEmailVerification())
+    .then(() => {
+      currentUser.sendEmailVerification()
+      alert(`We sent a verification to: ${email}. Please open your email and verify your account`)
+    })
     .then(() => firebase.auth().signOut())
-    .then(() => alert('Account Created',
-      `Please verify your email ${emailU} then log in using your credentials.`));
-
+    
   dispatch({
     type: CREATE_USER_SUCCESS,
   });
@@ -327,6 +328,12 @@ export const loginUser = ({ email, password }) => {
     dispatch({ type: LOGIN_USER });
 
     firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(user => {
+      if(!firebase.auth().currentUser.emailVerified){
+        alert('Account must be verified!\nPlease check your email for verification email')
+        return Promise.reject({error: 'Email not Verified'})
+      }
+    })
       .then(user => loginUserSuccess(dispatch, user))
       .catch(error => loginUserFail(dispatch, error));
   };

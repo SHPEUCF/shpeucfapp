@@ -202,7 +202,7 @@ export const addApplication = (fName, lName, plans, position) => {
 export const editApplication = (plans, position) => {
     const { uid } = firebase.auth().currentUser
 
-      firebase.database().ref(`/election/positions/${position}/candidates/${uid}/plan`).set("pooopdo")
+      firebase.database().ref(`/election/positions/${position}/candidates/${uid}/plan`).set(plans)
       .then(() => alert('Candidate Edited!', 'Successful'))
       .catch((error) => {
           console.error(error)

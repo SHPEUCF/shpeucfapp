@@ -164,7 +164,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state,
         ...INITIAL_STATE,
         user: payload,
-        loggedIn: true
+        loggedIn: true,
       };
     case LOAD_USER:
       return { ...state,
@@ -182,7 +182,8 @@ export default (state = INITIAL_STATE, action) => {
         picture: payload.picture,
         voted: payload.voted,
         applied: payload.applied,
-        id: payload.id
+        id: payload.id,
+        loading: false
       };
     case LOGIN_USER_FAIL:
       return { ...state,

@@ -2,7 +2,7 @@ import React, { Component} from 'react';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { goToLogIn } from './actions';
+import { goToLogIn, registrationError } from './actions';
 import Router from './config/Router';
 
 
@@ -41,6 +41,6 @@ const mapStateToProps = ({ auth }) => {
   return { loggedIn };
 };
 
-const mapDispatchToProps = { goToLogIn };
+const mapDispatchToProps = { goToLogIn, registrationError };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
