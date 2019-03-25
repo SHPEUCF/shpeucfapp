@@ -253,7 +253,21 @@ state = { isApplyShow: false, index: null,
     )
   }
 
-
+  renderNavBar(){
+    const {
+      isListShow
+    } = this.state
+    return <NavBar title="Positions" back onBack={() =>
+        {
+          if(isListShow){
+              Actions.pop()
+            }
+            else{
+              this.setState({isApplyShow: false, isListShow: true, applyPos: null});
+            }
+        }}
+      />
+  }
   render() {
     const {
       page,
@@ -275,16 +289,7 @@ state = { isApplyShow: false, index: null,
     return (
 
       <View style={page}>
-       <NavBar title="Positions" back onBack={() =>
-        {
-          if (isListShow) {
-            Actions.pop()
-          }
-          else {
-            this.setState({isApplyShow: false, isListShow: true, applyPos: null});
-          }
-        }}
-      />
+        {this.renderNavBar()}
         <View style={contentStyle}>
           {this.showListPosition(positionsArray)}
           {this.showApplyPosition()}
