@@ -34,13 +34,10 @@ class CandidateForm extends Component {
 
     onButtonPress() {
         const {
-            addApplication,
             firstName,
             lastName,
             candidatePlan,
             applyPosition,
-            id,
-            candidateId
         } = this.props;
         //alert("Still need to implement this action")
 
@@ -50,9 +47,9 @@ class CandidateForm extends Component {
             // this.EventCreationError('Please enter a Plan of action');
         } else{
             if(this.props.title === "ADD") {
-                this.props.addApplication(firstName, lastName, candidatePlan, applyPosition, id);}
+                this.props.addApplication(firstName, lastName, candidatePlan, applyPosition);}
             else {
-                this.props.editApplication(applyPosition, candidatePlan, candidateId);}
+                this.props.editApplication(applyPosition, candidatePlan);}
             Actions.ElectionCandidates();
         }
     }

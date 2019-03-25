@@ -185,7 +185,7 @@ state = { isApplyShow: false, index: null,
 
     this.state.application = 'Edit';
 
-    if (query != null && query.approved != true ){
+    if (query !== null && query.approved !== true ){
       return(
            <View style={button} >
               <Button
@@ -227,12 +227,12 @@ state = { isApplyShow: false, index: null,
     var p1 = (<Button
           title={application}
           onPress={()=>{
-          if (application == "Submit"){
-            addApplication(firstName,lastName,candidatePlan, applyPos, id );}
+          if (application === "Submit"){
+            addApplication(firstName,lastName,candidatePlan, applyPos );}
           else {
-            editApplication(applyPos, candidatePlan, id);
+            editApplication(applyPos, candidatePlan);
           }
-          this.setState({isApplyShow: false}); this.setState({isListShow: true}); 
+          this.setState({isApplyShow: false, isListShow: true}); 
         }}
         />)
     return (

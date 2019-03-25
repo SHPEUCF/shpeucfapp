@@ -176,18 +176,19 @@ export const editPosition = (title, description, oldTitle) => {
   }
 };
 
-export const addApplication = (fName, lName, plans, position, id) => {
+export const addApplication = (fName, lName, plans, position) => {
+        const { uid } = firebase.auth().currentUser
 
   return (dispatch) => {
-      firebase.database().ref(`/election/positions/${position}/candidates/${id}`).set({
+      firebase.database().ref(`/election/positions/${position}/candidates/${uid}`).set({
               firstName: fName,
               lastName: lName,
               plan: plans,
-              id: id,
+              id: uid,
               position: position,
               approved: false,
           })
-          .then(() => firebase.database().ref(`/users/${id}/applied/`).set(true))
+          .then(() => firebase.database().ref(`/users/${uid}/applied/`).set(true))
           .then(() => {
               dispatch({
                   type: ADD_APPLICATION,
@@ -198,10 +199,10 @@ export const addApplication = (fName, lName, plans, position, id) => {
   }
 };
 
-export const editApplication = (position, plans, id) => {
-
+export const editApplication = (position, plans) => {
+    const { uid } = firebase.auth().currentUser
   return () => {
-      firebase.database().ref(`/election/positions/${position}/candidates/${id}`).update({
+      firebase.database().ref(`/election/positions/${position}/candidates/${uid}`).update({
               plan: plans,
           })
       .then(() => alert('Candidate Edited!', 'Successful'))

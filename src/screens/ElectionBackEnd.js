@@ -135,7 +135,7 @@ class ElectionBackEnd extends Component {
 
     var positionOrder = [];
 
-    if(positions !== undefined && positions !== null){
+    if(positions !== undefined && positions !== null && votes !== null && votes !== undefined){
       const votesArray = Object.entries(votes)
       votesArray.forEach(function(item, index){
           var posTitle = item[0];

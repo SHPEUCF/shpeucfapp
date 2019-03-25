@@ -44,6 +44,10 @@ class PositionForm extends Component {
             positionDescription,
             positions
         } = this.props;
+
+
+        var length = (positions !== null && positions !== undefined) ? Object.entries(positions).length : 0
+
         if (positionTitle === '') {
             // this.EventCreationError('Please enter a Candidate Name');
         } else if (candidatePlan === '') {
@@ -53,7 +57,7 @@ class PositionForm extends Component {
         } else{
             if(this.props.title === "ADD"){
 
-                this.props.addPosition(positionTitle, positionDescription, Object.entries(positions).length);
+                this.props.addPosition(positionTitle, positionDescription, length);
               }
             else {
                 if (this.state.oldTitle !== positionTitle)
