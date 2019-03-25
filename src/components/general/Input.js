@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { TextInput, View, Text, ScrollView } from 'react-native';
 
 class Input extends Component {
- 
+
   constructor(props) {
     super(props)
   }
@@ -12,6 +12,7 @@ class Input extends Component {
     value: PropTypes.string.isRequired,
     onChangeText: PropTypes.func,
     placeholder: PropTypes.string,
+    blurOnSubmit: PropTypes.bool,
     autoCorrect: PropTypes.any,
     autoCapitalize: PropTypes.any,
     maxLength: PropTypes.number,
@@ -24,7 +25,7 @@ class Input extends Component {
     style: PropTypes.oneOfType([
       PropTypes.array,
       PropTypes.shape({}),
-    ]) 
+    ])
   }
   render() {
     const { inputStyle } = styles;
@@ -35,6 +36,7 @@ class Input extends Component {
       placeholder,
       autoCorrect,
       autoCapitalize,
+      blurOnSubmit,
       maxLength,
       secureTextEntry,
       numberOfLines,
@@ -53,6 +55,7 @@ class Input extends Component {
         style={[inputStyle, style]}
         autoCorrect={autoCorrect}
         autoCapitalize={autoCapitalize}
+        blurOnSubmit={blurOnSubmit}
         placeholder={placeholder}
         secureTextEntry={secureTextEntry}
         maxLength={maxLength}
@@ -83,7 +86,7 @@ const styles = {
     fontSize: 16,
     marginTop: 8,
     marginBottom: 8,
-    padding: 20,
+    padding: 15,
     backgroundColor: 'white',
     borderRadius: 25
   }

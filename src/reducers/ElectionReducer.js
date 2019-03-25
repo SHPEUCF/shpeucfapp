@@ -2,13 +2,16 @@
 import {
     OPEN_ELECTION,
     CLOSE_ELECTION,
+    OPEN_APPLICATIONS,
+    CLOSE_APPLICATIONS,
+    CANDIDATE_ID_CHANGED,
     ADD_POSITION,
     DELETE_POSITION,
     EDIT_POSITION,
     ADD_APPLICATION,
     CHANGE_POSITION,
     APPROVE_APPLICATION,
-    DELETE_CANDIDATES,
+    DELETE_APPLICATION,
     EDIT_CANDIDATES,
     CANDIDATE_FNAME_CHANGED,
     CANDIDATE_LNAME_CHANGED,
@@ -19,11 +22,16 @@ import {
     GO_TO_CANDIDATE_FORM,
     GO_TO_POSITION_FORM,
     GET_POSITIONS,
+    GET_VOTES,
+    UPDATE_ELECTION
 } from '../actions/types';
 
 const INITIAL_STATE = {
     election: false,
+    apply: false,
+    numOfVotes: 0,
     candidateFName: "",
+    candidateId: "",
     candidateLName: "",
     candidatePosition: "",
     candidatePlan: "",
@@ -31,7 +39,9 @@ const INITIAL_STATE = {
     positionDescription: "",
     title: "ADD",
     positions: [],
-    applyPosition: ""
+    applyPosition: "",
+    approved: false,
+    votes: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -50,6 +60,21 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 election : payload
             }
+        case OPEN_APPLICATIONS:
+            return {
+                ...state,
+                apply : payload
+            }
+        case CLOSE_APPLICATIONS:
+            return {
+                ...state,
+                apply : payload
+            }
+        case CANDIDATE_ID_CHANGED:
+            return {
+                ...state,
+                candidateId : payload
+            }
         case APPROVE_APPLICATION:
             return state
 
@@ -64,9 +89,10 @@ export default (state = INITIAL_STATE, action) => {
             }
         case EDIT_POSITION:
             return state
-        case DELETE_CANDIDATES:
+        case DELETE_APPLICATION:
             return {
                 ...state,
+                candidateFName: "",
                 candidateName : "",
                 candidatePlan : "",
                 candidatePosition : ""
@@ -123,6 +149,18 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 positions: payload
+            }
+        case GET_VOTES:
+            return {
+                ...state,
+                votes: payload
+            }
+        case UPDATE_ELECTION:
+            return {
+                ...state,
+                apply: payload.apply,
+                election: payload.election,
+                numOfVotes: payload.votes
             }
         default:
             return state;

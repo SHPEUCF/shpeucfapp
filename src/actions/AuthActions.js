@@ -217,7 +217,9 @@ const createUserSuccess = (dispatch, firstName, lastName, email, college, major,
       birthday: birthday,
       id: currentUser.uid,
       emailVerfied: false,
-      paidMember: false
+      paidMember: false,
+      voted: false,
+      applied: false
     })
     .then(() => firebase.database().ref(`/points/${currentUser.uid}/`).set({
       firstName: firstName,
@@ -331,7 +333,6 @@ export const loginUser = ({ email, password }) => {
 };
 
 const loginUserSuccess = (dispatch, user) => {
-  loadUser();
   dispatch({
     type: ENTER_APP,
     payload: user

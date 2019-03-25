@@ -66,10 +66,10 @@ class DatePicker extends Component {
             month,
             year
         } = this.state
-        
+
         this.setState({month: item})
         const Month30 = [false,false,false,true,false,true,false,false,true,false,true,false]
-        
+
         if(item === 2){
             if(year != 0 && this.leapYear(year)){
                 this.setState({dayArr: Array.from({length: 29}, (v, k) => k+1)})
@@ -89,7 +89,7 @@ class DatePicker extends Component {
         }
         if(day !== "" && year !== "")
             this.update({day: day, month: item, year: year})
-            
+
     }
     clickActionDay(item) {
         item = this.prepend0(item)
@@ -191,7 +191,7 @@ class DatePicker extends Component {
                         style={style}
                         title={"Enter a Year"}
                         inputBoxStyle={inputBoxStyle}
-                        iconSize={iconSize}  
+                        iconSize={iconSize}
                         iconColor='black'
                         dropDownArrowStyle={dropDownArrowStyle}
                         value={year}
@@ -248,7 +248,6 @@ const styles = {
         flexDirection: 'row',
         marginTop: 8,
         marginBottom: 8,
-        padding: 5
     }
 }
 

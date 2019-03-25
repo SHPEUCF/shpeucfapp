@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import {Text, ScrollView, View, StyleSheet }from 'react-native';
+import  {Text, ScrollView, View, StyleSheet }from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { List, ListItem } from 'react-native-elements';
+import { NavBar } from '../components/general';
 
 const forms = [
   {
@@ -74,7 +75,9 @@ const forms = [
 class Forms extends Component {
   render() {
     return (
-      <ScrollView style={{backgroundColor: '#2C3239'}}>
+      <View style={{flex: 1, backgroundColor: '#2C3239'}}>
+        <NavBar title="Forms" back onBack={() => Actions.pop()} />
+        <ScrollView>
         {
           forms.map((form, i) => (
             <View key={i}>
@@ -100,8 +103,8 @@ class Forms extends Component {
             </View>
           ))
         }
-      </ScrollView>
-
+        </ScrollView>
+      </View>
     );
   };
 }

@@ -11,8 +11,7 @@ import {
   Dimensions } from 'react-native';
 import { Button } from '../components/general'
 import { ListItem } from 'react-native-elements';
-
-
+import { NavBar } from '../components/general';
 
 const dimension = Dimensions.get('window');
 
@@ -22,11 +21,11 @@ const menuItems = [
       icon: 'check',
       screen: 'ElectionBackEnd'
     },
-    {
-      title: 'Statistics',
-      icon: 'check',
-      screen: 'Statistics'
-    },
+    // {
+    //   title: 'Statistics',
+    //   icon: 'check',
+    //   screen: 'Statistics'
+    // },
 ];
 
 class BackEnd extends Component {
@@ -41,6 +40,7 @@ class BackEnd extends Component {
         return(
         <ListItem
           title={item.title}
+          titleStyle={{color: 'white'}}
           leftIcon={{name: item.icon}}
           onPress={() => Actions[item.screen]()}
         />
@@ -52,26 +52,16 @@ class BackEnd extends Component {
     const {
         tabBar,
         tabBarText,
-        buttonContainerStyling,
         page
     } = styles;
     return (
       <View style={page}>
-        <View style={tabBar}>
-            <Text style={tabBarText}>Back End</Text>
-        </View>
+        <NavBar title="Back End" back onBack={() => Actions.pop()} />
         <FlatList
           keyExtractor = {this.keyExtractor}
           data = {menuItems}
           renderItem={this.renderItem}
         />
-        <View style={buttonContainerStyling}>
-            <Button
-            onPress={() => Actions.popTo('more')}
-            title={"BACK"}
-            >
-            </Button>
-        </View>
       </View>
     );
   };
@@ -91,12 +81,9 @@ const styles = StyleSheet.create({
     margin: 20,
     alignSelf: "center"
   },
-  buttonContainerStyling: {
-      margin: 10
-  },
   page: {
     flex: 1,
-    backgroundColor: '#ebebf1',
+    backgroundColor: '#2C3239',
   }
 });
 

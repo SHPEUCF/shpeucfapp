@@ -7,15 +7,18 @@ import { Spinner, NavBar } from '../components/general'
 
 import {
   getPrivilege,
-  pageLoad
+  pageLoad,
+  updateElection
 } from "../actions"
+
+
 
   const menuItems = [
     {
       title: 'Leaderboard',
       icon: 'format-align-left',
       screen: 'Leaderboard',
-      privilege: "user"
+      privilege: "user",
     },
     {
       title: 'Resources',
@@ -45,17 +48,27 @@ import {
       title: 'BackEnd',
       icon: 'settings',
       screen: 'BackEnd',
-      privilege: "eboard"
+      privilege: "president"
     }
   ];
 
 class More extends Component {
 
-  keyExtractor = (item, index) => index
  
+  keyExtractor = (item, index) => index
+
   renderItem  = ({item}) => {
-    
-    if (this.props.privilege !== undefined && this.props.privilege[item.privilege] === true ) {
+    const {
+      election,
+      privilege
+    } = this.props
+
+    if (item.title === "Election" && (election === false || election === undefined || election === null)){
+      return (null);
+    }
+
+
+    if (privilege !== undefined && privilege[item.privilege] === true ) {
       return(
         <ListItem
           removeClippedSubviews={false}
@@ -86,16 +99,18 @@ class More extends Component {
   }
 }
 
-const mapStateToProps = ({ auth, general }) => {
+const mapStateToProps = ({ auth, general, elect }) => {
   const { privilege } = auth;
   const { loading } = general;
+  const { election } = elect;
 
-  return { privilege, loading };
+  return { privilege, loading, election };
 };
 
 const mapDispatchToProps = {
   getPrivilege,
-  pageLoad
+  pageLoad,
+  updateElection
  };
 
 

@@ -1,8 +1,25 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import {Button, Spinner} from '../components/general';
-import { getPositions, goToOtherProfile, pageLoad, getPrivilege, addApplication, goToCandidateForm} from '../actions';
+import { Card, CardSection, Button, Spinner, Input, NavBar } from '../components/general';
+import { RkAvoidKeyboard } from 'react-native-ui-kitten';
+
+import { Avatar } from 'react-native-elements';
+import {
+  getPositions,
+  goToOtherProfile,
+  pageLoad,
+  getPrivilege,
+  addApplication,
+  editCandidates,
+  candidateFNameChanged,
+  candidateLNameChanged,
+  candidatePlanChanged,
+  candidatePositionChanged,
+  goToCandidateForm,
+  vote,
+  editApplication
+} from '../actions';
 import _ from 'lodash';
 import {
   FlatList,
@@ -10,185 +27,82 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Dimensions } from 'react-native';
+  Dimensions,
+  Modal,
+  TextInput
+  } from 'react-native';
+
+  // adding a random comment
 
 const dimension = Dimensions.get('window');
-const iteratees = ['points','lastName','firstName','picture', 'plan'];
-const order = ['desc','asc','asc'];
-const vColor = '#00ff7f';
-
-this.state = {president:null, eVP:null, iVP:null, treasurer:null, secretaty:null, gradAmb:null};
-
-      /* Color idea doesnt work
-         the color is annoying maybe a check box  */
-
-
 
 class Election extends Component {
+  
 
-  componentWillMount() {
-      this.props.getPositions();
-  }
-
-
-  apply(position){
-      const {
-      goToCandidateForm,
-      firstName,
-      lastName,
-      id } = this.props;
-
-
-      goToCandidateForm("ADD", position);
-  }
-  /*getCandidates(candidates){
-
-    const candidatesArray = _.toArray(candidates)
-
-  return <FlatList
-      data={candidatesArray}
-      extraData={this.state}
-      keyExtractor={this._keyExtractor}
-      renderItem={({item, separators}) => (
-      this.renderCandidates(item)
-    )}
-  />;
-  }
-
-
-  selectCandidate(){
-
-  }*/
-
-
-
-  /*renderCandidates(item){
-    const {
-      containerStyle,
-      contentContainerStyle,
-    } = styles;
-
-
-      return (
-      <TouchableOpacity onPress = {this.selectCandidate.bind(this)}>
-        <View style={contentContainerStyle}>
-            <View style={containerStyle}>
-              <Text>{`${Hello}`}</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      )
-
-  }*/
-
-
-
-  renderComponent(item) {
-    const {
-      containerStyle,
-      contentContainerStyle,
-    } = styles;
-
-      return (
-      <TouchableOpacity onPress = {this.apply.bind(this, item.candidates)}>
-        <View style={contentContainerStyle}>
-            <View style={containerStyle}>
-              <Text>{`${item.title}`}</Text>
-              <Text>{`${item.description}`}</Text>
-                <View style={styles.button}>
-                <Button
-                  title = "Apply"
-                  onPress={this.apply.bind(this, item.title)}
-                />
-      				</View>
-            </View>
-              <View style={{flex:1}}>
-                <View style={contentContainerStyle}>
-                    <View style={containerStyle}>
-
-                      <Text style={{fontSize:14}}>Plan: {`${item.plan}`}</Text>
-                    </View>
-                  </View>
-              </View>
-            </View>
-        </TouchableOpacity>
-      )
+  renderButtons(){
 
   }
-
-
-   _keyExtractor = (item, index) => index;
-
- renderFlatlist(positionsArray){
-   return(
-     <FlatList
-         data={positionsArray}
-         extraData={this.state}
-         keyExtractor={this._keyExtractor}
-         renderItem={({item, separators}) => (
-         this.renderComponent(item)
-       )}
-     />
-   )
- }
-
- loadNextPositions(){
-   /*
-   Checks if a candidate has been chosen if
-   not confirm that no vote for position.
-   This function gets the next position
-   (e.g. External Vice President) and passed
-   to the renderFlatlist function.
-    */
- }
 
   render() {
     const {
-      containerStyle,
-      contentContainerStyle } = styles;
+      page,
+      content,
+      textStyle,
+      textColor
+      } = styles;
 
-    const {
-      positions,
-    } = this.props;
-
-    const positionsArray = _.toArray(positions)
-
-    //alert(positions.title);
     return (
-      <View style={{flex:1, marginBottom:10}}>
-        {this.renderFlatlist(positionsArray)}
-        <Button/>
-      </View>
 
+      <View style={page}>
+        <NavBar title="Election Candidates" back onBack={() => Actions.pop()} />
+        <View style={content}>
+          <View style={{flex: .6, paddingTop: 30}}>
+            <Text style={[textStyle, {fontWeight: 'bold'},textColor]}>"Don't Boo, Vote"</Text>
+            <Text style={[textStyle, {fontWeight: 'bold', alignSelf: 'center'},textColor]}>                     - Barrack Obama</Text>
+          </View>
+        </View>
+          {/* <Text style={[textStyle, textColor]}>Your vote today is having a huge impact on the path that SHPE UCF is paving for the future</Text> */}
+        <Button
+           title="Run For Office"
+           onPress = {() => {Actions.ElectionApplication()}}
+           />
+        <Button
+         title="Vote"
+         onPress = {() => {
+           if (!this.props.voted) Actions.ElectionBallot();
+          else alert("You already voted!");
+          }}
+         />
+      </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  containerStyle: {
+  page:{
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+    backgroundColor: '#2C3239',
+    paddingBottom: 10
+  },
+  textStyle: {
+    flex: .2,
+    fontSize: 20,
 
-    paddingVertical: 10,
-    paddingHorizontal: 15,
   },
-  contentContainerStyle: {
-    margin: 1,
-    backgroundColor: '#abc',
+  textColor: {
+    color: '#e0e6ed'
   },
-  button: {
-  //  backgroundColor: '#8b95a5',
-    paddingTop: dimension.height * .015,
-    paddingBottom: dimension.height * .015,
+  content: {
+    flex: 1,
+    padding: 20,
   },
 });
 
 const mapStateToProps = ({ elect, auth }) => {
-  const { positions } = elect;
-  const { firstName, lastName, id} = auth
+  const { election, positions, candidatePlan, apply } = elect;
+  const { firstName, lastName, id, voted, applied} = auth
 
-  return { positions, firstName, lastName, id};
+  return { election, positions, candidatePlan, firstName, lastName, id, voted, apply, applied};
 };
 
 const mapDispatchToProps = {
@@ -197,7 +111,13 @@ const mapDispatchToProps = {
   pageLoad,
   getPrivilege,
   addApplication,
-  goToCandidateForm
+  goToCandidateForm,
+  candidateFNameChanged,
+  candidateLNameChanged,
+  candidatePlanChanged,
+  candidatePositionChanged,
+  vote,
+  editApplication
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Election);

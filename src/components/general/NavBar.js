@@ -60,7 +60,6 @@ class NavBar extends Component {
 }
 
 NavBar.defaultProps = {
-	title: "Enter NavBar Text",
 	back: false
 }
 

@@ -25,7 +25,9 @@ import Profile from '../screens/Profile';
 import OtherProfile from '../screens/OtherProfile';
 import Leaderboard from '../screens/Leaderboard';
 import Election from '../screens/Election';
+import ElectionApplication from '../screens/ElectionApplication';
 import BackEnd from '../screens/BackEnd'
+import ElectionBallot from '../screens/ElectionBallot';
 import ElectionBackEnd from '../screens/ElectionBackEnd'
 import ElectionPositions from '../screens/ElectionPositions'
 import ElectionCandidates from '../screens/ElectionCandidates'
@@ -214,7 +216,7 @@ const RouterComponent = () => {
             <Scene
               key="more"
               component={More}
-              title="More Options"
+              title="More"
               leftTitle="Back"
             />
             <Scene key="Leaderboard"
@@ -258,6 +260,19 @@ const RouterComponent = () => {
               component={CheckIn}
               title="Check In"
             />
+            <Scene
+              key="ElectionApplication"
+              component={ElectionApplication}
+              hideTabBar
+              hideNavBar
+            />
+            <Scene
+              key="ElectionBallot"
+              component={ElectionBallot}
+              title="Ballot"
+              hideTabBar
+              hideNavBar
+            />
             <Scene key="Forms"
               component={Forms}
               title="Forms"
@@ -265,6 +280,7 @@ const RouterComponent = () => {
             <Scene key="Election"
              component={Election}
              title="Election"
+             hideTabBar
             />
             <Scene key="About"
               component={About}

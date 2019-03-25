@@ -13,15 +13,20 @@ import {
 	fetchMembersPoints,
 	fetchMemberProfile,
 	fetchEvents,
-	getPrivilege } from '../actions';
+	getPrivilege,
+	updateElection,
+}
+from '../actions';
 
 const dimension = Dimensions.get('window');
+
 const iteratees = ['points','lastName','firstName'];
 const order = ['desc','asc','asc'];
 
 class Dashboard extends Component {
 	componentWillMount() {
 		this.props.pageLoad();
+		this.props.updateElection();
 		this.props.fetchMembersPoints();
 		this.props.fetchEvents();
 		this.props.getPrivilege();
@@ -194,7 +199,7 @@ class Dashboard extends Component {
 							</View>
 							<View style={ContainerStyle}>
 								<Text style={[title, textColor]}>Join our Slack!</Text>
-								<FontAwesomeIcon style={{color: '#E0E6ED'}} name="slack" size={30} onPress={() => Linking.openURL('https://shpeucf2018-2019.slack.com/')}/>
+								<FontAwesomeIcon style={{color: '#FFC107'}} name="slack" size={30} onPress={() => Linking.openURL('https://shpeucf2018-2019.slack.com/')}/>
 							</View>
 							<TouchableOpacity style={ContainerStyle} onPress={() => Linking.openURL('https://www.shpeucf.com/')}>
 								<Text style={[title, textColor, {paddingBottom: 0}]}>Visit our website!</Text>
@@ -288,12 +293,13 @@ const styles = StyleSheet.create({
 	}
 });
 
-const mapStateToProps = ({ auth, general, members, events }) => {
+const mapStateToProps = ({ auth, general, members, events, elect }) => {
 	const { firstName, id } = auth;
 	const { loading } = general;
 	const { membersPoints } = members;
 	const { eventList } = events;
-	return { firstName, id, loading, membersPoints, eventList };
+	const { election } = elect
+	return { firstName, id, loading, membersPoints, eventList, election };
 };
  
  const mapDispatchToProps = {	
@@ -302,7 +308,8 @@ const mapStateToProps = ({ auth, general, members, events }) => {
 	fetchMembersPoints,
 	fetchMemberProfile,
 	fetchEvents,
-	getPrivilege
+	getPrivilege,
+	updateElection
 };
  
  export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
