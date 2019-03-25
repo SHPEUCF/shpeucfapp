@@ -103,7 +103,7 @@ class ElectionBackEnd extends Component {
       i++;
     }
 
-    winners[index] = {String: winnerString, Ids: winnerIds};
+    winners[index] = {String: winnerString, Ids: winnerIds, Position: item[1]};
 
     return (
       <View>

@@ -328,23 +328,24 @@ export const goToPositionForm = (text) => {
 export const vote = (userId, dict) => {
     var votes;
     return () => {
-        dict.forEach(function(item){
-            firebase.database().ref(`/voting/${item.key}/${item.value}/votes`).once('value', snapshot => {
-            votes = parseInt(snapshot.val()) + 1;
-            firebase.database().ref(`/voting/${item.key}/${item.value}/votes`).set(votes)
-            .then(() => firebase.database().ref(`/voting/${item.key}/${item.value}/${userId}`).set(true))
+        var obj = {}
 
+        firebase.database().ref(`/voting/`).once('value', snapshot => {
+            obj = snapshot.val()
+            dict.forEach(function(item){
+                obj[item.key][item.value][userId] = true
+                obj[item.key][item.value].votes = snapshot.val()[item.key][item.value].votes + 1
             })
-          })
 
-          firebase.database().ref(`/users/${userId}/voted/`).set(true)
-
-          firebase.database().ref(`/election/votes`).once('value', snapshot => {
+            firebase.database().ref(`/voting/`).update(obj)
+        })
+        .then(() => firebase.database().ref(`/election/votes`).once('value', snapshot => {
             votes = parseInt(snapshot.val()) + 1;
             firebase.database().ref(`/election/votes`).set(votes)
-          })
-          /*.then(() => alert('Vote Cast!', 'Successful'))
-          .catch((error) => alert('Vote could not be cast!', 'Failure'))*/
+        }))
+        .then(() => firebase.database().ref(`/users/${userId}/voted/`).set(true))
+        .then(() => alert('Vote Cast!', 'Successful'))
+        .catch((error) => alert('Vote could not be cast!', error))
    }
 };
 
