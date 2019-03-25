@@ -1,9 +1,18 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
-import { emailChanged, passwordChanged, loginUser, goToResetPassword, goToRegistration } from '../../actions';
+import {
+  emailChanged,
+  passwordChanged,
+  loginUser,
+  goToResetPassword,
+  goToRegistration,
+  registrationError
+} from '../../actions';
+
 import { Card, CardSection, Spinner, Button, Input } from '../general';
 import {RkTheme, RkAvoidKeyboard, RkButton} from 'react-native-ui-kitten';
+import firebase from 'firebase'
 
 class LoginForm extends Component {
 
@@ -16,8 +25,13 @@ class LoginForm extends Component {
   }
 
   onButtonPress() {
-    const { email, password } = this.props;
-    this.props.loginUser({ email, password });
+    if(firebase.auth().currentUser.emailVerified){
+      const { email, password } = this.props;
+      this.props.loginUser({ email, password });
+    }
+    else{
+      this.props.registrationError('You must verify your email to log in')
+    }
   }
 
   renderError() {
@@ -198,6 +212,8 @@ const mapDispatchToProps = {
   passwordChanged,
   loginUser,
   goToResetPassword,
-  goToRegistration};
+  goToRegistration,
+  registrationError
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

@@ -270,6 +270,7 @@ class RegistrationForm extends Component {
             <Input
               placeholder="School Email"
               keyboardType="email-address"
+              autoCapitalize = "none"
               value={this.props.email}
               onChangeText={this.onEmailChange.bind(this)}
               />
