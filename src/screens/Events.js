@@ -50,7 +50,7 @@ class Events extends Component {
     } = styles
     return (
       <View>
-        <NavBar title="Events" style={{borderBottomWidth: 10, borderBottomColor: 'black'}} />
+        <NavBar title="Events" />
         <ScrollView>
           <Agenda
             selected={new Date()}

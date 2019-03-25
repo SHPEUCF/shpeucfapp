@@ -70,6 +70,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'flex-start',
 		backgroundColor: '#21252b',
 		alignItems:'center',
+		borderBottomWidth: 1,
+		borderBottomColor: '#fff2',
 		height: dimension.height * 0.1
 	},
 	tabBarText: {
