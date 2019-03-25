@@ -41,7 +41,8 @@ class PositionForm extends Component {
         const {
             positionTitle,
             candidatePlan,
-            positionDescription
+            positionDescription,
+            positions
         } = this.props;
         if (positionTitle === '') {
             // this.EventCreationError('Please enter a Candidate Name');
@@ -52,7 +53,7 @@ class PositionForm extends Component {
         } else{
             if(this.props.title === "ADD"){
 
-                this.props.addPosition(positionTitle, positionDescription);
+                this.props.addPosition(positionTitle, positionDescription, Object.entries(positions).length);
               }
             else {
                 if (this.state.oldTitle !== positionTitle)
@@ -152,9 +153,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ elect }) => {
-    const { positionTitle, positionDescription, title} = elect;
+    const { positionTitle, positionDescription, title, positions} = elect;
 
-    return { positionTitle, positionDescription, title};
+    return { positionTitle, positionDescription, title, positions};
 };
 
 const mapDispatchToProps = {

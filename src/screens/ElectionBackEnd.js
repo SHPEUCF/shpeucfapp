@@ -29,7 +29,6 @@ const orderPos = ['asc'];
 const iterateesCan = ['votes'];
 const orderCan = ['desc'];
 var winners = [];
-var positionOrder = [];
 
 class ElectionBackEnd extends Component {
   constructor(props) {
@@ -133,6 +132,7 @@ class ElectionBackEnd extends Component {
       positions
     } = this.props
 
+    var positionOrder = [];
 
     if(positions !== undefined && positions !== null){
       const votesArray = Object.entries(votes)
@@ -153,7 +153,7 @@ class ElectionBackEnd extends Component {
         </View>
 
         <View style = {{flex: 20}}>
-          {this.renderFlatlist()}
+          {this.renderFlatlist(positionOrder)}
         </View>
 
         <View style={buttonContainerStyling}>
@@ -191,7 +191,7 @@ class ElectionBackEnd extends Component {
 
   _keyExtractor = (item, index) => index;
 
-  renderFlatlist(){
+  renderFlatlist(positionOrder){
 
     return(
 
