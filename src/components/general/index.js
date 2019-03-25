@@ -5,6 +5,7 @@ export * from './Header';
 export * from './MyStatusBar';
 export * from './ButtonImage';
 export * from './Input';
+export * from './NavBar';
 export * from './PickerInput';
 export * from './DatePicker';
 export * from './Spinner';
