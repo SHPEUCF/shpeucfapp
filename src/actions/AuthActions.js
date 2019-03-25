@@ -291,10 +291,6 @@ export const getPrivilege = () => {
             type: GET_PRIVILEGE,
             payload: snapshot.val(),
           })
-          dispatch({
-            type: PAGE_LOAD,
-            payload: false
-          });
       })
     };
   };

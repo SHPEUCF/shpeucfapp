@@ -19,7 +19,8 @@ const menuItems = [
     {
       title: 'Election',
       icon: 'check',
-      screen: 'ElectionBackEnd'
+      screen: 'ElectionBackEnd',
+      privilege: 'president'
     },
     // {
     //   title: 'Statistics',
@@ -36,7 +37,12 @@ class BackEnd extends Component {
   keyExtractor = (item, index) => index
 
   renderItem  = ({item}) => {
-      if (!('privilege' in item) || this.props.privilege[item.privilege] === true ) {
+
+    const {
+      privilege
+    } = this.props
+      if ( privilege !== null && privilege !== undefined && item !== null && item !== undefined
+        &&  privilege[item.privilege] !== undefined && (!('privilege' in item) || privilege[item.privilege] === true )) {
         return(
         <ListItem
           title={item.title}
@@ -59,6 +65,7 @@ class BackEnd extends Component {
         <NavBar title="Back End" back onBack={() => Actions.pop()} />
         <FlatList
           keyExtractor = {this.keyExtractor}
+          extraData={this.state}
           data = {menuItems}
           renderItem={this.renderItem}
         />
@@ -87,9 +94,10 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = ({  }) => {
+const mapStateToProps = ({ auth }) => {
+  const { privilege } = auth
 
-  return {  };
+  return { privilege };
 };
 
 const mapDispatchToProps = {

@@ -126,10 +126,6 @@ export const fetchMembersPoints = () => {
         type: FETCH_MEMBERS_POINTS,
         payload: membersPoints,
       });
-      dispatch({
-        type: PAGE_LOAD,
-        payload: false,
-      });
     });
   };
 };
