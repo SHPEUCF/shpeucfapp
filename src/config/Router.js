@@ -211,7 +211,7 @@ const RouterComponent = () => {
             <Scene
               key="more"
               component={More}
-              title="More Options"
+              title="More"
               leftTitle="Back"
             />
             <Scene key="Leaderboard"
@@ -275,6 +275,7 @@ const RouterComponent = () => {
             <Scene key="Election"
              component={Election}
              title="Election"
+             hideTabBar
             />
             <Scene key="About"
               component={About}

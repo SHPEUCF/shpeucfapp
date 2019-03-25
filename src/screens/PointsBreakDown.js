@@ -109,15 +109,52 @@ class PointsBreakDown extends Component {
       )
   }
 
+    renderContent(){
+
+        const {
+            containerStyle,
+            contentContainerStyle,
+            title,
+            points,
+            topLevelText,
+            textColor
+        } = styles
+
+        const {
+            membersPoints
+        } = this.props
+            
+        var breakdown
+
+        if (membersPoints !== undefined && membersPoints !== null &&
+            membersPoints[currentUser.uid] !== undefined && membersPoints[currentUser.uid] !== null) {
+
+            breakdown = Object.entries(membersPoints[currentUser.uid].breakdown)
+            return (
+                <View style={{flex: 1}}>
+                    <View style={[contentContainerStyle,containerStyle]}>
+                        <Text style={[title, topLevelText, textColor]}>Total Points</Text>
+                        <Text style={[points, topLevelText, textColor]}>{this.props.membersPoints[currentUser.uid].points}</Text>
+                    </View>
+                    <FlatList
+                        data={breakdown}
+                        extraData={this.state}
+                        keyExtractor={this._keyExtractor}
+                        renderItem={({item, separators}) => (
+                        this.renderComponent(item)
+                        )}
+                    />
+                </View>
+            )
+        }
+        else return (
+            <Text style={[textColor, {flex: 1}]}>You have no Points! Go out there and get some points!</Text>
+        )
+    }
    _keyExtractor = (item, index) => item;
 
   render() {
   
-    // alert(this.props.loading)
-    if(this.props.loading){
-      return <Spinner/>
-    }
-    else{
         const {
             page,
             containerStyle,
@@ -126,33 +163,17 @@ class PointsBreakDown extends Component {
             points,
             topLevelText,
             textColor
-        } = styles;
+        } = styles
 
-        const { currentUser } = firebase.auth();
-        var breakdown
-        if(this.props.membersPoints !== undefined && this.props.membersPoints[currentUser.uid] !== undefined)
-            breakdown = Object.entries(this.props.membersPoints[currentUser.uid].breakdown)
-        return (
-            <View style ={page}>
-                <View style={[contentContainerStyle,containerStyle]}>
-                    <Text style={[title, topLevelText, textColor]}>Total Points</Text>
-                    <Text style={[points, topLevelText, textColor]}>{this.props.membersPoints[currentUser.uid].points}</Text>
+               return (
+                <View style ={page}>
+                    {this.renderContent()}
+                    <Button
+                    title={"Return"}
+                    onPress={()=> Actions.replace('dashboard')}/>
                 </View>
-                <FlatList
-                    data={breakdown}
-                    extraData={this.state}
-                    keyExtractor={this._keyExtractor}
-                    renderItem={({item, separators}) => (
-                    this.renderComponent(item)
-                    )}
-                />
-                <Button
-                title={"Return"}
-                onPress={()=> Actions.replace('dashboard')}/>
-            </View>
-        )
+            )
     }
-  }
 }
 
 const styles = StyleSheet.create({

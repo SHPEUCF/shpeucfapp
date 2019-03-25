@@ -71,13 +71,21 @@ class Profile extends Component {
 			<View style={{flexDirection: 'row'}}>
         <View style= {LogoContainer}>
           <TouchableOpacity
-            onPress={() => Actions.PostShow({ title: 'Linkedin', uri: 'https://www.linkedin.com/'})}>
+            onPress={() => {
+              alert("Coming Soon")
+              // Actions.PostShow({ title: 'Linkedin', uri: 'https://www.linkedin.com/'})
+            }
+            }>
             <Ionicons name="logo-linkedin" size={40} color='#000000'/>
           </TouchableOpacity>
         </View>
         <View style={LogoContainer}>
           <TouchableOpacity
-            onPress={() => Actions.PostShow({ title: 'Github', uri: 'https://www.github.com/'})}>
+            onPress={() => {
+              alert("Coming Soon")
+            // Actions.PostShow({ title: 'Github', uri: 'https://www.github.com/'})
+            }
+          }>
             <Ionicons name="logo-github" size={40} color='#000000'/>
           </TouchableOpacity>
         </View>
