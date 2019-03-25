@@ -87,26 +87,27 @@ class ElectionPosition extends Component {
     const {
       containerStyle,
       contentContainerStyle,
+      textColor
     } = styles;
 
 
-    const color = (isActive) ? {backgroundColor: '#ffd700'} : {backgroundColor: item.backgroundColor}
+    const color = (isActive) ? {backgroundColor: '#ffd70066'} : {backgroundColor: "#2C3239"}
     return (
       <TouchableOpacity
         style={[contentContainerStyle, color]}
         onLongPress={move}
         onPressOut={moveEnd}>
         <View style={containerStyle}>
-          <Text>{`${(item.position).title}`}</Text>
+          <Text style={textColor}>{item.position.title}</Text>
         </View>
         <View style= {styles.buttonContainerStyle}>
           <TouchableOpacity onPress={() => this.viewPosition(item.position)}>
-            <Ionicons name="md-create" size={40} color='#000000'/>
+            <Ionicons style={textColor} name="md-create" size={40}/>
           </TouchableOpacity>
         </View>
         <View style= {styles.buttonContainerStyle}>
           <TouchableOpacity onPress={() => this.props.deletePosition(item.position.title)}>
-            <Ionicons name="md-trash" size={40} color='#000000'/>
+            <Ionicons style={textColor} name="md-trash" size={40}/>
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    backgroundColor: '#ffd700',
+    backgroundColor: '#2C3239',
 
     paddingVertical: 10,
     paddingHorizontal: 15,
@@ -216,6 +217,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
 
+  },
+  textColor: {
+    color: '#e0e6ed'
   },
   tabBarText : {
     color: '#000',
@@ -234,7 +238,7 @@ const styles = StyleSheet.create({
   },
   page: {
     flex: 1,
-    backgroundColor: '#ebebf1',
+    backgroundColor: '#0c0b0b',
   }
 });
 

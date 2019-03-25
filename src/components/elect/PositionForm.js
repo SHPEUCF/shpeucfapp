@@ -91,15 +91,15 @@ class PositionForm extends Component {
 
                         </View>
                         {this.renderError()}
-                        <Button
-                            title = {this.props.title + " POSITION"}
-                            onPress={this.onButtonPress.bind(this)}
-                        />
-                        <Button
-                            title = "CANCEL"
-                            onPress={Actions.ElectionPositions.bind(this)}
-                        />
                     </ScrollView>
+                    <Button
+                        title = {this.props.title + " POSITION"}
+                        onPress={this.onButtonPress.bind(this)}
+                    />
+                    <Button
+                        title = "CANCEL"
+                        onPress={Actions.ElectionPositions.bind(this)}
+                    />
                 </View>
             )
         }
@@ -113,10 +113,10 @@ const styles = StyleSheet.create({
     },
     formContainerStyle: {
         flex: 1,
-        marginLeft: 20,
-        marginRight: 20,
         paddingTop: 30,
+        padding: 10,
         paddingBottom: 10,
+        backgroundColor: "#2C3239"
     },
     headerStyle: {
         flexDirection: 'column',
@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
     headerTextStyle: {
         fontSize: 22,
         fontWeight: 'bold',
+        color: '#e0e6ed'
     },
     errorTextStyle: {
         fontSize: 14,

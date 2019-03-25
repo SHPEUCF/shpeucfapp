@@ -22,11 +22,11 @@ const menuItems = [
       icon: 'check',
       screen: 'ElectionBackEnd'
     },
-    {
-      title: 'Statistics',
-      icon: 'check',
-      screen: 'Statistics'
-    },
+    // {
+    //   title: 'Statistics',
+    //   icon: 'check',
+    //   screen: 'Statistics'
+    // },
 ];
 
 class BackEnd extends Component {
@@ -41,6 +41,7 @@ class BackEnd extends Component {
         return(
         <ListItem
           title={item.title}
+          titleStyle={{color: 'white'}}
           leftIcon={{name: item.icon}}
           onPress={() => Actions[item.screen]()}
         />
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
   },
   page: {
     flex: 1,
-    backgroundColor: '#ebebf1',
+    backgroundColor: '#2C3239',
   }
 });
 
