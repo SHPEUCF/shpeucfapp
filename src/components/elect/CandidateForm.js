@@ -57,34 +57,50 @@ class CandidateForm extends Component {
         }
     }
 
+    renderButtons(){
+        const {
+            buttonContainer
+        } = styles
+        return (
+            <View style={buttonContainer}>
+                <Button
+                    title = "EDIT"
+                    onPress={this.onButtonPress.bind(this)}
+                />
+                <Button
+                    title = "CANCEL"
+                    onPress={Actions.ElectionCandidates.bind(this)}
+                />
+            </View>
+        )
+    }
     render() {
+        const {
+            formContainerStyle,
+            headerStyle,
+            headerTextStyle,
+            content,
+            textColor
+        } = styles
             return (
-                <View style={styles.formContainerStyle}>
-                    <View style={styles.headerStyle}>
-                        <Text style={styles.headerTextStyle}>{"Candidate Plan"}</Text>
+                <View style={formContainerStyle}>
+                    <View style={headerStyle}>
+                        <Text style={[headerTextStyle, textColor]}>{"Candidate Plan"}</Text>
                         {/* <Text style={styles.headerSubtitleStyle}>Registration</Text> */}
                     </View>
-                    <ScrollView
-                    ref={(ref)=> (this.scrollView=ref)}
-                    style={styles.scrollView}>
-                    {/* <RkAvoidKeyboard> */}
-                        <View>
-                            <Input
-                            placeholder="Candidate Plan"
-                            value={this.props.candidatePlan}
-                            onChangeText={this.props.candidatePlanChanged.bind(this)}
-                            />
+                        <View style ={content}>
+                            <View style={{flex: .4}}>
+                                <Input
+                                placeholder="Candidate Plan"
+                                multiline={true}
+                                blurOnSubmit={true}
+                                value={this.props.candidatePlan}
+                                onChangeText={this.props.candidatePlanChanged.bind(this)}
+                                />
+                            </View >
                         </View>
                         {this.renderError()}
-                        <Button
-                            title = "EDIT"
-                            onPress={this.onButtonPress.bind(this)}
-                        />
-                        <Button
-                            title = "CANCEL"
-                            onPress={Actions.ElectionCandidates.bind(this)}
-                        />
-                    </ScrollView>
+                        {this.renderButtons()}
                 </View>
             )
         }
@@ -93,22 +109,29 @@ class CandidateForm extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E1E1E1',
         justifyContent: 'flex-end',
+    },
+    content: {
+        flex: 1
+    },
+    buttonContainer: {
+        flex: .2
     },
     formContainerStyle: {
         flex: 1,
-        marginLeft: 20,
-        marginRight: 20,
-        paddingTop: 30,
-        paddingBottom: 10,
+        padding: 20,
+        backgroundColor: '#2C3239'
     },
     headerStyle: {
+        flex: .1,
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         padding: 5,
         marginBottom: 10,
+    },
+    textColor: {
+        color: '#e0e6ed'
     },
     headerTextStyle: {
         fontSize: 22,

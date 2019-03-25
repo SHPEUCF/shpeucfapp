@@ -48,6 +48,7 @@ class ElectionCandidates extends Component {
     const {
       containerStyle,
       contentContainerStyle,
+      textColor
     } = styles;
 
     const candidatesArray = _.toArray(item.candidates)
@@ -56,7 +57,7 @@ class ElectionCandidates extends Component {
       <View>
       <View style={contentContainerStyle}>
           <View style={containerStyle}>
-            <Text>{`${item.title}`}</Text>
+            <Text style={textColor}>{item.title}</Text>
           </View>
       </View>
       <FlatList
@@ -74,19 +75,16 @@ class ElectionCandidates extends Component {
   renderCandidates(item){
 
     const {
-      containerStyle,
-      contentContainerStyle,
+      textColor,
       containerTextStyle,
-      candidateContainer,
-      containerCandidateTextStyle
     } = styles;
 
-    const color = (item.approved) ? {backgroundColor: '#ffd700'} : {backgroundColor: '#ebebf1'}
+    const color = (item.approved) ? {backgroundColor: '#ffd70088'} : {backgroundColor: '#2C323988'}
 
     return (
       <View style={[styles.candidateContainer, color]}>
           <View style={containerTextStyle}>
-            <Text>{item.firstName + ' ' + item.lastName}</Text>
+            <Text style={textColor}>{item.firstName + ' ' + item.lastName}</Text>
           </View>
           {this.renderbuttons(item)}
         </View>
@@ -96,26 +94,34 @@ class ElectionCandidates extends Component {
   renderbuttons(item){
 
     const {
-      containerStyle,
-      contentContainerStyle,
-      containerTextStyle,
-      candidateContainer,
-      containerCandidateTextStyle
+      position,
+      id,
+      firstName,
+      lastName
+    } = item
+
+    const{
+      deleteApplication,
+      approveApplication
+    } = this.props
+
+    const {
+      buttonContainerStyle
     } = styles;
 
     if(!item.approved){
       return (
         <View style = {[{flexDirection: 'row', flex: 1}]}>
-            <View style= {styles.buttonContainerStyle}>
+            <View style= {buttonContainerStyle}>
               <TouchableOpacity
-              onPress={this.props.approveApplication.bind(this, item.position, item.id, item.firstName, item.lastName)}>
-                <Ionicons name="md-checkmark-circle" size={40} color='#000000'/>
+              onPress={() => approveApplication( position, id, firstName, lastName)}>
+                <Ionicons name="md-checkmark-circle" size={40} color='#e0e6ed'/>
               </TouchableOpacity>
             </View>
-            <View style= {styles.buttonContainerStyle}>
+            <View style= {buttonContainerStyle}>
               <TouchableOpacity
-              onPress={this.props.deleteApplication.bind(this, item.position, item.id)}>
-                <Ionicons name="md-close-circle" size={40} color='#000000'/>
+              onPress={() => deleteApplication( position, id)}>
+                <Ionicons name="md-close-circle" size={40} color='#e0e6ed'/>
               </TouchableOpacity>
             </View>
           </View>
@@ -125,15 +131,15 @@ class ElectionCandidates extends Component {
     else{
       return (
         <View style = {[{flexDirection: 'row', flex: 1}]}>
-          <View style= {styles.buttonContainerStyle}>
+          <View style= {buttonContainerStyle}>
           <TouchableOpacity onPress={() => this.viewCandidate(item)}>
-            <Ionicons name="md-create" size={40} color='#000000'/>
+            <Ionicons name="md-create" size={40} color='#e0e6ed'/>
           </TouchableOpacity>
           </View>
-          <View style= {styles.buttonContainerStyle}>
+          <View style= {buttonContainerStyle}>
             <TouchableOpacity
-            onPress={this.props.deleteApplication.bind(this, item.position, item.id)}>
-              <Ionicons name="md-remove-circle" size={40} color='#000000'/>
+            onPress={() => deleteApplication( position, id)}>
+              <Ionicons name="md-remove-circle" size={40} color='#e0e6ed'/>
             </TouchableOpacity>
           </View>
         </View>
@@ -168,10 +174,7 @@ class ElectionCandidates extends Component {
         tabBar,
         tabBarText,
         content,
-        buttonContainerStyling,
         page,
-        containerStyle,
-        contentContainerStyle,
     } = styles;
 
     const {
@@ -186,17 +189,14 @@ class ElectionCandidates extends Component {
         <View style={tabBar}>
             <Text style={tabBarText}>Candidates</Text>
         </View>
-
-        {this.renderFlatlist(positionsArray)}
-
-        <View style={buttonContainerStyling}>
-            <Button
-            onPress={() => Actions.ElectionBackEnd("")}
-            title={"BACK"}
-            >
-            </Button>
+        <View style={content}>
+          {this.renderFlatlist(positionsArray)}
         </View>
-      </View>
+        <Button
+        onPress={() => Actions.pop()}
+        title={"BACK"}
+        />
+    </View>
     );
   }
 }
@@ -213,18 +213,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    backgroundColor: '#fff',
-
+    backgroundColor: '#2C3239',
     paddingVertical: 10,
     paddingHorizontal: 15,
   },
+
   containerTextStyle: {
     flex: 3,
     justifyContent: 'center',
     alignItems: 'flex-start',
-
     paddingVertical: 10,
     paddingHorizontal: 15,
+  },
+  textColor: {
+    color: '#e0e6ed'
   },
   contentContainerStyle: {
     margin: 1,
@@ -238,8 +240,7 @@ const styles = StyleSheet.create({
     alignSelf: "center"
   },
   content: {
-    flex: 1,
-    margin: 10
+    flex: .98,
   },
   buttonContainerStyle: {
     flex: .5,
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
   },
   page: {
     flex: 1,
-    backgroundColor: '#ebebf1',
+    backgroundColor: '#0c0b0b',
   },
   candidateContainer: {
     flex: .5,
