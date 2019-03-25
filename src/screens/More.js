@@ -57,16 +57,21 @@ import {
 
 class More extends Component {
 
+ 
   keyExtractor = (item, index) => index
 
   renderItem  = ({item}) => {
+    const {
+      election,
+      privilege
+    } = this.props
 
-    if (item.title === "Election" && (this.props.election === false || this.props.election === undefined)){
+    if (item.title === "Election" && (election === false || election === undefined || election === null)){
       return (null);
     }
 
 
-    if (this.props.privilege !== undefined && this.props.privilege[item.privilege] === true ) {
+    if (privilege !== undefined && privilege[item.privilege] === true ) {
       return(
         <ListItem
           removeClippedSubviews={false}
