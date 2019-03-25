@@ -84,22 +84,24 @@ class ElectionBackEnd extends Component {
   }
 
   renderVotes(item, index) {
+    if(item === undefined || item === null) return
     const {
       containerStyle,
       contentContainerStyle,
+      textColor
     } = styles;
 
     const candidatesArray = _.orderBy(item[0], iterateesCan, orderCan)
 
     var i = 0;
     var winnerIds = [candidatesArray[0]];
-    var winnerString = candidatesArray[0].firstName + " " + candidatesArray[0].lastName
+    var winnerString = `${candidatesArray[0].firstName} ${candidatesArray[0].lastName}`
 
 
     while ((i + 1) < candidatesArray.length && (candidatesArray[i].votes === candidatesArray[i+1].votes)){
       var nextCandidate = candidatesArray[i+1];
       winnerIds.push(nextCandidate);
-      winnerString = winnerString + " , " + nextCandidate.firstName + " " + nextCandidate.lastName
+      winnerString = `${winnerString}, ${nextCandidate.firstName} ${nextCandidate.lastName}`
       i++;
     }
 
@@ -109,7 +111,7 @@ class ElectionBackEnd extends Component {
       <View>
       <View style={contentContainerStyle}>
           <View style={containerStyle}>
-            <Text style={{fontWeight:'bold'}}>{item[1] + ": " + winners[index].String}</Text>
+            <Text style={[{fontWeight:'bold'}, textColor]}>{item[1]}:  {winners[index].String}</Text>
           </View>
       </View>
       </View>
@@ -122,7 +124,8 @@ class ElectionBackEnd extends Component {
         tabBarText,
         content,
         buttonContainerStyling,
-        page
+        page,
+        textColor
     } = styles;
 
     const {
@@ -133,7 +136,6 @@ class ElectionBackEnd extends Component {
 
     if(positions !== undefined && positions !== null){
       const votesArray = Object.entries(votes)
-
       votesArray.forEach(function(item, index){
           var posTitle = item[0];
           if (positions[posTitle] !== undefined && positions[posTitle] !== null)
@@ -144,10 +146,10 @@ class ElectionBackEnd extends Component {
     return (
      <View style={page}>
         <View style={tabBar}>
-            <Text style={tabBarText}>Election</Text>
+            <Text style={[tabBarText]}>Election</Text>
         </View>
          <View style={content}>
-            <Text>{"Total Votes: " + this.props.numOfVotes}</Text>
+            <Text style={textColor}>Total Votes: {this.props.numOfVotes}</Text>
         </View>
 
         <View style = {{flex: 20}}>
@@ -197,7 +199,7 @@ class ElectionBackEnd extends Component {
           data={positionOrder}
           extraData={this.state}
           keyExtractor={this._keyExtractor}
-          renderItem={({item, separators, index}) => (
+          renderItem={({item, index}) => (
           this.renderVotes(item, index)
         )}
       />
@@ -248,13 +250,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
 
   },
+  textColor: {
+    color: '#e0e6ed'
+  },
   buttonContainerStyle: {
       flex: 5,
       margin: 5
   },
   page: {
     flex: 1,
-    backgroundColor: '#ebebf1',
+    backgroundColor: '#2C3239',
   }
 });
 
