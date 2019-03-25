@@ -130,13 +130,16 @@ class ElectionBackEnd extends Component {
       positions
     } = this.props
 
-    const votesArray = _.toArray(votes)
 
-    votesArray.forEach(function(item, index){
-        var posTitle = Object.entries(votes)[index][0];
-        positionOrder[positions[posTitle].level] = [item, posTitle];
-    });
+    if(positions !== undefined && positions !== null){
+      const votesArray = Object.entries(votes)
 
+      votesArray.forEach(function(item, index){
+          var posTitle = item[0];
+          if (positions[posTitle] !== undefined && positions[posTitle] !== null)
+          positionOrder[positions[posTitle].level] = [item[1], posTitle];
+      });
+    }
 
     return (
      <View style={page}>
