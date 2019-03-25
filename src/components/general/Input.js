@@ -12,6 +12,7 @@ class Input extends Component {
     value: PropTypes.string.isRequired,
     onChangeText: PropTypes.func,
     placeholder: PropTypes.string,
+    blurOnSubmit: PropTypes.bool,
     autoCorrect: PropTypes.any,
     autoCapitalize: PropTypes.any,
     maxLength: PropTypes.number,
@@ -35,6 +36,7 @@ class Input extends Component {
       placeholder,
       autoCorrect,
       autoCapitalize,
+      blurOnSubmit,
       maxLength,
       secureTextEntry,
       numberOfLines,
@@ -53,6 +55,7 @@ class Input extends Component {
         style={[inputStyle, style]}
         autoCorrect={autoCorrect}
         autoCapitalize={autoCapitalize}
+        blurOnSubmit={blurOnSubmit}
         placeholder={placeholder}
         secureTextEntry={secureTextEntry}
         maxLength={maxLength}

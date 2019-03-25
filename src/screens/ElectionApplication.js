@@ -94,14 +94,13 @@ state = { isApplyShow: false, index: null,
        <Text style={[textStyle, textColor]}>Plan:</Text>
        {this.renderError()}
        <View style={{flex:1}}>
-        <RkAvoidKeyboard style={{flex: .6}}>
         <Input style={applyInput}
+          blurOnSubmit={true}
           multiline = {true}
           placeholder="Please write your plan for members to read."
           value={this.props.candidatePlan}
           onChangeText={this.onPlanChange.bind(this)}
           />
-          </RkAvoidKeyboard>
           </View>
           <View style={{flex: .25}}>
             <Button
@@ -291,10 +290,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   applyInput: {
-    borderWidth: 3,
-    // borderRadius: 10,
-    borderColor: "lightgrey",
-    // textAlignVertical: "top", 
+    flex: .4,
   }
 });
 
