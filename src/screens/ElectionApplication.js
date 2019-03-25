@@ -188,9 +188,12 @@ state = { isApplyShow: false, index: null,
     if (query != null && query.approved != true ){
       return(
            <View style={button} >
-             <Button
+              <Button
                title={`Edit Application`}
-               onPress={()=>{this.setState({isListShow: false}); this.setState({isApplyShow: true}); this.setState({applyPos:item.title}); this.props.candidatePlanChanged(query.plan);}}/>
+               onPress={()=>{
+                 this.setState({isListShow: false, isApplyShow: true, applyPos: item.title}); 
+                 this.props.candidatePlanChanged(query.plan);
+              }}/>
            </View>
       )}
 
@@ -220,9 +223,8 @@ state = { isApplyShow: false, index: null,
       isListShow
     } = this.state
 
-    return (
-      <View style={buttonContainer}>
-        <Button
+    if(!isListShow)
+    var p1 = (<Button
           title={application}
           onPress={()=>{
           if (application == "Submit"){
@@ -232,7 +234,10 @@ state = { isApplyShow: false, index: null,
           }
           this.setState({isApplyShow: false}); this.setState({isListShow: true}); 
         }}
-        />
+        />)
+    return (
+      <View style={buttonContainer}>
+        {p1}
         <Button
           title="Cancel"
           onPress={()=>{
