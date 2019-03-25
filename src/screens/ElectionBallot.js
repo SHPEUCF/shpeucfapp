@@ -65,47 +65,53 @@ class ElectionBallot extends Component {
     const {
       containerStyle,
       contentContainerStyle,
+      textStyle,
+      textColor,
+      candidateContainer
     } = styles;
       if (item.approved){
       return (
-        <View>
-        <Card>
-          <View>
             <TouchableOpacity
+              style={candidateContainer}
               onPress={()=>{
-                dict[this.state.index] = {key:item.position , value:item.id, first:item.firstName, last:item.lastName};
+                dict[this.state.index] = {
+                  key: item.position , 
+                  value: item.id, 
+                  first: item.firstName,
+                  last:item.lastName
+                };
+
                 this.setState({isCand: false});
                 this.setState({isBallotShow: true});
               }}>
-              <View style={{alignItems:'center'}}>
-                <Text style={{ fontWeight:'bold', fontSize: 20}}>{item.firstName+' '+item.lastName}</Text>
-              </View>
+              <Text style={[{ fontWeight:'bold', fontSize: 20, alignSelf: 'center'}, textColor]}>{item.firstName+' '+item.lastName}</Text>
               <View style={{flex:1}}>
                 <View style={contentContainerStyle}>
                   <View style={containerStyle}>
-                      <Text style={{fontSize:16}}>Plan: {item.plan}</Text>
+                      <Text style={[textStyle,textColor]}>Plan: {item.plan}</Text>
                   </View>
                 </View>
               </View>
             </TouchableOpacity>
-          </View>
-        </Card>
-      </View>
+
       )
     }
   }
 
 renderCand(){
-  const {containerStyle, inputApply, tab} = styles;
+  const {
+    tab,
+    textStyle,
+    textColor
+  } = styles;
+
   if(this.state.isCand == false){
     return (null);
   }
   return(
-    <View>
-      <View style={tab}>
-        <View style={{flex: 2, alignItems:'center', justifyContent:'center'}}>
-          <Text style={{fontWeight:'bold', fontSize:18}}>{`${this.state.applyPos}`}</Text>
-        </View>
+    <View style={{flex: 1}}>
+      <View style={[tab, {flex: .05, backgroundColor: '#2C3239'}]}>
+        <Text style={[textStyle, textColor, {alignSelf: 'center'}]}>{this.state.applyPos}</Text>
     </View>
     <FlatList
       data={this.state.listCandidates}
@@ -116,19 +122,21 @@ renderCand(){
       )}
       />
       {this.renderPositionVote()}
-      <Button title="Ballot" onPress={() => {this.setState({isCand: false}); this.setState({isBallotShow: true});}}/>
       </View>
     )
   }
 
   renderPositionVote(){
-    const {containerStyle, inputApply, tab} = styles;
+    const {
+      tab,
+      textStyle
+    } = styles;
     var vote = dict[this.state.index];
     if (!(vote == undefined)) {
       return(
         <View style={tab}>
         <View style={{flex: 2, alignItems:'center', justifyContent:'center'}}>
-          <Text style={{fontWeight:'bold', fontSize:18}}>{"You are voting for: "+ vote.first+" " + vote.last}</Text>
+          <Text style={[textStyle, textColor]}>You are voting for: {vote.first} {vote.last}}</Text>
         </View>
         </View>
       )
@@ -136,23 +144,29 @@ renderCand(){
   }
 
   renderCandidatesList(item, index){
+
+    const {
+      container,
+      textStyle,
+      textColor
+    } = styles
+
     return(
       <View>
-          <TouchableOpacity onPress={() => {this.setState({isBallotShow: false}); this.setState({isCand: true}); this.setState({ listCandidates: _.orderBy(item.candidates, iterateesCan, orderCan)});
-          this.renderCand(); this.setState({applyPos:item.title}); this.setState({index: index})}}>
-      <View style={{
-      margin:4,
-      padding:8,
-      backgroundColor:'lightgrey',
-      flexDirection:'row'
-      }}>
-      <View style={{flex:2, alignItems:'center', flexDirection: 'row', justifyContent: 'flex-start'}}>
-          <Text style={{fontSize:16}}>{`${item.title}`}</Text>
+        <TouchableOpacity onPress={() => {
+          this.setState({
+            isBallotShow: false, 
+            isCand: true, 
+            listCandidates: _.orderBy(item.candidates, iterateesCan, orderCan),
+            applyPos: item.title,
+            index: index
+          }); 
+          this.renderCand(); 
+        }}>
+      <View style={[container,{flexDirection: 'row'}]}>
+          <Text style={[textStyle,textColor, {flex: 6}]}>{`${item.title}`}</Text>
           {this.renderAllVotes(index)}
-      </View>
-      <View style={{flex:1, alignItems:'flex-end'}}>
-        <Text >></Text>
-      </View>
+        
       </View>
     </TouchableOpacity>
     </View>
@@ -160,12 +174,17 @@ renderCand(){
   }
 
   renderAllVotes(index){
-    const {containerStyle, inputApply, tab} = styles;
+    const {
+      textStyle,
+      textColor
+    } = styles;
     var vote = dict[index];
-    if (!(vote == undefined)) {
+    if (!(vote === undefined)) {
       return(
-          <Text style={{fontWeight:'bold', fontSize:18}}>{" -> "+ vote.first+" " + vote.last}</Text>
+          <Text style={[textStyle, textColor]}> -> {vote.first} {vote.last}</Text>
       )
+    }else {
+      <Text style={[textStyle, textColor, {flex: .2}]}>></Text>
     }
   }
 
@@ -180,31 +199,59 @@ renderCand(){
 
    return(
        <View>
-       <View style={tab}>
-         <View style={{flex:1.5, alignItems:'flex-start', marginLeft:8, justifyContent:'center'}}>
-           <Text onPress = {()=>{Actions.popTo("Election");}} style={{fontSize:16}}>Back</Text>
-         </View>
-           <View style={{flex:2, alignItems:'flex-start', justifyContent:'center'}}>
-             <Text style={{fontWeight:'bold', fontSize:18}}>Ballot</Text>
-           </View>
-       </View>
          <FlatList
              data={positionsArray}
              extraData={this.state}
              keyExtractor={this._keyExtractor}
-             renderItem={({item, separators, index}) => (
+             renderItem={({item, index}) => (
              this.renderCandidatesList(item, index)
            )}
          />
-       <Button title="Submit" onPress={() => {this.props.vote(this.props.id, dict); Actions.popTo("Election");}}/>
      </View>
    )
  }
 
+  renderButtons(){
+    const{
+      buttonContainer
+    } = styles
+
+    const {
+      vote,
+      id
+    } = this.props
+
+    const {
+      isBallotShow
+    } = this.state
+
+    if(!isBallotShow){
+      return (
+        <Button title="Ballot" onPress={() => {
+          this.setState({isCand: false, isBallotShow: true})
+        }}/>
+      )
+    }
+    else return (
+      <View style={buttonContainer}>
+        <Button title="Submit" onPress={() => {
+          vote(id, dict); 
+          Actions.popTo("Election");
+        }}/>
+
+        <Button title="Cancel" onPress={() => {
+          Actions.pop()
+        }}/>
+      </View>
+    )
+  }
   render() {
     const {
-      containerStyle,
-      contentContainerStyle } = styles;
+      page,
+      tabBar,
+      tabBarText,
+      contentStyle
+     } = styles;
 
     const {
       positions,
@@ -215,18 +262,48 @@ renderCand(){
     //alert(positions.title);
     return (
 
-      <View style={{alignItems:'center', justifyContent:'center', flex: 1}}>
+      <View style={page}>
+        <View style={tabBar}>
+            <Text style={tabBarText}>Ballot</Text>
+        </View>
+        <View style={contentStyle}>
           {this.showBallot(positionsArray)}
           {this.renderCand()}
+        </View>
+        {this.renderButtons()}
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
+  tabBar : {
+    height: dimension.height * .1,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: "#0005",
+  },
+  tabBarText : {
+    color: '#000',
+    fontSize: 20,
+    margin: 20,
+    alignSelf: "center"
+  },
+  textColor: {
+    color: '#e0e6ed'
+  },
+  textStyle: {
+    fontWeight: 'bold',
+    fontSize: 18
+  },
+  page: {
+    backgroundColor: '#0c0b0b',
+    flex: 1,
+  },
   tab: {
     flexDirection: 'row',
-    marginTop:24,
+    paddingTop:24,
     paddingBottom:12,
     borderBottomWidth: 2,
     borderColor:'lightgrey',
@@ -234,26 +311,32 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  containerStyle: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  contentContainerStyle: {
-    margin: 1,
+  contentStyle: {
+    flex: .98
   },
   button: {
     paddingTop: dimension.height * .015,
     paddingBottom: dimension.height * .015,
     marginBottom: 8
   },
-  inputApply: {
-    borderWidth:5,
-    borderRadius:10,
-    borderColor:"grey",
-    textAlignVertical: "top"
+  buttonContainer: {
+    flex: .2
+  },
+  candidateContainer: {
+    flex: 1,
+    backgroundColor: '#2C3239',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderColor: '#e0e6ed22',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#2C3239',
+    borderBottomWidth: 1,
+    borderColor: '#e0e6ed',
+    padding: 10,
+    paddingTop: 20,
+    paddingBottom: 20,
   }
 });
 
