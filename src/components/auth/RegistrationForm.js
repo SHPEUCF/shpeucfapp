@@ -2,10 +2,18 @@ import React, { Component} from 'react';
 import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { Card, CardSection, Input, Button, Spinner } from '../general';
+import {
+  Card,
+  Input,
+  Button,
+  Spinner,
+  PickerInput,
+  DatePicker
+} from '../general';
 import {RkAvoidKeyboard, RkTextInput, RkPicker, RkText} from 'react-native-ui-kitten';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import data from '../../data/Colleges.json';
+import collegesJson from '../../data/Colleges.json';
+import countriesJson from '../../data/Countries.json';
 import {
   firstNameChanged,
   lastNameChanged,
@@ -16,24 +24,28 @@ import {
   pointsChanged,
   privilegeChanged,
   pictureChanged,
+  continentChanged, 
+  nationalityChanged, 
+  birthDateChanged,
   confirmPasswordChanged,
   registrationError,
+  quoteChanged,
   createUser,
   goToLogIn,
-  quoteChanged } from '../../actions';
+  genderChanged,
+   } from '../../actions';
 
 const collegeNames = [];
-data.map(college => {collegeNames.push({key:college.key, value:college.collegeName})});
-var majorNames =  [];
-majorNames.push(data[0].degrees);
+collegesJson.map(college => {collegeNames.push(college.collegeName)});
+var majorNames =  {};
+collegesJson.map(college => {majorNames[college.collegeName] = college.degrees});
+const continents = Object.keys(countriesJson);
+var countries =  {};
+continents.map(continent => {countries[continent] = countriesJson[continent]});
 
 const iconName= Platform.OS === 'ios'?'ios-arrow-dropdown':'md-arrow-dropdown';
 
 class RegistrationForm extends Component {
-  state = {collegeSelected: collegeNames.slice(0,1),
-    majorSelected: majorNames.slice(0,1),
-    pickerVisible: false,
-    pickerVisible2: false};
 
   onFirstNameChange(text) {
     this.props.firstNameChanged(text);
@@ -43,12 +55,6 @@ class RegistrationForm extends Component {
   }
   onEmailChange(text) {
     this.props.emailChanged(text);
-  }
-  onCollegeChange(text) {
-    this.props.collegeChanged(text);
-  }
-  onMajorChange(text) {
-    this.props.majorChanged(text);
   }
   onPointsChange(text) {
     this.props.pointsChanged(text);
@@ -64,6 +70,9 @@ class RegistrationForm extends Component {
   }
   onConfirmPasswordChange(text) {
     this.props.confirmPasswordChanged(text);
+  }
+  onBirthDateChanged(text) {
+    this.props.birthDateChanged(text);
   }
   onQuoteChange(text) {
     this.props.quoteChanged(text);
@@ -82,6 +91,10 @@ class RegistrationForm extends Component {
       confirmPassword,
       registrationError,
       createUser,
+      continent,
+      nationality,
+      gender,
+      birthday,
       goToLogIn,
       quote } = this.props;
 
@@ -105,9 +118,17 @@ class RegistrationForm extends Component {
       registrationError('Please confirm password');
     } else if (password !== confirmPassword) {
       registrationError('Passwords do not match, please try again');
+    } else if(continent == '') {
+      registrationError('Please enter your continent of origin');
+    } else if(nationality == '') {
+      registrationError('Please enter your country of origin');
+    } else if(gender == ''){
+      registrationError('Please enter your gender');
+    } else if(birthday == ''){
+      registrationError('Please enter your date of birth');
     } else if (password === confirmPassword) {
       this.onPointsChange(0);
-      createUser({ firstName, lastName, email, college, major, points, picture, password, quote });
+      createUser( firstName, lastName, email, college, major, points, picture, password, quote, continent, nationality, gender, birthday);
     }
   }
 
@@ -121,6 +142,61 @@ class RegistrationForm extends Component {
         </View>
       );
     }
+  }
+
+  renderCollegePickers() {
+    const {
+      college,
+      collegeChanged,
+      major,
+      majorChanged
+    } = this.props
+
+    const p1 = (college !== undefined && college !== null && college !== "") ?
+      (<PickerInput
+            title={"Major"}
+            data={majorNames[college]}
+            placeholder={"Select major"}
+            onSelect={(text) => majorChanged(text)}/>) : (<View></View>)
+
+        return(
+        <View>
+          <PickerInput
+            title={"Colleges"}
+            data={collegeNames}
+            placeholder={"Select college"}
+            onSelect={(text) => collegeChanged(text)}/>
+          {p1}
+          
+        </View>
+      )
+  }
+
+  renderCountryPickers() {
+    const {
+      continent,
+      continentChanged,
+      nationalityChanged
+    } = this.props
+
+    const p1 = (continent !== undefined && continent !== null && continent !== "") ?
+      (<PickerInput
+            title={"Nationality"}
+            data={countries[continent]}
+            placeholder={"Select country of origin"}
+            onSelect={(text) => nationalityChanged(text)}/>) : (<View></View>)
+
+        return(
+        <View>
+          <PickerInput
+            title={"Continent"}
+            data={continents}
+            placeholder={"Select continent of origin"}
+            onSelect={(text) => continentChanged(text)}/>
+          {p1}
+          
+        </View>
+      )
   }
 
   renderSignUpButton() {
@@ -160,44 +236,6 @@ class RegistrationForm extends Component {
     );
   }
 
-  showPicker1 = () => {
-    this.setState({pickerVisible: true})
-  };
-
-  hidePicker1 = () => {
-    this.setState({pickerVisible: false});
-  };
-
-  showPicker2 = () => {
-    this.setState({pickerVisible2: true})
-  };
-
-  hidePicker2 = () => {
-    this.setState({pickerVisible2: false});
-  };
-
-  handlePickedValueCollege = (input) =>{
-    this.setState({collegeSelected: input});
-    this.onCollegeChange(input[0].value);
-    this.populateMajorArray(input);
-    this.hidePicker1();
-  };
-
-  handlePickedValueMajor = (input2) =>{
-    this.setState({majorSelected: input2});
-    this.onMajorChange(input2[0]);
-    this.hidePicker2();
-  };
-  populateMajorArray(cName){
-      majorNames = [];
-      majorNames.push('Select a Major');
-      var i = 2;
-
-      var temp = data.slice(cName[0].key-1, cName[0].key);
-      temp[0].degrees.map((aDegree)=>{
-        majorNames.push(aDegree);
-      });
-  }
 
   render() {
     return (
@@ -235,7 +273,19 @@ class RegistrationForm extends Component {
               value={this.props.email}
               onChangeText={this.onEmailChange.bind(this)}
               />
+            <PickerInput
+              title={"Gender"}
+              data={["Female","Male","Other","Do not wish to disclose"]}
+              placeholder={"Select your gender"}
+              onSelect={(text) => this.props.genderChanged(text)}
+            />            
+            {this.renderCountryPickers()}
+            {this.renderCollegePickers()}
 
+            <DatePicker
+              placeholder={"Birthday"}
+              onSelect={(text) => this.onBirthDateChanged(text)}
+              />
             <Input
               secureTextEntry
               placeholder="Password"
@@ -251,59 +301,7 @@ class RegistrationForm extends Component {
               onChangeText={this.onConfirmPasswordChange.bind(this)}
               />
 
-            <View style={styles.pickerTextInput}>
-              <Input
-                style={{flex: 1}}
-                editable={false}
-                value={this.state.collegeSelected[0].value }/>
-                <TouchableOpacity
-                  style={{alignItems:'flex-end', margin: 10}}
-                  onPress={this.showPicker1}>
-                  <Ionicons name={iconName} size={45}/>
-                </TouchableOpacity>
-            </View>
-
-            <RkPicker
-              rkType='rounded'
-              optionHeight={80}
-              optionRkType={'medium'}
-              selectedOptionRkType={'medium danger'}
-              confirmButtonText={'Select'}
-              title="Colleges"
-              titleTextRkType={'large'}
-              data={[collegeNames]}
-              visible={this.state.pickerVisible}
-              onConfirm={this.handlePickedValueCollege}
-              onCancel={this.hidePicker1}
-              selectedOptions={this.state.collegeSelected}
-              />
-
-            <View style={styles.pickerTextInput}>
-              <Input
-                style={{flex: 1}}
-                editable={false}
-                value={this.state.majorSelected[0] }/>
-                <TouchableOpacity
-                  style={{alignItems:'flex-end', margin: 10,}}
-                  onPress={this.showPicker2}>
-                  <Ionicons name={iconName} size={45}/>
-                </TouchableOpacity>
-            </View>
-
-            <RkPicker
-              rkType='rounded'
-              optionHeight={80}
-              optionRkType={'medium'}
-              selectedOptionRkType={'medium danger'}
-              confirmButtonText={'Select'}
-              title="Degrees"
-              titleTextRkType={'large'}
-              data={[majorNames]}
-              visible={this.state.pickerVisible2}
-              onConfirm={this.handlePickedValueMajor}
-              onCancel={this.hidePicker2}
-              selectedOptions={this.state.majorSelected}
-              />
+             
           </RkAvoidKeyboard>
           </ScrollView>
 
@@ -321,7 +319,7 @@ const { height: D_HEIGHT, width: D_WIDTH } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'gray',
+    backgroundColor: '#0c0b0b',
     justifyContent: 'flex-end',
   },
   formContainerStyle: {
@@ -387,7 +385,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
 	Alreadyaccount: {
-		color: 'black',
+		color: 'grey',
 	}
 });
 
@@ -402,6 +400,10 @@ const mapStateToProps = ({ auth }) => {
     points,
     privilege,
     password,
+    continent,
+    nationality,
+    gender,
+    birthday,
     confirmPassword,
     error,
     loading,
@@ -417,6 +419,10 @@ const mapStateToProps = ({ auth }) => {
     points,
     privilege,
     password,
+    continent,
+    nationality,
+    gender,
+    birthday,
     confirmPassword,
     error,
     loading,
@@ -433,10 +439,15 @@ const mapDispatchToProps = {
   privilegeChanged,
   pictureChanged,
   passwordChanged,
+  continentChanged,
+  nationalityChanged,
+  birthDateChanged,
   confirmPasswordChanged,
   registrationError,
   createUser,
   goToLogIn,
-  quoteChanged }
+  quoteChanged,
+  genderChanged
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegistrationForm);

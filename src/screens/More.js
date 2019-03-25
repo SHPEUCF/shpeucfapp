@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import {
   ScrollView,
-  FlatList } from 'react-native';
+  FlatList,
+  Text } from 'react-native';
 import { connect } from 'react-redux';
 import { ListItem } from 'react-native-elements';
 import { Spinner} from '../components/general'
@@ -26,12 +27,6 @@ import {
       title: 'Resources',
       icon: 'layers',
       screen: 'Resources',
-      privilege: "user"
-    },
-    {
-      title: 'Check In',
-      icon: 'done',
-      screen: 'CheckIn',
       privilege: "user"
     },
     {
@@ -61,9 +56,6 @@ import {
   ];
 
 class More extends Component {
-  componentWillMount() {
-      this.props.updateElection();
-  }
 
   keyExtractor = (item, index) => index
 
@@ -77,7 +69,9 @@ class More extends Component {
     if (this.props.privilege !== undefined && this.props.privilege[item.privilege] === true ) {
       return(
         <ListItem
+          removeClippedSubviews={false}
           title={item.title}
+          titleStyle={{ color: 'white'}}
           leftIcon={{name: item.icon}}
           onPress={() => Actions[item.screen]()}
         />
@@ -86,20 +80,19 @@ class More extends Component {
   }
 
   render() {
-  if(this.props.loading){
-    return <Spinner>{this.renderContent}</Spinner>
-  }
-  else
+  
     return (
-      <ScrollView>
+      <ScrollView style={{backgroundColor: '#2C3239'}}>
         <FlatList
+          removeClippedSubviews={false}
+          extraData={this.state}
           keyExtractor = {this.keyExtractor}
           data = {menuItems}
           renderItem={this.renderItem}
         />
       </ScrollView>
     );
-  };
+  }
 }
 
 const mapStateToProps = ({ auth, general, elect }) => {

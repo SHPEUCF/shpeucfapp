@@ -50,12 +50,10 @@ export default (state = INITIAL_STATE, action) => {
       };
     case CREATE_EVENT:
       return { ...state,
-        loading: true,
         error: ''
       };
     case DELETE_EVENTS:
       return { ...state,
-        loading: true,
         type: '',
         name: '',
         description: '',
@@ -63,7 +61,7 @@ export default (state = INITIAL_STATE, action) => {
         time: '',
         location: '',
         points: 0,
-        eventID: [],
+        eventID: '',
         error: ''
       };
     case CHECK_IN:
@@ -109,11 +107,33 @@ export default (state = INITIAL_STATE, action) => {
         error: payload,
       };
     case GO_TO_CREATE_EVENT:
-      return INITIAL_STATE;
+      return {...state,
+        type: '',
+        name: '',
+        description: '',
+        date: '',
+        time: '',
+        location: '',
+        points: 0,
+        eventID: '',
+        code: '',
+        error: ''
+      };
     case GO_TO_CREATE_EVENT_FROM_EDIT:
       return state;
     case GO_TO_EVENT:
-      return INITIAL_STATE;
+      return {...state,
+        type: '',
+        name: '',
+        description: '',
+        date: '',
+        time: '',
+        location: '',
+        points: 0,
+        eventID: [],
+        code: '',
+        error: ''
+      };
     case GO_TO_VIEW_EVENT:
       return state;
     default:

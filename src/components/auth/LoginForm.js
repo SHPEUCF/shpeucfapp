@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser, goToResetPassword, goToRegistration } from '../../actions';
 import { Card, CardSection, Spinner, Button, Input } from '../general';
@@ -23,57 +23,50 @@ class LoginForm extends Component {
   renderError() {
     if (this.props.error) {
       return (
-        <View>
-          <Text style={styles.errorTextStyle}>
-            {this.props.error}
-          </Text>
-        </View>
+        <Text style={styles.errorTextStyle}>
+          {this.props.error}
+        </Text>
       );
     }
   }
-
-  renderLogInButton() {
-    return (
-      <Button 
-        title = "LOG IN"
-        onPress={this.onButtonPress.bind(this)}
-      />
-    );
-  }
-
   renderResetPassword() {
+    const {
+      resetPasswordText,
+      bottomContainer
+    } = styles
     return (
-      <View style={styles.resetPasswordContainer}>
         <TouchableOpacity
-          onPress={this.props.goToResetPassword}>
-          <Text style={styles.resetPasswordButton}>Forgot Password?</Text>
+          style={bottomContainer}
+          onPress={this.props.goToResetPassword}
+        >
+          <Text style={resetPasswordText}>Forgot Password?</Text>
         </TouchableOpacity>
-      </View>
     );
   }
   renderSignUpButton() {
+    const {
+      signUpText,
+      bottomContainer
+    } = styles
     return (
-      <View style={styles.signUpContainer}>
-        <Text style={styles.question}>Don't have an account? </Text>
+      <View style={bottomContainer}>
+        <Text style={{color: '#bbb', fontWeight: 'bold'}}>Don't have an account? </Text>
         <TouchableOpacity
           onPress={this.props.goToRegistration}>
-          <Text style={styles.signUpButton}> Register</Text>
+          <Text style={signUpText}> Register</Text>
         </TouchableOpacity>
       </View>
     );
   }
 
   renderButtons() {
-    if (this.props.loading) {
-      return (
-        <View style={{ marginTop: 40, marginBottom: 20}}>
-          <Spinner size="large" />
-        </View>
-      );
-    };
+    
     return (
-      <View>
-        {this.renderLogInButton()}
+      <View style={styles.buttonContainer}>
+        <Button 
+          title = "LOG IN"
+          onPress={this.onButtonPress.bind(this)}
+        />
         {this.renderResetPassword()}
         {this.renderSignUpButton()}
       </View>
@@ -81,26 +74,33 @@ class LoginForm extends Component {
   }
 
   renderContent() {
-    if (this.props.loggedIn) {
-      return <Spinner />;
-    } else {
-      return (
-        <View style={styles.container}>
-          <View style={styles.formContainerStyle}>
-            <RkAvoidKeyboard>
-            <View style={{flexDirection: 'row', justifyContent: 'center', bottom: 10}}>
-              <Image
-                source={require('../../assets/images/Icon_SHPE_UCF_152x152.png')}
-                style={{width: 100, height: 100}}/>
+    const {
+      formContainerStyle,
+      headerContainer,
+      headerTitle,
+      headerTextStyle,
+      headerSubtitleStyle,
+    } = styles
+    return (
+      <View style={formContainerStyle}> 
+        <RkAvoidKeyboard style={headerContainer}>
+          <ScrollView style= {{flex: 1}}>
+            <Image
+              source={require('../../assets/images/Icon_SHPE_UCF_152x152.png')}
+              style={{alignSelf: 'center'}}
+            />
+            <View style={headerContainer}>
+              <View style={headerTitle}>
+                <Text style={headerTextStyle}>S H P E  </Text>
+                <Text style={[headerTextStyle, {color: '#FFC107'}]}>U C F </Text>
+              </View>
             </View>
-				<View style= {styles.headercolumn}>
-            <View style={styles.headerStyle}>
-              <Text style={styles.headerTextStyle}>S H P E  </Text>
-							<Text style={styles.headerlowerTextStyle}>U C F </Text>
-            </View>
-						<Text style={styles.headerSubtitleStyle}>Society of Hispanic Professional Engineers</Text>
-						</View>
-            <Input
+            <Text style={headerSubtitleStyle}>Society of Hispanic Professional Engineers</Text>
+          </ScrollView>
+        </RkAvoidKeyboard>
+        <RkAvoidKeyboard style={{flex:1}}>
+          <ScrollView style= {{flex: 1}}>
+            <Input       
               placeholder="Knights Email"
               value={this.props.email}
               autoCapitalize="none"
@@ -110,102 +110,83 @@ class LoginForm extends Component {
             <Input
               secureTextEntry={true}
               placeholder="Password"
+              autoCapitalize="none"
               value={this.props.password}
               onChangeText={this.onPasswordChange.bind(this)}
             />
+          </ScrollView>
+        </RkAvoidKeyboard>
+        {this.renderError()}
+        {this.renderButtons()}
+      </View>
+    );
 
-            {this.renderError()}
-            {this.renderButtons()}
-
-            </RkAvoidKeyboard>
-          </View>
-        </View>
-      );
-    }
   }
 
   render() {
-    return this.renderContent();
+    if (this.props.loggedIn) {
+      return <Spinner />;
+    } else  return this.renderContent();
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0c0b0b',
-    justifyContent: 'flex-end',
-  },
   formContainerStyle: {
-    marginLeft: 20,
-    marginRight: 20,
-    bottom: 90,
+    padding: 10,
+    backgroundColor: '#0c0b0b',
+    flex: 1,
   },
-  headerStyle:{
-    flexDirection: 'row',
+  headerContainer:{
+    flex: 2,
     alignItems: 'center',
-    justifyContent: 'center',
-    padding: 5,
-		marginTop: 5,
-    marginBottom: 5,
+    paddingTop: 40,
   },
   headerTextStyle: {
 		color: 'white',
     fontSize: 40,
+    alignSelf: 'center'
   },
-	headercolumn: {
-	 flexDirection: 'column',
-	 alignItems: 'center',
-	 justifyContent: 'center',
-	 padding: 5,
-	 marginBottom: 10,
-
+	headerTitle: {
+    flex: 1,
+    flexDirection: 'row',
 	},
-	headerlowerTextStyle: {
-		color: 'yellow',
-    fontSize: 40,
-  },
 	headerSubtitleStyle: {
 		color: 'gray',
-		fontWeight: 'bold',
-		marginBottom: 50
+    fontWeight: 'bold',
+    flex: 1,
+    paddingTop: 10,
 	},
   errorTextStyle: {
+    flex: 1,
     fontSize: 14,
     alignSelf: 'center',
     color: 'red',
     fontWeight: 'bold',
-    padding: 10,
   },
   formButton: {
-    marginTop: 10,
-    marginBottom: 10
+    flex: 1,
   },
-  resetPasswordContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 10,
-		//color: 'white',
+  buttonContainer: {
+    flex: .8,
+    paddingTop: 10,
   },
-  resetPasswordButton: {
+  resetPasswordText: {
     fontWeight: 'bold',
     color: 'white',
-    flexDirection: 'row',
-    justifyContent: 'center',
+    alignSelf: 'center',
   },
-  signUpButton: {
+  signUpText: {
+    flex: 1,
     fontWeight: 'bold',
     color: 'white',
+    // paddingTop: 10,
   },
-	question: {
-		fontWeight: 'bold',
-		color: 'grey',
-	},
-  signUpContainer: {
+  bottomContainer: {
+    flex:.3,
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 10,
-  }
+    paddingTop: 10
+  },
 });
 
 const mapStateToProps = ({ auth }) => {

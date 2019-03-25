@@ -2,65 +2,49 @@ import React, { Component } from 'react';
 import { ScrollView, View, Text, StyleSheet, TouchableOpacity,TextInput, Image, Dimensions, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { Card, CardSection, Input, Button, Spinner } from '../general';
+import { PickerInput, Input, Button, Spinner, DatePicker } from '../general';
 import { RkAvoidKeyboard, RkButton, RkPicker } from 'react-native-ui-kitten';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import data from '../../data/Colleges.json';
+import collegesJson from '../../data/Colleges.json';
+import countriesJson from '../../data/Countries.json';
 import {
   firstNameChanged,
   lastNameChanged,
   emailChanged,
   collegeChanged,
   majorChanged,
+  passwordChanged,
   pointsChanged,
   privilegeChanged,
   pictureChanged,
+  continentChanged,
+  nationalityChanged, 
+  genderChanged,
+  birthDateChanged,
+  confirmPasswordChanged,
   registrationError,
-  editUser,
+  quoteChanged,
   goToLogIn,
+  editUser,
   goToProfile,
-  quoteChanged } from '../../actions';
+  } from '../../actions';
 
 const collegeNames = [];
-data.map(college => {collegeNames.push({key:college.key, value:college.collegeName})});
-var majorNames =  [];
-majorNames.push(data[0].degrees);
+collegesJson.map(college => {collegeNames.push(college.collegeName)});
+var majorNames =  {};
+collegesJson.map(college => {majorNames[college.collegeName] = college.degrees});
+const continents = Object.keys(countriesJson);
+var countries =  {};
+continents.map(continent => {countries[continent] = countriesJson[continent]});
+
 
 const iconName = Platform.OS === 'ios'?'ios-arrow-dropdown':'md-arrow-dropdown';
 
 class EditProfileForm extends Component {
-  state = {collegeSelected: collegeNames.slice(0,1),
-    majorSelected: majorNames.slice(0,1),
-    pickerVisible: false,
-    pickerVisible2: false};
 
-  onFirstNameChange(text) {
-    this.props.firstNameChanged(text);
-  }
-  onLastNameChange(text) {
-    this.props.lastNameChanged(text);
-  }
-  onEmailChange(text) {
-    this.props.emailChanged(text);
-  }
-  onCollegeChange(text) {
-    this.props.collegeChanged(text);
-  }
-  onMajorChange(text) {
-    this.props.majorChanged(text);
-  }
-  onPointsChange(text) {
-    this.props.pointsChanged(text);
-  }
-  onPrivilegeChange(text) {
-    this.props.privilegeChanged(text);
-  }
-  onPictureChange(text) {
-    this.props.pictureChanged(text);
-  }
-  onQuoteChange(text) {
-    this.props.quoteChanged(text);
-  }
+    checkPrivilege(level){
+      return (this.props.privilege !== undefined && this.props.privilege[level])
+    }
 
   onButtonPress() {
     const {
@@ -71,33 +55,57 @@ class EditProfileForm extends Component {
       points,
       picture,
       major,
+      password,
+      confirmPassword,
       registrationError,
-      editUser,
-      goToLogIn,
+      continent,
+      nationality,
+      gender,
+      birthday,
       goToProfile,
       quote } = this.props;
 
     const ucfStudentEmail = new RegExp(/^[A-Za-z0-9._%+-]+@(knights.|)ucf.edu$/i);
 
-    if (firstName === '') {
-      registrationError('Please enter your first name');
-    } else if (lastName === '') {
-      registrationError('Please enter your last name');
-    } else if (email === '') {
-      registrationError('Please enter your school email');
-    } else if (!ucfStudentEmail.test(email)) {
-       registrationError('Please use a "knights.ucf.edu", or "ucf.edu" email for registration');
+
+    
+    if(this.checkPrivilege('eboard')) {
+      if (firstName === '') {
+        registrationError('Please enter your first name');
+      } else if (lastName === '') {
+        registrationError('Please enter your last name');
+      } else if (email === '') {
+        registrationError('Please enter your school email');
+      } else if (!ucfStudentEmail.test(email)) {
+        registrationError('Please use a "knights.ucf.edu", or "ucf.edu" email for registration');
+      } else if (password === '') {
+        registrationError('Please enter password');
+      } else if (confirmPassword === '') {
+        registrationError('Please confirm password');
+      } else if (password !== confirmPassword) {
+        registrationError('Passwords do not match, please try again');
+      } else if (points == '') {
+        registrationError('Please enter your points');
+      } else if (nationality == '') {
+        registrationError('Please enter your country of origin');
+      } else if (birthday == '') {
+        registrationError('Please enter your date of birth');
+      } else if (college === '') {
+        registrationError('Please enter college');
+      } else if (major === '') {
+        registrationError('Please enter major');
+      }
+      else {
+        editUser( firstName, lastName, email, college, major, points, picture, password, quote, continent, nationality, gender, birthday );
+        Actions.replace('profile')
+      }
     } else if (college === '') {
       registrationError('Please enter college');
     } else if (major === '') {
       registrationError('Please enter major');
-    } else if (quote === '') {
-      registrationError('Please enter a quote');
-    }
-    else {
-      this.onPointsChange(0);
-      editUser( firstName, lastName, email, college, major, points, quote );
-      goToProfile();
+    }  else {
+      editUser( firstName, lastName, email, college, major, points, picture, password, quote, continent, nationality, gender, birthday );
+      Actions.replace('profile')
     }
   }
 
@@ -146,45 +154,155 @@ class EditProfileForm extends Component {
       </View>
     );
   }
+  renderCollegePickers() {
+    const {
+      college,
+      collegeChanged,
+      major,
+      majorChanged
+    } = this.props
 
-  showPicker1 = () => {
-    this.setState({pickerVisible: true})
-  };
+    const p1 = (college !== undefined && college !== null && college !== "") ?
+      (<PickerInput
+            title={"Major"}
+            value={major}
+            data={majorNames[college]}
+            placeholder={"Select major"}
+            onSelect={(text) => majorChanged(text)}/>) : (<View></View>)
 
-  hidePicker1 = () => {
-    this.setState({pickerVisible: false});
-  };
-
-  showPicker2 = () => {
-    this.setState({pickerVisible2: true})
-  };
-
-  hidePicker2 = () => {
-    this.setState({pickerVisible2: false});
-  };
-
-  handlePickedValueCollege = (input) =>{
-    this.setState({collegeSelected: input});
-    this.onCollegeChange(input[0].value);
-    this.populateMajorArray(input);
-    this.hidePicker1();
-  };
-
-  handlePickedValueMajor = (input2) =>{
-    this.setState({majorSelected: input2});
-    this.onMajorChange(input2[0]);
-    this.hidePicker2();
-  };
-  populateMajorArray(cName){
-      majorNames = [];
-      majorNames.push('Select a Major');
-      var i = 2;
-
-      var temp = data.slice(cName[0].key-1, cName[0].key);
-      temp[0].degrees.map((aDegree)=>{
-        majorNames.push(aDegree);
-      });
+        return(
+        <View>
+          <PickerInput
+            title={"Colleges"}
+            value={college}
+            data={collegeNames}
+            placeholder={"Select college"}
+            onSelect={(text) => collegeChanged(text)}/>
+          {p1}
+          
+        </View>
+      )
   }
+
+  renderCountryPickers() {
+    const {
+      continent,
+      continentChanged,
+      nationalityChanged,
+      nationality
+    } = this.props
+
+    const p1 = (continent !== undefined && continent !== null && continent !== "") ?
+      (<PickerInput
+            title={"Nationality"}
+            value={nationality}
+            data={countries[continent]}
+            placeholder={"Select country of origin"}
+            onSelect={(text) => nationalityChanged(text)}/>) : (<View></View>)
+
+        return(
+        <View>
+          <PickerInput
+            title={"Continent"}
+            value={continent}
+            data={continents}
+            placeholder={"Select continent of origin"}
+            onSelect={(text) => continentChanged(text)}/>
+          {p1}
+          
+        </View>
+      )
+  }
+
+  renderIfEboard(){
+    const {
+      firstName,
+      firstNameChanged,
+      lastName,
+      lastNameChanged,
+      email,
+      emailChanged,
+      gender,
+      genderChanged,
+      birthday,
+      birthDateChanged,
+      points,
+      pointsChanged
+    } = this.props
+    if (this.checkPrivilege('eboard')) {
+      return (
+        <View>
+          <Input
+              placeholder="First Name"
+              value={firstName}
+              onChangeText={(text) => firstNameChanged(text)}
+            />
+            <Input
+              placeholder="Last Name"
+              value={lastName}
+              onChangeText={(text) => lastNameChanged(text)}
+            />
+            <Input
+              placeholder="School Email"
+              keyboardType="email-address"
+              value={email}
+              onChangeText={(text) => emailChanged(text)}
+            />
+            <Input
+              placeholder="Points"
+              value={points + ""}
+              onChangeText={(text) => pointsChanged(text)}
+            />
+            <PickerInput
+              title={"Gender"}
+              value={gender}
+              data={["Female","Male","Other","Do not wish to disclose"]}
+              placeholder={"Select your gender"}
+              onSelect={(text) => genderChanged(text)}
+            />            
+            {this.renderCountryPickers()}
+            {this.renderCollegePickers()}
+
+            <DatePicker
+              placeholder={"Birthday"}
+              value={birthday}
+              onSelect={(text) => birthDateChanged(text)}
+              />
+        </View>
+      )
+    }
+  }
+
+  renderPickers() {
+    const {
+      college,
+      collegeChanged,
+      major,
+      majorChanged
+    } = this.props
+
+    const p1 = (college !== undefined && college !== null && college !== "") ?
+      (<PickerInput
+            title={"Colleges"}
+            value={this.props.major}
+            data={majorNames[college]}
+            placeholder={"Select College"}
+            onSelect={(text) => majorChanged(text)}/>) : (<View></View>)
+
+        return(
+        <View>
+          <PickerInput
+            title={"Colleges"}
+            value={this.props.college}
+            data={collegeNames}
+            placeholder={"Select College"}
+            onSelect={(text) => collegeChanged(text)}/>
+          {p1}
+          
+        </View>
+      )
+  }
+
 
   render() {
     return (
@@ -203,88 +321,18 @@ class EditProfileForm extends Component {
           style={styles.scrollView}>
 
           <RkAvoidKeyboard>
-            <Input
-              placeholder="First Name"
-              value={this.props.firstName}
-              onChangeText={this.onFirstNameChange.bind(this)}
-            />
-            <Input
-              placeholder="Last Name"
-              value={this.props.lastName}
-              onChangeText={this.onLastNameChange.bind(this)}
-            />
-            <Input
-              placeholder="School Email"
-              keyboardType="email-address"
-              value={this.props.email}
-              onChangeText={this.onEmailChange.bind(this)}
-            />
-
-            <View style={styles.pickerTextInput}>
-              <Input
-                style={{flex: 1}}
-                editable={false}
-                value={this.state.collegeSelected[0].value }/>
-                <TouchableOpacity
-                  style={{alignItems:'flex-end', margin: 10}}
-                  onPress={this.showPicker1}>
-                  <Ionicons name={iconName} size={45}/>
-                </TouchableOpacity>
-            </View>
-
-            <RkPicker
-              rkType='rounded'
-              optionHeight={80}
-              optionRkType={'medium'}
-              selectedOptionRkType={'medium danger'}
-              confirmButtonText={'Select'}
-              title="Colleges"
-              titleTextRkType={'large'}
-              data={[collegeNames]}
-              visible={this.state.pickerVisible}
-              onConfirm={this.handlePickedValueCollege}
-              onCancel={this.hidePicker1}
-              selectedOptions={this.state.collegeSelected}
-              />
-
-            <View style={styles.pickerTextInput}>
-              <Input
-                style={{flex: 1}}
-                editable={false}
-                value={this.state.majorSelected[0] }/>
-                <TouchableOpacity
-                  style={{alignItems:'flex-end', margin: 10}}
-                  onPress={this.showPicker2}>
-                  <Ionicons name={iconName} size={45}/>
-                </TouchableOpacity>
-            </View>
-
-            <RkPicker
-              rkType='rounded'
-              optionHeight={80}
-              optionRkType={'medium'}
-              selectedOptionRkType={'medium danger'}
-              confirmButtonText={'Select'}
-              title="Degrees"
-              titleTextRkType={'large'}
-              data={[majorNames]}
-              visible={this.state.pickerVisible2}
-              onConfirm={this.handlePickedValueMajor}
-              onCancel={this.hidePicker2}
-              selectedOptions={this.state.majorSelected}
-              />
-
-              <Input
-                placeholder='Quote'
-                autoCapitalize='sentences'
-                maxLength={175}
-                numberOfLines={5}
-                multiline={true}
-                value={this.props.quote}
-                onChangeText={this.onQuoteChange.bind(this)}
-                textAlignVertical='top'
-              />
-
+            {this.renderIfEboard()}
+            {this.renderPickers()}
+            {/* <Input
+              placeholder='Quote'
+              autoCapitalize='sentences'
+              maxLength={175}
+              numberOfLines={5}
+              multiline={true}
+              value={this.props.quote}
+              onChangeText={this.onQuoteChange.bind(this)}
+              textAlignVertical='top'
+            /> */}
           </RkAvoidKeyboard>
           </ScrollView>
 
@@ -303,7 +351,7 @@ const { height: D_HEIGHT, width: D_WIDTH } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E1E1E1',
+    backgroundColor: '#2C3239',
     justifyContent: 'flex-end',
   },
   formContainerStyle: {
@@ -323,6 +371,7 @@ const styles = StyleSheet.create({
   headerTextStyle: {
     fontSize: 22,
     fontWeight: 'bold',
+    color: '#e0e6ed'
   },
   errorTextStyle: {
     fontSize: 14,
@@ -377,6 +426,10 @@ const mapStateToProps = ({ auth }) => {
     email,
     college,
     major,
+    continent,
+    nationality,
+    gender,
+    birthday,
     picture,
     points,
     privilege,
@@ -390,6 +443,10 @@ const mapStateToProps = ({ auth }) => {
     email,
     college,
     major,
+    continent,
+    nationality,
+    gender,
+    birthday,
     picture,
     points,
     privilege,
@@ -404,13 +461,20 @@ const mapDispatchToProps = {
   emailChanged,
   collegeChanged,
   majorChanged,
+  passwordChanged,
   pointsChanged,
   privilegeChanged,
   pictureChanged,
+  continentChanged,
+  nationalityChanged,
+  genderChanged,
+  birthDateChanged,
+  confirmPasswordChanged,
   registrationError,
-  editUser,
+  quoteChanged,
   goToLogIn,
+  editUser,
   goToProfile,
-  quoteChanged }
+  }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditProfileForm);

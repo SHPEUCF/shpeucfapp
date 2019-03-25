@@ -328,7 +328,7 @@ export const goToPositionForm = (text) => {
 export const vote = (userId, dict) => {
     var votes;
     return () => {
-        var obj = {}
+       
 
         firebase.database().ref(`/voting/`).once('value', snapshot => {
             obj = snapshot.val()
@@ -336,7 +336,7 @@ export const vote = (userId, dict) => {
                 obj[item.key][item.value][userId] = true
                 obj[item.key][item.value].votes = snapshot.val()[item.key][item.value].votes + 1
             })
-
+            
             firebase.database().ref(`/voting/`).update(obj)
         })
         .then(() => firebase.database().ref(`/election/votes`).once('value', snapshot => {
@@ -344,8 +344,9 @@ export const vote = (userId, dict) => {
             firebase.database().ref(`/election/votes`).set(votes)
         }))
         .then(() => firebase.database().ref(`/users/${userId}/voted/`).set(true))
-        .then(() => alert('Vote Cast!', 'Successful'))
-        .catch((error) => alert('Vote could not be cast!', error))
+          
+          /*.then(() => alert('Vote Cast!', 'Successful'))
+          .catch((error) => alert('Vote could not be cast!', 'Failure'))*/
    }
 };
 

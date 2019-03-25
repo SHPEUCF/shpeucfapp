@@ -16,7 +16,10 @@ import {
   EDIT_MEMBER,
   GO_TO_OTHER_PROFILE,
   GO_TO_EDIT_OTHER_PROFILE_FORM,
-  FETCH_FILTERS
+  FETCH_FILTERS,
+  FETCH_ALL_USERS,
+  NATIONALITY_CHANGED_MEMBER,
+  DATE_BIRTH_CHANGED_MEMBER,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -34,12 +37,15 @@ const INITIAL_STATE = {
   privilege: {},
   password: '',
   confirmPassword: '',
+  nationality: '',
+  date_of_birth: '',
   user: null,
   loggedIn: null,
   loading: false,
   error: '',
   id: '',
-  filters: {}
+  filters: {},
+  userList: {}
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -82,6 +88,14 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state,
         picture: payload
       };
+      case NATIONALITY_CHANGED_MEMBER:
+      return { ...state,
+        nationality: payload
+      };
+      case DATE_BIRTH_CHANGED_MEMBER:
+      return { ...state,
+        date_of_birth: payload
+      };
     case CONFIRM_PASSWORD_CHANGED_MEMBER:
       return { ...state,
         confirmPassword: payload
@@ -110,8 +124,14 @@ export default (state = INITIAL_STATE, action) => {
         quote: payload.quote,
         points: payload.points,
         picture: payload.picture,
+        nationality: payload.nationality,
+        date_of_birth: payload.date_of_birth,
         privilege: payload.privilege,
       };
+    case FETCH_ALL_USERS:
+      return { ...state,
+        userList: payload
+      }
     case EDIT_MEMBER:
       return state;
     case GO_TO_OTHER_PROFILE:
