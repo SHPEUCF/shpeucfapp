@@ -71,39 +71,31 @@ state = { isApplyShow: false, index: null,
 
   showApplyPosition(){
 
-    const {containerStyle, inputApply, tab} = styles;
+    const {
+      applyTitle,
+      applyInput,
+      textColor,
+      textStyle
+    } = styles;
+      
 
     if(this.state.isApplyShow == false){
       return (null);
     }
 
     return(
-      <View>
-        <View style={tab}>
-          <View style={{flex:1, alignItems:'flex-start', marginLeft:8, justifyContent:'center'}}>
-            <Text onPress = {()=>{ this.setState({isApplyShow: false}); this.setState({isListShow: true}); }} style={{fontSize:16}}>Back</Text>
-          </View>
-          <View style={{flex:3, alignItems:'flex-start', justifyContent:'center'}}>
-            <Text style={{fontWeight:'bold', fontSize:18}}>Candidate Application</Text>
-          </View>
-        </View>
+      <View style={{flex: 1}}>
         <View style={{flex:1, margin: 8}}>
-          <View style={{alignItems:'center'}}>
-            <Text style={{fontSize:20}}> {`${this.state.applyPos}`}</Text>
-          </View>
+          <Text style={[applyTitle, textColor]}>{this.state.applyPos}</Text>
         <View style={{marginTop:10, marginBottom:8}}>
-          <Text style={{fontSize:18}}>Name:</Text>
-          <View style={{marginTop:8, marginLeft:16}}><Text>{`${this.props.firstName} ${this.props.lastName}`}</Text></View>
+          <Text style={[textStyle, textColor]}>Name: {this.props.firstName} {this.props.lastName}</Text>
         </View>
 
-       <Text style={{fontSize:18}}>Plan:</Text>
+       <Text style={[textStyle, textColor]}>Plan:</Text>
        {this.renderError()}
-       <View style={{flex:1, margin:16 }}>
-        <RkAvoidKeyboard>
-        <TextInput style={{borderWidth:5,
-        borderRadius:10,
-        borderColor:"lightgrey",
-        textAlignVertical: "top", height: dimension.height * 0.50} }
+       <View style={{flex:1}}>
+        <RkAvoidKeyboard style={{flex: .6}}>
+        <Input style={applyInput}
           multiline = {true}
           placeholder="Please write your plan for members to read."
           value={this.props.candidatePlan}
@@ -111,7 +103,7 @@ state = { isApplyShow: false, index: null,
           />
           </RkAvoidKeyboard>
           </View>
-          <View>
+          <View style={{flex: .25}}>
             <Button
               title={this.state.application}
               onPress={()=>{
@@ -125,8 +117,8 @@ state = { isApplyShow: false, index: null,
             <Button
               title="Cancel"
               onPress={()=>{
-                this.setState({isApplyShow: false}); this.setState({isListShow: true});
-                this.setState({applyPos:null});}}
+                this.setState({isApplyShow: false, isListShow: true, applyPos: null});
+              }}
                 />
           </View>
         </View>
@@ -143,14 +135,6 @@ state = { isApplyShow: false, index: null,
 
     return(
         <View>
-          <View style={tab}>
-            <View style={{flex:1, alignItems:'flex-start', marginLeft:8, justifyContent:'center'}}>
-              <Text onPress = {()=>{Actions.popTo("Election")}} style={{fontSize:16}}>Cancel</Text>
-            </View>
-            <View style={{flex:1.5, alignItems:'flex-start', justifyContent:'center'}}>
-              <Text style={{fontWeight:'bold', fontSize:18}}>Positions</Text>
-            </View>
-          </View>
           <FlatList
             data={positionsArray}
             extraData={this.state}
@@ -174,10 +158,10 @@ state = { isApplyShow: false, index: null,
     return(
       <View style={{flex:1, margin: 8, borderBottomWidth:1, borderColor:'grey'}}>
           <View style={{marginBottom:10}}>
-             <Text style={{fontSize:18, fontWeight:'500'}}>Position:  {`${item.title}`}</Text>
+             <Text style={{fontSize:18, fontWeight:'500'}}>Position: {item.title}</Text>
            </View>
            <View style={{marginLeft: 12, marginRight: 10, marginBottom:8}}>
-             <Text style={{fontSize:16, fontWeight:'400', lineHeight: 25}}>Role:  {`${item.description}`}</Text>
+             <Text style={{fontSize:16, fontWeight:'400', lineHeight: 25}}>Role: {item.description}</Text>
            </View>
            <View style={button} >
              <Button
@@ -190,7 +174,9 @@ state = { isApplyShow: false, index: null,
   }
 
   renderListPositionApplied(item){
-    const {button} = styles;
+    const { 
+      button  
+    } = styles;
     return(
       <View style={{flex:1, margin: 8, borderBottomWidth:1, borderColor:'grey'}}>
           <View style={{marginBottom:10}}>
@@ -235,8 +221,10 @@ state = { isApplyShow: false, index: null,
 
   render() {
     const {
-      containerStyle,
-      contentContainerStyle } = styles;
+      page,
+      tabBar,
+      tabBarText
+     } = styles;
 
     const {
       positions,
@@ -247,7 +235,10 @@ state = { isApplyShow: false, index: null,
     //alert(positions.title);
     return (
 
-      <View style={{alignItems:'center', justifyContent:'center', flex: 1}}>
+      <View style={page}>
+       <View style={tabBar}>
+            <Text style={tabBarText}>Positions</Text>
+        </View>
           {this.showListPosition(positionsArray)}
           {this.showApplyPosition()}
       </View>
@@ -256,15 +247,23 @@ state = { isApplyShow: false, index: null,
 }
 
 const styles = StyleSheet.create({
-  tab: {
-    flexDirection: 'row',
-    marginTop:24,
-    paddingBottom:12,
-    borderBottomWidth: 2,
-    borderColor:'lightgrey',
-    width: dimension.width *1,
-    alignItems: 'center',
-    justifyContent: 'flex-start'
+   tabBar : {
+    height: dimension.height * .1,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: "#0005",
+  },
+  tabBarText : {
+    color: '#000',
+    fontSize: 20,
+    margin: 20,
+    alignSelf: "center"
+  },
+  applyTitle: {
+    alignSelf: 'center',
+    fontSize: 20,
+    fontWeight: 'bold'
   },
   containerStyle: {
     flex: 1,
@@ -276,16 +275,26 @@ const styles = StyleSheet.create({
   contentContainerStyle: {
     margin: 1,
   },
+  textStyle: {
+    fontSize: 18
+  },
+  textColor: {
+    color: '#e0e6ed'
+  },
   button: {
     paddingTop: dimension.height * .015,
     paddingBottom: dimension.height * .015,
     marginBottom: 8
   },
-  inputApply: {
-    borderWidth:5,
-    borderRadius:10,
-    borderColor:"grey",
-    textAlignVertical: "top"
+  page: {
+    backgroundColor: '#2C3239',
+    flex: 1
+  },
+  applyInput: {
+    borderWidth: 3,
+    // borderRadius: 10,
+    borderColor: "lightgrey",
+    // textAlignVertical: "top", 
   }
 });
 

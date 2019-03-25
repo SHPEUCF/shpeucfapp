@@ -35,119 +35,66 @@ import {
   // adding a random comment
 
 const dimension = Dimensions.get('window');
-const iterateesPos = ['level'];
-const orderPos = ['asc'];
-
-const iterateesCan = ['lastName','firstName'];
-const orderCan = ['asc','asc'];
-
-const vColor = '#00ff7f';
-
-
-
-      /* Color idea doesnt work
-         the color is annoying maybe a check box  */
-
-var dict = [];
 
 class Election extends Component {
+  
 
-  componentWillMount() {
-      this.props.getPositions();
+  renderButtons(){
 
   }
-
-  renderError() {
-      if (this.props.error) {
-          return (
-          <View>
-              <Text style={styles.errorTextStyle}>
-                  {this.props.error}
-              </Text>
-          </View>
-          );
-      }
-  }
-
- optionButtons(){
-   return (
-     <View>
-       {this.applyButton()}
-       <Text>Write a message to tell the importance of voting for the chapter</Text>
-      { /* open a modal page whre the person can vote for the candidates */}
-       <Button
-         title="Vote"
-         onPress = {() => {
-           if (!this.props.voted)
-           Actions.ElectionBallot();
-          else {
-            alert("You already voted!");
-          }}}
-         />
-     </View>
-   )
- }
-
- applyButton(){
-   if (this.props.apply){
-     return (
-       <View>
-         <Text>Write an aspiring message for member to run for office</Text>
-         {/* open a modal page whre the person can apply for a position */}
-         <Button
-           title="Run For Office"
-           onPress = {() => {Actions.ElectionApplication()}}
-           />
-       </View>
-     )
-   }
- }
 
   render() {
     const {
-      containerStyle,
-      contentContainerStyle } = styles;
+      page,
+      content,
+      textStyle,
+      textColor
+      } = styles;
 
     return (
 
-      <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-        {this.optionButtons()}
+      <View style={page}>
+        <View style={content}>
+          <View style={{flex: .6, paddingTop: 30}}>
+            <Text style={[textStyle, {fontWeight: 'bold'},textColor]}>"Don't Boo, Vote"</Text>
+            <Text style={[textStyle, {fontWeight: 'bold', alignSelf: 'center'},textColor]}>                     - Barrack Obama</Text>
+          </View>
+        </View>
+          {/* <Text style={[textStyle, textColor]}>Your vote today is having a huge impact on the path that SHPE UCF is paving for the future</Text> */}
+        <Button
+           title="Run For Office"
+           onPress = {() => {Actions.ElectionApplication()}}
+           />
+        <Button
+         title="Vote"
+         onPress = {() => {
+           if (!this.props.voted) Actions.ElectionBallot();
+          else alert("You already voted!");
+          }}
+         />
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  containerStyle: {
+  page:{
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
+    backgroundColor: '#2C3239',
+    paddingBottom: 10
   },
-  contentContainerStyle: {
-    margin: 1,
+  textStyle: {
+    flex: .2,
+    fontSize: 20,
+
   },
-  button: {
-  //  backgroundColor: '#8b95a5',
-    paddingTop: dimension.height * .015,
-    paddingBottom: dimension.height * .015,
-    marginBottom: 8
+  textColor: {
+    color: '#e0e6ed'
   },
-  modalTopStyle:{
-    flexDirection:'row',
-    marginTop:24,
-    paddingBottom:12,
-    elevation:1,
-    borderBottomWidth: 2,
-    borderColor:'lightgrey'
+  content: {
+    flex: 1,
+    padding: 20,
   },
-  inputApply: {
-    borderWidth:5,
-    borderRadius:10,
-    borderColor:"grey",
-    textAlignVertical: "top"
-  }
 });
 
 const mapStateToProps = ({ elect, auth }) => {
