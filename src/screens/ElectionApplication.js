@@ -90,10 +90,9 @@ state = { isApplyShow: false, index: null,
         <View style={{marginTop:10, marginBottom:8}}>
           <Text style={[textStyle, textColor]}>Name: {this.props.firstName} {this.props.lastName}</Text>
         </View>
-
-       <Text style={[textStyle, textColor]}>Plan:</Text>
-       {this.renderError()}
-       <View style={{flex:1}}>
+        <Text style={[textStyle, textColor]}>Plan:</Text>
+        {this.renderError()}
+        <View style={{flex:1}}>
         <Input style={applyInput}
           blurOnSubmit={true}
           multiline = {true}
@@ -101,24 +100,6 @@ state = { isApplyShow: false, index: null,
           value={this.props.candidatePlan}
           onChangeText={this.onPlanChange.bind(this)}
           />
-          </View>
-          <View style={{flex: .25}}>
-            <Button
-              title={this.state.application}
-              onPress={()=>{
-              if (this.state.application == "Submit"){
-                this.props.addApplication(this.props.firstName,this.props.lastName,this.props.candidatePlan, this.state.applyPos, this.props.id );}
-              else {
-                this.props.editApplication(this.state.applyPos, this.props.candidatePlan, this.props.id);
-              }
-              this.setState({isApplyShow: false}); this.setState({isListShow: true}); }}
-              />
-            <Button
-              title="Cancel"
-              onPress={()=>{
-                this.setState({isApplyShow: false, isListShow: true, applyPos: null});
-              }}
-                />
           </View>
         </View>
       </View>
@@ -151,16 +132,20 @@ state = { isApplyShow: false, index: null,
   }
 
   renderListPositionComponent(item){
-    const {button} = styles;
+    const {
+      button,
+      textStyle,
+      textColor
+    } = styles;
     this.state.application = 'Submit';
 
     return(
       <View style={{flex:1, margin: 8, borderBottomWidth:1, borderColor:'grey'}}>
           <View style={{marginBottom:10}}>
-             <Text style={{fontSize:18, fontWeight:'500'}}>Position: {item.title}</Text>
+             <Text style={[textStyle, textColor]}>Position: {item.title}</Text>
            </View>
            <View style={{marginLeft: 12, marginRight: 10, marginBottom:8}}>
-             <Text style={{fontSize:16, fontWeight:'400', lineHeight: 25}}>Role: {item.description}</Text>
+             <Text style={[textStyle, textColor]}>Role: {item.description}</Text>
            </View>
            <View style={button} >
              <Button
@@ -174,15 +159,16 @@ state = { isApplyShow: false, index: null,
 
   renderListPositionApplied(item){
     const { 
-      button  
+      textStyle,
+      textColor
     } = styles;
     return(
       <View style={{flex:1, margin: 8, borderBottomWidth:1, borderColor:'grey'}}>
           <View style={{marginBottom:10}}>
-            <Text style={{fontSize:18, fontWeight:'500'}}>Position:  {`${item.title}`}</Text>
+            <Text style={[textStyle, textColor]}>Position:  {`${item.title}`}</Text>
           </View>
           <View style={{marginLeft: 12, marginRight: 10, marginBottom:8}}>
-            <Text style={{fontSize:16, fontWeight:'400', lineHeight: 25}}>Role:  {`${item.description}`}</Text>
+            <Text style={[textStyle, textColor]}>Role:  {`${item.description}`}</Text>
           </View>
            {this.renderEditButton(item)}
       </View>
@@ -217,12 +203,58 @@ state = { isApplyShow: false, index: null,
      }
   }
 
+  renderButtons(){
+
+    const{
+      firstName,
+      lastName,
+      candidatePlan,
+      id,
+      addApplication,
+      buttonContainer
+    } = this.props
+
+    const {
+      application,
+      applyPos,
+      isListShow
+    } = this.state
+
+    return (
+      <View style={buttonContainer}>
+        <Button
+          title={application}
+          onPress={()=>{
+          if (application == "Submit"){
+            addApplication(firstName,lastName,candidatePlan, applyPos, id );}
+          else {
+            editApplication(applyPos, candidatePlan, id);
+          }
+          this.setState({isApplyShow: false}); this.setState({isListShow: true}); 
+        }}
+        />
+        <Button
+          title="Cancel"
+          onPress={()=>{
+            if(isListShow){
+              Actions.pop()
+            }
+            else{
+              this.setState({isApplyShow: false, isListShow: true, applyPos: null});
+            }
+          }}
+        />
+      </View>
+    )
+  }
+
 
   render() {
     const {
       page,
       tabBar,
-      tabBarText
+      tabBarText,
+      contentStyle
      } = styles;
 
     const {
@@ -238,8 +270,11 @@ state = { isApplyShow: false, index: null,
        <View style={tabBar}>
             <Text style={tabBarText}>Positions</Text>
         </View>
+        <View style={contentStyle}>
           {this.showListPosition(positionsArray)}
           {this.showApplyPosition()}
+        </View>
+        {this.renderButtons()}
       </View>
     )
   }
@@ -271,8 +306,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15,
   },
-  contentContainerStyle: {
-    margin: 1,
+  contentStyle: {
+    flex: 1
   },
   textStyle: {
     fontSize: 18
@@ -285,12 +320,17 @@ const styles = StyleSheet.create({
     paddingBottom: dimension.height * .015,
     marginBottom: 8
   },
+  buttonContainer: {
+    flex: .4
+  },
   page: {
     backgroundColor: '#2C3239',
     flex: 1
   },
   applyInput: {
     flex: .4,
+    textAlignVertical: "top", 
+    height: dimension.height * .3
   }
 });
 
