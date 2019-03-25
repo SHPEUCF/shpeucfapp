@@ -60,10 +60,10 @@ class LoginForm extends Component {
   }
 
   renderButtons() {
-    
+
     return (
       <View style={styles.buttonContainer}>
-        <Button 
+        <Button
           title = "LOG IN"
           onPress={this.onButtonPress.bind(this)}
         />
@@ -82,7 +82,7 @@ class LoginForm extends Component {
       headerSubtitleStyle,
     } = styles
     return (
-      <View style={formContainerStyle}> 
+      <View style={formContainerStyle}>
         <RkAvoidKeyboard style={headerContainer}>
           <ScrollView style= {{flex: 1}}>
             <Image
@@ -100,7 +100,7 @@ class LoginForm extends Component {
         </RkAvoidKeyboard>
         <RkAvoidKeyboard style={{flex:1}}>
           <ScrollView style= {{flex: 1}}>
-            <Input       
+            <Input
               placeholder="Knights Email"
               value={this.props.email}
               autoCapitalize="none"
@@ -137,9 +137,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerContainer:{
-    flex: 2,
+    flex: 1.5,
     alignItems: 'center',
-    paddingTop: 40,
+    paddingTop: 10
   },
   headerTextStyle: {
 		color: 'white',
@@ -154,7 +154,6 @@ const styles = StyleSheet.create({
 		color: 'gray',
     fontWeight: 'bold',
     flex: 1,
-    paddingTop: 10,
 	},
   errorTextStyle: {
     flex: 1,
@@ -168,7 +167,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: .8,
-    paddingTop: 10,
+
   },
   resetPasswordText: {
     fontWeight: 'bold',
@@ -185,7 +184,6 @@ const styles = StyleSheet.create({
     flex:.3,
     flexDirection: 'row',
     justifyContent: 'center',
-    paddingTop: 10
   },
 });
 

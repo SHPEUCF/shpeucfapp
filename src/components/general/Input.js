@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { TextInput, View, Text, ScrollView } from 'react-native';
 
 class Input extends Component {
- 
+
   constructor(props) {
     super(props)
   }
@@ -25,7 +25,7 @@ class Input extends Component {
     style: PropTypes.oneOfType([
       PropTypes.array,
       PropTypes.shape({}),
-    ]) 
+    ])
   }
   render() {
     const { inputStyle } = styles;
@@ -86,7 +86,7 @@ const styles = {
     fontSize: 16,
     marginTop: 8,
     marginBottom: 8,
-    padding: 20,
+    padding: 15,
     backgroundColor: 'white',
     borderRadius: 25
   }
