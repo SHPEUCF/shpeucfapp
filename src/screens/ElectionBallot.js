@@ -52,13 +52,12 @@ class ElectionBallot extends Component {
     this.renderCand = this.renderCand.bind(this);
   }
 
-state = { isApplyShow: false, index: null,
-  isListShow: false, isBallotShow: true, isCand: false, applyPos: null, listCandidates: null, application: 'Submit'};
+  state = { index: null,
+  isBallotShow: true, isCand: false, applyPos: null, listCandidates: null, application: 'Submit'};
 
 
   componentWillMount() {
       this.props.getPositions();
-
   }
 
 
@@ -70,65 +69,57 @@ state = { isApplyShow: false, index: null,
       if (item.approved){
       return (
         <View>
-        <Card >
-
-              <View>
-                <TouchableOpacity
-                  onPress={()=>{
-                    dict[this.state.index] = {key:item.position , value:item.id, first:item.firstName, last:item.lastName};
-                    this.setState({isCand: false});
-                    this.setState({isBallotShow: true});
-                  }}>
-
-                <View style={{alignItems:'center'}}>
-                    <Text style={{ fontWeight:'bold', fontSize: 20}}>{item.firstName+' '+item.lastName}</Text>
-
-
+        <Card>
+          <View>
+            <TouchableOpacity
+              onPress={()=>{
+                dict[this.state.index] = {key:item.position , value:item.id, first:item.firstName, last:item.lastName};
+                this.setState({isCand: false});
+                this.setState({isBallotShow: true});
+              }}>
+              <View style={{alignItems:'center'}}>
+                <Text style={{ fontWeight:'bold', fontSize: 20}}>{item.firstName+' '+item.lastName}</Text>
               </View>
-
-                <View style={{flex:1}}>
-                  <View style={contentContainerStyle}>
-                      <View style={containerStyle}>
-
-                        <Text style={{fontSize:16}}>Plan: {item.plan}</Text>
-                      </View>
-                    </View>
+              <View style={{flex:1}}>
+                <View style={contentContainerStyle}>
+                  <View style={containerStyle}>
+                      <Text style={{fontSize:16}}>Plan: {item.plan}</Text>
+                  </View>
                 </View>
-                </TouchableOpacity>
               </View>
-
-          </Card>
-        </View>
+            </TouchableOpacity>
+          </View>
+        </Card>
+      </View>
       )
     }
   }
 
 renderCand(){
-const {containerStyle, inputApply, tab} = styles;
+  const {containerStyle, inputApply, tab} = styles;
   if(this.state.isCand == false){
     return (null);
   }
-
   return(
     <View>
-    <View style={tab}>
-    <View style={{flex: 2, alignItems:'center', justifyContent:'center'}}>
-      <Text style={{fontWeight:'bold', fontSize:18}}>{`${this.state.applyPos}`}</Text>
+      <View style={tab}>
+        <View style={{flex: 2, alignItems:'center', justifyContent:'center'}}>
+          <Text style={{fontWeight:'bold', fontSize:18}}>{`${this.state.applyPos}`}</Text>
+        </View>
     </View>
-    </View>
-  <FlatList
-    data={this.state.listCandidates}
-    extraData={this.state}
-    keyExtractor={this._keyExtractor}
-    renderItem={({item, separators}) => (
-    this.renderCandidatesComponent(item)
-  )}
-    />
-    {this.renderPositionVote()}
-    <Button title="Ballot" onPress={() => {this.setState({isCand: false}); this.setState({isBallotShow: true});}}/>
-    </View>
-)
-}
+    <FlatList
+      data={this.state.listCandidates}
+      extraData={this.state}
+      keyExtractor={this._keyExtractor}
+      renderItem={({item, separators}) => (
+      this.renderCandidatesComponent(item)
+      )}
+      />
+      {this.renderPositionVote()}
+      <Button title="Ballot" onPress={() => {this.setState({isCand: false}); this.setState({isBallotShow: true});}}/>
+      </View>
+    )
+  }
 
   renderPositionVote(){
     const {containerStyle, inputApply, tab} = styles;
@@ -145,32 +136,26 @@ const {containerStyle, inputApply, tab} = styles;
   }
 
   renderCandidatesList(item, index){
-    //this.setState({ listCandidates: _.toArray(item.candidates)});
-
     return(
-
-        <View>
-            <TouchableOpacity onPress={() => {this.setState({isBallotShow: false}); this.setState({isCand: true}); this.setState({ listCandidates: _.orderBy(item.candidates, iterateesCan, orderCan)});
-            this.renderCand(); this.setState({applyPos:item.title}); this.setState({index: index})}}>
-        <View style={{
-        margin:4,
-        padding:8,
-        backgroundColor:'lightgrey',
+      <View>
+          <TouchableOpacity onPress={() => {this.setState({isBallotShow: false}); this.setState({isCand: true}); this.setState({ listCandidates: _.orderBy(item.candidates, iterateesCan, orderCan)});
+          this.renderCand(); this.setState({applyPos:item.title}); this.setState({index: index})}}>
+      <View style={{
+      margin:4,
+      padding:8,
+      backgroundColor:'lightgrey',
       flexDirection:'row'
-    }}>
-    <View style={{flex:2, alignItems:'center', flexDirection: 'row', justifyContent: 'flex-start'}}>
+      }}>
+      <View style={{flex:2, alignItems:'center', flexDirection: 'row', justifyContent: 'flex-start'}}>
           <Text style={{fontSize:16}}>{`${item.title}`}</Text>
           {this.renderAllVotes(index)}
-          </View>
-          <View style={{flex:1, alignItems:'flex-end'}}>
-            <Text >></Text>
-          </View>
-        </View>
-</TouchableOpacity>
-
       </View>
-
-
+      <View style={{flex:1, alignItems:'flex-end'}}>
+        <Text >></Text>
+      </View>
+      </View>
+    </TouchableOpacity>
+    </View>
     )
   }
 
@@ -183,7 +168,6 @@ const {containerStyle, inputApply, tab} = styles;
       )
     }
   }
-
 
    _keyExtractor = (item, index) => index;
 
