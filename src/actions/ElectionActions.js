@@ -199,12 +199,17 @@ export const addApplication = (fName, lName, plans, position) => {
   }
 };
 
-export const editApplication = (position, plans) => {
+export const editApplication = (plans, position) => {
+    alert(`${plans} ${position}`)
     const { uid } = firebase.auth().currentUser
-  return () => {
-      firebase.database().ref(`/election/positions/${position}/candidates/${uid}`).update({
-              plan: plans,
-          })
+  return (dispatch) => {
+      firebase.database().ref(`/election/positions/${position}/candidates/${uid}/plan`).set("pooopdo")
+      .then(() => {
+          console.error("bro")
+          dispatch({
+              type: ADD_APPLICATION,
+          });
+      })
       .then(() => alert('Candidate Edited!', 'Successful'))
       .catch((error) => alert('Candidate could not be Edited!', 'Failure'))
   }

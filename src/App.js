@@ -21,7 +21,7 @@ class App extends Component {
     firebase.initializeApp(config)
 
     firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
+      if (user && firebase.auth().currentUser.emailVerified) {
         this.props.loggedIn = true;
         Actions.main();
       } else {

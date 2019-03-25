@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { Card, CardSection, Button, Spinner, Input } from '../components/general';
+import { Button, NavBar } from '../components/general';
 import { RkAvoidKeyboard } from 'react-native-ui-kitten';
 
 import { Avatar } from 'react-native-elements';
@@ -245,6 +245,24 @@ renderCand(){
       </View>
     )
   }
+
+  renderNavBar(){
+    const {
+      isBallotShow
+    } = this.state
+    return <NavBar title="Positions" back onBack={() =>
+        {
+          if(isBallotShow){
+              Actions.pop()
+            }
+            else{
+              this.setState({isCand: false, isBallotShow: true})
+            }
+        }}
+      />
+  }
+  re
+
   render() {
     const {
       page,
@@ -263,9 +281,7 @@ renderCand(){
     return (
 
       <View style={page}>
-        <View style={tabBar}>
-            <Text style={tabBarText}>Ballot</Text>
-        </View>
+        {this.renderNavBar()}
         <View style={contentStyle}>
           {this.showBallot(positionsArray)}
           {this.renderCand()}

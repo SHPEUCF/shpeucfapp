@@ -228,9 +228,9 @@ state = { isApplyShow: false, index: null,
           title={application}
           onPress={()=>{
           if (application === "Submit"){
-            addApplication(firstName,lastName,candidatePlan, applyPos );}
+            addApplication(firstName,lastName, candidatePlan, applyPos );}
           else {
-            editApplication(applyPos, candidatePlan);
+            editApplication( candidatePlan,applyPos);
           }
           this.setState({isApplyShow: false, isListShow: true}); 
         }}
