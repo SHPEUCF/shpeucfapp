@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { Card, CardSection, Button, Spinner, Input } from '../components/general';
+import { Card, CardSection, Button, Spinner, Input, NavBar } from '../components/general';
 import { RkAvoidKeyboard } from 'react-native-ui-kitten';
 
 import { Avatar } from 'react-native-elements';
@@ -264,6 +264,9 @@ state = { isApplyShow: false, index: null,
 
     const {
       positions,
+      isApplyShow,
+      applyPos,
+      isListShow
     } = this.props;
 
     const positionsArray =  _.orderBy(positions, iterateesPos, orderPos)
@@ -272,9 +275,16 @@ state = { isApplyShow: false, index: null,
     return (
 
       <View style={page}>
-       <View style={tabBar}>
-            <Text style={tabBarText}>Positions</Text>
-        </View>
+       <NavBar title="Positions" back onBack={() =>
+        {
+          if (isListShow) {
+            Actions.pop()
+          }
+          else {
+            this.setState({isApplyShow: false, isListShow: true, applyPos: null});
+          }
+        }}
+      />
         <View style={contentStyle}>
           {this.showListPosition(positionsArray)}
           {this.showApplyPosition()}

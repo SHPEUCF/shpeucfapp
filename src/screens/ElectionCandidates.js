@@ -11,7 +11,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions } from 'react-native';
-import { Button } from '../components/general'
+import { Button, NavBar } from '../components/general'
 import {
     openElection,
     closeElection,
@@ -186,16 +186,10 @@ class ElectionCandidates extends Component {
     //alert(positions.title);
     return (
      <View style={page}>
-        <View style={tabBar}>
-            <Text style={tabBarText}>Candidates</Text>
-        </View>
+        <NavBar title="Candidates" back onBack={() => Actions.pop()} />
         <View style={content}>
           {this.renderFlatlist(positionsArray)}
         </View>
-        <Button
-        onPress={() => Actions.pop()}
-        title={"BACK"}
-        />
     </View>
     );
   }

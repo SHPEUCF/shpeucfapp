@@ -175,14 +175,6 @@ class ElectionBackEnd extends Component {
             >
             </Button>
         </View>
-
-        <View style={buttonContainerStyling}>
-            <Button
-            onPress={() => Actions.popTo('BackEnd')}
-            title={"BACK"}
-            >
-            </Button>
-        </View>
       </View>
     );
   };
