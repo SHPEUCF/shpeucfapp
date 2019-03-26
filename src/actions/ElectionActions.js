@@ -249,7 +249,7 @@ export const deleteApplication = (position, candidateId) => {
                   type: DELETE_APPLICATION,
               });
           })
-          .then(() => firebase.database().ref(`/users/${id}/applied/`).set(false))
+          .then(() => firebase.database().ref(`/users/${candidateId}`).update({applied: false}))
           .then(() => firebase.database().ref(`/voting/${position}/${candidateId}`).remove())
           .then(() => alert('Candidate Removed!', 'Successful'))
           .catch((error) => alert('Candidate could not be removed!', 'Failure'))

@@ -86,6 +86,11 @@ class PointsBreakDown extends Component {
     } = styles;   
     // alert(item[0])
     var count = this.countPoints(section)
+
+    var arr = section;
+
+    if(section === null || section.length < 1 || section[1] === null)
+        arr = []
     // alert(Object.values(section[1])[1].name)
     return (
         <View>
@@ -99,7 +104,7 @@ class PointsBreakDown extends Component {
             </TouchableOpacity>
             <FlatList
                 visible={false}
-                data={Object.values(section[1])}
+                data={Object.values(arr[1])}
                 extraData={this.state}
                 keyExtractor={this._keyExtractor}
                 renderItem={({item, separators}) => (
@@ -111,6 +116,7 @@ class PointsBreakDown extends Component {
 
     renderContent(){
 
+        const { currentUser } = firebase.auth();
         const {
             containerStyle,
             contentContainerStyle,
@@ -127,7 +133,9 @@ class PointsBreakDown extends Component {
         var breakdown
 
         if (membersPoints !== undefined && membersPoints !== null &&
-            membersPoints[currentUser.uid] !== undefined && membersPoints[currentUser.uid] !== null) {
+            membersPoints[currentUser.uid] !== undefined && membersPoints[currentUser.uid] !== null
+            && membersPoints[currentUser.uid].breakdown !== undefined && membersPoints[currentUser.uid].breakdown !== null 
+            && membersPoints[currentUser.uid].breakdown.length !== 0) {
 
             breakdown = Object.entries(membersPoints[currentUser.uid].breakdown)
             return (

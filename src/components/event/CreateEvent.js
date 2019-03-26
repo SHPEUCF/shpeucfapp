@@ -107,7 +107,6 @@ class CreateEvent extends Component {
                     <ScrollView
                     ref={(ref)=> (this.scrollView=ref)}
                     style={styles.scrollView}>
-                    <RkAvoidKeyboard>
                         <View>
                             <PickerInput
                             placeholder="Event Type"
@@ -148,8 +147,6 @@ class CreateEvent extends Component {
                             onChangeText={this.onPointsChange.bind(this)}
                             />
                         </View>
-
-                    </RkAvoidKeyboard>
                     </ScrollView>
                         {this.renderError()}
                         <Button 

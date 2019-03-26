@@ -44,13 +44,35 @@ class Election extends Component {
   }
 
   render() {
+
+    const {
+      election,
+      apply
+    } = this.props
+
     const {
       page,
       content,
       textStyle,
       textColor
       } = styles;
-
+      var applyButton
+      var voteButton
+    if(apply)
+      applyButton = <Button
+                            title="Run For Office"
+                            onPress = {() => {
+                                Actions.ElectionApplication()
+                            }}
+                            />
+    if(election)
+      voteButton = (<Button
+                            title="Vote"
+                            onPress = {() => {
+                              if (!this.props.voted) Actions.ElectionBallot();
+                              else alert("You already voted!");
+                              }}
+                            />)
     return (
 
       <View style={page}>
@@ -62,17 +84,8 @@ class Election extends Component {
           </View>
         </View>
           {/* <Text style={[textStyle, textColor]}>Your vote today is having a huge impact on the path that SHPE UCF is paving for the future</Text> */}
-        <Button
-           title="Run For Office"
-           onPress = {() => {Actions.ElectionApplication()}}
-           />
-        <Button
-         title="Vote"
-         onPress = {() => {
-           if (!this.props.voted) Actions.ElectionBallot();
-          else alert("You already voted!");
-          }}
-         />
+        {applyButton}
+        {voteButton}
       </View>
     )
   }

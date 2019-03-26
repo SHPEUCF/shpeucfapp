@@ -60,10 +60,12 @@ class More extends Component {
   renderItem  = ({item}) => {
     const {
       election,
-      privilege
+      privilege,
+      apply
     } = this.props
 
-    if (item.title === "Election" && (election === false || election === undefined || election === null)){
+    if (item.title === "Election" && (election === false || election === undefined || election === null) 
+    && (apply === false || apply === undefined || apply === null)) {
       return (null);
     }
 
@@ -102,9 +104,9 @@ class More extends Component {
 const mapStateToProps = ({ auth, general, elect }) => {
   const { privilege } = auth;
   const { loading } = general;
-  const { election } = elect;
+  const { election, apply } = elect;
 
-  return { privilege, loading, election };
+  return { privilege, loading, election, apply };
 };
 
 const mapDispatchToProps = {

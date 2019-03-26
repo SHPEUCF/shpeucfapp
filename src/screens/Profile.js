@@ -123,10 +123,8 @@ class Profile extends Component {
               <Text style={[itemValueText, textColor]}>{points}</Text>
             </TouchableOpacity>
           </View>
-        <ScrollView>
           {this.renderSocialMedia()}
           {this.renderButtons()}
-        </ScrollView>
       </View>
   )
 

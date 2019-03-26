@@ -96,6 +96,7 @@ class EditProfileForm extends Component {
         registrationError('Please enter major');
       }
       else {
+        alert(points)
         editUser( firstName, lastName, email, college, major, points, picture, password, quote, continent, nationality, gender, birthday );
         Actions.replace('profile')
       }

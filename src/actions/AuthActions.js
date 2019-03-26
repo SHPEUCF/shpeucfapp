@@ -216,7 +216,6 @@ const createUserSuccess = (dispatch, firstName, lastName, email, college, major,
       gender: gender,
       birthday: birthday,
       id: currentUser.uid,
-      emailVerfied: false,
       paidMember: false,
       voted: false,
       applied: false
