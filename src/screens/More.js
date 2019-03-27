@@ -54,21 +54,21 @@ import {
 
 class More extends Component {
 
- 
+
   keyExtractor = (item, index) => index
 
   renderItem  = ({item}) => {
     const {
       election,
       privilege,
-      apply
+      apply,
     } = this.props
 
-    if (item.title === "Election" && (election === false || election === undefined || election === null) 
-    && (apply === false || apply === undefined || apply === null)) {
+    if (item.title === "Election" && (((election === false || election === undefined || election === null)
+    && (apply === false || apply === undefined || apply === null)) ||
+    (privilege.paidMember === false || privilege.paidMember === undefined || privilege.paidMember === null))) {
       return (null);
     }
-
 
     if (privilege !== undefined && privilege[item.privilege] === true ) {
       return(
@@ -104,7 +104,7 @@ class More extends Component {
 const mapStateToProps = ({ auth, general, elect }) => {
   const { privilege } = auth;
   const { loading } = general;
-  const { election, apply } = elect;
+  const { election, apply} = elect;
 
   return { privilege, loading, election, apply };
 };

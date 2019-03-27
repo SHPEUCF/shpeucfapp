@@ -41,6 +41,7 @@ const INITIAL_STATE = {
   college: '',
   major: '',
   quote: '',
+  paidMember: false,
   // Using URL below to avoid RN warning of empty source.uri as there's a delay fetching.
   // Will improve fetching later, just need to get rid of the warning for now.
   picture: 'https://cdn0.iconfinder.com/data/icons/superuser-web-kit/512/686909-user_people_man_human_head_person-512.png',
@@ -174,6 +175,7 @@ export default (state = INITIAL_STATE, action) => {
         email: payload.email,
         major: payload.major,
         quote: payload.quote,
+        paidMember: payload.paidMember,
         continent: payload.continent,
         nationality: payload.nationality,
         gender: payload.gender,

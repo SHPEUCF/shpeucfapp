@@ -107,7 +107,7 @@ renderPicture(item) {
   return (
     <View style={headerInfoContainer}>
       <Avatar
-        large
+        xlarge
         rounded
         source={{uri: item.picture}}
         activeOpacity={0.7}
@@ -155,7 +155,7 @@ renderCand(){
       return(
         <View style={tab}>
         <View style={{flex: 2, alignItems:'center', justifyContent:'center'}}>
-          <Text style={[textStyle, textColor]}>You are voting for: {vote.first} {vote.last}}</Text>
+          <Text style={[textStyle, textColor]}>You are voting for: {vote.first} {vote.last}</Text>
         </View>
         </View>
       )
