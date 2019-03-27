@@ -155,7 +155,7 @@ renderCand(){
       return(
         <View style={tab}>
         <View style={{flex: 2, alignItems:'center', justifyContent:'center'}}>
-          <Text style={[textStyle, textColor]}>You are voting for: {vote.first} {vote.last}}</Text>
+          <Text style={[textStyle, textColor]}>You are voting for: {vote.first} {vote.last}</Text>
         </View>
         </View>
       )
