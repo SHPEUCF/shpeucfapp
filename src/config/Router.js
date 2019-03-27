@@ -83,7 +83,7 @@ const RouterComponent = () => {
             component={PointsBreakDown}
             title="Points"
             type={ActionConst.REPLACE}
-            showNavBar
+            hideNavBar
           />        
         </Stack>
         <Stack key = "events" hideNavBar>

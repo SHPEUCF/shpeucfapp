@@ -11,7 +11,7 @@ import {
     FlatList,
     Linking
 } from 'react-native';
-import {Button} from '../general'
+import { Button, NavBar } from '../general'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
     goToCreateEvent,
@@ -316,9 +316,7 @@ class EventDetails extends Component {
             var iconSize = 25
             return (
                 <View style={page}>
-                    <View style={tabBar}>
-                        <Text style={tabBarText}>{name}</Text>
-                    </View>
+                    <NavBar title={name} back onBack={() => Actions.pop()} />
                     <View style={container}>
                         <View style={icon_container}>
                             <Ionicons style={[icon, textColor]} name="md-time" size={iconSize} color='#000000'/>
@@ -338,10 +336,6 @@ class EventDetails extends Component {
                     </View>
                     {this.renderButtons()}
                     {this.renderCodeBox()}
-                    <Button 
-                        title = "CANCEL"
-                        onPress={() => Actions.pop()}
-                    />
                 </View>
             )
         }

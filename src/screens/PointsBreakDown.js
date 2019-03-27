@@ -10,7 +10,7 @@ import {
 } from '../actions';
 import _ from 'lodash';
 import * as Progress from 'react-native-progress';
-import { Button, Spinner } from '../components/general'
+import { Button, Spinner, NavBar } from '../components/general'
 import {
   FlatList,
   Text,
@@ -175,10 +175,8 @@ class PointsBreakDown extends Component {
 
                return (
                 <View style ={page}>
+                    <NavBar title="Points" back onBack={() => Actions.replace('profile')} />
                     {this.renderContent()}
-                    <Button
-                    title={"Return"}
-                    onPress={()=> Actions.replace('dashboard')}/>
                 </View>
             )
     }
