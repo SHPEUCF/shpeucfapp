@@ -176,7 +176,7 @@ export const editPosition = (title, description, oldTitle) => {
   }
 };
 
-export const addApplication = (fName, lName, plans, position) => {
+export const addApplication = (fName, lName, plans, position, picture) => {
         const { uid } = firebase.auth().currentUser
 
   return (dispatch) => {
@@ -186,6 +186,7 @@ export const addApplication = (fName, lName, plans, position) => {
               plan: plans,
               id: uid,
               position: position,
+              picture: picture,
               approved: false,
           })
           .then(() => firebase.database().ref(`/users/${uid}/applied/`).set(true))
@@ -199,7 +200,7 @@ export const addApplication = (fName, lName, plans, position) => {
   }
 };
 
-export const editApplication = (plans, position) => {
+export const editApplication = (plans, position, candidateId) => {
     const { uid } = firebase.auth().currentUser
 
       firebase.database().ref(`/election/positions/${position}/candidates/${uid}/plan`).set(plans)

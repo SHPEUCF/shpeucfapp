@@ -75,8 +75,8 @@ class ElectionBallot extends Component {
               style={candidateContainer}
               onPress={()=>{
                 dict[this.state.index] = {
-                  key: item.position , 
-                  value: item.id, 
+                  key: item.position ,
+                  value: item.id,
                   first: item.firstName,
                   last:item.lastName
                 };
@@ -86,6 +86,7 @@ class ElectionBallot extends Component {
               }}>
               <Text style={[{ fontWeight:'bold', fontSize: 20, alignSelf: 'center'}, textColor]}>{item.firstName+' '+item.lastName}</Text>
               <View style={{flex:1}}>
+                {this.renderPicture(item)}
                 <View style={contentContainerStyle}>
                   <View style={containerStyle}>
                       <Text style={[textStyle,textColor]}>Plan: {item.plan}</Text>
@@ -97,6 +98,23 @@ class ElectionBallot extends Component {
       )
     }
   }
+
+renderPicture(item) {
+  const {
+    headerInfoContainer,
+  } = styles
+
+  return (
+    <View style={headerInfoContainer}>
+      <Avatar
+        large
+        rounded
+        source={{uri: item.picture}}
+        activeOpacity={0.7}
+        />
+    </View>
+  )
+}
 
 renderCand(){
   const {
@@ -155,18 +173,18 @@ renderCand(){
       <View>
         <TouchableOpacity onPress={() => {
           this.setState({
-            isBallotShow: false, 
-            isCand: true, 
+            isBallotShow: false,
+            isCand: true,
             listCandidates: _.orderBy(item.candidates, iterateesCan, orderCan),
             applyPos: item.title,
             index: index
-          }); 
-          this.renderCand(); 
+          });
+          this.renderCand();
         }}>
       <View style={[container,{flexDirection: 'row'}]}>
           <Text style={[textStyle,textColor, {flex: 6}]}>{`${item.title}`}</Text>
           {this.renderAllVotes(index)}
-        
+
       </View>
     </TouchableOpacity>
     </View>
@@ -235,7 +253,7 @@ renderCand(){
     else return (
       <View style={buttonContainer}>
         <Button title="Submit" onPress={() => {
-          vote(id, dict); 
+          vote(id, dict);
           Actions.popTo("Election");
         }}/>
 
@@ -353,7 +371,18 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingTop: 20,
     paddingBottom: 20,
-  }
+  },
+  headerInfoContainer: {
+    paddingTop: 15,
+    paddingBottom: 15,
+    flex: .6,
+    backgroundColor: '#2C3239',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomColor: '#e0e6ed22',
+    borderBottomWidth: 1,
+    padding: 1,
+  },
 });
 
 const mapStateToProps = ({ elect, auth }) => {

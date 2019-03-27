@@ -77,7 +77,7 @@ state = { isApplyShow: false, index: null,
       textColor,
       textStyle
     } = styles;
-      
+
 
     if(this.state.isApplyShow == false){
       return (null);
@@ -158,7 +158,7 @@ state = { isApplyShow: false, index: null,
   }
 
   renderListPositionApplied(item){
-    const { 
+    const {
       textStyle,
       textColor
     } = styles;
@@ -191,7 +191,7 @@ state = { isApplyShow: false, index: null,
               <Button
                title={`Edit Application`}
                onPress={()=>{
-                 this.setState({isListShow: false, isApplyShow: true, applyPos: item.title}); 
+                 this.setState({isListShow: false, isApplyShow: true, applyPos: item.title});
                  this.props.candidatePlanChanged(query.plan);
               }}/>
            </View>
@@ -214,7 +214,8 @@ state = { isApplyShow: false, index: null,
       candidatePlan,
       id,
       addApplication,
-      buttonContainer
+      buttonContainer,
+      picture
     } = this.props
 
     const {
@@ -228,11 +229,11 @@ state = { isApplyShow: false, index: null,
           title={application}
           onPress={()=>{
           if (application === "Submit"){
-            addApplication(firstName,lastName, candidatePlan, applyPos );}
+            addApplication(firstName, lastName, candidatePlan, applyPos, picture);}
           else {
             editApplication( candidatePlan,applyPos);
           }
-          this.setState({isApplyShow: false, isListShow: true}); 
+          this.setState({isApplyShow: false, isListShow: true});
         }}
         />)
     return (
@@ -349,16 +350,16 @@ const styles = StyleSheet.create({
   },
   applyInput: {
     flex: .4,
-    textAlignVertical: "top", 
+    textAlignVertical: "top",
     height: dimension.height * .3
   }
 });
 
 const mapStateToProps = ({ elect, auth }) => {
   const { election, positions, candidatePlan, apply } = elect;
-  const { firstName, lastName, id, voted, applied} = auth
+  const { firstName, lastName, id, voted, applied, picture} = auth
 
-  return { election, positions, candidatePlan, firstName, lastName, id, voted, apply, applied};
+  return { election, positions, candidatePlan, firstName, lastName, id, voted, apply, applied, picture};
 };
 
 const mapDispatchToProps = {
