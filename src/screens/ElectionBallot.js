@@ -147,7 +147,8 @@ renderCand(){
   renderPositionVote(){
     const {
       tab,
-      textStyle
+      textStyle,
+      textColor
     } = styles;
     var vote = dict[this.state.index];
     if (!(vote == undefined)) {
