@@ -80,7 +80,7 @@ class Election extends Component {
         <View style={content}>
           <View style={{flex: .6, paddingTop: 30}}>
             <Text style={[textStyle, {fontWeight: 'bold'},textColor]}>"Don't Boo, Vote"</Text>
-            <Text style={[textStyle, {fontWeight: 'bold', alignSelf: 'center'},textColor]}>                     - Barrack Obama</Text>
+            <Text style={[textStyle, {fontWeight: 'bold', alignSelf: 'center'},textColor]}>                     - Barack Obama</Text>
           </View>
         </View>
           {/* <Text style={[textStyle, textColor]}>Your vote today is having a huge impact on the path that SHPE UCF is paving for the future</Text> */}
