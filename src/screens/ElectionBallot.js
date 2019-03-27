@@ -107,7 +107,7 @@ renderPicture(item) {
   return (
     <View style={headerInfoContainer}>
       <Avatar
-        large
+        xlarge
         rounded
         source={{uri: item.picture}}
         activeOpacity={0.7}
