@@ -32,7 +32,7 @@ class Dashboard extends Component {
 		this.props.getPrivilege();
 		this.props.loadUser();
 	}
-  
+
 	callUser(id){
 		this.props.pageLoad();
 		this.props.fetchMemberProfile(id);
@@ -69,10 +69,10 @@ class Dashboard extends Component {
 		} = styles
 
 
-		if (this.props.eventList !== undefined) {
+		if (this.props.eventList !== null && this.props.eventList !== undefined) {
 			let events = this.props.eventList;
 			let fields = [];
-			
+
 			for (key in events) {
 				fields.push([`${events[key].name}`, `${events[key].date}`, `${events[key].description}`]);
 			}
@@ -81,7 +81,7 @@ class Dashboard extends Component {
 				field = fields.pop();
 			else
 				field = "No events coming soon"
-			
+
 			let eventName = field[0], eventDate = field[1], eventDesc = field[2];
 			if (eventDesc !== undefined && eventDesc.length > 75) {
 				eventDesc = eventDesc.slice(0, 75);
@@ -103,7 +103,7 @@ class Dashboard extends Component {
 				</View>
 			)
 		}
-		
+
 	}
 
 	isDefined(obj) {
@@ -124,7 +124,7 @@ class Dashboard extends Component {
 				<View style={index}>
 					<Text style={textColor} style={indexText}>{item.index}</Text>
 				</View>
-				
+
 				<View>
 					<Text style={textColor}>{item.firstName} {item.lastName === undefined ? '' : item.lastName}</Text>
 					<Text style={textColor}>Points: {item.points}</Text>
@@ -136,7 +136,7 @@ class Dashboard extends Component {
 					/>
 				</View>
 			</View>
-		)		
+		)
 	}
 
 	_keyExtractor = (item, index) => index;
@@ -153,7 +153,7 @@ class Dashboard extends Component {
 			eventsContainer,
 			textColor
 		} = styles;
-		
+
 		const { currentUser } = firebase.auth();
 
 		let sortedMembers = _.orderBy(this.props.membersPoints, iteratees, order);
@@ -187,12 +187,12 @@ class Dashboard extends Component {
 											renderItem={({item}) => (this.renderComponent(item, sortedMembers))}
 										/>
 									</TouchableOpacity>
-									<TouchableOpacity style={eventsContainer} onPress={() => alert('Coming soon!')}>
+									<View style={eventsContainer}>
 										<Text style={[title, textColor]}>Upcoming Events</Text>
 										<View style={{alignSelf: 'center'}}>
 											{this.getFormattedEventList()}
 										</View>
-									</TouchableOpacity>
+									</View>
 								</View>
 							</View>
 							<View style={ContainerStyle}>
@@ -213,7 +213,7 @@ class Dashboard extends Component {
 	}
 
    render() {
-	
+
 	if(this.props.loading){
       return <Spinner/>
     }
@@ -303,8 +303,8 @@ const mapStateToProps = ({ auth, general, members, events, elect }) => {
 	const { election } = elect
 	return { firstName, id, loading, membersPoints, eventList, election };
 };
- 
- const mapDispatchToProps = {	
+
+ const mapDispatchToProps = {
 	loadUser,
 	pageLoad,
 	fetchMembersPoints,
@@ -313,5 +313,5 @@ const mapStateToProps = ({ auth, general, members, events, elect }) => {
 	getPrivilege,
 	updateElection
 };
- 
+
  export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

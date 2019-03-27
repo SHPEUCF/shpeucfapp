@@ -66,7 +66,7 @@ const resources = [
           description: "website",
         },
         {
-          uri: "http://www.northropgrumman.com/Pages/default.aspx",
+          uri: "http://www.northropgrumman.com/Careers/Students-Entry-Level/Pages/default.aspx",
           title: "Northrop Grumman",
           description: "website",
         },
@@ -128,7 +128,7 @@ class Resources extends Component {
                         titleStyle={{ color: 'white'}}
                         subtitle={item.description}
                         onPress={() => Actions.WebPageShow(
-                          { title: item.title, 
+                          { title: item.title,
                             uri: item.uri }
                         )}
                       />
@@ -146,9 +146,9 @@ class Resources extends Component {
 
 const styles = StyleSheet.create({
   sectionTitle: {
-    color: 'white', 
-    fontWeight: 'bold', 
-    marginTop: 10, 
+    color: 'white',
+    fontWeight: 'bold',
+    marginTop: 10,
     marginLeft: 20,
   }
 });
