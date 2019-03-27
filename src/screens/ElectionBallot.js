@@ -255,6 +255,7 @@ renderCand(){
       <View style={buttonContainer}>
         <Button title="Submit" onPress={() => {
           vote(id, dict);
+          dict = []
           Actions.popTo("Election");
         }}/>
 
