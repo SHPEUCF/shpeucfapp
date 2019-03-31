@@ -101,7 +101,7 @@ android {
         applicationId "com.shpeucf"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 4
+        versionCode 5
         versionName "1.04"
         // ndk {
         //     abiFilters "armeabi-v7a", "x86"
