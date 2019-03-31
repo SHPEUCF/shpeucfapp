@@ -158,11 +158,18 @@ class Dashboard extends Component {
 
 		let sortedMembers = _.orderBy(this.props.membersPoints, iteratees, order);
 		var currentMember;
+		var pastPoints = 0;
+		var pastIndex = 1;
 		sortedMembers.forEach((x, index) => {
 			x.index = (x.points !== 0) ? index + 1 : sortedMembers.length;
+			if(x.points === pastPoints){
+				x.index = pastIndex
+			}
 			if (x.id === currentUser.uid) {
 				currentMember =  x;
 			};
+			pastPoints = x.points;
+			pastIndex = x.index;
 		});
 		sortedMembers.splice(2);
 		if (this.isDefined(currentMember) && this.isDefined(sortedMembers) && sortedMembers[0].id !== currentMember.id && sortedMembers[1].id !== currentMember.id)

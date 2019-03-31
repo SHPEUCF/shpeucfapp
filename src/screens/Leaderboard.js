@@ -53,7 +53,10 @@ class Leaderboard extends Component {
       contentContainerStyle,
       progress,
       curUserHighlight,
-      textStyle
+      textStyle,
+      index,
+      textColor,
+      indexText
     } = styles;
     var action
     if(item.id === this.props.id){
@@ -75,16 +78,24 @@ class Leaderboard extends Component {
                 style={{alignSelf: 'flex-end', width: dimension.width *.14, height: dimension.height *.085}}
                 source={{uri: picture}}
                 /> */}
-                <Text style={ [textStyle, {fontWeight: 'bold'}]}>{`${item.firstName} ${item.lastName}`}</Text>
-                <Text style={[textStyle, {fontSize: 15}]}>Points: {item.points}</Text>
-                <Progress.Bar
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <View style={index}>
+                    <Text style={textColor} style={indexText}>{item.index}</Text>
+                  </View>
+                <View>
+                  <Text style={ [textStyle, {fontWeight: 'bold'}]}>{`${item.firstName} ${item.lastName}`}</Text>
+                  <Text style={[textStyle, {fontSize: 15}]}>Points: {item.points}</Text>
+                    <Progress.Bar
                   style={progress}
                   progress={item.points / Math.max(sortedMembers[0].points,1)}
                   indeterminate={false}
                   height={dimension.width*.03}
-                  width={dimension.width * .9}
+                  width={dimension.width * .75}
                   color= {'#ffd700'}
                 />
+                </View>
+                </View>
+              
               </View>
           </View>
         // </TouchableOpacity>
@@ -98,7 +109,18 @@ class Leaderboard extends Component {
       screenBackground,
        } = styles;
     const sortedMembers = _.orderBy(this.props.membersPoints, iteratees, order);
-
+    var currentMember;
+    var pastPoints = 0;
+    var pastIndex = 1;
+    sortedMembers.forEach((x, index) => {
+      x.index = (x.points !== 0) ? index + 1 : sortedMembers.length;
+      if (x.points === pastPoints) {
+        x.index = pastIndex
+      }
+    
+      pastPoints = x.points;
+      pastIndex = x.index;
+    });
     return (
       <View style={screenBackground}>
         <NavBar title="Leaderboard" back onBack={() => Actions.pop()} />
@@ -148,6 +170,27 @@ const styles = StyleSheet.create({
     height: dimension.width*.03,
     borderColor: '#2C3239',
     backgroundColor: '#2C3239',
+  },
+  textColor: {
+    color: '#e0e6ed'
+  },
+  	indexText: {
+  	  alignSelf: 'center',
+  	  fontWeight: "700",
+  	  fontSize: 20,
+  	  color: "#e0e6ed"
+  	},
+  index: {
+    color: '#000',
+    borderColor: '#e0e6ed',
+    borderStyle: 'solid',
+    borderWidth: 3,
+    borderRadius: 20,
+    marginRight: '4%',
+    justifyContent: 'center',
+    height: 40,
+    width: 40,
+    elevation: 1
   }
 });
 
