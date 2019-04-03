@@ -365,7 +365,8 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         borderStyle: 'solid',
         fontWeight: 'bold',
-        fontSize: 60
+        fontSize: 60,
+        color: '#E0E6ED'
     },
     modalContent: {
         height: dimension.height*.5,
