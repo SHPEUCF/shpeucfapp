@@ -22,7 +22,7 @@ import {
  } from '../actions/types';
 
 const INITIAL_STATE = {
-  eventList: {},
+  eventList: undefined,
   type: '',
   title: 'Create Event',
   name: '',

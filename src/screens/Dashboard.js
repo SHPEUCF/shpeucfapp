@@ -15,6 +15,15 @@ import {
 	fetchEvents,
 	getPrivilege,
 	updateElection,
+	typeChanged,
+	nameChanged,
+	descriptionChanged,
+	dateChanged,
+	timeChanged,
+	locationChanged,
+	epointsChanged,
+	eventIDChanged,
+	goToViewEvent
 }
 from '../actions';
 
@@ -63,37 +72,44 @@ class Dashboard extends Component {
 		)
 	}
 
+	viewEvent(item) {
+		this.props.typeChanged(item.type);
+		this.props.nameChanged(item.name)
+		this.props.descriptionChanged(item.description)
+		this.props.dateChanged(item.date)
+		this.props.timeChanged(item.time)
+		this.props.locationChanged(item.location)
+		this.props.epointsChanged(item.points)
+		this.props.eventIDChanged(item.eventID)
+		this.props.goToViewEvent();
+	  }
+
 	getFormattedEventList() {
 		const {
 			textColor
-		} = styles
-
+		} = styles;
+		
 
 		if (this.props.eventList !== null && this.props.eventList !== undefined) {
-			let events = this.props.eventList;
-			let fields = [];
-
-			for (key in events) {
-				fields.push([`${events[key].name}`, `${events[key].date}`, `${events[key].description}`]);
-			}
-
-			if (fields.length > 0)
-				field = fields.pop();
-			else
-				field = "No events coming soon"
-
-			let eventName = field[0], eventDate = field[1], eventDesc = field[2];
-			if (eventDesc !== undefined && eventDesc.length > 75) {
-				eventDesc = eventDesc.slice(0, 75);
-				eventDesc += '...'
+			let events = Object.values(this.props.eventList);
+			let event = events[events.length - 1];
+			const {
+				name,
+				date,
+				description
+			} = event;
+	
+			if (description !== undefined && description.length > 75) {
+				description = description.slice(0, 75);
+				description += '...';
 			}
 
 			return (
-				<View style={{alignItems:'center'}}>
-					<Text style={[{fontStyle: 'italic', fontSize: 16}, textColor]}>{eventName}</Text>
-					<Text style={[{paddingBottom: '5%'}, textColor]}>{this.convertNumToDate(eventDate)}</Text>
-					<Text style={[{marginLeft: '10%', marginRight: '10%'}, textColor]}>{eventDesc}</Text>
-				</View>
+				<TouchableOpacity style={{alignItems:'center'}} onPress={() => this.viewEvent(event)}>
+					<Text style={[{fontStyle: 'italic', fontSize: 16}, textColor]}>{name}</Text>
+					<Text style={[{paddingBottom: '5%'}, textColor]}>{this.convertNumToDate(date)}</Text>
+					<Text style={[{marginLeft: '10%', marginRight: '10%'}, textColor]}>{description}</Text>
+				</TouchableOpacity>
 			)
 		}
 		else {
@@ -318,7 +334,16 @@ const mapStateToProps = ({ auth, general, members, events, elect }) => {
 	fetchMemberProfile,
 	fetchEvents,
 	getPrivilege,
-	updateElection
+	updateElection,
+	typeChanged,
+	nameChanged,
+	descriptionChanged,
+	dateChanged,
+	timeChanged,
+	locationChanged,
+	epointsChanged,
+	eventIDChanged,
+	goToViewEvent
 };
 
  export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
