@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
-import { ScrollView, FlatList, Text, View } from 'react-native';
+import { ScrollView, FlatList, Text, View, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import { ListItem } from 'react-native-elements';
 import { Spinner, NavBar } from '../components/general'
+
 
 import {
   getPrivilege,
@@ -54,7 +55,16 @@ import {
 
 class More extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      refreshing: false,
+    };
+  }
 
+  _onRefresh = () => {
+    this.setState({refreshing: false});
+  }
   keyExtractor = (item, index) => index
 
   renderItem  = ({item}) => {
@@ -87,7 +97,14 @@ class More extends Component {
     return (
       <View style={{backgroundColor: '#2C3239', flex: 1}}>
         <NavBar title="More Options" />
-        <ScrollView>
+        <ScrollView
+           refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh}
+          />
+        }
+        >
         <FlatList
           removeClippedSubviews={false}
           extraData={this.state}
