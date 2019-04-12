@@ -85,8 +85,6 @@ class EditProfileForm extends Component {
         registrationError('Please enter your school email');
       } else if (!ucfStudentEmail.test(email)) {
         registrationError('Please use a "knights.ucf.edu", or "ucf.edu" email for registration');
-      } else if (points === '') {
-        registrationError('Please enter your points');
       } else if (nationality === '') {
         registrationError('Please enter your country of origin');
       } else if (birthday === '') {
@@ -97,7 +95,7 @@ class EditProfileForm extends Component {
         registrationError('Please enter major');
       }
       else {
-        editUser( firstName, lastName, email, college, major, points, quote, continent, nationality, gender, birthday );
+        editUser( firstName, lastName, email, college, major, quote, continent, nationality, gender, birthday );
         Actions.replace('profile')
       }
     } else if (college === '') {
@@ -105,7 +103,7 @@ class EditProfileForm extends Component {
     } else if (major === '') {
       registrationError('Please enter major');
     }  else {
-      editUser( firstName, lastName, email, college, major, points, quote, continent, nationality, gender, birthday );
+      editUser( firstName, lastName, email, college, major, quote, continent, nationality, gender, birthday );
       Actions.replace('profile')
     }
   }
@@ -227,8 +225,6 @@ class EditProfileForm extends Component {
       genderChanged,
       birthday,
       birthDateChanged,
-      points,
-      pointsChanged
     } = this.props
     if (this.checkPrivilege('eboard')) {
       return (
@@ -248,11 +244,6 @@ class EditProfileForm extends Component {
               keyboardType="email-address"
               value={email}
               onChangeText={(text) => emailChanged(text)}
-            />
-            <Input
-              placeholder="Points"
-              value={points + ""}
-              onChangeText={(text) => pointsChanged(text)}
             />
             <PickerInput
               title={"Gender"}
@@ -306,6 +297,8 @@ class EditProfileForm extends Component {
 
 
   render() {
+    var content = this.renderPickers();
+    if (this.checkPrivilege('eboard')) content = this.renderIfEboard(); 
     return (
       <View style={styles.container}>
         <View style={styles.formContainerStyle}>
@@ -322,8 +315,7 @@ class EditProfileForm extends Component {
           style={styles.scrollView}>
 
           <RkAvoidKeyboard>
-            {this.renderIfEboard()}
-            {this.renderPickers()}
+            {content}
             {/* <Input
               placeholder='Quote'
               autoCapitalize='sentences'

@@ -244,14 +244,14 @@ const createUserSuccess = (dispatch, firstName, lastName, email, college, major,
     
   dispatch({
     type: CREATE_USER_SUCCESS,
-  });
+  }); 
 };
 
-export const editUser = ( firstName, lastName, email, college, major, points, quote, continent, nationality, gender, birthday) => {
-  return (dispatch) => {
-  const {
+export const editUser = ( firstName, lastName, email, college, major, quote, continent, nationality, gender, birthday) => {
+
+    const {
     currentUser
-  } = firebase.auth();
+    } = firebase.auth();
 
   firebase.database().ref(`/users/${currentUser.uid}/`).update({
       firstName: firstName,
@@ -259,7 +259,6 @@ export const editUser = ( firstName, lastName, email, college, major, points, qu
       email: email,
       college: college,
       major: major,
-      points: points,
       quote: quote,
       continent: continent,
       nationality: nationality,
@@ -269,14 +268,13 @@ export const editUser = ( firstName, lastName, email, college, major, points, qu
     .then(() => firebase.database().ref(`/points/${currentUser.uid}/`).update({
       firstName: firstName,
       lastName: lastName,
-      points: points,
     }))
-    .then(() => Alert.alert('Account Updated'));
-
-  dispatch({
-    type: EDIT_USER,
-  });
-}
+    .then(() => firebase.database().ref(`/privileges/${currentUser.uid}/`).update({
+      firstName: firstName,
+      lastName: lastName,
+    }))
+    .then(() => Alert.alert('Account Updated'))
+    
 };
 
 export const getPrivilege = () => {

@@ -150,7 +150,9 @@ export default (state = INITIAL_STATE, action) => {
       };
 
     case EDIT_USER:
-      return state;
+      return {...state,
+        firstName: payload
+      };
 
     case GET_PRIVILEGE:
       return { ...state,
