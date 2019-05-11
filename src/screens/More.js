@@ -107,7 +107,7 @@ class More extends Component {
         >
         <FlatList
           removeClippedSubviews={false}
-          extraData={this.state}
+          extraData={this.props}
           keyExtractor = {this.keyExtractor}
           data = {menuItems}
           renderItem={this.renderItem}
