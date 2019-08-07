@@ -15,7 +15,7 @@ What things you need to install the software and how to install them
 * Download [here](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 * You need to set up **Java_Home** if this is your first time running java or have never done it before.
     * [MacOS](https://dalanzg.github.io/tips-tutorials/mac/2016/03/21/how-to-set-java_home-on-mac-os-x/) :desktop_computer:
-    * [Windows](https://docs.oracle.com/cd/E19182-01/820-7851/inst_cli_jdk_javahome_t/) :computer:
+    * [Windows](https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/) :computer:
 
 #### Android Studio to use an Android Virtual Device
 
