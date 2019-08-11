@@ -34,9 +34,21 @@ import {
       privilege: "user"
     },
     {
+      title: 'Conventions',
+      icon: 'airplanemode-active',
+      screen: 'Conventions',
+      privilege: "user"
+    },
+    {
       title: 'Election',
       icon: 'done',
       screen: 'Election',
+      privilege: "user"
+    },
+    {
+      title: 'Committees',
+      icon: 'assignment-ind',
+      screen: 'Committees',
       privilege: "user"
     },
     {

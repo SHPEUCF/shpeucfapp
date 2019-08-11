@@ -61,6 +61,12 @@ export const FETCH_ALL_USERS = 'fetch_all_users';
 
 // GeneralActions
 export const PAGE_LOAD = 'page_load';
+export const GET_COMMITTEES = 'get_committees';
+export const GO_TO_COMMITTEE_FORM = 'go_to_committee_form';
+export const EDIT_COMMITTEE = 'edit_committee';
+export const DELETE_COMMITTEE = 'delete_committee';
+export const COMMITTEE_TITLE_CHANGED = "committee_title_changed"
+export const COMMITTEE_DESCRIPTION_CHANGED = "committee_description_changed"
 
 // EventActions
 export const CREATE_EVENT = 'create_event';

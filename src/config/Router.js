@@ -11,6 +11,7 @@ import EventDetailsForm from '../components/event/EventDetails';
 import ResetPasswordForm from '../components/auth/ResetPasswordForm';
 import CandidateForm from '../components/elect/CandidateForm'
 import PositionForm from '../components/elect/PositionForm'
+import CommitteeForm from '../components/general/CommitteeForm'
 import CreateStatistics from '../components/stats/CreateStatistics'
 
 import { WebPageShow, PostShow, ComingSoon } from '../components/general';
@@ -24,7 +25,10 @@ import Events from '../screens/Events';
 import Profile from '../screens/Profile';
 import OtherProfile from '../screens/OtherProfile';
 import Leaderboard from '../screens/Leaderboard';
+import Conventions from '../screens/Conventions';
+import CommitteeesBackEnd from '../screens/CommitteesBackEnd';
 import Election from '../screens/Election';
+import Committees from '../screens/Committees';
 import ElectionApplication from '../screens/ElectionApplication';
 import BackEnd from '../screens/BackEnd'
 import ElectionBallot from '../screens/ElectionBallot';
@@ -143,6 +147,13 @@ const RouterComponent = () => {
             type={ActionConst.REPLACE}
             hideNavBar
         />
+        <Scene
+           key="CommitteeForm"
+            component={CommitteeForm}
+            title="Committee Forms"
+            type={ActionConst.REPLACE}
+            hideNavBar
+        />
         </Stack>
         <Stack key = "Profiles" hideNavBar>
         <Scene
@@ -237,6 +248,11 @@ const RouterComponent = () => {
                 title="Election"
                 hideTabBar
               />
+              <Scene key = "CommitteesBackEnd"
+                component={CommitteeesBackEnd}
+                title="Committees"
+                hideTabBar
+              />
             </Stack>
             <Scene
               key="OtherProfile"
@@ -280,6 +296,16 @@ const RouterComponent = () => {
             <Scene key="Election"
              component={Election}
              title="Election"
+             hideTabBar
+            />
+            <Scene key="Committees"
+             component={Committees}
+             title="Committees"
+             hideTabBar
+            />
+            <Scene key="Conventions"
+             component={Conventions}
+             title="Conventions"
              hideTabBar
             />
             <Scene key="About"

@@ -27,6 +27,12 @@ const menuItems = [
     //   icon: 'check',
     //   screen: 'Statistics'
     // },
+    {
+      title: 'Committees',
+      icon: 'assignment-ind',
+      screen: 'CommitteesBackEnd',
+      privilege: 'eboard'
+    },
 ];
 
 class BackEnd extends Component {
