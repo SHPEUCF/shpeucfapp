@@ -1,20 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Alert } from 'react-native';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
-import { Input, Button } from '../general';
-import { RkAvoidKeyboard, RkButton, RkPicker } from 'react-native-ui-kitten';
+import { Input, Button, FilterPicker} from '../general';
+import { RkAvoidKeyboard, RkButton, RkPicker} from 'react-native-ui-kitten';
 import {
     addCommittee,
     editCommittee,
     committeeTitleChanged,
     committeeDescriptionChanged,
     deleteCommittee,
+    chairChanged,
+    fetchAllUsers,
+    filterChanged,
+    assignPosition
     
 } from '../../actions'
 import { Actions } from 'react-native-router-flux';
 
-
-
+var idIndex;
 
 class CommitteeForm extends Component {
     // EventCreationError(text) {
@@ -22,7 +26,11 @@ class CommitteeForm extends Component {
     // }
     constructor(props) {
       super(props);
-      this.state = {oldTitle: this.props.committeeTitle};
+      this.state = {oldTitle: this.props.committeeTitle, oldChair: this.props.chair};
+    }
+
+    componentWillMount() {
+        this.props.filterChanged("");
     }
 
 
@@ -38,41 +46,61 @@ class CommitteeForm extends Component {
         }
     }
 
-    onButtonPress() {
+    onButtonPress(id) {
         const {
             committeeTitle,
-            candidatePlan,
             committeeDescription,
-            committees
+            committees,
+            chair,
         } = this.props;
 
-
         var length = (committees !== null && committees !== undefined) ? Object.entries(committees).length : 0
+        
+        var chairObj = {name: chair.name, id: id};
 
         if (committeeTitle === '') {
             // this.EventCreationError('Please enter a Candidate Name');
-        } else if (candidatePlan === '') {
-            // this.EventCreationError('Please enter a Plan of action');
         } else if (committeeDescription === '') {
             // this.EventCreationError('Please enter a committee');
         } else{
             if(this.props.title === "ADD"){
 
-                this.props.addCommittee(committeeTitle, committeeDescription, length);
+                this.props.addCommittee(committeeTitle, committeeDescription, chairObj, length);
               }
             else {
                 if (this.state.oldTitle !== committeeTitle)
                 {
-                  this.props.editCommittee(committeeTitle, committeeDescription, this.state.oldTitle);
+                  this.props.editCommittee(committeeTitle, committeeDescription, chairObj, this.state.oldTitle);
                 }
                 else{
-                this.props.editCommittee(committeeTitle, committeeDescription, null);}
+                this.props.editCommittee(committeeTitle, committeeDescription, chairObj, null);}
               }
+
+              this.props.assignPosition(committeeTitle, "board", id, this.state.oldChair)
               Actions.CommitteesBackEnd();
         }
     }
 
     render() {
+
+        var names = [];
+        var ids = [];
+
+        Object.values(this.props.userList).forEach(function(item){
+            var name = item.firstName + " " + item.lastName
+            names.push(name)
+            ids.push(item.id)
+        });
+
+        var placeholder;
+
+        if (!this.props.chair){
+            placeholder = "Director/Chairperson";
+        }
+
+        else{
+            placeholder = this.props.chair.name;
+        }
             return (
                 <View style={styles.formContainerStyle}>
                     <View style={styles.headerStyle}>
@@ -94,13 +122,22 @@ class CommitteeForm extends Component {
                             value={this.props.committeeDescription}
                             onChangeText={this.props.committeeDescriptionChanged.bind(this)}
                             />
-
+                            <FilterPicker
+                                title={"Chair"}
+                                filter={this.props.filter}
+                                data={names}
+                                placeholder={placeholder}
+                                onChangeText={this.props.filterChanged.bind(this)}
+                                onSelect={(text, index) => {this.props.chairChanged({name: text, id: ids[index]});
+                                idIndex = index;
+                              }}/>
                         </View>
                         {this.renderError()}
                     </ScrollView>
                     <Button
                         title = {this.props.title + " COMMITTEE"}
-                        onPress={this.onButtonPress.bind(this)}
+                        onPress={() => { 
+                            this.onButtonPress(ids[idIndex])}}
                     />
                     <Button
                         title = "CANCEL"
@@ -157,10 +194,11 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = ({ general }) => {
-    const { committeeTitle, committeeDescription, title, committees} = general
+const mapStateToProps = ({ general, members }) => {
+    const { committeeTitle, committeeDescription, title, committees, chair, filter} = general
+    const { userList } = members
 
-    return { committeeTitle, committeeDescription, title, committees};
+    return { committeeTitle, committeeDescription, title, committees, chair, filter, userList};
 };
 
 const mapDispatchToProps = {
@@ -169,6 +207,10 @@ const mapDispatchToProps = {
    committeeTitleChanged,
    committeeDescriptionChanged,
    deleteCommittee,
+   chairChanged,
+   fetchAllUsers,
+   filterChanged,
+   assignPosition
 }
 
 

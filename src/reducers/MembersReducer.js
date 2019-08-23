@@ -20,6 +20,7 @@ import {
   FETCH_ALL_USERS,
   NATIONALITY_CHANGED_MEMBER,
   DATE_BIRTH_CHANGED_MEMBER,
+  ASSIGN_POSITION,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -133,6 +134,8 @@ export default (state = INITIAL_STATE, action) => {
         userList: payload
       }
     case EDIT_MEMBER:
+      return state;
+    case ASSIGN_POSITION:
       return state;
     case GO_TO_OTHER_PROFILE:
       return state;

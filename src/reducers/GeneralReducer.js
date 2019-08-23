@@ -6,7 +6,9 @@ import {
     EDIT_COMMITTEE,
     DELETE_COMMITTEE,
     COMMITTEE_DESCRIPTION_CHANGED,
-    COMMITTEE_TITLE_CHANGED
+    COMMITTEE_TITLE_CHANGED,
+    CHAIR_CHANGED,
+    FILTER_CHANGED
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -15,6 +17,8 @@ const INITIAL_STATE = {
     title: "ADD",
     committeeTitle: "",
     committeeDescription: "",
+    chair: "",
+    filter: ""
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -41,6 +45,7 @@ export default (state = INITIAL_STATE, action) => {
         case DELETE_COMMITTEE:
             return {
                 ...state,
+                chair : "",
                 committeeTitle : "",
                 committeeDescription : ""
             }
@@ -54,6 +59,16 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 committeeDescription: payload
             }
+        case CHAIR_CHANGED:
+            return {
+                ...state,
+                chair: payload
+            }
+        case FILTER_CHANGED:
+        return {
+            ...state,   
+            filter: payload
+        }
         case EDIT_COMMITTEE:
             return state
         default:

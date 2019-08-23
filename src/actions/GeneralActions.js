@@ -10,7 +10,9 @@ import {
     EDIT_COMMITTEE,
     DELETE_COMMITTEE,
     COMMITTEE_DESCRIPTION_CHANGED,
-    COMMITTEE_TITLE_CHANGED
+    COMMITTEE_TITLE_CHANGED,
+    CHAIR_CHANGED,
+    FILTER_CHANGED
 } from './types';
 
 export const pageLoad = () => {
@@ -43,11 +45,12 @@ export const goToCommitteeForm = (text) => {
   }
 };
 
-export const addCommittee = (title, description, length) => {
+export const addCommittee = (title, description, chair, length) => {
   return () => {
       firebase.database().ref(`/committees/${title}`).set({
               title: title,
               description: description,
+              chair: chair,
               level: length
           })
           .then(() => alert('Committee Added!', 'Successful'))
@@ -56,7 +59,7 @@ export const addCommittee = (title, description, length) => {
 };
 
 
-export const editCommittee = (title, description, oldTitle) => {
+export const editCommittee = (title, description, chair, oldTitle) => {
 if (oldTitle !== null){
   var level;
   firebase.database().ref(`/committees/${oldTitle}/level`).once('value', snapshot => {
@@ -73,6 +76,7 @@ if (oldTitle !== null){
   .then(() => firebase.database().ref(`/election/committees/${title}`).set({
           title: title,
           description: description,
+          chair: chair,
           level: level
   }))
   .then(() => alert('Committee Edited!', 'Successful'))
@@ -84,7 +88,8 @@ else {
   return (dispatch) => {
       firebase.database().ref(`/committees/${title}`).update({
               title: title,
-              description: description
+              description: description,
+              chair: chair
           })
           .then(() => {
               dispatch({
@@ -97,8 +102,14 @@ else {
 }
 };
 
-export const deleteCommittee = (text) => {
+export const deleteCommittee = (text, chair) => {
   return (dispatch) => {
+      
+      firebase.database().ref(`/users/${chair.id}/board`).remove()
+      .then(() => firebase.database().ref(`/privileges/${chair.id}/`).update({
+        board: false,
+      }))
+
       firebase.database().ref(`/committees/${text}`).remove()
           .then(() => {
               dispatch({
@@ -120,6 +131,20 @@ export const committeeTitleChanged = (text) => {
 export const committeeDescriptionChanged = (text) => {
   return {
       type: COMMITTEE_DESCRIPTION_CHANGED,
+      payload: text
+  };
+};
+
+export const chairChanged = (text) => {
+  return {
+      type: CHAIR_CHANGED,
+      payload: text
+  };
+};
+
+export const filterChanged = (text) => {
+  return {
+      type: FILTER_CHANGED,
       payload: text
   };
 };

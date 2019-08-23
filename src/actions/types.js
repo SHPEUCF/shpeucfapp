@@ -58,6 +58,7 @@ export const GO_TO_EDIT_OTHER_PROFILE_FORM = 'go_to_edit_other_profile_form';
 export const QUOTE_CHANGED_MEMBER = 'quote_changed_member';
 export const FETCH_FILTERS = 'fetch_filters';
 export const FETCH_ALL_USERS = 'fetch_all_users';
+export const ASSIGN_POSITION = 'assign_position';
 
 // GeneralActions
 export const PAGE_LOAD = 'page_load';
@@ -67,6 +68,8 @@ export const EDIT_COMMITTEE = 'edit_committee';
 export const DELETE_COMMITTEE = 'delete_committee';
 export const COMMITTEE_TITLE_CHANGED = "committee_title_changed"
 export const COMMITTEE_DESCRIPTION_CHANGED = "committee_description_changed"
+export const CHAIR_CHANGED = "chair_changed"
+export const FILTER_CHANGED = "chairtemp_changed"
 
 // EventActions
 export const CREATE_EVENT = 'create_event';
