@@ -61,7 +61,7 @@ import {
       title: 'BackEnd',
       icon: 'settings',
       screen: 'BackEnd',
-      privilege: "president"
+      privilege: "eboard"
     }
   ];
 
