@@ -78,6 +78,7 @@ export const FETCH_EVENTS = 'fetch_events';
 export const FETCH_CODE = 'fetch_code';
 export const CHECK_IN = 'check_in';
 export const TYPE_CHANGED = 'type_changed';
+export const COMMITTEE_CHANGED = 'committee_changed';
 export const TITLE_CHANGED = 'title_changed';
 export const NAME_CHANGED = 'name_changed';
 export const DESCRIPTION_CHANGED = 'description_changed';
