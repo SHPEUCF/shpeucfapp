@@ -1,6 +1,7 @@
 import firebase from 'firebase';
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
+import { Alert } from 'react-native';
 import { connect } from 'react-redux';
 import {
   fetchMembersPoints,
@@ -66,6 +67,7 @@ class PointsBreakDown extends Component {
                 <View style={innerContainerStyle}>
                     <Text style={[title,botLevelText,textColor]}>{item.name}</Text>
                     <Text style={[points,botLevelText,textColor]}>{item.points}</Text>
+                    <Text style={[points, botLevelText, textColor]}>{item.date}</Text>
                 </View>
             </View>
             </TouchableOpacity>
@@ -138,6 +140,7 @@ class PointsBreakDown extends Component {
             && membersPoints[currentUser.uid].breakdown.length !== 0) {
 
             breakdown = Object.entries(membersPoints[currentUser.uid].breakdown)
+
             return (
                 <View style={{flex: 1}}>
                     <View style={[contentContainerStyle,containerStyle]}>
@@ -212,7 +215,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#2C3239'
     },
     title: {
-        flex: .83
+        flex: .5
     },
     points: {
         flex: .15
