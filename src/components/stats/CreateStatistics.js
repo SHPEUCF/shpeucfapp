@@ -15,7 +15,7 @@ const obj = {
         "keys2" : "poop",
         "keys3" : "poop",
 }
-const filters = [];
+filters = [];
 for(k in obj){
     filters.push(k.key)
 }

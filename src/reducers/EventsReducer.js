@@ -6,7 +6,6 @@ import {
   CHECK_IN,
   FETCH_CODE,
   TYPE_CHANGED,
-  COMMITTEE_CHANGED,
   TITLE_CHANGED,
   NAME_CHANGED,
   DESCRIPTION_CHANGED,
@@ -25,7 +24,6 @@ import {
 const INITIAL_STATE = {
   eventList: undefined,
   type: '',
-  committee: '',
   title: 'Create Event',
   name: '',
   description: '',
@@ -57,7 +55,6 @@ export default (state = INITIAL_STATE, action) => {
     case DELETE_EVENTS:
       return { ...state,
         type: '',
-        committee: '',
         name: '',
         description: '',
         date: '',
@@ -72,10 +69,6 @@ export default (state = INITIAL_STATE, action) => {
     case TYPE_CHANGED:
       return { ...state,
         type: payload
-      };
-    case COMMITTEE_CHANGED:
-      return { ...state,
-        committee: payload
       };
     case TITLE_CHANGED:
       return { ...state,
@@ -116,7 +109,6 @@ export default (state = INITIAL_STATE, action) => {
     case GO_TO_CREATE_EVENT:
       return {...state,
         type: '',
-        committee: '',
         name: '',
         description: '',
         date: '',
@@ -132,7 +124,6 @@ export default (state = INITIAL_STATE, action) => {
     case GO_TO_EVENT:
       return {...state,
         type: '',
-        committee: '',
         name: '',
         description: '',
         date: '',

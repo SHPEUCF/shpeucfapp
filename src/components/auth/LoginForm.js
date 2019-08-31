@@ -104,12 +104,11 @@ class LoginForm extends Component {
     } = styles
     return (
       <View style={formContainerStyle}>
-        <RkAvoidKeyboard style={headerContainer}>
-          <ScrollView style= {{flex: 1}}>
-            <Image
+        <ScrollView style={{ flex: 1.5, paddingTop: 10 }}>
+            {/* <Image
               source={require('../../assets/images/Icon_SHPE_UCF_152x152.png')}
               style={{alignSelf: 'center'}}
-            />
+            /> */}
             <View style={headerContainer}>
               <View style={headerTitle}>
                 <Text style={headerTextStyle}>S H P E  </Text>
@@ -118,8 +117,6 @@ class LoginForm extends Component {
             </View>
             <Text style={headerSubtitleStyle}>Society of Hispanic Professional Engineers</Text>
           </ScrollView>
-        </RkAvoidKeyboard>
-        <RkAvoidKeyboard style={{flex:1}}>
           <ScrollView style= {{flex: 1}}>
             <Input
               placeholder="Knights Email"
@@ -136,7 +133,6 @@ class LoginForm extends Component {
               onChangeText={this.onPasswordChange.bind(this)}
             />
           </ScrollView>
-        </RkAvoidKeyboard>
         {this.renderError()}
         {this.renderButtons()}
       </View>

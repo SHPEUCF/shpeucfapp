@@ -1,7 +1,6 @@
 import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import _ from 'lodash';
-import { Alert } from 'react-native';
 
 import {
   FIRST_NAME_CHANGED_MEMBER,
@@ -24,8 +23,7 @@ import {
   FETCH_ALL_USERS,
   DATE_BIRTH_CHANGED_MEMBER,
   NATIONALITY_CHANGED_MEMBER,
-  FETCH_FILTERS,
-  ASSIGN_POSITION,
+  FETCH_FILTERS
 } from './types.js';
 
 export const firstNameChangedMember = (text) => {
@@ -189,38 +187,15 @@ export const editMember = ( firstNameU, lastNameU, emailU, collegeU, majorU, poi
 }
 };
 
-export const assignPosition = (title, types, id, oldChair) => {
-  
-  return (dispatch) => {
-
-    if (oldChair){
-    firebase.database().ref(`/users/${oldChair.id}/${types}`).remove()
-    .then(() => firebase.database().ref(`/privileges/${oldChair.id}/`).update({
-      [types]: false,
-    }))
-    }
-    
-    firebase.database().ref(`/users/${id}/`).update({
-    [types]: title,
-    })
-    .then(() => firebase.database().ref(`/privileges/${id}/`).update({
-      [types]: true,
-    }))
-
-    dispatch({
-      type: ASSIGN_POSITION,
-    });
-};
-}
-
 export const fetchAllUsers = () => {
   return (dispatch) => {
-    firebase.database().ref(`/users/`).on('value', snapshot => {
+    firebase.database().ref(`/users/`).once('value', snapshot => {
       dispatch({
         type: FETCH_ALL_USERS,
         payload: snapshot.val()
       })
     })
+    .catch(() => alert('could not access database', 'failure'))
   }
 }
 

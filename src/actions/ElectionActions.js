@@ -120,8 +120,8 @@ export const updateElection = () => {
           }
         });
 
-      }
-};
+      };
+}
 
 export const deletePosition = (text) => {
     return (dispatch) => {

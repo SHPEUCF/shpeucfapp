@@ -1,4 +1,3 @@
-export * from './Feed';
 export * from './Events';
 export * from './More';
 export * from './Leaderboard';

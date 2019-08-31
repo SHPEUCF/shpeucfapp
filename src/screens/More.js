@@ -34,21 +34,9 @@ import {
       privilege: "user"
     },
     {
-      title: 'Conventions',
-      icon: 'airplanemode-active',
-      screen: 'Conventions',
-      privilege: "user"
-    },
-    {
       title: 'Election',
       icon: 'done',
       screen: 'Election',
-      privilege: "user"
-    },
-    {
-      title: 'Committees',
-      icon: 'assignment-ind',
-      screen: 'Committees',
       privilege: "user"
     },
     {
@@ -61,7 +49,7 @@ import {
       title: 'BackEnd',
       icon: 'settings',
       screen: 'BackEnd',
-      privilege: "eboard"
+      privilege: "president"
     }
   ];
 
@@ -119,7 +107,7 @@ class More extends Component {
         >
         <FlatList
           removeClippedSubviews={false}
-          extraData={this.props}
+          extraData={this.state}
           keyExtractor = {this.keyExtractor}
           data = {menuItems}
           renderItem={this.renderItem}

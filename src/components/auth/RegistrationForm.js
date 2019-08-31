@@ -10,8 +10,6 @@ import {
   PickerInput,
   DatePicker
 } from '../general';
-import {RkAvoidKeyboard, RkTextInput, RkPicker, RkText} from 'react-native-ui-kitten';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import collegesJson from '../../data/Colleges.json';
 import countriesJson from '../../data/Countries.json';
 import {
