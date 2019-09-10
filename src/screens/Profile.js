@@ -23,7 +23,7 @@ class Profile extends Component {
     return (
       <View style={headerInfoContainer}>
         <Avatar
-          large
+          size="xlarge"
           rounded
           source={{uri: picture}}
           title={`${firstName[0]}${lastName[0]}`}

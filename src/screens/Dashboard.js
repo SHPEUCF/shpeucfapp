@@ -165,6 +165,7 @@ class Dashboard extends Component {
 			greetingContainerStyle,
 			ContainerStyle,
 			title,
+			webTitle,
 			touchLeaderboard,
 			eventsContainer,
 			textColor
@@ -227,7 +228,7 @@ class Dashboard extends Component {
 								<FontAwesomeIcon style={{color: '#FFC107'}} name="slack" size={30} onPress={() => Linking.openURL('https://shpeucf2018-2019.slack.com/')}/>
 							</View>
 							<TouchableOpacity style={ContainerStyle} onPress={() => Linking.openURL('https://www.shpeucf.com/')}>
-								<Text style={[title, textColor, {paddingBottom: 0}]}>Visit our website!</Text>
+								<Text style={[webTitle, textColor ]}>Visit our website!</Text>
 							</TouchableOpacity>
 						</View>
 					</ScrollView>
@@ -285,7 +286,12 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 18,
 		fontWeight: '500',
-		paddingBottom: '5%',
+		paddingBottom: '3%',
+	},
+	webTitle: {
+		fontSize: 18,
+		fontWeight: '500',
+		paddingBottom: '1%',
 	},
 	touchLeaderboard: {
 		flex: 1,

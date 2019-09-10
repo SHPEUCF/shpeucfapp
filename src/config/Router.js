@@ -156,7 +156,7 @@ const RouterComponent = () => {
           type={ActionConst.RESET}
           activeTintColor={'#E0E6ED'}
           inactiveTintColor={'#C0CCDA'}
-          tabBarStyle={{backgroundColor: '#21252b'}}
+          tabBarStyle={{backgroundColor: '#21252b', paddingTop: '1%'}}
         >
           <Scene
             key="dashboard"
@@ -166,9 +166,9 @@ const RouterComponent = () => {
             title="Dashboard"
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
-                name={focused ? 'ios-paper' : 'ios-paper-outline'}
+                name={'ios-paper'}
                 size ={30}
-                style={{ color: '#FFC107' }}
+                style={focused ? {color: '#FFC107'} : {color: 'white'}}
               />
             }
           />
@@ -182,9 +182,9 @@ const RouterComponent = () => {
             rightTitle="Today"
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
-                name={focused ? 'ios-calendar' : 'ios-calendar-outline'}
+                name={'ios-calendar'}
                 size ={30}
-                style={{ color: '#FFC107' }}
+                style={focused ? {color: '#FFC107'} : {color: 'white'}}
               />
             }
           />
@@ -195,9 +195,9 @@ const RouterComponent = () => {
             title="Profile"
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
-                name={focused ? 'ios-person' : 'ios-person-outline'}
+                name={'ios-person'}
                 size ={30}
-                style={{ color: '#FFC107' }}
+                style={focused ? {color: '#FFC107'} : {color: 'white'}} 
               />
             }
           />
@@ -207,9 +207,9 @@ const RouterComponent = () => {
             title="More"
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
-                name={focused ? 'ios-menu' : 'ios-menu-outline'}
+                name={'ios-menu'}
                 size ={30}
-                style={{ color: '#FFC107' }}
+                style={focused ? {color: '#FFC107'} : {color: 'white'}}
               />
             }>
             <Scene

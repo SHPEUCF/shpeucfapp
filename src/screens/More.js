@@ -83,10 +83,12 @@ class More extends Component {
     if (privilege !== undefined && privilege[item.privilege] === true ) {
       return(
         <ListItem
+          containerStyle={{ backgroundColor: '#2C3239', borderBottomColor: 'white', borderBottomWidth: 1}}
           removeClippedSubviews={false}
           title={item.title}
+          chevron
           titleStyle={{ color: 'white'}}
-          leftIcon={{name: item.icon}}
+          leftIcon={{name: item.icon , color: 'white' }}
           onPress={() => Actions[item.screen]()}
         />
       )
@@ -98,12 +100,12 @@ class More extends Component {
       <View style={{backgroundColor: '#2C3239', flex: 1}}>
         <NavBar title="More Options" />
         <ScrollView
-           refreshControl={
-          <RefreshControl
-            refreshing={this.state.refreshing}
-            onRefresh={this._onRefresh}
-          />
-        }
+        //    refreshControl={
+        //   <RefreshControl
+        //     refreshing={this.state.refreshing}
+        //     onRefresh={this._onRefresh}
+        //   />
+        // }
         >
         <FlatList
           removeClippedSubviews={false}
