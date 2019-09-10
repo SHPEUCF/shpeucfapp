@@ -10,9 +10,8 @@ import {
   registrationError
 } from '../../actions';
 
-import { Card, CardSection, Spinner, Button, Input } from '../general';
-import {RkTheme, RkAvoidKeyboard, RkButton} from 'react-native-ui-kitten';
-import firebase from 'firebase'
+import { Spinner, Button, Input } from '../general';
+import { RkAvoidKeyboard } from 'react-native-ui-kitten';
 
 class LoginForm extends Component {
 
@@ -145,9 +144,7 @@ class LoginForm extends Component {
   }
 
   render() {
-    if (this.props.loggedIn) {
-      return <Spinner />;
-    } else  return this.renderContent();
+    return this.renderContent();
   }
 }
 
