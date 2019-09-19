@@ -105,10 +105,10 @@ class LoginForm extends Component {
     return (
       <View style={formContainerStyle}>
         <ScrollView style={{ flex: 1.5, paddingTop: 10 }}>
-            {/* <Image
-              source={require('../../assets/images/Icon_SHPE_UCF_152x152.png')}
+            <Image
+              source={require('../../assets/images/SHPE_UCF_Logo.png')}
               style={{alignSelf: 'center'}}
-            /> */}
+            /> 
             <View style={headerContainer}>
               <View style={headerTitle}>
                 <Text style={headerTextStyle}>S H P E  </Text>
