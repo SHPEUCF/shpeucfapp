@@ -10,7 +10,7 @@ import {
     candidateLNameChanged,
     candidatePlanChanged,
     candidatePositionChanged
-} from '../../actions'
+} from '../../ducks'
 import { Actions } from 'react-native-router-flux';
 
 
@@ -155,9 +155,9 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = ({ elect, auth }) => {
+const mapStateToProps = ({ elect, user }) => {
     const {candidatePlan, title, applyPosition, candidateId} = elect;
-    const {firstName, lastName, id} = auth;
+    const {firstName, lastName, id} = user;
 
     return { firstName , lastName, applyPosition, candidatePlan, title, id, candidateId };
 };

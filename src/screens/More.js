@@ -10,7 +10,7 @@ import {
   getPrivilege,
   pageLoad,
   updateElection
-} from "../actions"
+} from "../ducks"
 
 
 
@@ -120,8 +120,8 @@ class More extends Component {
   }
 }
 
-const mapStateToProps = ({ auth, general, elect }) => {
-  const { privilege } = auth;
+const mapStateToProps = ({ user, general, elect }) => {
+  const { privilege } = user;
   const { loading } = general;
   const { election, apply} = elect;
 

@@ -17,7 +17,7 @@ import {
     eventError,
     goToCreateEvent,
     goToEvents
-} from '../../actions'
+} from '../../ducks'
 
 
 class CreateEvent extends Component {

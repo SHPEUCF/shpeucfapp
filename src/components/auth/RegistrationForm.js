@@ -30,7 +30,7 @@ import {
   createUser,
   goToLogIn,
   genderChanged,
-   } from '../../actions';
+   } from '../../ducks';
 
 const collegeNames = [];
 collegesJson.map(college => {collegeNames.push(college.collegeName)});
@@ -385,7 +385,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ user }) => {
   const {
     firstName,
     lastName,
@@ -403,7 +403,7 @@ const mapStateToProps = ({ auth }) => {
     confirmPassword,
     error,
     loading,
-    quote } = auth;
+    quote } = user;
 
   return {
     firstName,

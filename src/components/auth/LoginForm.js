@@ -8,7 +8,7 @@ import {
   goToResetPassword,
   goToRegistration,
   registrationError
-} from '../../actions';
+} from '../../ducks';
 
 import { Card, CardSection, Spinner, Button, Input } from '../general';
 import {RkTheme, RkAvoidKeyboard, RkButton} from 'react-native-ui-kitten';
@@ -203,8 +203,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ auth }) => {
-  const { email, password, error, loading, loggedIn } = auth;
+const mapStateToProps = ({ user }) => {
+  const { email, password, error, loading, loggedIn } = user;
 
   return { email, password, error, loading, loggedIn };
 };

@@ -24,7 +24,7 @@ import {
   eventIDChanged,
   goToCreateEvent,
   goToViewEvent
-} from '../actions';
+} from '../ducks';
 
 const dimension = Dimensions.get('window');
 
@@ -241,9 +241,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ events, auth }) => {
+const mapStateToProps = ({ events, user }) => {
   const { eventList } = events;
-  const { privilege } = auth;
+  const { privilege } = user;
   return { eventList, privilege };
 };
 

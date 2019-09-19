@@ -7,7 +7,7 @@ import {
   loadUser,
   fetchEvents,
   goToViewEvent
-} from '../actions';
+} from '../ducks';
 import _ from 'lodash';
 import * as Progress from 'react-native-progress';
 import { Button, Spinner, NavBar } from '../components/general'
@@ -230,9 +230,9 @@ const styles = StyleSheet.create({
     },
 });
 
-const mapStateToProps = ({ auth, members, events, general }) => {
+const mapStateToProps = ({ user, members, events, general }) => {
   const { membersPoints } = members;
-  const { id } = auth
+  const { id } = user
   const { eventList } = events
   const { loading } = general
 

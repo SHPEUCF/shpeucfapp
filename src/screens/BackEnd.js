@@ -94,8 +94,8 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = ({ auth }) => {
-  const { privilege } = auth
+const mapStateToProps = ({ user }) => {
+  const { privilege } = user
 
   return { privilege };
 };

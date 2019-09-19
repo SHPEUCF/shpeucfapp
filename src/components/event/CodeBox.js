@@ -11,7 +11,7 @@ import {View, Modal, TouchableOpacity, Dimensions, Text, TextInput} from 'react-
 import React from 'react';
 import {connect} from 'react-redux';
 import {Button} from '../general/Button';
-import {checkIn} from '../../actions/';
+import {checkIn} from '../../ducks';
 import Icons from 'react-native-vector-icons';
 
 const dimension = Dimensions.get('screen');

@@ -3,7 +3,7 @@ import { Actions } from 'react-native-router-flux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { Button, Spinner, NavBar } from '../components/general'
-import { loadUser, logoutUser, goToEditProfileForm, pageLoad} from '../actions';
+import { loadUser, logoutUser, goToEditProfileForm, pageLoad} from '../ducks';
 import { Text, View, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { Avatar, Divider } from 'react-native-elements';
 
@@ -207,8 +207,8 @@ const styles = StyleSheet.create({
 	},
 });
 
-const mapStateToProps = ({ auth, general }) => {
-  const { firstName, lastName, email, major, points, picture, quote } = auth;
+const mapStateToProps = ({ user, general }) => {
+  const { firstName, lastName, email, major, points, picture, quote } = user;
   const { loading } = general;
 
   return { firstName, lastName, email, major, points, picture, quote, loading };

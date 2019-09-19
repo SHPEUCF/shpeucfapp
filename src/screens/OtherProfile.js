@@ -3,7 +3,7 @@ import { Actions } from 'react-native-router-flux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import {Button, Spinner} from '../components/general'
-import { goToEditOtherProfileForm } from '../actions';
+import { goToEditOtherProfileForm } from '../ducks';
 import {
   Text,
   View, StyleSheet,
@@ -255,10 +255,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ members, general, auth }) => {
+const mapStateToProps = ({ members, general, user }) => {
   const { firstName, lastName, email, major, points, picture, quote } = members;
   const { loading } = general;
-  const { privilege } = auth;
+  const { privilege } = user;
 
   return { firstName, lastName, email, major, points, picture, quote, loading, privilege };
 };

@@ -22,7 +22,7 @@ import {
     deleteApplication,
     candidatePlanChanged,
     candidateIdChanged
-} from '../actions'
+} from '../ducks'
 
 const dimension = Dimensions.get('window');
 const iteratees = ['level'];

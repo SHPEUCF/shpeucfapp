@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
-import { emailChanged, resetPassword, goToLogIn } from '../../actions';
+import { emailChanged, resetPassword, goToLogIn } from '../../ducks';
 import { Card, CardSection, Button, Spinner } from '../general';
 import { Input } from '../general'
 class ResetPasswordForm extends Component {
@@ -158,8 +158,8 @@ const styles = StyleSheet.create({
 	}
 });
 
-const mapStateToProps = ({ auth }) => {
-  const { email, error } = auth;
+const mapStateToProps = ({ user }) => {
+  const { email, error } = user;
 
   return { email, error };
 };

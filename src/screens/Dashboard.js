@@ -25,7 +25,7 @@ import {
 	eventIDChanged,
 	goToViewEvent
 }
-from '../actions';
+from '../ducks';
 
 const dimension = Dimensions.get('window');
 
@@ -324,8 +324,8 @@ const styles = StyleSheet.create({
 	}
 });
 
-const mapStateToProps = ({ auth, general, members, events, elect }) => {
-	const { firstName, id } = auth;
+const mapStateToProps = ({ user, general, members, events, elect }) => {
+	const { firstName, id } = user;
 	const { loading } = general;
 	const { membersPoints } = members;
 	const { eventList } = events;
