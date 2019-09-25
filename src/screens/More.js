@@ -10,7 +10,7 @@ import {
   getPrivilege,
   pageLoad,
   updateElection
-} from "../actions"
+} from "../ducks"
 
 
 
@@ -22,33 +22,9 @@ import {
       privilege: "user",
     },
     {
-      title: 'Resources',
-      icon: 'layers',
-      screen: 'Resources',
-      privilege: "user"
-    },
-    {
-      title: 'Forms',
-      icon: 'assignment',
-      screen: 'Forms',
-      privilege: "user"
-    },
-    {
-      title: 'Conventions',
-      icon: 'airplanemode-active',
-      screen: 'Conventions',
-      privilege: "user"
-    },
-    {
       title: 'Election',
       icon: 'done',
       screen: 'Election',
-      privilege: "user"
-    },
-    {
-      title: 'Committees',
-      icon: 'assignment-ind',
-      screen: 'Committees',
       privilege: "user"
     },
     {
@@ -61,7 +37,7 @@ import {
       title: 'BackEnd',
       icon: 'settings',
       screen: 'BackEnd',
-      privilege: "eboard"
+      privilege: "president"
     }
   ];
 
@@ -95,10 +71,12 @@ class More extends Component {
     if (privilege !== undefined && privilege[item.privilege] === true ) {
       return(
         <ListItem
+          containerStyle={{ backgroundColor: '#2C3239', borderBottomColor: 'white', borderBottomWidth: 1}}
           removeClippedSubviews={false}
           title={item.title}
+          chevron
           titleStyle={{ color: 'white'}}
-          leftIcon={{name: item.icon}}
+          leftIcon={{name: item.icon , color: 'white' }}
           onPress={() => Actions[item.screen]()}
         />
       )
@@ -110,16 +88,16 @@ class More extends Component {
       <View style={{backgroundColor: '#2C3239', flex: 1}}>
         <NavBar title="More Options" />
         <ScrollView
-           refreshControl={
-          <RefreshControl
-            refreshing={this.state.refreshing}
-            onRefresh={this._onRefresh}
-          />
-        }
+        //    refreshControl={
+        //   <RefreshControl
+        //     refreshing={this.state.refreshing}
+        //     onRefresh={this._onRefresh}
+        //   />
+        // }
         >
         <FlatList
           removeClippedSubviews={false}
-          extraData={this.props}
+          extraData={this.state}
           keyExtractor = {this.keyExtractor}
           data = {menuItems}
           renderItem={this.renderItem}
@@ -130,8 +108,8 @@ class More extends Component {
   }
 }
 
-const mapStateToProps = ({ auth, general, elect }) => {
-  const { privilege } = auth;
+const mapStateToProps = ({ user, general, elect }) => {
+  const { privilege } = user;
   const { loading } = general;
   const { election, apply} = elect;
 

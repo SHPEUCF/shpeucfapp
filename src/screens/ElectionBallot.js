@@ -19,7 +19,7 @@ import {
   goToCandidateForm,
   vote,
   editApplication
-} from '../actions';
+} from '../ducks';
 import _ from 'lodash';
 import {
   FlatList,
@@ -387,9 +387,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ elect, auth }) => {
+const mapStateToProps = ({ elect, user }) => {
   const { election, positions, candidatePlan, apply } = elect;
-  const { firstName, lastName, id, voted, applied} = auth
+  const { firstName, lastName, id, voted, applied} = user
 
   return { election, positions, candidatePlan, firstName, lastName, id, voted, apply, applied};
 };

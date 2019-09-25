@@ -23,10 +23,9 @@ import {
 	locationChanged,
 	epointsChanged,
 	eventIDChanged,
-	goToViewEvent,
-	getCommittees
+	goToViewEvent
 }
-from '../actions';
+from '../ducks';
 
 const dimension = Dimensions.get('window');
 
@@ -36,7 +35,6 @@ const order = ['desc','asc','asc'];
 class Dashboard extends Component {
 	componentWillMount() {
 		this.props.pageLoad();
-		this.props.getCommittees();
 		this.props.updateElection();
 		this.props.fetchMembersPoints();
 		this.props.fetchEvents();
@@ -98,8 +96,7 @@ class Dashboard extends Component {
 			const {
 				name,
 				date,
-				description,
-				committee
+				description
 			} = event;
 	
 			if (description !== undefined && description.length > 75) {
@@ -107,14 +104,9 @@ class Dashboard extends Component {
 				description += '...';
 			}
 
-			var viewName = name;
-			if (committee !== ''){
-			viewName = committee + ": "  + name;
-			}
-
 			return (
 				<TouchableOpacity style={{alignItems:'center'}} onPress={() => this.viewEvent(event)}>
-					<Text style={[{fontStyle: 'italic', fontSize: 16}, textColor]}>{viewName}</Text>
+					<Text style={[{fontStyle: 'italic', fontSize: 16}, textColor]}>{name}</Text>
 					<Text style={[{paddingBottom: '5%'}, textColor]}>{this.convertNumToDate(date)}</Text>
 					<Text style={[{marginLeft: '10%', marginRight: '10%'}, textColor]}>{description}</Text>
 				</TouchableOpacity>
@@ -173,6 +165,7 @@ class Dashboard extends Component {
 			greetingContainerStyle,
 			ContainerStyle,
 			title,
+			webTitle,
 			touchLeaderboard,
 			eventsContainer,
 			textColor
@@ -235,7 +228,7 @@ class Dashboard extends Component {
 								<FontAwesomeIcon style={{color: '#FFC107'}} name="slack" size={30} onPress={() => Linking.openURL('https://shpeucf2018-2019.slack.com/')}/>
 							</View>
 							<TouchableOpacity style={ContainerStyle} onPress={() => Linking.openURL('https://www.shpeucf.com/')}>
-								<Text style={[title, textColor, {paddingBottom: 0}]}>Visit our website!</Text>
+								<Text style={[webTitle, textColor ]}>Visit our website!</Text>
 							</TouchableOpacity>
 						</View>
 					</ScrollView>
@@ -293,7 +286,12 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 18,
 		fontWeight: '500',
-		paddingBottom: '5%',
+		paddingBottom: '3%',
+	},
+	webTitle: {
+		fontSize: 18,
+		fontWeight: '500',
+		paddingBottom: '1%',
 	},
 	touchLeaderboard: {
 		flex: 1,
@@ -326,8 +324,8 @@ const styles = StyleSheet.create({
 	}
 });
 
-const mapStateToProps = ({ auth, general, members, events, elect }) => {
-	const { firstName, id } = auth;
+const mapStateToProps = ({ user, general, members, events, elect }) => {
+	const { firstName, id } = user;
 	const { loading } = general;
 	const { membersPoints } = members;
 	const { eventList } = events;
@@ -351,8 +349,7 @@ const mapStateToProps = ({ auth, general, members, events, elect }) => {
 	locationChanged,
 	epointsChanged,
 	eventIDChanged,
-	goToViewEvent,
-	getCommittees
+	goToViewEvent
 };
 
  export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

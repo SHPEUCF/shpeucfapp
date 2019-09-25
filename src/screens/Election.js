@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { Card, CardSection, Button, Spinner, Input, NavBar } from '../components/general';
-import { RkAvoidKeyboard } from 'react-native-ui-kitten';
 
 import { Avatar } from 'react-native-elements';
 import {
@@ -19,7 +18,7 @@ import {
   goToCandidateForm,
   vote,
   editApplication
-} from '../actions';
+} from '../ducks';
 import _ from 'lodash';
 import {
   FlatList,
@@ -111,9 +110,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ elect, auth }) => {
+const mapStateToProps = ({ elect, user }) => {
   const { election, positions, candidatePlan, apply } = elect;
-  const { firstName, lastName, id, voted, applied} = auth
+  const { firstName, lastName, id, voted, applied} = user
 
   return { election, positions, candidatePlan, firstName, lastName, id, voted, apply, applied};
 };

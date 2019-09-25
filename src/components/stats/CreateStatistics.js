@@ -5,7 +5,7 @@ import { Input, Button } from '../general';
 import { RkAvoidKeyboard, RkButton, RkPicker } from 'react-native-ui-kitten';
 import {
     
-} from '../../actions'
+} from '../../ducks'
 import { Actions } from 'react-native-router-flux';
 
 var filters = []
@@ -15,7 +15,7 @@ const obj = {
         "keys2" : "poop",
         "keys3" : "poop",
 }
-const filters = [];
+filters = [];
 for(k in obj){
     filters.push(k.key)
 }

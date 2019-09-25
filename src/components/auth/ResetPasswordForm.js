@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
-import { emailChanged, resetPassword, goToLogIn } from '../../actions';
+import { emailChanged, resetPassword, goToLogIn } from '../../ducks';
 import { Card, CardSection, Button, Spinner } from '../general';
-import {RkTheme, RkAvoidKeyboard, RkTextInput} from 'react-native-ui-kitten';
-
+import { Input } from '../general'
 class ResetPasswordForm extends Component {
 
   onEmailChange(text) {
@@ -72,19 +71,17 @@ class ResetPasswordForm extends Component {
       return (
         <View style={styles.container}>
           <View style={styles.formContainerStyle}>
-            <RkAvoidKeyboard>
             <View style={{flexDirection: 'row', justifyContent: 'center', bottom: 10}}>
-              <Image
+              {/* <Image
                 source={require('../../assets/images/Icon_SHPE_UCF_152x152.png')}
-                style={{width: 150, height: 150}}/>
+                style={{width: 150, height: 150}}/> */}
             </View>
             <View style={styles.headerStyle}>
               <Text style={styles.headerTextStyle}>Reset Password</Text>
               <Text style={styles.headerSubtitleStyle}>Enter your email below</Text>
             </View>
 
-            <RkTextInput
-              rkType='rounded'
+            <Input
               placeholder="Email"
               value={this.props.email}
               autoCapitalize="none"
@@ -94,8 +91,6 @@ class ResetPasswordForm extends Component {
 
             {this.renderError()}
             {this.renderButtons()}
-
-            </RkAvoidKeyboard>
           </View>
         </View>
       );
@@ -106,17 +101,6 @@ class ResetPasswordForm extends Component {
     return this.renderContent();
   }
 }
-
-RkTheme.setType('RkTextInput','rounded', {
-  input: {
-    borderRadius: 5
-  },
-  color: 'gray',
-  container: {
-    borderWidth: 2,
-    backgroundColor: '#FFF'
-  }
-});
 
 const styles = StyleSheet.create({
   container: {
@@ -174,8 +158,8 @@ const styles = StyleSheet.create({
 	}
 });
 
-const mapStateToProps = ({ auth }) => {
-  const { email, error } = auth;
+const mapStateToProps = ({ user }) => {
+  const { email, error } = user;
 
   return { email, error };
 };

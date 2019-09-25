@@ -25,7 +25,7 @@ import {
   eventIDChanged,
   goToCreateEvent,
   goToViewEvent
-} from '../actions';
+} from '../ducks';
 
 const dimension = Dimensions.get('window');
 
@@ -37,7 +37,6 @@ class Events extends Component {
 
   renderButton(){
     if(this.props.privilege !== undefined && this.props.privilege.board){
-      this.props.nameChanged("");
       return (
           <Button
               title = "CREATE EVENT"
@@ -159,16 +158,11 @@ class Events extends Component {
       textColor,
       itemContainer
     } = styles
-
-    var viewName = item.name;
-    if (item.committee !== ''){
-      viewName = item.committee + ": " + item.name;
-    }
     
     return (
       <TouchableOpacity onPress={this.viewEvent.bind(this,item)}>
           <View style={itemContainer}>
-            <Text style={[{ fontWeight: 'bold'},textColor]}>{viewName}</Text>
+            <Text style={[{ fontWeight: 'bold'},textColor]}>{item.name}</Text>
             <Text style={textColor}>Time: {item.time}</Text>
             <Text style={textColor}>Location: {item.location}</Text>
         </View>
@@ -249,9 +243,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ events, auth }) => {
+const mapStateToProps = ({ events, user }) => {
   const { eventList } = events;
-  const { privilege } = auth;
+  const { privilege } = user;
   return { eventList, privilege };
 };
 

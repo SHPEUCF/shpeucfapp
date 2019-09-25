@@ -9,7 +9,7 @@ import {
     positionTitleChanged,
     positionDescriptionChanged,
     deletePosition,
-} from '../../actions'
+} from '../../ducks'
 import { Actions } from 'react-native-router-flux';
 
 

@@ -1,39 +1,36 @@
 {
   "name": "shpeucfapp",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint ."
   },
   "dependencies": {
-    "axios": "^0.17.1",
-    "firebase": "^4.8.1",
-    "fresh": "^0.5.2",
-    "hoek": "^5.0.3",
-    "lodash": "^4.17.5",
-    "moment": "^2.20.1",
-    "npm": "^5.7.1",
-    "react": "^16.2.0",
-    "react-native": "^0.51.1",
+    "firebase": "^6.4.2",
+    "react": "16.8.6",
+    "react-native": "0.60.5",
     "react-native-beacons-manager": "^1.0.7",
-    "react-native-calendars": "^1.16.1",
-    "react-native-camera": "^1.0.1",
-    "react-native-elements": "^0.18.5",
-    "react-native-image-picker": "^0.26.10",
-    "react-native-progress": "^3.4.0",
-    "react-native-router-flux": "^4.0.0-beta.27",
-    "react-native-ui-kitten": "^3.0.0",
-    "react-native-vector-icons": "^4.5.0",
-    "react-redux": "^5.0.6",
-    "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0"
+    "react-native-calendars": "^1.212.0",
+    "react-native-elements": "^1.1.0",
+    "react-native-progress": "^3.6.0",
+    "react-native-router-flux": "^4.0.6",
+    "react-native-ui-kitten": "^4.2.0-beta.1",
+    "react-native-vector-icons": "^6.6.0",
+    "react-redux": "^7.1.1",
+    "redux": "^4.0.4",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
-    "babel-jest": "^21.2.0",
-    "babel-preset-react-native": "^4.0.0",
-    "jest": "21.2.1",
-    "react-test-renderer": "^16.0.0"
+    "@babel/core": "7.5.5",
+    "@babel/runtime": "7.5.5",
+    "@react-native-community/eslint-config": "0.0.3",
+    "babel-jest": "24.9.0",
+    "eslint": "6.2.2",
+    "jest": "24.9.0",
+    "metro-react-native-babel-preset": "0.54.1",
+    "react-test-renderer": "16.8.6"
   },
   "jest": {
     "preset": "react-native"

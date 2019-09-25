@@ -9,7 +9,7 @@ import {
   pageLoad,
   getPrivilege,
   loadUser
-} from '../actions';
+} from '../ducks';
 import _ from 'lodash';
 import * as Progress from 'react-native-progress';
 import {
@@ -194,9 +194,9 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = ({ auth,members }) => {
+const mapStateToProps = ({ user, members }) => {
   const { membersPoints } = members;
-  const { picture, id } = auth
+  const { picture, id } = user
 
   return { membersPoints, id, picture};
 };

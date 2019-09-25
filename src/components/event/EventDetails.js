@@ -27,7 +27,7 @@ import {
     convertNumToDate,
     fetchAllUsers,
     emailListUsers,
-} from '../../actions'
+} from '../../ducks'
 import { Actions } from 'react-native-router-flux';
 
 const dimension = Dimensions.get('screen');
@@ -451,9 +451,9 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = ({ events, auth, members }) => {
+const mapStateToProps = ({ events, user, members }) => {
   const { type, name, description, date, time, location, points, eventID, error, code, eventList } = events;
-  const { privilege } = auth;
+  const { privilege } = user;
   const { userList } = members
 
   return { type, name, description, date, time, location, points, eventID, error, privilege, code, eventList, userList};

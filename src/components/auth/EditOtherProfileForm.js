@@ -19,7 +19,7 @@ import {
   editMember,
   goToOtherProfile,
   quoteChanged
-} from '../../actions';
+} from '../../ducks';
 
 const collegeNames = [];
 data.map(college => {collegeNames.push({key:college.key, value:college.collegeName})});

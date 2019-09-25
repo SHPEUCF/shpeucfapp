@@ -8,7 +8,7 @@ import {
   goToResetPassword,
   goToRegistration,
   registrationError
-} from '../../actions';
+} from '../../ducks';
 
 import { Spinner, Button, Input } from '../general';
 import { RkAvoidKeyboard } from 'react-native-ui-kitten';
@@ -103,12 +103,11 @@ class LoginForm extends Component {
     } = styles
     return (
       <View style={formContainerStyle}>
-        <RkAvoidKeyboard style={headerContainer}>
-          <ScrollView style= {{flex: 1}}>
+        <ScrollView style={{ flex: 1.5, paddingTop: 10 }}>
             <Image
-              source={require('../../assets/images/Icon_SHPE_UCF_152x152.png')}
+              source={require('../../assets/images/SHPE_UCF_Logo.png')}
               style={{alignSelf: 'center'}}
-            />
+            /> 
             <View style={headerContainer}>
               <View style={headerTitle}>
                 <Text style={headerTextStyle}>S H P E  </Text>
@@ -117,8 +116,6 @@ class LoginForm extends Component {
             </View>
             <Text style={headerSubtitleStyle}>Society of Hispanic Professional Engineers</Text>
           </ScrollView>
-        </RkAvoidKeyboard>
-        <RkAvoidKeyboard style={{flex:1}}>
           <ScrollView style= {{flex: 1}}>
             <Input
               placeholder="Knights Email"
@@ -135,7 +132,6 @@ class LoginForm extends Component {
               onChangeText={this.onPasswordChange.bind(this)}
             />
           </ScrollView>
-        </RkAvoidKeyboard>
         {this.renderError()}
         {this.renderButtons()}
       </View>
@@ -204,8 +200,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ auth }) => {
-  const { email, password, error, loading, loggedIn } = auth;
+const mapStateToProps = ({ user }) => {
+  const { email, password, error, loading, loggedIn } = user;
 
   return { email, password, error, loading, loggedIn };
 };

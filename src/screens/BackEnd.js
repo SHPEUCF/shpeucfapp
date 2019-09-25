@@ -27,12 +27,6 @@ const menuItems = [
     //   icon: 'check',
     //   screen: 'Statistics'
     // },
-    {
-      title: 'Committees',
-      icon: 'assignment-ind',
-      screen: 'CommitteesBackEnd',
-      privilege: 'eboard'
-    },
 ];
 
 class BackEnd extends Component {
@@ -51,9 +45,12 @@ class BackEnd extends Component {
         &&  privilege[item.privilege] !== undefined && (!('privilege' in item) || privilege[item.privilege] === true )) {
         return(
         <ListItem
+          containerStyle={{ backgroundColor: '#2C3239', borderBottomColor: 'white', borderBottomWidth: 1}}
+          removeClippedSubviews={false}
           title={item.title}
-          titleStyle={{color: 'white'}}
-          leftIcon={{name: item.icon}}
+          chevron
+          titleStyle={{ color: 'white'}}
+          leftIcon={{name: item.icon , color: 'white' }}
           onPress={() => Actions[item.screen]()}
         />
       )
@@ -100,8 +97,8 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = ({ auth }) => {
-  const { privilege } = auth
+const mapStateToProps = ({ user }) => {
+  const { privilege } = user
 
   return { privilege };
 };

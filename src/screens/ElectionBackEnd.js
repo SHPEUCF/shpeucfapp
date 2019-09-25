@@ -19,7 +19,7 @@ import {
     closeApplications,
     openApplications,
     fetchMemberProfile
-} from '../actions'
+} from '../ducks'
 import { NavBar } from '../components/general';
 
 const dimension = Dimensions.get('window');

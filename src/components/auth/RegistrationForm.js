@@ -10,8 +10,6 @@ import {
   PickerInput,
   DatePicker
 } from '../general';
-import {RkAvoidKeyboard, RkTextInput, RkPicker, RkText} from 'react-native-ui-kitten';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import collegesJson from '../../data/Colleges.json';
 import countriesJson from '../../data/Countries.json';
 import {
@@ -32,7 +30,7 @@ import {
   createUser,
   goToLogIn,
   genderChanged,
-   } from '../../actions';
+   } from '../../ducks';
 
 const collegeNames = [];
 collegesJson.map(college => {collegeNames.push(college.collegeName)});
@@ -387,7 +385,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ user }) => {
   const {
     firstName,
     lastName,
@@ -405,7 +403,7 @@ const mapStateToProps = ({ auth }) => {
     confirmPassword,
     error,
     loading,
-    quote } = auth;
+    quote } = user;
 
   return {
     firstName,

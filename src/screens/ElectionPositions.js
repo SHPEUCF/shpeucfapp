@@ -21,7 +21,7 @@ import {
     positionDescriptionChanged,
     positionTitleChanged,
     changeLevels
-} from '../actions'
+} from '../ducks'
 
 const dimension = Dimensions.get('window');
 const iteratees = ['level'];
@@ -45,6 +45,7 @@ class ElectionPosition extends Component {
       backgroundColor: '#fff',
     }))
   }
+
 
   openOrClose(){
       if(this.props.election){
@@ -103,21 +104,12 @@ class ElectionPosition extends Component {
           </TouchableOpacity>
         </View>
         <View style= {styles.buttonContainerStyle}>
-          <TouchableOpacity onPress={() => this.delete(item.position)}>
+          <TouchableOpacity onPress={() => this.props.deletePosition(item.position.title)}>
             <Ionicons style={textColor} name="md-trash" size={40}/>
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
     )
-  }
-
-  delete(position){
-
-    this.setState({
-      data: this.state.data.filter(item => item.position !== position)
-    })
-    
-    this.props.deletePosition(position.title);
   }
 
 
@@ -126,7 +118,6 @@ class ElectionPosition extends Component {
       <View style={{ flex: 1 }}>
       <SortableFlatList
           data={this.state.data}
-          extraData={this.state}
           keyExtractor={(item, index) => `draggable-item-${item.key}`}
           renderItem={this.renderPositions}
           scrollPercent={5}
@@ -154,6 +145,7 @@ class ElectionPosition extends Component {
     } = this.props;
 
     const positionsArray = _.toArray(positions)
+
 
     return (
      <View style={page}>
