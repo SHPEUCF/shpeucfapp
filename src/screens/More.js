@@ -22,18 +22,6 @@ import {
       privilege: "user",
     },
     {
-      title: 'Resources',
-      icon: 'layers',
-      screen: 'Resources',
-      privilege: "user"
-    },
-    {
-      title: 'Forms',
-      icon: 'assignment',
-      screen: 'Forms',
-      privilege: "user"
-    },
-    {
       title: 'Election',
       icon: 'done',
       screen: 'Election',
