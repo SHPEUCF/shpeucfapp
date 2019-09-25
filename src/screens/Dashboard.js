@@ -23,7 +23,8 @@ import {
 	locationChanged,
 	epointsChanged,
 	eventIDChanged,
-	goToViewEvent
+	goToViewEvent,
+	getCommittees
 }
 from '../ducks';
 
@@ -35,6 +36,7 @@ const order = ['desc','asc','asc'];
 class Dashboard extends Component {
 	componentWillMount() {
 		this.props.pageLoad();
+		this.props.getCommittees();
 		this.props.updateElection();
 		this.props.fetchMembersPoints();
 		this.props.fetchEvents();
@@ -349,7 +351,8 @@ const mapStateToProps = ({ user, general, members, events, elect }) => {
 	locationChanged,
 	epointsChanged,
 	eventIDChanged,
-	goToViewEvent
+	goToViewEvent,
+	getCommittees
 };
 
  export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

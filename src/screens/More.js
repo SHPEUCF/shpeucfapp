@@ -28,6 +28,18 @@ import {
       privilege: "user"
     },
     {
+      title: 'Conventions',
+      icon: 'airplanemode-active',
+      screen: 'Conventions',
+      privilege: "user"
+    },
+    {
+      title: 'Committees',
+      icon: 'assignment-ind',
+      screen: 'Committees',
+      privilege: "user"
+    },
+    {
       title: 'About',
       icon: 'info',
       screen: 'About',
