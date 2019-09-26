@@ -10,7 +10,9 @@ const ACTIONS = createActiontypes([
     'EDIT_COMMITTEE',
     'DELETE_COMMITTEE',
     'COMMITTEE_DESCRIPTION_CHANGED',
-    'COMMITTEE_TITLE_CHANGED'
+    'COMMITTEE_TITLE_CHANGED',
+    'CHAIR_CHANGED',
+    'FILTER_CHANGED'
 ]);
 
 const INITIAL_STATE = {
@@ -19,6 +21,8 @@ const INITIAL_STATE = {
     title: "ADD",
     committeeTitle: "",
     committeeDescription: "",
+    chair: "",
+    filter: ""
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -45,6 +49,7 @@ export default (state = INITIAL_STATE, action) => {
         case ACTIONS.DELETE_COMMITTEE:
             return {
                 ...state,
+                chair : "",
                 committeeTitle : "",
                 committeeDescription : ""
             }
@@ -58,6 +63,16 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 committeeDescription: payload
             }
+        case ACTIONS.CHAIR_CHANGED:
+            return {
+                ...state,
+                chair: payload
+            }
+        case ACTIONS.FILTER_CHANGED:
+        return {
+            ...state,   
+            filter: payload
+        }
         case ACTIONS.EDIT_COMMITTEE:
             return state
         default:
@@ -95,11 +110,12 @@ export const getCommittees = () => {
     }
   };
   
-  export const addCommittee = (title, description, length) => {
+  export const addCommittee = (title, description, chair, length) => {
     return () => {
         firebase.database().ref(`/committees/${title}`).set({
                 title: title,
                 description: description,
+                chair: chair,
                 level: length
             })
             .then(() => alert('Committee Added!', 'Successful'))
@@ -108,7 +124,7 @@ export const getCommittees = () => {
   };
   
   
-  export const editCommittee = (title, description, oldTitle) => {
+  export const editCommittee = (title, description, chair, oldTitle) => {
   if (oldTitle !== null){
     var level;
     firebase.database().ref(`/committees/${oldTitle}/level`).once('value', snapshot => {
@@ -125,6 +141,7 @@ export const getCommittees = () => {
     .then(() => firebase.database().ref(`/election/committees/${title}`).set({
             title: title,
             description: description,
+            chair: chair,
             level: level
     }))
     .then(() => alert('Committee Edited!', 'Successful'))
@@ -136,7 +153,8 @@ export const getCommittees = () => {
     return (dispatch) => {
         firebase.database().ref(`/committees/${title}`).update({
                 title: title,
-                description: description
+                description: description,
+                chair: chair
             })
             .then(() => {
                 dispatch({
@@ -149,8 +167,14 @@ export const getCommittees = () => {
   }
   };
   
-  export const deleteCommittee = (text) => {
+  export const deleteCommittee = (text, chair) => {
     return (dispatch) => {
+
+        firebase.database().ref(`/users/${chair.id}/board`).remove()
+        .then(() => firebase.database().ref(`/privileges/${chair.id}/`).update({
+            board: false,
+        }))
+
         firebase.database().ref(`/committees/${text}`).remove()
             .then(() => {
                 dispatch({
@@ -172,6 +196,20 @@ export const getCommittees = () => {
   export const committeeDescriptionChanged = (text) => {
     return {
         type: ACTIONS.COMMITTEE_DESCRIPTION_CHANGED,
+        payload: text
+    };
+  };
+
+  export const chairChanged = (text) => {
+    return {
+        type: ACTIONS.CHAIR_CHANGED,
+        payload: text
+    };
+  };
+  
+  export const filterChanged = (text) => {
+    return {
+        type: ACTIONS.FILTER_CHANGED,
         payload: text
     };
   };

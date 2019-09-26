@@ -5,7 +5,7 @@ import { Card, CardSection, Button, Spinner, Input, NavBar, SortableFlatList } f
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import _ from 'lodash';
 import {
-  getCommittees, deleteCommittee, goToCommitteeForm, editCommittee, addCommittee, committeeDescriptionChanged, committeeTitleChanged, changeLevelsCom
+  getCommittees, deleteCommittee, goToCommitteeForm, editCommittee, fetchAllUsers, addCommittee, chairChanged, committeeDescriptionChanged, committeeTitleChanged, changeLevelsCom
 } from '../ducks';
 import { Avatar } from 'react-native-elements';
 import {
@@ -29,6 +29,7 @@ import {
 
   componentWillMount() {
     this.props.getCommittees();
+    this.props.fetchAllUsers();
   }
 
   state = {
@@ -51,6 +52,7 @@ import {
   viewCommittee(item) {
     this.props.committeeTitleChanged(item.title);
     this.props.committeeDescriptionChanged(item.description);
+    this.props.chairChanged(item.chair);
     this.props.goToCommitteeForm("EDIT");
   }
 
@@ -131,6 +133,7 @@ import {
             <Button
             onPress={() => {this.props.committeeTitleChanged("");
             this.props.committeeDescriptionChanged("");
+            this.props.chairChanged();
             this.props.goToCommitteeForm("ADD");}}
             title={"ADD COMMITEES"}
             >
@@ -154,7 +157,7 @@ import {
       data: this.state.data.filter(item => item.committee !== committee)
     })
 
-    this.props.deleteCommittee(committee.title);
+    this.props.deleteCommittee(committee.title, committee.chair);
   }
 
   renderFlatlist(committees){
@@ -230,10 +233,11 @@ const styles = StyleSheet.create({
   }
 });
 
-  const mapStateToProps = ({ general }) => {
+  const mapStateToProps = ({ general, members }) => {
     const { committees } = general;
+    const { userList } = members;
 
-    return { committees };
+    return { committees, userList};
   };
 
   const mapDispatchToProps = {
@@ -242,9 +246,11 @@ const styles = StyleSheet.create({
     deleteCommittee,
     addCommittee,
     editCommittee,
+    chairChanged,
     committeeDescriptionChanged,
     committeeTitleChanged,
-    changeLevelsCom
+    changeLevelsCom,
+    fetchAllUsers
   };
 
   export default connect(mapStateToProps, mapDispatchToProps)(CommitteesBackEnd); 

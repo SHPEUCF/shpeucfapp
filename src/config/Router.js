@@ -26,7 +26,7 @@ import Profile from '../screens/Profile';
 import OtherProfile from '../screens/OtherProfile';
 import Leaderboard from '../screens/Leaderboard';
 import Conventions from '../screens/Conventions';
-import CommitteeesBackEnd from '../screens/CommitteesBackEnd';
+import CommitteesBackEnd from '../screens/CommitteesBackEnd';
 import Election from '../screens/Election';
 import Committees from '../screens/Committees';
 import ElectionApplication from '../screens/ElectionApplication';
@@ -248,7 +248,7 @@ const RouterComponent = () => {
                 hideTabBar
               />
               <Scene key = "CommitteesBackEnd"
-                component={CommitteeesBackEnd}
+                component={CommitteesBackEnd}
                 title="Committees"
                 hideTabBar
               />

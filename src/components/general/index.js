@@ -7,6 +7,7 @@ export * from './ButtonImage';
 export * from './Input';
 export * from './NavBar';
 export * from './PickerInput';
+export * from './FilterPicker';
 export * from './DatePicker';
 export * from './Spinner';
 export * from './SegmentBtn';

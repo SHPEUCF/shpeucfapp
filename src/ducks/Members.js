@@ -23,9 +23,11 @@ const ACTIONS = createActiontypes([
   'GO_TO_OTHER_PROFILE',
   'GO_TO_EDIT_OTHER_PROFILE_FORM',
   'FETCH_FILTERS',
+  'ASSIGN_POSITION',
   'FETCH_ALL_USERS',
   'NATIONALITY_CHANGED_MEMBER',
   'DATE_BIRTH_CHANGED_MEMBER',
+  'ASSIGN_POSITION',
   'PAGE_LOAD'
 ]);
 
@@ -141,6 +143,8 @@ export default (state = INITIAL_STATE, action) => {
         userList: payload
       }
     case ACTIONS.EDIT_MEMBER:
+      return state;
+    case ACTIONS.ASSIGN_POSITION:
       return state;
     case ACTIONS.GO_TO_OTHER_PROFILE:
       return state;
@@ -310,15 +314,38 @@ export const editMember = (firstNameU, lastNameU, emailU, collegeU, majorU, poin
     }
 };
 
+export const assignPosition = (title, types, id, oldChair) => {
+
+  return (dispatch) => {
+
+    if (oldChair){
+    firebase.database().ref(`/users/${oldChair.id}/${types}`).remove()
+    .then(() => firebase.database().ref(`/privileges/${oldChair.id}/`).update({
+      [types]: false,
+    }))
+    }
+
+    firebase.database().ref(`/users/${id}/`).update({
+    [types]: title,
+    })
+    .then(() => firebase.database().ref(`/privileges/${id}/`).update({
+      [types]: true,
+    }))
+
+    dispatch({
+      type: ASSIGN_POSITION,
+    });
+};
+}
+
 export const fetchAllUsers = () => {
     return (dispatch) => {
-        firebase.database().ref(`/users/`).once('value', snapshot => {
+        firebase.database().ref(`/users/`).on('value', snapshot => {
                 dispatch({
                     type: ACTIONS.FETCH_ALL_USERS,
                     payload: snapshot.val()
                 })
             })
-            .catch(() => alert('could not access database', 'failure'))
     }
 }
 
