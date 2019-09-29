@@ -14,6 +14,7 @@ import {
 import {
   fetchEvents,
   getPrivilege,
+  committeeChanged,
   typeChanged,
   nameChanged,
   descriptionChanged,
@@ -140,7 +141,8 @@ class Events extends Component {
   }
 
   viewEvent(item) {
-    this.props.typeChanged(item.type);
+    this.props.typeChanged(item.type)
+    this.props.committeeChanged(item.committee);
     this.props.nameChanged(item.name)
     this.props.descriptionChanged(item.description)
     this.props.dateChanged(item.date)
@@ -256,6 +258,7 @@ const mapStateToProps = ({ events, user }) => {
 const mapDispatchToProps = {
   fetchEvents,
   getPrivilege,
+  committeeChanged,
   typeChanged,
   nameChanged,
   descriptionChanged,
