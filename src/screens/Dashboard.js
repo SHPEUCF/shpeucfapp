@@ -98,7 +98,8 @@ class Dashboard extends Component {
 			const {
 				name,
 				date,
-				description
+				description,
+				committee
 			} = event;
 	
 			if (description !== undefined && description.length > 75) {
@@ -106,9 +107,14 @@ class Dashboard extends Component {
 				description += '...';
 			}
 
+			var viewName = name;
+			if (committee !== ''){
+			viewName = committee + ": "  + name;
+			}
+
 			return (
 				<TouchableOpacity style={{alignItems:'center'}} onPress={() => this.viewEvent(event)}>
-					<Text style={[{fontStyle: 'italic', fontSize: 16}, textColor]}>{name}</Text>
+					<Text style={[{fontStyle: 'italic', fontSize: 16}, textColor]}>{viewName}</Text>
 					<Text style={[{paddingBottom: '5%'}, textColor]}>{this.convertNumToDate(date)}</Text>
 					<Text style={[{marginLeft: '10%', marginRight: '10%'}, textColor]}>{description}</Text>
 				</TouchableOpacity>

@@ -52,14 +52,10 @@ class PickerInput extends Component {
             itemTextStyle
         } = styles
 
-        const dataArr = Object.keys(this.props.data)
-
-        last = (item[0] == dataArr[dataArr.length - 1]) ? 
-            {borderBottomColor: '#0000'} : {}
         return(
             <TouchableOpacity
             onPress={() => this.clickAction(item[1])}>
-                <View style={[itemStyle, this.props.pickerItemStyle,last]}>
+                <View style={[itemStyle, this.props.pickerItemStyle]}>
                     <Text style={itemTextStyle}>{item[1]}</Text>
                 </View>
             </TouchableOpacity>
