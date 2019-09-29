@@ -36,6 +36,25 @@ class CreateEvent extends Component {
     onTypeChange(text) {
         this.onCommitteeChange('');
         this.props.typeChanged(text);
+        switch (text){
+            case "Social Event":
+                this.onPointsChange(3);
+                break;
+            case "Volunteer Event":
+                    this.onPointsChange(3);
+                    break;
+            case "GBM":
+                    this.onPointsChange(5);
+                    break;
+            case "Workshop":
+                    this.onPointsChange(3);
+                    break;
+            case "Committee":
+                    this.onPointsChange(2);
+                    break;
+            default:
+                    this.onPointsChange('');
+        }
     }
     onCommitteeChange(text) {
         this.props.committeeChanged(text);
@@ -213,7 +232,7 @@ class CreateEvent extends Component {
                             <PickerInput
                             placeholder="Event Type"
                             value={stringType}
-                            data={["Committee","Social Event","Volunteer Event", "GBM", "Other"]}
+                            data={["Committee","Social Event","Volunteer Event", "GBM", "Workshop","Other"]}
                             onSelect={(item) => {this.onTypeChange(item);
                             this.setState({modalVisible: true})}}
                             />
