@@ -23,7 +23,8 @@ import {
 	locationChanged,
 	epointsChanged,
 	eventIDChanged,
-	goToViewEvent
+	goToViewEvent,
+	getCommittees
 }
 from '../ducks';
 
@@ -35,6 +36,7 @@ const order = ['desc','asc','asc'];
 class Dashboard extends Component {
 	componentWillMount() {
 		this.props.pageLoad();
+		this.props.getCommittees();
 		this.props.updateElection();
 		this.props.fetchMembersPoints();
 		this.props.fetchEvents();
@@ -96,7 +98,8 @@ class Dashboard extends Component {
 			const {
 				name,
 				date,
-				description
+				description,
+				committee
 			} = event;
 	
 			if (description !== undefined && description.length > 75) {
@@ -104,9 +107,14 @@ class Dashboard extends Component {
 				description += '...';
 			}
 
+			var viewName = name;
+			if (committee !== ''){
+			viewName = committee + ": "  + name;
+			}
+
 			return (
 				<TouchableOpacity style={{alignItems:'center'}} onPress={() => this.viewEvent(event)}>
-					<Text style={[{fontStyle: 'italic', fontSize: 16}, textColor]}>{name}</Text>
+					<Text style={[{fontStyle: 'italic', fontSize: 16}, textColor]}>{viewName}</Text>
 					<Text style={[{paddingBottom: '5%'}, textColor]}>{this.convertNumToDate(date)}</Text>
 					<Text style={[{marginLeft: '10%', marginRight: '10%'}, textColor]}>{description}</Text>
 				</TouchableOpacity>
@@ -349,7 +357,8 @@ const mapStateToProps = ({ user, general, members, events, elect }) => {
 	locationChanged,
 	epointsChanged,
 	eventIDChanged,
-	goToViewEvent
+	goToViewEvent,
+	getCommittees
 };
 
  export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

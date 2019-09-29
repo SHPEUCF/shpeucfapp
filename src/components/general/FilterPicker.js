@@ -10,16 +10,18 @@ import {
 } from 'react-native';
 import { Input } from './Input'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Alert } from 'react-native';
 
 
 const dimension = Dimensions.get('window');
 
-class PickerInput extends Component {
+class FilterPicker extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {text: this.props.value, modalVisible: false}
+        this.state = {text: this.props.value, modalVisible: false, filterOn: false}
     }
+
     static propTypes = {
         title: PropTypes.string.isRequired,
         value: PropTypes.oneOfType([
@@ -37,29 +39,42 @@ class PickerInput extends Component {
         pickerItemStyle: PropTypes.shape({}),
         dropDownArrowStyle: PropTypes.shape({}),
         iconSize: PropTypes.number,
-        iconColor: PropTypes.string
+        filter: PropTypes.string,
+        iconColor: PropTypes.string,
+        onChangeText:  PropTypes.func,
     }
 
-    clickAction(item) {
-        this.props.onSelect(item)
+    clickAction(item, index) {
+        this.props.onSelect(item, index)
         this.setState({text: String(item), modalVisible: false})
     }
 
-    renderComponent(item) {
+    renderComponent(item, index) {
 
         const {
             itemStyle,
             itemTextStyle
         } = styles
 
+        const dataArr = Object.keys(this.props.data)
+
+        last = (item[0] == dataArr[dataArr.length - 1]) ? 
+            {borderBottomColor: '#0000'} : {}
+
+        var re = new RegExp("^"+this.props.filter, "i");
+
+        if (re.test(item[1]) ){
         return(
             <TouchableOpacity
-            onPress={() => this.clickAction(item[1])}>
-                <View style={[itemStyle, this.props.pickerItemStyle]}>
+            onPress={() => this.clickAction(item[1], index)}>
+                <View style={[itemStyle, this.props.pickerItemStyle,last]}>
                     <Text style={itemTextStyle}>{item[1]}</Text>
                 </View>
             </TouchableOpacity>
         )
+        }
+
+
     }
 
    _keyExtractor = (item, index) => index;
@@ -67,6 +82,8 @@ class PickerInput extends Component {
     render = () => {
         const {
             inputStyle,
+            inputStylee,
+            inputStyleee,
             iconStyle,
             modalStyle,
             modalBackground,
@@ -82,6 +99,7 @@ class PickerInput extends Component {
             value,
             data,
             placeholder,
+            onChangeText,
             style,
             inputBoxStyle,
             dropDownArrowStyle,
@@ -115,20 +133,27 @@ class PickerInput extends Component {
                     <View style={modalBackground}>
                         <View style={modalStyle}>
                             <Text style={titleStyle}>{title}</Text>
+                            <Input
+                            style={[inputStylee, inputStyleee]}
+                            onChangeText={onChangeText}
+                            value={this.props.filter}
+                            />
                             <View style={flatlistStyle}>
                                 <FlatList
                                 data={Object.entries(data)}
                                 extraData={this.state}
                                 keyExtractor={this._keyExtractor}
-                                renderItem={({item}) => (
-                                    this.renderComponent(item)
+                                renderItem={({item, index}) => (
+                                    this.renderComponent(item, index)
                                 )}
                                 />
                             </View>
                             <View style={buttonContainer}>
                                 <TouchableOpacity  
                                 style={buttonStyle}
-                                onPress={() => this.setState({modalVisible: false})}>
+                                onPress={() => { this.props.onSelect(placeholder)
+                                    this.setState({modalVisible: false})
+                                    }}>
                                     <Text style={textStyle}>Cancel</Text>
                                 </TouchableOpacity>
                             </View>
@@ -141,7 +166,7 @@ class PickerInput extends Component {
 }
 
 
-PickerInput.defaultProps = {
+FilterPicker.defaultProps = {
     title: 'Give me a title!',
     placeholder: 'Choose an Option',
     iconSize: 50,
@@ -163,7 +188,7 @@ const styles = {
         flex: 1,
         fontSize: 16,
         alignSelf:'center',
-        
+
     },
     titleStyle: {
         flex: .13,
@@ -175,10 +200,10 @@ const styles = {
         alignSelf: 'center'
     },
     flatlistStyle: {
-        flex: .8
+        flex: 1.5
     },
     buttonContainer:{
-        flex:.2,
+        flex:.3,
         flexDirection: 'row',
         borderTopColor: '#0001',
         borderTopWidth: 1
@@ -187,7 +212,7 @@ const styles = {
         flex: 1,
         alignSelf: 'center',
         fontSize: 18,
-        paddingTop: 5
+        paddingTop: dimension.height * .03,
     },
     modalBackground: {
         justifyContent: 'center',
@@ -198,8 +223,8 @@ const styles = {
         width: dimension.width,
     },
     modalStyle: {
-        height: dimension.height*.4,
-        width: dimension.width*.8,
+        height: dimension.height,
+        width: dimension.width,
         backgroundColor:'#fff',
         padding: 12,
         borderRadius: 12,
@@ -207,11 +232,25 @@ const styles = {
     inputStyle:{
         flex: 1
     },
+    inputStylee:{
+        flex: .1
+    },
     iconStyle: {
         flex: .2,
         paddingLeft: 10,
         alignSelf: 'center'
-    }
+    },
+    inputStyleee: {
+        alignSelf: 'center',
+        width: dimension.width,
+        color: '#000',
+        fontSize: 16,
+        marginTop: 8,
+        marginBottom: 8,
+        padding: 15,
+        backgroundColor: '#DCDCDC',
+        borderRadius: 0,
+      }
 }
 
-export { PickerInput }
+export { FilterPicker }

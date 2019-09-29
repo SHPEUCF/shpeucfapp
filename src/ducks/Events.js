@@ -10,6 +10,7 @@ const ACTIONS = createActiontypes([
     'CHECK_IN',
     'FETCH_CODE',
     'TYPE_CHANGED',
+    'COMMITTEE_CHANGED',
     'TITLE_CHANGED',
     'NAME_CHANGED',
     'DESCRIPTION_CHANGED',
@@ -30,6 +31,7 @@ const ACTIONS = createActiontypes([
 const INITIAL_STATE = {
   eventList: undefined,
   type: '',
+  committee: '',
   title: 'Create Event',
   name: '',
   description: '',
@@ -61,6 +63,7 @@ export default (state = INITIAL_STATE, action) => {
     case ACTIONS.DELETE_EVENTS:
       return { ...state,
         type: '',
+        committee: '',
         name: '',
         description: '',
         date: '',
@@ -75,6 +78,10 @@ export default (state = INITIAL_STATE, action) => {
     case ACTIONS.TYPE_CHANGED:
       return { ...state,
         type: payload
+      };
+    case ACTIONS.COMMITTEE_CHANGED:
+      return { ...state,
+        committee: payload
       };
     case ACTIONS.TITLE_CHANGED:
       return { ...state,
@@ -115,6 +122,7 @@ export default (state = INITIAL_STATE, action) => {
     case ACTIONS.GO_TO_CREATE_EVENT:
       return {...state,
         type: '',
+        committee: '',
         name: '',
         description: '',
         date: '',
@@ -130,6 +138,7 @@ export default (state = INITIAL_STATE, action) => {
     case ACTIONS.GO_TO_EVENT:
       return {...state,
         type: '',
+        committee: '',
         name: '',
         description: '',
         date: '',
@@ -157,28 +166,43 @@ function makeCode(length) {
     return text;
 }
 
-export const createEvent = (typeU, nameU, descriptionU, dateU, timeU, locationU, pointsU) => {
+export const createEvent = (typeU, committeeU, nameU, descriptionU, dateU, timeU, locationU, pointsU ) => {
+  var committee = false;
+  if (committeeU !== ''){
+    committee = true;
+  }
 
-    firebase.database().ref('/events/').push({
-            type: typeU,
-            name: nameU,
-            description: descriptionU,
-            date: dateU,
-            time: timeU,
-            eventActive: false,
-            location: locationU,
-            points: pointsU,
-            code: makeCode(4)
+  var postRef = firebase.database().ref('/events/').push()
+  var newData={
+    type: typeU,
+    committee: committeeU,
+    name: nameU,
+    description: descriptionU,
+    date: dateU,
+    time: timeU,
+    eventActive: false,
+    location: locationU,
+    points: pointsU,
+    code:  makeCode(4)
+ }
+
+    postRef.update(newData)
+    .then(() => Alert.alert('Event Created','Successful'))
+    .catch((error) => Alert.alert('Event Created Failed', 'Failure'));
+
+
+      if (committee){
+        firebase.database().ref(`/committees/${committeeU}/events/`).update({ 
+          [postRef.key]: true
         })
-        .then(() => Alert.alert('Event Created', 'Successful'))
-        .catch((error) => Alert.alert('Event Created Failed', 'Failure'));
+      }
 
-    return (dispatch) => {
-        dispatch({
-            type: ACTIONS.CREATE_EVENT,
-        });
-        Actions.event();
-    }
+
+  return (dispatch) => {  
+    dispatch({
+      type: CREATE_EVENT,
+    })
+  }
 };
 
 export const openCheckIn = (eventID) => {
@@ -199,10 +223,16 @@ export const closeCheckIn = (eventID) => {
     }
 };
 
-export const editEvent = (typeU, nameU, descriptionU, dateU, timeU, locationU, pointsU, eventIDU) => {
+export const editEvent = (typeU, committeeU, nameU, descriptionU, dateU, timeU, locationU, pointsU, eventIDU ) => {
+
+  var committee = false;
+  if (committeeU !== ''){
+    committee = true;
+  }
 
     firebase.database().ref(`/events/${eventIDU}`).update({
             type: typeU,
+            committee: committeeU,
             name: nameU,
             description: descriptionU,
             date: dateU,
@@ -222,9 +252,12 @@ export const editEvent = (typeU, nameU, descriptionU, dateU, timeU, locationU, p
 };
 
 export const deleteEvents = (eventIDs) => {
-    firebase.database().ref('events/').update({
-            [eventIDs]: {}
+        firebase.database().ref(`events/${eventIDs}`).once('value', snapshot => {
+          if (snapshot.val().committee !== ''){
+            firebase.database().ref(`committees/${snapshot.val().committee}/events/${eventIDs}`).remove
+          }
         })
+        .then(() => firebase.database().ref('events').update({[eventIDs]: {}}))
         .then(() => Alert.alert('Event Deleted', 'Successful'))
         .catch((error) => Alert.alert('Event Deletion Failed', 'Failure'));
 
@@ -248,13 +281,20 @@ export const checkIn = (eventID, val) => {
                         firebase.database().ref(`points/${currentUser.uid}/points`).once('value', snapshot => {
                             points = parseInt(snapshot.val()) + parseInt(val);
                             firebase.database().ref(`events/${eventID}`).once('value', snapshot => {
+                              var realType = snapshot.val().type;
+                                    if (snapshot.val().committee !== ''){
+                                      realType = snapshot.val().committee;
+                                      firebase.database().ref(`committees/${snapshot.val().committee}/events/${eventID}/attendance`).update({[currentUser.uid]: true })
+                                    }
                                     firebase.database().ref(`events/${eventID}/attendance`).update({
                                             [currentUser.uid]: true
                                         })
                                         .then(() => firebase.database().ref(`points/${currentUser.uid}/points`).set(points))
-                                        .then(() => firebase.database().ref(`points/${currentUser.uid}/breakdown/${snapshot.val().type}/${eventID}`).update({
+                                        .then(() => firebase.database().ref(`points/${currentUser.uid}/breakdown/${realType}/${eventID}`).update({
                                             points: val,
-                                            name: snapshot.val().name
+                                            name: snapshot.val().name,
+                                            date: snapshot.val().date,
+                                            committee: snapshot.val().committee,
                                         }))
                                 })
                                 .then(() => firebase.database().ref(`users/${currentUser.uid}/points`).set(points))
@@ -301,6 +341,13 @@ export const typeChanged = (text) => {
         type: ACTIONS.TYPE_CHANGED,
         payload: text
     };
+};
+
+export const committeeChanged = (text) => {
+  return {
+    type: ACTIONS.COMMITTEE_CHANGED,
+    payload: text
+  };
 };
 
 export const titleChanged = (text) => {
