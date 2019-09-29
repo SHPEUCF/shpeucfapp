@@ -66,6 +66,7 @@ class PointsBreakDown extends Component {
                 <View style={innerContainerStyle}>
                     <Text style={[title,botLevelText,textColor]}>{item.name}</Text>
                     <Text style={[points,botLevelText,textColor]}>{item.points}</Text>
+                    <Text style={[points, botLevelText, textColor]}>{item.date}</Text>
                 </View>
             </View>
             </TouchableOpacity>
@@ -212,7 +213,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#2C3239'
     },
     title: {
-        flex: .83
+        flex: .5
     },
     points: {
         flex: .15
