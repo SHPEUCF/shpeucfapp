@@ -33,7 +33,7 @@ What things you need to install the software and how to install them
    * Download HomeBrew [here](https://brew.sh/)
    * On your terminal write: `brew install node@10`
 * Windows:
-   * Download 10.16.3 here (https://nodejs.org/en/)
+   * Download 10.16.3 [here](https://nodejs.org/en/)
 
 #### Install git to get git command line access
 * Install git [here](https://git-scm.com/downloads)
