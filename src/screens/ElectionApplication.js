@@ -53,20 +53,35 @@ state = { isApplyShow: false, index: null,
       this.props.getPositions();
   }
 
-  renderError() {
-      if (this.props.error) {
-          return (
-          <View>
-              <Text style={styles.errorTextStyle}>
-                  {this.props.error}
-              </Text>
-          </View>
-          );
-      }
-  }
+  render() {
+    const {
+      page,
+      tabBar,
+      tabBarText,
+      contentStyle
+     } = styles;
 
-  onPlanChange(text){
-    this.props.candidatePlanChanged(text);
+    const {
+      positions,
+      isApplyShow,
+      applyPos,
+      isListShow
+    } = this.props;
+
+    const positionsArray =  _.orderBy(positions, iterateesPos, orderPos)
+
+    //alert(positions.title);
+    return (
+
+      <View style={page}>
+        {this.renderNavBar()}
+        <View style={contentStyle}>
+          {this.showListPosition(positionsArray)}
+          {this.showApplyPosition()}
+        </View>
+        {this.renderButtons()}
+      </View>
+    )
   }
 
   showApplyPosition(){
@@ -105,6 +120,18 @@ state = { isApplyShow: false, index: null,
       </View>
       )
     }
+
+    renderError() {
+      if (this.props.error) {
+          return (
+          <View>
+              <Text style={styles.errorTextStyle}>
+                  {this.props.error}
+              </Text>
+          </View>
+          );
+      }
+  }
 
    _keyExtractor = (item, index) => index;
 
@@ -206,6 +233,10 @@ state = { isApplyShow: false, index: null,
      }
   }
 
+  onPlanChange(text){
+    this.props.candidatePlanChanged(text);
+  }
+
   renderButtons(){
 
     const{
@@ -268,36 +299,6 @@ state = { isApplyShow: false, index: null,
             }
         }}
       />
-  }
-  render() {
-    const {
-      page,
-      tabBar,
-      tabBarText,
-      contentStyle
-     } = styles;
-
-    const {
-      positions,
-      isApplyShow,
-      applyPos,
-      isListShow
-    } = this.props;
-
-    const positionsArray =  _.orderBy(positions, iterateesPos, orderPos)
-
-    //alert(positions.title);
-    return (
-
-      <View style={page}>
-        {this.renderNavBar()}
-        <View style={contentStyle}>
-          {this.showListPosition(positionsArray)}
-          {this.showApplyPosition()}
-        </View>
-        {this.renderButtons()}
-      </View>
-    )
   }
 }
 

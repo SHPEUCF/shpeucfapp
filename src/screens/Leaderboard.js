@@ -35,16 +35,40 @@ class Leaderboard extends Component {
     this.props.fetchMembersPoints();
   }
 
-  viewBreakDown() {
-    Actions.pointsBreakDown();
-  }
+  _keyExtractor = (item, index) => index;
 
-  callUser(id){
-    this.props.pageLoad();
-    this.props.fetchMemberProfile(id);
-    this.props.goToOtherProfile();
-  }
+  render() {
+    const {
+      screenBackground,
+       } = styles;
+    const sortedMembers = _.orderBy(this.props.membersPoints, iteratees, order);
+    var currentMember;
+    var pastPoints = 0;
+    var pastIndex = 1;
+    sortedMembers.forEach((x, index) => {
+      x.index = (x.points !== 0) ? index + 1 : sortedMembers.length;
+      if (x.points === pastPoints) {
+        x.index = pastIndex
+      }
     
+      pastPoints = x.points;
+      pastIndex = x.index;
+    });
+    return (
+      <View style={screenBackground}>
+        <NavBar title="Leaderboard" back onBack={() => Actions.pop()} />
+        <FlatList
+            style={{flex: 1}}
+            data={sortedMembers}
+            extraData={this.state}
+            keyExtractor={this._keyExtractor}
+            renderItem={({item, separators}) => (
+            this.renderComponent(item, sortedMembers)
+          )}
+        />
+      </View>
+    )
+  }
 
   renderComponent(item, sortedMembers) {
     const {picture} = this.props;
@@ -102,40 +126,16 @@ class Leaderboard extends Component {
       )
     }
 
-   _keyExtractor = (item, index) => index;
-
-  render() {
-    const {
-      screenBackground,
-       } = styles;
-    const sortedMembers = _.orderBy(this.props.membersPoints, iteratees, order);
-    var currentMember;
-    var pastPoints = 0;
-    var pastIndex = 1;
-    sortedMembers.forEach((x, index) => {
-      x.index = (x.points !== 0) ? index + 1 : sortedMembers.length;
-      if (x.points === pastPoints) {
-        x.index = pastIndex
-      }
-    
-      pastPoints = x.points;
-      pastIndex = x.index;
-    });
-    return (
-      <View style={screenBackground}>
-        <NavBar title="Leaderboard" back onBack={() => Actions.pop()} />
-        <FlatList
-            style={{flex: 1}}
-            data={sortedMembers}
-            extraData={this.state}
-            keyExtractor={this._keyExtractor}
-            renderItem={({item, separators}) => (
-            this.renderComponent(item, sortedMembers)
-          )}
-        />
-      </View>
-    )
+  viewBreakDown() {
+    Actions.pointsBreakDown();
   }
+
+  callUser(id){
+    this.props.pageLoad();
+    this.props.fetchMemberProfile(id);
+    this.props.goToOtherProfile();
+  }
+  
 }
 
 const styles = StyleSheet.create({

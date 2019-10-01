@@ -41,71 +41,6 @@ import {
     }))
   }
 
-  setLevels(){
-    const {
-      changeLevelsCom,
-    } = this.props;
-
-      changeLevelsCom(this.state.data);
-  }
-
-  viewCommittee(item) {
-    this.props.committeeTitleChanged(item.title);
-    this.props.committeeDescriptionChanged(item.description);
-    this.props.chairChanged(item.chair);
-    this.props.goToCommitteeForm("EDIT");
-  }
-
-  renderCommittees( {item, index, move, moveEnd, isActive}) {
-    const {
-      containerStyle,
-      contentContainerStyle,
-      textColor
-    } = styles;
-
-
-    const color = (isActive) ? {backgroundColor: '#ffd70066'} : {backgroundColor: "#2C3239"}
-    return (
-      <TouchableOpacity
-        style={[contentContainerStyle, color]}
-        onLongPress={move}
-        onPressOut={moveEnd}>
-        <View style={containerStyle}>
-          <Text style={textColor}>{item.committee.title}</Text>
-        </View>
-        <View style= {styles.buttonContainerStyle}>
-          <TouchableOpacity onPress={() => this.viewCommittee(item.committee)}>
-            <Ionicons style={textColor} name="md-create" size={40}/>
-          </TouchableOpacity>
-        </View>
-        <View style= {styles.buttonContainerStyle}>
-          <TouchableOpacity onPress={() => this.delete(item.committee)}>
-            <Ionicons style={textColor} name="md-trash" size={40}/>
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
-    )
-
-  }
-
-
-
-
-  _keyExtractor = (item, index) => index;
-
-  renderFlatlist(committees){
-    return(
-      <FlatList
-          data={committees}
-          extraData={this.props}
-          keyExtractor={this._keyExtractor}
-          renderItem={({item, separators}) => (
-          this.renderCommittees(item)
-        )}
-      />
-    )
-  }
-
   render() {
     const {
         tabBar,
@@ -150,16 +85,8 @@ import {
     );
   };
 
-
-  delete(committee){
-
-    this.setState({
-      data: this.state.data.filter(item => item.committee !== committee)
-    })
-
-    this.props.deleteCommittee(committee.title, committee.chair);
-  }
-
+  _keyExtractor = (item, index) => index;
+  
   renderFlatlist(committees){
     return(
       <View style={{ flex: 1 }}>
@@ -174,6 +101,63 @@ import {
       </View>
     )
   }
+
+  renderCommittees( {item, index, move, moveEnd, isActive}) {
+    const {
+      containerStyle,
+      contentContainerStyle,
+      textColor
+    } = styles;
+
+
+    const color = (isActive) ? {backgroundColor: '#ffd70066'} : {backgroundColor: "#2C3239"}
+    return (
+      <TouchableOpacity
+        style={[contentContainerStyle, color]}
+        onLongPress={move}
+        onPressOut={moveEnd}>
+        <View style={containerStyle}>
+          <Text style={textColor}>{item.committee.title}</Text>
+        </View>
+        <View style= {styles.buttonContainerStyle}>
+          <TouchableOpacity onPress={() => this.viewCommittee(item.committee)}>
+            <Ionicons style={textColor} name="md-create" size={40}/>
+          </TouchableOpacity>
+        </View>
+        <View style= {styles.buttonContainerStyle}>
+          <TouchableOpacity onPress={() => this.delete(item.committee)}>
+            <Ionicons style={textColor} name="md-trash" size={40}/>
+          </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
+    )
+
+  }
+
+  delete(committee){
+
+    this.setState({
+      data: this.state.data.filter(item => item.committee !== committee)
+    })
+
+    this.props.deleteCommittee(committee.title, committee.chair);
+  }
+
+  viewCommittee(item) {
+    this.props.committeeTitleChanged(item.title);
+    this.props.committeeDescriptionChanged(item.description);
+    this.props.chairChanged(item.chair);
+    this.props.goToCommitteeForm("EDIT");
+  }
+
+  setLevels(){
+    const {
+      changeLevelsCom,
+    } = this.props;
+
+      changeLevelsCom(this.state.data);
+  }
+
 }
 
 const styles = StyleSheet.create({

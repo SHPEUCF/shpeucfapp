@@ -32,88 +32,25 @@ class PointsBreakDown extends Component {
         // this.props.fetchMembersPoints()
     }
 
-    countPoints(item) {
-         var count = 0;
-         values = Object.values(item[1])
-         for (var i = 0; i < values.length; i++) {
-             count += Number(values[i].points)
-         }
-         return count;
-    }
-    toggleShow = function(text) {
-        if (JSON.stringify(this.state.show) === JSON.stringify(text))
-            this.setState({show: ""})
-        else
-        this.setState({
-            show: text
-        });
-    }
-    
-    renderInnerComponent(item, section){
+    render() {
+  
         const {
-            innerContainerStyle,
-            innerContentContainerStyle,
+            page,
+            containerStyle,
+            contentContainerStyle,
             title,
             points,
-            botLevelText,
+            topLevelText,
             textColor
-        } = styles;
+        } = styles
 
-        if (JSON.stringify(this.state.show) === JSON.stringify(section)) {
-            return(
-            <TouchableOpacity>
-            <View style={innerContentContainerStyle}>
-                <View style={innerContainerStyle}>
-                    <Text style={[title,botLevelText,textColor]}>{item.name}</Text>
-                    <Text style={[points,botLevelText,textColor]}>{item.points}</Text>
-                    <Text style={[points, botLevelText, textColor]}>{item.date}</Text>
+               return (
+                <View style ={page}>
+                    <NavBar title="Points" back onBack={() => Actions.replace('profile')} />
+                    {this.renderContent()}
                 </View>
-            </View>
-            </TouchableOpacity>
             )
-        }
-        else
-            return null;
     }
-
-  renderComponent(section) {
-    const {
-      containerStyle,
-      contentContainerStyle,
-      title,
-      points,
-      midLevelText,
-      textColor
-    } = styles;   
-    // alert(item[0])
-    var count = this.countPoints(section)
-
-    var arr = section;
-
-    if(section === null || section.length < 1 || section[1] === null)
-        arr = []
-    // alert(Object.values(section[1])[1].name)
-    return (
-        <View>
-        <TouchableOpacity onPress = {() => this.toggleShow(section[0])}>
-            <View style={contentContainerStyle}>
-                <View style={containerStyle}>
-                    <Text style={[title,midLevelText, textColor]}>{section[0]}</Text>
-                    <Text style={[points,midLevelText, textColor]}>{count}</Text>
-                </View>
-            </View>
-            </TouchableOpacity>
-            <FlatList
-                visible={false}
-                data={Object.values(arr[1])}
-                extraData={this.state}
-                keyExtractor={this._keyExtractor}
-                renderItem={({item, separators}) => (
-                this.renderInnerComponent(item,section[0])
-                )}/>
-        </View>
-      )
-  }
 
     renderContent(){
 
@@ -160,27 +97,92 @@ class PointsBreakDown extends Component {
             <Text style={[textColor, {flex: 1}]}>You have no Points! Go out there and get some points!</Text>
         )
     }
+
    _keyExtractor = (item, index) => item;
 
-  render() {
-  
-        const {
-            page,
-            containerStyle,
-            contentContainerStyle,
-            title,
-            points,
-            topLevelText,
-            textColor
-        } = styles
+   renderComponent(section) {
+    const {
+    containerStyle,
+    contentContainerStyle,
+    title,
+    points,
+    midLevelText,
+    textColor
+    } = styles;   
+    // alert(item[0])
+    var count = this.countPoints(section)
 
-               return (
-                <View style ={page}>
-                    <NavBar title="Points" back onBack={() => Actions.replace('profile')} />
-                    {this.renderContent()}
+    var arr = section;
+
+    if(section === null || section.length < 1 || section[1] === null)
+        arr = []
+    // alert(Object.values(section[1])[1].name)
+    return (
+        <View>
+        <TouchableOpacity onPress = {() => this.toggleShow(section[0])}>
+            <View style={contentContainerStyle}>
+                <View style={containerStyle}>
+                    <Text style={[title,midLevelText, textColor]}>{section[0]}</Text>
+                    <Text style={[points,midLevelText, textColor]}>{count}</Text>
                 </View>
-            )
+            </View>
+            </TouchableOpacity>
+            <FlatList
+                visible={false}
+                data={Object.values(arr[1])}
+                extraData={this.state}
+                keyExtractor={this._keyExtractor}
+                renderItem={({item, separators}) => (
+                this.renderInnerComponent(item,section[0])
+                )}/>
+        </View>
+    )
     }
+
+   renderInnerComponent(item, section){
+    const {
+        innerContainerStyle,
+        innerContentContainerStyle,
+        title,
+        points,
+        botLevelText,
+        textColor
+    } = styles;
+
+    if (JSON.stringify(this.state.show) === JSON.stringify(section)) {
+        return(
+        <TouchableOpacity>
+        <View style={innerContentContainerStyle}>
+            <View style={innerContainerStyle}>
+                <Text style={[title,botLevelText,textColor]}>{item.name}</Text>
+                <Text style={[points,botLevelText,textColor]}>{item.points}</Text>
+                <Text style={[points, botLevelText, textColor]}>{item.date}</Text>
+            </View>
+        </View>
+        </TouchableOpacity>
+        )
+    }
+    else
+        return null;
+    }
+
+    countPoints(item) {
+         var count = 0;
+         values = Object.values(item[1])
+         for (var i = 0; i < values.length; i++) {
+             count += Number(values[i].points)
+         }
+         return count;
+    }
+    toggleShow = function(text) {
+        if (JSON.stringify(this.state.show) === JSON.stringify(text))
+            this.setState({show: ""})
+        else
+        this.setState({
+            show: text
+        });
+    }
+
 }
 
 const styles = StyleSheet.create({

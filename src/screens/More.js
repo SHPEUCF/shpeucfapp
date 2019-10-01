@@ -62,6 +62,30 @@ class More extends Component {
     };
   }
 
+  render() {
+    return (
+      <View style={{backgroundColor: '#2C3239', flex: 1}}>
+        <NavBar title="More Options" />
+        <ScrollView
+        //    refreshControl={
+        //   <RefreshControl
+        //     refreshing={this.state.refreshing}
+        //     onRefresh={this._onRefresh}
+        //   />
+        // }
+        >
+        <FlatList
+          removeClippedSubviews={false}
+          extraData={this.props}
+          keyExtractor = {this.keyExtractor}
+          data = {menuItems}
+          renderItem={this.renderItem}
+        />
+        </ScrollView>
+      </View>
+    );
+  }
+
   _onRefresh = () => {
     this.setState({refreshing: false});
   }
@@ -95,29 +119,6 @@ class More extends Component {
     }
   }
 
-  render() {
-    return (
-      <View style={{backgroundColor: '#2C3239', flex: 1}}>
-        <NavBar title="More Options" />
-        <ScrollView
-        //    refreshControl={
-        //   <RefreshControl
-        //     refreshing={this.state.refreshing}
-        //     onRefresh={this._onRefresh}
-        //   />
-        // }
-        >
-        <FlatList
-          removeClippedSubviews={false}
-          extraData={this.props}
-          keyExtractor = {this.keyExtractor}
-          data = {menuItems}
-          renderItem={this.renderItem}
-        />
-        </ScrollView>
-      </View>
-    );
-  }
 }
 
 const mapStateToProps = ({ user, general, elect }) => {

@@ -9,8 +9,6 @@ import {
   Alert } from 'react-native';
 import { Card, Button, List, ListItem, Divider, Avatar } from 'react-native-elements';
 
-
-
 class EBoard extends Component {
   render() {
     const {
@@ -233,8 +231,6 @@ class EBoard extends Component {
     )
   }
 }
-
-
 
 
   const styles = StyleSheet.create({

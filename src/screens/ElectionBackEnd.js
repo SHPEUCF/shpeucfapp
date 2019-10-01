@@ -40,9 +40,86 @@ class ElectionBackEnd extends Component {
   componentDidMount() {
       this.props.getVotes();
       this.props.getPositions();
-
   }
 
+  render() {
+    const {
+        tabBar,
+        tabBarText,
+        content,
+        buttonContainerStyling,
+        page,
+        textColor
+    } = styles;
+
+    const {
+      votes,
+      positions
+    } = this.props
+
+    var positionOrder = [];
+
+    if(positions !== undefined && positions !== null && votes !== null && votes !== undefined){
+      const votesArray = Object.entries(votes)
+      votesArray.forEach(function(item, index){
+          var posTitle = item[0];
+          if (positions[posTitle] !== undefined && positions[posTitle] !== null)
+          positionOrder[positions[posTitle].level] = [item[1], posTitle];
+      });
+    }
+
+    return (
+     <View style={page}>
+        <NavBar title="Election" back onBack={() => Actions.pop()} />
+         <View style={content}>
+            <Text style={textColor}>Total Votes: {this.props.numOfVotes}</Text>
+        </View>
+
+        <View style = {{flex: 20}}>
+          {this.renderFlatlist(positionOrder)}
+        </View>
+
+        <View style={buttonContainerStyling}>
+            {this.openOrClose()}
+        </View>
+        <View style={buttonContainerStyling}>
+            {this.applyOpenOrClose()}
+        </View>
+         <View style={buttonContainerStyling}>
+            <Button
+            onPress={() => Actions.ElectionPositions()}
+            title={"MANAGE POSITIONS"}
+            >
+            </Button>
+        </View>
+        <View style={buttonContainerStyling}>
+            <Button
+            onPress={() => Actions.ElectionCandidates()}
+            title={"MANAGE CANDIDATES"}
+            >
+            </Button>
+        </View>
+      </View>
+    );
+  };
+
+  _keyExtractor = (item, index) => index;
+
+  renderFlatlist(positionOrder){
+
+    return(
+
+      <FlatList
+          data={positionOrder}
+          extraData={this.state}
+          keyExtractor={this._keyExtractor}
+          renderItem={({item, index}) => (
+          this.renderVotes(item, index)
+        )}
+      />
+    )
+  }
+  
   openOrClose(){
       if(this.props.election){
         return (
@@ -115,85 +192,6 @@ class ElectionBackEnd extends Component {
           </View>
       </View>
       </View>
-    )
-  }
-
-  render() {
-    const {
-        tabBar,
-        tabBarText,
-        content,
-        buttonContainerStyling,
-        page,
-        textColor
-    } = styles;
-
-    const {
-      votes,
-      positions
-    } = this.props
-
-    var positionOrder = [];
-
-    if(positions !== undefined && positions !== null && votes !== null && votes !== undefined){
-      const votesArray = Object.entries(votes)
-      votesArray.forEach(function(item, index){
-          var posTitle = item[0];
-          if (positions[posTitle] !== undefined && positions[posTitle] !== null)
-          positionOrder[positions[posTitle].level] = [item[1], posTitle];
-      });
-    }
-
-    return (
-     <View style={page}>
-        <NavBar title="Election" back onBack={() => Actions.pop()} />
-         <View style={content}>
-            <Text style={textColor}>Total Votes: {this.props.numOfVotes}</Text>
-        </View>
-
-        <View style = {{flex: 20}}>
-          {this.renderFlatlist(positionOrder)}
-        </View>
-
-        <View style={buttonContainerStyling}>
-            {this.openOrClose()}
-        </View>
-        <View style={buttonContainerStyling}>
-            {this.applyOpenOrClose()}
-        </View>
-         <View style={buttonContainerStyling}>
-            <Button
-            onPress={() => Actions.ElectionPositions()}
-            title={"MANAGE POSITIONS"}
-            >
-            </Button>
-        </View>
-        <View style={buttonContainerStyling}>
-            <Button
-            onPress={() => Actions.ElectionCandidates()}
-            title={"MANAGE CANDIDATES"}
-            >
-            </Button>
-        </View>
-      </View>
-    );
-  };
-
-
-  _keyExtractor = (item, index) => index;
-
-  renderFlatlist(positionOrder){
-
-    return(
-
-      <FlatList
-          data={positionOrder}
-          extraData={this.state}
-          keyExtractor={this._keyExtractor}
-          renderItem={({item, index}) => (
-          this.renderVotes(item, index)
-        )}
-      />
     )
   }
 }

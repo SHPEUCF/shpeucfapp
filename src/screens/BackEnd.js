@@ -40,6 +40,25 @@ class BackEnd extends Component {
     super(props);
   }
 
+  render() {
+    const {
+        tabBar,
+        tabBarText,
+        page
+    } = styles;
+    return (
+      <View style={page}>
+        <NavBar title="Back End" back onBack={() => Actions.pop()} />
+        <FlatList
+          keyExtractor = {this.keyExtractor}
+          extraData={this.state}
+          data = {menuItems}
+          renderItem={this.renderItem}
+        />
+      </View>
+    );
+  };
+
   keyExtractor = (item, index) => index
 
   renderItem  = ({item}) => {
@@ -62,25 +81,6 @@ class BackEnd extends Component {
       )
     }
   }
-
-  render() {
-    const {
-        tabBar,
-        tabBarText,
-        page
-    } = styles;
-    return (
-      <View style={page}>
-        <NavBar title="Back End" back onBack={() => Actions.pop()} />
-        <FlatList
-          keyExtractor = {this.keyExtractor}
-          extraData={this.state}
-          data = {menuItems}
-          renderItem={this.renderItem}
-        />
-      </View>
-    );
-  };
 }
 
 const styles = StyleSheet.create({

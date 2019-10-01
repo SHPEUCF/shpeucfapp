@@ -44,6 +44,123 @@ class Dashboard extends Component {
 		this.props.loadUser();
 	}
 
+	render() {
+
+		if(this.props.loading){
+		  return <Spinner/>
+		}
+		return this.renderContent()
+	  }
+
+	  _keyExtractor = (item, index) => index;
+
+	  renderContent() {
+		const {
+		  page,
+		  mainContentStyle,
+		  greetingContainerStyle,
+		  ContainerStyle,
+		  title,
+		  webTitle,
+		  touchLeaderboard,
+		  eventsContainer,
+		  textColor
+	  } = styles;
+
+	  const { currentUser } = firebase.auth();
+
+	  let sortedMembers = _.orderBy(this.props.membersPoints, iteratees, order);
+	  var currentMember;
+	  var pastPoints = 0;
+	  var pastIndex = 1;
+	  sortedMembers.forEach((x, index) => {
+		  x.index = (x.points !== 0) ? index + 1 : sortedMembers.length;
+		  if(x.points === pastPoints){
+			  x.index = pastIndex
+		  }
+		  if (x.id === currentUser.uid) {
+			  currentMember =  x;
+		  };
+		  pastPoints = x.points;
+		  pastIndex = x.index;
+	  });
+	  sortedMembers.splice(2);
+	  if (this.isDefined(currentMember) && this.isDefined(sortedMembers) && sortedMembers[0].id !== currentMember.id && sortedMembers[1].id !== currentMember.id)
+		  sortedMembers = sortedMembers.concat(currentMember);
+
+	  return (
+		  <View style={page}>
+			  <NavBar title="Dashboard" />
+				  <ScrollView>
+					  <View style={mainContentStyle}>
+						  <View style={greetingContainerStyle}>
+							  {this.greeting()}
+						  </View>
+						  <View style={ContainerStyle}>
+							  <View style={{flexDirection: 'row'}}>
+								  <TouchableOpacity style={touchLeaderboard} onPress={() => Actions.Leaderboard()}>
+									  <Text style={[title, textColor]}>Leaderboard</Text>
+									  <FlatList
+										  data={sortedMembers}
+										  extraData={this.state}
+										  keyExtractor={this._keyExtractor}
+										  renderItem={({item}) => (this.renderComponent(item, sortedMembers))}
+									  />
+								  </TouchableOpacity>
+								  <View style={eventsContainer}>
+									  <Text style={[title, textColor]}>Upcoming Events</Text>
+									  <View style={{alignSelf: 'center'}}>
+										  {this.getFormattedEventList()}
+									  </View>
+								  </View>
+							  </View>
+						  </View>
+						  <View style={ContainerStyle}>
+							  <Text style={[title, textColor]}>Committees</Text>
+							  <Text style={textColor}>Coming soon!</Text>
+						  </View>
+						  <View style={ContainerStyle}>
+							  <Text style={[title, textColor]}>Join our Slack!</Text>
+							  <FontAwesomeIcon style={{color: '#FFC107'}} name="slack" size={30} onPress={() => Linking.openURL('https://shpeucf2018-2019.slack.com/')}/>
+						  </View>
+						  <TouchableOpacity style={ContainerStyle} onPress={() => Linking.openURL('https://www.shpeucf.com/')}>
+							  <Text style={[webTitle, textColor ]}>Visit our website!</Text>
+						  </TouchableOpacity>
+					  </View>
+				  </ScrollView>
+		  </View>
+	  );
+   }
+
+  renderComponent(item, sortedMembers) {
+	const {
+		contentContainerStyle,
+		progress,
+		index,
+		indexText,
+		textColor
+	} = styles;
+
+	return (
+		<View style={contentContainerStyle}>
+			<View style={index}>
+				<Text style={textColor} style={indexText}>{item.index}</Text>
+			</View>
+
+			<View>
+				<Text style={textColor}>{item.firstName} {item.lastName === undefined ? '' : item.lastName}</Text>
+				<Text style={textColor}>Points: {item.points}</Text>
+				<Progress.Bar
+					style={progress}
+					progress={item.points / Math.max(sortedMembers[0].points, 1)}
+					indeterminate={false}
+					color={'#ffd700'}
+				/>
+			</View>
+		</View>
+	)
+	}
+
 	callUser(id){
 		this.props.pageLoad();
 		this.props.fetchMemberProfile(id);
@@ -134,123 +251,6 @@ class Dashboard extends Component {
 		return !(obj === undefined || obj == null || obj.length < 2)
 	}
 
-	renderComponent(item, sortedMembers) {
-		const {
-			contentContainerStyle,
-			progress,
-			index,
-			indexText,
-			textColor
-		} = styles;
-
-		return (
-			<View style={contentContainerStyle}>
-				<View style={index}>
-					<Text style={textColor} style={indexText}>{item.index}</Text>
-				</View>
-
-				<View>
-					<Text style={textColor}>{item.firstName} {item.lastName === undefined ? '' : item.lastName}</Text>
-					<Text style={textColor}>Points: {item.points}</Text>
-					<Progress.Bar
-						style={progress}
-						progress={item.points / Math.max(sortedMembers[0].points, 1)}
-						indeterminate={false}
-						color={'#ffd700'}
-					/>
-				</View>
-			</View>
-		)
-	}
-
-	_keyExtractor = (item, index) => index;
-
-
-	renderContent() {
-	      const {
-			page,
-			mainContentStyle,
-			greetingContainerStyle,
-			ContainerStyle,
-			title,
-			webTitle,
-			touchLeaderboard,
-			eventsContainer,
-			textColor
-		} = styles;
-
-		const { currentUser } = firebase.auth();
-
-		let sortedMembers = _.orderBy(this.props.membersPoints, iteratees, order);
-		var currentMember;
-		var pastPoints = 0;
-		var pastIndex = 1;
-		sortedMembers.forEach((x, index) => {
-			x.index = (x.points !== 0) ? index + 1 : sortedMembers.length;
-			if(x.points === pastPoints){
-				x.index = pastIndex
-			}
-			if (x.id === currentUser.uid) {
-				currentMember =  x;
-			};
-			pastPoints = x.points;
-			pastIndex = x.index;
-		});
-		sortedMembers.splice(2);
-		if (this.isDefined(currentMember) && this.isDefined(sortedMembers) && sortedMembers[0].id !== currentMember.id && sortedMembers[1].id !== currentMember.id)
-			sortedMembers = sortedMembers.concat(currentMember);
-
-		return (
-			<View style={page}>
-				<NavBar title="Dashboard" />
-					<ScrollView>
-						<View style={mainContentStyle}>
-							<View style={greetingContainerStyle}>
-								{this.greeting()}
-							</View>
-							<View style={ContainerStyle}>
-								<View style={{flexDirection: 'row'}}>
-									<TouchableOpacity style={touchLeaderboard} onPress={() => Actions.Leaderboard()}>
-										<Text style={[title, textColor]}>Leaderboard</Text>
-										<FlatList
-											data={sortedMembers}
-											extraData={this.state}
-											keyExtractor={this._keyExtractor}
-											renderItem={({item}) => (this.renderComponent(item, sortedMembers))}
-										/>
-									</TouchableOpacity>
-									<View style={eventsContainer}>
-										<Text style={[title, textColor]}>Upcoming Events</Text>
-										<View style={{alignSelf: 'center'}}>
-											{this.getFormattedEventList()}
-										</View>
-									</View>
-								</View>
-							</View>
-							<View style={ContainerStyle}>
-								<Text style={[title, textColor]}>Committees</Text>
-								<Text style={textColor}>Coming soon!</Text>
-							</View>
-							<View style={ContainerStyle}>
-								<Text style={[title, textColor]}>Join our Slack!</Text>
-								<FontAwesomeIcon style={{color: '#FFC107'}} name="slack" size={30} onPress={() => Linking.openURL('https://shpeucf2018-2019.slack.com/')}/>
-							</View>
-							<TouchableOpacity style={ContainerStyle} onPress={() => Linking.openURL('https://www.shpeucf.com/')}>
-								<Text style={[webTitle, textColor ]}>Visit our website!</Text>
-							</TouchableOpacity>
-						</View>
-					</ScrollView>
-			</View>
-		);
-	}
-
-   render() {
-
-	if(this.props.loading){
-      return <Spinner/>
-    }
-    return this.renderContent()
-  }
 }
 
 const styles = StyleSheet.create({

@@ -60,6 +60,56 @@ class ElectionBallot extends Component {
       this.props.getPositions();
   }
 
+  render() {
+    const {
+      page,
+      tabBar,
+      tabBarText,
+      contentStyle
+     } = styles;
+
+    const {
+      positions,
+    } = this.props;
+
+    const positionsArray =  _.orderBy(positions, iterateesPos, orderPos)
+
+    //alert(positions.title);
+    return (
+
+      <View style={page}>
+        {this.renderNavBar()}
+        <View style={contentStyle}>
+          {this.showBallot(positionsArray)}
+          {this.renderCand()}
+        </View>
+        {this.renderButtons()}
+      </View>
+    )
+  }
+
+  _keyExtractor = (item, index) => index;
+
+  showBallot(positionsArray){
+    const {containerStyle, inputApply, tab} = styles;
+ 
+    if(this.state.isBallotShow == false){
+      return (null);
+    }
+ 
+    return(
+        <View>
+          <FlatList
+              data={positionsArray}
+              extraData={this.state}
+              keyExtractor={this._keyExtractor}
+              renderItem={({item, index}) => (
+              this.renderCandidatesList(item, index)
+            )}
+          />
+      </View>
+    )
+  }
 
   renderCandidatesComponent(item) {
     const {
@@ -207,29 +257,6 @@ renderCand(){
     }
   }
 
-   _keyExtractor = (item, index) => index;
-
- showBallot(positionsArray){
-   const {containerStyle, inputApply, tab} = styles;
-
-   if(this.state.isBallotShow == false){
-     return (null);
-   }
-
-   return(
-       <View>
-         <FlatList
-             data={positionsArray}
-             extraData={this.state}
-             keyExtractor={this._keyExtractor}
-             renderItem={({item, index}) => (
-             this.renderCandidatesList(item, index)
-           )}
-         />
-     </View>
-   )
- }
-
   renderButtons(){
     const{
       buttonContainer
@@ -282,34 +309,6 @@ renderCand(){
       />
   }
   re
-
-  render() {
-    const {
-      page,
-      tabBar,
-      tabBarText,
-      contentStyle
-     } = styles;
-
-    const {
-      positions,
-    } = this.props;
-
-    const positionsArray =  _.orderBy(positions, iterateesPos, orderPos)
-
-    //alert(positions.title);
-    return (
-
-      <View style={page}>
-        {this.renderNavBar()}
-        <View style={contentStyle}>
-          {this.showBallot(positionsArray)}
-          {this.renderCand()}
-        </View>
-        {this.renderButtons()}
-      </View>
-    )
-  }
 }
 
 const styles = StyleSheet.create({

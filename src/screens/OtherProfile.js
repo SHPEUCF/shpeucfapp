@@ -18,6 +18,18 @@ const dimension = Dimensions.get('window');
 
 class OtherProfile extends Component {
 
+  render() {
+    // alert(this.props.loading)
+     if(this.props.loading){
+      return <Spinner>{this.renderContent}</Spinner>
+    }
+    else return (
+      <View>
+        {this.renderContent()}
+      </View>
+    )
+  }
+  
   renderContent(){
     const { firstName, lastName, email, major, points, picture, quote } = this.props;
 
@@ -163,18 +175,6 @@ class OtherProfile extends Component {
             <Ionicons name="logo-github" size={40} color='#fff'/>
           </TouchableOpacity>
         </View>
-      </View>
-    )
-  }
-
-  render() {
-    // alert(this.props.loading)
-     if(this.props.loading){
-      return <Spinner>{this.renderContent}</Spinner>
-    }
-    else return (
-      <View>
-        {this.renderContent()}
       </View>
     )
   }

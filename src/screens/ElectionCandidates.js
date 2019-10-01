@@ -37,12 +37,30 @@ class ElectionCandidates extends Component {
       this.props.getPositions();
   }
 
-  /*viewPosition(item) {
-    this.props.candidateFNameChanged(item.firstName);
-    this.props.candidateLNameChanged(item.lastName);
-    this.props.candidatePlanChanged(iten.plan);
-    this.props.goToCandidateForm("EDIT");
-  }*/
+  render() {
+    const {
+        tabBar,
+        tabBarText,
+        content,
+        page,
+    } = styles;
+
+    const {
+      positions,
+    } = this.props;
+
+    const positionsArray = _.orderBy(positions, iteratees, order)
+
+    //alert(positions.title);
+    return (
+     <View style={page}>
+        <NavBar title="Candidates" back onBack={() => Actions.pop()} />
+        <View style={content}>
+          {this.renderFlatlist(positionsArray)}
+        </View>
+    </View>
+    );
+  }
 
   renderPositions(item) {
     const {
@@ -167,31 +185,6 @@ class ElectionCandidates extends Component {
         )}
       />
     )
-  }
-
-  render() {
-    const {
-        tabBar,
-        tabBarText,
-        content,
-        page,
-    } = styles;
-
-    const {
-      positions,
-    } = this.props;
-
-    const positionsArray = _.orderBy(positions, iteratees, order)
-
-    //alert(positions.title);
-    return (
-     <View style={page}>
-        <NavBar title="Candidates" back onBack={() => Actions.pop()} />
-        <View style={content}>
-          {this.renderFlatlist(positionsArray)}
-        </View>
-    </View>
-    );
   }
 }
 

@@ -9,6 +9,56 @@ import { Avatar, Divider } from 'react-native-elements';
 
 const dimension = Dimensions.get('window');
 class Profile extends Component {
+
+  render() {
+    return (
+          this.renderContent()
+      )
+    }
+
+  renderContent(){
+    const { firstName, lastName, email, major, points, quote } = this.props;
+
+    const {
+      bioContainer,
+      taglineContainer,
+      fieldContainerStyle,
+      itemLabelText,
+      itemValueText,
+      textColor
+      } = styles
+
+    return (
+      <View style={{flex: 1}}>
+        <NavBar title="Profile" />
+        {this.renderPicture()}
+        
+          <View style={bioContainer}>
+            <View style={taglineContainer}>
+                <Text style={[itemLabelText, textColor, {flex: 1}]}>{firstName + ' ' + lastName}</Text>
+            </View>
+            <View style={fieldContainerStyle}>
+              <Text style={[itemLabelText, textColor]}>Email:</Text>
+              <Text style={[itemValueText, textColor]}>{email}</Text>
+            </View>
+            <View style={fieldContainerStyle}>
+              <Text style={[itemLabelText, textColor]}>Major:</Text>
+              <Text style={[itemValueText, textColor]}>{major}</Text>
+            </View>
+            <TouchableOpacity style = {fieldContainerStyle} onPress={() => {
+              Actions.pointsBreakDown()}}
+            >
+              <Text style={[itemLabelText, textColor]}>Points:</Text>
+              <Text style={[itemValueText, textColor]}>{points}</Text>
+            </TouchableOpacity>
+          </View>
+          {this.renderSocialMedia()}
+          {this.renderButtons()}
+      </View>
+  )
+
+  }
+
   renderPicture() {
     const {
       headerInfoContainer,
@@ -84,55 +134,6 @@ class Profile extends Component {
         </View>
       </View>
 			</View>
-    )
-  }
-
-  renderContent(){
-    const { firstName, lastName, email, major, points, quote } = this.props;
-
-    const {
-      bioContainer,
-      taglineContainer,
-      fieldContainerStyle,
-      itemLabelText,
-      itemValueText,
-      textColor
-      } = styles
-
-    return (
-      <View style={{flex: 1}}>
-        <NavBar title="Profile" />
-        {this.renderPicture()}
-        
-          <View style={bioContainer}>
-            <View style={taglineContainer}>
-                <Text style={[itemLabelText, textColor, {flex: 1}]}>{firstName + ' ' + lastName}</Text>
-            </View>
-            <View style={fieldContainerStyle}>
-              <Text style={[itemLabelText, textColor]}>Email:</Text>
-              <Text style={[itemValueText, textColor]}>{email}</Text>
-            </View>
-            <View style={fieldContainerStyle}>
-              <Text style={[itemLabelText, textColor]}>Major:</Text>
-              <Text style={[itemValueText, textColor]}>{major}</Text>
-            </View>
-            <TouchableOpacity style = {fieldContainerStyle} onPress={() => {
-              Actions.pointsBreakDown()}}
-            >
-              <Text style={[itemLabelText, textColor]}>Points:</Text>
-              <Text style={[itemValueText, textColor]}>{points}</Text>
-            </TouchableOpacity>
-          </View>
-          {this.renderSocialMedia()}
-          {this.renderButtons()}
-      </View>
-  )
-
-  }
-
-  render() {
-  return (
-        this.renderContent()
     )
   }
 }

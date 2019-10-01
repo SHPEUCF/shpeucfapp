@@ -26,6 +26,45 @@ import {
     this.props.getCommittees();
   }
 
+  render() {
+    const {
+        tabBar,
+        tabBarText,
+        content,
+        page,
+    } = styles;
+
+    const {
+      committees,
+    } = this.props;
+
+    const committeesArray = _.orderBy(committees, iteratees, order)
+
+    return (
+     <View style={page}>
+        <NavBar title="Committees" back onBack={() => Actions.pop()} />
+        <View style={content}>
+          {this.renderFlatlist(committeesArray)}
+        </View>
+    </View>
+    );
+  }
+
+  _keyExtractor = (item, index) => index;
+
+  renderFlatlist(committees){
+    return(
+      <FlatList
+          data={committees}
+          extraData={this.props}
+          keyExtractor={this._keyExtractor}
+          renderItem={({item, separators}) => (
+          this.renderCommittees(item)
+        )}
+      />
+    )
+  }
+
   renderCommittees(item) {
     const {
       containerStyle,
@@ -99,46 +138,6 @@ import {
         </View>
       )
     }
-  }
-
-
-  _keyExtractor = (item, index) => index;
-
-  renderFlatlist(committees){
-    return(
-      <FlatList
-          data={committees}
-          extraData={this.props}
-          keyExtractor={this._keyExtractor}
-          renderItem={({item, separators}) => (
-          this.renderCommittees(item)
-        )}
-      />
-    )
-  }
-
-  render() {
-    const {
-        tabBar,
-        tabBarText,
-        content,
-        page,
-    } = styles;
-
-    const {
-      committees,
-    } = this.props;
-
-    const committeesArray = _.orderBy(committees, iteratees, order)
-
-    return (
-     <View style={page}>
-        <NavBar title="Committees" back onBack={() => Actions.pop()} />
-        <View style={content}>
-          {this.renderFlatlist(committeesArray)}
-        </View>
-    </View>
-    );
   }
 }
 

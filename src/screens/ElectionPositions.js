@@ -46,98 +46,6 @@ class ElectionPosition extends Component {
     }))
   }
 
-  openOrClose(){
-      if(this.props.election){
-        return (
-        <Button
-        onPress={() => this.props.closeElection()}
-        title={"CLOSE ELECTION"}
-        >
-        </Button>
-        )
-      }
-      else
-      return (
-        <Button
-        onPress={() => this.props.openElection()}
-        title={"OPEN ELECTION"}
-        >
-        </Button>
-        )
-  }
-
-  setLevels(){
-    const {
-      changeLevels,
-    } = this.props;
-
-      changeLevels(this.state.data);
-  }
-
-  viewPosition(item) {
-    this.props.positionTitleChanged(item.title);
-    this.props.positionDescriptionChanged(item.description);
-    this.props.goToPositionForm("EDIT");
-  }
-
-  renderPositions({ item, index, move, moveEnd, isActive }) {
-    const {
-      containerStyle,
-      contentContainerStyle,
-      textColor
-    } = styles;
-
-
-    const color = (isActive) ? {backgroundColor: '#ffd70066'} : {backgroundColor: "#2C3239"}
-    return (
-      <TouchableOpacity
-        style={[contentContainerStyle, color]}
-        onLongPress={move}
-        onPressOut={moveEnd}>
-        <View style={containerStyle}>
-          <Text style={textColor}>{item.position.title}</Text>
-        </View>
-        <View style= {styles.buttonContainerStyle}>
-          <TouchableOpacity onPress={() => this.viewPosition(item.position)}>
-            <Ionicons style={textColor} name="md-create" size={40}/>
-          </TouchableOpacity>
-        </View>
-        <View style= {styles.buttonContainerStyle}>
-          <TouchableOpacity onPress={() => this.delete(item.position)}>
-            <Ionicons style={textColor} name="md-trash" size={40}/>
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
-    )
-  }
-
-  delete(position){
-
-    this.setState({
-      data: this.state.data.filter(item => item.position !== position)
-    })
-    
-    this.props.deletePosition(position.title);
-  }
-
-
-  renderFlatlist(positions){
-    return(
-      <View style={{ flex: 1 }}>
-      <SortableFlatList
-          data={this.state.data}
-          extraData={this.state}
-          keyExtractor={(item, index) => `draggable-item-${item.key}`}
-          renderItem={this.renderPositions}
-          scrollPercent={5}
-          onMoveEnd={({ data }) => this.setState({ data })}
-      />
-      </View>
-    )
-  }
-
-
-
   render() {
     const {
         tabBar,
@@ -180,6 +88,76 @@ class ElectionPosition extends Component {
       </View>
     );
   };
+
+  setLevels(){
+    const {
+      changeLevels,
+    } = this.props;
+
+      changeLevels(this.state.data);
+  }
+
+  renderPositions({ item, index, move, moveEnd, isActive }) {
+    const {
+      containerStyle,
+      contentContainerStyle,
+      textColor
+    } = styles;
+
+
+    const color = (isActive) ? {backgroundColor: '#ffd70066'} : {backgroundColor: "#2C3239"}
+    return (
+      <TouchableOpacity
+        style={[contentContainerStyle, color]}
+        onLongPress={move}
+        onPressOut={moveEnd}>
+        <View style={containerStyle}>
+          <Text style={textColor}>{item.position.title}</Text>
+        </View>
+        <View style= {styles.buttonContainerStyle}>
+          <TouchableOpacity onPress={() => this.viewPosition(item.position)}>
+            <Ionicons style={textColor} name="md-create" size={40}/>
+          </TouchableOpacity>
+        </View>
+        <View style= {styles.buttonContainerStyle}>
+          <TouchableOpacity onPress={() => this.delete(item.position)}>
+            <Ionicons style={textColor} name="md-trash" size={40}/>
+          </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
+    )
+  }
+
+  viewPosition(item) {
+    this.props.positionTitleChanged(item.title);
+    this.props.positionDescriptionChanged(item.description);
+    this.props.goToPositionForm("EDIT");
+  }
+
+  delete(position){
+
+    this.setState({
+      data: this.state.data.filter(item => item.position !== position)
+    })
+    
+    this.props.deletePosition(position.title);
+  }
+
+
+  renderFlatlist(positions){
+    return(
+      <View style={{ flex: 1 }}>
+      <SortableFlatList
+          data={this.state.data}
+          extraData={this.state}
+          keyExtractor={(item, index) => `draggable-item-${item.key}`}
+          renderItem={this.renderPositions}
+          scrollPercent={5}
+          onMoveEnd={({ data }) => this.setState({ data })}
+      />
+      </View>
+    )
+  }
 }
 
 const styles = StyleSheet.create({

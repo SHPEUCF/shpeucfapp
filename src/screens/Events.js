@@ -35,17 +35,6 @@ class Events extends Component {
     this.alert(new Date());
   }
 
-  renderButton(){
-    if(this.props.privilege !== undefined && this.props.privilege.board){
-      this.props.nameChanged("");
-      return (
-          <Button
-              title = "CREATE EVENT"
-              onPress={this.props.goToCreateEvent.bind(this)}
-          />
-      )
-    }
-  }
   render() {
     const {
       textColor
@@ -97,6 +86,18 @@ class Events extends Component {
         </View>
       </View>
     );
+  }
+
+  renderButton(){
+    if(this.props.privilege !== undefined && this.props.privilege.board){
+      this.props.nameChanged("");
+      return (
+          <Button
+              title = "CREATE EVENT"
+              onPress={this.props.goToCreateEvent.bind(this)}
+          />
+      )
+    }
   }
 
   getFormattedEventList() {

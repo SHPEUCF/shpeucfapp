@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { Card, CardSection, Button, Spinner, Input, NavBar } from '../components/general';
-
 import { Avatar } from 'react-native-elements';
 import {
   getPositions,
@@ -36,11 +35,6 @@ import {
 const dimension = Dimensions.get('window');
 
 class Election extends Component {
-  
-
-  renderButtons(){
-
-  }
 
   render() {
 
