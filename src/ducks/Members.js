@@ -333,7 +333,7 @@ export const assignPosition = (title, types, id, oldChair) => {
     }))
 
     dispatch({
-      type: ASSIGN_POSITION,
+      type: ACTIONS.ASSIGN_POSITION,
     });
 };
 }

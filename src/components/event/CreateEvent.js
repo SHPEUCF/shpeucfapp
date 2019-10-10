@@ -141,7 +141,7 @@ class CreateEvent extends Component {
             itemTextStyle
         } = styles
 
-        const dataArr = Object.keys(this.props.committees)
+        const dataArr = Object.keys(this.props.committeesList)
 
         last = (item[0] == dataArr[dataArr.length - 1]) ? 
             {borderBottomColor: '#0000'} : {}
@@ -181,7 +181,7 @@ class CreateEvent extends Component {
                             <Text style={titleStyle}>{"Committees"}</Text>
                             <View style={flatlistStyle}>
                                 <FlatList
-                                data={Object.keys(this.props.committees)}
+                                data={Object.keys(this.props.committeesList)}
                                 extraData={this.props}
                                 keyExtractor={this._keyExtractor}
                                 renderItem={({item}) => (
@@ -382,11 +382,11 @@ const styles = StyleSheet.create({
     },
 });
 
-const mapStateToProps = ({ events, general }) => {
+const mapStateToProps = ({ events, committees }) => {
     const { type, title, committee, name, description, date, time, location, points, error, eventID } = events;
-    const { committees } = general;
+    const { committeesList } = committees;
 
-    return { type, title, name, description, date, time, location, points, error, eventID, committees, committee };
+    return { type, title, name, description, date, time, location, points, error, eventID, committeesList, committee };
 };
 
 const mapDispatchToProps = {

@@ -35,10 +35,10 @@ import {
     } = styles;
 
     const {
-      committees,
+      committeesList,
     } = this.props;
 
-    const committeesArray = _.orderBy(committees, iteratees, order)
+    const committeesArray = _.orderBy(committeesList, iteratees, order)
 
     return (
      <View style={page}>
@@ -199,10 +199,10 @@ const styles = StyleSheet.create({
   },
 });
 
-  const mapStateToProps = ({ general }) => {
-    const { committees } = general;
+  const mapStateToProps = ({ committees }) => {
+    const { committeesList } = committees;
 
-    return { committees };
+    return { committeesList };
   };
 
   const mapDispatchToProps = {

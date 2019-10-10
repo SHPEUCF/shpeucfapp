@@ -33,7 +33,7 @@ import {
   }
 
   state = {
-    data: (_.orderBy(this.props.committees, iteratees, order)).map((d, index) => ({
+    data: (_.orderBy(this.props.committeesList, iteratees, order)).map((d, index) => ({
       committee: d,
       key: `item-${index}`,
       label: index,
@@ -53,10 +53,10 @@ import {
     } = styles;
 
     const {
-      committees,
+      committeesList,
     } = this.props;
 
-    const committeesArray = _.toArray(committees)
+    const committeesArray = _.toArray(committeesList)
 
     return (
      <View style={page}>
@@ -217,11 +217,11 @@ const styles = StyleSheet.create({
   }
 });
 
-  const mapStateToProps = ({ general, members }) => {
-    const { committees } = general;
+  const mapStateToProps = ({ committees, members }) => {
+    const { committeesList } = committees;
     const { userList } = members;
 
-    return { committees, userList};
+    return { committeesList, userList};
   };
 
   const mapDispatchToProps = {

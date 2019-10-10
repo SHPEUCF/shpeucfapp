@@ -34,6 +34,12 @@ import {
       privilege: "user"
     },
     {
+      title: 'Leadership',
+      icon: 'assignment-ind',
+      screen: 'EBoard',
+      privilege: "user"
+    },
+    {
       title: 'Committees',
       icon: 'assignment-ind',
       screen: 'Committees',

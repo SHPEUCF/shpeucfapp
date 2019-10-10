@@ -50,12 +50,12 @@ class CommitteeForm extends Component {
         const {
             committeeTitle,
             committeeDescription,
-            committees,
+            committeesList,
             chair
         } = this.props;
 
 
-        var length = (committees !== null && committees !== undefined) ? Object.entries(committees).length : 0
+        var length = (committeesList !== null && committeesList !== undefined) ? Object.entries(committees).length : 0
 
         var chairObj = {name: chair.name, id: id};
 
@@ -197,11 +197,12 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = ({ general, members }) => {
-    const { committeeTitle, committeeDescription, title, committees, chair, filter} = general
+const mapStateToProps = ({ committees, general, members }) => {
+    const { filter } = general
     const { userList } = members
+    const { committeeTitle, committeeDescription, title, committeesList, chair } = committees 
 
-    return { committeeTitle, committeeDescription, title, committees, chair, filter, userList};
+    return { committeeTitle, committeeDescription, title, committeesList, chair, filter, userList};
 };
 
 const mapDispatchToProps = {
