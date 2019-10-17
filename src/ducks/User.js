@@ -543,10 +543,7 @@ export const resetPassword = ({
     };
 }
 
-export const loginUser = ({
-    email,
-    password
-}) => {
+export const loginUser = ({email,password}) => {
     return (dispatch) => {
         dispatch({
             type: ACTIONS.LOGIN_USER

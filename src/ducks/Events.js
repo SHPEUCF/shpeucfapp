@@ -168,12 +168,12 @@ function makeCode(length) {
 
 export const createEvent = (typeU, committeeU, nameU, descriptionU, dateU, timeU, locationU, pointsU ) => {
   var committee = false;
+
   if (committeeU !== ''){
     committee = true;
   }
 
-  var postRef = firebase.database().ref('/events/').push()
-  var newData={
+  let postRef = firebase.database().ref('/events/').push({
     type: typeU,
     committee: committeeU,
     name: nameU,
@@ -184,18 +184,17 @@ export const createEvent = (typeU, committeeU, nameU, descriptionU, dateU, timeU
     location: locationU,
     points: pointsU,
     code:  makeCode(4)
+  })
+  .then(snapshot => {
+      if (committee === true){
+      firebase.database().ref(`/committees/${committeeU}/events/`).update({ 
+        [snapshot.key]: true
+      })
  }
-
-    postRef.update(newData)
+  })
     .then(() => Alert.alert('Event Created','Successful'))
     .catch((error) => Alert.alert('Event Created Failed', 'Failure'));
 
-
-      if (committee){
-        firebase.database().ref(`/committees/${committeeU}/events/`).update({ 
-          [postRef.key]: true
-        })
-      }
 
 
   return (dispatch) => {  
@@ -225,11 +224,6 @@ export const closeCheckIn = (eventID) => {
 
 export const editEvent = (typeU, committeeU, nameU, descriptionU, dateU, timeU, locationU, pointsU, eventIDU ) => {
 
-  var committee = false;
-  if (committeeU !== ''){
-    committee = true;
-  }
-
     firebase.database().ref(`/events/${eventIDU}`).update({
             type: typeU,
             committee: committeeU,
@@ -254,7 +248,7 @@ export const editEvent = (typeU, committeeU, nameU, descriptionU, dateU, timeU, 
 export const deleteEvents = (eventIDs) => {
         firebase.database().ref(`events/${eventIDs}`).once('value', snapshot => {
           if (snapshot.val().committee !== ''){
-            firebase.database().ref(`committees/${snapshot.val().committee}/events/${eventIDs}`).remove
+            firebase.database().ref(`committees/${snapshot.val().committee}/events/`).update({[eventIDs]: {}})
           }
         })
         .then(() => firebase.database().ref('events').update({[eventIDs]: {}}))
