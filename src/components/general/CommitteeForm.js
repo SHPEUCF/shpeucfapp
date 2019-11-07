@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
 import { Input, Button, FilterPicker } from '../general';
@@ -15,7 +16,6 @@ import {
     assignPosition
 
 } from '../../ducks'
-import { Actions } from 'react-native-router-flux';
 import Members from '../../ducks/Members';
 
 var idIndex;
@@ -78,7 +78,7 @@ class CommitteeForm extends Component {
               }
 
               this.props.assignPosition(committeeTitle, "board", id, this.state.oldChair)
-              Actions.CommitteesBackEnd();
+              Actions.pop();
         }
     }
 
@@ -144,7 +144,7 @@ class CommitteeForm extends Component {
                     />
                     <Button
                         title = "CANCEL"
-                        onPress={() => Actions.CommitteesBackEnd()}
+                        onPress={() => Actions.pop()}
                     />
                 </View>
             )

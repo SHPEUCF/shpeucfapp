@@ -314,7 +314,7 @@ class EditProfileForm extends Component {
           snapToAlignment={"center"}
           style={styles.scrollView}>
 
-          <RkAvoidKeyboard>
+          
             {content}
             {/* <Input
               placeholder='Quote'
@@ -326,7 +326,6 @@ class EditProfileForm extends Component {
               onChangeText={this.onQuoteChange.bind(this)}
               textAlignVertical='top'
             /> */}
-          </RkAvoidKeyboard>
           </ScrollView>
 
           {this.renderError()}

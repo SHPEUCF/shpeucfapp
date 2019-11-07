@@ -153,14 +153,14 @@ const RouterComponent = () => {
             type={ActionConst.REPLACE}
             hideNavBar
         />
-        </Stack>
-        <Stack key = "Profiles" hideNavBar>
         <Scene
           key="EditProfileForm"
           component={EditProfileForm}
+          type={ActionConst.REPLACE}
           hideNavBar
-        />
+          />
         </Stack>
+        
         <Stack key="main"
           tabs
           tabBarPosition="bottom"

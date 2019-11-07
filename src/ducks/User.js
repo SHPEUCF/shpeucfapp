@@ -666,10 +666,10 @@ export const goToRegistration = () => {
 };
 
 export const goToEditProfileForm = () => {
+    Actions.EditProfileForm();
     return (dispatch) => {
         dispatch({
             type: ACTIONS.GO_TO_EDIT_PROFILE_FORM
         });
-        Actions.EditProfileForm();
     }
 };
