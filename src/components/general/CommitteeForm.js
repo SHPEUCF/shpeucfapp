@@ -55,7 +55,7 @@ class CommitteeForm extends Component {
         } = this.props;
 
 
-        var length = (committeesList !== null && committeesList !== undefined) ? Object.entries(committees).length : 0
+        var length = (committeesList !== null && committeesList !== undefined) ? Object.entries(committeesList).length : 0
 
         var chairObj = {name: chair.name, id: id};
 

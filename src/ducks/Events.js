@@ -6,6 +6,7 @@ import { createActiontypes } from '../utils/actions';
 const ACTIONS = createActiontypes([
     'FETCH_EVENTS',
     'CREATE_EVENT',
+    'EDIT_EVENT',
     'DELETE_EVENTS',
     'CHECK_IN',
     'FETCH_CODE',
@@ -57,6 +58,10 @@ export default (state = INITIAL_STATE, action) => {
         code: payload
       };
     case ACTIONS.CREATE_EVENT:
+      return { ...state,
+        error: ''
+      };
+    case ACTIONS.EDIT_EVENT:
       return { ...state,
         error: ''
       };
@@ -199,7 +204,7 @@ export const createEvent = (typeU, committeeU, nameU, descriptionU, dateU, timeU
 
   return (dispatch) => {  
     dispatch({
-      type: CREATE_EVENT,
+      type: ACTIONS.CREATE_EVENT,
     })
   }
 };
@@ -223,6 +228,11 @@ export const closeCheckIn = (eventID) => {
 };
 
 export const editEvent = (typeU, committeeU, nameU, descriptionU, dateU, timeU, locationU, pointsU, eventIDU ) => {
+  var committee = false;
+
+  if (committeeU !== ''){
+    committee = true;
+  }
 
     firebase.database().ref(`/events/${eventIDU}`).update({
             type: typeU,
@@ -234,14 +244,20 @@ export const editEvent = (typeU, committeeU, nameU, descriptionU, dateU, timeU, 
             location: locationU,
             points: pointsU,
         })
+        .then(() => {
+          if (committee === true){
+          firebase.database().ref(`/committees/${committeeU}/events/`).update({ 
+            [eventIDU]: true
+          })
+           }
+        })
         .then(() => Alert.alert('Event Edited', 'Successful'))
         .catch((error) => Alert.alert('Event edit Failed', 'Failure'));
 
     return (dispatch) => {
         dispatch({
-            type: ACTIONS.CREATE_EVENT,
+            type: ACTIONS.EDIT_EVENT,
         });
-        Actions.event();
     }
 };
 
@@ -278,7 +294,6 @@ export const checkIn = (eventID, val) => {
                               var realType = snapshot.val().type;
                                     if (snapshot.val().committee !== ''){
                                       realType = snapshot.val().committee;
-                                      firebase.database().ref(`committees/${snapshot.val().committee}/events/${eventID}/attendance`).update({[currentUser.uid]: true })
                                     }
                                     firebase.database().ref(`events/${eventID}/attendance`).update({
                                             [currentUser.uid]: true
