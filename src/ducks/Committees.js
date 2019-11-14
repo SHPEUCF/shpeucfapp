@@ -105,26 +105,29 @@ export const getCommittees = () => {
   
   export const editCommittee = (title, description, chair, oldTitle) => {
   if (oldTitle !== null){
+    return (dispatch) => {
     var level;
     firebase.database().ref(`/committees/${oldTitle}/level`).once('value', snapshot => {
     level = snapshot.val();
-    })
-    return (dispatch) => {
-  
+
     firebase.database().ref(`/committees/${oldTitle}`).remove()
     .then(() => {
         dispatch({
             type: ACTIONS.DELETE_COMMITTEE,
         });
     })
-    .then(() => firebase.database().ref(`/election/committees/${title}`).set({
+    .then(() => firebase.database().ref(`/committees/${title}`).set({
             title: title,
             description: description,
             chair: chair,
             level: level
     }))
     .then(() => alert('Committee Edited!', 'Successful'))
-    .catch((error) => alert('Committee could not be Edited!', 'Failure'))
+    .catch((error) => {
+        alert('Committee could not be Edited!', 'Failure')
+    })
+    })
+  
   }
   }
   

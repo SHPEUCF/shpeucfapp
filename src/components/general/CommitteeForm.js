@@ -127,6 +127,7 @@ class CommitteeForm extends Component {
 
                             <FilterPicker
                             title={"Chair"}
+                            type="Single"
                             filter={this.props.filter}
                             data={names}
                             placeholder={placeholder}

@@ -19,7 +19,13 @@ class FilterPicker extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {text: this.props.value, modalVisible: false, filterOn: false}
+        this.state = {text: this.props.value, modalVisible: false, filterOn: false, selectedNames: {}}
+    }
+
+    componentDidMount(){
+        if (this.props.type === "Multiple"){
+            this.setState({modalVisible: true})
+        }
     }
 
     static propTypes = {
@@ -42,6 +48,7 @@ class FilterPicker extends Component {
         filter: PropTypes.string,
         iconColor: PropTypes.string,
         onChangeText:  PropTypes.func,
+        type: PropTypes.string
     }
 
     clickAction(item, index) {
@@ -49,7 +56,19 @@ class FilterPicker extends Component {
         this.setState({text: String(item), modalVisible: false})
     }
 
+    selectUserAction(user) {
+        let tmpSelectedNames = Object.assign({}, this.state.selectedNames)
+        if(tmpSelectedNames[`${user.firstName} ${user.lastName}`])
+            tmpSelectedNames[`${user.firstName} ${user.lastName}`] = undefined
+        else
+            tmpSelectedNames[`${user.firstName} ${user.lastName}`] = user.id
+        this.setState({
+            selectedNames: tmpSelectedNames
+          })
+    }
+
     renderComponent(item, index) {
+        if (this.props.type === "Single"){
 
         const {
             itemStyle,
@@ -74,12 +93,44 @@ class FilterPicker extends Component {
         )
         }
 
+        }
 
+        else if (this.props.type === "Multiple"){
+            const {
+                filter,
+                pickerItemStyle,
+                excludeData,
+            } = this.props;
+            let user = item[1];
+    
+            const {
+                itemStyle,
+                itemTextStyle
+            } = styles
+            if(excludeData && excludeData[user.id]) return null;
+    
+            let selected = (this.state.selectedNames[`${user.firstName} ${user.lastName}`]) ?
+                { backgroundColor: '#f00' }: {};
+            var re = new RegExp("^"+filter, "i");
+    
+            if (re.test(`${user.firstName} ${user.lastName}`) ){
+            return(
+                <TouchableOpacity
+                onPress={() => this.selectUserAction(user)}>
+                    <View style={[itemStyle, pickerItemStyle, selected]}>
+                        <Text style={itemTextStyle}>{user.firstName} {user.lastName}</Text>
+                    </View>
+                </TouchableOpacity>
+            )
+            }
+        }
     }
 
    _keyExtractor = (item, index) => index;
 
     render = () => {
+        let picker = null
+
         const {
             inputStyle,
             inputStylee,
@@ -110,56 +161,105 @@ class FilterPicker extends Component {
             this.setState({text: String(value)})
         }
 
-        return (
-            <View>
-                <View style={[{flexDirection:'row'}, style]}>
-                    <Input
-                    style={[inputStyle, inputBoxStyle]}
-                    value={this.state.text}
-                    placeholder={placeholder}
-                    editable={false}
-                    />
-                    <Ionicons
-                    onPress={() => this.setState({modalVisible: true})}
-                    style={[iconStyle, dropDownArrowStyle]}
-                    name={'ios-arrow-dropdown'}
-                    size={iconSize}
-                    color={iconColor}
-                    />
-                </View>
-                <Modal
-                transparent={true}
-                visible={this.state.modalVisible}>
-                    <View style={modalBackground}>
-                        <View style={modalStyle}>
-                            <Text style={titleStyle}>{title}</Text>
-                            <Input
-                            style={[inputStylee, inputStyleee]}
-                            onChangeText={onChangeText}
-                            value={this.props.filter}
+        if(this.props.type === "Single"){
+            picker = <View>
+            <View style={[{flexDirection:'row'}, style]}>
+                <Input
+                style={[inputStyle, inputBoxStyle]}
+                value={this.state.text}
+                placeholder={placeholder}
+                editable={false}
+                />
+                <Ionicons
+                onPress={() => this.setState({modalVisible: true})}
+                style={[iconStyle, dropDownArrowStyle]}
+                name={'ios-arrow-dropdown'}
+                size={iconSize}
+                color={iconColor}
+                />
+            </View>
+            <Modal
+            transparent={true}
+            visible={this.state.modalVisible}>
+                <View style={modalBackground}>
+                    <View style={modalStyle}>
+                        <Text style={titleStyle}>{title}</Text>
+                        <Input
+                        style={[inputStylee, inputStyleee]}
+                        onChangeText={onChangeText}
+                        value={this.props.filter}
+                        />
+                        <View style={flatlistStyle}>
+                            <FlatList
+                            data={Object.entries(data)}
+                            extraData={this.state}
+                            keyExtractor={this._keyExtractor}
+                            renderItem={({item, index}) => (
+                                this.renderComponent(item, index)
+                            )}
                             />
-                            <View style={flatlistStyle}>
-                                <FlatList
-                                data={Object.entries(data)}
-                                extraData={this.state}
-                                keyExtractor={this._keyExtractor}
-                                renderItem={({item, index}) => (
-                                    this.renderComponent(item, index)
-                                )}
-                                />
-                            </View>
-                            <View style={buttonContainer}>
-                                <TouchableOpacity  
-                                style={buttonStyle}
-                                onPress={() => { this.props.onSelect(placeholder)
-                                    this.setState({modalVisible: false})
-                                    }}>
-                                    <Text style={textStyle}>Cancel</Text>
-                                </TouchableOpacity>
-                            </View>
+                        </View>
+                        <View style={buttonContainer}>
+                            <TouchableOpacity  
+                            style={buttonStyle}
+                            onPress={() => { this.props.onSelect(placeholder)
+                                this.setState({modalVisible: false})
+                                }}>
+                                <Text style={textStyle}>Cancel</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
-                </Modal>
+                </View>
+            </Modal>
+        </View>
+        }
+
+        else if (this.props.type === "Multiple") {
+            picker = <View>
+            <Modal
+            transparent={true}
+            visible={this.state.modalVisible}>
+                <View style={modalBackground}>
+                    <View style={modalStyle}>
+                        <Text style={titleStyle}>{title}</Text>
+                        <Input
+                        style={[inputStylee, inputStyleee]}
+                        onChangeText={onChangeText}
+                        value={this.props.filter}
+                        />
+                        <View style={flatlistStyle}>
+                            <FlatList
+                            data={Object.entries(this.props.data)}
+                            extraData={this.state}
+                            keyExtractor={this._keyExtractor}
+                            renderItem={({item, index}) => (
+                                this.renderComponent(item, index)
+                            )}
+                            />
+                        </View>
+                        <View style={buttonContainer}>
+                            <TouchableOpacity  
+                            style={buttonStyle}
+                            onPress={() => this.props.onSelect(this.state.selectedNames)}
+                            >
+                                <Text style={textStyle}>Done</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity  
+                            style={buttonStyle}
+                            onPress={() => this.props.onClose()}>
+                                <Text style={textStyle}>Cancel</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+        </View>
+
+        }
+
+        return (
+            <View>
+            {picker}
             </View>
         )
     };

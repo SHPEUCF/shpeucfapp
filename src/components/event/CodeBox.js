@@ -128,7 +128,7 @@ CodeBox.defaultProps = {
   containerStyle: styles.modalContent,
   onPress: function(code, eventID, points){
         if(code === this.state.text){
-            checkIn(eventID, points)
+            checkIn(eventID, points, null)
         }
     }
 

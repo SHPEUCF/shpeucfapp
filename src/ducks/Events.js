@@ -278,17 +278,21 @@ export const deleteEvents = (eventIDs) => {
     }
 }
 
-export const checkIn = (eventID, val) => {
-    const {
-        currentUser
-    } = firebase.auth();
-    var points;
+export const checkIn = (eventID, val, id) => {
+  const { currentUser } = firebase.auth();
+  let points;
+  let valId = currentUser.uid
+  
+  if (id){
+    valId = id
+  }
+
     return (dispatch) => {
         firebase.database().ref(`events/${eventID}/eventActive`).once('value', snapshot => {
             if (snapshot.val())
-                firebase.database().ref(`events/${eventID}/attendance/${currentUser.uid}`).once('value', snapshot => {
+                firebase.database().ref(`events/${eventID}/attendance/${valId}`).once('value', snapshot => {
                     if (!snapshot.exists()) {
-                        firebase.database().ref(`points/${currentUser.uid}/points`).once('value', snapshot => {
+                        firebase.database().ref(`points/${valId}/points`).once('value', snapshot => {
                             points = parseInt(snapshot.val()) + parseInt(val);
                             firebase.database().ref(`events/${eventID}`).once('value', snapshot => {
                               var realType = snapshot.val().type;
@@ -296,17 +300,17 @@ export const checkIn = (eventID, val) => {
                                       realType = snapshot.val().committee;
                                     }
                                     firebase.database().ref(`events/${eventID}/attendance`).update({
-                                            [currentUser.uid]: true
+                                            [valId]: true
                                         })
-                                        .then(() => firebase.database().ref(`points/${currentUser.uid}/points`).set(points))
-                                        .then(() => firebase.database().ref(`points/${currentUser.uid}/breakdown/${realType}/${eventID}`).update({
+                                        .then(() => firebase.database().ref(`points/${valId}/points`).set(points))
+                                        .then(() => firebase.database().ref(`points/${valId}/breakdown/${realType}/${eventID}`).update({
                                             points: val,
                                             name: snapshot.val().name,
                                             date: snapshot.val().date,
                                             committee: snapshot.val().committee,
                                         }))
                                 })
-                                .then(() => firebase.database().ref(`users/${currentUser.uid}/points`).set(points))
+                                .then(() => firebase.database().ref(`users/${valId}/points`).set(points))
                                 .then(() => Alert.alert('Checked In', 'Successful'))
                                 .catch((error) => Alert.alert('Check In Failed', 'Failure'))
                         })
