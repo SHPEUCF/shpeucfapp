@@ -46,8 +46,8 @@ const INITIAL_STATE = {
     firstName: '',
     lastName: '',
     email: '',
-    college: 'Do not wish to disclose',
-    major: 'Do not wish to disclose',
+    college: '',
+    major: '',
     quote: '',
     paidMember: false,
     // Using URL below to avoid RN warning of empty source.uri as there's a delay fetching.
@@ -385,6 +385,7 @@ export const createUser = (firstName, lastName, email, college, major, points, p
         });
 
         firebase.auth().createUserWithEmailAndPassword(email, password)
+           // .then(() => firebase.auth().signInWithEmailAndPassword(email, password))
             .then((user) => createUserSuccess(dispatch, firstName, lastName, email, college, major, points, picture, quote, continent, nationality, gender, birthday))
             .catch((error) => createUserFail(dispatch, error))
     };
@@ -418,7 +419,9 @@ const createUserSuccess = (dispatch, firstName, lastName, email, college, major,
         currentUser
     } = firebase.auth();
 
-    firebase.database().ref(`/users/${currentUser.uid}/`).set({
+    let id = currentUser.uid
+
+    firebase.database().ref(`/users/${id}/`).set({
             firstName: firstName,
             lastName: lastName,
             email: email,
@@ -431,36 +434,52 @@ const createUserSuccess = (dispatch, firstName, lastName, email, college, major,
             nationality: nationality,
             gender: gender,
             birthday: birthday,
-            id: currentUser.uid,
+            id: id,
             paidMember: false,
             voted: false,
             applied: false
         })
-        .then(() => firebase.database().ref(`/points/${currentUser.uid}/`).set({
+        .then(() => {firebase.database().ref(`/points/${id}/`).set({
             firstName: firstName,
             lastName: lastName,
             points: points,
-            id: currentUser.uid
-        }))
-        .then(() => firebase.database().ref(`/privileges/${currentUser.uid}/`).set({
+            id: id
+        })})
+        .then(() => {firebase.database().ref(`/privileges/${id}/`).set({
             firstName: firstName,
             lastName: lastName,
             user: true,
             board: false,
             eboard: false,
             president: false,
-            id: currentUser.uid,
+            id: id,
             paidMember: false
-        }))
+        })})
         .then(() => {
             currentUser.sendEmailVerification()
             alert(`We sent a verification to: ${email}. Please open your email and verify your account`)
         })
         .then(() => firebase.auth().signOut())
+        .catch((error) => alert(error))
+        
 
     dispatch({
         type: ACTIONS.CREATE_USER_SUCCESS,
     });
+};
+
+const makePrivileges = (firstName, lastName, id) => {
+
+            firebase.database().ref(`/privileges/${id}/`).set({
+            firstName: firstName,
+            lastName: lastName,
+            user: true,
+            board: false,
+            eboard: false,
+            president: false,
+            id: id,
+            paidMember: false
+        })
 };
 
 export const editUser = (firstName, lastName, email, college, major, quote, continent, nationality, gender, birthday) => {
