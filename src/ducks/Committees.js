@@ -18,7 +18,7 @@ const INITIAL_STATE = {
     title: "ADD",
     committeeTitle: "",
     committeeDescription: "",
-    chair: ""
+    chair: {}
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -124,7 +124,7 @@ export const getCommittees = () => {
     }))
     .then(() => alert('Committee Edited!', 'Successful'))
     .catch((error) => {
-        alert('Committee could not be Edited!', 'Failure')
+        alert('Committee could not be Edited!', 'Failure') // You fuck
     })
     })
   
@@ -182,10 +182,10 @@ export const getCommittees = () => {
     };
   };
 
-  export const chairChanged = (text) => {
+  export const chairChanged = (person) => {
     return {
         type: ACTIONS.CHAIR_CHANGED,
-        payload: text
+        payload: person
     };
   };
   

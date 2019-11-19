@@ -51,17 +51,17 @@ class FilterPicker extends Component {
         type: PropTypes.string
     }
 
-    clickAction(item, index) {
-        this.props.onSelect(item, index)
-        this.setState({text: String(item), modalVisible: false})
+    clickAction(user, index) {
+        this.props.onSelect(user, index)
+        this.setState({text: `${user.firstName} ${user.lastName}`, modalVisible: false})
     }
 
     selectUserAction(user) {
         let tmpSelectedNames = Object.assign({}, this.state.selectedNames)
-        if(tmpSelectedNames[`${user.firstName} ${user.lastName}`])
-            tmpSelectedNames[`${user.firstName} ${user.lastName}`] = undefined
+        if(tmpSelectedNames[`${user.id}`])
+            tmpSelectedNames[`${user.id}`] = undefined
         else
-            tmpSelectedNames[`${user.firstName} ${user.lastName}`] = user.id
+            tmpSelectedNames[`${user.id}`] = user.id
         this.setState({
             selectedNames: tmpSelectedNames
           })
@@ -75,19 +75,16 @@ class FilterPicker extends Component {
             itemTextStyle
         } = styles
 
-        const dataArr = Object.keys(this.props.data)
-
-        last = (item[0] == dataArr[dataArr.length - 1]) ? 
-            {borderBottomColor: '#0000'} : {}
+        let user = item[1]
 
         var re = new RegExp("^"+this.props.filter, "i");
 
-        if (re.test(item[1]) ){
+        if (re.test(`${user.firstName} ${user.lastName}`) ){
         return(
             <TouchableOpacity
-            onPress={() => this.clickAction(item[1], index)}>
-                <View style={[itemStyle, this.props.pickerItemStyle,last]}>
-                    <Text style={itemTextStyle}>{item[1]}</Text>
+            onPress={() => this.clickAction(user, index)}>
+                <View style={[itemStyle, this.props.pickerItemStyle]}>
+                    <Text style={itemTextStyle}>{user.firstName} {user.lastName}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -109,7 +106,7 @@ class FilterPicker extends Component {
             } = styles
             if(excludeData && excludeData[user.id]) return null;
     
-            let selected = (this.state.selectedNames[`${user.firstName} ${user.lastName}`]) ?
+            let selected = (this.state.selectedNames[`${user.id}`]) ?
                 { backgroundColor: '#f00' }: {};
             var re = new RegExp("^"+filter, "i");
     

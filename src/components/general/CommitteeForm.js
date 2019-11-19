@@ -46,7 +46,7 @@ class CommitteeForm extends Component {
         }
     }
 
-    onButtonPress(id) {
+    onButtonPress() {
         const {
             committeeTitle,
             committeeDescription,
@@ -57,7 +57,7 @@ class CommitteeForm extends Component {
 
         var length = (committeesList !== null && committeesList !== undefined) ? Object.entries(committeesList).length : 0
 
-        var chairObj = {name: chair.name, id: id};
+        var chairObj = {name: `${chair.firstName} ${chair.lastName}`, id: chair.id};
 
         if (committeeTitle === '') {
             // this.EventCreationError('Please enter a Candidate Name');
@@ -77,21 +77,14 @@ class CommitteeForm extends Component {
                 this.props.editCommittee(committeeTitle, committeeDescription, chairObj, null);}
               }
 
-              this.props.assignPosition(committeeTitle, "board", id, this.state.oldChair)
+              this.props.assignPosition(committeeTitle, "board", chair.id, this.state.oldChair)
               Actions.pop();
         }
     }
 
     render() {
 
-        var names = [];
-        var ids = [];
-
-        Object.values(this.props.userList).forEach(function(item){
-            var name = item.firstName + " " + item.lastName
-            names.push(name)
-            ids.push(item.id)
-        });
+        const {chair} = this.props
 
         var placeholder;
 
@@ -100,7 +93,7 @@ class CommitteeForm extends Component {
         }
 
         else{
-            placeholder = this.props.chair.name;
+            placeholder = chair.name
         }
 
             return (
@@ -129,19 +122,17 @@ class CommitteeForm extends Component {
                             title={"Chair"}
                             type="Single"
                             filter={this.props.filter}
-                            data={names}
+                            data={this.props.userList}
                             placeholder={placeholder}
                             onChangeText={this.props.filterChanged.bind(this)}
-                            onSelect={(text, index) => {this.props.chairChanged({name: text, id: ids[index]});
-                            idIndex = index;
-                            }}/>
+                            onSelect={(item, index) => {this.props.chairChanged(item)}}/>
                         </View>
                         {this.renderError()}
                     </ScrollView>
                     <Button
                         title = {this.props.title + " COMMITTEE"}
                         onPress={() => { 
-                            this.onButtonPress(ids[idIndex])}}
+                            this.onButtonPress()}}
                     />
                     <Button
                         title = "CANCEL"
