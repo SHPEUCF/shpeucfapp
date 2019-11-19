@@ -9,6 +9,7 @@ export * from './NavBar';
 export * from './PickerInput';
 export * from './FilterPicker';
 export * from './DatePicker';
+export * from './TimePicker';
 export * from './Spinner';
 export * from './SegmentBtn';
 export * from './WebPageShow';
