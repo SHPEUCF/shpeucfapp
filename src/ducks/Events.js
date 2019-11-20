@@ -126,11 +126,11 @@ export default (state = INITIAL_STATE, action) => {
       };
     case ACTIONS.GO_TO_CREATE_EVENT:
       return {...state,
+        title: 'Create Event',
         type: '',
         committee: '',
         name: '',
         description: '',
-        date: '',
         time: '',
         location: '',
         points: 0,

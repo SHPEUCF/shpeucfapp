@@ -26,13 +26,29 @@ import {
   goToCreateEvent,
   goToViewEvent
 } from '../ducks';
+import { ThemeConsumer } from 'react-native-elements';
 
 const dimension = Dimensions.get('window');
+let dateStr =  ""
 
 class Events extends Component {
 
+  componentDidMount(){
+    let date = new Date()
+    let month = date.getMonth() + 1
+    let year = date.getFullYear()
+    let day = date.getDate()
+    let stringDate = `${year}-${month}-${day}`
+
+    dateStr = stringDate
+  }
+
   static onRight = function(){
     this.alert(new Date());
+  }
+
+  getDate(item){
+    dateStr = item.dateString
   }
 
   render() {
@@ -46,6 +62,7 @@ class Events extends Component {
           <Agenda
             selected={new Date()}
             //onDayChange={(day)=>{alert('day pressed')}}
+            passDate={(item) => this.getDate(item)}
             showWeekNumbers={true}
             pastScrollRange={24}
             futureScrollRange={24}
@@ -91,10 +108,15 @@ class Events extends Component {
   renderButton(){
     if(this.props.privilege !== undefined && this.props.privilege.board){
       this.props.nameChanged("");
+
       return (
           <Button
               title = "CREATE EVENT"
-              onPress={this.props.goToCreateEvent.bind(this)}
+              onPress={() =>
+                {
+                this.props.dateChanged(dateStr)
+                this.props.goToCreateEvent()}
+                }
           />
       )
     }
@@ -104,14 +126,13 @@ class Events extends Component {
     var events = this.props.eventList;
     var dates = {};
 
-    for(props in events){
+    for(props in events){ 
       events[props]["eventID"] = props;
-      if (dates[events[props].date] === undefined)
-        dates[events[props].date] = [events[props]]
-      else
-        dates[events[props].date].push(events[props]);
-    }
-
+        if (dates[events[props].date] === undefined)
+          dates[events[props].date] = [events[props]]
+        else
+          dates[events[props].date].push(events[props]);
+        }
     return dates;
   }
 
