@@ -12,7 +12,7 @@
     "react": "16.8.6",
     "react-native": "0.60.5",
     "react-native-beacons-manager": "^1.0.7",
-    "react-native-calendars": "^1.212.0",
+    "react-native-calendars": "git+https://github.com/SHPEUCF/react-native-calendars.git",
     "react-native-elements": "^1.1.0",
     "react-native-progress": "^3.6.0",
     "react-native-router-flux": "^4.0.6",
