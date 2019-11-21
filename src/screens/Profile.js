@@ -3,7 +3,7 @@ import { Actions } from 'react-native-router-flux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { Button, Spinner, NavBar } from '../components/general'
-import { loadUser, logoutUser, goToEditProfileForm, pageLoad} from '../ducks';
+import { loadUser, logoutUser, goToEditProfileForm, pageLoad, pictureChanged} from '../ducks';
 import { Text, View, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { Avatar, Divider } from 'react-native-elements';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -76,7 +76,7 @@ class Profile extends Component {
         <Avatar
           size="xlarge"
           rounded
-          title={`${firstName[0]}${lastName[0]}`}
+          source={{uri: picture}}
           onPress={() => this.openGallery()}
           />
       </View>
@@ -88,11 +88,12 @@ class Profile extends Component {
       width: 300,
       height: 400,
       includeBase64: true,
-      compressImageQuality: 0.8,
+      compressImageQuality: 0.6,
       cropping: true
-    }) 
+    }).then(image => {
+      this.props.pictureChanged(`data:${image.mime};base64,${image.data}`);
+    });
   }
-
 
   renderButtons(){
     const {
@@ -228,7 +229,8 @@ const mapDispatchToProps = {
   loadUser,
   logoutUser,
   goToEditProfileForm,
-  pageLoad
+  pageLoad,
+  pictureChanged
  };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
