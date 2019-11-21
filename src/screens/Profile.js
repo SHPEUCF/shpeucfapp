@@ -6,6 +6,7 @@ import { Button, Spinner, NavBar } from '../components/general'
 import { loadUser, logoutUser, goToEditProfileForm, pageLoad} from '../ducks';
 import { Text, View, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { Avatar, Divider } from 'react-native-elements';
+import ImagePicker from 'react-native-image-crop-picker';
 
 const dimension = Dimensions.get('window');
 class Profile extends Component {
@@ -75,13 +76,21 @@ class Profile extends Component {
         <Avatar
           size="xlarge"
           rounded
-          source={{uri: picture}}
           title={`${firstName[0]}${lastName[0]}`}
-          onPress={() => alert("Coming Soon") }
-          activeOpacity={0.7}
+          onPress={() => this.openGallery()}
           />
       </View>
     )
+  }
+
+  openGallery(){
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      includeBase64: true,
+      compressImageQuality: 0.8,
+      cropping: true
+    }) 
   }
 
 
