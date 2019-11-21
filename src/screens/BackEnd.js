@@ -1,38 +1,30 @@
-import React, { Component } from 'react';
-import { Actions } from 'react-native-router-flux';
-import { connect } from 'react-redux';
-import {
-  FlatList,
-  ScrollView,
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions } from 'react-native';
-import { Button } from '../components/general'
-import { ListItem } from 'react-native-elements';
-import { NavBar } from '../components/general';
+import React, { Component } from "react";
+import { Actions } from "react-native-router-flux";
+import { connect } from "react-redux";
+import { FlatList, View, StyleSheet, Dimensions } from "react-native";
+import { ListItem } from "react-native-elements";
+import { NavBar } from "../components/general";
 
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get("window");
 
 const menuItems = [
-    {
-      title: 'Election',
-      icon: 'check',
-      screen: 'ElectionBackEnd',
-      privilege: 'president'
-    },
-    // {
-    //   title: 'Statistics',
-    //   icon: 'check',
-    //   screen: 'Statistics'
-    // },
-    {
-      title: 'Committees',
-      icon: 'assignment-ind',
-      screen: 'CommitteesBackEnd',
-      privilege: 'eboard'
-    },
+  {
+    title: "Election",
+    icon: "check",
+    screen: "ElectionBackEnd",
+    privilege: "president"
+  },
+  // {
+  //   title: 'Statistics',
+  //   icon: 'check',
+  //   screen: 'Statistics'
+  // },
+  {
+    title: "Committees",
+    icon: "assignment-ind",
+    screen: "CommitteesBackEnd",
+    privilege: "eboard"
+  }
 ];
 
 class BackEnd extends Component {
@@ -41,76 +33,76 @@ class BackEnd extends Component {
   }
 
   render() {
-    const {
-        tabBar,
-        tabBarText,
-        page
-    } = styles;
+    const { page } = styles;
     return (
       <View style={page}>
         <NavBar title="Back End" back onBack={() => Actions.pop()} />
         <FlatList
-          keyExtractor = {this.keyExtractor}
+          keyExtractor={this.keyExtractor}
           extraData={this.state}
-          data = {menuItems}
+          data={menuItems}
           renderItem={this.renderItem}
         />
       </View>
     );
-  };
+  }
 
-  keyExtractor = (item, index) => index
+  keyExtractor = (item, index) => index;
 
-  renderItem  = ({item}) => {
+  renderItem = ({ item }) => {
+    const { privilege } = this.props;
 
-    const {
-      privilege
-    } = this.props
-      if ( privilege !== null && privilege !== undefined && item !== null && item !== undefined
-        &&  privilege[item.privilege] !== undefined && (!('privilege' in item) || privilege[item.privilege] === true )) {
-        return(
+    if (
+      privilege !== null &&
+      privilege !== undefined &&
+      item !== null &&
+      item !== undefined &&
+      privilege[item.privilege] !== undefined &&
+      (!("privilege" in item) || privilege[item.privilege] === true)
+    )
+      return (
         <ListItem
-          containerStyle={{ backgroundColor: '#2C3239', borderBottomColor: 'white', borderBottomWidth: 1}}
+          containerStyle={{
+            backgroundColor: "#2C3239",
+            borderBottomColor: "white",
+            borderBottomWidth: 1
+          }}
           removeClippedSubviews={false}
           title={item.title}
           chevron
-          titleStyle={{ color: 'white'}}
-          leftIcon={{name: item.icon , color: 'white' }}
+          titleStyle={{ color: "white" }}
+          leftIcon={{ name: item.icon, color: "white" }}
           onPress={() => Actions[item.screen]()}
         />
-      )
-    }
-  }
+      );
+  };
 }
 
 const styles = StyleSheet.create({
-  tabBar : {
-    height: dimension.height * .1,
-    backgroundColor: '#fff',
+  tabBar: {
+    height: dimension.height * 0.1,
+    backgroundColor: "#fff",
     borderWidth: 1,
     borderStyle: "solid",
-    borderColor: "#0005",
+    borderColor: "#0005"
   },
-  tabBarText : {
-    color: '#000',
+  tabBarText: {
+    color: "#000",
     fontSize: 20,
     margin: 20,
     alignSelf: "center"
   },
   page: {
     flex: 1,
-    backgroundColor: '#2C3239',
+    backgroundColor: "#2C3239"
   }
 });
 
 const mapStateToProps = ({ user }) => {
-  const { privilege } = user
-
+  const { privilege } = user;
   return { privilege };
 };
 
-const mapDispatchToProps = {
-
-};
+const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(BackEnd);

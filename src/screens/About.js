@@ -25,32 +25,30 @@ const menuItems = [
   }
 ];
 
-class About extends Component {
-  render() {
-    return (
-      <View style={{ flex: 1, backgroundColor: "#2C3239" }}>
-        <NavBar title="About" back onBack={() => Actions.pop()} />
-        <View style={{ backgroundColor: "#2C3239" }}>
-          {menuItems.map((menuItem, i) => (
-            <ListItem
-              key={i}
-              title={menuItem.title}
-              titleStyle={{ color: "black" }}
-              leftIcon={{ name: menuItem.icon }}
-              onPress={() =>
-                Actions[menuItem.screen]({
-                  title: menuItem.title,
-                  uri: menuItem.uri,
-                  content: menuItem.content,
-                  footer: menuItem.footer
-                })
-              }
-            />
-          ))}
-        </View>
+const About = () => {
+  return (
+    <View style={{ flex: 1, backgroundColor: "#2C3239" }}>
+      <NavBar title="About" back onBack={() => Actions.pop()} />
+      <View style={{ backgroundColor: "#2C3239" }}>
+        {menuItems.map((menuItem, i) => (
+          <ListItem
+            key={i}
+            title={menuItem.title}
+            titleStyle={{ color: "black" }}
+            leftIcon={{ name: menuItem.icon }}
+            onPress={() =>
+              Actions[menuItem.screen]({
+                title: menuItem.title,
+                uri: menuItem.uri,
+                content: menuItem.content,
+                footer: menuItem.footer
+              })
+            }
+          />
+        ))}
       </View>
-    );
-  }
-}
+    </View>
+  );
+};
 
 export { About };
