@@ -325,6 +325,15 @@ export const privilegeChanged = (text) => {
     };
 };
 export const pictureChanged = (text) => {
+    const {
+        currentUser
+    } = firebase.auth();
+
+    let id = currentUser.uid
+
+    firebase.database().ref(`/users/${id}/`).update({
+        picture: text
+    })
     return {
         type: ACTIONS.PICTURE_CHANGED,
         payload: text

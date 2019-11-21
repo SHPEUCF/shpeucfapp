@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
@@ -7,6 +8,7 @@ import { loadUser, logoutUser, goToEditProfileForm, pageLoad, pictureChanged} fr
 import { Text, View, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { Avatar, Divider } from 'react-native-elements';
 import ImagePicker from 'react-native-image-crop-picker';
+import RNFetchBlob from 'react-native-fetch-blob';
 
 const dimension = Dimensions.get('window');
 class Profile extends Component {
@@ -83,16 +85,65 @@ class Profile extends Component {
     )
   }
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      dp: null
+     }
+   }
+
   openGallery(){
+
+    const Blob = RNFetchBlob.polyfill.Blob
+    const fs = RNFetchBlob.fs
+    window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+    window.Blob = Blob
+    
     ImagePicker.openPicker({
       width: 300,
       height: 400,
       includeBase64: true,
-      compressImageQuality: 0.6,
+      compressImageQuality: 0.8,
+      mediaType: 'photo',
       cropping: true
     }).then(image => {
-      this.props.pictureChanged(`data:${image.mime};base64,${image.data}`);
-    });
+
+      const imagePath = image.path
+
+      let uploadBlob = null
+
+      const imageRef = firebase.storage().ref("users/profile").child(this.props.id)
+      let mime = 'image/jpg'
+      fs.readFile(imagePath, 'base64')
+        .then((data) => {
+          //console.log(data);
+          return Blob.build(data, { type: `${mime};BASE64` })
+      })
+      .then((blob) => {
+          uploadBlob = blob
+          return imageRef.put(blob, { contentType: mime })
+        })
+        .then(() => {
+          uploadBlob.close()
+          return imageRef.getDownloadURL()
+        })
+        .then((url) => {
+
+          let userData = {}
+          //userData[dpNo] = url
+          //firebase.database().ref('users').child(uid).update({ ...userData})
+          this.props.pictureChanged(url);
+          let obj = {}
+          obj["dp"] = url
+          this.setState(obj)
+
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+
+    })
+
   }
 
   renderButtons(){
@@ -219,10 +270,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ user, general }) => {
-  const { firstName, lastName, email, major, points, picture, quote } = user;
+  const { firstName, lastName, email, major, points, picture, quote, id } = user;
   const { loading } = general;
 
-  return { firstName, lastName, email, major, points, picture, quote, loading };
+  return { firstName, lastName, email, major, points, picture, quote, loading, id };
 };
 
 const mapDispatchToProps = {
