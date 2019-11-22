@@ -92,8 +92,12 @@ class Leaderboard extends Component {
     // }
 
     // if(item.points !== 0){
+
+  //Member List
+  //action(item.id)
       return (
         // <TouchableOpacity onPress = {() => action(item.id)}>
+        <TouchableOpacity onPress = {() => this.callUser(item.id)}>
           <View style={contentContainerStyle}>
               <View style={containerStyle}>
               {/* <Image    ***For Profile Picture Update***
@@ -122,7 +126,7 @@ class Leaderboard extends Component {
               
               </View>
           </View>
-        // </TouchableOpacity>
+          </TouchableOpacity>
       )
     }
 
@@ -134,6 +138,7 @@ class Leaderboard extends Component {
     this.props.pageLoad();
     this.props.fetchMemberProfile(id);
     this.props.goToOtherProfile();
+    Actions.OtherProfile();
   }
   
 }
