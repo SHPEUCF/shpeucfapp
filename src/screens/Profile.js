@@ -76,7 +76,7 @@ class Profile extends Component {
     return (
       <View style={headerInfoContainer}>
         <Avatar
-          size="xlarge"
+          size = {200}
           rounded
           source={{uri: picture}}
           onPress={() => this.openGallery()}
