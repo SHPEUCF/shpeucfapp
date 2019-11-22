@@ -30,6 +30,8 @@ import {
     filterChanged
 } from '../../ducks'
 import { Actions } from 'react-native-router-flux';
+import QRCode from 'react-native-qrcode-svg'
+import QRCodeScanner from 'react-native-qrcode-scanner'
 
 const dimension = Dimensions.get('screen');
 
@@ -51,6 +53,13 @@ class EventDetails extends Component {
 		return `${months[Number(temp_date[1]) - 1]} ${temp_date[2]}`;
     }
 
+    onSuccess = (e) => {
+        Linking
+          .openURL(e.data)
+          .catch(err => console.error('An error occured', err));
+      }
+    
+
     renderCodeBox(){
         const {
             modalBackground,
@@ -70,15 +79,23 @@ class EventDetails extends Component {
                      <View style={modalBackground}>
                         <View style={modalContent}>
                             <TouchableOpacity onPress={() => {
-                                            this.setState({modalVisible: false})
-                                            this.props.closeCheckIn(this.props.eventID)}}>
-                            <Text>X</Text>
+                            this.setState({modalVisible: false})
+                            this.props.closeCheckIn(this.props.eventID)}}>
+                            <Text style = {{color: "#FECB00"}}>X</Text>
                             </TouchableOpacity>
-                            <Text style={[modalText, textColor]}>The event check-in is now open!</Text>
-                            <Text style={[modalText, textColor]}>Please provide everyone this code</Text>
-                            <Text style={codeText}>{this.props.code}</Text>
+                            <View style = {{paddingTop: 20, paddingBottom: 20}}>
+                                <Text style={[modalText, textColor]}>The event check-in is now open!</Text>
+                                <Text style={[modalText, textColor]}>Please provide everyone the code</Text>
+                            </View>
+                            <View style = {{alignItems: "center", flex: 2, justifyContent: "center"}}>
+                            <QRCode
+                                value = {this.props.code}
+                                size = {300}
+                            />
+                            </View>
+                            <View style = {{paddingTop: 20}}>
                             <Text style={[modalText, textColor]}>When you close this box the event check-in will close</Text>
-
+                            </View>
                         </View>
                     </View>
                 </Modal>
@@ -86,7 +103,26 @@ class EventDetails extends Component {
         }
         else
         return (
-        <Modal
+        
+            <QRCodeScanner
+            onRead={this.onSuccess}
+            topContent={
+              <Text style={styles.centerText}>
+                Go to <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on your computer and scan the QR code.
+              </Text>
+            }
+            bottomContent={
+              <TouchableOpacity style={styles.buttonTouchable}>
+                <Text style={styles.buttonText}>OK. Got it!</Text>
+              </TouchableOpacity>
+            }
+          />
+
+
+
+
+
+            /*<Modal
         transparent={true}
         animationType={'fade'}
         onRequestClose={() => {
@@ -97,7 +133,7 @@ class EventDetails extends Component {
             <View style={modalBackground}>
                 <View style={modalContent}>
                     <TouchableOpacity onPress={() => {this.setState({modalVisible: false})}}>
-                    <Text style={textColor}>X</Text>
+                    <Text style={{color: "#FECB00"}}>X</Text>
                     </TouchableOpacity>
                     <View style={container}>
                         <Text style={[headerTextStyle, textColor]}>Enter Code</Text>
@@ -122,7 +158,7 @@ class EventDetails extends Component {
                     </View>
                 </View>
             </View>
-        </Modal>
+                    </Modal>*/
     )
   }
 
@@ -420,8 +456,8 @@ const styles = StyleSheet.create({
         color: '#E0E6ED'
     },
     modalContent: {
-        height: dimension.height*.5,
-        width: dimension.width*.8,
+        height: dimension.height*.6,
+        width: dimension.width*.9,
         padding: 12,
         backgroundColor: '#21252b',
         borderRadius: 12,
@@ -499,7 +535,24 @@ const styles = StyleSheet.create({
     headerTextStyle: {
         fontSize: 22,
         fontWeight: 'bold',
-    }
+    },
+    centerText: {
+        flex: 1,
+        fontSize: 18,
+        padding: 32,
+        color: '#777',
+      },
+      textBold: {
+        fontWeight: '500',
+        color: '#000',
+      },
+      buttonText: {
+        fontSize: 21,
+        color: 'rgb(0,122,255)',
+      },
+      buttonTouchable: {
+        padding: 16,
+      },
 });
 
 const mapStateToProps = ({ events, user, members, general }) => {
