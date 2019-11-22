@@ -131,8 +131,6 @@ class Profile extends Component {
         .then((url) => {
 
           let userData = {}
-          //userData[dpNo] = url
-          //firebase.database().ref('users').child(uid).update({ ...userData})
           this.props.pictureChanged(url);
           let obj = {}
           obj["dp"] = url
