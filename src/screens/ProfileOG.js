@@ -30,8 +30,7 @@ class Profile extends Component {
 
     return (
       <View style={{flex: 1}}>
-        <Text style={[textColor,]}>Email:</Text>
-        <NavBar title="Profile" back onBack={() => Actions.pop()} />
+        <NavBar title="Profile" />
         {this.renderPicture()}
         
           <View style={bioContainer}>
@@ -209,10 +208,9 @@ const styles = StyleSheet.create({
 	},
 });
 
-const mapStateToProps = ({ members, general, user }) => {
-  const { firstName, lastName, email, major, points, picture, quote } = members;
+const mapStateToProps = ({ user, general }) => {
+  const { firstName, lastName, email, major, points, picture, quote } = user;
   const { loading } = general;
-  const { privilege } = user;
 
   return { firstName, lastName, email, major, points, picture, quote, loading };
 };

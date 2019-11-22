@@ -5,7 +5,7 @@ import { NavBar } from '../components/general'
 import {
   fetchMembersPoints,
   fetchMemberProfile,
-  goToOtherProfile,
+  goToProfile,
   pageLoad,
   getPrivilege,
   loadUser
@@ -137,8 +137,9 @@ class Leaderboard extends Component {
   callUser(id){
     this.props.pageLoad();
     this.props.fetchMemberProfile(id);
-    this.props.goToOtherProfile();
-    Actions.OtherProfile();
+    //this.props.goToOtherProfile();
+    //Actions.Profile();
+    this.props.goToProfile();
   }
   
 }
@@ -209,7 +210,7 @@ const mapStateToProps = ({ user, members }) => {
 const mapDispatchToProps = {
   fetchMembersPoints,
   fetchMemberProfile,
-  goToOtherProfile,
+  goToProfile,
   pageLoad,
   getPrivilege,
   loadUser
