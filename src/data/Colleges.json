@@ -2,7 +2,6 @@
   {
     "collegeName": "College of Arts & Humanities (CAH)",
     "degrees": [
-
       "Architecture",
       "Art",
       "Digital Media",
@@ -27,7 +26,6 @@
   {
     "collegeName": "College of Business Administration (CBA)",
     "degrees": [
-
       "Accounting",
       "Business Economics",
       "Economics",
@@ -41,7 +39,6 @@
   {
     "collegeName": "College of Education & Human Performance (CEDHP)",
     "degrees": [
-
       "Early Childhood Development and Education Track 1: Education: Pr",
       "Early Childhood Development and Education Track 2: Early Childhood Development",
       "Elementary Education",
@@ -55,7 +52,6 @@
   {
     "collegeName": "College of Engineering & Computer Science (CECS)",
     "degrees": [
-
       "Aerospace Engineering",
       "Civil Engineering",
       "Computer Engineering",
@@ -71,7 +67,6 @@
   {
     "collegeName": "College of Health & Public Affairs (COHPA)",
     "degrees": [
-
       "Athletic Training",
       "Criminal Justice",
       "Health Informatics and Information Management",
@@ -86,7 +81,6 @@
   {
     "collegeName": "Rosen College of Hospitality Management (RCHM)",
     "degrees": [
-
       "Entertainment Management",
       "Hospitality Management",
       "Restaurant and Foodservice Management"
@@ -94,31 +88,19 @@
   },
   {
     "collegeName": "College of Medicine (COM)",
-    "degrees": [
-
-      "Biomedical Sciences",
-      "Biotechnology",
-      "Medical Laboratory Sciences"
-    ]
+    "degrees": ["Biomedical Sciences", "Biotechnology", "Medical Laboratory Sciences"]
   },
   {
     "collegeName": "College of Nursing (CON)",
-    "degrees": [
-
-      "Nursing"
-    ]
+    "degrees": ["Nursing"]
   },
   {
     "collegeName": "College of Optics & Photonics (CREOL)",
-    "degrees": [
-
-      "Photonic Science and Engineering"
-    ]
+    "degrees": ["Photonic Science and Engineering"]
   },
   {
     "collegeName": "College of Sciences (COS)",
     "degrees": [
-
       "Actuarial Science",
       "Advertising",
       "Anthropology",
@@ -142,10 +124,6 @@
   },
   {
     "collegeName": "Undergraduate Studies (UGST)",
-    "degrees": [
-      "Applied Science B.A.S.",
-      "Environmental Studies",
-      "Interdisciplinary Studies"
-    ]
+    "degrees": ["Applied Science B.A.S.", "Environmental Studies", "Interdisciplinary Studies"]
   }
 ]

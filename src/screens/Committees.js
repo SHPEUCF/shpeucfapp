@@ -4,14 +4,7 @@ import { connect } from "react-redux";
 import { NavBar } from "../components/general";
 import _ from "lodash";
 import { getCommittees } from "../ducks";
-import {
-  FlatList,
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions
-} from "react-native";
+import { FlatList, Text, View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
 
 const dimension = Dimensions.get("window");
 const iteratees = ["level"];
@@ -71,11 +64,7 @@ class Committees extends Component {
       return (
         <View style={[{ flexDirection: "row", flex: 1 }]}>
           <View style={buttonContainerStyle}>
-            <TouchableOpacity
-              onPress={() =>
-                approveApplication(position, id, firstName, lastName)
-              }
-            >
+            <TouchableOpacity onPress={() => approveApplication(position, id, firstName, lastName)}>
               <Ionicons name="md-checkmark-circle" size={40} color="#e0e6ed" />
             </TouchableOpacity>
           </View>
@@ -121,7 +110,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15
   },
-
   containerTextStyle: {
     flex: 3,
     justifyContent: "center",
@@ -129,31 +117,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15
   },
-  textColor: {
-    color: "#e0e6ed"
-  },
-  contentContainerStyle: {
-    margin: 1,
-    backgroundColor: "#abc",
-    height: dimension.height * 0.09
-  },
-  tabBarText: {
-    color: "#000",
-    fontSize: 20,
-    margin: 20,
-    alignSelf: "center"
-  },
-  content: {
-    flex: 0.98
-  },
-  buttonContainerStyle: {
-    flex: 0.5,
-    justifyContent: "center"
-  },
-  page: {
-    flex: 1,
-    backgroundColor: "#0c0b0b"
-  },
+  textColor: { color: "#e0e6ed" },
+  contentContainerStyle: { margin: 1, backgroundColor: "#abc", height: dimension.height * 0.09 },
+  tabBarText: { color: "#000", fontSize: 20, margin: 20, alignSelf: "center" },
+  content: { flex: 0.98 },
+  buttonContainerStyle: { flex: 0.5, justifyContent: "center" },
+  page: { flex: 1, backgroundColor: "#0c0b0b" },
   candidateContainer: {
     flex: 0.5,
     marginTop: dimension.height * 0.002,

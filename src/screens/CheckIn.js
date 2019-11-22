@@ -22,8 +22,7 @@ class CheckIn extends Component {
     const region = { identifier: identity, uuid: uid };
 
     // Request for authorization while the app is open
-    /* Checking for both ios or android just in case the
-     app is ran on another type of OS */
+    // Checking for both ios/android in case the app is ran on another OS
     if (Platform.OS === "android") Beacons.detectIBeacons();
     else if (Platform.OS === "ios") {
       Beacons.requestWhenInUseAuthorization();
@@ -34,13 +33,11 @@ class CheckIn extends Component {
 
   componentDidMount() {
     // Listen for beacon changes every time beacon emits (every second)
-    this.subscription = DeviceEventEmitter.addListener(
-      "beaconsDidRange",
-      data => {
-        this.setState({ beacons: data.beacons });
-      }
-    );
+    this.subscription = DeviceEventEmitter.addListener("beaconsDidRange", data => {
+      this.setState({ beacons: data.beacons });
+    });
   }
+
   componentWillUpdate() {
     LayoutAnimation.spring();
   }
@@ -79,20 +76,15 @@ class CheckIn extends Component {
                 <Text style={infoValue}>HEC-101</Text>
               </View>
             </View>
+
             {this.state.beacons.map((beacon, i) => (
               <View key={i} style={{ marginBottom: 10 }}>
                 <Divider style={{ marginBottom: 10 }} />
-                <Text
-                  style={{ fontSize: 15, fontWeight: "bold", marginBottom: 10 }}
-                >
+                <Text style={{ fontSize: 15, fontWeight: "bold", marginBottom: 10 }}>
                   Beacon Information
                 </Text>
-                <Text style={signalInfoLabel}>
-                  Proximity: {beacon.proximity}
-                </Text>
-                <Text style={signalInfoLabel}>
-                  RSSI (signal strength): {beacon.rssi}
-                </Text>
+                <Text style={signalInfoLabel}>Proximity: {beacon.proximity}</Text>
+                <Text style={signalInfoLabel}>RSSI (signal strength): {beacon.rssi}</Text>
               </View>
             ))}
 
@@ -118,35 +110,13 @@ class CheckIn extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  cardContainer: {
-    marginRight: 5,
-    marginLeft: 5,
-    marginTop: 5
-  },
-  eventInfoContainer: {
-    marginBottom: 10
-  },
-  eventInfoRow: {
-    marginBottom: 10,
-    flexDirection: "row"
-  },
-  infoLabel: {
-    fontSize: 15,
-    fontWeight: "bold"
-  },
-  infoValue: {
-    fontSize: 15,
-    fontWeight: "normal"
-  },
-  signalInfoLabel: {
-    marginBottom: 10,
-    marginLeft: 10,
-    color: "#666",
-    fontWeight: "bold"
-  }
+  container: { flex: 1 },
+  cardContainer: { marginRight: 5, marginLeft: 5, marginTop: 5 },
+  eventInfoContainer: { marginBottom: 10 },
+  eventInfoRow: { marginBottom: 10, flexDirection: "row" },
+  infoLabel: { fontSize: 15, fontWeight: "bold" },
+  infoValue: { fontSize: 15, fontWeight: "normal" },
+  signalInfoLabel: { marginBottom: 10, marginLeft: 10, color: "#666", fontWeight: "bold" }
 });
 
 export { CheckIn };

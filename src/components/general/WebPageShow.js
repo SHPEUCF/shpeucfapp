@@ -11,11 +11,7 @@ class WebPageShow extends Component {
     return (
       <View style={{ flex: 1 }}>
         <NavBar back onBack={() => Actions.pop()} />
-        <WebView
-          source={{ uri }}
-          renderLoading={() => <Spinner />}
-          startInLoadingState
-        />
+        <WebView source={{ uri }} renderLoading={() => <Spinner />} startInLoadingState />
       </View>
     );
   }

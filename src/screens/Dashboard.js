@@ -40,6 +40,20 @@ const dimension = Dimensions.get("window");
 
 const iteratees = ["points", "lastName", "firstName"];
 const order = ["desc", "asc", "asc"];
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
+];
 
 class Dashboard extends Component {
   componentWillMount() {
@@ -71,8 +85,6 @@ class Dashboard extends Component {
       textColor
     } = styles;
 
-    const { currentUser } = firebase.auth();
-
     let sortedMembers = _.orderBy(this.props.membersPoints, iteratees, order);
     let curMember,
       pastPoints = 0,
@@ -86,6 +98,7 @@ class Dashboard extends Component {
       pastIndex = x.index;
     });
     sortedMembers.splice(2);
+
     if (
       this.isDefined(curMember) &&
       this.isDefined(sortedMembers) &&
@@ -100,49 +113,43 @@ class Dashboard extends Component {
         <ScrollView>
           <View style={mainContentStyle}>
             <View style={greetingContainerStyle}>{this.greeting()}</View>
+
             <View style={ContainerStyle}>
               <View style={{ flexDirection: "row" }}>
-                <TouchableOpacity
-                  style={touchLeaderboard}
-                  onPress={() => Actions.Leaderboard()}
-                >
+                <TouchableOpacity style={touchLeaderboard} onPress={() => Actions.Leaderboard()}>
                   <Text style={[title, textColor]}>Leaderboard</Text>
                   <FlatList
                     data={sortedMembers}
                     extraData={this.state}
                     keyExtractor={this._keyExtractor}
-                    renderItem={({ item }) =>
-                      this.renderComponent(item, sortedMembers)
-                    }
+                    renderItem={({ item }) => this.renderComponent(item, sortedMembers)}
                   />
                 </TouchableOpacity>
                 <View style={eventsContainer}>
                   <Text style={[title, textColor]}>Upcoming Events</Text>
-                  <View style={{ alignSelf: "center" }}>
-                    {this.getFormattedEventList()}
-                  </View>
+                  <View style={{ alignSelf: "center" }}>{this.getFormattedEventList()}</View>
                 </View>
               </View>
             </View>
+
             <View style={ContainerStyle}>
               <Text style={[title, textColor]}>Committees</Text>
               <Text style={textColor}>Coming soon!</Text>
             </View>
+
             <View style={ContainerStyle}>
               <Text style={[title, textColor]}>Join our Slack!</Text>
               <FontAwesomeIcon
                 style={{ color: "#FFC107" }}
                 name="slack"
                 size={30}
-                onPress={() =>
-                  Linking.openURL("https://shpeucf2018-2019.slack.com/")
-                }
+                onPress={() => Linking.openURL("https://shpeucf2018-2019.slack.com/")}
               />
             </View>
+
             <TouchableOpacity
               style={ContainerStyle}
-              onPress={() => Linking.openURL("https://www.shpeucf.com/")}
-            >
+              onPress={() => Linking.openURL("https://www.shpeucf.com/")}>
               <Text style={[webTitle, textColor]}>Visit our website!</Text>
             </TouchableOpacity>
           </View>
@@ -152,13 +159,7 @@ class Dashboard extends Component {
   }
 
   renderComponent(item, sortedMembers) {
-    const {
-      contentContainerStyle,
-      progress,
-      index,
-      indexText,
-      textColor
-    } = styles;
+    const { contentContainerStyle, progress, index, indexText, textColor } = styles;
 
     return (
       <View style={contentContainerStyle}>
@@ -190,41 +191,11 @@ class Dashboard extends Component {
   }
 
   convertNumToDate(date) {
-    var months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "April",
-      "May",
-      "June",
-      "July",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
-    ];
     temp_date = date.split("-");
-    return `${months[Number(temp_date[1]) - 1]} ${temp_date[2]}, ${
-      temp_date[0]
-    }`;
+    return `${months[Number(temp_date[1]) - 1].substring(0, 3)} ${temp_date[2]}, ${temp_date[0]}`;
   }
 
   greeting() {
-    const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
-    ];
     const date = new Date();
     let time = date.getHours();
     let day = date.getDate();
@@ -263,30 +234,18 @@ class Dashboard extends Component {
       let event = events[events.length - 1];
       const { name, date, description, committee } = event;
 
-      if (description !== undefined && description.length > 75) {
-        description = description.slice(0, 75);
-        description += "...";
-      }
+      if (description !== undefined && description.length > 75)
+        description = `${description.slice(0, 75)}...`;
 
-      var viewName = name;
-      if (committee !== "") {
-        viewName = committee + ": " + name;
-      }
+      let viewName = committee !== "" ? `${committee}: ${name}` : name;
 
       return (
-        <TouchableOpacity
-          style={{ alignItems: "center" }}
-          onPress={() => this.viewEvent(event)}
-        >
-          <Text style={[{ fontStyle: "italic", fontSize: 16 }, textColor]}>
-            {viewName}
-          </Text>
-          <Text style={[{ paddingBottom: "5%" }, textColor]}>
-            {this.convertNumToDate(date)}
-          </Text>
-          <Text style={[{ marginLeft: "10%", marginRight: "10%" }, textColor]}>
-            {description}
-          </Text>
+        <TouchableOpacity style={{ alignItems: "center" }} onPress={() => this.viewEvent(event)}>
+          <Text style={[{ fontStyle: "italic", fontSize: 16 }, textColor]}>{viewName}</Text>
+
+          <Text style={[{ paddingBottom: "5%" }, textColor]}>{this.convertNumToDate(date)}</Text>
+
+          <Text style={[{ marginLeft: "10%", marginRight: "10%" }, textColor]}>{description}</Text>
         </TouchableOpacity>
       );
     } else {
@@ -306,21 +265,10 @@ class Dashboard extends Component {
 }
 
 const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-    backgroundColor: "#0c0b0b"
-  },
-  greetingContainerStyle: {
-    padding: "5%"
-  },
-  textColor: {
-    color: "#e0e6ed"
-  },
-  contentContainerStyle: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingBottom: "5%"
-  },
+  page: { flex: 1, backgroundColor: "#0c0b0b" },
+  greetingContainerStyle: { padding: "5%" },
+  textColor: { color: "#e0e6ed" },
+  contentContainerStyle: { flexDirection: "row", alignItems: "center", paddingBottom: "5%" },
   ContainerStyle: {
     alignItems: "center",
     justifyContent: "center",
@@ -336,29 +284,11 @@ const styles = StyleSheet.create({
     marginBottom: "2%",
     elevation: 1
   },
-  mainContentStyle: {
-    color: "#000"
-  },
-  progress: {
-    width: dimension.width * 0.32,
-    justifyContent: "center"
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "500",
-    paddingBottom: "3%"
-  },
-  webTitle: {
-    fontSize: 18,
-    fontWeight: "500",
-    paddingBottom: "1%"
-  },
-  touchLeaderboard: {
-    flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-    paddingRight: "3%"
-  },
+  mainContentStyle: { color: "#000" },
+  progress: { width: dimension.width * 0.32, justifyContent: "center" },
+  title: { fontSize: 18, fontWeight: "500", paddingBottom: "3%" },
+  webTitle: { fontSize: 18, fontWeight: "500", paddingBottom: "1%" },
+  touchLeaderboard: { flex: 1, flexDirection: "column", alignItems: "center", paddingRight: "3%" },
   index: {
     color: "#000",
     borderColor: "#e0e6ed",
@@ -371,17 +301,8 @@ const styles = StyleSheet.create({
     width: 22,
     elevation: 1
   },
-  indexText: {
-    alignSelf: "center",
-    fontWeight: "700",
-    fontSize: 11,
-    color: "#e0e6ed"
-  },
-  eventsContainer: {
-    flex: 1,
-    flexDirection: "column",
-    alignItems: "center"
-  }
+  indexText: { alignSelf: "center", fontWeight: "700", fontSize: 11, color: "#e0e6ed" },
+  eventsContainer: { flex: 1, flexDirection: "column", alignItems: "center" }
 });
 
 const mapStateToProps = ({ user, general, members, events, elect }) => {

@@ -86,16 +86,8 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderColor: "#0005"
   },
-  tabBarText: {
-    color: "#000",
-    fontSize: 20,
-    margin: 20,
-    alignSelf: "center"
-  },
-  page: {
-    flex: 1,
-    backgroundColor: "#2C3239"
-  }
+  tabBarText: { color: "#000", fontSize: 20, margin: 20, alignSelf: "center" },
+  page: { flex: 1, backgroundColor: "#2C3239" }
 });
 
 const mapStateToProps = ({ user }) => {

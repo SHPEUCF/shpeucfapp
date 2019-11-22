@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types'
-import { TextInput, View, Text, ScrollView } from 'react-native';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { TextInput } from "react-native";
 
 class Input extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
   }
+
   static propTypes = {
     children: PropTypes.any,
     value: PropTypes.string.isRequired,
@@ -22,11 +22,9 @@ class Input extends Component {
     textAlignVertical: PropTypes.any,
     keyboardType: PropTypes.any,
     editable: PropTypes.bool,
-    style: PropTypes.oneOfType([
-      PropTypes.array,
-      PropTypes.shape({}),
-    ])
-  }
+    style: PropTypes.oneOfType([PropTypes.array, PropTypes.shape({})])
+  };
+
   render() {
     const { inputStyle } = styles;
     const {
@@ -46,7 +44,7 @@ class Input extends Component {
       editable,
       style,
       onFocus
-    } = this.props
+    } = this.props;
 
     return (
       <TextInput
@@ -65,30 +63,31 @@ class Input extends Component {
         keyboardType={keyboardType}
         editable={editable}
         onFocus={onFocus}
-        underlineColorAndroid='transparent'
-      >
-      {children}
+        underlineColorAndroid="transparent">
+        {children}
       </TextInput>
     );
-  };
+  }
 }
+
 Input.defaultProps = {
   maxLength: 45,
-  autoCapitalize: 'sentences',
+  autoCapitalize: "sentences",
   autoCorrect: false,
-  placeholder: 'Enter text here'
-}
+  placeholder: "Enter text here"
+};
 
 const styles = {
   inputStyle: {
     flex: 1,
-    color: '#000',
+    color: "#000",
     fontSize: 16,
     marginTop: 8,
     marginBottom: 8,
     padding: 15,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 25
   }
 };
+
 export { Input };

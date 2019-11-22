@@ -16,13 +16,7 @@ import {
   committeeTitleChanged,
   changeLevelsCom
 } from "../ducks";
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions
-} from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
 
 const dimension = Dimensions.get("window");
 const iteratees = ["level"];
@@ -40,14 +34,12 @@ class CommitteesBackEnd extends Component {
   }
 
   state = {
-    data: _.orderBy(this.props.committeesList, iteratees, order).map(
-      (d, index) => ({
-        committee: d,
-        key: `item-${index}`,
-        label: index,
-        backgroundColor: "#fff"
-      })
-    )
+    data: _.orderBy(this.props.committeesList, iteratees, order).map((d, index) => ({
+      committee: d,
+      key: `item-${index}`,
+      label: index,
+      backgroundColor: "#fff"
+    }))
   };
 
   render() {
@@ -67,8 +59,7 @@ class CommitteesBackEnd extends Component {
               this.props.chairChanged();
               this.props.goToCommitteeForm("ADD");
             }}
-            title={"ADD COMMITEES"}
-          ></Button>
+            title={"ADD COMMITEES"}></Button>
         </View>
 
         <View style={buttonContainerStyling}>
@@ -95,25 +86,23 @@ class CommitteesBackEnd extends Component {
 
   renderCommittees({ item, move, moveEnd, isActive }) {
     const { containerStyle, contentContainerStyle, textColor } = styles;
-
-    const color = isActive
-      ? { backgroundColor: "#ffd70066" }
-      : { backgroundColor: "#2C3239" };
+    const color = isActive ? { backgroundColor: "#ffd70066" } : { backgroundColor: "#2C3239" };
 
     return (
       <TouchableOpacity
         style={[contentContainerStyle, color]}
         onLongPress={move}
-        onPressOut={moveEnd}
-      >
+        onPressOut={moveEnd}>
         <View style={containerStyle}>
           <Text style={textColor}>{item.committee.title}</Text>
         </View>
+
         <View style={styles.buttonContainerStyle}>
           <TouchableOpacity onPress={() => this.viewCommittee(item.committee)}>
             <Ionicons style={textColor} name="md-create" size={40} />
           </TouchableOpacity>
         </View>
+
         <View style={styles.buttonContainerStyle}>
           <TouchableOpacity onPress={() => this.delete(item.committee)}>
             <Ionicons style={textColor} name="md-trash" size={40} />
@@ -173,28 +162,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center"
   },
-  textColor: {
-    color: "#e0e6ed"
-  },
-  tabBarText: {
-    color: "#000",
-    fontSize: 20,
-    margin: 20,
-    alignSelf: "center"
-  },
-  content: {
-    flex: 1,
-    margin: 10
-  },
-  buttonContainerStyle: {
-    flex: 5,
-    margin: 5,
-    justifyContent: "center"
-  },
-  page: {
-    flex: 1,
-    backgroundColor: "#0c0b0b"
-  }
+  textColor: { color: "#e0e6ed" },
+  tabBarText: { color: "#000", fontSize: 20, margin: 20, alignSelf: "center" },
+  content: { flex: 1, margin: 10 },
+  buttonContainerStyle: { flex: 5, margin: 5, justifyContent: "center" },
+  page: { flex: 1, backgroundColor: "#0c0b0b" }
 });
 
 const mapStateToProps = ({ committees, members }) => {
