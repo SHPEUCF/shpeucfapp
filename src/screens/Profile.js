@@ -8,7 +8,7 @@ import { loadUser, logoutUser, goToEditProfileForm, pageLoad, pictureChanged} fr
 import { Text, View, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { Avatar, Divider } from 'react-native-elements';
 import ImagePicker from 'react-native-image-crop-picker';
-import RNFetchBlob from 'react-native-fetch-blob';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const dimension = Dimensions.get('window');
 class Profile extends Component {
@@ -76,7 +76,7 @@ class Profile extends Component {
     return (
       <View style={headerInfoContainer}>
         <Avatar
-          size="xlarge"
+          size = {200}
           rounded
           source={{uri: picture}}
           onPress={() => this.openGallery()}
@@ -105,7 +105,8 @@ class Profile extends Component {
       includeBase64: true,
       compressImageQuality: 0.8,
       mediaType: 'photo',
-      cropping: true
+      cropping: true,
+      cropperCircleOverlay: true
     }).then(image => {
 
       const imagePath = image.path
