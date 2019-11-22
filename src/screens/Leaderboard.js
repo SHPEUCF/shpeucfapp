@@ -138,8 +138,8 @@ class Leaderboard extends Component {
     this.props.pageLoad();
     this.props.fetchMemberProfile(id);
     //this.props.goToOtherProfile();
-    //Actions.Profile();
-    this.props.goToProfile();
+    Actions.pop();
+    Actions.profile();
   }
   
 }

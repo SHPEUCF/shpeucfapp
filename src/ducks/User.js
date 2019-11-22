@@ -679,7 +679,11 @@ export const goToProfile = () => {
         dispatch({
             type: ACTIONS.GO_TO_PROFILE
         });
-        Actions.profile();
+        // Actions.pop();
+        // Actions.Profile()
+        
+        // Actions.pop()
+        Actions.push('profile')
     }
 };
 
