@@ -35,6 +35,7 @@
     "react-native-svg": "^9.13.3",
     "react-native-ui-kitten": "^4.2.0-beta.1",
     "react-native-vector-icons": "^6.6.0",
+    "react-native-webview": "^7.5.1",
     "react-redux": "^7.1.1",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
