@@ -53,43 +53,106 @@ export default (state = INITIAL_STATE, action) => {
 
   switch (action.type) {
     case ACTIONS.OPEN_ELECTION:
-      return { ...state, election: payload };
+      return {
+        ...state,
+        election: payload
+      };
     case ACTIONS.CLOSE_ELECTION:
-      return { ...state, election: payload };
+      return {
+        ...state,
+        election: payload
+      };
     case ACTIONS.OPEN_APPLICATIONS:
-      return { ...state, apply: payload };
+      return {
+        ...state,
+        apply: payload
+      };
     case ACTIONS.CLOSE_APPLICATIONS:
-      return { ...state, apply: payload };
+      return {
+        ...state,
+        apply: payload
+      };
     case ACTIONS.CANDIDATE_ID_CHANGED:
-      return { ...state, candidateId: payload };
+      return {
+        ...state,
+        candidateId: payload
+      };
     case ACTIONS.DELETE_POSITION:
-      return { ...state, positionTitle: "", positionDescription: "" };
+      return {
+        ...state,
+        positionTitle: "",
+        positionDescription: ""
+      };
     case ACTIONS.DELETE_APPLICATION:
-      return { ...state, candidateFName: "", candidateName: "", candidatePlan: "", candidatePosition: "" };
+      return {
+        ...state,
+        candidateFName: "",
+        candidateName: "",
+        candidatePlan: "",
+        candidatePosition: ""
+      };
     case ACTIONS.CANDIDATE_FNAME_CHANGED:
-      return { ...state, candidateFName: payload };
+      return {
+        ...state,
+        candidateFName: payload
+      };
     case ACTIONS.CANDIDATE_LNAME_CHANGED:
-      return { ...state, candidateLName: payload };
+      return {
+        ...state,
+        candidateLName: payload
+      };
     case ACTIONS.CANDIDATE_PLAN_CHANGED:
-      return { ...state, candidatePlan: payload };
+      return {
+        ...state,
+        candidatePlan: payload
+      };
     case ACTIONS.CANDIDATE_POSITION_CHANGED:
-      return { ...state, candidatePosition: payload };
+      return {
+        ...state,
+        candidatePosition: payload
+      };
     case ACTIONS.POSITION_TITLE_CHANGED:
-      return { ...state, positionTitle: payload };
+      return {
+        ...state,
+        positionTitle: payload
+      };
     case ACTIONS.POSITION_DESCRIPTION_CHANGED:
-      return { ...state, positionDescription: payload };
+      return {
+        ...state,
+        positionDescription: payload
+      };
     case ACTIONS.GO_TO_CANDIDATE_FORM:
-      return { ...state, title: payload };
+      return {
+        ...state,
+        title: payload
+      };
     case ACTIONS.CHANGE_POSITION:
-      return { ...state, applyPosition: payload };
+      return {
+        ...state,
+        applyPosition: payload
+      };
     case ACTIONS.GO_TO_POSITION_FORM:
-      return { ...state, title: payload };
+      return {
+        ...state,
+        title: payload
+      };
     case ACTIONS.GET_POSITIONS:
-      return { ...state, positions: payload };
+      return {
+        ...state,
+        positions: payload
+      };
     case ACTIONS.GET_VOTES:
-      return { ...state, votes: payload };
+      return {
+        ...state,
+        votes: payload
+      };
     case ACTIONS.UPDATE_ELECTION:
-      return { ...state, apply: payload.apply, election: payload.election, numOfVotes: payload.votes };
+      return {
+        ...state,
+        apply: payload.apply,
+        election: payload.election,
+        numOfVotes: payload.votes
+      };
     // Covers ACTIONS.EDIT_CANDIDATES, ACTIONS.EDIT_POSITION, ACTIONS.ADD_APPLICATION, ACTIONS.APPROVE_APPLICATION
     default:
       return state;
@@ -106,7 +169,10 @@ export const openElection = () => {
         election: true
       })
       .then(() => {
-        dispatch({ type: ACTIONS.OPEN_ELECTION, payload: true });
+        dispatch({
+          type: ACTIONS.OPEN_ELECTION,
+          payload: true
+        });
       })
       .then(() => alert("Election Started!", "Successful"))
       .catch(error => alert("Election could not be Started!", "Failure"));
@@ -120,7 +186,10 @@ export const closeElection = () => {
       .ref(`/election/`)
       .update({ election: false })
       .then(() => {
-        dispatch({ type: ACTIONS.CLOSE_ELECTION, payload: false });
+        dispatch({
+          type: ACTIONS.CLOSE_ELECTION,
+          payload: false
+        });
       })
       .then(() => alert("Election Closed!", "Successful"))
       .catch(error => alert("Election could not be Closed!", "Failure"));
@@ -134,7 +203,10 @@ export const openApplications = () => {
       .ref(`/election/`)
       .update({ apply: true })
       .then(() => {
-        dispatch({ type: ACTIONS.OPEN_APPLICATIONS, payload: true });
+        dispatch({
+          type: ACTIONS.OPEN_APPLICATIONS,
+          payload: true
+        });
       })
       .then(() => alert("Applications Started!", "Successful"))
       .catch(error => alert("Applications could not be Started!", "Failure"));
@@ -147,7 +219,10 @@ export const closeApplications = () => {
       .ref(`/election/`)
       .update({ apply: false })
       .then(() => {
-        dispatch({ type: ACTIONS.CLOSE_APPLICATIONS, payload: false });
+        dispatch({
+          type: ACTIONS.CLOSE_APPLICATIONS,
+          payload: false
+        });
       })
       .then(() => alert("Applications Closed!", "Successful"))
       .catch(error => alert("Applications could not be Closed!", "Failure"));
@@ -174,7 +249,10 @@ export const updateElection = () => {
         if (snapshot.exists()) {
           const info = snapshot.val();
 
-          dispatch({ type: ACTIONS.UPDATE_ELECTION, payload: info });
+          dispatch({
+            type: ACTIONS.UPDATE_ELECTION,
+            payload: info
+          });
         }
       });
   };
@@ -187,7 +265,9 @@ export const deletePosition = text => {
       .ref(`/election/positions/${text}`)
       .remove()
       .then(() => {
-        dispatch({ type: ACTIONS.DELETE_POSITION });
+        dispatch({
+          type: ACTIONS.DELETE_POSITION
+        });
       })
       .then(() => alert("Position Deleted!", "Successful"))
       .catch(error => alert("Position could not be deleted!", "Failure"));
@@ -210,7 +290,9 @@ export const editPosition = (title, description, oldTitle) => {
         .ref(`/election/positions/${oldTitle}`)
         .remove()
         .then(() => {
-          dispatch({ type: ACTIONS.DELETE_POSITION });
+          dispatch({
+            type: ACTIONS.DELETE_POSITION
+          });
         })
         .then(() =>
           firebase
@@ -228,7 +310,9 @@ export const editPosition = (title, description, oldTitle) => {
         .ref(`/election/positions/${title}`)
         .update({ title: title, description: description })
         .then(() => {
-          dispatch({ type: ACTIONS.EDIT_POSITION });
+          dispatch({
+            type: ACTIONS.EDIT_POSITION
+          });
         })
         .then(() => alert("Position Edited!", "Successful"))
         .catch(error => alert("Position could not be Edited!", "Failure"));
@@ -259,7 +343,9 @@ export const addApplication = (fName, lName, plans, position, picture) => {
           .set(true)
       )
       .then(() => {
-        dispatch({ type: ACTIONS.ADD_APPLICATION });
+        dispatch({
+          type: ACTIONS.ADD_APPLICATION
+        });
       })
       .then(() => alert("Application Added!", "Successful"))
       .catch(error => alert("Application could not be Added!", "Failure"));
@@ -317,15 +403,15 @@ export const deleteApplication = (position, candidateId) => {
       .ref(`/election/positions/${position}/candidates/${candidateId}`)
       .remove()
       .then(() => {
-        dispatch({ type: ACTIONS.DELETE_APPLICATION });
+        dispatch({
+          type: ACTIONS.DELETE_APPLICATION
+        });
       })
       .then(() =>
         firebase
           .database()
           .ref(`/users/${candidateId}`)
-          .update({
-            applied: false
-          })
+          .update({ applied: false })
       )
       .then(() =>
         firebase
@@ -339,34 +425,57 @@ export const deleteApplication = (position, candidateId) => {
 };
 
 export const editCandidates = text => {
-  return { type: ACTIONS.EDIT_CANDIDATES };
+  return {
+    type: ACTIONS.EDIT_CANDIDATES
+  };
 };
 
 export const candidateIdChanged = text => {
-  return { type: ACTIONS.CANDIDATE_ID_CHANGED, payload: text };
+  return {
+    type: ACTIONS.CANDIDATE_ID_CHANGED,
+    payload: text
+  };
 };
 
 export const candidateFNameChanged = text => {
-  return { type: ACTIONS.CANDIDATE_FNAME_CHANGED, payload: text };
+  return {
+    type: ACTIONS.CANDIDATE_FNAME_CHANGED,
+    payload: text
+  };
 };
 
 export const candidateLNameChanged = text => {
-  return { type: ACTIONS.CANDIDATE_LNAME_CHANGED, payload: text };
+  return {
+    type: ACTIONS.CANDIDATE_LNAME_CHANGED,
+    payload: text
+  };
 };
 
 export const candidatePlanChanged = text => {
-  return { type: ACTIONS.CANDIDATE_PLAN_CHANGED, payload: text };
+  return {
+    type: ACTIONS.CANDIDATE_PLAN_CHANGED,
+    payload: text
+  };
 };
 
 export const candidatePositionChanged = text => {
-  return { type: ACTIONS.CANDIDATE_POSITION_CHANGED, payload: text };
+  return {
+    type: ACTIONS.CANDIDATE_POSITION_CHANGED,
+    payload: text
+  };
 };
 
 export const positionTitleChanged = text => {
-  return { type: ACTIONS.POSITION_TITLE_CHANGED, payload: text };
+  return {
+    type: ACTIONS.POSITION_TITLE_CHANGED,
+    payload: text
+  };
 };
 export const positionDescriptionChanged = text => {
-  return { type: ACTIONS.POSITION_DESCRIPTION_CHANGED, payload: text };
+  return {
+    type: ACTIONS.POSITION_DESCRIPTION_CHANGED,
+    payload: text
+  };
 };
 
 export const goToCandidateForm = (text, pos) => {
@@ -385,7 +494,10 @@ export const goToCandidateForm = (text, pos) => {
 
 export const goToPositionForm = text => {
   Actions.PositionForm();
-  return { type: ACTIONS.GO_TO_POSITION_FORM, payload: text };
+  return {
+    type: ACTIONS.GO_TO_POSITION_FORM,
+    payload: text
+  };
 };
 
 export const vote = (userId, dict) => {
@@ -437,7 +549,10 @@ export const getPositions = () => {
       .on("value", snapshot => {
         const positions = snapshot.val();
 
-        dispatch({ type: ACTIONS.GET_POSITIONS, payload: positions });
+        dispatch({
+          type: ACTIONS.GET_POSITIONS,
+          payload: positions
+        });
       });
   };
 };
@@ -469,8 +584,10 @@ export const getVotes = () => {
       .ref(`voting`)
       .on("value", snapshot => {
         const votes = snapshot.val();
-
-        dispatch({ type: ACTIONS.GET_VOTES, payload: votes });
+        dispatch({
+          type: ACTIONS.GET_VOTES,
+          payload: votes
+        });
       });
   };
 };

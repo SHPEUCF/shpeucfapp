@@ -62,35 +62,80 @@ export default (state = INITIAL_STATE, action) => {
 
   switch (action.type) {
     case ACTIONS.FIRST_NAME_CHANGED_MEMBER:
-      return { ...state, firstName: payload };
+      return {
+        ...state,
+        firstName: payload
+      };
     case ACTIONS.LAST_NAME_CHANGED_MEMBER:
-      return { ...state, lastName: payload };
+      return {
+        ...state,
+        lastName: payload
+      };
     case ACTIONS.EMAIL_CHANGED_MEMBER:
-      return { ...state, email: payload };
+      return {
+        ...state,
+        email: payload
+      };
     case ACTIONS.COLLEGE_CHANGED_MEMBER:
-      return { ...state, college: payload };
+      return {
+        ...state,
+        college: payload
+      };
     case ACTIONS.MAJOR_CHANGED_MEMBER:
-      return { ...state, major: payload };
+      return {
+        ...state,
+        major: payload
+      };
     case ACTIONS.PASSWORD_CHANGED_MEMBER:
-      return { ...state, password: payload };
+      return {
+        ...state,
+        password: payload
+      };
     case ACTIONS.POINTS_CHANGED_MEMBER:
-      return { ...state, points: payload };
+      return {
+        ...state,
+        points: payload
+      };
     case ACTIONS.PRIVILEGE_CHANGED_MEMBER:
-      return { ...state, privilege: payload };
+      return {
+        ...state,
+        privilege: payload
+      };
     case ACTIONS.PICTURE_CHANGED_MEMBER:
-      return { ...state, picture: payload };
+      return {
+        ...state,
+        picture: payload
+      };
     case ACTIONS.NATIONALITY_CHANGED_MEMBER:
-      return { ...state, nationality: payload };
+      return {
+        ...state,
+        nationality: payload
+      };
     case ACTIONS.DATE_BIRTH_CHANGED_MEMBER:
-      return { ...state, date_of_birth: payload };
+      return {
+        ...state,
+        date_of_birth: payload
+      };
     case ACTIONS.CONFIRM_PASSWORD_CHANGED_MEMBER:
-      return { ...state, confirmPassword: payload };
+      return {
+        ...state,
+        confirmPassword: payload
+      };
     case ACTIONS.QUOTE_CHANGED_MEMBER:
-      return { ...state, quote: payload };
+      return {
+        ...state,
+        quote: payload
+      };
     case ACTIONS.FETCH_MEMBERS_POINTS:
-      return { ...state, membersPoints: payload };
+      return {
+        ...state,
+        membersPoints: payload
+      };
     case ACTIONS.FETCH_FILTERS:
-      return { ...state, filters: payload };
+      return {
+        ...state,
+        filters: payload
+      };
     case ACTIONS.FETCH_MEMBER_PROFILE:
       return {
         ...state,
@@ -107,7 +152,10 @@ export default (state = INITIAL_STATE, action) => {
         privilege: payload.privilege
       };
     case ACTIONS.FETCH_ALL_USERS:
-      return { ...state, userList: payload };
+      return {
+        ...state,
+        userList: payload
+      };
     // Covers ACTIONS.EDIT_MEMBER, ACTIONS.ASSIGN_POSITION, ACTIONS.GO_TO_OTHER_PROFILE, ACTIONS.GO_TO_EDIT_OTHER_PROFILE_FORM
     default:
       return state;
@@ -115,59 +163,101 @@ export default (state = INITIAL_STATE, action) => {
 };
 
 export const firstNameChangedMember = text => {
-  return { type: ACTIONS.FIRST_NAME_CHANGED_MEMBER, payload: text };
+  return {
+    type: ACTIONS.FIRST_NAME_CHANGED_MEMBER,
+    payload: text
+  };
 };
 
 export const lastNameChangedMember = text => {
-  return { type: ACTIONS.LAST_NAME_CHANGED_MEMBER, payload: text };
+  return {
+    type: ACTIONS.LAST_NAME_CHANGED_MEMBER,
+    payload: text
+  };
 };
 
 export const emailChangedMember = text => {
-  return { type: ACTIONS.EMAIL_CHANGED_MEMBER, payload: text };
+  return {
+    type: ACTIONS.EMAIL_CHANGED_MEMBER,
+    payload: text
+  };
 };
 
 export const collegeChangedMember = text => {
-  return { type: ACTIONS.COLLEGE_CHANGED_MEMBER, payload: text };
+  return {
+    type: ACTIONS.COLLEGE_CHANGED_MEMBER,
+    payload: text
+  };
 };
 
 export const majorChangedMember = text => {
-  return { type: ACTIONS.MAJOR_CHANGED_MEMBER, payload: text };
+  return {
+    type: ACTIONS.MAJOR_CHANGED_MEMBER,
+    payload: text
+  };
 };
 
 export const passwordChangedMember = text => {
-  return { type: ACTIONS.PASSWORD_CHANGED_MEMBER, payload: text };
+  return {
+    type: ACTIONS.PASSWORD_CHANGED_MEMBER,
+    payload: text
+  };
 };
 
 export const pointsChangedMember = text => {
-  return { type: ACTIONS.POINTS_CHANGED_MEMBER, payload: text };
+  return {
+    type: ACTIONS.POINTS_CHANGED_MEMBER,
+    payload: text
+  };
 };
 
 export const privilegeChangedMember = text => {
-  return { type: ACTIONS.PRIVILEGE_CHANGED_MEMBER, payload: text };
+  return {
+    type: ACTIONS.PRIVILEGE_CHANGED_MEMBER,
+    payload: text
+  };
 };
 
 export const pictureChangedMember = text => {
-  return { type: ACTIONS.PICTURE_CHANGED_MEMBER, payload: text };
+  return {
+    type: ACTIONS.PICTURE_CHANGED_MEMBER,
+    payload: text
+  };
 };
 
 export const nationalitychangedMember = text => {
-  return { type: ACTIONS.NATIONALITY_CHANGED_MEMBER, payload: text };
+  return {
+    type: ACTIONS.NATIONALITY_CHANGED_MEMBER,
+    payload: text
+  };
 };
 
 export const datebirthchangedMember = text => {
-  return { type: ACTIONS.DATE_BIRTH_CHANGED_MEMBER, payload: text };
+  return {
+    type: ACTIONS.DATE_BIRTH_CHANGED_MEMBER,
+    payload: text
+  };
 };
 
 export const fetchFilters = text => {
-  return { type: ACTIONS.FETCH_FILTERS, payload: text };
+  return {
+    type: ACTIONS.FETCH_FILTERS,
+    payload: text
+  };
 };
 
 export const confirmPasswordChangedMember = text => {
-  return { type: ACTIONS.CONFIRM_PASSWORD_CHANGED_MEMBER, payload: text };
+  return {
+    type: ACTIONS.CONFIRM_PASSWORD_CHANGED_MEMBER,
+    payload: text
+  };
 };
 
 export const quoteChangedMember = text => {
-  return { type: ACTIONS.QUOTE_CHANGED_MEMBER, payload: text };
+  return {
+    type: ACTIONS.QUOTE_CHANGED_MEMBER,
+    payload: text
+  };
 };
 
 export const fetchMembersPoints = () => {
@@ -276,28 +366,24 @@ export const assignPosition = (title, types, id, oldChair) => {
           firebase
             .database()
             .ref(`/privileges/${oldChair.id}/`)
-            .update({
-              [types]: false
-            })
+            .update({ [types]: false })
         );
     }
 
     firebase
       .database()
       .ref(`/users/${id}/`)
-      .update({
-        [types]: title
-      })
+      .update({ [types]: title })
       .then(() =>
         firebase
           .database()
           .ref(`/privileges/${id}/`)
-          .update({
-            [types]: true
-          })
+          .update({ [types]: true })
       );
 
-    dispatch({ type: ACTIONS.ASSIGN_POSITION });
+    dispatch({
+      type: ACTIONS.ASSIGN_POSITION
+    });
   };
 };
 
@@ -307,21 +393,28 @@ export const fetchAllUsers = () => {
       .database()
       .ref(`/users/`)
       .on("value", snapshot => {
-        dispatch({ type: ACTIONS.FETCH_ALL_USERS, payload: snapshot.val() });
+        dispatch({
+          type: ACTIONS.FETCH_ALL_USERS,
+          payload: snapshot.val()
+        });
       });
   };
 };
 
 export const goToOtherProfile = () => {
   return dispatch => {
-    dispatch({ type: ACTIONS.GO_TO_OTHER_PROFILE });
+    dispatch({
+      type: ACTIONS.GO_TO_OTHER_PROFILE
+    });
     Actions.OtherProfile();
   };
 };
 
 export const goToEditOtherProfileForm = () => {
   return dispatch => {
-    dispatch({ type: ACTIONS.GO_TO_EDIT_OTHER_PROFILE_FORM });
+    dispatch({
+      type: ACTIONS.GO_TO_EDIT_OTHER_PROFILE_FORM
+    });
     Actions.EditOtherProfileForm();
   };
 };

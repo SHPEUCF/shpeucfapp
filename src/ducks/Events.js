@@ -49,13 +49,25 @@ export default (state = INITIAL_STATE, action) => {
 
   switch (action.type) {
     case ACTIONS.FETCH_EVENTS:
-      return { ...state, eventList: payload };
+      return {
+        ...state,
+        eventList: payload
+      };
     case ACTIONS.FETCH_CODE:
-      return { ...state, code: payload };
+      return {
+        ...state,
+        code: payload
+      };
     case ACTIONS.CREATE_EVENT:
-      return { ...state, error: "" };
+      return {
+        ...state,
+        error: ""
+      };
     case ACTIONS.EDIT_EVENT:
-      return { ...state, error: "" };
+      return {
+        ...state,
+        error: ""
+      };
     case ACTIONS.DELETE_EVENTS:
       return {
         ...state,
@@ -71,27 +83,60 @@ export default (state = INITIAL_STATE, action) => {
         error: ""
       };
     case ACTIONS.TYPE_CHANGED:
-      return { ...state, type: payload };
+      return {
+        ...state,
+        type: payload
+      };
     case ACTIONS.COMMITTEE_CHANGED:
-      return { ...state, committee: payload };
+      return {
+        ...state,
+        committee: payload
+      };
     case ACTIONS.TITLE_CHANGED:
-      return { ...state, title: payload };
+      return {
+        ...state,
+        title: payload
+      };
     case ACTIONS.NAME_CHANGED:
-      return { ...state, name: payload };
+      return {
+        ...state,
+        name: payload
+      };
     case ACTIONS.DESCRIPTION_CHANGED:
-      return { ...state, description: payload };
+      return {
+        ...state,
+        description: payload
+      };
     case ACTIONS.DATE_CHANGED:
-      return { ...state, date: payload };
+      return {
+        ...state,
+        date: payload
+      };
     case ACTIONS.TIME_CHANGED:
-      return { ...state, time: payload };
+      return {
+        ...state,
+        time: payload
+      };
     case ACTIONS.LOCATION_CHANGED:
-      return { ...state, location: payload };
+      return {
+        ...state,
+        location: payload
+      };
     case ACTIONS.E_POINTS_CHANGED:
-      return { ...state, points: payload };
+      return {
+        ...state,
+        points: payload
+      };
     case ACTIONS.EVENT_ID_CHANGED:
-      return { ...state, eventID: payload };
+      return {
+        ...state,
+        eventID: payload
+      };
     case ACTIONS.EVENT_ERROR:
-      return { ...state, error: payload };
+      return {
+        ...state,
+        error: payload
+      };
     case ACTIONS.GO_TO_CREATE_EVENT:
       return {
         ...state,
@@ -132,7 +177,7 @@ function makeCode(length) {
   let text = "";
   let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-  for (var i = 0; i < length; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
+  for (let i = 0; i < length; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
 
   return text;
 }
@@ -168,7 +213,9 @@ export const createEvent = (typeU, committeeU, nameU, descriptionU, dateU, timeU
     .catch(error => Alert.alert("Event Created Failed", "Failure"));
 
   return dispatch => {
-    dispatch({ type: ACTIONS.CREATE_EVENT });
+    dispatch({
+      type: ACTIONS.CREATE_EVENT
+    });
   };
 };
 
@@ -214,16 +261,16 @@ export const editEvent = (typeU, committeeU, nameU, descriptionU, dateU, timeU, 
         firebase
           .database()
           .ref(`/committees/${committeeU}/events/`)
-          .update({
-            [eventIDU]: true
-          });
+          .update({ [eventIDU]: true });
       }
     })
     .then(() => Alert.alert("Event Edited", "Successful"))
     .catch(error => Alert.alert("Event edit Failed", "Failure"));
 
   return dispatch => {
-    dispatch({ type: ACTIONS.EDIT_EVENT });
+    dispatch({
+      type: ACTIONS.EDIT_EVENT
+    });
   };
 };
 
@@ -331,7 +378,10 @@ export const fetchEvents = () => {
       .ref("events/")
       .on("value", snapshot => {
         const eventList = snapshot.val();
-        dispatch({ type: ACTIONS.FETCH_EVENTS, payload: eventList });
+        dispatch({
+          type: ACTIONS.FETCH_EVENTS,
+          payload: eventList
+        });
       });
   };
 };
@@ -344,79 +394,123 @@ export const fetchCode = eventID => {
       .on("value", snapshot => {
         const code = snapshot.val();
         // Alert.alert(`${eventID} ${code}`)
-        dispatch({ type: ACTIONS.FETCH_CODE, payload: code });
+        dispatch({
+          type: ACTIONS.FETCH_CODE,
+          payload: code
+        });
       });
   };
 };
 
 export const typeChanged = text => {
-  return { type: ACTIONS.TYPE_CHANGED, payload: text };
+  return {
+    type: ACTIONS.TYPE_CHANGED,
+    payload: text
+  };
 };
 
 export const committeeChanged = text => {
-  return { type: ACTIONS.COMMITTEE_CHANGED, payload: text };
+  return {
+    type: ACTIONS.COMMITTEE_CHANGED,
+    payload: text
+  };
 };
 
 export const titleChanged = text => {
-  return { type: ACTIONS.TITLE_CHANGED, payload: text };
+  return {
+    type: ACTIONS.TITLE_CHANGED,
+    payload: text
+  };
 };
 
 export const nameChanged = text => {
-  return { type: ACTIONS.NAME_CHANGED, payload: text };
+  return {
+    type: ACTIONS.NAME_CHANGED,
+    payload: text
+  };
 };
 
 export const descriptionChanged = text => {
-  return { type: ACTIONS.DESCRIPTION_CHANGED, payload: text };
+  return {
+    type: ACTIONS.DESCRIPTION_CHANGED,
+    payload: text
+  };
 };
 
 export const dateChanged = text => {
-  return { type: ACTIONS.DATE_CHANGED, payload: text };
+  return {
+    type: ACTIONS.DATE_CHANGED,
+    payload: text
+  };
 };
 
 export const timeChanged = text => {
-  return { type: ACTIONS.TIME_CHANGED, payload: text };
+  return {
+    type: ACTIONS.TIME_CHANGED,
+    payload: text
+  };
 };
 
 export const locationChanged = text => {
-  return { type: ACTIONS.LOCATION_CHANGED, payload: text };
+  return {
+    type: ACTIONS.LOCATION_CHANGED,
+    payload: text
+  };
 };
 
 export const epointsChanged = text => {
-  return { type: ACTIONS.E_POINTS_CHANGED, payload: text };
+  return {
+    type: ACTIONS.E_POINTS_CHANGED,
+    payload: text
+  };
 };
 
 export const eventIDChanged = text => {
-  return { type: ACTIONS.EVENT_ID_CHANGED, payload: text };
+  return {
+    type: ACTIONS.EVENT_ID_CHANGED,
+    payload: text
+  };
 };
 
 export const eventError = text => {
-  return { type: ACTIONS.EVENT_ERROR, payload: text };
+  return {
+    type: ACTIONS.EVENT_ERROR,
+    payload: text
+  };
 };
 
 export const goToCreateEvent = () => {
   return dispatch => {
-    dispatch({ type: ACTIONS.GO_TO_CREATE_EVENT });
+    dispatch({
+      type: ACTIONS.GO_TO_CREATE_EVENT
+    });
     Actions.createEvent();
   };
 };
 
 export const goToCreateEventFromEdit = () => {
   return dispatch => {
-    dispatch({ type: ACTIONS.GO_TO_CREATE_EVENT_FROM_EDIT });
+    dispatch({
+      type: ACTIONS.GO_TO_CREATE_EVENT_FROM_EDIT
+    });
     Actions.createEvent();
   };
 };
 
 export const goToEvents = () => {
   return dispatch => {
-    dispatch({ type: ACTIONS.GO_TO_EVENT });
+    dispatch({
+      type: ACTIONS.GO_TO_EVENT
+    });
     Actions.event();
   };
 };
 
 export const goToViewEvent = () => {
   return dispatch => {
-    dispatch({ type: ACTIONS.GO_TO_VIEW_EVENT });
+    dispatch({
+      type: ACTIONS.GO_TO_VIEW_EVENT
+    });
     Actions.eventDetails();
   };
 };

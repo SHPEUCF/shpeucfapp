@@ -75,53 +75,130 @@ export default (state = INITIAL_STATE, action) => {
 
   switch (action.type) {
     case ACTIONS.FIRST_NAME_CHANGED:
-      return { ...state, firstName: payload };
+      return {
+        ...state,
+        firstName: payload
+      };
     case ACTIONS.LAST_NAME_CHANGED:
-      return { ...state, lastName: payload };
+      return {
+        ...state,
+        lastName: payload
+      };
     case ACTIONS.EMAIL_CHANGED:
-      return { ...state, email: payload };
+      return {
+        ...state,
+        email: payload
+      };
     case ACTIONS.COLLEGE_CHANGED:
-      return { ...state, college: payload };
+      return {
+        ...state,
+        college: payload
+      };
     case ACTIONS.MAJOR_CHANGED:
-      return { ...state, major: payload };
+      return {
+        ...state,
+        major: payload
+      };
     case ACTIONS.PASSWORD_CHANGED:
-      return { ...state, password: payload };
+      return {
+        ...state,
+        password: payload
+      };
     case ACTIONS.POINTS_CHANGED:
-      return { ...state, points: payload };
+      return {
+        ...state,
+        points: payload
+      };
     case ACTIONS.PRIVILEGE_CHANGED:
-      return { ...state, privilege: payload };
+      return {
+        ...state,
+        privilege: payload
+      };
     case ACTIONS.PICTURE_CHANGED:
-      return { ...state, picture: payload };
+      return {
+        ...state,
+        picture: payload
+      };
     case ACTIONS.CONFIRM_PASSWORD_CHANGED:
-      return { ...state, confirmPassword: payload };
+      return {
+        ...state,
+        confirmPassword: payload
+      };
     case ACTIONS.QUOTE_CHANGED:
-      return { ...state, quote: payload };
+      return {
+        ...state,
+        quote: payload
+      };
     case ACTIONS.CONTINENT_CHANGED:
-      return { ...state, continent: payload };
+      return {
+        ...state,
+        continent: payload
+      };
     case ACTIONS.NATIONALITY_CHANGED:
-      return { ...state, nationality: payload };
+      return {
+        ...state,
+        nationality: payload
+      };
     case ACTIONS.GENDER_CHANGED:
-      return { ...state, gender: payload };
+      return {
+        ...state,
+        gender: payload
+      };
     case ACTIONS.BIRTH_DATE_CHANGED:
-      return { ...state, birthday: payload };
+      return {
+        ...state,
+        birthday: payload
+      };
     case ACTIONS.REGISTRATION_ERROR:
-      return { ...state, error: payload };
+      return {
+        ...state,
+        error: payload
+      };
     case ACTIONS.SHOW_FIREBASE_ERROR:
-      return { ...state, error: payload };
+      return {
+        ...state,
+        error: payload
+      };
     case ACTIONS.CREATE_USER:
-      return { ...state, loading: true, error: "" };
+      return {
+        ...state,
+        loading: true,
+        error: ""
+      };
     case ACTIONS.CREATE_USER_SUCCESS:
-      return { ...state, ...INITIAL_STATE };
+      return {
+        ...state,
+        ...INITIAL_STATE
+      };
     case ACTIONS.CREATE_USER_FAIL:
-      return { ...state, error: payload, loading: false };
+      return {
+        ...state,
+        error: payload,
+        loading: false
+      };
     case ACTIONS.EDIT_USER:
-      return { ...state, firstName: payload };
+      return {
+        ...state,
+        firstName: payload
+      };
     case ACTIONS.GET_PRIVILEGE:
-      return { ...state, privilege: payload };
+      return {
+        ...state,
+        privilege: payload
+      };
     case ACTIONS.LOGIN_USER:
-      return { ...state, loading: true, error: "" };
+      return {
+        ...state,
+        loading: true,
+        error: ""
+      };
     case ACTIONS.ENTER_APP:
-      return { ...state, ...INITIAL_STATE, user: payload, loggedIn: true };
+      return {
+        ...state,
+        ...INITIAL_STATE,
+        user: payload,
+        loggedIn: true
+      };
     case ACTIONS.LOAD_USER:
       return {
         ...state,
@@ -144,9 +221,17 @@ export default (state = INITIAL_STATE, action) => {
         loading: false
       };
     case ACTIONS.LOGIN_USER_FAIL:
-      return { ...state, error: payload, loading: false, password: "" };
+      return {
+        ...state,
+        error: payload,
+        loading: false,
+        password: ""
+      };
     case ACTIONS.LOGOUT_USER:
-      return { ...state, ...INITIAL_STATE };
+      return {
+        ...state,
+        ...INITIAL_STATE
+      };
     case ACTIONS.GO_TO_RESET_PASSWORD:
       return INITIAL_STATE;
     case ACTIONS.GO_TO_LOGIN:
@@ -160,51 +245,87 @@ export default (state = INITIAL_STATE, action) => {
 };
 
 export const firstNameChanged = text => {
-  return { type: ACTIONS.FIRST_NAME_CHANGED, payload: text };
+  return {
+    type: ACTIONS.FIRST_NAME_CHANGED,
+    payload: text
+  };
 };
 
 export const lastNameChanged = text => {
-  return { type: ACTIONS.LAST_NAME_CHANGED, payload: text };
+  return {
+    type: ACTIONS.LAST_NAME_CHANGED,
+    payload: text
+  };
 };
 
 export const emailChanged = text => {
-  return { type: ACTIONS.EMAIL_CHANGED, payload: text };
+  return {
+    type: ACTIONS.EMAIL_CHANGED,
+    payload: text
+  };
 };
 
 export const collegeChanged = text => {
-  return { type: ACTIONS.COLLEGE_CHANGED, payload: text };
+  return {
+    type: ACTIONS.COLLEGE_CHANGED,
+    payload: text
+  };
 };
 
 export const majorChanged = text => {
-  return { type: ACTIONS.MAJOR_CHANGED, payload: text };
+  return {
+    type: ACTIONS.MAJOR_CHANGED,
+    payload: text
+  };
 };
 
 export const passwordChanged = text => {
-  return { type: ACTIONS.PASSWORD_CHANGED, payload: text };
+  return {
+    type: ACTIONS.PASSWORD_CHANGED,
+    payload: text
+  };
 };
 
 export const pointsChanged = text => {
-  return { type: ACTIONS.POINTS_CHANGED, payload: text };
+  return {
+    type: ACTIONS.POINTS_CHANGED,
+    payload: text
+  };
 };
 
 export const birthDateChanged = text => {
-  return { type: ACTIONS.BIRTH_DATE_CHANGED, payload: text };
+  return {
+    type: ACTIONS.BIRTH_DATE_CHANGED,
+    payload: text
+  };
 };
 
 export const continentChanged = text => {
-  return { type: ACTIONS.CONTINENT_CHANGED, payload: text };
+  return {
+    type: ACTIONS.CONTINENT_CHANGED,
+    payload: text
+  };
 };
 
 export const nationalityChanged = text => {
-  return { type: ACTIONS.NATIONALITY_CHANGED, payload: text };
+  return {
+    type: ACTIONS.NATIONALITY_CHANGED,
+    payload: text
+  };
 };
 
 export const genderChanged = text => {
-  return { type: ACTIONS.GENDER_CHANGED, payload: text };
+  return {
+    type: ACTIONS.GENDER_CHANGED,
+    payload: text
+  };
 };
 
 export const privilegeChanged = text => {
-  return { type: ACTIONS.PRIVILEGE_CHANGED, payload: text };
+  return {
+    type: ACTIONS.PRIVILEGE_CHANGED,
+    payload: text
+  };
 };
 
 export const pictureChanged = text => {
@@ -219,33 +340,47 @@ export const pictureChanged = text => {
       picture: text
     });
 
-  return { type: ACTIONS.PICTURE_CHANGED, payload: text };
+  return {
+    type: ACTIONS.PICTURE_CHANGED,
+    payload: text
+  };
 };
 
 export const confirmPasswordChanged = text => {
-  return { type: ACTIONS.CONFIRM_PASSWORD_CHANGED, payload: text };
+  return {
+    type: ACTIONS.CONFIRM_PASSWORD_CHANGED,
+    payload: text
+  };
 };
 
 export const quoteChanged = text => {
-  return { type: ACTIONS.QUOTE_CHANGED, payload: text };
+  return {
+    type: ACTIONS.QUOTE_CHANGED,
+    payload: text
+  };
 };
 
 export const registrationError = error => {
   return dispatch => {
-    dispatch({ type: ACTIONS.REGISTRATION_ERROR, payload: error });
+    dispatch({
+      type: ACTIONS.REGISTRATION_ERROR,
+      payload: error
+    });
   };
 };
 
 const showFirebaseError = (dispatch, error) => {
-  let errorMessage;
+  let errMsg;
 
-  if (error.code === "auth/user-not-found")
-    errorMessage = "There is no user record corresponding to this identifier";
-  else if (error.code === "auth/invalid-email") errorMessage = "Enter a valid email";
-  else if (error.code === "auth/wrong-password") errorMessage = "Incorrect credentials";
-  else errorMessage = error.message;
+  if (error.code === "auth/user-not-found") errMsg = "There is no user record corresponding to this identifier";
+  else if (error.code === "auth/invalid-email") errMsg = "Enter a valid email";
+  else if (error.code === "auth/wrong-password") errMsg = "Incorrect credentials";
+  else errMsg = error.message;
 
-  dispatch({ type: ACTIONS.SHOW_FIREBASE_ERROR, payload: errorMessage });
+  dispatch({
+    type: ACTIONS.SHOW_FIREBASE_ERROR,
+    payload: errMsg
+  });
 };
 
 // Registration Actions
@@ -265,12 +400,13 @@ export const createUser = (
   birthday
 ) => {
   return dispatch => {
-    dispatch({ type: ACTIONS.CREATE_USER });
+    dispatch({
+      type: ACTIONS.CREATE_USER
+    });
 
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      // .then(() => firebase.auth().signInWithEmailAndPassword(email, password))
       .then(user =>
         createUserSuccess(
           dispatch,
@@ -294,15 +430,14 @@ export const createUser = (
 
 const createUserFail = (dispatch, error) => {
   firebase.auth().signOut();
-  let errorMessage;
+  let errMsg;
 
-  if (error.code === "auth/user-not-found")
-    errorMessage = "There is no user record corresponding to this identifier";
-  else if (error.code === "auth/invalid-email") errorMessage = "Enter a valid email";
-  else if (error.code === "auth/wrong-password") errorMessage = "Incorrect credentials";
-  else errorMessage = error.message;
+  if (error.code === "auth/user-not-found") errMsg = "There is no user record corresponding to this identifier";
+  else if (error.code === "auth/invalid-email") errMsg = "Enter a valid email";
+  else if (error.code === "auth/wrong-password") errMsg = "Incorrect credentials";
+  else errMsg = error.message;
 
-  dispatch({ type: ACTIONS.CREATE_USER_FAIL, payload: errorMessage });
+  dispatch({ type: ACTIONS.CREATE_USER_FAIL, payload: errMsg });
 };
 
 const createUserSuccess = (
@@ -373,7 +508,9 @@ const createUserSuccess = (
     .then(() => firebase.auth().signOut())
     .catch(error => alert(error));
 
-  dispatch({ type: ACTIONS.CREATE_USER_SUCCESS });
+  dispatch({
+    type: ACTIONS.CREATE_USER_SUCCESS
+  });
 };
 
 const makePrivileges = (firstName, lastName, id) => {
@@ -445,7 +582,10 @@ export const getPrivilege = () => {
         .database()
         .ref(`/privileges/${currentUser.uid}/`)
         .on("value", snapshot => {
-          dispatch({ type: ACTIONS.GET_PRIVILEGE, payload: snapshot.val() });
+          dispatch({
+            type: ACTIONS.GET_PRIVILEGE,
+            payload: snapshot.val()
+          });
         });
     }
   };
@@ -454,13 +594,17 @@ export const getPrivilege = () => {
 // Login Actions
 const isVerifiedUser = ({ email, password }) => {
   return dispatch => {
-    dispatch({ type: ACTIONS.VERIFIED_USER });
+    dispatch({
+      type: ACTIONS.VERIFIED_USER
+    });
   };
 };
 
 export const resetPassword = ({ email }) => {
   return dispatch => {
-    dispatch({ type: ACTIONS.RESET_PASSWORD });
+    dispatch({
+      type: ACTIONS.RESET_PASSWORD
+    });
 
     firebase
       .auth()
@@ -478,7 +622,9 @@ export const resetPassword = ({ email }) => {
 
 export const loginUser = ({ email, password }) => {
   return dispatch => {
-    dispatch({ type: ACTIONS.LOGIN_USER });
+    dispatch({
+      type: ACTIONS.LOGIN_USER
+    });
 
     firebase
       .auth()
@@ -495,7 +641,10 @@ export const loginUser = ({ email, password }) => {
 };
 
 const loginUserSuccess = (dispatch, user) => {
-  dispatch({ type: ACTIONS.ENTER_APP, payload: user });
+  dispatch({
+    type: ACTIONS.ENTER_APP,
+    payload: user
+  });
 };
 
 export const loadUser = userID => {
@@ -522,22 +671,25 @@ export const loadUser = userID => {
 };
 
 export const loginUserFail = (dispatch, error) => {
-  let errorMessage;
+  let errMsg;
 
-  if (error.code === "auth/user-not-found")
-    errorMessage = "There is no user record corresponding to this identifier";
-  else if (error.code === "auth/invalid-email") errorMessage = "Enter a valid email";
-  else if (error.code === "auth/wrong-password") errorMessage = "Incorrect credentials";
-  else if (error.code === "auth/network-request-failed")
-    errorMessage = "Network error. Check your Internet connectivity.";
-  else errorMessage = error.message;
+  if (error.code === "auth/user-not-found") errMsg = "There is no user record corresponding to this identifier";
+  else if (error.code === "auth/invalid-email") errMsg = "Enter a valid email";
+  else if (error.code === "auth/wrong-password") errMsg = "Incorrect credentials";
+  else if (error.code === "auth/network-request-failed") errMsg = "Network error. Check your Internet connectivity.";
+  else errMsg = error.message;
 
-  dispatch({ type: ACTIONS.LOGIN_USER_FAIL, payload: errorMessage });
+  dispatch({
+    type: ACTIONS.LOGIN_USER_FAIL,
+    payload: errMsg
+  });
 };
 
 export const logoutUser = () => {
   return dispatch => {
-    dispatch({ type: ACTIONS.LOGOUT_USER });
+    dispatch({
+      type: ACTIONS.LOGOUT_USER
+    });
 
     firebase
       .auth()
@@ -549,28 +701,36 @@ export const logoutUser = () => {
 
 export const goToResetPassword = () => {
   return dispatch => {
-    dispatch({ type: ACTIONS.GO_TO_RESET_PASSWORD });
+    dispatch({
+      type: ACTIONS.GO_TO_RESET_PASSWORD
+    });
     Actions.resetPassword();
   };
 };
 
 export const goToLogIn = () => {
   return dispatch => {
-    dispatch({ type: ACTIONS.GO_TO_LOGIN });
+    dispatch({
+      type: ACTIONS.GO_TO_LOGIN
+    });
     Actions.login();
   };
 };
 
 export const goToProfile = () => {
   return dispatch => {
-    dispatch({ type: ACTIONS.GO_TO_PROFILE });
+    dispatch({
+      type: ACTIONS.GO_TO_PROFILE
+    });
     Actions.profile();
   };
 };
 
 export const goToRegistration = () => {
   return dispatch => {
-    dispatch({ type: ACTIONS.GO_TO_REGISTRATION });
+    dispatch({
+      type: ACTIONS.GO_TO_REGISTRATION
+    });
     Actions.registration();
   };
 };
@@ -578,6 +738,8 @@ export const goToRegistration = () => {
 export const goToEditProfileForm = () => {
   Actions.EditProfileForm();
   return dispatch => {
-    dispatch({ type: ACTIONS.GO_TO_EDIT_PROFILE_FORM });
+    dispatch({
+      type: ACTIONS.GO_TO_EDIT_PROFILE_FORM
+    });
   };
 };

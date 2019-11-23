@@ -26,17 +26,37 @@ export default (state = INITIAL_STATE, action) => {
 
   switch (action.type) {
     case ACTIONS.GET_COMMITTEES:
-      return { ...state, committeesList: payload };
+      return {
+        ...state,
+        committeesList: payload
+      };
     case ACTIONS.GO_TO_COMMITTEE_FORM:
-      return { ...state, title: payload };
+      return {
+        ...state,
+        title: payload
+      };
     case ACTIONS.DELETE_COMMITTEE:
-      return { ...state, chair: "", committeeTitle: "", committeeDescription: "" };
+      return {
+        ...state,
+        chair: "",
+        committeeTitle: "",
+        committeeDescription: ""
+      };
     case ACTIONS.COMMITTEE_TITLE_CHANGED:
-      return { ...state, committeeTitle: payload };
+      return {
+        ...state,
+        committeeTitle: payload
+      };
     case ACTIONS.COMMITTEE_DESCRIPTION_CHANGED:
-      return { ...state, committeeDescription: payload };
+      return {
+        ...state,
+        committeeDescription: payload
+      };
     case ACTIONS.CHAIR_CHANGED:
-      return { ...state, chair: payload };
+      return {
+        ...state,
+        chair: payload
+      };
     // Covers ACTIONS.EDIT_COMMITTEE
     default:
       return state;
@@ -51,14 +71,20 @@ export const getCommittees = () => {
       .on("value", snapshot => {
         const committtees = snapshot.val();
 
-        dispatch({ type: ACTIONS.GET_COMMITTEES, payload: committtees });
+        dispatch({
+          type: ACTIONS.GET_COMMITTEES,
+          payload: committtees
+        });
       });
   };
 };
 
 export const goToCommitteeForm = text => {
   Actions.CommitteeForm();
-  return { type: ACTIONS.GO_TO_COMMITTEE_FORM, payload: text };
+  return {
+    type: ACTIONS.GO_TO_COMMITTEE_FORM,
+    payload: text
+  };
 };
 
 export const addCommittee = (title, description, chair, length) => {
@@ -155,15 +181,24 @@ export const deleteCommittee = (text, chair) => {
 };
 
 export const committeeTitleChanged = text => {
-  return { type: ACTIONS.COMMITTEE_TITLE_CHANGED, payload: text };
+  return {
+    type: ACTIONS.COMMITTEE_TITLE_CHANGED,
+    payload: text
+  };
 };
 
 export const committeeDescriptionChanged = text => {
-  return { type: ACTIONS.COMMITTEE_DESCRIPTION_CHANGED, payload: text };
+  return {
+    type: ACTIONS.COMMITTEE_DESCRIPTION_CHANGED,
+    payload: text
+  };
 };
 
 export const chairChanged = person => {
-  return { type: ACTIONS.CHAIR_CHANGED, payload: person };
+  return {
+    type: ACTIONS.CHAIR_CHANGED,
+    payload: person
+  };
 };
 
 export const changeLevelsCom = committees => {
