@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet, ScrollView } from "react-native";
 import { Card, Avatar } from "react-native-elements";
+import { NavBar } from "../components/general";
+import { Actions } from "react-native-router-flux";
 
 class EBoard extends Component {
   render() {
@@ -8,6 +10,8 @@ class EBoard extends Component {
 
     return (
       <View style={styles.container}>
+        <NavBar title="E-Board" back onBack={() => Actions.pop()} />
+
         <ScrollView style={{ backgroundColor: "#0c0b0b" }}>
           <Card title="Piero Castillo" titleStyle={titleColor} containerStyle={cardContainer}>
             <View style={shpeInfoContainer}>

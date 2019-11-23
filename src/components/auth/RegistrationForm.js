@@ -298,13 +298,7 @@ const { height: D_HEIGHT, width: D_WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#0c0b0b", justifyContent: "flex-end" },
-  formContainerStyle: {
-    flex: 1,
-    marginLeft: 20,
-    marginRight: 20,
-    paddingTop: 30,
-    paddingBottom: 10
-  },
+  formContainerStyle: { flex: 1, marginLeft: 20, marginRight: 20, paddingTop: 30, paddingBottom: 10 },
   headerStyle: {
     flexDirection: "column",
     alignItems: "center",
@@ -315,13 +309,7 @@ const styles = StyleSheet.create({
   headerTextStyle: { fontSize: 22, fontWeight: "bold", color: "white" },
   headerSubtitleStyle: { marginTop: 3, color: "white" },
   underheaderSubtitleStyle: { marginTop: 4, borderBottomColor: "black", borderBottomWidth: 1, width: "100%" },
-  errorTextStyle: {
-    fontSize: 14,
-    alignSelf: "center",
-    color: "red",
-    fontWeight: "bold",
-    padding: 10
-  },
+  errorTextStyle: { fontSize: 14, alignSelf: "center", color: "red", fontWeight: "bold", padding: 10 },
   formButton: { marginTop: 10, marginBottom: 10 },
   logInButton: { fontWeight: "bold", color: "white" },
   logInContainer: { flexDirection: "row", justifyContent: "center", marginTop: 10, marginBottom: 10 },

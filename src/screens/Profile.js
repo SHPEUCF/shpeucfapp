@@ -5,7 +5,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { connect } from "react-redux";
 import { Button, NavBar } from "../components/general";
 import { loadUser, logoutUser, goToEditProfileForm, pageLoad, pictureChanged } from "../ducks";
-import { Text, View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from "react-native";
 import { Avatar } from "react-native-elements";
 import ImagePicker from "react-native-image-crop-picker";
 import RNFetchBlob from "rn-fetch-blob";
@@ -31,39 +31,43 @@ class Profile extends Component {
 
     return (
       <View style={{ flex: 1 }}>
-        <NavBar title="Profile" />
-        {this.renderPicture()}
+        <ScrollView style={{ backgroundColor: "#0c0b0b" }}>
+          <NavBar title="Profile" />
+          {this.renderPicture()}
+          <View style={bioContainer}>
+            <View style={taglineContainer}>
+              <Text style={[itemLabelText, textColor, { flex: 1 }]}>{firstName + " " + lastName}</Text>
+            </View>
+            <View style={fieldContainerStyle}>
+              <Text style={[itemLabelText, textColor]}>Email:</Text>
+              <Text style={[itemValueText, textColor]}>{email}</Text>
+            </View>
+            <View style={fieldContainerStyle}>
+              <Text style={[itemLabelText, textColor]}>Major:</Text>
+              <Text style={[itemValueText, textColor]}>{major}</Text>
+            </View>
+            <TouchableOpacity
+              style={fieldContainerStyle}
+              onPress={() => {
+                Actions.pointsBreakDown();
+              }}>
+              <Text style={[itemLabelText, textColor]}>Points:</Text>
+              <Text style={[itemValueText, textColor]}>{points}</Text>
+            </TouchableOpacity>
 
-        <View style={bioContainer}>
-          <View style={taglineContainer}>
-            <Text style={[itemLabelText, textColor, { flex: 1 }]}>{firstName + " " + lastName}</Text>
+            <View style={taglineContainer}>
+              <Text style={[itemLabelText, textColor, { flex: 1 }]}>(Quote): {quote}</Text>
+            </View>
           </View>
-          <View style={fieldContainerStyle}>
-            <Text style={[itemLabelText, textColor]}>Email:</Text>
-            <Text style={[itemValueText, textColor]}>{email}</Text>
-          </View>
-          <View style={fieldContainerStyle}>
-            <Text style={[itemLabelText, textColor]}>Major:</Text>
-            <Text style={[itemValueText, textColor]}>{major}</Text>
-          </View>
-          <TouchableOpacity
-            style={fieldContainerStyle}
-            onPress={() => {
-              Actions.pointsBreakDown();
-            }}>
-            <Text style={[itemLabelText, textColor]}>Points:</Text>
-            <Text style={[itemValueText, textColor]}>{points}</Text>
-          </TouchableOpacity>
-        </View>
-        {this.renderSocialMedia()}
-        {this.renderButtons()}
+          {this.renderSocialMedia()}
+          {this.renderButtons()}
+        </ScrollView>
       </View>
     );
   }
 
   renderPicture() {
     const { headerInfoContainer } = styles;
-
     const { picture } = this.props;
 
     return (
