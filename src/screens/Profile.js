@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { Button, Spinner, NavBar } from '../components/general'
-import { loadUser, logoutUser, goToEditProfileForm, pageLoad} from '../ducks';
+import { loadUser, logoutUser, goToEditProfileForm, pageLoad, pictureChanged} from '../ducks';
 import { Text, View, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { Avatar, Divider } from 'react-native-elements';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -32,8 +33,7 @@ class Profile extends Component {
 
     return (
       <View style={{flex: 1}}>
-        <Text style={[textColor,]}>Email:</Text>
-        <NavBar title="Profile" back onBack={() => Actions.pop()} />
+        <NavBar title="Profile" />
         {this.renderPicture()}
         
           <View style={bioContainer}>
@@ -79,9 +79,7 @@ class Profile extends Component {
           size = {200}
           rounded
           source={{uri: picture}}
-          title={`${firstName[0]}${lastName[0]}`}
-          onPress={() => alert("Coming Soon") }
-          activeOpacity={0.7}
+          onPress={() => this.openGallery()}
           />
       </View>
     )
@@ -208,7 +206,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderBottomColor: '#e0e6ed22',
     borderBottomWidth: 1,
-    padding: 15,
+    padding: 1,
   },
   textColor: {
     color: '#e0e6ed'
@@ -270,19 +268,19 @@ const styles = StyleSheet.create({
 	},
 });
 
-const mapStateToProps = ({ members, general, user }) => {
-  const { firstName, lastName, email, major, points, picture, quote } = members;
+const mapStateToProps = ({ user, general }) => {
+  const { firstName, lastName, email, major, points, picture, quote, id } = user;
   const { loading } = general;
-  const { privilege } = user;
 
-  return { firstName, lastName, email, major, points, picture, quote, loading };
+  return { firstName, lastName, email, major, points, picture, quote, loading, id };
 };
 
 const mapDispatchToProps = {
   loadUser,
   logoutUser,
   goToEditProfileForm,
-  pageLoad
+  pageLoad,
+  pictureChanged
  };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
