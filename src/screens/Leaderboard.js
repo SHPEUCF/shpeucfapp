@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { NavBar } from '../components/general'
+import { NavBar, FilterPicker } from '../components/general'
 import {
   fetchMembersPoints,
   fetchMemberProfile,
   goToProfile,
   pageLoad,
   getPrivilege,
-  loadUser
+  loadUser,
+  filterChanged
 } from '../ducks';
 import _ from 'lodash';
 import * as Progress from 'react-native-progress';
@@ -31,6 +32,7 @@ class Leaderboard extends Component {
   }
 
   componentWillMount() {
+    this.props.filterChanged("")
     this.props.loadUser()
     this.props.fetchMembersPoints();
   }
@@ -57,15 +59,18 @@ class Leaderboard extends Component {
     return (
       <View style={screenBackground}>
         <NavBar title="Leaderboard" back onBack={() => Actions.pop()} />
-        <FlatList
-            style={{flex: 1}}
-            data={sortedMembers}
-            extraData={this.state}
-            keyExtractor={this._keyExtractor}
-            renderItem={({item, separators}) => (
-            this.renderComponent(item, sortedMembers)
-          )}
-        />
+        <FilterPicker
+              title={"Members"}
+              filter={this.props.filter}
+              type="Searchbar"
+              data={sortedMembers}
+              onChangeText={this.props.filterChanged.bind(this)}
+              placeholder="Find user"
+              itemJSX = {(item) => this.renderComponent(item, sortedMembers)}
+              onSelect={(item) => {
+                  alert(item.firstName)
+                }}
+              />
       </View>
     )
   }
@@ -100,12 +105,12 @@ class Leaderboard extends Component {
         <TouchableOpacity onPress = {() => this.callUser(item.id)}>
           <View style={contentContainerStyle}>
               <View style={containerStyle}>
-              {/* <Image    ***For Profile Picture Update***
-                large
-                rounded
-                style={{alignSelf: 'flex-end', width: dimension.width *.14, height: dimension.height *.085}}
-                source={{uri: picture}}
-                /> */}
+              <Image   
+                    large
+                    rounded
+                    style={{alignSelf: 'flex-end', width: dimension.width *.14, height: dimension.height *.085}}
+                    source={{uri: item.picture}}
+                  />
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <View style={index}>
                     <Text style={textColor} style={indexText}>{item.index}</Text>
@@ -164,7 +169,6 @@ const styles = StyleSheet.create({
   textStyle: {
     color: "#e0e6ed",
     fontSize: 18,
-    paddingBottom: 5,
   },
   contentContainerStyle: {
     margin: 1,
@@ -200,11 +204,12 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = ({ user, members }) => {
+const mapStateToProps = ({ user, members, general }) => {
   const { membersPoints } = members;
   const { picture, id } = user
+  const { filter } = general
 
-  return { membersPoints, id, picture};
+  return { membersPoints, id, picture, filter};
 };
 
 const mapDispatchToProps = {
@@ -213,7 +218,8 @@ const mapDispatchToProps = {
   goToProfile,
   pageLoad,
   getPrivilege,
-  loadUser
+  loadUser,
+  filterChanged
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Leaderboard);

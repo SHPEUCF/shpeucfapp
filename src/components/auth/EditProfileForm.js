@@ -191,7 +191,7 @@ class EditProfileForm extends Component {
       nationality
     } = this.props
 
-    const p1 = (continent !== undefined && continent !== null && continent !== "") ?
+    const p1 = (continent !== undefined && continent !== null && continent !== "" && continent !== "Do not wish to disclose") ?
       (<PickerInput
             title={"Nationality"}
             value={nationality}

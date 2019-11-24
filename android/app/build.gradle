@@ -134,6 +134,7 @@ android {
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
+        missingDimensionStrategy 'react-native-camera', 'general'
     }
     splits {
         abi {
@@ -189,6 +190,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-permissions')
     implementation project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules

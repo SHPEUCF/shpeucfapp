@@ -6,6 +6,8 @@ import { Button, Spinner, NavBar } from '../components/general'
 import { loadUser, logoutUser, goToEditProfileForm, pageLoad} from '../ducks';
 import { Text, View, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { Avatar, Divider } from 'react-native-elements';
+import ImagePicker from 'react-native-image-crop-picker';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const dimension = Dimensions.get('window');
 class Profile extends Component {
@@ -74,7 +76,7 @@ class Profile extends Component {
     return (
       <View style={headerInfoContainer}>
         <Avatar
-          size="xlarge"
+          size = {200}
           rounded
           source={{uri: picture}}
           title={`${firstName[0]}${lastName[0]}`}
@@ -85,6 +87,65 @@ class Profile extends Component {
     )
   }
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      dp: null
+     }
+   }
+
+  openGallery(){
+
+    const Blob = RNFetchBlob.polyfill.Blob
+    const fs = RNFetchBlob.fs
+    window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+    window.Blob = Blob
+    
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      includeBase64: true,
+      compressImageQuality: 0.8,
+      mediaType: 'photo',
+      cropping: true,
+      cropperCircleOverlay: true
+    }).then(image => {
+
+      const imagePath = image.path
+
+      let uploadBlob = null
+
+      const imageRef = firebase.storage().ref("users/profile").child(this.props.id)
+      let mime = 'image/jpg'
+      fs.readFile(imagePath, 'base64')
+        .then((data) => {
+          //console.log(data);
+          return Blob.build(data, { type: `${mime};BASE64` })
+      })
+      .then((blob) => {
+          uploadBlob = blob
+          return imageRef.put(blob, { contentType: mime })
+        })
+        .then(() => {
+          uploadBlob.close()
+          return imageRef.getDownloadURL()
+        })
+        .then((url) => {
+
+          let userData = {}
+          this.props.pictureChanged(url);
+          let obj = {}
+          obj["dp"] = url
+          this.setState(obj)
+
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+
+    })
+
+  }
 
   renderButtons(){
     const {
