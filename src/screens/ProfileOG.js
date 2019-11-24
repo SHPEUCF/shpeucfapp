@@ -3,12 +3,12 @@ import { Actions } from 'react-native-router-flux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { Button, Spinner, NavBar } from '../components/general'
-import { loadUser, logoutUser, goToEditOtherProfileForm, pageLoad} from '../ducks';
+import { loadUser, logoutUser, goToEditProfileForm, pageLoad} from '../ducks';
 import { Text, View, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { Avatar, Divider } from 'react-native-elements';
 
 const dimension = Dimensions.get('window');
-class OtherProfile extends Component {
+class Profile extends Component {
 
   render() {
     return (
@@ -30,8 +30,7 @@ class OtherProfile extends Component {
 
     return (
       <View style={{flex: 1}}>
-        <Text style={[textColor,]}>Email:</Text>
-        <NavBar title="Profile" back onBack={() => Actions.pop()} />
+        <NavBar title="Profile" />
         {this.renderPicture()}
         
           <View style={bioContainer}>
@@ -94,7 +93,7 @@ class OtherProfile extends Component {
       <View style={buttonsContainerStyle}>
           <Button
             title = "EDIT PROFILE"
-            onPress={this.props.goToEditOtherProfileForm.bind(this)}
+            onPress={this.props.goToEditProfileForm.bind(this)}
           />
           <Button
             title = "LOG OUT"
@@ -209,10 +208,9 @@ const styles = StyleSheet.create({
 	},
 });
 
-const mapStateToProps = ({ members, general, user }) => {
-  const { firstName, lastName, email, major, points, picture, quote } = members;
+const mapStateToProps = ({ user, general }) => {
+  const { firstName, lastName, email, major, points, picture, quote } = user;
   const { loading } = general;
-  const { privilege } = user;
 
   return { firstName, lastName, email, major, points, picture, quote, loading };
 };
@@ -220,8 +218,8 @@ const mapStateToProps = ({ members, general, user }) => {
 const mapDispatchToProps = {
   loadUser,
   logoutUser,
-  goToEditOtherProfileForm,
+  goToEditProfileForm,
   pageLoad
  };
 
-export default connect(mapStateToProps, mapDispatchToProps)(OtherProfile);
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

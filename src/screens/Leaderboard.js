@@ -5,7 +5,7 @@ import { NavBar, FilterPicker } from '../components/general'
 import {
   fetchMembersPoints,
   fetchMemberProfile,
-  goToOtherProfile,
+  goToProfile,
   pageLoad,
   getPrivilege,
   loadUser,
@@ -97,8 +97,12 @@ class Leaderboard extends Component {
     // }
 
     // if(item.points !== 0){
+
+  //Member List
+  //action(item.id)
       return (
         // <TouchableOpacity onPress = {() => action(item.id)}>
+        <TouchableOpacity onPress = {() => this.callUser(item.id)}>
           <View style={contentContainerStyle}>
               <View style={containerStyle}>
               <Image   
@@ -127,7 +131,7 @@ class Leaderboard extends Component {
               
               </View>
           </View>
-        // </TouchableOpacity>
+          </TouchableOpacity>
       )
     }
 
@@ -138,7 +142,9 @@ class Leaderboard extends Component {
   callUser(id){
     this.props.pageLoad();
     this.props.fetchMemberProfile(id);
-    this.props.goToOtherProfile();
+    //this.props.goToOtherProfile();
+    Actions.pop();
+    Actions.profile();
   }
   
 }
@@ -209,7 +215,7 @@ const mapStateToProps = ({ user, members, general }) => {
 const mapDispatchToProps = {
   fetchMembersPoints,
   fetchMemberProfile,
-  goToOtherProfile,
+  goToProfile,
   pageLoad,
   getPrivilege,
   loadUser,
