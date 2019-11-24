@@ -48,7 +48,8 @@ class FilterPicker extends Component {
         filter: PropTypes.string,
         iconColor: PropTypes.string,
         onChangeText:  PropTypes.func,
-        type: PropTypes.string
+        type: PropTypes.string,
+        itemJSX: PropTypes.func
     }
 
     clickAction(user, index) {
@@ -70,57 +71,73 @@ class FilterPicker extends Component {
     renderComponent(item, index) {
         if (this.props.type === "Single"){
 
-        const {
-            itemStyle,
-            itemTextStyle
-        } = styles
-
-        let user = item[1]
-
-        var re = new RegExp("^"+this.props.filter, "i");
-
-        if (re.test(`${user.firstName} ${user.lastName}`) ){
-        return(
-            <TouchableOpacity
-            onPress={() => this.clickAction(user, index)}>
-                <View style={[itemStyle, this.props.pickerItemStyle]}>
-                    <Text style={itemTextStyle}>{user.firstName} {user.lastName}</Text>
-                </View>
-            </TouchableOpacity>
-        )
-        }
-
-        }
-
-        else if (this.props.type === "Multiple"){
-            const {
-                filter,
-                pickerItemStyle,
-                excludeData,
-            } = this.props;
-            let user = item[1];
-    
+           
             const {
                 itemStyle,
                 itemTextStyle
             } = styles
-            if(excludeData && excludeData[user.id]) return null;
-    
-            let selected = (this.state.selectedNames[`${user.id}`]) ?
-                { backgroundColor: '#f00' }: {};
-            var re = new RegExp("^"+filter, "i");
-    
+
+            let user = item[1]
+
+            var re = new RegExp("^"+this.props.filter, "i");
+
             if (re.test(`${user.firstName} ${user.lastName}`) ){
             return(
                 <TouchableOpacity
-                onPress={() => this.selectUserAction(user)}>
-                    <View style={[itemStyle, pickerItemStyle, selected]}>
+                onPress={() => this.clickAction(user, index)}>
+                    <View style={[itemStyle, this.props.pickerItemStyle]}>
                         <Text style={itemTextStyle}>{user.firstName} {user.lastName}</Text>
                     </View>
                 </TouchableOpacity>
             )
             }
+            
+
         }
+
+        else if (this.props.type === "Multiple"){
+            
+                const {
+                    filter,
+                    pickerItemStyle,
+                    excludeData,
+                } = this.props;
+                let user = item[1];
+        
+                const {
+                    itemStyle,
+                    itemTextStyle
+                } = styles
+                if(excludeData && excludeData[user.id]) return null;
+        
+                let selected = (this.state.selectedNames[`${user.id}`]) ?
+                    { backgroundColor: '#f00' }: {};
+                var re = new RegExp("^"+filter, "i");
+        
+                if (re.test(`${user.firstName} ${user.lastName}`) ){
+                return(
+                    <TouchableOpacity
+                    onPress={() => this.selectUserAction(user)}>
+                        <View style={[itemStyle, pickerItemStyle, selected]}>
+                            <Text style={itemTextStyle}>{user.firstName} {user.lastName}</Text>
+                        </View>
+                    </TouchableOpacity>
+                )
+                }
+            }
+
+        else if (this.props.type === "Searchbar"){
+            var re = new RegExp("^"+this.props.filter, "i");
+            if (re.test(`${item.firstName} ${item.lastName}`) ){
+                return(
+                <TouchableOpacity onPress={() => this.props.onSelect(item)}>
+                    {this.props.itemJSX(item)}
+                </TouchableOpacity>
+                )
+            }
+
+        }
+        
     }
 
    _keyExtractor = (item, index) => index;
@@ -254,9 +271,35 @@ class FilterPicker extends Component {
 
         }
 
+        else if (this.props.type === "Searchbar") {
+            picker = <View>
+                <View style={modalBackground}>
+                    <View >
+                        <Input
+                        style={[inputStylee, inputStyleee]}
+                        onChangeText={onChangeText}
+                        value={this.props.filter}
+                        />
+                        <View style = {{flex: 2}}>
+                        <FlatList
+                        data={this.props.data}
+                        extraData={this.state}
+                        keyExtractor={this._keyExtractor}
+                        renderItem={({item, index}) => (
+                            this.renderComponent(item, index)
+                        )}
+                        />
+                        </View>
+                    </View>
+                </View>
+          
+        </View>
+
+        }
+
         return (
             <View>
-            {picker}
+             {picker}
             </View>
         )
     };
