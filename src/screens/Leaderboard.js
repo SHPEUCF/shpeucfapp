@@ -101,12 +101,12 @@ class Leaderboard extends Component {
         // <TouchableOpacity onPress = {() => action(item.id)}>
           <View style={contentContainerStyle}>
               <View style={containerStyle}>
-              {/* <Image    ***For Profile Picture Update***
-                large
-                rounded
-                style={{alignSelf: 'flex-end', width: dimension.width *.14, height: dimension.height *.085}}
-                source={{uri: picture}}
-                /> */}
+              <Image   
+                    large
+                    rounded
+                    style={{alignSelf: 'flex-end', width: dimension.width *.14, height: dimension.height *.085}}
+                    source={{uri: item.picture}}
+                  />
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <View style={index}>
                     <Text style={textColor} style={indexText}>{item.index}</Text>
@@ -163,7 +163,6 @@ const styles = StyleSheet.create({
   textStyle: {
     color: "#e0e6ed",
     fontSize: 18,
-    paddingBottom: 5,
   },
   contentContainerStyle: {
     margin: 1,
