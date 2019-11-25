@@ -9,7 +9,13 @@ const Spinner = ({ style, size, color, width, height }) => {
   );
 };
 
-const styles = { spinnerStyle: { flex: 1, justifyContent: "center", alignItems: "center" } };
+const styles = {
+  spinnerStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+};
 
 Spinner.defaultProps = {
   style: styles.spinnerStyle,

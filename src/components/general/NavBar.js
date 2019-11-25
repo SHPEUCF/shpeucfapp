@@ -60,8 +60,15 @@ const styles = StyleSheet.create({
     borderBottomColor: "#fff2",
     height: dimension.height * 0.1
   },
-  tabBarText: { color: "#E0E6ED", fontSize: 20, fontWeight: "bold", paddingLeft: "5%" },
-  childStyle: { paddingRight: "3%" }
+  tabBarText: { 
+    color: "#E0E6ED", 
+    fontSize: 20, 
+    fontWeight: "bold", 
+    paddingLeft: "5%" 
+  },
+  childStyle: { 
+    paddingRight: "3%" 
+  }
 });
 
 export { NavBar };

@@ -88,7 +88,12 @@ class Resources extends Component {
 }
 
 const styles = StyleSheet.create({
-  sectionTitle: { color: "white", fontWeight: "bold", marginTop: 10, marginLeft: 20 }
+  sectionTitle: { 
+    color: "white", 
+    fontWeight: "bold", 
+    marginTop: 10, 
+    marginLeft: 20 
+  }
 });
 
 export { Resources };

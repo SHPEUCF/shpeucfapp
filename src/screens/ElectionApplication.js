@@ -30,7 +30,13 @@ class ElectionApplication extends Component {
     super(props);
   }
 
-  state = { isApplyShow: false, index: null, isListShow: true, applyPos: null, application: "Submit" };
+  state = { 
+    isApplyShow: false, 
+    index: null, 
+    isListShow: true, 
+    applyPos: null,
+    application: "Submit" 
+  };
 
   componentWillMount() {
     this.props.getPositions();
@@ -56,7 +62,8 @@ class ElectionApplication extends Component {
   showApplyPosition() {
     const { applyTitle, applyInput, textColor, textStyle } = styles;
 
-    if (this.state.isApplyShow == false) return null;
+    if (this.state.isApplyShow == false) 
+      return null;
 
     return (
       <View style={{ flex: 1 }}>
@@ -199,8 +206,10 @@ class ElectionApplication extends Component {
         <Button
           title={application}
           onPress={() => {
-            if (application === "Submit") addApplication(firstName, lastName, candidatePlan, applyPos, picture);
-            else editApplication(candidatePlan, applyPos);
+            if (application === "Submit") 
+              addApplication(firstName, lastName, candidatePlan, applyPos, picture);
+            else 
+              editApplication(candidatePlan, applyPos);
             this.setState({ isApplyShow: false, isListShow: true });
           }}
         />
@@ -212,8 +221,10 @@ class ElectionApplication extends Component {
         <Button
           title="Cancel"
           onPress={() => {
-            if (isListShow) Actions.pop();
-            else this.setState({ isApplyShow: false, isListShow: true, applyPos: null });
+            if (isListShow) 
+              Actions.pop();
+            else 
+              this.setState({ isApplyShow: false, isListShow: true, applyPos: null });
           }}
         />
       </View>
@@ -227,8 +238,10 @@ class ElectionApplication extends Component {
         title="Positions"
         back
         onBack={() => {
-          if (isListShow) Actions.pop();
-          else this.setState({ isApplyShow: false, isListShow: true, applyPos: null });
+          if (isListShow) 
+            Actions.pop();
+          else 
+            this.setState({ isApplyShow: false, isListShow: true, applyPos: null });
         }}
       />
     );
@@ -236,29 +249,57 @@ class ElectionApplication extends Component {
 }
 
 const styles = StyleSheet.create({
-  tabBar: {
-    height: dimension.height * 0.1,
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: "#0005"
-  },
-  tabBarText: { color: "#000", fontSize: 20, margin: 20, alignSelf: "center" },
-  applyTitle: { alignSelf: "center", fontSize: 20, fontWeight: "bold" },
-  containerStyle: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "flex-start",
-    paddingVertical: 10,
-    paddingHorizontal: 15
-  },
-  contentStyle: { flex: 1 },
-  textStyle: { fontSize: 18 },
-  textColor: { color: "#e0e6ed" },
-  button: { paddingTop: dimension.height * 0.015, paddingBottom: dimension.height * 0.015, marginBottom: 8 },
-  buttonContainer: { flex: 0.4 },
-  page: { backgroundColor: "#2C3239", flex: 1 },
-  applyInput: { flex: 0.4, textAlignVertical: "top", height: dimension.height * 0.3 }
+  tabBar : {
+   height: dimension.height * .1,
+   backgroundColor: '#fff',
+   borderWidth: 1,
+   borderStyle: "solid",
+   borderColor: "#0005"
+ },
+ tabBarText : {
+   color: '#000',
+   fontSize: 20,
+   margin: 20,
+   alignSelf: "center"
+ },
+ applyTitle: {
+   alignSelf: 'center',
+   fontSize: 20,
+   fontWeight: 'bold'
+ },
+ containerStyle: {
+   flex: 1,
+   justifyContent: 'center',
+   alignItems: 'flex-start',
+   paddingVertical: 10,
+   paddingHorizontal: 15
+ },
+ contentStyle: {
+   flex: 1
+ },
+ textStyle: {
+   fontSize: 18
+ },
+ textColor: {
+   color: '#e0e6ed'
+ },
+ button: {
+   paddingTop: dimension.height * .015,
+   paddingBottom: dimension.height * .015,
+   marginBottom: 8
+ },
+ buttonContainer: {
+   flex: .4
+ },
+ page: {
+   backgroundColor: '#2C3239',
+   flex: 1
+ },
+ applyInput: {
+   flex: .4,
+   textAlignVertical: "top",
+   height: dimension.height * .3
+ }
 });
 
 const mapStateToProps = ({ elect, user }) => {

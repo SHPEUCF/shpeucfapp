@@ -149,11 +149,28 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center"
   },
-  textColor: { color: "#e0e6ed" },
-  tabBarText: { color: "#000", fontSize: 20, margin: 20, alignSelf: "center" },
-  content: { flex: 1, margin: 10 },
-  buttonContainerStyle: { flex: 5, margin: 5, justifyContent: "center" },
-  page: { flex: 1, backgroundColor: "#0c0b0b" }
+  textColor: { 
+    color: "#e0e6ed" 
+  },
+  tabBarText: { 
+    color: "#000", 
+    fontSize: 20, 
+    margin: 20, 
+    alignSelf: "center" 
+  },
+  content: { 
+    flex: 1,
+    margin: 10
+  },
+  buttonContainerStyle: { 
+    flex: 5, 
+    margin: 5, 
+    justifyContent: "center"
+  },
+  page: { 
+    flex: 1, 
+    backgroundColor: "#0c0b0b"
+  }
 });
 
 const mapStateToProps = ({ elect }) => {

@@ -66,44 +66,44 @@ class EditProfileForm extends Component {
     const ucfStudentEmail = new RegExp(/^[A-Za-z0-9._%+-]+@(knights.|)ucf.edu$/i);
 
     if (this.checkPrivilege("eboard")) {
-      if (firstName === "") {
+      if (firstName === "")
         registrationError("Please enter your first name");
-      } else if (lastName === "") {
+      else if (lastName === "") 
         registrationError("Please enter your last name");
-      } else if (email === "") {
+      else if (email === "") 
         registrationError("Please enter your school email");
-      } else if (!ucfStudentEmail.test(email)) {
+      else if (!ucfStudentEmail.test(email)) 
         registrationError('Please use a "knights.ucf.edu", or "ucf.edu" email for registration');
-      } else if (nationality === "") {
+      else if (nationality === "") 
         registrationError("Please enter your country of origin");
-      } else if (birthday === "") {
+      else if (birthday === "") 
         registrationError("Please enter your date of birth");
-      } else if (college === "") {
+      else if (college === "") 
         registrationError("Please enter college");
-      } else if (major === "") {
+      else if (major === "") 
         registrationError("Please enter major");
-      } else {
+      else {
         editUser(firstName, lastName, email, college, major, quote, continent, nationality, gender, birthday);
         Actions.replace("profile");
       }
-    } else if (college === "") {
+    }
+    else if (college === "") 
       registrationError("Please enter college");
-    } else if (major === "") {
+    else if (major === "") 
       registrationError("Please enter major");
-    } else {
+    else {
       editUser(firstName, lastName, email, college, major, quote, continent, nationality, gender, birthday);
       Actions.replace("profile");
     }
   }
 
   renderError() {
-    if (this.props.error) {
+    if (this.props.error)
       return (
         <View>
           <Text style={styles.errorTextStyle}>{this.props.error}</Text>
         </View>
       );
-    }
   }
 
   renderConfirmButton() {
@@ -115,35 +115,33 @@ class EditProfileForm extends Component {
   }
 
   renderButtons() {
-    if (this.props.loading) {
+    if (this.props.loading)
       return (
         <View style={{ marginTop: 40, marginBottom: 20 }}>
           <Spinner />
         </View>
       );
-    }
-    return (
-      <View>
-        {this.renderConfirmButton()}
-        {this.renderCancelButton()}
-      </View>
-    );
+    else
+      return (
+        <View>
+          {this.renderConfirmButton()}
+          {this.renderCancelButton()}
+        </View>
+      );
   }
   renderCollegePickers() {
     const { college, collegeChanged, major, majorChanged } = this.props;
 
-    const p1 =
-      college !== undefined && college !== null && college !== "" ? (
-        <PickerInput
+    const p1 = (college !== undefined && college !== null && college !== "") ? 
+      (<PickerInput
           title={"Major"}
           value={major}
           data={majorNames[college]}
           placeholder={"Select major"}
           onSelect={text => majorChanged(text)}
-        />
-      ) : (
-        <View></View>
-      );
+        />) 
+      : 
+      (<View></View>);
 
     return (
       <View>
@@ -162,18 +160,16 @@ class EditProfileForm extends Component {
   renderCountryPickers() {
     const { continent, continentChanged, nationalityChanged, nationality } = this.props;
 
-    const p1 =
-      continent !== undefined && continent !== null && continent !== "" ? (
-        <PickerInput
+    const p1 = (continent !== undefined && continent !== null && continent !== "") ? 
+      (<PickerInput
           title={"Nationality"}
           value={nationality}
           data={countries[continent]}
           placeholder={"Select country of origin"}
           onSelect={text => nationalityChanged(text)}
-        />
-      ) : (
-        <View></View>
-      );
+        />)
+      : 
+      (<View></View>);
 
     return (
       <View>
@@ -202,6 +198,7 @@ class EditProfileForm extends Component {
       birthday,
       birthDateChanged
     } = this.props;
+
     if (this.checkPrivilege("eboard")) {
       return (
         <View>
@@ -232,18 +229,16 @@ class EditProfileForm extends Component {
   renderPickers() {
     const { college, collegeChanged, majorChanged } = this.props;
 
-    const p1 =
-      college !== undefined && college !== null && college !== "" ? (
-        <PickerInput
+    const p1 = (college !== undefined && college !== null && college !== "") ? 
+      (<PickerInput
           title={"Colleges"}
           value={this.props.major}
           data={majorNames[college]}
           placeholder={"Select College"}
           onSelect={text => majorChanged(text)}
-        />
-      ) : (
-        <View></View>
-      );
+        />) 
+      : 
+      (<View></View>);
 
     return (
       <View>
@@ -300,7 +295,11 @@ class EditProfileForm extends Component {
 const { height: D_HEIGHT, width: D_WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#2C3239", justifyContent: "flex-end" },
+  container: { 
+    flex: 1, 
+    backgroundColor: "#2C3239", 
+    justifyContent: "flex-end" 
+  },
   formContainerStyle: {
     flex: 1,
     marginLeft: 20,
@@ -315,7 +314,11 @@ const styles = StyleSheet.create({
     padding: 5,
     marginBottom: 10
   },
-  headerTextStyle: { fontSize: 22, fontWeight: "bold", color: "#e0e6ed" },
+  headerTextStyle: { 
+    fontSize: 22, 
+    fontWeight: "bold", 
+    color: "#e0e6ed" 
+  },
   errorTextStyle: {
     fontSize: 14,
     alignSelf: "center",
@@ -323,9 +326,20 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     padding: 10
   },
-  formButton: { marginTop: 10, marginBottom: 10 },
-  logInButton: { fontWeight: "bold", color: "#000" },
-  logInContainer: { flexDirection: "row", justifyContent: "center", marginTop: 10, marginBottom: 10 },
+  formButton: { 
+    marginTop: 10, 
+    marginBottom: 10 
+  },
+  logInButton: { 
+    fontWeight: "bold", 
+    color: "#000"
+  },
+  logInContainer: { 
+    flexDirection: "row", 
+    justifyContent: "center", 
+    marginTop: 10, 
+    marginBottom: 10 
+  },
   blackText: { color: "black" },
   quoteBox: {
     height: 100,
@@ -335,8 +349,18 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 25
   },
-  pickerTextInput: { flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center" },
-  scrollView: { flex: 0, paddingTop: 10, paddingBottom: 10, paddingRight: 10 }
+  pickerTextInput: { 
+    flex: 1, 
+    flexDirection: "row", 
+    justifyContent: "center", 
+    alignItems: "center" 
+  },
+  scrollView: { 
+    flex: 0, 
+    paddingTop: 10, 
+    paddingBottom: 10, 
+    paddingRight: 10 
+  }
 });
 
 const mapStateToProps = ({ user }) => {

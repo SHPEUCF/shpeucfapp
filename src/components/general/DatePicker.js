@@ -50,15 +50,19 @@ class DatePicker extends Component {
     if (item === 2) {
       if (year != 0 && this.leapYear(year)) {
         this.setState({ dayArr: Array.from({ length: 29 }, (v, k) => k + 1) });
-        if (day > 29) this.setState({ day: 29 });
+        if (day > 29) 
+          this.setState({ day: 29 });
       } else {
         this.setState({ dayArr: Array.from({ length: 28 }, (v, k) => k + 1) });
-        if (day > 28) this.setState({ day: 28 });
+        if (day > 28) 
+          this.setState({ day: 28 });
       }
     }
+
     if (Month30[item]) {
       this.setState({ dayArr: Array.from({ length: 30 }, (v, k) => k + 1) });
-      if (day > 30) this.setState({ day: 30 });
+      if (day > 30) 
+        this.setState({ day: 30 });
     } else if (item !== 2) {
       this.setState({ dayArr: Array.from({ length: 31 }, (v, k) => k + 1) });
     }
@@ -72,7 +76,8 @@ class DatePicker extends Component {
 
     this.setState({ day: item });
 
-    if (month !== "" && year !== "") this.update({ day: item, month: month, year: year });
+    if (month !== "" && year !== "") 
+      this.update({ day: item, month: month, year: year });
   }
 
   clickActionYear(item) {
@@ -81,10 +86,12 @@ class DatePicker extends Component {
 
     if (month === "2" && this.leapYear(item)) {
       this.setState({ dayArr: Array.from({ length: 29 }, (v, k) => k + 1) });
-      if (day > 29) this.setState({ day: "29" });
+      if (day > 29) 
+        this.setState({ day: "29" });
     }
 
-    if (month !== "" && day !== "") this.update({ day: day, month: month, year: item });
+    if (month !== "" && day !== "") 
+      this.update({ day: day, month: month, year: item });
   }
 
   _keyExtractor = (item, index) => index;
@@ -156,19 +163,41 @@ class DatePicker extends Component {
 DatePicker.defaultProps = { placeholder: "Choose a Date" };
 
 const styles = {
-  titleStyle: { flex: 0.13, alignSelf: "center", fontSize: 20 },
-  buttonStyle: { flex: 1, alignSelf: "center" },
-  fieldContainer: { flex: 1, flexDirection: "row", alignItems: "center" },
-  style: { flex: 1, width: 130 },
-  inputBoxStyle: { flex: 0.42, borderRadius: 15, margin: 5, padding: 7 },
-  dropDownArrowStyle: { flex: 0.3, paddingLeft: 0 },
+  titleStyle: {
+    flex: .13,
+    alignSelf: 'center',
+    fontSize: 20
+  },
+  buttonStyle: {
+    flex: 1,
+    alignSelf: 'center'
+  },
+  fieldContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  style: {
+    flex: 1,
+    width: 130
+  },
+  inputBoxStyle: {
+    flex: .42,
+    borderRadius: 15,
+    margin: 5,
+    padding: 7
+  },
+  dropDownArrowStyle: {
+    flex: .3,
+    paddingLeft: 0
+  },
   datePickerStyle: {
     flex: 1,
-    color: "#000",
+    color: '#000',
     fontSize: 16,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 25,
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 8,
     marginBottom: 8
   }

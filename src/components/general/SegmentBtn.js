@@ -8,7 +8,8 @@ class SegmentBtn extends Component {
 
   renderScreenView() {
     if (this.state.toggle) {
-      if (this.props.screen1 != null) return <View style={{ flex: 1 }}>{this.props.screen1}</View>;
+      if (this.props.screen1 != null) 
+        return <View style={{ flex: 1 }}>{this.props.screen1}</View>;
       else
         return (
           <View style={{ flex: 1, justifyContent: "center", backgroundColor: "#96e4ff" }}>
@@ -18,7 +19,8 @@ class SegmentBtn extends Component {
           </View>
         );
     } else {
-      if (this.props.screen2 != null) return <View style={{ flex: 1 }}>{this.props.screen2}</View>;
+      if (this.props.screen2 != null) 
+        return <View style={{ flex: 1 }}>{this.props.screen2}</View>;
       else
         return (
           <View style={{ flex: 1, backgroundColor: "#ffc196", justifyContent: "center", alignItems: "center" }}>

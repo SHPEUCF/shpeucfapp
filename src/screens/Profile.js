@@ -101,14 +101,10 @@ class Profile extends Component {
 
       let uploadBlob = null;
 
-      const imageRef = firebase
-        .storage()
-        .ref("users/profile")
-        .child(this.props.id);
+      const imageRef = firebase.storage().ref("users/profile").child(this.props.id);
       let mime = "image/jpg";
       fs.readFile(imagePath, "base64")
         .then(data => {
-          //console.log(data);
           return Blob.build(data, { type: `${mime};BASE64` });
         })
         .then(blob => {

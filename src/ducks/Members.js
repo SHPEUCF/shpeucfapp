@@ -262,17 +262,14 @@ export const quoteChangedMember = text => {
 
 export const fetchMembersPoints = () => {
   return dispatch => {
-    firebase
-      .database()
-      .ref(`/points`)
-      .on("value", snapshot => {
-        const membersPoints = snapshot.val();
+    firebase.database().ref(`/points`).on("value", snapshot => {
+            const membersPoints = snapshot.val();
 
-        dispatch({
-          type: ACTIONS.FETCH_MEMBERS_POINTS,
-          payload: membersPoints
-        });
-      });
+            dispatch({
+              type: ACTIONS.FETCH_MEMBERS_POINTS,
+              payload: membersPoints
+            });
+    });
   };
 };
 
@@ -282,19 +279,17 @@ export const fetchMemberProfile = userID => {
 
   return dispatch => {
     if (currentUser != null) {
-      firebase
-        .database()
-        .ref(`/users/${id}/`)
-        .on("value", snapshot => {
-          dispatch({
-            type: ACTIONS.FETCH_MEMBER_PROFILE,
-            payload: snapshot.val()
-          });
-          dispatch({
-            type: ACTIONS.PAGE_LOAD,
-            payload: false
-          });
-        });
+      firebase.database().ref(`/users/${id}/`).on("value", snapshot => {
+              dispatch({
+                type: ACTIONS.FETCH_MEMBER_PROFILE,
+                payload: snapshot.val()
+              });
+
+              dispatch({
+                type: ACTIONS.PAGE_LOAD,
+                payload: false
+              });
+      });
     }
   };
 };
@@ -312,43 +307,34 @@ export const editMember = (
   date_birthU
 ) => {
   return dispatch => {
-    firebase
-      .database()
-      .ref(`/users/${idU}/`)
-      .update({
-        firstName: firstNameU,
-        lastName: lastNameU,
-        email: emailU,
-        college: collegeU,
-        major: majorU,
-        points: pointsU,
-        quote: quoteU,
-        nationality: nationalityU,
-        date_of_birth: date_birthU
+    firebase.database().ref(`/users/${idU}/`).update({
+            firstName: firstNameU,
+            lastName: lastNameU,
+            email: emailU,
+            college: collegeU,
+            major: majorU,
+            points: pointsU,
+            quote: quoteU,
+            nationality: nationalityU,
+            date_of_birth: date_birthU
+    })
+    .then(() => {
+        firebase.database().ref(`/points/${idU}/`).update({
+                firstName: firstNameU,
+                lastName: lastNameU,
+                points: pointsU
+          })
       })
-      .then(() =>
-        firebase
-          .database()
-          .ref(`/points/${idU}/`)
-          .update({
-            firstName: firstNameU,
-            lastName: lastNameU,
-            points: pointsU
+      .then(() => {
+          firebase.database().ref(`/privileges/${idU}/`).update({
+                firstName: firstNameU,
+                lastName: lastNameU,
+                user: true,
+                board: false,
+                eboard: false,
+                president: false
           })
-      )
-      .then(() =>
-        firebase
-          .database()
-          .ref(`/privileges/${idU}/`)
-          .update({
-            firstName: firstNameU,
-            lastName: lastNameU,
-            user: true,
-            board: false,
-            eboard: false,
-            president: false
-          })
-      )
+      })
       .then(() => Alert.alert("Account Updated"));
 
     dispatch({ type: ACTIONS.EDIT_MEMBER });
@@ -358,28 +344,16 @@ export const editMember = (
 export const assignPosition = (title, types, id, oldChair) => {
   return dispatch => {
     if (oldChair) {
-      firebase
-        .database()
-        .ref(`/users/${oldChair.id}/${types}`)
-        .remove()
-        .then(() =>
-          firebase
-            .database()
-            .ref(`/privileges/${oldChair.id}/`)
-            .update({ [types]: false })
-        );
+      firebase.database().ref(`/users/${oldChair.id}/${types}`).remove()
+      .then(() => {
+          firebase.database().ref(`/privileges/${oldChair.id}/`).update({ [types]: false })
+      });
     }
 
-    firebase
-      .database()
-      .ref(`/users/${id}/`)
-      .update({ [types]: title })
-      .then(() =>
-        firebase
-          .database()
-          .ref(`/privileges/${id}/`)
-          .update({ [types]: true })
-      );
+    firebase.database().ref(`/users/${id}/`).update({ [types]: title })
+    .then(() => {
+        firebase.database().ref(`/privileges/${id}/`).update({ [types]: true })
+    });
 
     dispatch({
       type: ACTIONS.ASSIGN_POSITION
@@ -389,15 +363,12 @@ export const assignPosition = (title, types, id, oldChair) => {
 
 export const fetchAllUsers = () => {
   return dispatch => {
-    firebase
-      .database()
-      .ref(`/users/`)
-      .on("value", snapshot => {
-        dispatch({
-          type: ACTIONS.FETCH_ALL_USERS,
-          payload: snapshot.val()
-        });
-      });
+    firebase.database().ref(`/users/`).on("value", snapshot => {
+            dispatch({
+              type: ACTIONS.FETCH_ALL_USERS,
+              payload: snapshot.val()
+            });
+    });
   };
 };
 

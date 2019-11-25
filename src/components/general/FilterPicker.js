@@ -9,11 +9,17 @@ const dimension = Dimensions.get("window");
 class FilterPicker extends Component {
   constructor(props) {
     super(props);
-    this.state = { text: this.props.value, modalVisible: false, filterOn: false, selectedNames: {} };
+    this.state = { 
+      text: this.props.value, 
+      modalVisible: false, 
+      filterOn: false, 
+      selectedNames: {} 
+    };
   }
 
   componentDidMount() {
-    if (this.props.type === "Multiple") this.setState({ modalVisible: true });
+    if (this.props.type === "Multiple") 
+      this.setState({ modalVisible: true });
   }
 
   static propTypes = {
@@ -70,7 +76,8 @@ class FilterPicker extends Component {
       let user = item[1];
 
       const { itemStyle, itemTextStyle } = styles;
-      if (excludeData && excludeData[user.id]) return null;
+      if (excludeData && excludeData[user.id]) 
+        return null;
 
       let selected = this.state.selectedNames[`${user.id}`] ? { backgroundColor: "#f00" } : {};
       re = new RegExp("^" + filter, "i");
@@ -217,28 +224,47 @@ FilterPicker.defaultProps = {
 const styles = {
   itemStyle: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-    borderBottomColor: "#0002",
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    borderBottomColor: '#0002',
     borderBottomWidth: 1
   },
   itemTextStyle: {
-    paddingTop: dimension.height * 0.03,
-    paddingBottom: dimension.height * 0.03,
+    paddingTop: dimension.height * .03,
+    paddingBottom: dimension.height * .03,
     flex: 1,
     fontSize: 16,
-    alignSelf: "center"
+    alignSelf:'center'
   },
-  titleStyle: { flex: 0.13, alignSelf: "center", fontSize: 20 },
-  buttonStyle: { flex: 1, alignSelf: "center" },
-  flatlistStyle: { flex: 1.5 },
-  buttonContainer: { flex: 0.3, flexDirection: "row", borderTopColor: "#0001", borderTopWidth: 1 },
-  textStyle: { flex: 1, alignSelf: "center", fontSize: 18, paddingTop: dimension.height * 0.03 },
+  titleStyle: {
+    flex: .13,
+    alignSelf: 'center',
+    fontSize: 20
+  },
+  buttonStyle: {
+    flex: 1,
+    alignSelf: 'center'
+  },
+  flatlistStyle: {
+    flex: 1.5
+  },
+  buttonContainer:{
+    flex:.3,
+    flexDirection: 'row',
+    borderTopColor: '#0001',
+    borderTopWidth: 1
+  },
+  textStyle:{
+    flex: 1,
+    alignSelf: 'center',
+    fontSize: 18,
+    paddingTop: dimension.height * .03
+  },
   modalBackground: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#0003",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#0003',
     margin: 0,
     height: dimension.height,
     width: dimension.width
@@ -246,22 +272,30 @@ const styles = {
   modalStyle: {
     height: dimension.height,
     width: dimension.width,
-    backgroundColor: "#fff",
+    backgroundColor:'#fff',
     padding: 12,
     borderRadius: 12
   },
-  inputStyle: { flex: 1 },
-  inputStylee: { flex: 0.1 },
-  iconStyle: { flex: 0.2, paddingLeft: 10, alignSelf: "center" },
+  inputStyle:{
+    flex: 1
+  },
+  inputStylee:{
+    flex: .1
+  },
+  iconStyle: {
+    flex: .2,
+    paddingLeft: 10,
+    alignSelf: 'center'
+  },
   inputStyleee: {
-    alignSelf: "center",
+    alignSelf: 'center',
     width: dimension.width,
-    color: "#000",
+    color: '#000',
     fontSize: 16,
     marginTop: 8,
     marginBottom: 8,
     padding: 15,
-    backgroundColor: "#DCDCDC",
+    backgroundColor: '#DCDCDC',
     borderRadius: 0
   }
 };

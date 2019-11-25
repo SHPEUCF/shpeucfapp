@@ -251,46 +251,63 @@ class ElectionBallot extends Component {
 }
 
 const styles = StyleSheet.create({
-  tabBar: {
-    height: dimension.height * 0.1,
-    backgroundColor: "#fff",
+  tabBar : {
+    height: dimension.height * .1,
+    backgroundColor: '#fff',
     borderWidth: 1,
     borderStyle: "solid",
     borderColor: "#0005"
   },
-  tabBarText: { color: "#000", fontSize: 20, margin: 20, alignSelf: "center" },
-  textColor: { color: "#e0e6ed" },
-  textStyle: { fontWeight: "bold", fontSize: 18 },
-  page: { backgroundColor: "#0c0b0b", flex: 1 },
-  tab: {
-    flexDirection: "row",
-    paddingTop: 24,
-    paddingBottom: 12,
-    borderBottomWidth: 2,
-    borderColor: "lightgrey",
-    width: dimension.width * 1,
-    alignItems: "center",
-    justifyContent: "center"
+  tabBarText : {
+    color: '#000',
+    fontSize: 20,
+    margin: 20,
+    alignSelf: "center"
   },
-  contentStyle: { flex: 0.98 },
+  textColor: {
+    color: '#e0e6ed'
+  },
+  textStyle: {
+    fontWeight: 'bold',
+    fontSize: 18
+  },
+  page: {
+    backgroundColor: '#0c0b0b',
+    flex: 1
+  },
+  tab: {
+    flexDirection: 'row',
+    paddingTop:24,
+    paddingBottom:12,
+    borderBottomWidth: 2,
+    borderColor:'lightgrey',
+    width: dimension.width *1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  contentStyle: {
+    flex: .98
+  },
   button: {
-    paddingTop: dimension.height * 0.015,
-    paddingBottom: dimension.height * 0.015,
+    paddingTop: dimension.height * .015,
+    paddingBottom: dimension.height * .015,
     marginBottom: 8
   },
-  buttonContainer: { flex: 0.2 },
+  buttonContainer: {
+    flex: .2
+  },
   candidateContainer: {
     flex: 1,
-    backgroundColor: "#2C3239",
+    backgroundColor: '#2C3239',
     padding: 20,
     borderBottomWidth: 1,
-    borderColor: "#e0e6ed22"
+    borderColor: '#e0e6ed22'
   },
   container: {
     flex: 1,
-    backgroundColor: "#2C3239",
+    backgroundColor: '#2C3239',
     borderBottomWidth: 1,
-    borderColor: "#e0e6ed",
+    borderColor: '#e0e6ed',
     padding: 10,
     paddingTop: 20,
     paddingBottom: 20
@@ -298,11 +315,11 @@ const styles = StyleSheet.create({
   headerInfoContainer: {
     paddingTop: 15,
     paddingBottom: 15,
-    flex: 0.6,
-    backgroundColor: "#2C3239",
-    alignItems: "center",
-    justifyContent: "center",
-    borderBottomColor: "#e0e6ed22",
+    flex: .6,
+    backgroundColor: '#2C3239',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomColor: '#e0e6ed22',
     borderBottomWidth: 1,
     padding: 1
   }

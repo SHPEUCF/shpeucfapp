@@ -8,7 +8,8 @@ class TimePicker extends Component {
   constructor(props) {
     super(props);
     let time = [];
-    if (this.props.value !== undefined && this.props.value !== null) time = this.props.value.split(":");
+    if (this.props.value !== undefined && this.props.value !== null)
+      time = this.props.value.split(":");
 
     this.state = {
       hour: time.length === 3 ? time[0] : "",
@@ -41,20 +42,23 @@ class TimePicker extends Component {
     item = this.prepend0(item);
     const { minute, period } = this.state;
     this.setState({ hour: item });
-    if (minute !== "" && period !== "") this.update({ hour: item, minute: minute, period: period });
+    if (minute !== "" && period !== "") 
+      this.update({ hour: item, minute: minute, period: period });
   }
 
   clickActionMinute(item) {
     item = this.prepend0(item);
     const { hour, period } = this.state;
     this.setState({ minute: item });
-    if (hour !== "" && period !== "") this.update({ hour: hour, minute: item, period: period });
+    if (hour !== "" && period !== "") 
+      this.update({ hour: hour, minute: item, period: period });
   }
 
   clickActionPeriod(item) {
     const { hour, minute } = this.state;
     this.setState({ period: item });
-    if (hour !== "" && minute !== "") this.update({ hour: hour, minute: minute, period: item });
+    if (hour !== "" && minute !== "") 
+      this.update({ hour: hour, minute: minute, period: item });
   }
 
   _keyExtractor = (item, index) => index;
@@ -126,22 +130,44 @@ class TimePicker extends Component {
 TimePicker.defaultProps = { placeholder: "Choose a Time" };
 
 const styles = {
-  titleStyle: { flex: 0.13, alignSelf: "center", fontSize: 20 },
-  buttonStyle: { flex: 1, alignSelf: "center" },
-  fieldContainer: { flex: 1, flexDirection: "row", alignItems: "center" },
-  style: { flex: 1, width: 130 },
-  inputBoxStyle: { flex: 0.42, borderRadius: 15, margin: 5, padding: 7 },
-  dropDownArrowStyle: { flex: 0.3, paddingLeft: 0 },
+  titleStyle: {
+    flex: .13,
+    alignSelf: 'center',
+    fontSize: 20
+  },
+  buttonStyle: {
+    flex: 1,
+    alignSelf: 'center'
+  },
+  fieldContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  style: {
+    flex: 1,
+    width: 130
+  },
+  inputBoxStyle: {
+    flex: .42,
+    borderRadius: 15,
+    margin: 5,
+    padding: 7
+  },
+  dropDownArrowStyle: {
+    flex: .3,
+    paddingLeft: 0
+  },
   timePickerStyle: {
     flex: 1,
-    color: "#000",
+    color: '#000',
     fontSize: 16,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 25,
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 8,
     marginBottom: 8
   }
-};
+}
 
 export { TimePicker };

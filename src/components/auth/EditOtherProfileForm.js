@@ -72,21 +72,21 @@ class EditProfileForm extends Component {
     const ucfStudentEmail = new RegExp(/^[A-Za-z0-9._%+-]+@(knights.|)ucf.edu$/i);
     const { goBack } = this.props.navigation;
 
-    if (firstName === "") {
+    if (firstName === "") 
       registrationError("Please enter your first name");
-    } else if (lastName === "") {
+    else if (lastName === "") 
       registrationError("Please enter your last name");
-    } else if (email === "") {
+    else if (email === "") 
       registrationError("Please enter your school email");
-    } else if (!ucfStudentEmail.test(email)) {
+    else if (!ucfStudentEmail.test(email)) 
       registrationError('Please use a "knights.ucf.edu", or "ucf.edu" email for registration');
-    } else if (college === "") {
+    else if (college === "") 
       registrationError("Please enter college");
-    } else if (major === "") {
+    else if (major === "") 
       registrationError("Please enter major");
-    } else if (quote === "") {
+    else if (quote === "") 
       registrationError("Please enter a quote");
-    } else {
+    else {
       this.onPointsChange(0);
       editMember(firstName, lastName, email, college, major, points, quote);
       goBack();
@@ -94,13 +94,12 @@ class EditProfileForm extends Component {
   }
 
   renderError() {
-    if (this.props.error) {
+    if (this.props.error)
       return (
         <View>
           <Text style={styles.errorTextStyle}>{this.props.error}</Text>
         </View>
       );
-    }
   }
 
   renderConfirmButton() {
@@ -113,19 +112,19 @@ class EditProfileForm extends Component {
   }
 
   renderButtons() {
-    if (this.props.loading) {
+    if (this.props.loading)
       return (
         <View style={{ marginTop: 40, marginBottom: 20 }}>
           <Spinner />
         </View>
       );
-    }
-    return (
-      <View>
-        {this.renderConfirmButton()}
-        {this.renderCancelButton()}
-      </View>
-    );
+    else 
+      return (
+        <View>
+          {this.renderConfirmButton()}
+          {this.renderCancelButton()}
+        </View>
+      );
   }
 
   showPicker1 = () => {
@@ -266,7 +265,11 @@ class EditProfileForm extends Component {
 const { height: D_HEIGHT, width: D_WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#E1E1E1", justifyContent: "flex-end" },
+  container: { 
+    flex: 1, 
+    backgroundColor: "#E1E1E1", 
+    justifyContent: "flex-end"
+  },
   formContainerStyle: {
     flex: 1,
     marginLeft: 20,
@@ -281,7 +284,10 @@ const styles = StyleSheet.create({
     padding: 5,
     marginBottom: 10
   },
-  headerTextStyle: { fontSize: 22, fontWeight: "bold" },
+  headerTextStyle: { 
+    fontSize: 22,
+    fontWeight: "bold" 
+  },
   errorTextStyle: {
     fontSize: 14,
     alignSelf: "center",
@@ -289,10 +295,23 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     padding: 10
   },
-  formButton: { marginTop: 10, marginBottom: 10 },
-  logInButton: { fontWeight: "bold", color: "#000" },
-  logInContainer: { flexDirection: "row", justifyContent: "center", marginTop: 10, marginBottom: 10 },
-  blackText: { color: "black" },
+  formButton: { 
+    marginTop: 10,
+    marginBottom: 10 
+  },
+  logInButton: { 
+    fontWeight: "bold", 
+    color: "#000" 
+  },
+  logInContainer: { 
+    flexDirection: "row", 
+    justifyContent: "center", 
+    marginTop: 10, 
+    marginBottom: 10 
+  },
+  blackText: {
+    color: "black"
+  },
   quoteBox: {
     height: 100,
     padding: 15,
@@ -301,8 +320,18 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 25
   },
-  pickerTextInput: { flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center" },
-  scrollView: { flex: 0, paddingTop: 10, paddingBottom: 10, paddingRight: 10 }
+  pickerTextInput: { 
+    flex: 1, 
+    flexDirection: "row", 
+    justifyContent: "center", 
+    alignItems: "center" 
+  },
+  scrollView: {
+    flex: 0, 
+    paddingTop: 10, 
+    paddingBottom: 10, 
+    paddingRight: 10 
+  }
 });
 
 const mapStateToProps = ({ members }) => {

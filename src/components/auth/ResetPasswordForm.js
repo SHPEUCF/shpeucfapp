@@ -46,19 +46,19 @@ class ResetPasswordForm extends Component {
           <Spinner size="large" />
         </View>
       );
-
-    return (
-      <View>
-        {this.ResetPasswordButton()}
-        {this.LogInButton()}
-      </View>
-    );
+    else 
+      return (
+        <View>
+          {this.ResetPasswordButton()}
+          {this.LogInButton()}
+        </View>
+      );
   }
 
   renderContent() {
-    if (this.props.loggedIn) {
+    if (this.props.loggedIn)
       return <Spinner />;
-    } else {
+    else {
       return (
         <View style={styles.container}>
           <View style={styles.formContainerStyle}>
@@ -94,28 +94,59 @@ class ResetPasswordForm extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#0c0b0b", justifyContent: "flex-end" },
-  formContainerStyle: { marginLeft: 20, marginRight: 20, bottom: 90 },
-  headerStyle: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 5,
-    marginBottom: 30
+  container: {
+    flex: 1,
+    backgroundColor: '#0c0b0b',
+    justifyContent: 'flex-end',
   },
-  headerTextStyle: { color: "white", fontSize: 22 },
-  headerSubtitleStyle: { color: "gray", marginTop: 10, marginBottom: 10 },
+  formContainerStyle: {
+    marginLeft: 20,
+    marginRight: 20,
+    bottom: 90,
+  },
+  headerStyle: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 5,
+    marginBottom: 30,
+  },
+  headerTextStyle: {
+		color: 'white',
+    fontSize: 22,
+  },
+	headerSubtitleStyle: {
+		color: 'gray',
+		marginTop: 10,
+		marginBottom: 10
+	},
   errorTextStyle: {
     fontSize: 14,
-    alignSelf: "center",
-    color: "red",
-    fontWeight: "bold",
+    alignSelf: 'center',
+    color: 'red',
+    fontWeight: 'bold',
     padding: 10
   },
-  formButton: { marginTop: 10, marginBottom: 10 },
-  resetPasswordContainer: { flexDirection: "row", justifyContent: "center", marginTop: 10, marginBottom: 10 },
-  loginButton: { color: "#000", flexDirection: "row", justifyContent: "center" },
-  insteadButton: { color: "gray", marginBottom: 20 }
+  formButton: {
+    marginTop: 10,
+    marginBottom: 10
+  },
+  resetPasswordContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 10,
+    marginBottom: 10
+  },
+  loginButton: {
+    color: '#000',
+    flexDirection: 'row',
+    justifyContent: 'center',
+		color: 'white'
+  },
+	insteadButton:{
+		color: 'gray',
+		marginBottom: 20
+	}
 });
 
 const mapStateToProps = ({ user }) => {

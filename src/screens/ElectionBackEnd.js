@@ -126,39 +126,55 @@ class ElectionBackEnd extends Component {
 
 const styles = StyleSheet.create({
   tabBar: {
-    height: dimension.height * 0.1,
-    backgroundColor: "#fff",
+    height: dimension.height * .1,
+    backgroundColor: '#fff',
     borderWidth: 1,
     borderStyle: "solid",
     borderColor: "#0005"
   },
-  tabBarText: { color: "#000", fontSize: 20, margin: 20, alignSelf: "center" },
-  content: { flex: 1, margin: 10 },
+  tabBarText : {
+    color: '#000',
+    fontSize: 20,
+    margin: 20,
+    alignSelf: "center"
+  },
+  content: {
+    flex: 1,
+    margin: 10
+  },
   containerStyle: {
     flex: 25,
-    justifyContent: "center",
-    alignItems: "flex-start",
+    justifyContent: 'center',
+    alignItems: 'flex-start',
     paddingVertical: 10,
     paddingHorizontal: 15
   },
   containerTextStyle: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "flex-start",
-    backgroundColor: "#ffd700",
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    backgroundColor: '#ffd700',
     paddingVertical: 10,
     paddingHorizontal: 15
   },
   contentContainerStyle: {
     margin: 1,
-    height: dimension.height * 0.09,
+    height: dimension.height * .09,
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "center"
+    flexDirection: 'row',
+    justifyContent: 'center'
   },
-  textColor: { color: "#e0e6ed" },
-  buttonContainerStyle: { flex: 5, margin: 5 },
-  page: { flex: 1, backgroundColor: "#2C3239" }
+  textColor: {
+    color: '#e0e6ed'
+  },
+  buttonContainerStyle: {
+    flex: 5,
+    margin: 5
+  },
+  page: {
+    flex: 1,
+    backgroundColor: '#2C3239'
+  }
 });
 
 const mapStateToProps = ({ elect, members }) => {

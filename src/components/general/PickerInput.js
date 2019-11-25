@@ -124,41 +124,66 @@ PickerInput.defaultProps = {
 const styles = {
   itemStyle: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-    borderBottomColor: "#0002",
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    borderBottomColor: '#0002',
     borderBottomWidth: 1
   },
   itemTextStyle: {
-    paddingTop: dimension.height * 0.03,
-    paddingBottom: dimension.height * 0.03,
+    paddingTop: dimension.height * .03,
+    paddingBottom: dimension.height * .03,
     flex: 1,
     fontSize: 16,
-    alignSelf: "center"
+    alignSelf:'center'      
   },
-  titleStyle: { flex: 0.13, alignSelf: "center", fontSize: 20 },
-  buttonStyle: { flex: 1, alignSelf: "center" },
-  flatlistStyle: { flex: 0.8 },
-  buttonContainer: { flex: 0.2, flexDirection: "row", borderTopColor: "#0001", borderTopWidth: 1 },
-  textStyle: { flex: 1, alignSelf: "center", fontSize: 18, paddingTop: 5 },
+  titleStyle: {
+    flex: .13,
+    alignSelf: 'center',
+    fontSize: 20
+  },
+  buttonStyle: {
+    flex: 1,
+    alignSelf: 'center'
+  },
+  flatlistStyle: {
+    flex: .8
+  },
+  buttonContainer:{
+    flex:.2,
+    flexDirection: 'row',
+    borderTopColor: '#0001',
+    borderTopWidth: 1
+  },
+  textStyle:{
+    flex: 1,
+    alignSelf: 'center',
+    fontSize: 18,
+    paddingTop: 5
+  },
   modalBackground: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#0003",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#0003',
     margin: 0,
     height: dimension.height,
     width: dimension.width
   },
   modalStyle: {
-    height: dimension.height * 0.4,
-    width: dimension.width * 0.8,
-    backgroundColor: "#fff",
+    height: dimension.height*.4,
+    width: dimension.width*.8,
+    backgroundColor:'#fff',
     padding: 12,
     borderRadius: 12
   },
-  inputStyle: { flex: 1 },
-  iconStyle: { flex: 0.2, paddingLeft: 10, alignSelf: "center" }
+  inputStyle:{
+    flex: 1
+  },
+  iconStyle: {
+    flex: .2,
+    paddingLeft: 10,
+    alignSelf: 'center'
+  }
 };
 
 export { PickerInput };

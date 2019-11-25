@@ -8,8 +8,23 @@ import { NavBar } from "../components/general";
 const dimension = Dimensions.get("window");
 
 const menuItems = [
-  { title: "Election", icon: "check", screen: "ElectionBackEnd", privilege: "president" },
-  { title: "Committees", icon: "assignment-ind", screen: "CommitteesBackEnd", privilege: "eboard" }
+  {
+    title: 'Election',
+    icon: 'check',
+    screen: 'ElectionBackEnd',
+    privilege: 'president'
+  },
+  // {
+  //   title: 'Statistics',
+  //   icon: 'check',
+  //   screen: 'Statistics'
+  // },
+  {
+    title: 'Committees',
+    icon: 'assignment-ind',
+    screen: 'CommitteesBackEnd',
+    privilege: 'eboard'
+  },
 ];
 
 class BackEnd extends Component {
@@ -36,14 +51,8 @@ class BackEnd extends Component {
 
   renderItem = ({ item }) => {
     const { privilege } = this.props;
-    if (
-      privilege !== null &&
-      privilege !== undefined &&
-      item !== null &&
-      item !== undefined &&
-      privilege[item.privilege] !== undefined &&
-      (!("privilege" in item) || privilege[item.privilege] === true)
-    )
+    if (privilege !== null && privilege !== undefined && item !== null && item !== undefined &&
+      privilege[item.privilege] !== undefined && (!("privilege" in item) || privilege[item.privilege] === true))
       return (
         <ListItem
           containerStyle={{ backgroundColor: "#2C3239", borderBottomColor: "white", borderBottomWidth: 1 }}
@@ -66,8 +75,16 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderColor: "#0005"
   },
-  tabBarText: { color: "#000", fontSize: 20, margin: 20, alignSelf: "center" },
-  page: { flex: 1, backgroundColor: "#2C3239" }
+  tabBarText: { 
+    color: "#000", 
+    fontSize: 20, 
+    margin: 20, 
+    alignSelf: "center" 
+  },
+  page: { 
+    flex: 1,
+    backgroundColor: "#2C3239" 
+  }
 });
 
 const mapStateToProps = ({ user }) => {

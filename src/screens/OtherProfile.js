@@ -151,21 +151,77 @@ class OtherProfile extends Component {
 }
 
 const styles = StyleSheet.create({
-  bottomHalfContainerStyle: { backgroundColor: "rgb(240,240,240)" },
-  headerInfoContainer: { flex: 1, paddingTop: 30, paddingBottom: 50, backgroundColor: "#2C3239" },
-  avatarContainerStyle: { justifyContent: "center", alignItems: "center" },
-  taglineContainer: { alignItems: "center", marginTop: 10 },
-  taglineTextStyle: { fontSize: 16, fontWeight: "600" },
-  contentContainerStyle: { height: dimension.width, flex: 1, marginTop: 20, marginBottom: 20 },
-  contentItemsContainerStyle: { flexDirection: "row", paddingHorizontal: 15, paddingVertical: 15 },
-  itemLabelContainerStyle: { flex: 1, justifyContent: "center" },
-  itemLabelText: { fontSize: 18, fontWeight: "bold", color: "#fff", lineHeight: 26 },
-  itemValueContainerStyle: { flex: 4, justifyContent: "center", alignItems: "flex-start" },
-  itemValueText: { fontSize: 16, fontWeight: "500", color: "#fff", lineHeight: 26 },
-  buttonsContainerStyle: { marginRight: 10, marginLeft: 10 },
-  editButtonContainer: { marginTop: 10, marginBottom: 10 },
-  editLogoContainer: { flex: 1, marginTop: 3, flexDirection: "row", justifyContent: "center" },
-  logOutButtonContainer: { marginTop: 10, marginBottom: 60 }
+  bottomHalfContainerStyle: {
+    backgroundColor: 'rgb(240,240,240)'
+  },
+  headerInfoContainer: {
+    flex: 1,
+    paddingTop: 30,
+    paddingBottom: 50,
+    backgroundColor: '#2C3239'
+  },
+  avatarContainerStyle: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  taglineContainer: {
+    alignItems: 'center',
+    marginTop: 10
+  },
+  taglineTextStyle:{
+    fontSize: 16,
+    fontWeight: '600'
+  },
+  contentContainerStyle: {
+		height: dimension.width,
+    flex: 1,
+    marginTop: 20,
+    marginBottom: 20
+  },
+  contentItemsContainerStyle: {
+    flexDirection: 'row',
+    paddingHorizontal: 15,
+    paddingVertical: 15
+  },
+  itemLabelContainerStyle: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+  itemLabelText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+		color: '#fff',
+		lineHeight: 26
+  },
+  itemValueContainerStyle: {
+    flex: 4,
+    justifyContent: 'center',
+    alignItems: 'flex-start'
+  },
+  itemValueText: {
+    fontSize: 16,
+    fontWeight: '500',
+		color: '#fff',
+		lineHeight: 26
+  },
+  buttonsContainerStyle: {
+    marginRight: 10,
+    marginLeft: 10
+  },
+  editButtonContainer: {
+    marginTop: 10,
+    marginBottom: 10
+  },
+	editLogoContainer: {
+    flex: 1,
+		marginTop: 3,
+		flexDirection: 'row',
+		justifyContent: 'center'
+	},
+  logOutButtonContainer: {
+    marginTop: 10,
+    marginBottom: 60
+  }
 });
 
 const mapStateToProps = ({ members, general, user }) => {

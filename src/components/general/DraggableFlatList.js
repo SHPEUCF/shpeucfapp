@@ -310,13 +310,12 @@ class SortableFlatList extends Component {
     const { activeRow, spacerIndex } = this.state;
     const isSpacerRow = spacerIndex === index;
     const spacerSize =
-      isSpacerRow && this._measurements[activeRow]
-        ? this._measurements[activeRow][horizontal ? "width" : "height"]
-        : 0;
-    const endPadding =
-      index === data.length - 1 &&
-      spacerIndex === data.length &&
-      this._measurements[activeRow][horizontal ? "width" : "height"];
+      (isSpacerRow && this._measurements[activeRow]) ? 
+      this._measurements[activeRow][horizontal ? "width" : "height"] : 0;
+    const endPadding = 
+      (index === data.length - 1 && 
+      spacerIndex === data.length && 
+      this._measurements[activeRow][horizontal ? "width" : "height"]);
     const isActiveRow = activeRow === index;
 
     return (
@@ -419,9 +418,12 @@ class RowItem extends React.PureComponent {
     const { moveEnd, isActiveRow, horizontal, endPadding, renderItem, item, index, setRef } = this.props;
 
     const component = renderItem({ isActive: false, item, index, move: this.move, moveEnd });
+    
     let wrapperStyle = { opacity: 1 };
-    if (horizontal && isActiveRow) wrapperStyle = { width: 0, opacity: 0 };
-    else if (!horizontal && isActiveRow) wrapperStyle = { height: 0, opacity: 0 };
+    if (horizontal && isActiveRow) 
+      wrapperStyle = { width: 0, opacity: 0 };
+    else if (!horizontal && isActiveRow) 
+      wrapperStyle = { height: 0, opacity: 0 };
 
     // Rendering the final row requires padding to be applied at the bottom
     return (
@@ -437,8 +439,21 @@ class RowItem extends React.PureComponent {
 }
 
 const styles = StyleSheet.create({
-  hoverComponentVertical: { position: "absolute", left: 0, right: 0 },
-  hoverComponentHorizontal: { position: "absolute", bottom: 0, top: 0 },
-  wrapper: { flex: 1, opacity: 1 },
-  fullOpacity: { opacity: 1 }
+  hoverComponentVertical: { 
+    position: "absolute", 
+    left: 0,
+    right: 0 
+  },
+  hoverComponentHorizontal: { 
+    position: "absolute",
+    bottom: 0, 
+    top: 0 
+  },
+  wrapper: { 
+    flex: 1, 
+    opacity: 1 
+  },
+  fullOpacity: { 
+    opacity: 1 
+  }
 });

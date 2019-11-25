@@ -45,8 +45,10 @@ class Election extends Component {
         <Button
           title="Vote"
           onPress={() => {
-            if (!this.props.voted) Actions.ElectionBallot();
-            else alert("You already voted!");
+            if (!this.props.voted) 
+              Actions.ElectionBallot();
+            else 
+              alert("You already voted!");
           }}
         />
       );
@@ -72,10 +74,22 @@ class Election extends Component {
 }
 
 const styles = StyleSheet.create({
-  page: { flex: 1, backgroundColor: "#2C3239", paddingBottom: 10 },
-  textStyle: { flex: 0.2, fontSize: 20 },
-  textColor: { color: "#e0e6ed" },
-  content: { flex: 1, padding: 20 }
+  page: {
+    flex: 1,
+    backgroundColor: '#2C3239',
+    paddingBottom: 10
+  },
+  textStyle: {
+    flex: .2,
+    fontSize: 20
+  },
+  textColor: {
+    color: '#e0e6ed'
+  },
+  content: {
+    flex: 1,
+    padding: 20
+  }
 });
 
 const mapStateToProps = ({ elect, user }) => {

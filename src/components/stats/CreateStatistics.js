@@ -67,7 +67,11 @@ class CreateStatistics extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#E1E1E1", justifyContent: "flex-end" },
+  container: { 
+    flex: 1, 
+    backgroundColor: "#E1E1E1", 
+    justifyContent: "flex-end" 
+  },
   formContainerStyle: {
     flex: 1,
     marginLeft: 20,
@@ -82,7 +86,10 @@ const styles = StyleSheet.create({
     padding: 5,
     marginBottom: 10
   },
-  headerTextStyle: { fontSize: 22, fontWeight: "bold" },
+  headerTextStyle: { 
+    fontSize: 22, 
+    fontWeight: "bold" 
+  },
   errorTextStyle: {
     fontSize: 14,
     alignSelf: "center",
@@ -90,8 +97,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     padding: 10
   },
-  pickerTextInput: { flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center" },
-  scrollView: { flex: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 10 }
+  pickerTextInput: { 
+    flex: 1, 
+    flexDirection: "row", 
+    justifyContent: "center", 
+    alignItems: "center" 
+  },
+  scrollView: { 
+    flex: 0, 
+    paddingTop: 0,
+    paddingBottom: 0, 
+    paddingRight: 10 
+  }
 });
 
 const mapStateToProps = ({ members }) => {

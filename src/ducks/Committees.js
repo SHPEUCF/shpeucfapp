@@ -65,17 +65,14 @@ export default (state = INITIAL_STATE, action) => {
 
 export const getCommittees = () => {
   return dispatch => {
-    firebase
-      .database()
-      .ref(`/committees/`)
-      .on("value", snapshot => {
-        const committtees = snapshot.val();
+    firebase.database().ref(`/committees/`).on("value", snapshot => {
+            const committtees = snapshot.val();
 
-        dispatch({
-          type: ACTIONS.GET_COMMITTEES,
-          payload: committtees
-        });
-      });
+            dispatch({
+              type: ACTIONS.GET_COMMITTEES,
+              payload: committtees
+            });
+    });
   };
 };
 
@@ -89,12 +86,14 @@ export const goToCommitteeForm = text => {
 
 export const addCommittee = (title, description, chair, length) => {
   return () => {
-    firebase
-      .database()
-      .ref(`/committees/${title}`)
-      .set({ title: title, description: description, chair: chair, level: length })
-      .then(() => alert("Committee Added!", "Successful"))
-      .catch(error => alert("Committee could not be Added!", "Failure"));
+    firebase.database().ref(`/committees/${title}`).set({ 
+            title: title, 
+            description: description, 
+            chair: chair, 
+            level: length 
+    })
+    .then(() => alert("Committee Added!", "Successful"))
+    .catch(error => alert("Committee could not be Added!", "Failure"));
   };
 };
 
@@ -103,80 +102,63 @@ export const editCommittee = (title, description, chair, oldTitle) => {
     return dispatch => {
       let level;
 
-      firebase
-        .database()
-        .ref(`/committees/${oldTitle}/level`)
-        .once("value", snapshot => {
-          level = snapshot.val();
+      firebase.database().ref(`/committees/${oldTitle}/level`).once("value", snapshot => {
+        level = snapshot.val();
 
-          firebase
-            .database()
-            .ref(`/committees/${oldTitle}`)
-            .remove()
-            .then(() => {
-              dispatch({
-                type: ACTIONS.DELETE_COMMITTEE
-              });
-            })
-            .then(() =>
-              firebase
-                .database()
-                .ref(`/committees/${title}`)
-                .set({ title: title, description: description, chair: chair, level: level })
-            )
-            .then(() => alert("Committee Edited!", "Successful"))
-            .catch(error => {
-              alert("Committee could not be Edited!", "Failure"); // You fuck
+        firebase.database().ref(`/committees/${oldTitle}`).remove()
+        .then(() => {
+            dispatch({
+              type: ACTIONS.DELETE_COMMITTEE
             });
-        });
-    };
-  } else {
-    return dispatch => {
-      firebase
-        .database()
-        .ref(`/committees/${title}`)
-        .update({
-          title: title,
-          description: description,
-          chair: chair
         })
         .then(() => {
-          dispatch({
-            type: ACTIONS.EDIT_COMMITTEE
-          });
+            firebase.database().ref(`/committees/${title}`).set({ 
+                    title: title, 
+                    description: description, 
+                    chair: chair, 
+                    level: level 
+            })
         })
         .then(() => alert("Committee Edited!", "Successful"))
         .catch(error => alert("Committee could not be Edited!", "Failure"));
+      });
+    };
+  } 
+  else {
+    return dispatch => {
+      firebase.database().ref(`/committees/${title}`).update({
+              title: title,
+              description: description,
+              chair: chair
+      })
+      .then(() => {
+          dispatch({
+            type: ACTIONS.EDIT_COMMITTEE
+          });
+      })
+      .then(() => alert("Committee Edited!", "Successful"))
+      .catch(error => alert("Committee could not be Edited!", "Failure"));
     };
   }
 };
 
 export const deleteCommittee = (text, chair) => {
   return dispatch => {
-    firebase
-      .database()
-      .ref(`/users/${chair.id}/board`)
-      .remove()
-      .then(() =>
-        firebase
-          .database()
-          .ref(`/privileges/${chair.id}/`)
-          .update({
-            board: false
-          })
-      );
+    firebase.database().ref(`/users/${chair.id}/board`).remove()
+    .then(() => {
+        firebase.database().ref(`/privileges/${chair.id}/`).update({
+                board: false
+        })
+    });
 
-    firebase
-      .database()
-      .ref(`/committees/${text}`)
-      .remove()
-      .then(() => {
+    firebase.database().ref(`/committees/${text}`).remove()
+    .then(() => {
         dispatch({
           type: ACTIONS.DELETE_COMMITTEE
         });
-      })
-      .then(() => alert("Committee Deleted!", "Successful"))
-      .catch(error => alert("Committee could not be deleted!", "Failure"));
+    })
+    .then(() => alert("Committee Deleted!", "Successful"))
+    .catch(error => alert("Committee could not be deleted!", "Failure"));
   };
 };
 
@@ -203,20 +185,14 @@ export const chairChanged = person => {
 
 export const changeLevelsCom = committees => {
   return () => {
-    firebase
-      .database()
-      .ref(`/committees/`)
-      .once("value", snapshot => {
-        obj = snapshot.val();
-        committees.forEach(function(item, index) {
-          obj[item.committee.title].level = index;
-        });
-        firebase
-          .database()
-          .ref(`/committees/`)
-          .update(obj);
-      })
-      .then(() => alert("Order Set!", "Successful"))
-      .catch(error => alert("Order could not be set!", "Failure"));
+    firebase.database().ref(`/committees/`).once("value", snapshot => {
+          obj = snapshot.val();
+          committees.forEach(function(item, index) {
+            obj[item.committee.title].level = index;
+          });
+          firebase.database().ref(`/committees/`).update(obj);
+    })
+    .then(() => alert("Order Set!", "Successful"))
+    .catch(error => alert("Order could not be set!", "Failure"));
   };
 };

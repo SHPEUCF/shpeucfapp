@@ -333,12 +333,9 @@ export const pictureChanged = text => {
 
   let id = currentUser.uid;
 
-  firebase
-    .database()
-    .ref(`/users/${id}/`)
-    .update({
-      picture: text
-    });
+  firebase.database().ref(`/users/${id}/`).update({
+          picture: text
+  });
 
   return {
     type: ACTIONS.PICTURE_CHANGED,
@@ -372,10 +369,14 @@ export const registrationError = error => {
 const showFirebaseError = (dispatch, error) => {
   let errMsg;
 
-  if (error.code === "auth/user-not-found") errMsg = "There is no user record corresponding to this identifier";
-  else if (error.code === "auth/invalid-email") errMsg = "Enter a valid email";
-  else if (error.code === "auth/wrong-password") errMsg = "Incorrect credentials";
-  else errMsg = error.message;
+  if (error.code === "auth/user-not-found") 
+    errMsg = "There is no user record corresponding to this identifier";
+  else if (error.code === "auth/invalid-email") 
+    errMsg = "Enter a valid email";
+  else if (error.code === "auth/wrong-password") 
+    errMsg = "Incorrect credentials";
+  else 
+    errMsg = error.message;
 
   dispatch({
     type: ACTIONS.SHOW_FIREBASE_ERROR,
@@ -404,10 +405,8 @@ export const createUser = (
       type: ACTIONS.CREATE_USER
     });
 
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(user =>
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(user => {
         createUserSuccess(
           dispatch,
           firstName,
@@ -423,8 +422,8 @@ export const createUser = (
           gender,
           birthday
         )
-      )
-      .catch(error => createUserFail(dispatch, error));
+    })
+    .catch(error => createUserFail(dispatch, error));
   };
 };
 
@@ -432,12 +431,19 @@ const createUserFail = (dispatch, error) => {
   firebase.auth().signOut();
   let errMsg;
 
-  if (error.code === "auth/user-not-found") errMsg = "There is no user record corresponding to this identifier";
-  else if (error.code === "auth/invalid-email") errMsg = "Enter a valid email";
-  else if (error.code === "auth/wrong-password") errMsg = "Incorrect credentials";
-  else errMsg = error.message;
+  if (error.code === "auth/user-not-found") 
+    errMsg = "There is no user record corresponding to this identifier";
+  else if (error.code === "auth/invalid-email") 
+    errMsg = "Enter a valid email";
+  else if (error.code === "auth/wrong-password") 
+    errMsg = "Incorrect credentials";
+  else 
+    errMsg = error.message;
 
-  dispatch({ type: ACTIONS.CREATE_USER_FAIL, payload: errMsg });
+  dispatch({ 
+    type: ACTIONS.CREATE_USER_FAIL, 
+    payload: errMsg 
+  });
 };
 
 const createUserSuccess = (
@@ -459,38 +465,58 @@ const createUserSuccess = (
 
   let id = currentUser.uid;
 
-  firebase
-    .database()
-    .ref(`/users/${id}/`)
-    .set({
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      college: college,
-      major: major,
-      points: points,
-      picture: picture,
-      quote: quote,
-      continent: continent,
-      nationality: nationality,
-      gender: gender,
-      birthday: birthday,
-      id: id,
-      paidMember: false,
-      voted: false,
-      applied: false
-    })
-    .then(() => {
-      firebase
-        .database()
-        .ref(`/points/${id}/`)
-        .set({ firstName: firstName, lastName: lastName, points: points, id: id });
-    })
-    .then(() => {
-      firebase
-        .database()
-        .ref(`/privileges/${id}/`)
-        .set({
+  firebase.database().ref(`/users/${id}/`).set({
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          college: college,
+          major: major,
+          points: points,
+          picture: picture,
+          quote: quote,
+          continent: continent,
+          nationality: nationality,
+          gender: gender,
+          birthday: birthday,
+          id: id,
+          paidMember: false,
+          voted: false,
+          applied: false
+  })
+  .then(() => {
+      firebase.database().ref(`/points/${id}/`).set({ 
+              firstName: firstName, 
+              lastName: lastName, 
+              points: points, 
+              id: id 
+      });
+  })
+  .then(() => {
+      firebase.database().ref(`/privileges/${id}/`).set({
+              firstName: firstName,
+              lastName: lastName,
+              user: true,
+              board: false,
+              eboard: false,
+              president: false,
+              id: id,
+              paidMember: false
+      });
+  })
+  .then(() => {
+      currentUser.sendEmailVerification();
+      alert(`We sent a verification to: ${email}. Please open your email and verify your account`);
+  })
+  .then(() => firebase.auth().signOut())
+  .catch(error => alert(error));
+
+  dispatch({
+    type: ACTIONS.CREATE_USER_SUCCESS
+  });
+};
+
+const makePrivileges = (firstName, lastName, id) => {
+  firebase.database().ref(`/privileges/${id}/`).set({
           firstName: firstName,
           lastName: lastName,
           user: true,
@@ -499,34 +525,7 @@ const createUserSuccess = (
           president: false,
           id: id,
           paidMember: false
-        });
-    })
-    .then(() => {
-      currentUser.sendEmailVerification();
-      alert(`We sent a verification to: ${email}. Please open your email and verify your account`);
-    })
-    .then(() => firebase.auth().signOut())
-    .catch(error => alert(error));
-
-  dispatch({
-    type: ACTIONS.CREATE_USER_SUCCESS
   });
-};
-
-const makePrivileges = (firstName, lastName, id) => {
-  firebase
-    .database()
-    .ref(`/privileges/${id}/`)
-    .set({
-      firstName: firstName,
-      lastName: lastName,
-      user: true,
-      board: false,
-      eboard: false,
-      president: false,
-      id: id,
-      paidMember: false
-    });
 };
 
 export const editUser = (
@@ -543,32 +542,29 @@ export const editUser = (
 ) => {
   const { currentUser } = firebase.auth();
 
-  firebase
-    .database()
-    .ref(`/users/${currentUser.uid}/`)
-    .update({
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      college: college,
-      major: major,
-      quote: quote,
-      continent: continent,
-      nationality: nationality,
-      gender: gender,
-      birthday: birthday
-    })
+  firebase.database().ref(`/users/${currentUser.uid}/`).update({
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          college: college,
+          major: major,
+          quote: quote,
+          continent: continent,
+          nationality: nationality,
+          gender: gender,
+          birthday: birthday
+  })
+  .then(() => {
+      firebase.database().ref(`/points/${currentUser.uid}/`).update({ 
+              firstName: firstName, 
+              lastName: lastName 
+      })
+  })
     .then(() =>
-      firebase
-        .database()
-        .ref(`/points/${currentUser.uid}/`)
-        .update({ firstName: firstName, lastName: lastName })
-    )
-    .then(() =>
-      firebase
-        .database()
-        .ref(`/privileges/${currentUser.uid}/`)
-        .update({ firstName: firstName, lastName: lastName })
+      firebase.database().ref(`/privileges/${currentUser.uid}/`).update({ 
+              firstName: firstName, 
+              lastName: lastName 
+      })
     )
     .then(() => Alert.alert("Account Updated"));
 };
@@ -578,15 +574,12 @@ export const getPrivilege = () => {
 
   return dispatch => {
     if (currentUser != null) {
-      firebase
-        .database()
-        .ref(`/privileges/${currentUser.uid}/`)
-        .on("value", snapshot => {
-          dispatch({
-            type: ACTIONS.GET_PRIVILEGE,
-            payload: snapshot.val()
-          });
-        });
+      firebase.database().ref(`/privileges/${currentUser.uid}/`).on("value", snapshot => {
+              dispatch({
+                type: ACTIONS.GET_PRIVILEGE,
+                payload: snapshot.val()
+              });
+      });
     }
   };
 };
@@ -606,17 +599,15 @@ export const resetPassword = ({ email }) => {
       type: ACTIONS.RESET_PASSWORD
     });
 
-    firebase
-      .auth()
-      .sendPasswordResetEmail(email)
-      .then(() =>
+    firebase.auth().sendPasswordResetEmail(email)
+    .then(() => {
         Alert.alert(
           "Reset Started",
           `If an account with email ${email} exists, a reset password email will be sent. Please check your email.`
         )
-      )
-      .then(() => Actions.login())
-      .catch(error => showFirebaseError(dispatch, error));
+    })
+    .then(() => Actions.login())
+    .catch(error => showFirebaseError(dispatch, error));
   };
 };
 
@@ -626,17 +617,15 @@ export const loginUser = ({ email, password }) => {
       type: ACTIONS.LOGIN_USER
     });
 
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(user => {
+    firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(user => {
         if (!firebase.auth().currentUser.emailVerified) {
           alert("Account must be verified!\nPlease check your email for verification email");
           return Promise.reject({ error: "Email not Verified" });
         }
-      })
-      .then(user => loginUserSuccess(dispatch, user))
-      .catch(error => loginUserFail(dispatch, error));
+    })
+    .then(user => loginUserSuccess(dispatch, user))
+    .catch(error => loginUserFail(dispatch, error));
   };
 };
 
@@ -653,19 +642,17 @@ export const loadUser = userID => {
 
   return dispatch => {
     if (currentUser != null) {
-      firebase
-        .database()
-        .ref(`/users/${id}/`)
-        .on("value", snapshot => {
-          dispatch({
-            type: ACTIONS.LOAD_USER,
-            payload: snapshot.val()
-          });
-          dispatch({
-            type: ACTIONS.PAGE_LOAD,
-            payload: false
-          });
-        });
+      firebase.database().ref(`/users/${id}/`).on("value", snapshot => {
+              dispatch({
+                type: ACTIONS.LOAD_USER,
+                payload: snapshot.val()
+              });
+
+              dispatch({
+                type: ACTIONS.PAGE_LOAD,
+                payload: false
+              });
+      });
     }
   };
 };
@@ -673,11 +660,16 @@ export const loadUser = userID => {
 export const loginUserFail = (dispatch, error) => {
   let errMsg;
 
-  if (error.code === "auth/user-not-found") errMsg = "There is no user record corresponding to this identifier";
-  else if (error.code === "auth/invalid-email") errMsg = "Enter a valid email";
-  else if (error.code === "auth/wrong-password") errMsg = "Incorrect credentials";
-  else if (error.code === "auth/network-request-failed") errMsg = "Network error. Check your Internet connectivity.";
-  else errMsg = error.message;
+  if (error.code === "auth/user-not-found") 
+    errMsg = "There is no user record corresponding to this identifier";
+  else if (error.code === "auth/invalid-email") 
+    errMsg = "Enter a valid email";
+  else if (error.code === "auth/wrong-password") 
+    errMsg = "Incorrect credentials";
+  else if (error.code === "auth/network-request-failed") 
+    errMsg = "Network error. Check your Internet connectivity.";
+  else 
+    errMsg = error.message;
 
   dispatch({
     type: ACTIONS.LOGIN_USER_FAIL,
@@ -691,11 +683,9 @@ export const logoutUser = () => {
       type: ACTIONS.LOGOUT_USER
     });
 
-    firebase
-      .auth()
-      .signOut()
-      .then(Actions.login())
-      .then(Alert.alert("Signed Out", "Have a great day!"));
+    firebase.auth().signOut()
+    .then(Actions.login())
+    .then(Alert.alert("Signed Out", "Have a great day!"));
   };
 };
 

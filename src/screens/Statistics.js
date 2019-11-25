@@ -43,16 +43,26 @@ class Statistics extends Component {
 }
 
 const styles = StyleSheet.create({
-  buttonContainerStyling: { margin: 5 },
-  page: { flex: 1, backgroundColor: "#ebebf1" },
-  tabBar: {
-    height: dimension.height * 0.1,
-    backgroundColor: "#fff",
+  buttonContainerStyling: {
+    margin: 5
+  },
+  page: {
+    flex: 1,
+    backgroundColor: '#ebebf1'
+  },
+  tabBar : {
+    height: dimension.height * .1,
+    backgroundColor: '#fff',
     borderWidth: 1,
     borderStyle: "solid",
     borderColor: "#0005"
   },
-  tabBarText: { color: "#000", fontSize: 20, margin: 20, alignSelf: "center" }
+  tabBarText : {
+    color: '#000',
+    fontSize: 20,
+    margin: 20,
+    alignSelf: "center"
+  },
 });
 
 export default Statistics;

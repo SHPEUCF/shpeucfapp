@@ -23,7 +23,8 @@ class CheckIn extends Component {
     if (Platform.OS === "ios") {
       Beacons.requestWhenInUseAuthorization();
       Beacons.startUpdatingLocation();
-    } else if (Platform.OS === "android") Beacons.detectIBeacons();
+    } else if (Platform.OS === "android") 
+      Beacons.detectIBeacons();
 
     Beacons.startRangingBeaconsInRegion(region);
   }
@@ -96,13 +97,35 @@ class CheckIn extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  cardContainer: { marginRight: 5, marginLeft: 5, marginTop: 5 },
-  eventInfoContainer: { marginBottom: 10 },
-  eventInfoRow: { marginBottom: 10, flexDirection: "row" },
-  infoLabel: { fontSize: 15, fontWeight: "bold" },
-  infoValue: { fontSize: 15, fontWeight: "normal" },
-  signalInfoLabel: { marginBottom: 10, marginLeft: 10, color: "#666", fontWeight: "bold" }
+  container: {
+    flex: 1
+  },
+  cardContainer: {
+    marginRight: 5,
+    marginLeft: 5,
+    marginTop: 5
+  },
+  eventInfoContainer: {
+    marginBottom: 10
+  },
+  eventInfoRow: {
+    marginBottom: 10,
+    flexDirection: 'row'
+  },
+  infoLabel: {
+   fontSize: 15,
+   fontWeight: 'bold'
+  },
+  infoValue: {
+   fontSize: 15,
+   fontWeight: 'normal'
+  },
+  signalInfoLabel: {
+    marginBottom: 10,
+    marginLeft: 10,
+    color: '#666',
+    fontWeight: 'bold'
+  }
 });
 
 export { CheckIn };

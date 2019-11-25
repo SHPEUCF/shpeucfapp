@@ -69,37 +69,44 @@ const CodeBox = ({
 };
 
 const styles = {
-  text: { fontSize: 20 },
+  text: {
+    fontSize: 20
+  },
   input: {
-    marginTop: dimension.height * 0.05,
+    marginTop: dimension.height*.05,
     height: 80,
-    textAlign: "center",
-    width: dimension.width * 0.6,
-    backgroundColor: "#FECB0022",
-    borderColor: "#FECB00",
+    textAlign: 'center',
+    width: dimension.width*.6,
+    backgroundColor: '#FECB0022',
+    borderColor: '#FECB00',
     borderRadius: 16,
     borderWidth: 3,
-    borderStyle: "solid",
-    fontWeight: "bold",
+    borderStyle: 'solid',
+    fontWeight: 'bold',
     fontSize: 60
   },
   modal: {
     padding: 100,
     margin: 100,
-    width: Dimensions.get("screen").width * 0.4,
-    height: Dimensions.get("screen").height * 0.8
+    width: Dimensions.get("screen").width * .4,
+    height: Dimensions.get("screen").height * .8
   },
   modalContent: {
     padding: 12,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 12,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     align: self,
     margin: 0,
-    backgroundColor: "#fff"
+    backgroundColor: '#fff'
   },
-  container: { flex: 1, alignItems: "center", justifyContent: "flex-start", margin: 5 }
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    margin: 5
+  },
 };
 
 CodeBox.defaultProps = {

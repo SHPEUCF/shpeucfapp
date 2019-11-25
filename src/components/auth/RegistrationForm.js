@@ -98,21 +98,21 @@ class RegistrationForm extends Component {
 
     const ucfStudentEmail = new RegExp(/^[A-Za-z0-9._%+-]+@(knights.|)ucf.edu$/i);
 
-    if (firstName === "") {
+    if (firstName === "")
       registrationError("Please enter your first name");
-    } else if (lastName === "") {
+    else if (lastName === "")
       registrationError("Please enter your last name");
-    } else if (email === "") {
+    else if (email === "") 
       registrationError("Please enter your school email");
-    } else if (!ucfStudentEmail.test(email)) {
+    else if (!ucfStudentEmail.test(email))
       registrationError('Please use a "knights.ucf.edu", or "ucf.edu" email for registration');
-    } else if (password === "") {
+    else if (password === "")
       registrationError("Please enter password");
-    } else if (confirmPassword === "") {
+    else if (confirmPassword === "")
       registrationError("Please confirm password");
-    } else if (password !== confirmPassword) {
+    else if (password !== confirmPassword)
       registrationError("Passwords do not match, please try again");
-    } else if (password === confirmPassword) {
+    else if (password === confirmPassword) {
       this.props.createUser(
         firstName,
         lastName,
@@ -146,17 +146,15 @@ class RegistrationForm extends Component {
   renderCollegePickers() {
     const { college, collegeChanged, majorChanged } = this.props;
 
-    const p1 =
-      college !== undefined && college !== null && college !== "" && college != "Do not wish to disclose" ? (
-        <PickerInput
+    const p1 = (college !== undefined && college !== null && college !== "" && college != "Do not wish to disclose") ? 
+      (<PickerInput
           title={"Major"}
           data={majorNames[college]}
           placeholder={"Select major"}
           onSelect={text => majorChanged(text)}
-        />
-      ) : (
-        <View></View>
-      );
+        />) 
+      : 
+      (<View></View>);
 
     return (
       <View>
@@ -174,20 +172,15 @@ class RegistrationForm extends Component {
   renderCountryPickers() {
     const { continent, continentChanged, nationalityChanged } = this.props;
 
-    const p1 =
-      continent !== undefined &&
-      continent !== null &&
-      continent !== "" &&
-      continent !== "Do not wish to disclose" ? (
-        <PickerInput
+    const p1 = (continent !== undefined && continent !== null && continent !== "" && continent !== "Do not wish to disclose") ? 
+      (<PickerInput
           title={"Nationality"}
           data={countries[continent]}
           placeholder={"Select country of origin"}
           onSelect={text => nationalityChanged(text)}
-        />
-      ) : (
-        <View></View>
-      );
+        />) 
+      : 
+      (<View></View>);
 
     return (
       <View>
@@ -218,19 +211,19 @@ class RegistrationForm extends Component {
   }
 
   renderButtons() {
-    if (this.props.loading) {
+    if (this.props.loading)
       return (
         <View style={{ marginTop: 40, marginBottom: 20 }}>
           <Spinner />
         </View>
       );
-    }
-    return (
-      <View>
-        {this.renderSignUpButton()}
-        {this.renderLogInButton()}
-      </View>
-    );
+    else
+      return (
+        <View>
+          {this.renderSignUpButton()}
+          {this.renderLogInButton()}
+        </View>
+      );
   }
 
   render() {
@@ -297,25 +290,76 @@ class RegistrationForm extends Component {
 const { height: D_HEIGHT, width: D_WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#0c0b0b", justifyContent: "flex-end" },
-  formContainerStyle: { flex: 1, marginLeft: 20, marginRight: 20, paddingTop: 30, paddingBottom: 10 },
+  container: {
+    flex: 1,
+    backgroundColor: '#0c0b0b',
+    justifyContent: 'flex-end'
+  },
+  formContainerStyle: {
+    flex:1,
+    marginLeft: 20,
+    marginRight: 20,
+    paddingTop: 30,
+    paddingBottom:10
+  },
   headerStyle: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 5,
     marginBottom: 10
   },
-  headerTextStyle: { fontSize: 22, fontWeight: "bold", color: "white" },
-  headerSubtitleStyle: { marginTop: 3, color: "white" },
-  underheaderSubtitleStyle: { marginTop: 4, borderBottomColor: "black", borderBottomWidth: 1, width: "100%" },
-  errorTextStyle: { fontSize: 14, alignSelf: "center", color: "red", fontWeight: "bold", padding: 10 },
-  formButton: { marginTop: 10, marginBottom: 10 },
-  logInButton: { fontWeight: "bold", color: "white" },
-  logInContainer: { flexDirection: "row", justifyContent: "center", marginTop: 10, marginBottom: 10 },
-  pickerTextInput: { flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center" },
-  scrollView: { flex: 0, paddingTop: 10, paddingBottom: 10, paddingRight: 10 },
-  Alreadyaccount: { color: "grey" }
+  headerTextStyle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+		color: 'white'
+  },
+	headerSubtitleStyle:{
+		marginTop: 3,
+		color: 'white'
+	},
+	underheaderSubtitleStyle:{
+		marginTop: 4,
+		borderBottomColor: 'black',
+		borderBottomWidth: 1,
+		width: '100%'
+	},
+  errorTextStyle: {
+    fontSize: 14,
+    alignSelf: 'center',
+    color: 'red',
+    fontWeight: 'bold',
+    padding: 10
+  },
+  formButton: {
+    marginTop: 10,
+    marginBottom: 10
+  },
+  logInButton: {
+    fontWeight: 'bold',
+    color: 'white'
+  },
+  logInContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 10,
+    marginBottom: 10
+  },
+  pickerTextInput:{
+    flex:1,
+    flexDirection:'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  scrollView: {
+    flex: 0,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingRight: 10
+  },
+	Alreadyaccount: {
+		color: 'grey'
+	}
 });
 
 const mapStateToProps = ({ user }) => {

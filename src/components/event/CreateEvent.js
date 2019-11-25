@@ -87,24 +87,25 @@ class CreateEvent extends Component {
   onButtonPress() {
     const { type, committee, name, description, date, time, location, points, eventID } = this.props;
 
-    if (type === "") {
+    if (type === "")
       this.EventCreationError("Please enter event type");
-    } else if (name === "") {
+    else if (name === "")
       this.EventCreationError("Please enter event name");
-    } else if (description === "") {
+    else if (description === "")
       this.EventCreationError("Please enter a short event description");
-    } else if (date === "") {
+    else if (date === "")
       this.EventCreationError("Please enter the date of the event");
-    } else if (time === "") {
+    else if (time === "")
       this.EventCreationError("Please enter the time of the event");
-    } else if (location === "") {
+    else if (location === "")
       this.EventCreationError("Please enter where the event is taking place");
-    } else if (points === 0) {
+    else if (points === 0) 
       this.EventCreationError("Please enter how many points the event is worth");
-    } else {
+    else {
       if (this.props.title === "Create Event")
         createEvent(type, committee, name, description, date, time, location, points);
-      else editEvent(type, committee, name, description, date, time, location, points, eventID);
+      else 
+        editEvent(type, committee, name, description, date, time, location, points, eventID);
       this.props.goToEvents();
     }
   }
@@ -171,10 +172,10 @@ class CreateEvent extends Component {
 
   render() {
     let stringType;
-    if (this.props.type === "Committee") {
-      if (this.props.committee !== "") stringType = this.props.type + ": " + this.props.committee;
-      else stringType = this.props.type;
-    } else stringType = this.props.type;
+    if (this.props.type === "Committee" && this.props.committee !== "")
+      stringType = this.props.type + ": " + this.props.committee;
+    else 
+      stringType = this.props.type;
 
     return (
       <View style={styles.formContainerStyle}>
@@ -224,62 +225,101 @@ class CreateEvent extends Component {
     );
   }
 }
-
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "flex-end" },
+  container: {
+    flex: 1,
+    justifyContent: 'flex-end'
+  },
   itemStyle: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-    borderBottomColor: "#0002",
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    borderBottomColor: '#0002',
     borderBottomWidth: 1
   },
   itemTextStyle: {
-    paddingTop: dimension.height * 0.03,
-    paddingBottom: dimension.height * 0.03,
+    paddingTop: dimension.height * .03,
+    paddingBottom: dimension.height * .03,
     flex: 1,
     fontSize: 16,
-    alignSelf: "center"
+    alignSelf:'center'
   },
-  formContainerStyle: { flex: 1, padding: 20, backgroundColor: "#21252b" },
+  formContainerStyle: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#21252b'
+  },
   headerStyle: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 5,
     marginBottom: 10
   },
-  headerTextStyle: { fontSize: 22, fontWeight: "bold", color: "#e0e6ed" },
+  headerTextStyle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#e0e6ed'
+  },
   errorTextStyle: {
     fontSize: 14,
-    alignSelf: "center",
-    color: "red",
-    fontWeight: "bold",
+    alignSelf: 'center',
+    color: 'red',
+    fontWeight: 'bold',
     padding: 10
   },
-  pickerTextInput: { flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center" },
-  scrollView: { flex: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 10 },
-  titleStyle: { flex: 0.13, alignSelf: "center", fontSize: 20 },
-  buttonStyle: { flex: 1, alignSelf: "center" },
-  flatlistStyle: { flex: 0.8 },
-  buttonContainer: { flex: 0.2, flexDirection: "row", borderTopColor: "#0001", borderTopWidth: 1 },
-  textStyle: { flex: 1, alignSelf: "center", fontSize: 18, paddingTop: 5 },
+  pickerTextInput: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  scrollView: {
+    flex: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingRight: 10
+  },
+  titleStyle: {
+    flex: .13,
+    alignSelf: 'center',
+    fontSize: 20
+  },
+  buttonStyle: {
+    flex: 1,
+    alignSelf: 'center'
+  },
+  flatlistStyle: {
+    flex: .8
+  },
+  buttonContainer:{
+    flex:.2,
+    flexDirection: 'row',
+    borderTopColor: '#0001',
+    borderTopWidth: 1
+  },
+  textStyle:{
+    flex: 1,
+    alignSelf: 'center',
+    fontSize: 18,
+    paddingTop: 5
+  },
   modalBackground: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#0003",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#0003',
     margin: 0,
     height: dimension.height,
     width: dimension.width
   },
   modalStyle: {
-    height: dimension.height * 0.4,
-    width: dimension.width * 0.8,
-    backgroundColor: "#fff",
+    height: dimension.height*.4,
+    width: dimension.width*.8,
+    backgroundColor:'#fff',
     padding: 12,
     borderRadius: 12
-  }
+  },
 });
 
 const mapStateToProps = ({ events, committees }) => {

@@ -25,14 +25,18 @@ class LoginForm extends Component {
     const { email, password } = this.props;
 
     if (email === null || email === undefined || password === null || password === undefined) {
-      if (email === null || email === undefined) this.props.registrationError("Please enter your knights email");
-      else this.props.registrationError("Please enter your password");
+      if (email === null || email === undefined) 
+        this.props.registrationError("Please enter your knights email");
+      else 
+        this.props.registrationError("Please enter your password");
       return;
-    } else this.props.loginUser({ email, password });
+    } 
+    else 
+      this.props.loginUser({ email, password });
   }
 
   renderError() {
-    if (this.props.error) return <Text style={styles.errorTextStyle}>{this.props.error}</Text>;
+    if (this.props.error) return (<Text style={styles.errorTextStyle}>{this.props.error}</Text>);
   }
 
   renderResetPassword() {
@@ -109,17 +113,57 @@ class LoginForm extends Component {
 }
 
 const styles = StyleSheet.create({
-  formContainerStyle: { padding: 10, backgroundColor: "#0c0b0b", flex: 1 },
-  headerContainer: { flex: 1.5, alignItems: "center", paddingTop: 10 },
-  headerTextStyle: { color: "white", fontSize: 40, alignSelf: "center" },
-  headerTitle: { flex: 1, flexDirection: "row" },
-  headerSubtitleStyle: { color: "gray", fontWeight: "bold", flex: 1 },
-  errorTextStyle: { fontSize: 14, alignSelf: "center", color: "red", fontWeight: "bold" },
-  formButton: { flex: 1 },
-  buttonContainer: { flex: 0.8 },
-  resetPasswordText: { fontWeight: "bold", color: "white", alignSelf: "center" },
-  signUpText: { flex: 1, fontWeight: "bold", color: "white" },
-  bottomContainer: { flex: 0.3, flexDirection: "row", justifyContent: "center" }
+  formContainerStyle: { 
+    padding: 10, 
+    backgroundColor: "#0c0b0b", 
+    flex: 1 
+  },
+  headerContainer: { 
+    flex: 1.5, 
+    alignItems: "center", 
+    paddingTop: 10
+  },
+  headerTextStyle: { 
+    color: "white", 
+    fontSize: 40, 
+    alignSelf: "center" 
+  },
+  headerTitle: { 
+    flex: 1, 
+    flexDirection: "row"
+  },
+  headerSubtitleStyle: { 
+    color: "gray", 
+    fontWeight: "bold", 
+    flex: 1 
+  },
+  errorTextStyle: { 
+    fontSize: 14, 
+    alignSelf: "center", 
+    color: "red", 
+    fontWeight: "bold" 
+  },
+  formButton: { 
+    flex: 1 
+  },
+  buttonContainer: { 
+    flex: 0.8 
+  },
+  resetPasswordText: { 
+    fontWeight: "bold", 
+    color: "white", 
+    alignSelf: "center"
+  },
+  signUpText: { 
+    flex: 1, 
+    fontWeight: "bold", 
+    color: "white" 
+  },
+  bottomContainer: { 
+    flex: 0.3, 
+    flexDirection: "row", 
+    justifyContent: "center"
+  }
 });
 
 const mapStateToProps = ({ user }) => {

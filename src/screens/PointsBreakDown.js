@@ -36,15 +36,10 @@ class PointsBreakDown extends Component {
     const { membersPoints } = this.props;
     let breakdown;
 
-    if (
-      membersPoints !== undefined &&
-      membersPoints !== null &&
-      membersPoints[currentUser.uid] !== undefined &&
-      membersPoints[currentUser.uid] !== null &&
-      membersPoints[currentUser.uid].breakdown !== undefined &&
-      membersPoints[currentUser.uid].breakdown !== null &&
-      membersPoints[currentUser.uid].breakdown.length !== 0
-    ) {
+    if (membersPoints !== undefined && membersPoints !== null && membersPoints[currentUser.uid] !== undefined &&
+      membersPoints[currentUser.uid] !== null && membersPoints[currentUser.uid].breakdown !== undefined &&
+      membersPoints[currentUser.uid].breakdown !== null && membersPoints[currentUser.uid].breakdown.length !== 0) 
+      {
       breakdown = Object.entries(membersPoints[currentUser.uid].breakdown);
       return (
         <View style={{ flex: 1 }}>
@@ -74,7 +69,8 @@ class PointsBreakDown extends Component {
     let count = this.countPoints(section);
     let arr = section;
 
-    if (section === null || section.length < 1 || section[1] === null) arr = [];
+    if (section === null || section.length < 1 || section[1] === null)
+      arr = [];
     // alert(Object.values(section[1])[1].name)
     return (
       <View>
@@ -118,35 +114,65 @@ class PointsBreakDown extends Component {
   countPoints(item) {
     let count = 0;
     values = Object.values(item[1]);
-    for (let i = 0; i < values.length; i++) count += Number(values[i].points);
+    for (let i = 0; i < values.length; i++) 
+      count += Number(values[i].points);
 
     return count;
   }
   toggleShow = function(text) {
-    if (JSON.stringify(this.state.show) === JSON.stringify(text)) this.setState({ show: "" });
-    else this.setState({ show: text });
+    if (JSON.stringify(this.state.show) === JSON.stringify(text)) 
+      this.setState({ show: "" });
+    else 
+      this.setState({ show: text });
   };
 }
 
 const styles = StyleSheet.create({
-  page: { paddingBottom: 10, flexDirection: "column", flex: 1, backgroundColor: "#0c0b0b" },
-  containerStyle: { flexDirection: "row", paddingVertical: 30, paddingHorizontal: 15 },
-  textColor: { color: "#e0e6ed" },
-  topLevelText: { fontSize: 20, fontWeight: "bold" },
-  midLevelText: { fontSize: 16 },
-  botLevelText: { fontSize: 12 },
-  contentContainerStyle: { marginTop: 1, backgroundColor: "#2C3239" },
-  title: { flex: 0.5 },
-  points: { flex: 0.15 },
+  page: {
+    paddingBottom: 10,
+    flexDirection: 'column',
+    flex: 1,
+    backgroundColor: '#0c0b0b'
+  },
+  containerStyle: {
+    flexDirection: 'row',
+    paddingVertical: 30,
+    paddingHorizontal: 15
+  },
+  textColor: {
+    color: '#e0e6ed'
+  },
+  topLevelText: {
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  midLevelText: {
+    fontSize: 16
+  },
+  botLevelText: {
+    fontSize: 12
+  },
+  contentContainerStyle: {
+    marginTop: 1,
+    backgroundColor: '#2C3239'
+  },
+  title: {
+    flex: .5
+  },
+  points: {
+    flex: .15
+  },
   innerContainerStyle: {
     flex: 1,
-    flexDirection: "row",
-    height: dimension.height * 0.07,
-    backgroundColor: "#aaa2",
+    flexDirection: 'row',
+    height: dimension.height *.07,
+    backgroundColor: '#aaa2',
     paddingVertical: 10,
     paddingHorizontal: 15
   },
-  innerContentContainerStyle: { margin: 1 }
+  innerContentContainerStyle: {
+    margin: 1
+  },
 });
 
 const mapStateToProps = ({ user, members, events, general }) => {

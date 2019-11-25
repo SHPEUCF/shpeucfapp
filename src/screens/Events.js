@@ -48,7 +48,7 @@ class Events extends Component {
         <ScrollView style={{ flex: 1 }}>
           <Agenda
             selected={new Date()}
-            //onDayChange={(day)=>{alert('day pressed')}}
+            // onDayChange={(day)=>{alert('day pressed')}}
             passDate={item => this.getDate(item)}
             showWeekNumbers={true}
             pastScrollRange={24}
@@ -62,9 +62,7 @@ class Events extends Component {
             rowHasChanged={this.rowHasChanged.bind(this)}
             renderEmptyDate={this.renderEmptyDate.bind(this)}
             renderEmptyData={this.renderEmptyData.bind(this)}
-            style={{
-              height: dimension.height * 0.73
-            }}
+            style={{ height: dimension.height * 0.73 }}
             theme={{
               backgroundColor: "#0c0b0b",
               calendarBackground: "#21252b",
@@ -111,8 +109,10 @@ class Events extends Component {
 
     for (props in events) {
       events[props]["eventID"] = props;
-      if (dates[events[props].date] === undefined) dates[events[props].date] = [events[props]];
-      else dates[events[props].date].push(events[props]);
+      if (dates[events[props].date] === undefined) 
+        dates[events[props].date] = [events[props]];
+      else 
+        dates[events[props].date].push(events[props]);
     }
     return dates;
   }
@@ -155,7 +155,8 @@ class Events extends Component {
     const { textColor, itemContainer } = styles;
 
     let viewName = item.name;
-    if (item.committee !== "") viewName = item.committee + ": " + item.name;
+    if (item.committee !== "") 
+      viewName = item.committee + ": " + item.name;
 
     return (
       <TouchableOpacity onPress={this.viewEvent.bind(this, item)}>
@@ -174,8 +175,15 @@ class Events extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: "center", justifyContent: "flex-start", margin: 5 },
-  textColor: { color: "#e0e6ed" },
+  container: { 
+    flex: 1, 
+    alignItems: "center", 
+    justifyContent: "flex-start", 
+    margin: 5 
+  },
+  textColor: { 
+    color: "#e0e6ed" 
+  },
   modalTextInput: {
     marginTop: dimension.height * 0.05,
     height: dimension.height * 0.091,
@@ -212,7 +220,10 @@ const styles = StyleSheet.create({
     marginRight: dimension.height * 0.01,
     marginTop: dimension.height * 0.02
   },
-  headerTextStyle: { fontSize: 22, fontWeight: "bold" },
+  headerTextStyle: { 
+    fontSize: 22, 
+    fontWeight: "bold" 
+  },
   emptyData: {
     height: dimension.height * 0.015,
     paddingTop: dimension.height * 0.03,

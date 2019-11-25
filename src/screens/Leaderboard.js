@@ -2,14 +2,7 @@ import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import { NavBar } from "../components/general";
-import {
-  fetchMembersPoints,
-  fetchMemberProfile,
-  goToOtherProfile,
-  pageLoad,
-  getPrivilege,
-  loadUser
-} from "../ducks";
+import { fetchMembersPoints, fetchMemberProfile, goToOtherProfile, pageLoad, getPrivilege, loadUser } from "../ducks";
 import _ from "lodash";
 import * as Progress from "react-native-progress";
 import { FlatList, Text, View, StyleSheet, Dimensions, Image } from "react-native";
@@ -129,32 +122,50 @@ class Leaderboard extends Component {
 
 const styles = StyleSheet.create({
   containerStyle: {
-    justifyContent: "center",
-    alignItems: "flex-start",
-    backgroundColor: "#21252b",
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    backgroundColor: '#21252b',
     paddingVertical: 30,
     paddingHorizontal: 15
   },
-  screenBackground: { flex: 1, backgroundColor: "#0c0b0b" },
-  curUserHighlight: { color: "#aa9100" },
-  textStyle: { color: "#e0e6ed", fontSize: 18 },
-  contentContainerStyle: { margin: 1, backgroundColor: "#2C3239" },
-  progress: {
-    justifyContent: "center",
-    height: dimension.width * 0.03,
-    borderColor: "#2C3239",
-    backgroundColor: "#2C3239"
+  screenBackground: {
+    flex: 1,
+    backgroundColor: '#0c0b0b'
   },
-  textColor: { color: "#e0e6ed" },
-  indexText: { alignSelf: "center", fontWeight: "700", fontSize: 20, color: "#e0e6ed" },
+  curUserHighlight: {
+    color: '#aa9100'
+  },
+  textStyle: {
+    color: "#e0e6ed",
+    fontSize: 18
+  },
+  contentContainerStyle: {
+    margin: 1,
+    backgroundColor: '#2C3239'
+  },
+  progress: {
+    justifyContent: 'center',
+    height: dimension.width*.03,
+    borderColor: '#2C3239',
+    backgroundColor: '#2C3239'
+  },
+  textColor: {
+    color: '#e0e6ed'
+  },
+  indexText: {
+    alignSelf: 'center',
+    fontWeight: "700",
+    fontSize: 20,
+    color: "#e0e6ed"
+  },
   index: {
-    color: "#000",
-    borderColor: "#e0e6ed",
-    borderStyle: "solid",
+    color: '#000',
+    borderColor: '#e0e6ed',
+    borderStyle: 'solid',
     borderWidth: 3,
     borderRadius: 20,
-    marginRight: "4%",
-    justifyContent: "center",
+    marginRight: '4%',
+    justifyContent: 'center',
     height: 40,
     width: 40,
     elevation: 1

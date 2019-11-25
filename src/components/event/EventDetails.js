@@ -52,8 +52,10 @@ class EventDetails extends Component {
   }
 
   onSuccess = e => {
-    if (this.props.code === e.data) this.checkinButton(this.props.eventID, this.props.points);
-    else alert("Incorrect Code");
+    if (this.props.code === e.data) 
+      this.checkinButton(this.props.eventID, this.props.points);
+    else 
+      alert("Incorrect Code");
   };
 
   renderCodeBox() {
@@ -85,7 +87,8 @@ class EventDetails extends Component {
           </View>
         </Modal>
       );
-    } else
+    } 
+    else
       return (
         <Modal
           transparent={true}
@@ -103,44 +106,6 @@ class EventDetails extends Component {
             </View>
           </View>
         </Modal>
-
-        /*<Modal
-        transparent={true}
-        animationType={'fade'}
-        onRequestClose={() => {
-            alert('Modal has been closed.');
-        }}
-        visible={this.state.modalVisible}
-        >
-            <View style={modalBackground}>
-                <View style={modalContent}>
-                    <TouchableOpacity onPress={() => {this.setState({modalVisible: false})}}>
-                    <Text style={{color: "#FECB00"}}>X</Text>
-                    </TouchableOpacity>
-                    <View style={container}>
-                        <Text style={[headerTextStyle, textColor]}>Enter Code</Text>
-                        <TextInput
-                        style={modalTextInput}
-                        onChangeText={(text) => this.setState({text})}
-                        value={this.state.text}
-                        autoCapitalize={'characters'}
-                        autoCorrect={false}
-                        maxLength={4}
-                        />
-                        <Button 
-                            title = "CHECK IN"
-                            width = {dimension.width * .6}
-                            onPress={() => {
-                            if(this.props.code === this.state.text){
-                                this.checkinButton(this.props.eventID, this.props.points)
-                                // this.setState({modalVisible: false})
-                            }
-                        }}
-                        />
-                    </View>
-                </View>
-            </View>
-                    </Modal>*/
       );
   }
 
@@ -201,17 +166,17 @@ class EventDetails extends Component {
 
     let csv = this.convertArrayOfObjectsToCSV({ data: users });
 
-    if (csv == null) return;
+    if (csv === null) return;
 
     filename = `${name}.csv` || "export.csv";
 
     data =
       `Instructions: \n1.Open a plain text Editor(Not microsoft Word)\n2.Copy everything under the line and paste it into the text editor\n3.save the file and change the extension to .csv(Look up how to do this if you dont know how)\n` +
-      `4.Open the file in either Numbers or Excel\n------------------\n\n` +
-      csv;
+      `4.Open the file in either Numbers or Excel\n------------------\n\n` + csv;
     let link = `mailto:${email}?subject=event: ${name}&body=` + data;
 
-    if (!Linking.canOpenURL(link)) alert("Email could not be sent", "Failure");
+    if (!Linking.canOpenURL(link)) 
+      alert("Email could not be sent", "Failure");
     else {
       Linking.openURL(link);
       alert("Email app should be Opened");
@@ -222,13 +187,8 @@ class EventDetails extends Component {
     const { privilege, eventList, eventID } = this.props;
     const { lineOnTop, attendance, attendanceContainer, icon, textColor } = styles;
 
-    if (
-      privilege !== undefined &&
-      privilege.board === true &&
-      eventList !== undefined &&
-      eventList[eventID] !== undefined &&
-      eventList[eventID].attendance !== undefined
-    ) {
+    if (privilege !== undefined && privilege.board === true && eventList !== undefined &&
+      eventList[eventID] !== undefined && eventList[eventID].attendance !== undefined) {
       let attendants = Object.keys(eventList[eventID].attendance);
 
       return (
@@ -255,21 +215,25 @@ class EventDetails extends Component {
       );
     }
   }
+
   openCheckInButton() {
     this.props.openCheckIn(this.props.eventID);
     this.setState({ modalVisible: true });
   }
+
   deleteButton() {
     this.props.deleteEvents(this.props.eventID);
     Actions.pop();
   }
+
   checkinButton(ID, points) {
     this.props.checkIn(ID, points, null);
   }
 
   renderPickMembers() {
     const { filter, userList, eventList, eventID, filterChanged } = this.props;
-    if (!this.state.pickerVisible) return null;
+    if (!this.state.pickerVisible) 
+      return null;
 
     return (
       <View>
@@ -311,7 +275,8 @@ class EventDetails extends Component {
           <Button title="EDIT EVENT" onPress={this.props.goToCreateEventFromEdit.bind(this)} />
         </View>
       );
-    } else
+    } 
+    else {
       return (
         <View>
           <Button
@@ -322,12 +287,14 @@ class EventDetails extends Component {
           />
         </View>
       );
+    }
   }
 
   render() {
-    if (this.props.loading) {
+    if (this.props.loading)
       return <Spinner />;
-    } else {
+    
+    else {
       const { name, description, date, time, location } = this.props;
       const { page, container, icon_container, icon, text, textColor, final } = styles;
       let iconSize = 25;
@@ -363,79 +330,99 @@ class EventDetails extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.95,
-    alignItems: "center",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    padding: 25
+    flex: 1,
+    justifyContent: 'flex-end'
   },
-  modalText: { alignSelf: "center", fontSize: 16 },
-  modalTextInput: {
-    marginTop: dimension.height * 0.05,
-    height: 80,
-    textAlign: "center",
-    width: dimension.width * 0.6,
-    backgroundColor: "#e0e6ed22",
-    borderColor: "#e0e6ed",
-    borderRadius: 16,
-    borderWidth: 3,
-    borderStyle: "solid",
-    fontWeight: "bold",
-    fontSize: 60,
-    color: "#E0E6ED"
+  itemStyle: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    borderBottomColor: '#0002',
+    borderBottomWidth: 1
   },
-  modalContent: {
-    height: dimension.height * 0.6,
-    width: dimension.width * 0.9,
-    padding: 12,
-    backgroundColor: "#21252b",
-    borderRadius: 12
+  itemTextStyle: {
+    paddingTop: dimension.height * .03,
+    paddingBottom: dimension.height * .03,
+    flex: 1,
+    fontSize: 16,
+    alignSelf:'center'
   },
-  modalBackground: {
-    justifyContent: "center",
-    alignItems: "center",
-    margin: 0,
-    height: dimension.height,
-    width: dimension.width,
-    backgroundColor: "#000a"
+  formContainerStyle: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#21252b'
   },
-  final: { flex: 1 },
-  textColor: { color: "#e0e6ed" },
-  icon_container: { flex: 0.2, flexDirection: "row" },
-  icon: { flex: 0.2 },
-  attendanceContainer: { flex: 0.5, flexDirection: "row" },
-  attendance: { fontSize: 20, alignSelf: "center", flex: 0.8 },
-  text: { flex: 1, fontSize: 20 },
-  lineOnTop: { borderTopColor: "#e0e6ed", borderTopWidth: 1 },
-  codeText: {
-    margin: 60,
-    color: "#FECB00",
-    alignSelf: "center",
-    fontWeight: "bold",
-    fontSize: 50
-  },
-  page: { flex: 1, backgroundColor: "#0c0b0b" },
-  tabBar: {
-    height: dimension.height * 0.1,
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: "#0005",
-    padding: 10
-  },
-  tabBarText: { color: "#000", fontSize: 20, margin: 20, alignSelf: "center" },
   headerStyle: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 5,
     marginBottom: 10
   },
-  headerTextStyle: { fontSize: 22, fontWeight: "bold" },
-  centerText: { flex: 1, fontSize: 18, padding: 32, color: "#777" },
-  textBold: { fontWeight: "500", color: "#000" },
-  buttonText: { fontSize: 21, color: "rgb(0,122,255)" },
-  buttonTouchable: { padding: 16 }
+  headerTextStyle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#e0e6ed'
+  },
+  errorTextStyle: {
+    fontSize: 14,
+    alignSelf: 'center',
+    color: 'red',
+    fontWeight: 'bold',
+    padding: 10
+  },
+  pickerTextInput: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  scrollView: {
+    flex: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingRight: 10
+  },
+  titleStyle: {
+    flex: .13,
+    alignSelf: 'center',
+    fontSize: 20
+  },
+  buttonStyle: {
+    flex: 1,
+    alignSelf: 'center'
+  },
+  flatlistStyle: {
+    flex: .8
+  },
+  buttonContainer:{
+    flex:.2,
+    flexDirection: 'row',
+    borderTopColor: '#0001',
+    borderTopWidth: 1
+  },
+  textStyle:{
+    flex: 1,
+    alignSelf: 'center',
+    fontSize: 18,
+    paddingTop: 5
+  },
+  modalBackground: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#0003',
+    margin: 0,
+    height: dimension.height,
+    width: dimension.width
+  },
+  modalStyle: {
+    height: dimension.height*.4,
+    width: dimension.width*.8,
+    backgroundColor:'#fff',
+    padding: 12,
+    borderRadius: 12
+  },
 });
 
 const mapStateToProps = ({ events, user, members, general }) => {

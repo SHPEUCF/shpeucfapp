@@ -20,8 +20,13 @@ const iphone = D_HEIGHT != X_HEIGHT || D_WIDTH != X_WIDTH ? 22 : 38;
 const STATUSBAR_HEIGHT = Platform.OS === "ios" ? iphone : null;
 
 const styles = StyleSheet.create({
-  mycontainer: { flex: 1, position: "absolute" },
-  mystatusBar: { height: STATUSBAR_HEIGHT }
+  mycontainer: { 
+    flex: 1, 
+    position: "absolute" 
+  },
+  mystatusBar: { 
+    height: STATUSBAR_HEIGHT
+  }
 });
 
 export { StyledStatusBar };

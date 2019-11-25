@@ -45,7 +45,8 @@ class PositionForm extends Component {
       else {
         if (this.state.oldTitle !== positionTitle)
           this.props.editPosition(positionTitle, positionDescription, this.state.oldTitle);
-        else this.props.editPosition(positionTitle, positionDescription, null);
+        else 
+          this.props.editPosition(positionTitle, positionDescription, null);
       }
       Actions.ElectionPositions();
     }
@@ -82,7 +83,11 @@ class PositionForm extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#E1E1E1", justifyContent: "flex-end" },
+  container: {
+    flex: 1,
+    backgroundColor: '#E1E1E1',
+    justifyContent: 'flex-end'
+  },
   formContainerStyle: {
     flex: 1,
     paddingTop: 30,
@@ -91,22 +96,36 @@ const styles = StyleSheet.create({
     backgroundColor: "#2C3239"
   },
   headerStyle: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 5,
     marginBottom: 10
   },
-  headerTextStyle: { fontSize: 22, fontWeight: "bold", color: "#e0e6ed" },
+  headerTextStyle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#e0e6ed'
+  },
   errorTextStyle: {
     fontSize: 14,
-    alignSelf: "center",
-    color: "red",
-    fontWeight: "bold",
+    alignSelf: 'center',
+    color: 'red',
+    fontWeight: 'bold',
     padding: 10
   },
-  pickerTextInput: { flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center" },
-  scrollView: { flex: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 10 }
+  pickerTextInput: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  scrollView: {
+    flex: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingRight: 10
+  }
 });
 
 const mapStateToProps = ({ elect }) => {

@@ -5,7 +5,11 @@ import { ListItem } from "react-native-elements";
 import { NavBar } from "../components/general";
 
 const menuItems = [
-  { title: "E-Board", icon: "people", screen: "EBoard" },
+  { 
+    title: "E-Board", 
+    icon: "people", 
+    screen: "EBoard" 
+  },
   {
     title: "Privacy Policy",
     icon: "insert-drive-file",

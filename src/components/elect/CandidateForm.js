@@ -18,13 +18,12 @@ class CandidateForm extends Component {
   // }
 
   renderError() {
-    if (this.props.error) {
+    if (this.props.error)
       return (
         <View>
           <Text style={styles.errorTextStyle}>{this.props.error}</Text>
         </View>
       );
-    }
   }
 
   onButtonPress() {
@@ -34,11 +33,11 @@ class CandidateForm extends Component {
     if (candidatePlan === "") {
       // this.EventCreationError('Please enter a Plan of action');
     } else {
-      if (this.props.title === "ADD") {
+      if (this.props.title === "ADD")
         this.props.addApplication(firstName, lastName, candidatePlan, applyPosition);
-      } else {
+      else
         this.props.editApplication(applyPosition, candidatePlan);
-      }
+
       Actions.ElectionCandidates();
     }
   }
@@ -80,29 +79,55 @@ class CandidateForm extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "flex-end" },
-  content: { flex: 1 },
-  buttonContainer: { flex: 0.2 },
-  formContainerStyle: { flex: 1, padding: 20, backgroundColor: "#2C3239" },
+  container: {
+      flex: 1,
+      justifyContent: 'flex-end',
+  },
+  content: {
+      flex: 1
+  },
+  buttonContainer: {
+      flex: .2
+  },
+  formContainerStyle: {
+      flex: 1,
+      padding: 20,
+      backgroundColor: '#2C3239'
+  },
   headerStyle: {
-    flex: 0.1,
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 5,
-    marginBottom: 10
+      flex: .1,
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 5,
+      marginBottom: 10
   },
-  textColor: { color: "#e0e6ed" },
-  headerTextStyle: { fontSize: 22, fontWeight: "bold" },
+  textColor: {
+      color: '#e0e6ed'
+  },
+  headerTextStyle: {
+      fontSize: 22,
+      fontWeight: 'bold'
+  },
   errorTextStyle: {
-    fontSize: 14,
-    alignSelf: "center",
-    color: "red",
-    fontWeight: "bold",
-    padding: 10
+      fontSize: 14,
+      alignSelf: 'center',
+      color: 'red',
+      fontWeight: 'bold',
+      padding: 10
   },
-  pickerTextInput: { flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center" },
-  scrollView: { flex: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 10 }
+  pickerTextInput: {
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center'
+  },
+  scrollView: {
+      flex: 0,
+      paddingTop: 0,
+      paddingBottom: 0,
+      paddingRight: 10
+  }
 });
 
 const mapStateToProps = ({ elect, user }) => {

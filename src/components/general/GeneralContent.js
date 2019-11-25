@@ -18,9 +18,22 @@ class GeneralContent extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#FFFFFF", alignItems: "stretch" },
-  content: { flex: 4, alignItems: "center", justifyContent: "center" },
-  footer: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#25292E" }
-});
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'stretch'
+  },
+  content: {
+    flex: 4,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  footer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#25292E'
+  }
+})
 
 export { GeneralContent };

@@ -4,17 +4,51 @@ import { ScrollView, FlatList, View } from "react-native";
 import { connect } from "react-redux";
 import { ListItem } from "react-native-elements";
 import { NavBar } from "../components/general";
-
 import { getPrivilege, pageLoad, updateElection } from "../ducks";
 
 const menuItems = [
-  { title: "Leaderboard", icon: "format-align-left", screen: "Leaderboard", privilege: "user" },
-  { title: "Election", icon: "done", screen: "Election", privilege: "user" },
-  { title: "Conventions", icon: "airplanemode-active", screen: "Conventions", privilege: "user" },
-  { title: "Leadership", icon: "assignment-ind", screen: "EBoard", privilege: "user" },
-  { title: "Committees", icon: "assignment-ind", screen: "Committees", privilege: "user" },
-  { title: "About", icon: "info", screen: "About", privilege: "user" },
-  { title: "BackEnd", icon: "settings", screen: "BackEnd", privilege: "eboard" }
+  {
+    title: 'Leaderboard',
+    icon: 'format-align-left',
+    screen: 'Leaderboard',
+    privilege: "user"
+  },
+  {
+    title: 'Election',
+    icon: 'done',
+    screen: 'Election',
+    privilege: "user"
+  },
+  {
+    title: 'Conventions',
+    icon: 'airplanemode-active',
+    screen: 'Conventions',
+    privilege: "user"
+  },
+  {
+    title: 'Leadership',
+    icon: 'assignment-ind',
+    screen: 'EBoard',
+    privilege: "user"
+  },
+  {
+    title: 'Committees',
+    icon: 'assignment-ind',
+    screen: 'Committees',
+    privilege: "user"
+  },
+  {
+    title: 'About',
+    icon: 'info',
+    screen: 'About',
+    privilege: "user"
+  },
+  {
+    title: 'BackEnd',
+    icon: 'settings',
+    screen: 'BackEnd',
+    privilege: "eboard"
+  }
 ];
 
 class More extends Component {
@@ -56,15 +90,12 @@ class More extends Component {
 
   renderItem = ({ item }) => {
     const { election, privilege, apply } = this.props;
+  
+    let notElection = (election === false || election === undefined || election === null);
+    let notApply = (apply === false || apply === undefined || apply === null);
+    let notPaid = (privilege.paidMember === false || privilege.paidMember === undefined || privilege.paidMember === null);
 
-    if (
-      item.title === "Election" &&
-      (((election === false || election === undefined || election === null) &&
-        (apply === false || apply === undefined || apply === null)) ||
-        privilege.paidMember === false ||
-        privilege.paidMember === undefined ||
-        privilege.paidMember === null)
-    )
+    if (item.title === "Election" && ((notElection && notApply) || notPaid))
       return null;
 
     if (privilege !== undefined && privilege[item.privilege] === true) {

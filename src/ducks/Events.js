@@ -177,7 +177,8 @@ function makeCode(length) {
   let text = "";
   let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-  for (let i = 0; i < length; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
+  for (let i = 0; i < length; i++) 
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
 
   return text;
 }
@@ -186,31 +187,24 @@ export const createEvent = (typeU, committeeU, nameU, descriptionU, dateU, timeU
   let committee = false;
   if (committeeU !== "") committee = true;
 
-  let postRef = firebase
-    .database()
-    .ref("/events/")
-    .push({
-      type: typeU,
-      committee: committeeU,
-      name: nameU,
-      description: descriptionU,
-      date: dateU,
-      time: timeU,
-      eventActive: false,
-      location: locationU,
-      points: pointsU,
-      code: makeCode(4)
-    })
-    .then(snapshot => {
-      if (committee === true) {
-        firebase
-          .database()
-          .ref(`/committees/${committeeU}/events/`)
-          .update({ [snapshot.key]: true });
-      }
-    })
-    .then(() => Alert.alert("Event Created", "Successful"))
-    .catch(error => Alert.alert("Event Created Failed", "Failure"));
+  let postRef = firebase.database().ref("/events/").push({
+                        type: typeU,
+                        committee: committeeU,
+                        name: nameU,
+                        description: descriptionU,
+                        date: dateU,
+                        time: timeU,
+                        eventActive: false,
+                        location: locationU,
+                        points: pointsU,
+                        code: makeCode(4)
+  })
+  .then(snapshot => {
+      if (committee === true) 
+        firebase.database().ref(`/committees/${committeeU}/events/`).update({ [snapshot.key]: true });
+  })
+  .then(() => Alert.alert("Event Created", "Successful"))
+  .catch(error => Alert.alert("Event Created Failed", "Failure"));
 
   return dispatch => {
     dispatch({
@@ -221,21 +215,15 @@ export const createEvent = (typeU, committeeU, nameU, descriptionU, dateU, timeU
 
 export const openCheckIn = eventID => {
   return () => {
-    firebase
-      .database()
-      .ref(`/events/${eventID}/`)
-      .update({ eventActive: true })
-      .catch(error => alert("Event Check-In could not be Started!", "Failure"));
+    firebase.database().ref(`/events/${eventID}/`).update({ eventActive: true })
+    .catch(error => alert("Event Check-In could not be Started!", "Failure"));
   };
 };
 
 export const closeCheckIn = eventID => {
   return () => {
-    firebase
-      .database()
-      .ref(`/events/${eventID}/`)
-      .update({ eventActive: false })
-      .catch(error => alert("Event Check-In could not be closed!", "Failure"));
+    firebase.database().ref(`/events/${eventID}/`).update({ eventActive: false })
+    .catch(error => alert("Event Check-In could not be closed!", "Failure"));
   };
 };
 
@@ -243,29 +231,22 @@ export const editEvent = (typeU, committeeU, nameU, descriptionU, dateU, timeU, 
   let committee = false;
   if (committeeU !== "") committee = true;
 
-  firebase
-    .database()
-    .ref(`/events/${eventIDU}`)
-    .update({
-      type: typeU,
-      committee: committeeU,
-      name: nameU,
-      description: descriptionU,
-      date: dateU,
-      time: timeU,
-      location: locationU,
-      points: pointsU
-    })
-    .then(() => {
-      if (committee === true) {
-        firebase
-          .database()
-          .ref(`/committees/${committeeU}/events/`)
-          .update({ [eventIDU]: true });
-      }
-    })
-    .then(() => Alert.alert("Event Edited", "Successful"))
-    .catch(error => Alert.alert("Event edit Failed", "Failure"));
+  firebase.database().ref(`/events/${eventIDU}`).update({
+          type: typeU,
+          committee: committeeU,
+          name: nameU,
+          description: descriptionU,
+          date: dateU,
+          time: timeU,
+          location: locationU,
+          points: pointsU
+  })
+  .then(() => {
+      if (committee === true) 
+        firebase.database().ref(`/committees/${committeeU}/events/`).update({ [eventIDU]: true });
+   })
+  .then(() => Alert.alert("Event Edited", "Successful"))
+  .catch(error => Alert.alert("Event edit Failed", "Failure"));
 
   return dispatch => {
     dispatch({
@@ -275,25 +256,15 @@ export const editEvent = (typeU, committeeU, nameU, descriptionU, dateU, timeU, 
 };
 
 export const deleteEvents = eventIDs => {
-  firebase
-    .database()
-    .ref(`events/${eventIDs}`)
-    .once("value", snapshot => {
-      if (snapshot.val().committee !== "") {
-        firebase
-          .database()
-          .ref(`committees/${snapshot.val().committee}/events/`)
-          .update({ [eventIDs]: {} });
-      }
-    })
-    .then(() =>
-      firebase
-        .database()
-        .ref("events")
-        .update({ [eventIDs]: {} })
-    )
-    .then(() => Alert.alert("Event Deleted", "Successful"))
-    .catch(error => Alert.alert("Event Deletion Failed", "Failure"));
+  firebase.database().ref(`events/${eventIDs}`).once("value", snapshot => {
+          if (snapshot.val().committee !== "")
+            firebase.database().ref(`committees/${snapshot.val().committee}/events/`).update({ [eventIDs]: {} });
+  })
+  .then(() => {
+      firebase.database().ref("events").update({ [eventIDs]: {} })
+  })
+  .then(() => Alert.alert("Event Deleted", "Successful"))
+  .catch(error => Alert.alert("Event Deletion Failed", "Failure"));
 
   return dispatch => {
     dispatch({ type: ACTIONS.DELETE_EVENTS });
@@ -308,97 +279,71 @@ export const checkIn = (eventID, val, id) => {
   if (id) valId = id;
 
   return dispatch => {
-    firebase
-      .database()
-      .ref(`events/${eventID}/eventActive`)
-      .once("value", snapshot => {
-        if (snapshot.val())
-          firebase
-            .database()
-            .ref(`events/${eventID}/attendance/${valId}`)
-            .once("value", snapshot => {
-              if (!snapshot.exists()) {
-                firebase
-                  .database()
-                  .ref(`points/${valId}/points`)
-                  .once("value", snapshot => {
-                    points = parseInt(snapshot.val()) + parseInt(val);
-                    firebase
-                      .database()
-                      .ref(`events/${eventID}`)
-                      .once("value", snapshot => {
-                        var realType = snapshot.val().type;
-                        if (snapshot.val().committee !== "") {
-                          realType = snapshot.val().committee;
-                        }
-                        firebase
-                          .database()
-                          .ref(`events/${eventID}/attendance`)
-                          .update({
-                            [valId]: true
-                          })
-                          .then(() =>
-                            firebase
-                              .database()
-                              .ref(`points/${valId}/points`)
-                              .set(points)
-                          )
-                          .then(() =>
-                            firebase
-                              .database()
-                              .ref(`points/${valId}/breakdown/${realType}/${eventID}`)
-                              .update({
-                                points: val,
-                                name: snapshot.val().name,
-                                date: snapshot.val().date,
-                                committee: snapshot.val().committee
-                              })
-                          );
-                      })
-                      .then(() =>
-                        firebase
-                          .database()
-                          .ref(`users/${valId}/points`)
-                          .set(points)
-                      )
-                      .then(() => Alert.alert("Checked In", "Successful"))
-                      .catch(error => Alert.alert("Check In Failed", "Failure"));
-                  });
-              } else Alert.alert("You have already attended this event!", "Failure");
-            });
-        else Alert.alert("Event check-in for this event is not open", "Failure");
+    firebase.database().ref(`events/${eventID}/eventActive`).once("value", snapshot => {
+            if (snapshot.val()) {
+              firebase.database().ref(`events/${eventID}/attendance/${valId}`).once("value", snapshot => {
+                      if (!snapshot.exists()) {
+                        firebase.database().ref(`points/${valId}/points`).once("value", snapshot => {
+                                points = parseInt(snapshot.val()) + parseInt(val);
+                                firebase.database().ref(`events/${eventID}`).once("value", snapshot => {
+                                        let realType = snapshot.val().type;
+                                        if (snapshot.val().committee !== "") 
+                                          realType = snapshot.val().committee;
+                                        
+                                        firebase.database().ref(`events/${eventID}/attendance`).update({
+                                                [valId]: true
+                                        })
+                                        .then(() => {
+                                            firebase.database().ref(`points/${valId}/points`).set(points)
+                                        })
+                                        .then(() => {
+                                            firebase.database().ref(`points/${valId}/breakdown/${realType}/${eventID}`).update({
+                                                    points: val,
+                                                    name: snapshot.val().name,
+                                                    date: snapshot.val().date,
+                                                    committee: snapshot.val().committee
+                                            })
+                                        });
+                                })
+                                .then(() => {
+                                    firebase.database().ref(`users/${valId}/points`).set(points)
+                                })
+                                .then(() => Alert.alert("Checked In", "Successful"))
+                                .catch(error => Alert.alert("Check In Failed", "Failure"));
+                          });
+                      } 
+                      else 
+                        Alert.alert("You have already attended this event!", "Failure");
+                });
+            }
+            else
+              Alert.alert("Event check-in for this event is not open", "Failure");
       });
   };
 };
 
 export const fetchEvents = () => {
   return dispatch => {
-    firebase
-      .database()
-      .ref("events/")
-      .on("value", snapshot => {
-        const eventList = snapshot.val();
-        dispatch({
-          type: ACTIONS.FETCH_EVENTS,
-          payload: eventList
-        });
-      });
+    firebase.database().ref("events/").on("value", snapshot => {
+            const eventList = snapshot.val();
+            dispatch({
+              type: ACTIONS.FETCH_EVENTS,
+              payload: eventList
+            });
+    });
   };
 };
 
 export const fetchCode = eventID => {
   return dispatch => {
-    firebase
-      .database()
-      .ref(`events/${eventID}/code`)
-      .on("value", snapshot => {
-        const code = snapshot.val();
-        // Alert.alert(`${eventID} ${code}`)
-        dispatch({
-          type: ACTIONS.FETCH_CODE,
-          payload: code
-        });
-      });
+    firebase.database().ref(`events/${eventID}/code`).on("value", snapshot => {
+            const code = snapshot.val();
+            // Alert.alert(`${eventID} ${code}`)
+            dispatch({
+              type: ACTIONS.FETCH_CODE,
+              payload: code
+            });
+    });
   };
 };
 

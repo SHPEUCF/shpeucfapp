@@ -161,116 +161,99 @@ export default (state = INITIAL_STATE, action) => {
 
 export const openElection = () => {
   return dispatch => {
-    firebase
-      .database()
-      .ref(`/election/`)
-      .update({
-        votes: 0,
-        election: true
-      })
-      .then(() => {
+    firebase.database().ref(`/election/`).update({
+            votes: 0,
+            election: true
+    })
+    .then(() => {
         dispatch({
           type: ACTIONS.OPEN_ELECTION,
           payload: true
         });
-      })
-      .then(() => alert("Election Started!", "Successful"))
-      .catch(error => alert("Election could not be Started!", "Failure"));
+    })
+    .then(() => alert("Election Started!", "Successful"))
+    .catch(error => alert("Election could not be Started!", "Failure"));
   };
 };
 
 export const closeElection = () => {
   return dispatch => {
-    firebase
-      .database()
-      .ref(`/election/`)
-      .update({ election: false })
-      .then(() => {
+    firebase.database().ref(`/election/`).update({ election: false })
+    .then(() => {
         dispatch({
           type: ACTIONS.CLOSE_ELECTION,
           payload: false
         });
-      })
-      .then(() => alert("Election Closed!", "Successful"))
-      .catch(error => alert("Election could not be Closed!", "Failure"));
+    })
+    .then(() => alert("Election Closed!", "Successful"))
+    .catch(error => alert("Election could not be Closed!", "Failure"));
   };
 };
 
 export const openApplications = () => {
   return dispatch => {
-    firebase
-      .database()
-      .ref(`/election/`)
-      .update({ apply: true })
-      .then(() => {
+    firebase.database().ref(`/election/`).update({ apply: true })
+    .then(() => {
         dispatch({
           type: ACTIONS.OPEN_APPLICATIONS,
           payload: true
         });
-      })
-      .then(() => alert("Applications Started!", "Successful"))
-      .catch(error => alert("Applications could not be Started!", "Failure"));
+    })
+    .then(() => alert("Applications Started!", "Successful"))
+    .catch(error => alert("Applications could not be Started!", "Failure"));
   };
 };
 export const closeApplications = () => {
   return dispatch => {
-    firebase
-      .database()
-      .ref(`/election/`)
-      .update({ apply: false })
-      .then(() => {
+    firebase.database().ref(`/election/`).update({ apply: false })
+    .then(() => {
         dispatch({
           type: ACTIONS.CLOSE_APPLICATIONS,
           payload: false
         });
-      })
-      .then(() => alert("Applications Closed!", "Successful"))
-      .catch(error => alert("Applications could not be Closed!", "Failure"));
+    })
+    .then(() => alert("Applications Closed!", "Successful"))
+    .catch(error => alert("Applications could not be Closed!", "Failure"));
   };
 };
 
 export const addPosition = (title, description, length) => {
   return () => {
-    firebase
-      .database()
-      .ref(`/election/positions/${title}`)
-      .set({ title: title, description: description, level: length })
-      .then(() => alert("Position Added!", "Successful"))
-      .catch(error => alert("Position could not be Added!", "Failure"));
+    firebase.database().ref(`/election/positions/${title}`).set({ 
+            title: title, 
+            description: description, 
+            level: length 
+    })
+    .then(() => alert("Position Added!", "Successful"))
+    .catch(error => alert("Position could not be Added!", "Failure"));
   };
 };
 
 export const updateElection = () => {
   return dispatch => {
-    firebase
-      .database()
-      .ref(`/election/`)
-      .on("value", snapshot => {
-        if (snapshot.exists()) {
-          const info = snapshot.val();
+    firebase.database().ref(`/election/`).on("value", snapshot => {
+            if (snapshot.exists()) {
+              const info = snapshot.val();
 
-          dispatch({
-            type: ACTIONS.UPDATE_ELECTION,
-            payload: info
-          });
-        }
-      });
+              dispatch({
+                type: ACTIONS.UPDATE_ELECTION,
+                payload: info
+              });
+            }
+    });
   };
 };
 
 export const deletePosition = text => {
   return dispatch => {
-    firebase
-      .database()
-      .ref(`/election/positions/${text}`)
-      .remove()
-      .then(() => {
+    firebase.database().ref(`/election/positions/${text}`).remove()
+    .then(() => {
         dispatch({
           type: ACTIONS.DELETE_POSITION
         });
-      })
-      .then(() => alert("Position Deleted!", "Successful"))
-      .catch(error => alert("Position could not be deleted!", "Failure"));
+    })
+    .then(() => alert("Position Deleted!", "Successful"))
+    .catch(error => alert("Position could not be deleted!", "Failure"));
   };
 };
 
@@ -278,44 +261,42 @@ export const editPosition = (title, description, oldTitle) => {
   if (oldTitle !== null) {
     let level;
 
-    firebase
-      .database()
-      .ref(`/election/positions/${oldTitle}/level`)
-      .once("value", snapshot => {
-        level = snapshot.val();
-      });
+    firebase.database().ref(`/election/positions/${oldTitle}/level`).once("value", snapshot => {
+            level = snapshot.val();
+    });
+
     return dispatch => {
-      firebase
-        .database()
-        .ref(`/election/positions/${oldTitle}`)
-        .remove()
-        .then(() => {
+      firebase.database().ref(`/election/positions/${oldTitle}`).remove()
+      .then(() => {
           dispatch({
             type: ACTIONS.DELETE_POSITION
           });
-        })
-        .then(() =>
-          firebase
-            .database()
-            .ref(`/election/positions/${title}`)
-            .set({ title: title, description: description, level: level })
-        )
-        .then(() => alert("Position Edited!", "Successful"))
-        .catch(error => alert("Position could not be Edited!", "Failure"));
+      })
+      .then(() => {
+          firebase.database().ref(`/election/positions/${title}`).set({ 
+                  title: title, 
+                  description: description, 
+                  level: level 
+          })
+      })
+      .then(() => alert("Position Edited!", "Successful"))
+      .catch(error => alert("Position could not be Edited!", "Failure"));
     };
-  } else {
+  } 
+  else {
     return dispatch => {
-      firebase
-        .database()
-        .ref(`/election/positions/${title}`)
-        .update({ title: title, description: description })
-        .then(() => {
+      firebase.database().ref(`/election/positions/${title}`).update({ 
+              title: title, 
+              description: 
+              description 
+      })
+      .then(() => {
           dispatch({
             type: ACTIONS.EDIT_POSITION
           });
-        })
-        .then(() => alert("Position Edited!", "Successful"))
-        .catch(error => alert("Position could not be Edited!", "Failure"));
+      })
+      .then(() => alert("Position Edited!", "Successful"))
+      .catch(error => alert("Position could not be Edited!", "Failure"));
     };
   }
 };
@@ -324,72 +305,63 @@ export const addApplication = (fName, lName, plans, position, picture) => {
   const { uid } = firebase.auth().currentUser;
 
   return dispatch => {
-    firebase
-      .database()
-      .ref(`/election/positions/${position}/candidates/${uid}`)
-      .set({
-        firstName: fName,
-        lastName: lName,
-        plan: plans,
-        id: uid,
-        position: position,
-        picture: picture,
-        approved: false
-      })
-      .then(() =>
-        firebase
-          .database()
-          .ref(`/users/${uid}/applied/`)
-          .set(true)
-      )
-      .then(() => {
+    firebase.database().ref(`/election/positions/${position}/candidates/${uid}`).set({
+            firstName: fName,
+            lastName: lName,
+            plan: plans,
+            id: uid,
+            position: position,
+            picture: picture,
+            approved: false
+    })
+    .then(() => {
+        firebase.database().ref(`/users/${uid}/applied/`).set(true)
+    })
+    .then(() => {
         dispatch({
           type: ACTIONS.ADD_APPLICATION
         });
-      })
-      .then(() => alert("Application Added!", "Successful"))
-      .catch(error => alert("Application could not be Added!", "Failure"));
+    })
+    .then(() => alert("Application Added!", "Successful"))
+    .catch(error => alert("Application could not be Added!", "Failure"));
   };
 };
 
 export const editApplication = (plans, position, candidateId) => {
   const { uid } = firebase.auth().currentUser;
 
-  firebase
-    .database()
-    .ref(`/election/positions/${position}/candidates/${uid}/plan`)
-    .set(plans)
-    .then(() => alert("Candidate Edited!", "Successful"))
-    .catch(error => {
-      console.error(error);
-      alert("Candidate could not be Edited!", "Failure");
-    });
+  firebase.database().ref(`/election/positions/${position}/candidates/${uid}/plan`).set(plans)
+  .then(() => alert("Candidate Edited!", "Successful"))
+  .catch(error => {
+    console.error(error);
+    alert("Candidate could not be Edited!", "Failure");
+  });
 };
 
 export const approveApplication = (position, candidateId, fName, lName) => {
   return dispatch => {
-    //this needs to find the person but it needs to check for duplicates somehow
+    // this needs to find the person but it needs to check for duplicates somehow
 
-    //Alert.alert(candidateId);
-    firebase
-      .database()
-      .ref(`/election/positions/${position}/candidates/${candidateId}`)
-      .update({
-        approved: true
-      })
-      .then(() => {
-        firebase
-          .database()
-          .ref(`/voting/${position}/${candidateId}`)
-          .set({ votes: 0, firstName: fName, lastName: lName });
-      })
-      .then(() => {
+    // Alert.alert(candidateId);
+    firebase.database().ref(`/election/positions/${position}/candidates/${candidateId}`).update({
+            approved: true
+    })
+    .then(() => {
+        firebase.database().ref(`/voting/${position}/${candidateId}`).set({ 
+                votes: 0, 
+                firstName: 
+                fName, 
+                lastName: 
+                lName 
+        });
+    })
+    .then(() => {
         dispatch({
           type: ACTIONS.APPROVE_APPLICATION
         });
-      })
-      .then(() => alert("Candidate Approved!", "Successful"))
-      .catch(error => alert("Candidate could not be Approved!", "Failure"));
+    })
+    .then(() => alert("Candidate Approved!", "Successful"))
+    .catch(error => alert("Candidate could not be Approved!", "Failure"));
   };
 };
 
@@ -398,29 +370,22 @@ export const deleteApplication = (position, candidateId) => {
     //this needs to find the person but it needs to check for duplicates somehow
 
     //Alert.alert(candidateId);
-    firebase
-      .database()
-      .ref(`/election/positions/${position}/candidates/${candidateId}`)
-      .remove()
-      .then(() => {
+    firebase.database().ref(`/election/positions/${position}/candidates/${candidateId}`).remove()
+    .then(() => {
         dispatch({
           type: ACTIONS.DELETE_APPLICATION
         });
-      })
-      .then(() =>
-        firebase
-          .database()
-          .ref(`/users/${candidateId}`)
-          .update({ applied: false })
-      )
-      .then(() =>
-        firebase
-          .database()
-          .ref(`/voting/${position}/${candidateId}`)
-          .remove()
-      )
-      .then(() => alert("Candidate Removed!", "Successful"))
-      .catch(error => alert("Candidate could not be removed!", "Failure"));
+    })
+    .then(() => {
+        firebase.database().ref(`/users/${candidateId}`).update({ 
+          applied: false 
+        })
+    })
+    .then(() => {
+        firebase.database().ref(`/voting/${position}/${candidateId}`).remove()
+    })
+    .then(() => alert("Candidate Removed!", "Successful"))
+    .catch(error => alert("Candidate could not be removed!", "Failure"));
   };
 };
 
@@ -503,91 +468,64 @@ export const goToPositionForm = text => {
 export const vote = (userId, dict) => {
   let votes;
   return () => {
-    firebase
-      .database()
-      .ref(`/voting/`)
-      .once("value", snapshot => {
-        obj = snapshot.val();
-        dict.forEach(function(item) {
-          obj[item.key][item.value][userId] = true;
-          obj[item.key][item.value].votes = snapshot.val()[item.key][item.value].votes + 1;
-        });
+    firebase.database().ref(`/voting/`).once("value", snapshot => {
+            obj = snapshot.val();
+            dict.forEach(function(item) {
+              obj[item.key][item.value][userId] = true;
+              obj[item.key][item.value].votes = snapshot.val()[item.key][item.value].votes + 1;
+            });
 
-        firebase
-          .database()
-          .ref(`/voting/`)
-          .update(obj);
-      })
-      .then(() =>
-        firebase
-          .database()
-          .ref(`/election/votes`)
-          .once("value", snapshot => {
-            votes = parseInt(snapshot.val()) + 1;
-            firebase
-              .database()
-              .ref(`/election/votes`)
-              .set(votes);
-          })
-      )
-      .then(() =>
-        firebase
-          .database()
-          .ref(`/users/${userId}/voted/`)
-          .set(true)
-      )
-      .then(() => alert("Vote Cast!", "Successful"))
-      .catch(error => alert("Vote could not be cast!", "Failure"));
+            firebase.database().ref(`/voting/`).update(obj);
+    })
+    .then(() => {
+        firebase.database().ref(`/election/votes`).once("value", snapshot => {
+                votes = parseInt(snapshot.val()) + 1;
+                firebase.database().ref(`/election/votes`).set(votes);
+        })
+    })
+    .then(() => {
+        firebase.database().ref(`/users/${userId}/voted/`).set(true)
+    })
+    .then(() => alert("Vote Cast!", "Successful"))
+    .catch(error => alert("Vote could not be cast!", "Failure"));
   };
 };
 
 export const getPositions = () => {
   return dispatch => {
-    firebase
-      .database()
-      .ref(`/election/positions`)
-      .on("value", snapshot => {
-        const positions = snapshot.val();
+    firebase.database().ref(`/election/positions`).on("value", snapshot => {
+            const positions = snapshot.val();
 
-        dispatch({
-          type: ACTIONS.GET_POSITIONS,
-          payload: positions
-        });
-      });
+            dispatch({
+              type: ACTIONS.GET_POSITIONS,
+              payload: positions
+            });
+    });
   };
 };
 
 export const changeLevels = positions => {
   return () => {
-    firebase
-      .database()
-      .ref(`/election/`)
-      .once("value", snapshot => {
-        obj = snapshot.val();
-        positions.forEach(function(item, index) {
-          obj.positions[item.position.title].level = index;
-        });
-        firebase
-          .database()
-          .ref(`/election/`)
-          .update(obj);
-      })
-      .then(() => alert("Order Set!", "Successful"))
-      .catch(error => alert("Order could not be set!", "Failure"));
+    firebase.database().ref(`/election/`).once("value", snapshot => {
+            obj = snapshot.val();
+            positions.forEach(function(item, index) {
+              obj.positions[item.position.title].level = index;
+            });
+            firebase.database().ref(`/election/`).update(obj);
+    })
+    .then(() => alert("Order Set!", "Successful"))
+    .catch(error => alert("Order could not be set!", "Failure"));
   };
 };
 
 export const getVotes = () => {
   return dispatch => {
-    firebase
-      .database()
-      .ref(`voting`)
-      .on("value", snapshot => {
-        const votes = snapshot.val();
-        dispatch({
-          type: ACTIONS.GET_VOTES,
-          payload: votes
-        });
-      });
+    firebase.database().ref(`voting`).on("value", snapshot => {
+            const votes = snapshot.val();
+            dispatch({
+              type: ACTIONS.GET_VOTES,
+              payload: votes
+            });
+    });
   };
 };

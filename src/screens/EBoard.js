@@ -185,20 +185,45 @@ class EBoard extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  cardContainer: { marginRight: 5, marginLeft: 5, marginTop: 5, backgroundColor: "#2C3239" },
-  shpeInfoContainer: { marginBottom: 10 },
-  shpeInfoRow: { marginBottom: 10, flexDirection: "row", alignItems: "center", justifyContent: "center" },
-  infoLabel: {
-    fontSize: 20,
-    fontWeight: "bold",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "white"
+  container: {
+    flex: 1
   },
-  infoValue: { fontSize: 15, fontWeight: "normal", color: "white" },
-  signalInfoLabel: { marginBottom: 10, marginLeft: 10, color: "white", fontWeight: "bold" },
-  titleColor: { color: "white" }
+  cardContainer: {
+    marginRight: 5,
+    marginLeft: 5,
+    marginTop: 5,
+    backgroundColor: '#2C3239'
+  },
+  shpeInfoContainer: {
+    marginBottom: 10
+  },
+  shpeInfoRow: {
+    marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  infoLabel: {
+   fontSize: 20,
+   fontWeight: 'bold',
+   alignItems: 'center',
+   justifyContent: 'center',
+   color: 'white'
+  },
+  infoValue: {
+   fontSize: 15,
+   fontWeight: 'normal',
+   color: 'white'
+  },
+  signalInfoLabel: {
+    marginBottom: 10,
+    marginLeft: 10,
+    color: 'white',
+    fontWeight: 'bold'
+  },
+  titleColor: {
+    color: 'white'
+  }
 });
 
 export { EBoard };

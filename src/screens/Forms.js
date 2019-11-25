@@ -22,14 +22,12 @@ const forms = [
       name: "Positions",
       items: [
         {
-          uri:
-            "https://docs.google.com/forms/d/e/1FAIpQLSeeLiqMkNBV0Cken5KWglpcCmDyXzvfqejb5txJjg81vLkG8w/viewform",
+          uri: "https://docs.google.com/forms/d/e/1FAIpQLSeeLiqMkNBV0Cken5KWglpcCmDyXzvfqejb5txJjg81vLkG8w/viewform",
           title: "Fundraising Committee",
           description: "MentorSHPE Interest Form"
         },
         {
-          uri:
-            "https://docs.google.com/forms/d/e/1FAIpQLScfN-uGLrsSmw1OwKflkHUN0V_70wdaKwRB2AgPmc1uQQdzhQ/viewform",
+          uri: "https://docs.google.com/forms/d/e/1FAIpQLScfN-uGLrsSmw1OwKflkHUN0V_70wdaKwRB2AgPmc1uQQdzhQ/viewform",
           title: "MentorSHPE",
           description: "Fundraising Committee Interest Form"
         }
@@ -41,8 +39,7 @@ const forms = [
       name: "Events",
       items: [
         {
-          uri:
-            "https://docs.google.com/forms/d/e/1FAIpQLSfiA_BK2BXpvQDIds7ilmdbyWT1wpdFptMpKRFPrE57L0pi0g/viewform",
+          uri: "https://docs.google.com/forms/d/e/1FAIpQLSfiA_BK2BXpvQDIds7ilmdbyWT1wpdFptMpKRFPrE57L0pi0g/viewform",
           title: "Pen Pal",
           description: "SHPE Pen Pal project"
         }
@@ -54,8 +51,7 @@ const forms = [
       name: "Workshops",
       items: [
         {
-          uri:
-            "https://docs.google.com/forms/d/e/1FAIpQLSfh5hkPVV9OlsZwNKExuu8b58aBcShGzCeMXyMY6-b77LmtsQ/viewform",
+          uri: "https://docs.google.com/forms/d/e/1FAIpQLSfh5hkPVV9OlsZwNKExuu8b58aBcShGzCeMXyMY6-b77LmtsQ/viewform",
           title: "Google at UCF",
           description: "Applied CS Workshop"
         }
@@ -67,8 +63,7 @@ const forms = [
       name: "Tours",
       items: [
         {
-          uri:
-            "https://docs.google.com/forms/d/e/1FAIpQLSf48WUE1ZEP62rl9lGJV3A_GhJXMHKr_pp3N1uf_LCFJhrMrA/viewform",
+          uri: "https://docs.google.com/forms/d/e/1FAIpQLSf48WUE1ZEP62rl9lGJV3A_GhJXMHKr_pp3N1uf_LCFJhrMrA/viewform",
           title: "Northrop Grumman",
           description: "January 19 (Full Day Availability Required)"
         }
@@ -106,7 +101,13 @@ class Forms extends Component {
 }
 
 const styles = StyleSheet.create({
-  sectionTitle: { color: "white", fontWeight: "bold", fontSize: 15, marginTop: 10, marginLeft: 20 }
+  sectionTitle: { 
+    color: "white", 
+    fontWeight: "bold", 
+    fontSize: 15, 
+    marginTop: 10,
+    marginLeft: 20 
+  }
 });
 
 export { Forms };

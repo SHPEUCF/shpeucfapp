@@ -132,40 +132,57 @@ class CommitteesBackEnd extends Component {
 }
 
 const styles = StyleSheet.create({
-  tabBar: {
-    height: dimension.height * 0.1,
-    backgroundColor: "#fff",
+  tabBar : {
+    height: dimension.height * .1,
+    backgroundColor: '#fff',
     borderWidth: 1,
     borderStyle: "solid",
     borderColor: "#0005"
   },
   containerStyle: {
     flex: 25,
-    justifyContent: "center",
-    alignItems: "flex-start",
+    justifyContent: 'center',
+    alignItems: 'flex-start',
     paddingVertical: 10,
     paddingHorizontal: 15
   },
   containerTextStyle: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "flex-start",
-    backgroundColor: "#2C3239",
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    backgroundColor: '#2C3239',
     paddingVertical: 10,
     paddingHorizontal: 15
   },
   contentContainerStyle: {
     margin: 1,
-    height: dimension.height * 0.09,
+    height: dimension.height * .09,
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "center"
+    flexDirection: 'row',
+    justifyContent: 'center'
   },
-  textColor: { color: "#e0e6ed" },
-  tabBarText: { color: "#000", fontSize: 20, margin: 20, alignSelf: "center" },
-  content: { flex: 1, margin: 10 },
-  buttonContainerStyle: { flex: 5, margin: 5, justifyContent: "center" },
-  page: { flex: 1, backgroundColor: "#0c0b0b" }
+  textColor: {
+    color: '#e0e6ed'
+  },
+  tabBarText : {
+    color: '#000',
+    fontSize: 20,
+    margin: 20,
+    alignSelf: "center"
+  },
+  content: {
+    flex: 1,
+    margin: 10
+  },
+  buttonContainerStyle: {
+      flex: 5,
+      margin: 5,
+      justifyContent: 'center'
+  },
+  page: {
+    flex: 1,
+    backgroundColor: '#0c0b0b'
+  }
 });
 
 const mapStateToProps = ({ committees, members }) => {
