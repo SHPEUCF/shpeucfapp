@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ScrollView, View, Text, StyleSheet, Dimensions, Platform } from "react-native";
+import { ScrollView, View, Text, StyleSheet, Dimensions } from "react-native";
 import { connect } from "react-redux";
 import { Actions } from "react-native-router-flux";
 import { PickerInput, Input, Button, Spinner, DatePicker } from "../general";
@@ -160,7 +160,7 @@ class EditProfileForm extends Component {
   renderCountryPickers() {
     const { continent, continentChanged, nationalityChanged, nationality } = this.props;
 
-    const p1 = (continent !== undefined && continent !== null && continent !== "") ? 
+    const p1 = (continent !== undefined && continent !== null && continent !== "" && continent !== "Do not wish to disclose") ?
       (<PickerInput
           title={"Nationality"}
           value={nationality}

@@ -22,27 +22,33 @@ class FilterPicker extends Component {
       this.setState({ modalVisible: true });
   }
 
-  static propTypes = {
-    title: PropTypes.string.isRequired,
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    data: PropTypes.oneOfType([PropTypes.array, PropTypes.shape({})]).isRequired,
-    placeholder: PropTypes.string,
-    onSelect: PropTypes.func.isRequired,
-    inputBoxStyle: PropTypes.shape({}),
-    style: PropTypes.shape({}),
-    pickerItemStyle: PropTypes.shape({}),
-    dropDownArrowStyle: PropTypes.shape({}),
-    iconSize: PropTypes.number,
-    filter: PropTypes.string,
-    iconColor: PropTypes.string,
-    onChangeText: PropTypes.func,
-    type: PropTypes.string
-  };
-
   clickAction(user, index) {
     this.props.onSelect(user, index);
     this.setState({ text: `${user.firstName} ${user.lastName}`, modalVisible: false });
   }
+    static propTypes = {
+        title: PropTypes.string.isRequired,
+        value: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+        ]).isRequired,
+        data: PropTypes.oneOfType([
+            PropTypes.array,
+            PropTypes.shape({})
+        ]).isRequired,
+        placeholder: PropTypes.string,
+        onSelect: PropTypes.func.isRequired,
+        inputBoxStyle: PropTypes.shape({}),
+        style: PropTypes.shape({}),
+        pickerItemStyle: PropTypes.shape({}),
+        dropDownArrowStyle: PropTypes.shape({}),
+        iconSize: PropTypes.number,
+        filter: PropTypes.string,
+        iconColor: PropTypes.string,
+        onChangeText:  PropTypes.func,
+        type: PropTypes.string,
+        itemJSX: PropTypes.func
+    }
 
   selectUserAction(user) {
     let tmpSelectedNames = Object.assign({}, this.state.selectedNames);
@@ -93,6 +99,16 @@ class FilterPicker extends Component {
           </TouchableOpacity>
         );
       }
+      else if (this.props.type === "Searchbar") {
+            var re = new RegExp("^"+this.props.filter, "i");
+            if (re.test(`${item.firstName} ${item.lastName}`) ){
+                return(
+                <TouchableOpacity onPress={() => this.props.onSelect(item)}>
+                    {this.props.itemJSX(item)}
+                </TouchableOpacity>
+                )
+            }
+       }
     }
   }
 
@@ -209,6 +225,29 @@ class FilterPicker extends Component {
         </View>
       );
     }
+    else if (this.props.type === "Searchbar") {
+      picker = <View>
+          <View style={modalBackground}>
+              <View >
+                  <Input
+                  style={[inputStylee, inputStyleee]}
+                  onChangeText={onChangeText}
+                  value={this.props.filter}
+                  />
+                  <View style = {{flex: 2}}>
+                  <FlatList
+                  data={this.props.data}
+                  extraData={this.state}
+                  keyExtractor={this._keyExtractor}
+                  renderItem={({item, index}) => (
+                      this.renderComponent(item, index)
+                  )}
+                  />
+                  </View>
+              </View>
+          </View>
+        </View>
+      }
 
     return <View>{picker}</View>;
   };

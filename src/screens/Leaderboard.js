@@ -1,15 +1,30 @@
-import React, { Component } from "react";
-import { Actions } from "react-native-router-flux";
-import { connect } from "react-redux";
-import { NavBar } from "../components/general";
-import { fetchMembersPoints, fetchMemberProfile, goToOtherProfile, pageLoad, getPrivilege, loadUser } from "../ducks";
-import _ from "lodash";
-import * as Progress from "react-native-progress";
-import { FlatList, Text, View, StyleSheet, Dimensions, Image } from "react-native";
+import React, { Component } from 'react';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { NavBar, FilterPicker } from '../components/general'
+import {
+  fetchMembersPoints,
+  fetchMemberProfile,
+  goToOtherProfile,
+  pageLoad,
+  getPrivilege,
+  loadUser,
+  filterChanged
+} from '../ducks';
+import _ from 'lodash';
+import * as Progress from 'react-native-progress';
+import {
+  FlatList,
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+  Image } from 'react-native';
 
-const dimension = Dimensions.get("window");
-const iteratees = ["points", "lastName", "firstName"];
-const order = ["desc", "asc", "asc"];
+const dimension = Dimensions.get('window');
+const iteratees = ['points','lastName','firstName'];
+const order = ['desc','asc','asc'];
 
 class Leaderboard extends Component {
   constructor(props) {
@@ -17,7 +32,8 @@ class Leaderboard extends Component {
   }
 
   componentWillMount() {
-    this.props.loadUser();
+    this.props.filterChanged("")
+    this.props.loadUser()
     this.props.fetchMembersPoints();
   }
 
@@ -47,6 +63,18 @@ class Leaderboard extends Component {
           keyExtractor={this._keyExtractor}
           renderItem={({ item, separators }) => this.renderComponent(item, sortedMembers)}
         />
+        <FilterPicker
+              title={"Members"}
+              filter={this.props.filter}
+              type="Searchbar"
+              data={sortedMembers}
+              onChangeText={this.props.filterChanged.bind(this)}
+              placeholder="Find user"
+              itemJSX = {(item) => this.renderComponent(item, sortedMembers)}
+              onSelect={(item) => {
+                  alert(item.firstName)
+                }}
+              />
       </View>
     );
   }
@@ -172,10 +200,11 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = ({ user, members }) => {
+const mapStateToProps = ({ user, members, general }) => {
   const { membersPoints } = members;
   const { picture, id } = user;
-  return { membersPoints, id, picture };
+  const { filter } = general
+  return { membersPoints, id, picture, filter};
 };
 
 const mapDispatchToProps = {
@@ -184,7 +213,8 @@ const mapDispatchToProps = {
   goToOtherProfile,
   pageLoad,
   getPrivilege,
-  loadUser
+  loadUser,
+  filterChanged
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Leaderboard);
