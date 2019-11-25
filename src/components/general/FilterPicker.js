@@ -61,9 +61,7 @@ class FilterPicker extends Component {
   renderComponent(item, index) {
     if (this.props.type === "Single") {
       const { itemStyle, itemTextStyle } = styles;
-
       let user = item[1];
-
       let re = new RegExp("^" + this.props.filter, "i");
 
       if (re.test(`${user.firstName} ${user.lastName}`)) {
@@ -77,7 +75,8 @@ class FilterPicker extends Component {
           </TouchableOpacity>
         );
       }
-    } else if (this.props.type === "Multiple") {
+    } 
+    else if (this.props.type === "Multiple") {
       const { filter, pickerItemStyle, excludeData } = this.props;
       let user = item[1];
 
@@ -86,7 +85,7 @@ class FilterPicker extends Component {
         return null;
 
       let selected = this.state.selectedNames[`${user.id}`] ? { backgroundColor: "#f00" } : {};
-      re = new RegExp("^" + filter, "i");
+      let re = new RegExp("^" + filter, "i");
 
       if (re.test(`${user.firstName} ${user.lastName}`)) {
         return (
@@ -100,15 +99,15 @@ class FilterPicker extends Component {
         );
       }
       else if (this.props.type === "Searchbar") {
-            var re = new RegExp("^"+this.props.filter, "i");
-            if (re.test(`${item.firstName} ${item.lastName}`) ){
-                return(
-                <TouchableOpacity onPress={() => this.props.onSelect(item)}>
-                    {this.props.itemJSX(item)}
-                </TouchableOpacity>
-                )
-            }
-       }
+        let re = new RegExp("^"+this.props.filter, "i");
+        if (re.test(`${item.firstName} ${item.lastName}`)) {
+            return (
+            <TouchableOpacity onPress={() => this.props.onSelect(item)}>
+                {this.props.itemJSX(item)}
+            </TouchableOpacity>
+            )
+        }
+      }
     }
   }
 
@@ -193,7 +192,8 @@ class FilterPicker extends Component {
           </Modal>
         </View>
       );
-    } else if (this.props.type === "Multiple") {
+    } 
+    else if (this.props.type === "Multiple") {
       picker = (
         <View>
           <Modal transparent={true} visible={this.state.modalVisible}>

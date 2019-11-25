@@ -56,13 +56,6 @@ class Leaderboard extends Component {
     return (
       <View style={screenBackground}>
         <NavBar title="Leaderboard" back onBack={() => Actions.pop()} />
-        <FlatList
-          style={{ flex: 1 }}
-          data={sortedMembers}
-          extraData={this.state}
-          keyExtractor={this._keyExtractor}
-          renderItem={({ item, separators }) => this.renderComponent(item, sortedMembers)}
-        />
         <FilterPicker
               title={"Members"}
               filter={this.props.filter}
@@ -74,7 +67,15 @@ class Leaderboard extends Component {
               onSelect={(item) => {
                   alert(item.firstName)
                 }}
-              />
+         />
+        <FlatList
+          style={{ flex: 1 }}
+          data={sortedMembers}
+          extraData={this.state}
+          keyExtractor={this._keyExtractor}
+          renderItem={({ item, separators }) => this.renderComponent(item, sortedMembers)}
+        />
+        
       </View>
     );
   }
@@ -203,7 +204,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({ user, members, general }) => {
   const { membersPoints } = members;
   const { picture, id } = user;
-  const { filter } = general
+  const { filter } = general;
   return { membersPoints, id, picture, filter};
 };
 
