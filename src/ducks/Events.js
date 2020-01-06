@@ -234,31 +234,31 @@ export const editEvent = (typeU, committeeU, nameU, descriptionU, dateU, timeU, 
     committee = true;
   }
 
-    firebase.database().ref(`/events/${eventIDU}`).update({
-            type: typeU,
-            committee: committeeU,
-            name: nameU,
-            description: descriptionU,
-            date: dateU,
-            time: timeU,
-            location: locationU,
-            points: pointsU,
-        })
-        .then(() => {
-          if (committee === true){
-          firebase.database().ref(`/committees/${committeeU}/events/`).update({ 
-            [eventIDU]: true
-          })
-           }
-        })
-        .then(() => Alert.alert('Event Edited', 'Successful'))
-        .catch((error) => Alert.alert('Event edit Failed', 'Failure'));
-
-    return (dispatch) => {
-        dispatch({
-            type: ACTIONS.EDIT_EVENT,
-        });
+  firebase.database().ref(`/events/${eventIDU}`).update({
+          type: typeU,
+          committee: committeeU,
+          name: nameU,
+          description: descriptionU,
+          date: dateU,
+          time: timeU,
+          location: locationU,
+          points: pointsU,
+  })
+  .then(() => {
+    if (committee === true){
+      firebase.database().ref(`/committees/${committeeU}/events/`).update({ 
+        [eventIDU]: true
+      })
     }
+  })
+  .then(() => Alert.alert('Event Edited', 'Successful'))
+  .catch((error) => Alert.alert('Event edit Failed', 'Failure'));
+
+  return (dispatch) => {
+      dispatch({
+          type: ACTIONS.EDIT_EVENT,
+      });
+  }
 };
 
 export const deleteEvents = (eventIDs) => {

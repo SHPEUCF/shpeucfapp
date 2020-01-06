@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { Button, NavBar } from '../components/general';
-import { RkAvoidKeyboard } from 'react-native-ui-kitten';
 
 import { Avatar } from 'react-native-elements';
 import {

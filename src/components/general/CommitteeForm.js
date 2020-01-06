@@ -3,7 +3,6 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
 import { Input, Button, FilterPicker } from '../general';
-import { RkAvoidKeyboard, RkButton, RkPicker } from 'react-native-ui-kitten';
 import {
     addCommittee,
     editCommittee,

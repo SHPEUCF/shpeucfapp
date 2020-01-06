@@ -19,9 +19,10 @@
   },
   "dependencies": {
     "firebase": "^6.4.2",
+    "googleapis": "^39.2.0",
     "qrcode": "^1.4.4",
-    "react": "16.8.6",
-    "react-native": "0.60.5",
+    "react": "16.9.0",
+    "react-native": "0.61.5",
     "react-native-beacons-manager": "^1.0.7",
     "react-native-calendars": "git+https://github.com/SHPEUCF/react-native-calendars.git",
     "react-native-camera": "^3.11.1",

@@ -11,7 +11,6 @@ import {
 } from '../../ducks';
 
 import { Spinner, Button, Input } from '../general';
-import { RkAvoidKeyboard } from 'react-native-ui-kitten';
 
 class LoginForm extends Component {
 

@@ -46,7 +46,7 @@ class PointsBreakDown extends Component {
 
                return (
                 <View style ={page}>
-                    <NavBar title="Points" back onBack={() => Actions.replace('profile')} />
+                    <NavBar title="Points" back onBack={() => Actions.pop()} />
                     {this.renderContent()}
                 </View>
             )
