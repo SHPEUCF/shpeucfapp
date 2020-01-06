@@ -42,7 +42,6 @@ import Dashboard from '../screens/Dashboard'
 
 import {
   Resources,
-  CheckIn,
   Forms,
   About,
   EBoard,
@@ -80,14 +79,7 @@ const RouterComponent = () => {
             title="Reset Password"
             type={ActionConst.REPLACE}
             hideNavBar
-          />
-          <Scene
-            key="pointsBreakDown"
-            component={PointsBreakDown}
-            title="Points"
-            type={ActionConst.REPLACE}
-            hideNavBar
-          />        
+          />   
         </Stack>
         <Stack key = "events" hideNavBar>
           <Scene
@@ -153,12 +145,6 @@ const RouterComponent = () => {
             type={ActionConst.REPLACE}
             hideNavBar
         />
-        <Scene
-          key="EditProfileForm"
-          component={EditProfileForm}
-          type={ActionConst.REPLACE}
-          hideNavBar
-          />
         </Stack>
         
         <Stack key="main"
@@ -183,8 +169,6 @@ const RouterComponent = () => {
               />
             }
           />
-
-
           <Scene
             key="event"
             hideNavBar
@@ -199,19 +183,36 @@ const RouterComponent = () => {
               />
             }
           />
-          <Scene
-            key="profile"
+          <Stack
             hideNavBar
-            component={Profile}
+            key="profile"
             title="Profile"
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
                 name={'ios-person'}
                 size ={30}
-                style={focused ? {color: '#FFC107'} : {color: 'white'}} 
+                style={focused ? {color: '#FFC107'} : {color: 'white'}}
               />
-            }
-          />
+            }>
+            <Scene
+              key="profile"
+              component={Profile}
+              title="Profile"
+              leftTitle="Back"
+            />
+            <Scene
+              key="EditProfileForm"
+              component={EditProfileForm}
+              type={ActionConst.REPLACE}
+              hideNavBar
+            />
+            <Scene
+            key="pointsBreakDown"
+            component={PointsBreakDown}
+            title="Points"
+            hideNavBar
+             />     
+          </Stack>
           <Stack
             hideNavBar
             key="more"
@@ -270,10 +271,6 @@ const RouterComponent = () => {
             />
             <Scene key="WebPageShow"
               component={WebPageShow}
-            />
-            <Scene key="CheckIn"
-              component={CheckIn}
-              title="Check In"
             />
             <Scene
               key="ElectionApplication"
