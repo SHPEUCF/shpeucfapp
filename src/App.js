@@ -9,7 +9,7 @@ import AppInfo from '../app.json'
 
 class App extends Component {
 
-  componentWillMount() {
+  componentDidMount() {
     // Initialize firebase
     const config = {
       apiKey: "AIzaSyCeX5lUZUmQxXsWNO8gNXVHqfJs-kQmSaY",
@@ -17,7 +17,7 @@ class App extends Component {
       databaseURL: "https://shpe-ucf.firebaseio.com",
       projectId: "shpe-ucf",
       storageBucket: "shpe-ucf.appspot.com",
-      messagingSenderId: "974032317047"
+      messagingSenderId: "974032317047",
     };
     firebase.initializeApp(config)
     

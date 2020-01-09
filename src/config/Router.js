@@ -153,22 +153,31 @@ const RouterComponent = () => {
           type={ActionConst.RESET}
           activeTintColor={'#E0E6ED'}
           inactiveTintColor={'#C0CCDA'}
-          tabBarStyle={{backgroundColor: '#21252b', paddingTop: '1%'}}
+          tabBarStyle={{backgroundColor: '#21252b', height: "10%"}}
         >
-          <Scene
-            key="dashboard"
+          <Stack
             hideNavBar
-            component={Dashboard}
-            tabBarLabel="Dashboard"
+            key="dashboard"
             title="Dashboard"
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
-                name={'ios-paper'}
+                name={'ios-person'}
                 size ={30}
                 style={focused ? {color: '#FFC107'} : {color: 'white'}}
               />
-            }
-          />
+            }>
+            <Scene
+              key="dashboard"
+              component={Dashboard}
+              title="dashboard"
+              leftTitle="Back"
+            />
+           <Scene key="LeaderboardD"
+              component={Leaderboard}
+              title="Leaderboard"
+              hideTabBar
+            />
+          </Stack>
           <Scene
             key="event"
             hideNavBar
@@ -230,7 +239,7 @@ const RouterComponent = () => {
               title="More"
               leftTitle="Back"
             />
-            <Scene key="Leaderboard"
+            <Scene key="LeaderboardM"
               component={Leaderboard}
               title="Leaderboard"
               hideTabBar
