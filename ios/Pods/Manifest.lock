@@ -19,7 +19,7 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - Permission-Camera (2.0.3):
+  - Permission-Camera (2.0.9):
     - RNPermissions
   - QBImagePickerController (3.4.0)
   - RCTRequired (0.61.5)
@@ -185,13 +185,13 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
   - React-jsinspector (0.61.5)
-  - react-native-camera (3.11.1):
+  - react-native-camera (3.15.1):
     - React
-    - react-native-camera/RCT (= 3.11.1)
-    - react-native-camera/RN (= 3.11.1)
-  - react-native-camera/RCT (3.11.1):
+    - react-native-camera/RCT (= 3.15.1)
+    - react-native-camera/RN (= 3.15.1)
+  - react-native-camera/RCT (3.15.1):
     - React
-  - react-native-camera/RN (3.11.1):
+  - react-native-camera/RN (3.15.1):
     - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
@@ -228,16 +228,16 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
-  - rn-fetch-blob (0.11.2):
+  - rn-fetch-blob (0.12.0):
     - React-Core
-  - RNImageCropPicker (0.26.1):
+  - RNImageCropPicker (0.26.2):
     - QBImagePickerController
     - React-Core
     - React-RCTImage
     - RSKImageCropper
-  - RNPermissions (2.0.3):
+  - RNPermissions (2.0.9):
     - React
-  - RNSVG (9.13.3):
+  - RNSVG (10.0.0):
     - React
   - RNVectorIcons (6.6.0):
     - React
@@ -362,7 +362,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  Permission-Camera: 019cd09a9b6fa90f7e5b2f7a4a9e32c54027f123
+  Permission-Camera: b0fec577b27488314a885f9c74433e02f3585b9b
   QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
@@ -373,7 +373,7 @@ SPEC CHECKSUMS:
   React-jsi: cb2cd74d7ccf4cffb071a46833613edc79cdf8f7
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
-  react-native-camera: b7ad0c9648c3ea83f58a3ef4f815ab4acd88dc7e
+  react-native-camera: d5b131588a2d1f0ad377a321793f58794dbdc768
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -384,10 +384,10 @@ SPEC CHECKSUMS:
   React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
-  rn-fetch-blob: f525a73a78df9ed5d35e67ea65e79d53c15255bc
-  RNImageCropPicker: e1d8c3381e5b05a1bdcd13ea57a4f1c020a09cef
-  RNPermissions: 332fd0d0c33ba71d83a22f584fce7b2270488ae0
-  RNSVG: f6177f8d7c095fada7cfee2e4bb7388ba426064c
+  rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
+  RNImageCropPicker: 9d1a7eea4f8368fc479cbd2bf26459bd3c74d9aa
+  RNPermissions: 6db7e0a4d94c9c02390d11020b1d3d187aaf77e5
+  RNSVG: 9d45f03136ecc9b5497e12f6f20838b568acb9f4
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   RSKImageCropper: a446db0e8444a036b34f3c43db01b2373baa4b2a
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
