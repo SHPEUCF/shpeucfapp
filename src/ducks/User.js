@@ -18,6 +18,8 @@ const ACTIONS = createActiontypes([
     'PASSWORD_CHANGED',
     'CONFIRM_PASSWORD_CHANGED',
     'REGISTRATION_ERROR',
+    'SET_DASH_COLOR',
+    'SET_FLAG',
     'SHOW_FIREBASE_ERROR',
     'VERIFIED_USER',
     'LOGIN_USER',
@@ -44,6 +46,8 @@ const ACTIONS = createActiontypes([
 
 const INITIAL_STATE = {
     firstName: '',
+    dashColor: '#B83227',
+    flag: '',
     lastName: '',
     email: '',
     college: '',
@@ -155,6 +159,16 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 error: payload,
+            };
+        case ACTIONS.SET_DASH_COLOR:
+            return {
+                ...state,
+                dashColor: payload,
+            };
+        case ACTIONS.SET_FLAG:
+            return {
+                ...state,
+                flag: payload,
             };
         case ACTIONS.SHOW_FIREBASE_ERROR:
             return {
@@ -359,6 +373,24 @@ export const registrationError = (error) => {
         dispatch({
             type: ACTIONS.REGISTRATION_ERROR,
             payload: error
+        });
+    }
+};
+
+export const setDashColor = (color) => {
+    return (dispatch) => {
+        dispatch({
+            type: ACTIONS.SET_DASH_COLOR,
+            payload: color
+        });
+    }
+};
+
+export const setFlag = (flag) => {
+    return (dispatch) => {
+        dispatch({
+            type: ACTIONS.SET_FLAG,
+            payload: flag
         });
     }
 };
