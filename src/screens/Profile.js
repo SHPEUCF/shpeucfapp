@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { Button, Spinner, NavBar } from '../components/general'
 import { loadUser, logoutUser, goToEditProfileForm, pageLoad, pictureChanged} from '../ducks';
-import { Text, View, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
+import { Text, View, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions, SafeAreaView} from 'react-native';
 import { Avatar, Divider } from 'react-native-elements';
 import ImagePicker from 'react-native-image-crop-picker';
 import RNFetchBlob from 'rn-fetch-blob';
@@ -32,32 +32,38 @@ class Profile extends Component {
       } = styles
 
     return (
-      <View style={{flex: 1}}>
-        <NavBar title="Profile" />
+      <SafeAreaView style={{flex: 1, backgroundColor: "black"}}>
         {this.renderPicture()}
         
           <View style={bioContainer}>
-            <View style={taglineContainer}>
-                <Text style={[itemLabelText, textColor, {flex: 1}]}>{firstName + ' ' + lastName}</Text>
-            </View>
-            <View style={fieldContainerStyle}>
-              <Text style={[itemLabelText, textColor]}>Email:</Text>
-              <Text style={[itemValueText, textColor]}>{email}</Text>
-            </View>
-            <View style={fieldContainerStyle}>
-              <Text style={[itemLabelText, textColor]}>Major:</Text>
-              <Text style={[itemValueText, textColor]}>{major}</Text>
-            </View>
-            <TouchableOpacity style = {fieldContainerStyle} onPress={() => {
-              Actions.pointsBreakDown()}}
-            >
-              <Text style={[itemLabelText, textColor]}>Points:</Text>
-              <Text style={[itemValueText, textColor]}>{points}</Text>
-            </TouchableOpacity>
+            <View style={{flexDirection: "row", flex: 1, justifyContent: "space-evenly", alignItems: "flex-start"}}>
+              <View style={[fieldContainerStyle]}>
+                <View>
+                  <Text style={[itemLabelText, textColor]}>Email:</Text>
+                </View>
+                <View>
+                  <Text style={[itemLabelText, textColor]}>Major:</Text>
+                </View>
+                <View>
+                <Text style={[itemLabelText, textColor]}>Points:</Text>
+                </View>
+              </View>
+              <View style={[fieldContainerStyle]}>
+                <View >
+                <Text style={[itemValueText, textColor]}>{email}</Text>
+                </View>
+                <View>
+                <Text style={[itemValueText, textColor]}>{major}</Text>
+                </View>
+                <View>
+                <Text style={[itemValueText, textColor]}>{points}</Text>
+                </View>
+              </View>
+              </View>
           </View>
           {this.renderSocialMedia()}
           {this.renderButtons()}
-      </View>
+      </SafeAreaView>
   )
 
   }
@@ -65,6 +71,9 @@ class Profile extends Component {
   renderPicture() {
     const {
       headerInfoContainer,
+      taglineContainer,
+      itemLabelText,
+      textColor
     } = styles
 
     const {
@@ -74,13 +83,17 @@ class Profile extends Component {
     } = this.props
 
     return (
-      <View style={headerInfoContainer}>
+      <View style={[headerInfoContainer]}>
         <Avatar
-          size = {200}
+          size = {220}
+          containerStyle = {{borderWidth: 5, borderColor: this.props.dashColor}}
           rounded
           source={{uri: picture}}
           onPress={() => this.openGallery()}
           />
+          <View style={taglineContainer}>
+                <Text style={[itemLabelText, textColor]}>{firstName + ' ' + lastName}</Text>
+            </View>
       </View>
     )
   }
@@ -150,7 +163,19 @@ class Profile extends Component {
       buttonsContainerStyle
     } = styles
     return (
-      <View style={buttonsContainerStyle}>
+      <View style={{flex: .3, flexDirection: "row"}}>
+      <TouchableOpacity onPress={this.props.goToEditProfileForm.bind(this)} style={{backgroundColor: "#FECB00", borderWidth: 1, borderColor: "#0000",flex: 1, alignItems: "center", justifyContent: "center"}}>
+      <View style={{justifyContent: "center"}}>
+        <Text style={{fontSize: 18}}> Edit Profile </Text>
+      </View>
+      </TouchableOpacity>
+      <View style={{flex: .01}}></View>
+      <TouchableOpacity onPress={this.props.logoutUser.bind(this)} style={{backgroundColor: "#FECB00", borderWidth: 1, borderColor: "#0000",flex: 1, alignItems: "center", justifyContent: "center"}}>
+        <Text style={{fontSize: 18}}> Logout </Text>
+      </TouchableOpacity>
+
+      
+      {/*<View style={buttonsContainerStyle}>
           <Button
             title = "EDIT PROFILE"
             onPress={this.props.goToEditProfileForm.bind(this)}
@@ -159,7 +184,8 @@ class Profile extends Component {
             title = "LOG OUT"
             onPress={this.props.logoutUser.bind(this)}
           />
-      </View>
+    </View>*/}
+    </View>
     )
   }
 
@@ -170,7 +196,7 @@ class Profile extends Component {
     } = styles
     return (
       <View style={socialmediarow}>
-			<Text style={{fontSize: 17, alignSelf:"center"}}> Social Media</Text>
+			
 			<View style={{flexDirection: 'row'}}>
         <View style= {LogoContainer}>
           <TouchableOpacity
@@ -200,10 +226,10 @@ class Profile extends Component {
 
 const styles = StyleSheet.create({
   headerInfoContainer: {
-    flex: .6,
+    flex: 1.4,
     backgroundColor: '#2C3239',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     borderBottomColor: '#e0e6ed22',
     borderBottomWidth: 1,
     padding: 1,
@@ -212,37 +238,36 @@ const styles = StyleSheet.create({
     color: '#e0e6ed'
   },
   taglineContainer: {
-    flex: .2,
+    flex: .3,
     alignItems: 'center',
-		marginTop: dimension.height * .02,
+    justifyContent: "flex-end",
   },
   fieldContainerStyle: {
-    flex: .2,
-    flexDirection: 'row',
+    height: "100%",
+    flexDirection: 'column',
+    justifyContent: "space-evenly",
+    alignItems: "flex-start",
   },
   itemLabelText: {
-    flex: .25,
     fontSize: 18,
     fontWeight: 'bold',
 		color: '#fff',
 		lineHeight: dimension.height * .03
   },
   itemValueContainerStyle: {
-    flex: 4,
     flexDirection:'row',
     justifyContent: 'center',
-    alignItems: 'flex-start'
   },
   itemValueText: {
-    flex: 1,
     fontSize: 16,
     fontWeight: '500',
 		color: '#fff',
   },
   buttonsContainerStyle: {
     flex: .4,
-    marginRight: dimension.height * .015,
-    marginLeft: dimension.height * .015,
+    backgroundColor: "white",
+    paddingRight: dimension.height * .015,
+    paddingLeft: dimension.height * .015,
     height: dimension.height * .145,
   },
 	LogoContainer: {
@@ -252,15 +277,14 @@ const styles = StyleSheet.create({
 		justifyContent: 'center'
 	},
 	socialmediarow: {
-    flex: .25,
+    flex: .2,
 		paddingTop: dimension.height * .015,
 		paddingBottom: dimension.height * .015,
 		backgroundColor: '#dee0e2',
 	},
 	bioContainer: {
-    flex: 1,
+    flex: .7,
     backgroundColor: '#2C3239',
-    paddingLeft: '5%'
 	},
 	socialmediatext: {
 		flex:1,
@@ -269,10 +293,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ user, general }) => {
-  const { firstName, lastName, email, major, points, picture, quote, id } = user;
+  const { firstName, lastName, email, major, points, picture, quote, id, dashColor } = user;
   const { loading } = general;
 
-  return { firstName, lastName, email, major, points, picture, quote, loading, id };
+  return { firstName, lastName, email, major, points, picture, quote, loading, id, dashColor};
 };
 
 const mapDispatchToProps = {

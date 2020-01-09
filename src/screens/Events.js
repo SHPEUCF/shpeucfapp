@@ -9,7 +9,8 @@ import {
   View,
   StyleSheet,
   ScrollView,
-  Dimensions
+  Dimensions,
+  SafeAreaView
   } from 'react-native';
 import {
   fetchEvents,
@@ -56,8 +57,7 @@ class Events extends Component {
       textColor
     } = styles
     return (
-      <View style={{ flex: 1, backgroundColor: '#0c0b0b'}}>
-        <NavBar title="Events" />
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#0c0b0b'}}>
         <ScrollView style={{flex:1}}>
           <Agenda
             selected={new Date()}
@@ -101,7 +101,7 @@ class Events extends Component {
         <View style={{flex: .1}}>
             {this.renderButton()}
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 
@@ -150,7 +150,7 @@ class Events extends Component {
       emptyData
     } = styles
     return (
-      <View style={emptyData}>
+      <View style={[emptyData, {backgroundColor: this.props.dashColor}]}>
         <Text style={textColor}>No events to display on this day</Text>
       </View>
     );
@@ -189,7 +189,7 @@ class Events extends Component {
     
     return (
       <TouchableOpacity onPress={this.viewEvent.bind(this,item)}>
-          <View style={itemContainer}>
+          <View style={[itemContainer, {backgroundColor: this.props.dashColor}]}>
             <Text style={[{ fontWeight: 'bold'},textColor]}>{viewName}</Text>
             <Text style={textColor}>Time: {item.time}</Text>
             <Text style={textColor}>Location: {item.location}</Text>
@@ -273,8 +273,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ events, user }) => {
   const { eventList } = events;
-  const { privilege } = user;
-  return { eventList, privilege };
+  const { privilege, dashColor } = user;
+  return { eventList, privilege, dashColor};
 };
 
 const mapDispatchToProps = {

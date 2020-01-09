@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
-import { ScrollView, FlatList, Text, View, RefreshControl } from 'react-native';
+import { ScrollView, FlatList, Text, View, RefreshControl, SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
 import { ListItem } from 'react-native-elements';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Spinner, NavBar } from '../components/general'
 
 
@@ -18,7 +19,7 @@ import {
     {
       title: 'Leaderboard',
       icon: 'format-align-left',
-      screen: 'Leaderboard',
+      screen: 'LeaderboardM',
       privilege: "user",
     },
     {
@@ -70,8 +71,7 @@ class More extends Component {
 
   render() {
     return (
-      <View style={{backgroundColor: '#2C3239', flex: 1}}>
-        <NavBar title="More Options" />
+      <SafeAreaView style={{backgroundColor: 'black', flex: 1}}>
         <ScrollView
         //    refreshControl={
         //   <RefreshControl
@@ -87,8 +87,10 @@ class More extends Component {
           data = {menuItems}
           renderItem={this.renderItem}
         />
+        <View>
+        </View>
         </ScrollView>
-      </View>
+      </SafeAreaView>
     );
   }
 
@@ -112,15 +114,17 @@ class More extends Component {
 
     if (privilege !== undefined && privilege[item.privilege] === true ) {
       return(
-        <ListItem
-          containerStyle={{ backgroundColor: '#2C3239', borderBottomColor: 'white', borderBottomWidth: 1}}
-          removeClippedSubviews={false}
-          title={item.title}
-          chevron
-          titleStyle={{ color: 'white'}}
-          leftIcon={{name: item.icon , color: 'white' }}
-          onPress={() => Actions[item.screen]()}
-        />
+        <View>
+          <ListItem
+            containerStyle={{ backgroundColor: '#2C3239', borderBottomColor: 'white', borderBottomWidth: 1}}
+            removeClippedSubviews={false}
+            title={item.title}
+            chevron
+            titleStyle={{ color: 'white'}}
+            leftIcon={{name: item.icon , color: 'white' }}
+            onPress={() => Actions[item.screen]()}
+          />
+        </View>
       )
     }
   }
@@ -128,11 +132,11 @@ class More extends Component {
 }
 
 const mapStateToProps = ({ user, general, elect }) => {
-  const { privilege } = user;
+  const { privilege, dashColor } = user;
   const { loading } = general;
   const { election, apply} = elect;
 
-  return { privilege, loading, election, apply };
+  return { privilege, loading, election, apply, dashColor};
 };
 
 const mapDispatchToProps = {
