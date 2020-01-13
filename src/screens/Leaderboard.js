@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
+import { Avatar } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { NavBar, FilterPicker } from '../components/general'
 import {
@@ -20,6 +21,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  SafeAreaView,
   Image } from 'react-native';
 
 const dimension = Dimensions.get('window');
@@ -43,7 +45,7 @@ class Leaderboard extends Component {
     const {
       screenBackground,
        } = styles;
-    const sortedMembers = _.orderBy(this.props.membersPoints, iteratees, order);
+    const sortedMembers = _.orderBy(this.props.userList, iteratees, order);
     var currentMember;
     var pastPoints = 0;
     var pastIndex = 1;
@@ -57,9 +59,9 @@ class Leaderboard extends Component {
       pastIndex = x.index;
     });
     return (
-      <View style={screenBackground}>
+      <SafeAreaView style={screenBackground}>
         <NavBar title="Leaderboard" back onBack={() => Actions.pop()} />
-        <FilterPicker
+        {/*<FilterPicker
               title={"Members"}
               filter={this.props.filter}
               type="Searchbar"
@@ -70,8 +72,16 @@ class Leaderboard extends Component {
               onSelect={(item) => {
                   alert(item.firstName)
                 }}
-              />
-      </View>
+              />*/}
+            <FlatList
+              extraData={this.props}
+              keyExtractor = {this.keyExtractor}
+              data = {sortedMembers}
+              renderItem={({item, separators}) => (
+                this.renderComponent(item, sortedMembers)
+              )}
+            />
+      </SafeAreaView>
     )
   }
 
@@ -98,36 +108,59 @@ class Leaderboard extends Component {
 
     // if(item.points !== 0){
       return (
-        // <TouchableOpacity onPress = {() => action(item.id)}>
+        <TouchableOpacity onPress = {() => this.callUser(item.id)}>
           <View style={contentContainerStyle}>
               <View style={containerStyle}>
-              <Image   
-                    large
-                    rounded
-                    style={{alignSelf: 'flex-end', width: dimension.width *.14, height: dimension.height *.085}}
-                    source={{uri: item.picture}}
-                  />
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <View style={index}>
-                    <Text style={textColor} style={indexText}>{item.index}</Text>
+                <View style={{flex:.1}}></View>
+                <View style={{flexDirection: 'row', flex: 1, alignItems: "center"}}>
+                  <View style={{justifyContent: "center"}}> 
+                    <View style={index}>
+                      <Text style={textColor} style={indexText}>{item.index}</Text>
+                    </View>
                   </View>
-                <View>
-                  <Text style={ [textStyle, {fontWeight: 'bold'}]}>{`${item.firstName} ${item.lastName}`}</Text>
-                  <Text style={[textStyle, {fontSize: 15}]}>Points: {item.points}</Text>
+                <View >
+                  <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start"}}>
+                    <View>
+                      <View style={{flex: .2}}></View>
+                      <Text style={ [textStyle, {fontWeight: 'bold'}]}>{`${item.firstName} ${item.lastName}`}</Text>
+                      <Text style={[textStyle, {fontSize: dimension.width*.04,}]}>Points: {item.points}</Text>
+                    </View>
+                    <View>
+                    {(picture === '') && (
+                     <Avatar
+                      size = {dimension.height*.08}
+                      rounded
+                      titleStyle={{backgroundColor: this.props.dashColor}}
+                      overlayContainerStyle={{backgroundColor: "black"}}
+                      title={item.firstName[0].concat(item.lastName[0])}
+                      />
+                    )}
+                    {(picture !== '') && (
+                      <Avatar
+                      size = {dimension.height*.08}
+                      rounded
+                      source= {{uri: item.picture}}
+                      />
+                    )}
+                    </View>
+                  </View>
+                  <View style={{flex: .2}}></View>
+                  <View >
                     <Progress.Bar
-                  style={progress}
-                  progress={item.points / Math.max(sortedMembers[0].points,1)}
-                  indeterminate={false}
-                  height={dimension.width*.03}
-                  width={dimension.width * .75}
-                  color= {'#ffd700'}
-                />
+                      style={progress}
+                      progress={item.points / Math.max(sortedMembers[0].points,1)}
+                      indeterminate={false}
+                      height={dimension.width*.03}
+                      width={dimension.width * .75}
+                      color= {'#ffd700'}
+                    />
+                    </View>   
                 </View>
                 </View>
-              
-              </View>
+                <View style={{flex:.1}}></View>
+            </View>
           </View>
-        // </TouchableOpacity>
+        </TouchableOpacity>
       )
     }
 
@@ -145,11 +178,8 @@ class Leaderboard extends Component {
 
 const styles = StyleSheet.create({
   containerStyle: {
-    // flex: 1,
-    justifyContent: 'center',
+    flex: 1,
     alignItems: 'flex-start',
-    backgroundColor: '#21252b',
-    paddingVertical: 30,
     paddingHorizontal: 15,
   },
   screenBackground: {
@@ -162,11 +192,13 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: "#e0e6ed",
-    fontSize: 18,
+    fontSize: dimension.width * .05,
   },
   contentContainerStyle: {
-    margin: 1,
-    backgroundColor: '#2C3239',
+    borderColor: "white",
+    flex: 1,
+    height: dimension.height*.18,
+    backgroundColor: 'black',
   },
   progress: {
     // flex: 1,
@@ -181,29 +213,28 @@ const styles = StyleSheet.create({
   	indexText: {
   	  alignSelf: 'center',
   	  fontWeight: "700",
-  	  fontSize: 20,
-  	  color: "#e0e6ed"
+  	  fontSize:  dimension.width*.05,
+  	  color: "black"
   	},
   index: {
-    color: '#000',
-    borderColor: '#e0e6ed',
-    borderStyle: 'solid',
-    borderWidth: 3,
-    borderRadius: 20,
+    borderColor: '#FECB00',
+    backgroundColor: "#FECB00",
+    borderRadius: dimension.height*.06*.5,
     marginRight: '4%',
     justifyContent: 'center',
-    height: 40,
-    width: 40,
-    elevation: 1
+    height: dimension.height*.06,
+    width: dimension.height*.06,
+    elevation: 1,
+    alignItems: "center"
   }
 });
 
 const mapStateToProps = ({ user, members, general }) => {
-  const { membersPoints } = members;
+  const { membersPoints, userList } = members;
   const { picture, id } = user
   const { filter } = general
 
-  return { membersPoints, id, picture, filter};
+  return { membersPoints, id, picture, filter, userList};
 };
 
 const mapDispatchToProps = {

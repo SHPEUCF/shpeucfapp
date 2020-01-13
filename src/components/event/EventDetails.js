@@ -9,7 +9,8 @@ import {
     TextInput,
     Dimensions,
     FlatList,
-    Linking
+    Linking,
+    SafeAreaView
 } from 'react-native';
 import { Button, NavBar, FilterPicker } from '../general'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -357,22 +358,34 @@ class EventDetails extends Component {
         if(this.props.privilege !== undefined && this.props.privilege.board === true){
             return (
                 <View>
-                    <Button 
-                        title = "OPEN CHECK-IN"
-                        onPress={this.openCheckInButton.bind(this)}
-                    />
-                    <Button 
-                        title = "CHECK MEMBERS IN"
-                        onPress={() => this.setState({pickerVisible: true})}
-                    />
-                    <Button 
-                        title = "DELETE EVENT"
-                        onPress={this.deleteButton.bind(this)}
-                    />
-                    <Button 
-                        title = "EDIT EVENT"
-                        onPress={this.props.goToCreateEventFromEdit.bind(this)}
-                    />
+                    <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .1, width:"100%"}}>
+                        <View style={{flex: .45}}>
+                            <Button 
+                                title = "Open check-in"
+                                onPress={this.openCheckInButton.bind(this)}
+                            />
+                        </View>
+                        <View style={{flex: .45}}>
+                            <Button 
+                                title = "Manual check-in"
+                                onPress={() => this.setState({pickerVisible: true})}
+                            />
+                        </View>
+                    </View>
+                    <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+                          <View style={{flex: .45}}>
+                            <Button 
+                            title = "Edit event"
+                            onPress={this.props.goToCreateEventFromEdit.bind(this)}
+                             />
+                        </View>
+                        <View style={{flex: .45}}>
+                            <Button 
+                            title = "Delete event"
+                            onPress={this.deleteButton.bind(this)}
+                            />
+                        </View>
+                    </View>
                 </View>
             )
             }else
@@ -415,7 +428,7 @@ class EventDetails extends Component {
 
             var iconSize = 25
             return (
-                <View style={page}>
+                <SafeAreaView style={page}>
                     <NavBar title={name} back onBack={() => Actions.pop()} />
                     {this.renderPickMembers()}
                     <View style={container}>
@@ -437,7 +450,7 @@ class EventDetails extends Component {
                     </View>
                     {this.renderButtons()}
                     {this.renderCodeBox()}
-                </View>
+                </SafeAreaView>
             )
         }
     }
@@ -523,7 +536,7 @@ const styles = StyleSheet.create({
     }, 
     page: {
         flex: 1,
-        backgroundColor: '#0c0b0b',
+        backgroundColor: 'black',
     },
     tabBar: {
         height: dimension.height * .1,

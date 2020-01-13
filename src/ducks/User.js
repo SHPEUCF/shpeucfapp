@@ -23,6 +23,8 @@ const ACTIONS = createActiontypes([
     'SHOW_FIREBASE_ERROR',
     'VERIFIED_USER',
     'LOGIN_USER',
+    'GET_USER_COMMITTEES',
+    'CHANGE_USER_COMMITTEES',
     'ENTER_APP',
     'LOAD_USER',
     'LOGIN_USER_FAIL',
@@ -46,7 +48,7 @@ const ACTIONS = createActiontypes([
 
 const INITIAL_STATE = {
     firstName: '',
-    dashColor: '#B83227',
+    dashColor: '#21252b',
     flag: '',
     lastName: '',
     email: '',
@@ -56,7 +58,7 @@ const INITIAL_STATE = {
     paidMember: false,
     // Using URL below to avoid RN warning of empty source.uri as there's a delay fetching.
     // Will improve fetching later, just need to get rid of the warning for now.
-    picture: 'https://cdn0.iconfinder.com/data/icons/superuser-web-kit/512/686909-user_people_man_human_head_person-512.png',
+    picture: '',
     points: 0,
     privilege: {},
     password: '',
@@ -72,6 +74,7 @@ const INITIAL_STATE = {
     id: '',
     voted: false,
     applied: false,
+    userCommittees: null
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -198,7 +201,10 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 firstName: payload
             };
-
+        case ACTIONS.CHANGE_USER_COMMITTEES:
+            return {
+                ...state,
+            };
         case ACTIONS.GET_PRIVILEGE:
             return {
                 ...state,
@@ -210,6 +216,11 @@ export default (state = INITIAL_STATE, action) => {
                 loading: true,
                     error: ''
             };
+        case ACTIONS.GET_USER_COMMITTEES:
+            return {
+                ...state,
+                userCommittees: payload,
+            };
         case ACTIONS.ENTER_APP:
             return {
                 ...state,
@@ -220,7 +231,7 @@ export default (state = INITIAL_STATE, action) => {
         case ACTIONS.LOAD_USER:
             return {
                 ...state,
-                firstName: payload.firstName,
+                    firstName: payload.firstName,
                     lastName: payload.lastName,
                     college: payload.college,
                     email: payload.email,
@@ -236,6 +247,9 @@ export default (state = INITIAL_STATE, action) => {
                     voted: payload.voted,
                     applied: payload.applied,
                     id: payload.id,
+                    flag: payload.flag,
+                    userCommittees: payload.committees,
+                    dashColor: payload.color,
                     loading: false
             };
         case ACTIONS.LOGIN_USER_FAIL:
@@ -378,7 +392,14 @@ export const registrationError = (error) => {
 };
 
 export const setDashColor = (color) => {
+    const {
+        currentUser
+    } = firebase.auth();
+
+    let id = currentUser.uid
+
     return (dispatch) => {
+        firebase.database().ref(`/users/${id}/color`).set(color)
         dispatch({
             type: ACTIONS.SET_DASH_COLOR,
             payload: color
@@ -387,6 +408,15 @@ export const setDashColor = (color) => {
 };
 
 export const setFlag = (flag) => {
+
+    const {
+        currentUser
+    } = firebase.auth();
+
+    let id = currentUser.uid
+
+    firebase.database().ref(`/users/${id}/flag`).set(flag)
+        
     return (dispatch) => {
         dispatch({
             type: ACTIONS.SET_FLAG,
@@ -394,6 +424,7 @@ export const setFlag = (flag) => {
         });
     }
 };
+
 
 const showFirebaseError = (dispatch, error) => {
     let errorMessage;
@@ -478,7 +509,10 @@ const createUserSuccess = (dispatch, firstName, lastName, email, college, major,
             id: id,
             paidMember: false,
             voted: false,
-            applied: false
+            applied: false,
+            flag: "",
+            color: '#21252b',
+            committees: "null"
         })
         .then(() => {firebase.database().ref(`/points/${id}/`).set({
             firstName: firstName,
@@ -622,6 +656,22 @@ export const loginUser = ({email,password}) => {
             .catch(error => loginUserFail(dispatch, error));
     };
 };
+
+export const changeUserCommittees = (change) => {
+    const {
+        currentUser
+    } = firebase.auth();
+
+    let id = currentUser.uid
+
+    firebase.database().ref(`/users/${id}/committees`).update(change)
+
+    return (dispatch) => {
+        dispatch({
+            type: ACTIONS.CHANGE_USER_COMMITTEES,
+        });
+    }
+}
 
 const loginUserSuccess = (dispatch, user) => {
     dispatch({

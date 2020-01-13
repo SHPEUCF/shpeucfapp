@@ -32,8 +32,8 @@ class NavBar extends Component {
 		if (back) {
 			return (
 				<View style={[tabBar, style, {flexDirection: 'row'}]}>
-					<View style={{paddingLeft: '3%'}}>
-						<Ionicons name="md-arrow-back" size={30} onPress={onBack} style={{padding: '3%', color: '#E0E6ED'}}/>
+					<View style={{height: dimension.height *.04, width: dimension.height *.04, justifyContent: "center", alignItems: "center", marginLeft: "5%"}}>
+						<Ionicons name="md-arrow-back" size={dimension.height * .03} onPress={onBack} style={{color: '#FECB00'}}/>
 					</View>
 					<View>
 						<Text style={tabBarText}>{title}</Text>
@@ -68,14 +68,14 @@ const dimension = Dimensions.get('window');
 const styles = StyleSheet.create({
 	tabBar: {
 		justifyContent: 'flex-start',
-		backgroundColor: '#21252b',
+		backgroundColor: "black",
 		alignItems:'center',
 		borderBottomWidth: 1,
-		borderBottomColor: '#fff2',
+		borderBottomColor: 'black',
 		height: dimension.height * 0.1
 	},
 	tabBarText: {
-		color: '#E0E6ED',
+		color: 'white',
 		fontSize: 20,
 		fontWeight:'bold',
 		paddingLeft: '5%'

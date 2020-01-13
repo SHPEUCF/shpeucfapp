@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
-import { ScrollView, FlatList, Text, View, RefreshControl, SafeAreaView } from 'react-native';
+import { ScrollView, FlatList, Text, View, RefreshControl, Dimensions, SafeAreaView, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { ListItem } from 'react-native-elements';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
@@ -13,6 +13,7 @@ import {
   updateElection
 } from "../ducks"
 
+const dimension = Dimensions.get('window');
 
 
   const menuItems = [
@@ -28,7 +29,7 @@ import {
       screen: 'Election',
       privilege: "user"
     },
-    {
+    /*{
       title: 'Conventions',
       icon: 'airplanemode-active',
       screen: 'Conventions',
@@ -39,7 +40,7 @@ import {
       icon: 'assignment-ind',
       screen: 'EBoard',
       privilege: "user"
-    },
+    },*/
     {
       title: 'Committees',
       icon: 'assignment-ind',
@@ -72,14 +73,15 @@ class More extends Component {
   render() {
     return (
       <SafeAreaView style={{backgroundColor: 'black', flex: 1}}>
-        <ScrollView
-        //    refreshControl={
-        //   <RefreshControl
-        //     refreshing={this.state.refreshing}
-        //     onRefresh={this._onRefresh}
-        //   />
-        // }
-        >
+        <View style={{height: dimension.height * .1, backgroundColor: '#FECB00', borderBottomWidth: 1, borderColor: "black", justifyContent: "center"}}>
+            <Image
+              source={require('../assets/images/SHPE_UCF_Logo.png')}
+              style={{alignSelf: 'center'}}
+              height = {dimension.height * .06}
+              resizeMode="contain"
+            /> 
+          </View>
+        <View>
         <FlatList
           removeClippedSubviews={false}
           extraData={this.props}
@@ -87,9 +89,15 @@ class More extends Component {
           data = {menuItems}
           renderItem={this.renderItem}
         />
-        <View>
         </View>
-        </ScrollView>
+        <View style={{justifyContent: "center", flex: 1, flexDirection: "row"}}>
+           <Image
+              source={require('../assets/images/SHPE_logo_FullColor-RGB-2x.png')}
+              style={{alignSelf: 'center'}}
+              height = {dimension.height * dimension.width * .00025}
+              resizeMode="contain"
+            /> 
+        </View>
       </SafeAreaView>
     );
   }
@@ -116,12 +124,12 @@ class More extends Component {
       return(
         <View>
           <ListItem
-            containerStyle={{ backgroundColor: '#2C3239', borderBottomColor: 'white', borderBottomWidth: 1}}
+            containerStyle={{ backgroundColor: 'black', borderBottomColor: 'black'}}
             removeClippedSubviews={false}
             title={item.title}
-            chevron
+            chevron={{color: "#FECB00"}}
             titleStyle={{ color: 'white'}}
-            leftIcon={{name: item.icon , color: 'white' }}
+            leftIcon={{name: item.icon , color: 'white'}}
             onPress={() => Actions[item.screen]()}
           />
         </View>

@@ -1,5 +1,5 @@
 import React, {Button, View} from 'react';
-import { Router, Scene, Stack, ActionConst, Actions } from 'react-native-router-flux';
+import { Router, Scene, Stack, ActionConst, Actions} from 'react-native-router-flux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Spinner } from '../components/general';
 import RegistrationForm from '../components/auth/RegistrationForm';
@@ -39,6 +39,7 @@ import Statistics from '../screens/Statistics'
 import More from '../screens/More'
 import PointsBreakDown from '../screens/PointsBreakDown'
 import Dashboard from '../screens/Dashboard'
+import {Dimensions} from 'react-native'
 
 import {
   Resources,
@@ -47,6 +48,8 @@ import {
   EBoard,
   Version
 } from '../screens/';
+
+const dimension = Dimensions.get('window');
 
 const RouterComponent = () => {
   return (
@@ -153,7 +156,7 @@ const RouterComponent = () => {
           type={ActionConst.RESET}
           activeTintColor={'#E0E6ED'}
           inactiveTintColor={'#C0CCDA'}
-          tabBarStyle={{backgroundColor: '#21252b', height: "10%"}}
+          tabBarStyle={{backgroundColor: '#21252b', height: dimension.height *.08}}
         >
           <Stack
             hideNavBar
@@ -161,7 +164,7 @@ const RouterComponent = () => {
             title="Dashboard"
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
-                name={'ios-person'}
+                name={'ios-paper'}
                 size ={30}
                 style={focused ? {color: '#FFC107'} : {color: 'white'}}
               />
@@ -172,9 +175,27 @@ const RouterComponent = () => {
               title="dashboard"
               leftTitle="Back"
             />
-           <Scene key="LeaderboardD"
-              component={Leaderboard}
-              title="Leaderboard"
+           <Stack
+            hideNavBar
+            key="LeaderboardD"
+            title="Leaderboard"
+            >
+              <Scene
+                key="LeaderboardD"
+                component={Leaderboard}
+                title="leaderboard"
+                hideTabBar
+              />
+               <Scene
+              key="OtherProfileD"
+              component={OtherProfile}
+              hideTabBar
+              hideNavBar
+            />
+            </Stack>
+            <Scene key="CommitteesD"
+              component={Committees}
+              title="Committees"
               hideTabBar
             />
           </Stack>
@@ -212,7 +233,6 @@ const RouterComponent = () => {
             <Scene
               key="EditProfileForm"
               component={EditProfileForm}
-              type={ActionConst.REPLACE}
               hideNavBar
             />
             <Scene
@@ -239,11 +259,30 @@ const RouterComponent = () => {
               title="More"
               leftTitle="Back"
             />
-            <Scene key="LeaderboardM"
+            <Scene
+              key="Leaderboard"
               component={Leaderboard}
-              title="Leaderboard"
+              title="leaderboard"
               hideTabBar
             />
+            <Stack
+            hideNavBar
+            key="LeaderboardM"
+            title="Leaderboard"
+            >
+              <Scene
+                key="LeaderboardM"
+                component={Leaderboard}
+                title="leaderboard"
+                hideTabBar
+              />
+               <Scene
+              key="OtherProfileM"
+              component={OtherProfile}
+              hideTabBar
+              hideNavBar
+            />
+            </Stack>
             <Stack 
             key="BackEnd"
             title="BackEnd"
@@ -263,12 +302,6 @@ const RouterComponent = () => {
                 hideTabBar
               />
             </Stack>
-            <Scene
-              key="OtherProfile"
-              component={OtherProfile}
-              hideTabBar
-              hideNavBar
-            />
             <Scene
               key="EditOtherProfileForm"
               component={EditOtherProfileForm}

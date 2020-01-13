@@ -46,10 +46,9 @@ const styles = {
     flexDirection: 'row',
     alignSelf: 'center',
     backgroundColor: '#FECB00',
-    borderRadius: 32,
+    borderRadius: 15,
     borderColor: '#0000',
     borderWidth: 1,
-    marginTop: 10,
     padding:5
   }
 };

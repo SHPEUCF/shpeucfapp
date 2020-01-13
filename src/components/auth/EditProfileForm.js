@@ -95,7 +95,7 @@ class EditProfileForm extends Component {
       }
       else {
         editUser( firstName, lastName, email, college, major, quote, continent, nationality, gender, birthday );
-        Actions.replace('profile')
+        Actions.pop()
       }
     } else if (college === '') {
       registrationError('Please enter college');
@@ -103,7 +103,7 @@ class EditProfileForm extends Component {
       registrationError('Please enter major');
     }  else {
       editUser( firstName, lastName, email, college, major, quote, continent, nationality, gender, birthday );
-      Actions.replace('profile')
+      Actions.pop()
     }
   }
 
@@ -132,7 +132,7 @@ class EditProfileForm extends Component {
     return (
       <Button
         title={"Cancel"}
-        onPress={this.props.goToProfile.bind(this)}
+        onPress={() => Actions.pop()}
       />
     );
   }

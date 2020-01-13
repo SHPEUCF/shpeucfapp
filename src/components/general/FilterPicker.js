@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Input } from './Input'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Avatar } from 'react-native-elements'
 import { Alert } from 'react-native';
 
 
@@ -74,7 +75,7 @@ class FilterPicker extends Component {
            
             const {
                 itemStyle,
-                itemTextStyle
+                itemTextStyle,
             } = styles
 
             let user = item[1]
@@ -106,7 +107,15 @@ class FilterPicker extends Component {
         
                 const {
                     itemStyle,
-                    itemTextStyle
+                    itemTextStyle,
+                    containerStyle,
+                    contentContainerStyle,
+                    progress,
+                    curUserHighlight,
+                    textStyle,
+                    index,
+                    textColor,
+                    indexText
                 } = styles
                 if(excludeData && excludeData[user.id]) return null;
         
@@ -118,9 +127,26 @@ class FilterPicker extends Component {
                 return(
                     <TouchableOpacity
                     onPress={() => this.selectUserAction(user)}>
-                        <View style={[itemStyle, pickerItemStyle, selected]}>
-                            <Text style={itemTextStyle}>{user.firstName} {user.lastName}</Text>
+                    <View style={[contentContainerStyle, selected]}>
+                        <View style={containerStyle}>
+                            <View style={{flex:.1}}></View>
+                            <View >
+                            <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
+                                <View>
+                                <Text style={ [textStyle, {fontWeight: 'bold'}]}>{`${user.firstName} ${user.lastName}`}</Text>
+                                </View>
+                                <View>
+                                <Avatar   
+                                size={dimension.height*.08}
+                                rounded
+                                source={{uri: item.picture}}
+                                />
+                                </View>
+                            </View>
+                            </View>
+                            <View style={{flex:.1}}></View>
                         </View>
+                    </View>
                     </TouchableOpacity>
                 )
                 }
@@ -156,7 +182,7 @@ class FilterPicker extends Component {
             buttonContainer,
             flatlistStyle,
             buttonStyle,
-            titleStyle
+            titleStyle,
         } = styles;
 
         const {
@@ -357,7 +383,7 @@ const styles = {
     modalBackground: {
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#0003',
+        backgroundColor: 'black',
         margin: 0,
         height: dimension.height,
         width: dimension.width,
@@ -390,7 +416,41 @@ const styles = {
         padding: 15,
         backgroundColor: '#DCDCDC',
         borderRadius: 0,
-      }
+      },
+      containerStyle: {
+        flex: 1,
+        alignItems: 'flex-start',
+        paddingHorizontal: 15,
+      },
+      screenBackground: {
+        flex: 1,
+        backgroundColor: '#0c0b0b',
+      },
+      curUserHighlight: {
+        // backgroundColor: '#ffd70024',
+        color: '#aa9100'
+      },
+      textStyle: {
+        color: "#e0e6ed",
+        fontSize: dimension.height * .027,
+      },
+      contentContainerStyle: {
+        borderBottomWidth: 1,
+        borderColor: "#ffd700",
+        flex: 1,
+        height: dimension.height*.18,
+        backgroundColor: 'black',
+      },
+      progress: {
+        // flex: 1,
+        justifyContent: 'center',
+        height: dimension.width*.03,
+        borderColor: '#2C3239',
+        backgroundColor: '#2C3239',
+      },
+      textColor: {
+        color: '#e0e6ed'
+      },
 }
 
 export { FilterPicker }

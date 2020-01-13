@@ -54,7 +54,10 @@ const INITIAL_STATE = {
   loading: false,
   error: '',
   id: '',
+  flag: '',
+  dashColor: "",
   filters: {},
+  userCommittees: {},
   userList: {}
 };
 
@@ -136,6 +139,9 @@ export default (state = INITIAL_STATE, action) => {
         picture: payload.picture,
         nationality: payload.nationality,
         date_of_birth: payload.date_of_birth,
+        flag: payload.flag,
+        userCommittees: payload.committees,
+        dashColor: payload.color,
         privilege: payload.privilege,
       };
     case ACTIONS.FETCH_ALL_USERS:
@@ -354,7 +360,8 @@ export const goToOtherProfile = () => {
         dispatch({
             type: ACTIONS.GO_TO_OTHER_PROFILE
         });
-        Actions.OtherProfile();
+        Actions.OtherProfileD();
+        Actions.OtherProfileM();
     }
 };
 

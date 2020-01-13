@@ -1,10 +1,11 @@
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, ScrollView, FlatList, Dimensions, TouchableOpacity, Linking, Modal, SafeAreaView} from 'react-native';
+import { Text, View, StyleSheet, ScrollView, TextInput, Dimensions, TouchableOpacity, Linking, Modal, SafeAreaView, StatusBar} from 'react-native';
 import * as Progress from 'react-native-progress';
 import _ from 'lodash';
-import { Spinner, NavBar, Input } from '../components/general'
+import { Spinner, NavBar, Input, Button } from '../components/general'
+import CodeBox from '../components/event/CodeBox'
 import { Actions } from 'react-native-router-flux';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {
@@ -26,11 +27,14 @@ import {
 	goToViewEvent,
 	getCommittees,
 	setDashColor,
-	setFlag
+	setFlag,
+	fetchAllUsers,
+	getUserCommittees
 }
 from '../ducks';
 import Flag from 'react-native-flags'
 import {ColorPicker} from 'react-native-color-picker'
+
 
 const dimension = Dimensions.get('window');
 
@@ -44,7 +48,7 @@ class Dashboard extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {colorPicker: false}
+		this.state = {colorPicker: false, flags: false, newFlag: false}
 	  }
 
 	componentDidMount() {
@@ -55,6 +59,7 @@ class Dashboard extends Component {
 		this.props.fetchEvents();
 		this.props.getPrivilege();
 		this.props.loadUser();
+		this.props.fetchAllUsers();
 	}
 
 	colorPicked(color) {
@@ -63,17 +68,9 @@ class Dashboard extends Component {
 	}
 
 	flag(){
-
-		if (this.props.flag === ''){
-			return(
-			<View style={{justifyContent: "center"}}>
-			<FontAwesomeIcon style={{color: 'white'}} name="chevron-down" onPress={()=> this.setState({colorPicker:true})} size={15}/>
-			</View>)
-		}
-
 		return(		
 			<View style={{justifyContent: "center"}}>
-				<TouchableOpacity onPress={()=> this.setState({colorPicker:true})} >
+				<TouchableOpacity onPress={()=> this.setState({flags:!this.state.flags})} >
 				<Flag
 					type="flat"
 					code={this.props.flag}
@@ -82,9 +79,15 @@ class Dashboard extends Component {
 				</TouchableOpacity>
 			  </View>
 		)
-
 	}
 
+	flagPicked(flag){
+		if (flag === '') this.setState({flags: false, newFlag: true})
+		else {
+		this.props.setFlag(flag)
+		this.setState({flags: false})
+		}
+	}
 
 	render() {
 
@@ -109,14 +112,16 @@ class Dashboard extends Component {
 		  eventsContainer,
 		  textColor,
 		  indexText,
-		  index
+		  index,
+		  modalText
 	  } = styles;
 
-	  const flagHeight = dimension.height - (.24 * dimension.height)
-	  const committeesArray = _.orderBy(this.props.committeesList, iterateesC, orderC).splice(3, 20)
+	  const flagHeight = dimension.height - (.3 * dimension.height)
 
-	  countriesL = ["AR", "BO", "CL", "CO", "CR", "CU", "DO", "EC", "SV", "GQ"]
-	  countriesR = ["GT", "HN", "MX", "NI", "PA", "PY", "PE", "PR", "UY", "VE"]
+	  const committeesArray = (this.props.userCommittees !== null &&  this.props.userCommittees !== undefined) ? Object.keys(this.props.userCommittees).splice(0, 4) : ["Add your main committees!"]
+
+	  countriesL = ["AR", "BO", "BR", "CL", "CO", "CR", "CU", "DO", "EC", "SV", "GQ", "GT", "HN"]
+	  countriesR = ["MX", "NI", "PA", "PY", "PE", "PR", "RO", "ES", "TT", "US", "UY", "VE", '']
 	  const { currentUser } = firebase.auth();
 
 	  let sortedMembers = _.orderBy(this.props.membersPoints, iteratees, order);
@@ -142,27 +147,32 @@ class Dashboard extends Component {
 
 	  return (
 		  <SafeAreaView style={page}>
+			  <StatusBar backgroundColor="black" barStyle="light-content" />
 			  <Modal visible={this.state.colorPicker}  transparent={true}>
-					<View style={styles.modalBackground}>
+					<View style={[styles.modalBackground, {backgroundColor: "transparent"}]}>
 						<ColorPicker
-						defaultColor="#B83227"
+						defaultColor="#21252b"
 						oldColor={this.props.dashColor}
 						onColorSelected={color => this.colorPicked(color)}
-						style={styles.modalContent}
+						style={[styles.modalContent, {backgroundColor: "black"}]}
 						/>
 					</View>
 	  			</Modal>
 					  <View style={mainContentStyle}>
 						  <View style={[greetingContainerStyle, {backgroundColor: this.props.dashColor, justifyContent: "center"}]}>
 							  {this.greeting()}
-							  {this.flag()}
-							  
+							  <View style={{justifyContent: "space-evenly",  alignItems: "center", paddingLeft: "2%", paddingRight: "2%"}}>
+								{this.flag()}
+								<View style={{justifyContent: "center", alignItems: "center"}}>
+									<FontAwesomeIcon style={{color: 'white'}} name="chevron-down" onPress={()=> this.setState({colorPicker:true})} size={15}/>
+								</View>
+							  </View>
 						  </View>
 						  <View style= {{flex: .9, flexDirection: 'row', justifyContent: 'space-evenly'}}>				
 							<View style= {{flex: 1, justifyContent:'space-evenly'}}>
-								<View style={{flex: .65}}>
+								<View style={{flex: .8}}>
 								<View style={eventsContainer}>
-										<View style={{alignItems: "center", flex: .4, justifyContent: "center"}}>
+										<View style={{alignItems: "center", flex: .4, justifyContent: "flex-end"}}>
 											<Text style={[title, textColor]}>Upcoming Events</Text>
 										</View>
 										<View style={{flex: 1}}>
@@ -170,16 +180,16 @@ class Dashboard extends Component {
 										</View>
 									</View>
 									<View style={{flex: .2, flexDirection: "row"}}>
-										<View style={{flex: 1, alignItems: 'center', justifyContent: "flex-end", paddingLeft: "10%"}}>
+										<View style={{flex: 1, alignItems: 'center', justifyContent: "flex-end"}}>
 											<Text style={[title, textColor]}>Leaderboard</Text>
 										</View>
-										<View style={{flex:.1}}></View>
-										<View style={{flex: 1, alignItems: 'center', justifyContent: "flex-end", paddingRight: "10%"}}>
+										<View style={{flex:.05}}></View>
+										<View style={{flex: 1, alignItems: 'center', justifyContent: "flex-end"}}>
 											<Text style={[title, textColor]}>Committees</Text>
 										</View>
 									</View>
 									<View style={{flexDirection: "row", alignItems: 'flex-start', flex: 1, borderColor: "white"}}>
-										<TouchableOpacity style={{backgroundColor: '#21252b', flex: 1, paddingLeft: "10%"}} onPress={() => Actions.LeaderboardD()}>
+										<TouchableOpacity style={{backgroundColor: '#21252b', flex: 1}} onPress={() => Actions.LeaderboardD()}>
 										<View style={touchLeaderboard}>
 												<View >
 													<Text style={[title, textColor]}>Top Member</Text>
@@ -188,27 +198,27 @@ class Dashboard extends Component {
 													<Text style={{color: 'white'}}>{sortedMembers[0].firstName} {sortedMembers[0].lastName}</Text>
 												</View>	
 										</View>
-										<View style={{flex: .1, backgroundColor: "black"}}></View>
+										<View style={{flex: .025, backgroundColor: "black", alignSelf: "center", width: "80%"}}></View>
 										<View style={touchLeaderboard}>
 												<View >
 													<Text style={[title, textColor]}>Your Ranking</Text>
 												</View>
 												<View style={{justifyContent: "center", alignItems: "center"}}>
 													<View style={[index, {borderColor: '#FFC107', }]}>
-														<Text style={[indexText, {color: 'white'}]}>{currentMember.index}</Text>
+														<Text style={[indexText, {color: 'black'}]}>{currentMember.index}</Text>
 													</View>
 												</View>
 										</View>
 										</TouchableOpacity>
-										<View style={{flex:.1}}></View>
-										<View style={[touchCommittee, {flex: 1, height: "100%"}]}>
+										<View style={{flex:.05}}></View>
+										<TouchableOpacity style={[touchCommittee, {flex: 1, height: "100%"}]} onPress={() => Actions.CommitteesD()}>
 										{Object.values(committeesArray).map(item => (
 											<View style={{justifyContent: "space-between"}}>
-												<Text style={textColor}>{item.title}</Text>
-												<View style={{flex: .1, backgroundColor: "black"}}></View>
+												<Text style={textColor}>{item}</Text>
+												<View style={{flex: .11, backgroundColor: "black"}}></View>
 											</View>
 										))}
-										</View>
+										</TouchableOpacity>
 									</View>
 								</View>
 							{/*<View style={ContainerStyle}>
@@ -216,49 +226,96 @@ class Dashboard extends Component {
 								<Text style={textColor}>Coming soon!</Text>
 							</View>*/}
 							<View style={{flex: .3, alignItems: 'center'}}>
-								<View style={{flex:.6}}></View>
+								<View style={{flex:.5}}></View>
 								<View style={{flexDirection: 'row', justifyContent: 'center', flex: 1}}>
 									<TouchableOpacity style={ContainerStyle} onPress={() => Linking.openURL('https://shpeucf2018-2019.slack.com/')}>
-										<FontAwesomeIcon style={{color: '#000"'}} name="slack" size={25}/>
+										<FontAwesomeIcon style={{color: 'black'}} name="slack" size={dimension.height*.04}/>
 									</TouchableOpacity>
 									<TouchableOpacity style={ContainerStyle} onPress={() => Linking.openURL('https://www.facebook.com/shpeucfchapter/')}>
-										<FontAwesomeIcon style={{color: '#000"'}} name="facebook" size={25}/>
+										<FontAwesomeIcon style={{color: 'black'}} name="facebook" size={dimension.height*.04}/>
 									</TouchableOpacity>
 									<TouchableOpacity style={ContainerStyle} onPress={() => Linking.openURL('https://www.shpeucf.com/')}>
-										<FontAwesomeIcon style={{color: '#000"'}} name="globe" size={25}/>
+										<FontAwesomeIcon style={{color: 'black'}} name="globe" size={dimension.height*.04}/>
 									</TouchableOpacity>
 									<TouchableOpacity style={ContainerStyle} onPress={() => Linking.openURL('https://www.instagram.com/shpeucf/?hl=en')}>
-										<FontAwesomeIcon style={{color: '"#000"'}} name="instagram" size={25}/>
+										<FontAwesomeIcon style={{color: 'black'}} name="instagram" size={dimension.height*.04}/>
 									</TouchableOpacity>
 								</View>
-								<View style={{flex:.7}}></View>
+								<View style={{flex:.5}}></View>
+								<View style={{flex:.5, justifyContent: "center", backgroundColor: "#FECB00", width: "100%"}}>
+									<View style={{flexDirection: "row", justifyContent: "center"}}>
+									<Text style={{color: "black"}}>SHPE </Text>
+									<Text style={{color: "white"}}>UCF</Text>
+									</View>
+								</View>
 							</View>
 						</View>
-							<View style={{position: "absolute", flexDirection: "row", width: dimension.width, height: flagHeight, justifyContent: "space-between"}}>
-							<View style={{justifyContent:'space-evenly',borderColor: "white",}}>
+							
+							<Modal visible={this.state.flags} transparent={true}>
+							<SafeAreaView style={{position: "absolute", flexDirection: "row", width: dimension.width, height: flagHeight, justifyContent: "space-between", top: dimension.height * .13, paddingLeft: "2%", paddingRight: "2%"}}>
+							<View style={{justifyContent:'space-evenly',borderColor: "white"}}>
 								{countriesL.map(item => (
-								<TouchableOpacity onPress={() => this.props.setFlag(item)}>
+								<TouchableOpacity onPress={() => this.flagPicked(item)}>
 									<Flag
 									type="flat"
 									code={item}
-									size={24}
+									size={32}
 								/>
 								</TouchableOpacity>
 								))}
 							</View>		
 							<View style={{justifyContent:'space-evenly',borderColor: "white"}}>
 								{countriesR.map(item => (
-								<TouchableOpacity onPress={() => this.props.setFlag(item)}>
+								<TouchableOpacity onPress={() => this.flagPicked(item)}>
 									<Flag
 									type="flat"
 									code={item}
-									size={24}
+									size={32}
 								/>
 								</TouchableOpacity>
 								))}
 							</View>
-							</View>
+							</SafeAreaView>
+							</Modal>
+							
 						</View>
+						<Modal visible={this.state.newFlag} transparent={true}>
+							<View style={styles.modalBackground}>
+								<View style={styles.modalContent}>
+									<View style={{justifyContent: "center", flex: 1}}>
+										<Text style={[modalText, textColor]}>Look up your two digit country ISO code and enter it!</Text>
+									</View>
+									<View style={{flex: 1, alignItems: "center"}}>
+										<TextInput
+										style={styles.modalTextInput}
+										onChangeText={(text) => this.setState({text: text})}
+										value={this.state.text}
+										autoCapitalize={'characters'}
+										autoCorrect={false}
+										maxLength={2}
+										/>
+									</View>
+									<View style={{flex: .6, justifyContent: "flex-start"}}>
+										<View style={{flexDirection: "row"}}>
+											<View style={{flex: 1}}>
+												<Button 
+												title = "Done"
+												onPress={() => {this.flagPicked(this.state.text)
+													this.setState({newFlag: false})}}
+												/>
+											</View>
+											<View style={{flex:.2}}></View>
+											<View style={{flex: 1}}>
+												<Button 
+												title = "Cancel"
+												onPress={() => this.setState({newFlag: false})}
+												/>
+											</View>
+										</View>
+									</View>
+								</View>
+							</View>
+						</Modal>
 					  </View>
 				  
 		  </SafeAreaView>
@@ -412,7 +469,6 @@ const styles = StyleSheet.create({
 	},
 	greetingContainerStyle: {
 		paddingLeft: "4%",
-		paddingRight: "2%",
 		justifyContent: "center",
 		flex: .12,
 		flexDirection: "row",
@@ -427,16 +483,17 @@ const styles = StyleSheet.create({
 	ContainerStyle: {
 		alignItems: 'center',
 		justifyContent: 'space-evenly',
-		backgroundColor: '#FECB00',
-		width: '15%',
-		borderRadius: 10,
+		backgroundColor: "#FECB00",
+		width: dimension.height  * .07,
+		height: dimension.height * .07,
+		borderRadius: 15,
 		elevation: 1,
-		paddingBottom: "10%",
+		paddingBottom: "7%",
 		marginBottom: '2%',
 		marginLeft: '2%',
 		marginRight: '2%',
 		borderWidth: 1,
-		borderColor: "#0000"
+		borderColor: "black"
 	 },
 	mainContentStyle: {
 		color: '#000',
@@ -463,44 +520,61 @@ const styles = StyleSheet.create({
 		paddingBottom: "3%",
 		borderColor: 'white'
 	},
-	touchCommittee: {
-		flexDirection:'column',
-		alignItems:'center',
-		backgroundColor: '#21252b',
-		justifyContent: "space-evenly",
-		paddingRight: "10%"
-	},
-	index: {
-		color: '#000',
-		borderColor: '#e0e6ed',
-		borderStyle: 'solid',
-		borderWidth: 1.5,
-		borderRadius: 15,
-		justifyContent:'center',
-		alignItems: 'center',
-		height: 30,
-		width: 30,
-		elevation: 1
-	},
-	modalBackground: {
+	modalContent: {
+        height: dimension.height*.5,
+        width: dimension.width*.8,
+        padding: dimension.height*.008,
+        backgroundColor: '#21252b',
+		borderRadius: 12,
+    },
+    modalBackground: {
         justifyContent: 'center',
         alignItems: 'center',
         margin: 0,
         height: dimension.height,
         width: dimension.width,
-        backgroundColor: 'transparent'
+        backgroundColor: '#000a'
     },
+	touchCommittee: {
+		flexDirection:'column',
+		alignItems:'center',
+		backgroundColor: '#21252b',
+		justifyContent: "space-evenly",
+	},
+	index: {
+		color: '#000',
+		borderColor: '#FECB00',
+		backgroundColor: "#FECB00",
+		borderStyle: 'solid',
+		borderWidth: 1.5,
+		borderRadius: dimension.height*.06*.5,
+		justifyContent:'center',
+		alignItems: 'center',
+		height: dimension.height*.06,
+		width: dimension.height*.06,
+		elevation: 1
+	},
 	indexText: {
 		fontWeight: "700",
 		fontSize: 20,
-		color: "#e0e6ed"
+		color: "black"
 	},
-	modalContent: {
-        height: dimension.height*.6,
-        width: dimension.width*.9,
-        padding: 12,
-        backgroundColor: '#21252b',
-        borderRadius: 12,
+	modalText: {
+        textAlign: 'center',
+        fontSize:16
+    },
+    modalTextInput: {
+        height: 80,
+        textAlign: 'center',
+        width: dimension.width*.6,
+        backgroundColor: '#e0e6ed22',
+        borderColor: '#e0e6ed',
+        borderRadius: 16,
+        borderWidth: 3,
+        borderStyle: 'solid',
+        fontWeight: 'bold',
+        fontSize: 60,
+		color: '#E0E6ED'
     },
 	eventsContainer: {
 		flex: .6,
@@ -509,13 +583,13 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ user, general, members, events, elect, committees }) => {
-	const { firstName, id, dashColor, flag} = user;
+	const { firstName, id, dashColor, flag, userCommittees} = user;
 	const { loading } = general;
 	const { membersPoints } = members;
 	const { eventList } = events;
 	const { election } = elect
 	const { committeesList} = committees 
-	return { firstName, id, loading, membersPoints, eventList, election, dashColor, committeesList, flag};
+	return { firstName, id, loading, membersPoints, eventList, election, dashColor, committeesList, flag, userCommittees};
 };
 
  const mapDispatchToProps = {
@@ -537,7 +611,9 @@ const mapStateToProps = ({ user, general, members, events, elect, committees }) 
 	goToViewEvent,
 	getCommittees,
 	setDashColor,
-	setFlag
+	setFlag,
+	fetchAllUsers,
+	getUserCommittees
 };
 
  export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

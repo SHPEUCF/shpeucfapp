@@ -33,12 +33,16 @@ const dimension = Dimensions.get('window');
 let dateStr =  ""
 
 class Events extends Component {
+  constructor(props) {
+    super(props);
+    this.state ={status: "closed"}
+  }
 
   componentDidMount(){
     let date = new Date()
-    let month = date.getMonth() + 1
+    let month = this.prepend0((date.getMonth() + 1).toString())
     let year = date.getFullYear()
-    let day = date.getDate()
+    let day = this.prepend0((date.getDate()).toString())
     let stringDate = `${year}-${month}-${day}`
 
     dateStr = stringDate
@@ -47,6 +51,13 @@ class Events extends Component {
   static onRight = function(){
     this.alert(new Date());
   }
+
+  prepend0(item){
+    if(item < 10){
+        return "0" + item;
+    }
+    return item
+}
 
   getDate(item){
     dateStr = item.dateString
@@ -60,10 +71,12 @@ class Events extends Component {
       <SafeAreaView style={{ flex: 1, backgroundColor: '#0c0b0b'}}>
         <ScrollView style={{flex:1}}>
           <Agenda
+            ref={child => {this.child = child}} {...this.props}
             selected={new Date()}
             //onDayChange={(day)=>{alert('day pressed')}}
+            setPos={(stat) => this.setState({status: stat})}
             passDate={(item) => this.getDate(item)}
-            showWeekNumbers={true}
+            showWeekNumbers={false}
             pastScrollRange={24}
             futureScrollRange={24}
             showScrollIndicator={true}
@@ -105,19 +118,62 @@ class Events extends Component {
     );
   }
 
+  selectButton(){
+    if (this.state.status === "closed") {
+
+      return (<Button
+          title = "Open Calendar"
+          onPress={() =>{
+          this.child.onSnapAfterDrag("closed")
+          this.setState({status: "opened"})
+        }}
+      />)
+    }
+
+    else {
+      return (<Button
+        title = "Close Calendar"
+        onPress={() =>{
+        this.child.onSnapAfterDrag("opened")
+        this.setState({status: "closed"})
+        }}
+      />)
+    }
+  }
+
+
   renderButton(){
     if(this.props.privilege !== undefined && this.props.privilege.board){
       this.props.nameChanged("");
 
       return (
-          <Button
-              title = "CREATE EVENT"
-              onPress={() =>
-                {
-                this.props.dateChanged(dateStr)
-                this.props.goToCreateEvent()}
-                }
-          />
+        <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+            <View style={{flex: .45}}>
+              <Button
+                  title = "Create Event"
+                  onPress={() =>
+                    {
+                    this.props.dateChanged(dateStr)
+                    this.props.goToCreateEvent()}
+                    }
+              />
+            </View>
+            <View style={{flex: .45}}>
+              {this.selectButton()}
+            </View>
+          </View>
+      )
+    }
+
+    else {
+      return(
+        <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+            <View style={{flex: .3}}></View>
+            <View style={{flex: 1}}>
+              {this.selectButton()}
+            </View>
+            <View style={{flex: .3}}></View>
+          </View>
       )
     }
   }
@@ -212,7 +268,7 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   textColor: {
-    color: '#e0e6ed'
+    color: 'white'
   },
   modalTextInput: {
     marginTop: dimension.height*.05,
@@ -255,11 +311,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   emptyData: {
-    height: dimension.height * .015,
-    paddingTop: dimension.height * .030,
-    paddingBottom: dimension.height *.04,
-    marginRight: dimension.height *.010,
-    marginLeft: dimension.height *.010,
+    height: dimension.height * .15,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#21252b',

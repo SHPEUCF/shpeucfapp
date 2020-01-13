@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import {
   emailChanged,
@@ -11,6 +11,7 @@ import {
 } from '../../ducks';
 
 import { Spinner, Button, Input } from '../general';
+const dimension = Dimensions.get('window');
 
 class LoginForm extends Component {
 
@@ -82,12 +83,36 @@ class LoginForm extends Component {
 
     return (
       <View style={styles.buttonContainer}>
-        <Button
-          title = "LOG IN"
-          onPress={this.onButtonPress.bind(this)}
-        />
-        {this.renderResetPassword()}
-        {this.renderSignUpButton()}
+        <View style={{flexDirection: "row"}}> 
+          <View style={{flex: .3}}></View>
+            <View style={{flex: 1}}>
+            <Button
+              title = "Log in"
+              onPress={this.onButtonPress.bind(this)}
+            />
+            </View>
+          <View style={{flex: .3}}></View>
+        </View>
+        <View style={{flexDirection: "row"}}>
+          <View style={{flex: .3}}></View>
+            <View style={{flex: 1}}>
+              <Button
+                title = "Reset Password"
+                onPress={this.props.goToResetPassword.bind(this)}
+              />
+              </View>
+          <View style={{flex: .3}}></View>
+        </View>
+           <View style={{flexDirection: "row"}}>
+           <View style={{flex: .3}}></View>
+            <View style={{flex: 1}}>
+            <Button
+              title = "Register"
+              onPress={this.props.goToRegistration.bind(this)}
+            />
+          </View>
+          <View style={{flex: .3}}></View>
+        </View>
       </View>
     );
   }
@@ -101,21 +126,28 @@ class LoginForm extends Component {
       headerSubtitleStyle,
     } = styles
     return (
-      <View style={formContainerStyle}>
-        <ScrollView style={{ flex: 1.5, paddingTop: 10 }}>
-            <Image
-              source={require('../../assets/images/SHPE_UCF_Logo.png')}
-              style={{alignSelf: 'center'}}
-            /> 
+      <SafeAreaView style={formContainerStyle}>
+        <View style={{flex: 1, backgroundColor: "#FECB00"}}>
+          <View style={{flex: .1}}></View>
+            <View style={{alignItems: "center", flex: 1, justifyContent: "center"}}>
+              <Image
+                 source={require('../../assets/images/SHPE_UCF_Logo.png')}
+                 style={{alignSelf: 'center'}}
+                 height = {dimension.height * .5}
+                 resizeMode="contain"
+              /> 
+            </View>
             <View style={headerContainer}>
               <View style={headerTitle}>
                 <Text style={headerTextStyle}>S H P E  </Text>
-                <Text style={[headerTextStyle, {color: '#FFC107'}]}>U C F </Text>
+                <Text style={[headerTextStyle, {color: 'white'}]}>U C F</Text>
               </View>
+              <Text style={headerSubtitleStyle}>Society of Hispanic Professional Engineers</Text>
             </View>
-            <Text style={headerSubtitleStyle}>Society of Hispanic Professional Engineers</Text>
-          </ScrollView>
-          <ScrollView style= {{flex: 1}}>
+            <View style={{flex: .2}}></View>
+          </View>
+          <View style={{flex: .18}}></View>
+          <View style= {{flex: .5, paddingLeft: "5%", paddingRight: "5%", justifyContent: "space-evenly"}}>
             <Input
               placeholder="Knights Email"
               value={this.props.email}
@@ -130,10 +162,11 @@ class LoginForm extends Component {
               value={this.props.password}
               onChangeText={this.onPasswordChange.bind(this)}
             />
-          </ScrollView>
+          </View>
+          <View style={{flex: .1}}></View>
         {this.renderError()}
         {this.renderButtons()}
-      </View>
+      </SafeAreaView>
     );
 
   }
@@ -145,28 +178,26 @@ class LoginForm extends Component {
 
 const styles = StyleSheet.create({
   formContainerStyle: {
-    padding: 10,
     backgroundColor: '#0c0b0b',
     flex: 1,
   },
   headerContainer:{
-    flex: 1.5,
+    flex: .6,
     alignItems: 'center',
-    paddingTop: 10
+    justifyContent: "space-evenly",
   },
   headerTextStyle: {
-		color: 'white',
+		color: 'black',
     fontSize: 40,
     alignSelf: 'center'
   },
 	headerTitle: {
-    flex: 1,
     flexDirection: 'row',
+    justifyContent: "space-evenly",
 	},
 	headerSubtitleStyle: {
 		color: 'gray',
     fontWeight: 'bold',
-    flex: 1,
 	},
   errorTextStyle: {
     fontSize: 14,
@@ -178,8 +209,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttonContainer: {
-    flex: .8,
-
+    flex: .7,
+    justifyContent: "space-evenly"
   },
   resetPasswordText: {
     fontWeight: 'bold',

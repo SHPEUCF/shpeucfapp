@@ -1,5 +1,5 @@
 import React, { Component} from 'react';
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Platform } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Platform, SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import {
@@ -244,7 +244,7 @@ class RegistrationForm extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.formContainerStyle}>
 
           <View style={styles.headerStyle}>
@@ -305,7 +305,7 @@ class RegistrationForm extends Component {
           {this.renderButtons()}
 
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }

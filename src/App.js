@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux';
 import { goToLogIn, registrationError } from './ducks';
 import Router from './config/Router';
 import AppInfo from '../app.json'
+import { SafeAreaView, StatusBar, View} from 'react-native'
 
 
 class App extends Component {
@@ -51,7 +52,11 @@ class App extends Component {
   }
 
   render() {
-    return <Router />;
+    return (
+    <View style={{flex: 1}}>
+      <Router />
+    </View>
+    );
   }
 }
 

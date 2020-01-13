@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {View, StyleSheet, Text, ScrollView, Modal, Dimensions, FlatList, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Text, ScrollView, Modal, Dimensions, FlatList, TouchableOpacity, SafeAreaView} from 'react-native';
 import { Input, Button, PickerInput, DatePicker, TimePicker } from '../general';
 import {
     createEvent,
@@ -220,10 +220,12 @@ class CreateEvent extends Component {
                 stringType = this.props.type;
             }
             return (
-                <View style={styles.formContainerStyle}>
+                <SafeAreaView style={styles.formContainerStyle}>
+                    <View style={{flex: .1}}></View>
                     <View style={styles.headerStyle}>
                         <Text style={styles.headerTextStyle}>{this.props.title}</Text>
                     </View>
+                    <View style={{flex: .1}}></View>
                     <ScrollView
                     ref={(ref)=> (this.scrollView=ref)}
                     style={styles.scrollView}>
@@ -270,16 +272,25 @@ class CreateEvent extends Component {
                             />
                         </View>
                     </ScrollView>
+                    <View style={{flex: 1}}></View>
                         {this.renderError()}
+                        <SafeAreaView>
+                        <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .08, width:"100%"}}>
+                        <View style={{flex: .45}}>
                         <Button 
                             title = {this.props.title}
                             onPress={this.onButtonPress.bind(this)}
                         />
+                        </View>
+                        <View style={{flex: .45}}>
                         <Button 
-                            title = "CANCEL"
+                            title = "Cancel"
                             onPress={this.props.goToEvents.bind(this)}
                         />
-                </View>
+                        </View>
+                        </View>
+                    </SafeAreaView>
+                </SafeAreaView>
             )
         }
 }
@@ -306,15 +317,13 @@ const styles = StyleSheet.create({
     },
     formContainerStyle: {
         flex: 1,
-        padding: 20,
-        backgroundColor: '#21252b'
+        backgroundColor: 'black'
     },
     headerStyle: {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 5,
-        marginBottom: 10,
+        flex:.7
     },
     headerTextStyle: {
         fontSize: 22,
@@ -335,10 +344,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     scrollView: {
-        flex: 0,
+        backgroundColor: "#0c0b0b",
+        height: "50%",
         paddingTop: 0,
         paddingBottom: 0,
-        paddingRight: 10,
+        paddingLeft: "5%",
+        paddingRight: "5%",
     },
     titleStyle: {
         flex: .13,

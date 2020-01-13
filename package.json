@@ -18,7 +18,10 @@
     "android-release": "react-native run-android --variant=release"
   },
   "dependencies": {
+    "dev-tools": "^0.1.6",
     "firebase": "^6.4.2",
+    "install": "^0.13.0",
+    "npm": "^6.13.6",
     "qrcode": "^1.4.4",
     "react": "16.12.0",
     "react-native": "0.61.5",
