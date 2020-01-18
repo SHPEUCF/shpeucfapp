@@ -280,19 +280,20 @@ class Dashboard extends Component {
 	const committeesArray = (this.props.userCommittees !== null &&  this.props.userCommittees !== undefined) ? Object.entries(this.props.userCommittees) : ["Add your main committees!"]
 
 	return(
-	<View style = {{flexDirection: "row", flex: 1, height: "100%", backgroundColor: "#21252b"}}>
-		<View style ={{height: "100%", justifyContent: "flex-start", alignItems: "center", flex: .3, paddingTop: "5%", paddingRight: "5%"}}>
-			<Ionicons name="ios-information-circle" size={dimension.height * .03} onPress = {() => Actions["CommitteesD"]({screen: 'dashboard'})} style={{color: '#FECB00'}}/>	
+	<View style = {{flexDirection: "row", flex: 1, height: "100%", backgroundColor: "#21252b", alignItems: "center"}}>
+		<View style ={{height: "100%", justifyContent: "flex-start", alignItems: "center", flex: .25, paddingTop: "5%"}}>
+			<Ionicons name="ios-information-circle" size={dimension.height * .028} onPress = {() => Actions["CommitteesD"]({screen: 'dashboard'})} style={{color: '#FECB00'}}/>	
 		</View>
-		<View style = {{flex: 1, backgroundColor: "#21252b",justifyContent: "space-evenly"}}>
+		<View style = {{flex: 1, backgroundColor: "#21252b",justifyContent: "space-evenly", height: "80%"}}>
 		{Object.values(committeesArray).map(item => (
 			<TouchableOpacity style={[touchCommittee, {flex: .5, backgroundColor: "#21252b"}]} onPress={() => {this.viewCommittee(this.props.committeesList[item[0]])}}>
 				<View style={{justifyContent: "center", width: "100%", alignItems: "center", flex: 1, flexDirection: "row", backgroundColor: "#21252b"}}>
-					<View style = {{flex: 1, alignItems: "flex-start", justifyContent: "space-evenly"}}>
+					<View style = {{flex: .8, alignItems: "flex-start", justifyContent: "space-evenly"}}>
 						<View style = {{}}>
-							<Text style={[textColor, {fontSize: dimension.width * .035}]}>{item[0]}</Text>
+							<Text style={[textColor, {fontSize: dimension.width * .03}]}>{item[0]}</Text>
 						</View>
 					</View>
+					<View style = {{flex: .2}}></View>
 					<View style = {{flex: .3}}>
 						<View style= {{alignItems: "flex-end", justifyContent: "center", flex: 1, paddingRight: dimension.width * .03}}>
 							<Ionicons name="ios-arrow-dropright" size={dimension.height * .025} style={{color: '#FECB00'}}/>
@@ -593,22 +594,10 @@ class Dashboard extends Component {
 		<View style={{flexDirection: "row", flex: 1}}>
 			<View style = {{flex: .1}}></View>
 			<View style={{alignItems:'center', flexDirection: "row", borderColor: "white", flex: 1}}>
-				<View style={{flex: .6, alignItems: "flex-start"}}>
+				<View style={{flex: 1, alignItems: "flex-start"}}>
 					<View style={{alignItems: "flex-start"}}>
-						<Text style={{color: "white", fontSize: dimension.width * .035}}>{viewType}:</Text>
-						<Text style={{color: "white", fontSize: dimension.width * .035}}>{name}</Text>
-					</View>
-				</View>
-				<View style ={{flex:.08,  height: "60%"}}></View>
-				<View style={{alignItems: "center", flex: .6}}>
-					<View style={{alignItems: "flex-start"}}>
-						<View style={{alignItems: "flex-start"}}>
-							<Text style={{color: "white", fontSize: dimension.width * .035}}>{this.convertNumToDate(date)}</Text>
-						</View>
-						<View style={{alignItems: "flex-start"}}>
-							<Text style={{color: "white", fontSize: dimension.width * .035}}>{realStart}</Text>
-							<Text style={{color: "white", fontSize: dimension.width * .035}}>{realEnd}</Text>
-						</View>
+						<Text style={{color: "white", fontSize: dimension.width * .035}}>{viewType}: {name}</Text>
+						<Text style={{color: "white", fontSize: dimension.width * .035}}>{this.convertNumToDate(date)} - {realStart} - {realEnd} </Text>
 					</View>
 				</View>
 				<View style ={{flex:.08, height: "60%"}}></View>
@@ -678,7 +667,7 @@ const styles = StyleSheet.create({
 	greetingContainerStyle: {
 		paddingLeft: "4%",
 		justifyContent: "center",
-		flex: .14,
+		flex: .16,
 		flexDirection: "row",
 	},
 	textColor:{

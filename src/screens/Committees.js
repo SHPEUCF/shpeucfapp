@@ -168,6 +168,7 @@ import {
               <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
               <Ionicons name="ios-calendar" size={dimension.height * .03} onPress = {() => {this.setState({opened: Object.assign(this.state.opened, {[item.title]: this.toggleEvents(item.title)})})}} style={{color: '#FECB00'}}/>
             </View>)}
+            <View style ={{ flex: 1}}></View>
             <View style = {{flex: .6, justifyContent: "center"}}>
             <Ionicons name="ios-arrow-dropright" size={dimension.height * .025} style={{color: '#FECB00', backgroundColor: "transparent", alignSelf: "center"}}/>
             </View>
@@ -229,36 +230,26 @@ import {
 
 		if (committee !== ''){
 		viewName = committee + ": "  + name;
-		}
+    }
+    
+    var realStart = this.convertHour(startTime)
+		var realEnd = this.convertHour(endTime)
    
     return (
       <View>
       <View style={[contentContainerStyle, {backgroundColor:"#0c0b0b"}]}>
-        <View style={{flexDirection: "row", flex: 1}}>
-        <View style = {{flex: .1}}></View>
+      <View style={{flexDirection: "row", flex: 1}}>
+			<View style = {{flex: .1}}></View>
 			<View style={{alignItems:'center', flexDirection: "row", borderColor: "white", flex: 1}}>
-				<View style={{flex: .6, alignItems: "flex-start"}}>
+				<View style={{flex: 1, alignItems: "flex-start"}}>
 					<View style={{alignItems: "flex-start"}}>
-    <Text style={{color: "white", fontSize: dimension.width * .035}}>{name}</Text>
-					</View>
-				</View>
-				<View style ={{flex:.08,  height: "60%"}}></View>
-				<View style={{alignItems: "center", flex: .6}}>
-         <View style={{alignItems: "flex-start"}}>
-						<View style={{alignItems: "flex-start"}}>
-							<Text style={{color: "white", fontSize: dimension.width * .035}}>{this.convertNumToDate(date)}</Text>
-						</View>
-						<View style={{alignItems: "flex-start"}}>
-							<Text style={{color: "white", fontSize: dimension.width * .035}}>{this.convertHour(startTime)}</Text>
-							<Text style={{color: "white", fontSize: dimension.width * .035}}>{this.convertHour(endTime)}</Text>
-						</View>
+						<Text style={{color: "white", fontSize: dimension.width * .035}}>{name}</Text>
+						<Text style={{color: "white", fontSize: dimension.width * .035}}>{this.convertNumToDate(date)} - {realStart} - {realEnd} </Text>
 					</View>
 				</View>
 				<View style ={{flex:.08, height: "60%"}}></View>
 			</View>
-			<View style = {{flex: .1}}>	
-			</View>
-      </View>
+		</View>
       </View>
       </View>
     )
