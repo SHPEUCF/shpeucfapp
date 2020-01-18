@@ -39,13 +39,15 @@ class OtherProfile extends Component {
       } = styles
 
     return (
-      <SafeAreaView style={{flex: 1, backgroundColor: "black"}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: "#0c0b0b"}}>
+        <View style={{backgroundColor: "black", flex: 1}}>
         {this.renderPicture()}
         
           <View style={[bioContainer]}>
             <View style= {{flex:.2}}></View>
-            <View style={{flexDirection: "row", flex: 1.5, justifyContent: "space-evenly", alignItems: "flex-start"}}>
-              <View style={[fieldContainerStyle]}>
+            <View style={{flexDirection: "row", flex: 1.5, justifyContent: "space-evenly"}}>
+              <View style = {{flex: .1}}></View>
+              <View style={[fieldContainerStyle, {flex: .3}]}>
                 <View style={{flex: 1, justifyContent: "center"}}>
                   <Text style={[itemLabelText, textColor]}>Email:</Text>
                 </View>
@@ -67,13 +69,15 @@ class OtherProfile extends Component {
                 <Text style={[itemValueText, textColor]}>{points}</Text>
                 </View>
               </View>
+              <View style = {{flex: .1}}></View>
               </View>
               <View style= {{flex:.2}}></View>
           </View>
           {this.renderSocialMedia()}
           <View style={{flex: .3}}></View>
           {this.renderButtons()}
-          <View style={{height: dimension.height *.08}}></View>
+          <View style={{height: dimension.height *.08, backgroundColor: "#0c0b0b"}}></View>
+          </View>
       </SafeAreaView>
   )
 
@@ -193,9 +197,29 @@ class OtherProfile extends Component {
     const {
       buttonsContainerStyle
     } = styles
+
+    if (this.props.screen !== undefined){
+      return(
+        <SafeAreaView style= {{}}>
+          <SafeAreaView style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "flex-start", width:"100%", position: "absolute", bottom: dimension.height * .032, backgroundColor: "black"}}>
+          <View style={{flex: .3}}></View>
+            <View style={[buttonsContainerStyle, {flex: 1}]}>
+              <Button
+                    title = "Back"
+                    onPress={() => {
+                      Actions.pop()
+                    }}
+                  />
+            </View>
+            <View style={{flex: .3}}></View>
+          </SafeAreaView>
+        </SafeAreaView>
+
+      )
+    }
     return (
-      <SafeAreaView>
-        <SafeAreaView style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "flex-start", width:"100%", position: "absolute", bottom: dimension.height * .032}}>
+      <SafeAreaView style= {{}}>
+        <SafeAreaView style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "flex-start", width:"100%", position: "absolute", bottom: dimension.height * .032, backgroundColor: "black"}}>
         {/*<TouchableOpacity onPress={this.props.goToEditProfileForm.bind(this)} style={{backgroundColor: "#FECB00", borderWidth: 1, borderColor: "#0000",flex: 1, alignItems: "center", justifyContent: "center"}}>
         <View style={{justifyContent: "center"}}>
           <Text style={{fontSize: 18}}> Edit Profile </Text>
@@ -291,6 +315,7 @@ const styles = StyleSheet.create({
     height: "100%",
     flexDirection: 'column',
     alignItems: "flex-start",
+    flex: 1
   },
   nameLabelText: {
     fontSize: dimension.height*.03,
