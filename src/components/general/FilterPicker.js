@@ -6,12 +6,16 @@ import {
     FlatList,
     Dimensions,
     TouchableOpacity,
-    Text
+    Text,
+    SafeAreaView
 } from 'react-native';
 import { Input } from './Input'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Avatar } from 'react-native-elements'
 import { Alert } from 'react-native';
+import { Button } from './Button'
+import { Actions } from 'react-native-router-flux';
+
 
 
 const dimension = Dimensions.get('window');
@@ -130,19 +134,24 @@ class FilterPicker extends Component {
                     <View style={[contentContainerStyle, selected]}>
                         <View style={containerStyle}>
                             <View style={{flex:.1}}></View>
-                            <View >
                             <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
-                                <View>
+                                <View style = {{flex: 1}}>
                                 <Text style={ [textStyle, {fontWeight: 'bold'}]}>{`${user.firstName} ${user.lastName}`}</Text>
                                 </View>
-                                <View>
+                                <View style = {{alignItems: "flex-end", flexDirection: "row", flex: .4}}>
+                                <Ionicons
+                                onPress={() => this.props.callUser(user.id)}
+                                name={'ios-arrow-dropright-circle'}
+                                size={dimension.height*.04}
+                                color={"#FECB00"}
+                                />
+                                <View style = {{flex: .2}}></View>
                                 <Avatar   
                                 size={dimension.height*.08}
                                 rounded
-                                source={{uri: item.picture}}
+                                source={{uri: user.picture}}
                                 />
                                 </View>
-                            </View>
                             </View>
                             <View style={{flex:.1}}></View>
                         </View>
@@ -255,13 +264,12 @@ class FilterPicker extends Component {
         }
 
         else if (this.props.type === "Multiple") {
-            picker = <View>
+            picker = 
             <Modal
             transparent={true}
-            visible={this.state.modalVisible}>
-                <View style={modalBackground}>
-                    <View style={modalStyle}>
-                        <Text style={titleStyle}>{title}</Text>
+            visible={this.state.modalVisible && this.props.visible}>
+                <SafeAreaView style={modalBackground}>
+                    <SafeAreaView style={modalStyle}>
                         <Input
                         style={[inputStylee, inputStyleee]}
                         onChangeText={onChangeText}
@@ -277,50 +285,37 @@ class FilterPicker extends Component {
                             )}
                             />
                         </View>
-                        <View style={buttonContainer}>
-                            <TouchableOpacity  
-                            style={buttonStyle}
-                            onPress={() => this.props.onSelect(this.state.selectedNames)}
-                            >
-                                <Text style={textStyle}>Done</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity  
-                            style={buttonStyle}
-                            onPress={() => this.props.onClose()}>
-                                <Text style={textStyle}>Cancel</Text>
-                            </TouchableOpacity>
+                        <View style={{height: dimension.height *.08, backgroundColor: "#0c0b0b"}}></View>
+                        <View style = {{backgroundColor: "#0c0b0b"}}>
+                            <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%", backgroundColor: "#0c0b0b"}}>
+                                <View style={{flex: .45}}>
+                                    <Button 
+                                    title = "Done"
+                                    onPress={() => this.props.onSelect(this.state.selectedNames)}
+                                    />
+                                </View>
+                                <View style={{flex: .45}}>
+                                    <Button 
+                                    title = "Cancel"
+                                    onPress={() => this.props.onClose()}
+                                    />
+                                </View>
+                            </View>
                         </View>
-                    </View>
-                </View>
+                    </SafeAreaView>
+                </SafeAreaView>
             </Modal>
-        </View>
-
         }
 
         else if (this.props.type === "Searchbar") {
-            picker = <View>
-                <View style={modalBackground}>
-                    <View >
-                        <Input
-                        style={[inputStylee, inputStyleee]}
-                        onChangeText={onChangeText}
-                        value={this.props.filter}
-                        />
-                        <View style = {{flex: 2}}>
-                        <FlatList
-                        data={this.props.data}
-                        extraData={this.state}
-                        keyExtractor={this._keyExtractor}
-                        renderItem={({item, index}) => (
-                            this.renderComponent(item, index)
-                        )}
-                        />
-                        </View>
-                    </View>
-                </View>
-          
-        </View>
-
+            picker = 
+            <View style = {{height: dimension.height *.1}}>
+                <Input
+                style={[inputStylee, inputStyleee, {flex: 1}]}
+                onChangeText={onChangeText}
+                value={this.props.filter}
+                />
+            </View>
         }
 
         return (
@@ -359,7 +354,8 @@ const styles = {
     titleStyle: {
         flex: .13,
         alignSelf: 'center',
-        fontSize: 20
+        fontSize: 20,
+        backgroundColor: "white"
     },
     buttonStyle: {
         flex: 1,
@@ -382,18 +378,12 @@ const styles = {
     },
     modalBackground: {
         justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'black',
-        margin: 0,
-        height: dimension.height,
-        width: dimension.width,
+        backgroundColor: '#0c0b0b',
+        flex: 1
     },
     modalStyle: {
-        height: dimension.height,
-        width: dimension.width,
-        backgroundColor:'#fff',
-        padding: 12,
-        borderRadius: 12,
+        flex: 1,
+        backgroundColor: 'black',
     },
     inputStyle:{
         flex: 1
@@ -407,8 +397,6 @@ const styles = {
         alignSelf: 'center'
     },
     inputStyleee: {
-        alignSelf: 'center',
-        width: dimension.width,
         color: '#000',
         fontSize: 16,
         marginTop: 8,
@@ -419,8 +407,8 @@ const styles = {
       },
       containerStyle: {
         flex: 1,
-        alignItems: 'flex-start',
         paddingHorizontal: 15,
+        justifyContent: "center",
       },
       screenBackground: {
         flex: 1,
@@ -435,10 +423,9 @@ const styles = {
         fontSize: dimension.height * .027,
       },
       contentContainerStyle: {
-        borderBottomWidth: 1,
-        borderColor: "#ffd700",
+    
         flex: 1,
-        height: dimension.height*.18,
+        height: dimension.height*.14,
         backgroundColor: 'black',
       },
       progress: {
