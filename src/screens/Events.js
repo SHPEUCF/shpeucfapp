@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 import { Button, NavBar } from '../components/general'
 import { Agenda } from 'react-native-calendars';
 import {
@@ -20,7 +21,8 @@ import {
   nameChanged,
   descriptionChanged,
   dateChanged,
-  timeChanged,
+  startTimeChanged,
+  endTimeChanged,
   locationChanged,
   epointsChanged,
   eventIDChanged,
@@ -31,11 +33,12 @@ import { ThemeConsumer } from 'react-native-elements';
 
 const dimension = Dimensions.get('window');
 let dateStr =  ""
+let initDate = ""
 
 class Events extends Component {
   constructor(props) {
     super(props);
-    this.state ={status: "closed"}
+    this.state ={status: "closed", day: new Date()}
   }
 
   componentDidMount(){
@@ -44,8 +47,8 @@ class Events extends Component {
     let year = date.getFullYear()
     let day = this.prepend0((date.getDate()).toString())
     let stringDate = `${year}-${month}-${day}`
-
     dateStr = stringDate
+    initDate = stringDate
   }
 
   static onRight = function(){
@@ -63,16 +66,22 @@ class Events extends Component {
     dateStr = item.dateString
   }
 
+  chooseToday(){
+    this.child.chooseToday()
+  }
+
   render() {
     const {
       textColor
     } = styles
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: '#0c0b0b'}}>
+        <View style= {{backgroundColor: "black", flex: 1}}>
         <ScrollView style={{flex:1}}>
           <Agenda
+            dashColor={this.props.dashColor}
             ref={child => {this.child = child}} {...this.props}
-            selected={new Date()}
+            selected={this.state.day}
             //onDayChange={(day)=>{alert('day pressed')}}
             setPos={(stat) => this.setState({status: stat})}
             passDate={(item) => this.getDate(item)}
@@ -84,7 +93,7 @@ class Events extends Component {
             items = {this.getFormattedEventList()}
             // Will only load items for visible month to improve performance later
             // loadItemsForMonth={this.loadItemsForMonth.bind(this)}
-            renderItem={this.renderItem.bind(this)}
+            renderItem={(item) => this.renderItem(item)}
             rowHasChanged={this.rowHasChanged.bind(this)}
             renderEmptyDate={ this.renderEmptyDate.bind(this) }
             renderEmptyData = {this.renderEmptyData.bind(this)}
@@ -93,7 +102,7 @@ class Events extends Component {
               height: dimension.height *.73
             }}
             theme={{
-              backgroundColor: '#0c0b0b',
+              backgroundColor: 'black',
               calendarBackground: '#21252b',
               agendaDayTextColor: '#fff',
               agendaDayNumColor: '#fff',
@@ -111,8 +120,17 @@ class Events extends Component {
             }}
           />
         </ScrollView>
+        <View style= {{flex: .1}}>
+        {(initDate !== dateStr) && ( <TouchableOpacity  style= {{alignItems: "center", justifyContent: "flex-start", flex: 1}} onPress={() => this.chooseToday()}>
+            <View style= {{flex: .25}}></View>
+            <Text style={{color: "white", fontSize: 16}}>
+                Today
+            </Text>
+         </TouchableOpacity>)}
+         </View>
         <View style={{flex: .1}}>
             {this.renderButton()}
+        </View>
         </View>
       </SafeAreaView>
     );
@@ -141,20 +159,18 @@ class Events extends Component {
     }
   }
 
-
   renderButton(){
     if(this.props.privilege !== undefined && this.props.privilege.board){
-      this.props.nameChanged("");
-
       return (
-        <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+        <View style ={{position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+        <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center"}}>
             <View style={{flex: .45}}>
               <Button
                   title = "Create Event"
                   onPress={() =>
                     {
                     this.props.dateChanged(dateStr)
-                    this.props.goToCreateEvent()}
+                    this.props.goToCreateEvent("events")}
                     }
               />
             </View>
@@ -162,6 +178,7 @@ class Events extends Component {
               {this.selectButton()}
             </View>
           </View>
+        </View>
       )
     }
 
@@ -224,21 +241,21 @@ class Events extends Component {
     this.props.nameChanged(item.name)
     this.props.descriptionChanged(item.description)
     this.props.dateChanged(item.date)
-    this.props.timeChanged(item.time)
+    this.props.startTimeChanged(item.startTime)
+    this.props.endTimeChanged(item.endTime)
     this.props.locationChanged(item.location)
     this.props.epointsChanged(item.points)
     this.props.eventIDChanged(item.eventID)
-    this.props.goToViewEvent();
+    this.props.goToViewEvent("events");
   }
 
   renderItem(item) {
-
     const {
       textColor,
       itemContainer
     } = styles
 
-    var viewName = item.name;
+    var viewName = item.type + ": " + item.name;
     if (item.committee !== ''){
       viewName = item.committee + ": " + item.name;
     }
@@ -247,13 +264,25 @@ class Events extends Component {
       <TouchableOpacity onPress={this.viewEvent.bind(this,item)}>
           <View style={[itemContainer, {backgroundColor: this.props.dashColor}]}>
             <Text style={[{ fontWeight: 'bold'},textColor]}>{viewName}</Text>
-            <Text style={textColor}>Time: {item.time}</Text>
+            <Text style={textColor}>Time: {this.convertHour(item.startTime)} - {this.convertHour(item.endTime)}</Text>
             <Text style={textColor}>Location: {item.location}</Text>
         </View>
       </TouchableOpacity>
     );
   }
 
+  convertHour(time){
+		var array = time.split(":")
+
+		if(array[2] === "AM") {
+      var hour = "" + (parseInt(array[0])) 
+      return hour + ":" + array[1] + ":" +array[2]
+    }
+    
+		var hour = "" + (parseInt(array[0]) - 12) 
+		return hour + ":" + array[1] + ":" +array[2]
+	}
+  
   rowHasChanged(r1, r2) {
     return r1.name !== r2.name;
   }
@@ -337,7 +366,8 @@ const mapDispatchToProps = {
   nameChanged,
   descriptionChanged,
   dateChanged,
-  timeChanged,
+  startTimeChanged,
+  endTimeChanged,
   locationChanged,
   epointsChanged,
   eventIDChanged,
