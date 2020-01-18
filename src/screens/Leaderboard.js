@@ -23,6 +23,7 @@ import {
   Dimensions,
   SafeAreaView,
   Image } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const dimension = Dimensions.get('window');
 const iteratees = ['points','lastName','firstName'];
@@ -31,6 +32,8 @@ const order = ['desc','asc','asc'];
 class Leaderboard extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {search: false}
   }
 
   componentWillMount() {
@@ -60,20 +63,33 @@ class Leaderboard extends Component {
     });
     return (
       <SafeAreaView style={screenBackground}>
+        <View style = {{flexDirection: "row", justifyContent: "space-between", backgroundColor: "black", paddingRight: "10%"}}>
         <NavBar title="Leaderboard" back onBack={() => Actions.pop()} />
-        {/*<FilterPicker
-              title={"Members"}
-              filter={this.props.filter}
-              type="Searchbar"
-              data={sortedMembers}
-              onChangeText={this.props.filterChanged.bind(this)}
-              placeholder="Find user"
-              itemJSX = {(item) => this.renderComponent(item, sortedMembers)}
-              onSelect={(item) => {
-                  alert(item.firstName)
-                }}
-              />*/}
-            <FlatList
+          <View style = {{flex: .2, alignItems: "center", justifyContent: "center", backgroundColor: "black"}}>
+            <Ionicons
+            onPress={() => {
+              this.props.filterChanged('')
+              this.setState({search: !this.state.search})
+            }}
+            name={'ios-search'}
+            size={dimension.height*.04}
+            color={"#FECB00"}
+          />
+          </View>
+        </View>
+              <View style = {{flexDirection: "row", backgroundColor: "black"}}>
+                <View style = {{flex: 1}}>
+                  {this.state.search && (<FilterPicker
+                  title={"Members"}
+                  filter={this.props.filter}
+                  type="Searchbar"
+                  data={sortedMembers}
+                  onChangeText={this.props.filterChanged.bind(this)}
+                  placeholder="Find user"
+                  />)}
+                </View>
+              </View>
+              <FlatList
               extraData={this.props}
               keyExtractor = {this.keyExtractor}
               data = {sortedMembers}
@@ -106,7 +122,9 @@ class Leaderboard extends Component {
     //   action = this.callUser
     // }
 
-    // if(item.points !== 0){
+    var re = new RegExp("^"+this.props.filter, "i");
+    if (re.test(`${item.firstName} ${item.lastName}`) ){
+        
       return (
         <TouchableOpacity onPress = {() => this.callUser(item.id)}>
           <View style={contentContainerStyle}>
@@ -162,6 +180,10 @@ class Leaderboard extends Component {
           </View>
         </TouchableOpacity>
       )
+    }
+
+    // if(item.points !== 0){
+      
     }
 
   viewBreakDown() {
