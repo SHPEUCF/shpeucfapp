@@ -14,6 +14,13 @@ import Flag from 'react-native-flags'
 const dimension = Dimensions.get('window');
 class Profile extends Component {
 
+  shouldComponentUpdate(nextProps, nextState){
+    if(nextProps.firstName === null || nextProps.lastName === undefined || nextProps.firstName === ''){
+      return false
+    }
+    return true
+  }
+
   render() {
     return (
           this.renderContent()
@@ -33,13 +40,15 @@ class Profile extends Component {
       } = styles
 
     return (
-      <SafeAreaView style={{flex: 1, backgroundColor: "black"}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: "#0c0b0b"}}>
+        <View style= {{flex: 1, backgroundColor: "black"}}>
         {this.renderPicture()}
         
           <View style={[bioContainer]}>
             <View style= {{flex:.2}}></View>
-            <View style={{flexDirection: "row", flex: 1.5, justifyContent: "space-evenly", alignItems: "flex-start"}}>
-              <View style={[fieldContainerStyle]}>
+            <View style={{flexDirection: "row", flex: 1.5, justifyContent: "space-evenly"}}>
+              <View style = {{flex: .1}}></View>
+              <View style={[fieldContainerStyle, {flex: .3}]}>
                 <View style={{flex: 1, justifyContent: "center"}}>
                   <Text style={[itemLabelText, textColor]}>Email:</Text>
                 </View>
@@ -61,12 +70,14 @@ class Profile extends Component {
                 <Text style={[itemValueText, textColor]}>{points}</Text>
                 </View>
               </View>
+              <View style = {{flex: .1}}></View>
               </View>
               <View style= {{flex:.2}}></View>
           </View>
           {this.renderSocialMedia()}
           <View style={{flex: .3}}></View>
           {this.renderButtons()}
+          </View>
       </SafeAreaView>
   )
 
@@ -219,7 +230,9 @@ class Profile extends Component {
     <View style={buttonsContainerStyle}>
       <Button
             title = "Logout"
-            onPress={this.props.logoutUser.bind(this)}
+            onPress={
+              this.props.logoutUser.bind(this)
+            }
           />
     </View>
 
@@ -283,6 +296,7 @@ const styles = StyleSheet.create({
     height: "100%",
     flexDirection: 'column',
     alignItems: "flex-start",
+    flex: 1
   },
   nameLabelText: {
     fontSize: dimension.height*.03,
@@ -291,7 +305,7 @@ const styles = StyleSheet.create({
 		lineHeight: dimension.height * .03
   },
   itemLabelText: {
-    fontSize: dimension.height*.02,
+    fontSize: dimension.width*.04,
     fontWeight: 'bold',
 		color: '#fff',
 		lineHeight: dimension.height * .03
@@ -301,7 +315,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   itemValueText: {
-    fontSize: dimension.height*.019,
+    fontSize: dimension.height*.017,
     fontWeight: '500',
 		color: '#fff',
   },
