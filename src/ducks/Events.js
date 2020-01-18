@@ -16,7 +16,8 @@ const ACTIONS = createActiontypes([
     'NAME_CHANGED',
     'DESCRIPTION_CHANGED',
     'DATE_CHANGED',
-    'TIME_CHANGED',
+    'START_TIME_CHANGED',
+    'END_TIME_CHANGED',
     'LOCATION_CHANGED',
     'E_POINTS_CHANGED',
     'EVENT_ID_CHANGED',
@@ -37,7 +38,8 @@ const INITIAL_STATE = {
   name: '',
   description: '',
   date: '',
-  time: '',
+  startTime: '',
+  endTime: '',
   location: '',
   points: 0,
   eventID: {},
@@ -72,7 +74,8 @@ export default (state = INITIAL_STATE, action) => {
         name: '',
         description: '',
         date: '',
-        time: '',
+        startTime: '',
+        endTime: '',
         location: '',
         points: 0,
         eventID: '',
@@ -104,9 +107,13 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state,
         date: payload
       };
-    case ACTIONS.TIME_CHANGED:
+    case ACTIONS.START_TIME_CHANGED:
       return { ...state,
-        time: payload
+        startTime: payload
+      };
+    case ACTIONS.END_TIME_CHANGED:
+      return { ...state,
+        endTime: payload
       };
     case ACTIONS.LOCATION_CHANGED:
       return { ...state,
@@ -127,16 +134,17 @@ export default (state = INITIAL_STATE, action) => {
     case ACTIONS.GO_TO_CREATE_EVENT:
       return {...state,
         title: 'Create Event',
-        type: '',
-        committee: '',
+        type: payload.type,
+        committee: payload.committee,
         name: '',
         description: '',
-        time: '',
+        startTime: '',
+        endTime: '',
         location: '',
-        points: 0,
+        points: payload.points,
         eventID: '',
         code: '',
-        error: ''
+        error: '',
       };
     case ACTIONS.GO_TO_CREATE_EVENT_FROM_EDIT:
       return state;
@@ -147,7 +155,8 @@ export default (state = INITIAL_STATE, action) => {
         name: '',
         description: '',
         date: '',
-        time: '',
+        startTime: '',
+        endTime: '',
         location: '',
         points: 0,
         eventID: [],
@@ -171,7 +180,7 @@ function makeCode(length) {
     return text;
 }
 
-export const createEvent = (typeU, committeeU, nameU, descriptionU, dateU, timeU, locationU, pointsU ) => {
+export const createEvent = (typeU, committeeU, nameU, descriptionU, dateU, startTimeU, endTimeU, locationU, pointsU ) => {
   var committee = false;
 
   if (committeeU !== ''){
@@ -184,7 +193,8 @@ export const createEvent = (typeU, committeeU, nameU, descriptionU, dateU, timeU
     name: nameU,
     description: descriptionU,
     date: dateU,
-    time: timeU,
+    startTime: startTimeU,
+    endTime: endTimeU,
     eventActive: false,
     location: locationU,
     points: pointsU,
@@ -227,23 +237,30 @@ export const closeCheckIn = (eventID) => {
     }
 };
 
-export const editEvent = (typeU, committeeU, nameU, descriptionU, dateU, timeU, locationU, pointsU, eventIDU ) => {
+export const editEvent = (typeU, committeeU, nameU, descriptionU, dateU, startTimeU, endTimeU, locationU, pointsU, eventIDU ) => {
   var committee = false;
+  var pastCommittee = false
 
   if (committeeU !== ''){
     committee = true;
   }
 
-  firebase.database().ref(`/events/${eventIDU}`).update({
+  firebase.database().ref(`events/${eventIDU}`).once('value', snapshot => {
+    if (snapshot.val().committee !== ''){
+      firebase.database().ref(`committees/${snapshot.val().committee}/events/`).update({[eventIDU]: {}})
+    }
+  })
+  .then(() => {firebase.database().ref(`/events/${eventIDU}`).update({
           type: typeU,
           committee: committeeU,
           name: nameU,
           description: descriptionU,
           date: dateU,
-          time: timeU,
+          startTime: startTimeU,
+          endTime: endTimeU,
           location: locationU,
           points: pointsU,
-  })
+  })})
   .then(() => {
     if (committee === true){
       firebase.database().ref(`/committees/${committeeU}/events/`).update({ 
@@ -278,7 +295,7 @@ export const deleteEvents = (eventIDs) => {
     }
 }
 
-export const checkIn = (eventID, val, id) => {
+export const checkIn = (eventID, val, id, board) => {
   const { currentUser } = firebase.auth();
   let points;
   let valId = currentUser.uid
@@ -286,6 +303,43 @@ export const checkIn = (eventID, val, id) => {
   if (id){
     valId = id
   }
+
+
+  if (board !== undefined && board !== null){
+
+    return (dispatch) => {
+      firebase.database().ref(`events/${eventID}/attendance/${valId}`).once('value', snapshot => {
+            if (!snapshot.exists()) {
+                firebase.database().ref(`points/${valId}/points`).once('value', snapshot => {
+                    points = parseInt(snapshot.val()) + parseInt(val);
+                    firebase.database().ref(`events/${eventID}`).once('value', snapshot => {
+                      var realType = snapshot.val().type;
+                            if (snapshot.val().committee !== ''){
+                              realType = snapshot.val().committee;
+                            }
+                            firebase.database().ref(`events/${eventID}/attendance`).update({
+                                    [valId]: true
+                                })
+                                .then(() => {firebase.database().ref(`points/${valId}/points`).set(points)})
+                                .then(() => {firebase.database().ref(`points/${valId}/breakdown/${realType}/${eventID}`).update({
+                                    points: val,
+                                    name: snapshot.val().name,
+                                    date: snapshot.val().date,
+                                    committee: snapshot.val().committee,
+                                    board: board
+                                })})
+                                .then(() => firebase.database().ref(`users/${valId}/points`).set(points))
+                    })
+              })
+            }
+          })
+
+        }
+  }
+  
+
+    else {
+
 
     return (dispatch) => {
         firebase.database().ref(`events/${eventID}/eventActive`).once('value', snapshot => {
@@ -309,10 +363,10 @@ export const checkIn = (eventID, val, id) => {
                                             date: snapshot.val().date,
                                             committee: snapshot.val().committee,
                                         }))
+                                        .then(() => firebase.database().ref(`users/${valId}/points`).set(points))
+                                        .then(() => Alert.alert('Checked In', 'Successful'))
+                                        .catch((error) => Alert.alert('Check In Failed', 'Failure'))
                                 })
-                                .then(() => firebase.database().ref(`users/${valId}/points`).set(points))
-                                .then(() => Alert.alert('Checked In', 'Successful'))
-                                .catch((error) => Alert.alert('Check In Failed', 'Failure'))
                         })
                     } else
                         Alert.alert('You have already attended this event!', 'Failure');
@@ -321,6 +375,8 @@ export const checkIn = (eventID, val, id) => {
                 Alert.alert('Event check-in for this event is not open', 'Failure')
         })
     };
+
+  }
 }
 
 
@@ -388,11 +444,17 @@ export const dateChanged = (text) => {
         payload: text
     };
 };
-export const timeChanged = (text) => {
+export const startTimeChanged = (text) => {
     return {
-        type: ACTIONS.TIME_CHANGED,
+        type: ACTIONS.START_TIME_CHANGED,
         payload: text
     };
+};
+export const endTimeChanged = (text) => {
+  return {
+      type: ACTIONS.END_TIME_CHANGED,
+      payload: text
+  };
 };
 export const locationChanged = (text) => {
     return {
@@ -420,21 +482,34 @@ export const eventError = (text) => {
     };
 };
 
-export const goToCreateEvent = () => {
+export const goToCreateEvent = (screen, props) => {
     return (dispatch) => {
+
+        if (props === undefined || props === null){
+            props = {type: "", committee: ""}
+        }
+
+
         dispatch({
-            type: ACTIONS.GO_TO_CREATE_EVENT
+            type: ACTIONS.GO_TO_CREATE_EVENT,
+            payload: props
         });
-        Actions.createEvent();
+        if (screen === "events") Actions["createEventE"]({screen: screen})
+        else if (screen === ("dashboard" + "committeepage")) Actions["createEventCPD"]({screen: screen})
+        else if (screen === ("committees" + "committeepage")) Actions["createEventC"]({screen: screen})
     }
 };
 
-export const goToCreateEventFromEdit = () => {
+export const goToCreateEventFromEdit = (screen) => {
     return (dispatch) => {
         dispatch({
             type: ACTIONS.GO_TO_CREATE_EVENT_FROM_EDIT
         });
-        Actions.createEvent();
+
+        if (screen === "dashboard")  Actions["createEventD"]({screen: screen})
+        else if (screen === "events") Actions["createEventE"]({screen: screen})
+        else if (screen === ("dashboard" + "committeepage")) Actions["createEventCPD"]({screen: screen})
+        else if (screen === ("committees" + "committeepage")) Actions["createEventC"]({screen: screen})
     }
 };
 
@@ -447,14 +522,19 @@ export const goToEvents = () => {
     }
 };
 
-export const goToViewEvent = () => {
+export const goToViewEvent = (screen) => {
     return (dispatch) => {
         dispatch({
             type: ACTIONS.GO_TO_VIEW_EVENT
         });
-        Actions.eventDetails();
-    }
-};
+
+        if (screen === "dashboard") Actions["eventDetailsD"]({screen: screen})
+        else if (screen === "events" ) Actions["eventDetails"]({screen: screen})
+        else if (screen === ("dashboard" + "committeepage")) Actions["eventDetailsCPD"]({screen: screen})
+        else if (screen === ("committees" + "committeepage")) Actions["eventDetailsC"]({screen: screen})
+      }
+  }
+
 
 // Use this function to update keys or duplicate/copy test data on Firebase -
 // Be careful, especially if setting anything to null as it will delete it on Firebase.
