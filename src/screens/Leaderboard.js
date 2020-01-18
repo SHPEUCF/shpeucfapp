@@ -36,7 +36,7 @@ class Leaderboard extends Component {
     this.state = {search: false}
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.filterChanged("")
     this.props.loadUser()
     this.props.fetchMembersPoints();
@@ -102,7 +102,6 @@ class Leaderboard extends Component {
   }
 
   renderComponent(item, sortedMembers) {
-    const {picture} = this.props;
     const {
       containerStyle,
       contentContainerStyle,
@@ -144,7 +143,7 @@ class Leaderboard extends Component {
                       <Text style={[textStyle, {fontSize: dimension.width*.04,}]}>Points: {item.points}</Text>
                     </View>
                     <View>
-                    {(picture === '') && (
+                    {(item.picture === '') && (
                      <Avatar
                       size = {dimension.height*.08}
                       rounded
@@ -153,7 +152,7 @@ class Leaderboard extends Component {
                       title={item.firstName[0].concat(item.lastName[0])}
                       />
                     )}
-                    {(picture !== '') && (
+                    {(item.picture !== '') && (
                       <Avatar
                       size = {dimension.height*.08}
                       rounded

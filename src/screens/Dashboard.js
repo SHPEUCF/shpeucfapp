@@ -156,6 +156,8 @@ class Dashboard extends Component {
    }
 
   renderColorPicker(){
+
+	return(
 	<Modal visible={this.state.colorPicker}  transparent={true}>
 		<View style={[styles.modalBackground, {backgroundColor: "transparent"}]}>
 			<ColorPicker
@@ -165,8 +167,8 @@ class Dashboard extends Component {
 			style={[styles.modalContent, {backgroundColor: "black"}]}
 			/>
 		</View>
-  </Modal>
-	  
+  	</Modal>
+	) 
   }
 
   renderHeader(){
