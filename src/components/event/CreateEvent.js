@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 import {View, StyleSheet, Text, ScrollView, Modal, Dimensions, FlatList, TouchableOpacity, SafeAreaView} from 'react-native';
 import { Input, Button, PickerInput, DatePicker, TimePicker } from '../general';
 import {
@@ -11,7 +12,8 @@ import {
     nameChanged,
     descriptionChanged,
     dateChanged,
-    timeChanged,
+    startTimeChanged,
+    endTimeChanged,
     locationChanged,
     epointsChanged,
     eventError,
@@ -27,7 +29,7 @@ class CreateEvent extends Component {
         this.state = {text: this.props.value, modalVisible: false}
     }
 
-    componentWillMount() {
+    componentDidMount() {
         if(this.props.name !== '')
             this.props.titleChanged("Edit Event");
 
@@ -67,8 +69,23 @@ class CreateEvent extends Component {
     onDateChange(text) {
         this.props.dateChanged(text);
     }
-    onTimeChange(text) {
-        this.props.timeChanged(text);
+    onStartTimeChange(text) {
+        if (text.hour === 12){
+            text.hour = "0" + 0
+            if (text.period === "PM") text.hour = "" + 12
+        } 
+        else if (text.period === "PM") text.hour = "" + (parseInt(text.hour) + 12)
+
+        this.props.startTimeChanged(`${text.hour}:${text.minute}:${text.period}`);
+    }
+    onEndTimeChange(text) {
+        if (text.hour === 12){
+            text.hour = "0" + 0
+            if (text.period === "PM") text.hour = "" + 12
+        } 
+        else if (text.period === "PM") text.hour = "" + (parseInt(text.hour) + 12)
+
+        this.props.endTimeChanged(`${text.hour}:${text.minute}:${text.period}`);
     }
     onLocationChange(text) {
         this.props.locationChanged(text);
@@ -99,32 +116,44 @@ class CreateEvent extends Component {
             name,
             description,
             date,
-            time,
+            startTime,
+            endTime,
             location,
             points,
             eventID
         } = this.props;
 
+        startTimeComp = startTime.split(":")
+
+        endTimeComp = endTime.split(":")
+
         if (type === '') {
             this.EventCreationError('Please enter event type');
         } else if (name === '') {
             this.EventCreationError('Please enter event name');
-        } else if (description === '') {
-            this.EventCreationError('Please enter a short event description');
         } else if (date === '') {
             this.EventCreationError('Please enter the date of the event');
-        } else if (time === '') {
-            this.EventCreationError('Please enter the time of the event');
+        } else if (startTime === '') {
+            this.EventCreationError('Please enter the starting time of the event');
+        } else if (endTime === '') {
+            this.EventCreationError('Please enter the ending time of the event');
+        } else if (endTimeComp[0] < startTimeComp[0]) {
+            this.EventCreationError('Ending time must be after start time');
+        } else if (endTimeComp[0] === startTimeComp[0] && (endTimeComp[1] <= startTimeComp[1])) {
+            this.EventCreationError('Ending time must be after start time');
         } else if (location === '') {
             this.EventCreationError('Please enter where the event is taking place');
         } else if (points === 0){
             this.EventCreationError('Please enter how many points the event is worth');
         }else{
             if(this.props.title === "Create Event")
-            createEvent(type, committee, name, description, date, time, location, points);
-            else
-            editEvent(type, committee, name, description, date, time, location, points, eventID);
-            this.props.goToEvents();
+            createEvent(type, committee, name, description, date, startTime, endTime, location, points);
+            else{
+            editEvent(type, committee, name, description, date, startTime, endTime, location, points, eventID);
+            this.props.startTimeChanged(this.convertHour(this.props.startTime))
+            this.props.endTimeChanged(this.convertHour(this.props.endTime))
+            }
+            Actions.pop();
         }
     }
 
@@ -132,6 +161,18 @@ class CreateEvent extends Component {
         this.onCommitteeChange(item)
         this.setState({text: String(item), modalVisible: false})
     }
+
+    convertHour(time){
+		var array = time.split(":")
+
+		if(array[2] === "AM") {
+      var hour = "" + (parseInt(array[0])) 
+      return hour + ":" + array[1] + ":" +array[2]
+    }
+    
+		var hour = "" + (parseInt(array[0]) - 12) 
+		return hour + ":" + array[1] + ":" +array[2]
+	}
 
     renderComponent(item) {
 
@@ -221,11 +262,12 @@ class CreateEvent extends Component {
             }
             return (
                 <SafeAreaView style={styles.formContainerStyle}>
-                    <View style={{flex: .1}}></View>
+                    <View style={{backgroundColor: "black", flex: 1}}>
+                    <View style={{flex: .02}}></View>
                     <View style={styles.headerStyle}>
                         <Text style={styles.headerTextStyle}>{this.props.title}</Text>
                     </View>
-                    <View style={{flex: .1}}></View>
+                    <View style={{flex: .02}}></View>
                     <ScrollView
                     ref={(ref)=> (this.scrollView=ref)}
                     style={styles.scrollView}>
@@ -244,7 +286,7 @@ class CreateEvent extends Component {
                             onChangeText={this.onNameChange.bind(this)}
                             />
                             <Input
-                            placeholder="Description"
+                            placeholder="Description (Optional)"
                             value={this.props.description}
                             autoCapitalize="sentences"
                             maxLength={200}
@@ -256,9 +298,14 @@ class CreateEvent extends Component {
                             onSelect={(text) => this.onDateChange(text)}
                             />
                             <TimePicker
-                            placeholder={"Time"}
-                            value={this.props.time}
-                            onSelect={(text) => this.onTimeChange(text)}
+                            placeholder={"Start Time"}
+                            value={this.props.startTime}
+                            onSelect={(text) => this.onStartTimeChange(text)}
+                            />
+                             <TimePicker
+                            placeholder={"End Time"}
+                            value={this.props.endTime}
+                            onSelect={(text) => this.onEndTimeChange(text)}
                             />
                             <Input
                             placeholder="Location"
@@ -272,10 +319,10 @@ class CreateEvent extends Component {
                             />
                         </View>
                     </ScrollView>
-                    <View style={{flex: 1}}></View>
+                    <View style={{flex: .5}}></View>
                         {this.renderError()}
                         <SafeAreaView>
-                        <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .08, width:"100%"}}>
+                        <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
                         <View style={{flex: .45}}>
                         <Button 
                             title = {this.props.title}
@@ -285,11 +332,19 @@ class CreateEvent extends Component {
                         <View style={{flex: .45}}>
                         <Button 
                             title = "Cancel"
-                            onPress={this.props.goToEvents.bind(this)}
+                            onPress={() => {
+                                if(this.props.title === "Edit Event"){
+                                    this.props.startTimeChanged(this.convertHour(this.props.startTime))
+                                    this.props.endTimeChanged(this.convertHour(this.props.endTime))
+                                }
+                                Actions.pop()}
+                        }
                         />
                         </View>
                         </View>
                     </SafeAreaView>
+                    </View>
+                    <View style={{height: dimension.height *.08, backgroundColor: "#0c0b0b"}}></View>
                 </SafeAreaView>
             )
         }
@@ -317,13 +372,13 @@ const styles = StyleSheet.create({
     },
     formContainerStyle: {
         flex: 1,
-        backgroundColor: 'black'
+        backgroundColor: '#0c0b0b'
     },
     headerStyle: {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        flex:.7
+        flex:.5
     },
     headerTextStyle: {
         fontSize: 22,
@@ -344,7 +399,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     scrollView: {
-        backgroundColor: "#0c0b0b",
+        backgroundColor: "black",
         height: "50%",
         paddingTop: 0,
         paddingBottom: 0,
@@ -393,10 +448,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ events, committees }) => {
-    const { type, title, committee, name, description, date, time, location, points, error, eventID } = events;
+    const { type, title, committee, name, description, date, startTime, endTime, location, points, error, eventID } = events;
     const { committeesList } = committees;
 
-    return { type, title, name, description, date, time, location, points, error, eventID, committeesList, committee };
+    return { type, title, name, description, date, startTime, endTime, location, points, error, eventID, committeesList, committee};
 };
 
 const mapDispatchToProps = {
@@ -408,7 +463,8 @@ const mapDispatchToProps = {
     nameChanged,
     descriptionChanged,
     dateChanged,
-    timeChanged,
+    startTimeChanged,
+    endTimeChanged,
     locationChanged,
     epointsChanged,
     eventError,
