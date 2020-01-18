@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { ListItem } from 'react-native-elements';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Spinner, NavBar } from '../components/general'
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 import {
@@ -72,7 +73,7 @@ class More extends Component {
 
   render() {
     return (
-      <SafeAreaView style={{backgroundColor: 'black', flex: 1}}>
+      <SafeAreaView style={{backgroundColor: '#0c0b0b', flex: 1}}>
         <View style={{height: dimension.height * .1, backgroundColor: '#FECB00', borderBottomWidth: 1, borderColor: "black", justifyContent: "center"}}>
             <Image
               source={require('../assets/images/SHPE_UCF_Logo.png')}
@@ -90,7 +91,7 @@ class More extends Component {
           renderItem={this.renderItem}
         />
         </View>
-        <View style={{justifyContent: "center", flex: 1, flexDirection: "row"}}>
+        <View style={{justifyContent: "center", flex: 1, flexDirection: "row", backgroundColor: "black"}}>
            <Image
               source={require('../assets/images/SHPE_logo_FullColor-RGB-2x.png')}
               style={{alignSelf: 'center'}}
@@ -127,9 +128,9 @@ class More extends Component {
             containerStyle={{ backgroundColor: 'black', borderBottomColor: 'black'}}
             removeClippedSubviews={false}
             title={item.title}
-            chevron={{color: "#FECB00"}}
             titleStyle={{ color: 'white'}}
             leftIcon={{name: item.icon , color: 'white'}}
+            rightIcon={<Ionicons name="ios-arrow-dropright" size={dimension.height * .025} style={{color: '#FECB00'}}/>}
             onPress={() => Actions[item.screen]()}
           />
         </View>
