@@ -11,14 +11,19 @@ const ACTIONS = createActiontypes([
     'COMMITTEE_DESCRIPTION_CHANGED',
     'COMMITTEE_TITLE_CHANGED',
     'CHAIR_CHANGED',
+    'LOAD_COMMITTEE'
 ]);
 
 const INITIAL_STATE = {
     committeesList: [],
+    committeeEvents: {},
     title: "ADD",
     committeeTitle: "",
     committeeDescription: "",
-    chair: {}
+    chair: {},
+    pendingMembers: {},
+    joinedMembers: {},
+    links: {}
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -61,6 +66,16 @@ export default (state = INITIAL_STATE, action) => {
             }
         case ACTIONS.EDIT_COMMITTEE:
             return state
+        case ACTIONS.LOAD_COMMITTEE:
+            return {
+                ...state,
+                committeeTitle: payload.title,
+                committeeEvents: payload.events,
+                chair: payload.chair,
+                pendingMembers: payload.pendingMembers,
+                joinedMembers: payload.joinedMembers,
+                links: payload.links
+            }
         default:
             return state;
     }
@@ -148,6 +163,18 @@ export const getCommittees = () => {
     }
   }
   };
+
+  export const loadCommittee = (committee) => {
+    return (dispatch) => {
+
+        dispatch({
+            type: ACTIONS.LOAD_COMMITTEE,
+            payload: committee
+        });
+            
+
+    }
+  }
   
   export const deleteCommittee = (text, chair) => {
     return (dispatch) => {
