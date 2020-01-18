@@ -50,7 +50,7 @@ class CommitteePage extends Component {
 
 	constructor(props) {
         super(props);
-        this.state ={status: "closed", day: new Date(), visible: false}
+        this.state ={status: "closed", day: new Date(), visible: true}
       }
 
       chooseToday(){
@@ -114,19 +114,20 @@ class CommitteePage extends Component {
         <SafeAreaView style={{ flex: 1, backgroundColor: '#0c0b0b'}}>
          <View style = {{flexDirection: "row", justifyContent: "space-between", backgroundColor: "black", paddingRight: "10%"}}>
             <NavBar title={this.props.committeeTitle} back onBack={() => Actions.pop()} />
-            <View style = {{flex: .2, alignItems: "center", justifyContent: "center", backgroundColor: "black"}}>
+            <View style = {{flex: .6, alignItems: "center", flexDirection: "row", justifyContent: "center", backgroundColor: "black"}}>
+                {this.renderMemberStatus()}
                 <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
-                <Ionicons name="ios-calendar" size={dimension.height * .03} onPress = {() => this.setState({visible: !this.state.visible})} style={{color: '#FECB00'}}/>
+                    <Ionicons name="ios-calendar" size={dimension.height * .03} onPress = {() => this.setState({visible: !this.state.visible})} style={{color: '#FECB00'}}/>
                 </View>
             </View>
             </View>
-        <ScrollView style={{flex: 1, backgroundColor: "black"}}>
+        <ScrollView style={{flex: 1, backgroundColor: "#535C68"}}>
             <View style= {{flex: 1, height: dimension.height * 1}}>
-            <View style = {{height: dimension.height * .06, justifyContent: "center"}}>
+            <View style = {{height: dimension.height * .09, justifyContent: "center",}}>
             {this.renderGreeting()}
             </View>
             {(this.state.visible) && 
-            (<View style= {{backgroundColor: "black", height: dimension.height * .75, padding: "5%"}}>
+            (<View style= {{backgroundColor: "black", height: dimension.height * .75, marginLeft: "3%", marginRight: "3%"}}>
                 <ScrollView style={{flex:1}}>
                  <Agenda
                     key={JSON.stringify(this.props.eventList)}
@@ -171,7 +172,7 @@ class CommitteePage extends Component {
                     }}
                 />
                 </ScrollView>
-                <View style= {{flex: .1}}>
+                <View style= {{flex: .1, borderTopWidth: 2, borderColor: "#535C68"}}>
                 {(initDate !== dateStr) && ( <TouchableOpacity  style= {{alignItems: "center", justifyContent: "flex-start", flex: 1}} onPress={() => this.chooseToday()}>
                     <View style= {{flex: .25}}></View>
                     <Text style={{color: "white", fontSize: 16}}>
@@ -189,6 +190,93 @@ class CommitteePage extends Component {
       </SafeAreaView>
 	  );
    }
+
+   renderMemberStatus(){
+        const {
+            joinedMembers,
+            pendingMembers,
+            id
+        } = this.props
+        
+        if ((joinedMembers === undefined || joinedMembers === null) && (pendingMembers === undefined || pendingMembers === null)){
+
+            return (
+            <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
+                 <Ionicons name="md-person-add" size={dimension.height * .03} 
+                 onPress = {() => {
+                    alert("Join request sent!")
+                 }} 
+                 style={{color: '#FECB00'}}/>
+            </View>
+            )
+        }
+        
+        if (joinedMembers === undefined || joinedMembers === null){
+            return (
+            <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
+                    <Ionicons name="ios-alert" size={dimension.height * .03} 
+                    onPress = {() => {
+                        alert("Join pending board member!")
+                        }} 
+                    style={{color: '#FECB00'}}/>
+            </View>
+            )
+        }
+
+        else if (pendingMembers === undefined || pendingMembers === null){
+            if(joinedMembers[id] !== undefined || joinedMembers[id] !== null){
+                return (
+                <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
+                    <Ionicons name="ios-checkmark-circle" size={dimension.height * .03} 
+                    onPress = {() => {
+                        alert("You're a committee member!")
+                        }} 
+                    style={{color: '#FECB00'}}/>
+                </View>
+                )
+            }
+        }
+
+        if(joinedMembers[id] !== undefined || joinedMembers[id] !== null){
+            return (
+            <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
+                <Ionicons name="ios-checkmark-circle" size={dimension.height * .03} 
+                onPress = {() => {
+                    alert("You're a committee member!")
+                    }} 
+                style={{color: '#FECB00'}}/>
+            </View>
+             )
+        }
+
+        if(pendingMembers[id] !== undefined || pendingMembers[id] !== null){
+            return (
+            <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
+                    <Ionicons name="ios-alert" size={dimension.height * .03} 
+                    onPress = {() => {
+                        alert("Join pending board member!")
+                     }} 
+                    style={{color: '#FECB00'}}/>
+            </View>
+             )
+        }
+
+        else {
+            return (
+                <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
+                     <Ionicons name="md-person-add" size={dimension.height * .03} 
+                     onPress = {() => {
+                        alert("Join request sent!")
+                     }} 
+                     style={{color: '#FECB00'}}/>
+                </View>
+            )
+        }
+
+   }
+
+
+
 
    renderSelect(){
     if(this.props.chair.id === this.props.id){
@@ -250,7 +338,7 @@ class CommitteePage extends Component {
         if(this.props.privilege !== undefined && this.props.privilege.board && (this.props.chair.id === this.props.id)){
     
           return (
-            <View style ={{position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+            <View style ={{position: "absolute", bottom: dimension.height * .025, width:"100%"}}>
             <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center"}}>
                 <View style={{flex: .45}}>
                   <Button
@@ -272,7 +360,7 @@ class CommitteePage extends Component {
     
         else {
           return(
-            <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+            <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .025, width:"100%"}}>
                 <View style={{flex: .3}}></View>
                 <View style={{flex: 1}}>
                   {this.selectButton()}
@@ -327,7 +415,7 @@ class CommitteePage extends Component {
    renderGreeting(){
         if(this.props.chair.id === this.props.id){
             return(
-                <View style = {{alignItems: "center"}}>
+                <View style = {{alignItems: "center", flex: 1, justifyContent: "center"}}>
                 <Text style={{color: "white", fontSize: 16}}>Welcome to Your Committee!</Text>
                 </View>
         )
@@ -336,8 +424,9 @@ class CommitteePage extends Component {
 
         else
         return (
-            <View style = {{alignItems: "center"}}>
+            <View style = {{alignItems: "center", flex: 1, justifyContent: "center"}}>
                     <Text style={{color: "white", fontSize: 16}}>Welcome to the {this.props.committeeTitle} Committee!</Text>
+                    <Text style={{color: "white", fontSize: 16}}>Board: {this.props.chair.name}</Text>
             </View>
         )
    }
