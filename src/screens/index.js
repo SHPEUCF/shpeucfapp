@@ -9,3 +9,4 @@ export * from './Version';
 export * from './Election';
 export * from './Dashboard';
 export * from './BackEnd';
+export * from './CommitteePage'
