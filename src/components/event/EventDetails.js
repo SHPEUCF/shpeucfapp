@@ -28,7 +28,10 @@ import {
     convertNumToDate,
     fetchAllUsers,
     emailListUsers,
-    filterChanged
+    filterChanged,
+    fetchMemberProfile,
+    startTimeChanged,
+    endTimeChanged,
 } from '../../ducks'
 import { Actions } from 'react-native-router-flux';
 import QRCode from 'react-native-qrcode-svg'
@@ -37,16 +40,25 @@ import QRCodeScanner from 'react-native-qrcode-scanner'
 const dimension = Dimensions.get('screen');
 
 class EventDetails extends Component {
-    
 
-    componentWillMount() {
+    constructor(props){
+        super(props)
+        this.state ={modalVisible: false, pickerVisible: false}
+
+    }
+
+    componentDidMount() {
         this.props.filterChanged("")
-        {this.setState({modalVisible: false, pickerVisible: false})}
+       
         this.props.fetchCode(this.props.eventID)
         if (this.props.privilege !== undefined && this.props.privilege.board) {
             this.props.fetchAllUsers()
         }
+
+        this.props.startTimeChanged(this.convertHour(this.props.startTime))
+        this.props.endTimeChanged(this.convertHour(this.props.endTime))
     }
+
 
     convertNumToDate(date) {
         var months = ["Jan", "Feb", "Mar", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -272,6 +284,8 @@ class EventDetails extends Component {
             textColor
         } = styles
 
+        if(eventList[eventID] === null || eventList[eventID] === undefined) return null
+
         if(privilege !== undefined && privilege.board === true && eventList !== undefined && eventList[eventID] !== undefined && eventList[eventID].attendance !== undefined) {
             var attendants = Object.keys(eventList[eventID].attendance)
 
@@ -311,6 +325,17 @@ class EventDetails extends Component {
         this.props.checkIn(ID, points, null);
     }
 
+    callUser(id){
+        this.setState({pickerVisible: false})
+        this.props.pageLoad();
+        this.props.fetchMemberProfile(id);
+
+        if (this.props.screen === "dashboard")  Actions["OtherProfileD"]({screen: this.props.screen})
+        else if (this.props.screen === "events") Actions["OtherProfileE"]({screen: this.props.screen})
+        else if (this.props.screen === ("dashboard" + "committeepage")) Actions["OtherProfileCPD"]({screen: this.props.screen})
+        else if (this.props.screen === ("committees" + "committeepage")) Actions["OtherProfileC"]({screen: this.props.screen})
+    }
+
     renderPickMembers(){
         const {
             filter,
@@ -319,15 +344,19 @@ class EventDetails extends Component {
             eventID,
             filterChanged
         } = this.props;
-        if(!this.state.pickerVisible) return null;
+
+        excludeDataProp = (eventList[eventID] === null || eventList[eventID] === undefined) ? {} : eventList[eventID].attendance  
+
         return (
             <View>
                 <FilterPicker
                 title={"Members"}
+                visible={this.state.pickerVisible}
+                callUser={(id) => this.callUser(id)}
                 filter={filter}
                 type="Multiple"
                 data={userList}
-                excludeData={eventList[eventID].attendance}
+                excludeData={excludeDataProp}
                 onChangeText={filterChanged.bind(this)}
                 onClose={() => {
                     this.setState({pickerVisible: false})
@@ -346,14 +375,29 @@ class EventDetails extends Component {
             checkIn,
             eventID,
             points,
+            id,
+            firstName,
+            lastName
         } = this.props;
 
         let userArr = Object.values(selectedUsers);
         userArr.forEach(function(userID){
-            checkIn(eventID, points, userID)
+            checkIn(eventID, points, userID, {id: id, name: firstName + " " +lastName})
         })
     }
     
+    prepend0(item){
+        var array = item.split(":")
+    
+		var hour = (array[0])  
+
+        if(hour.length === 1){
+            hour = "0" + hour;
+        }
+        
+        return  hour + ":" + array[1] + ":" +array[2]
+    }
+
     renderButtons(){
         if(this.props.privilege !== undefined && this.props.privilege.board === true){
             return (
@@ -376,8 +420,11 @@ class EventDetails extends Component {
                           <View style={{flex: .45}}>
                             <Button 
                             title = "Edit event"
-                            onPress={this.props.goToCreateEventFromEdit.bind(this)}
-                             />
+                            onPress={() => {
+                                this.props.startTimeChanged(this.prepend0(this.props.startTime))
+                                this.props.endTimeChanged(this.prepend0(this.props.endTime))
+                                this.props.goToCreateEventFromEdit(this.props.screen)}
+                            }/>
                         </View>
                         <View style={{flex: .45}}>
                             <Button 
@@ -401,16 +448,17 @@ class EventDetails extends Component {
         )
     }
     render() {
-
         if (this.props.loading) {
             return <Spinner/>
         } 
+
         else {
             const {
                 name,
                 description,
                 date,
-                time,
+                startTime,
+                endTime,
                 location,
             } = this.props
 
@@ -432,37 +480,55 @@ class EventDetails extends Component {
                     <NavBar title={name} back onBack={() => Actions.pop()} />
                     {this.renderPickMembers()}
                     <View style={container}>
+                    <View style={icon_container}>
+                            <Ionicons style={[icon, textColor]} name="md-calendar" size={iconSize} color='#000000'/>
+                            <Text style={[text, textColor]}>{this.convertNumToDate(date)}</Text>
+                        </View>
                         <View style={icon_container}>
                             <Ionicons style={[icon, textColor]} name="md-time" size={iconSize} color='#000000'/>
-                            <Text style={[text, textColor]}>{this.convertNumToDate(date)}  {time}</Text>
+                            <Text style={[text, textColor]}>{startTime}-{endTime}</Text>
                         </View>
                         <View style={icon_container}>
                             <Ionicons style={[icon, textColor]} name="md-pin" size={iconSize} color='#000000'/>
                             <Text style={[text, textColor]}>{location}</Text>
                         </View>
-                        <View style={[icon_container, {flex: .7}]}>
+                        {(description != '') && (<View style={[icon_container, {flex: .7}]}>
                             <Ionicons style={[icon, textColor]} name="md-list" size={iconSize} color='#000000'/>
                             <Text style={[text, textColor]}>{description}</Text>
-                        </View>
+                        </View>)}
                         <View style = {[icon_container, final]}>
                             {this.renderAttendance()}
                         </View>
                     </View>
                     {this.renderButtons()}
                     {this.renderCodeBox()}
+                    <View style={{height: dimension.height *.08}}></View>
                 </SafeAreaView>
             )
         }
     }
+    
+    convertHour(time){
+		var array = time.split(":")
+
+		if(array[2] === "AM") {
+      var hour = "" + (parseInt(array[0])) 
+      return hour + ":" + array[1] + ":" +array[2]
+    }
+    
+		var hour = "" + (parseInt(array[0]) - 12) 
+		return hour + ":" + array[1] + ":" +array[2]
+	}
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: .95,
+        flex: 1,
         alignItems: 'center',
         flexDirection: 'column',
         justifyContent: 'flex-start',
         padding: 25,
+        backgroundColor: "black"
     },
     modalText: {
         alignSelf: 'center',
@@ -536,7 +602,7 @@ const styles = StyleSheet.create({
     }, 
     page: {
         flex: 1,
-        backgroundColor: 'black',
+        backgroundColor: '#0c0b0b',
     },
     tabBar: {
         height: dimension.height * .1,
@@ -583,12 +649,12 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ events, user, members, general }) => {
-  const { type, name, description, date, time, location, points, eventID, error, code, eventList } = events;
-  const { privilege } = user;
+  const { type, name, description, date, startTime, endTime, location, points, eventID, error, code, eventList } = events;
+  const { privilege, firstName, lastName, id} = user;
   const { userList } = members;
   const { filter } = general;
 
-  return { type, name, description, date, time, location, points, eventID, error, privilege, code, eventList, userList, filter};
+  return { type, name, description, date, startTime, endTime, location, points, eventID, error, privilege, code, eventList, userList, filter, firstName, lastName, id};
 };
 
 const mapDispatchToProps = {
@@ -605,7 +671,10 @@ const mapDispatchToProps = {
     convertNumToDate,
     fetchAllUsers,
     emailListUsers,
-    filterChanged
+    filterChanged,
+    fetchMemberProfile,
+    startTimeChanged,
+    endTimeChanged,
 }
 
 
