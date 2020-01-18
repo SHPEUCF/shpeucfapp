@@ -15,7 +15,8 @@ import {
 	locationChanged,
 	epointsChanged,
 	eventIDChanged,
-	goToViewEvent,
+  goToViewEvent,
+  loadCommittee
 } from '../ducks';
 import { Avatar } from 'react-native-elements';
 import {
@@ -78,6 +79,18 @@ import {
     }
   }
 
+  filterDates(date){
+    temp_date = date.split("-");
+    let thisdate = new Date()
+    let month = (thisdate.getMonth() + 1)
+    let year = thisdate.getFullYear()
+    let day = (thisdate.getDate())
+
+    if (temp_date[0] < parseInt(year)) return true
+    if (temp_date[1] < parseInt(month)) return true
+    if (temp_date[2] < parseInt(day)) return true
+  }
+
   _keyExtractor = (item, index) => index;
 
   renderFlatlist(committees){
@@ -95,6 +108,23 @@ import {
     )
   }
 
+  sortEvents(eventIds, eventList){
+    let events = {}
+    eventIds.forEach(function(element){
+      Object.assign(events, {[element]: eventList[element]})
+    })
+   
+    let sortedEvents = _.orderBy(events, ['date', 'startTime', 'endTime'], ['asc', 'asc', 'asc']);
+
+    return sortedEvents
+  }
+
+  viewCommittee(item){
+    this.props.loadCommittee(item)
+    Actions["CommitteePageC"]({screen: "committees"});
+  }
+
+
   renderCommittees(item) {
     const {
       containerStyle,
@@ -102,29 +132,51 @@ import {
       textColor
     } = styles;
 
+    if (this.props.screen === "dashboard"){
+      return (
+        <View >
+        <View style={contentContainerStyle}>
+            <View style={{flex: .3}}></View>
+              <View style={containerStyle}>
+                <Text style={[textColor, {fontSize: 16}]}>{item.title}</Text>
+              </View>
+              {(!(this.props.userCommittees === null || this.props.userCommittees === undefined) && this.props.userCommittees[item.title])&&(<View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
+                <Ionicons name="ios-star" size={dimension.height * .03} onPress = {() => this.props.changeUserCommittees({[item.title]: null})} style={{color: '#FECB00'}}/>
+              </View>)}
+                {(this.props.userCommittees === null || this.props.userCommittees === undefined || !this.props.userCommittees[item.title])&&(<View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
+                <Ionicons name="ios-star-outline" size={dimension.height * .03} onPress= {() => {if (Object.entries(this.props.userCommittees).length <= 4) this.props.changeUserCommittees({[item.title]: true})}} style={{color: '#FECB00'}}/>
+                </View>)}
+            <View style={{flex: .3}}></View>
+        </View>
+        </View>
+      )
+    }
+
    
     return (
-      <View style ={{}}>
-      <View style={contentContainerStyle}>
+      <View >
+      <TouchableOpacity onPress={() => this.viewCommittee(item)} style={contentContainerStyle}>
           <View style={{flex: .3}}></View>
             <View style={containerStyle}>
-              <Text style={textColor}>{item.title}</Text>
+              <Text style={[textColor, {fontSize: 16}]}>{item.title}</Text>
             </View>
-            <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
+            {((this.state.opened[item.title] !== true)&&
+              <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
               <Ionicons name="ios-calendar" size={dimension.height * .03} onPress = {() => {this.setState({opened: Object.assign(this.state.opened, {[item.title]: this.toggleEvents(item.title)})})}} style={{color: 'white'}}/>
-            </View>
-            {(!(this.props.userCommittees === null || this.props.userCommittees === undefined ) && this.props.userCommittees[item.title])&&(<View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
-              <Ionicons name="ios-star" size={dimension.height * .03} onPress = {() => this.props.changeUserCommittees({[item.title]: null})} style={{color: '#FECB00'}}/>
             </View>)}
-              {(this.props.userCommittees === null || this.props.userCommittees === undefined || !this.props.userCommittees[item.title])&&(<View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
-              <Ionicons name="ios-star-outline" size={dimension.height * .03} onPress= {() => this.props.changeUserCommittees({[item.title]: true})} style={{color: '#FECB00'}}/>
-              </View>)}
+            {((this.state.opened[item.title] === true)&&
+              <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
+              <Ionicons name="ios-calendar" size={dimension.height * .03} onPress = {() => {this.setState({opened: Object.assign(this.state.opened, {[item.title]: this.toggleEvents(item.title)})})}} style={{color: '#FECB00'}}/>
+            </View>)}
+            <View style = {{flex: .6, justifyContent: "center"}}>
+            <Ionicons name="ios-arrow-dropright" size={dimension.height * .025} style={{color: '#FECB00', backgroundColor: "transparent", alignSelf: "center"}}/>
+            </View>
           <View style={{flex: .3}}></View>
-      </View>
-      {(this.state.opened[item.title] !== null && this.state.opened[item.title] !== undefined) &&
+      </TouchableOpacity>
+      {(this.state.opened[item.title] !== null && this.state.opened[item.title] !== undefined && item.events != null && item.events != undefined) &&
         (<View style={{}}>
         <FlatList
-            data={Object.keys(item.events)}
+            data={this.sortEvents(Object.keys(item.events), this.props.eventList)}
             extraData={this.props}
             keyExtractor={this._keyExtractor}
             renderItem={({item, separators}) => (
@@ -148,7 +200,7 @@ import {
 		this.props.goToViewEvent();
 	  }
 
-  renderEvents(id) {
+  renderEvents(event) {
     const {
       containerStyle,
       contentContainerStyle,
@@ -156,38 +208,78 @@ import {
       eventStyle
     } = styles;
 
-    let event = this.props.eventList[id]
+    if (this.filterDates(event.date) || event === null || event === undefined) return null
+
+		const {
+			name,
+			date,
+			description,
+			committee,
+			startTime,
+			endTime,
+			type
+		} = event;
+
+		if (description !== undefined && description.length > 75) {
+			description = description.slice(0, 75);
+			description += '...';
+		}
+
+		var viewName = type  + ": " + name;
+
+		if (committee !== ''){
+		viewName = committee + ": "  + name;
+		}
    
     return (
       <View>
-      <TouchableOpacity style={[contentContainerStyle, {backgroundColor:"#0c0b0b"}]} onPress={() => this.viewEvent(event)}>
-          <View style={{flex: .05}}></View>
-            <View style={[eventStyle, {backgroundColor: "#0c0b0b", flex: 1,}]}>
-              <View style={{alignItems:'center', flex: 1, flexDirection: "row", borderColor: "white", justifyContent: "space-evenly"}}>
-                <View style={{flex: 1, alignItems: "center"}}>
-                <Text style={[textColor]}>{event.name}</Text>
-                </View >
-                <View style={{flex: 1, alignItems: "center"}}>
-                <Text style={{color: "white"}}>{this.convertNumToDate(event.date)}</Text>
-                </View>
-                <View style={{flex: 1, alignItems: "center"}}>
-                <Text style={[textColor]}>{event.time}</Text>
-                </View>
-                <View style= {{alignItems: "center", justifyContent: "center", flex: 1}}>
-                  <Ionicons name="ios-arrow-dropright" size={dimension.height * .03} style={{color: '#FECB00'}}/>
-                </View>
-              </View>
-            </View>
-          <View style={{flex: .05}}></View>
-      </TouchableOpacity>
+      <View style={[contentContainerStyle, {backgroundColor:"#0c0b0b"}]}>
+        <View style={{flexDirection: "row", flex: 1}}>
+        <View style = {{flex: .1}}></View>
+			<View style={{alignItems:'center', flexDirection: "row", borderColor: "white", flex: 1}}>
+				<View style={{flex: .6, alignItems: "flex-start"}}>
+					<View style={{alignItems: "flex-start"}}>
+    <Text style={{color: "white", fontSize: dimension.width * .035}}>{name}</Text>
+					</View>
+				</View>
+				<View style ={{flex:.08,  height: "60%"}}></View>
+				<View style={{alignItems: "center", flex: .6}}>
+         <View style={{alignItems: "flex-start"}}>
+						<View style={{alignItems: "flex-start"}}>
+							<Text style={{color: "white", fontSize: dimension.width * .035}}>{this.convertNumToDate(date)}</Text>
+						</View>
+						<View style={{alignItems: "flex-start"}}>
+							<Text style={{color: "white", fontSize: dimension.width * .035}}>{this.convertHour(startTime)}</Text>
+							<Text style={{color: "white", fontSize: dimension.width * .035}}>{this.convertHour(endTime)}</Text>
+						</View>
+					</View>
+				</View>
+				<View style ={{flex:.08, height: "60%"}}></View>
+			</View>
+			<View style = {{flex: .1}}>	
+			</View>
+      </View>
+      </View>
       </View>
     )
   }
 
+  convertHour(time){
+		var array = time.split(":")
+
+		if(array[2] === "AM") {
+      var hour = "" + (parseInt(array[0])) 
+      return hour + ":" + array[1] + ":" +array[2]
+    }
+
+		var hour = "" + (parseInt(array[0]) - 12) 
+		return hour + ":" + array[1] + ":" +array[2]
+	}
+
   convertNumToDate(date) {
 		var months = ["Jan", "Feb", "Mar", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 		temp_date = date.split("-");
-		return `${months[Number(temp_date[1]) - 1]} ${temp_date[2]}, ${temp_date[0]}`;
+		return `${months[Number(temp_date[1]) - 1]} ${temp_date[2]}`;
 	}
 
   
@@ -291,6 +383,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: .98,
+    backgroundColor: "black"
   },
   buttonContainerStyle: {
     flex: .5,
@@ -330,6 +423,7 @@ const styles = StyleSheet.create({
     epointsChanged,
     eventIDChanged,
     goToViewEvent,
+    loadCommittee
   };
 
   export default connect(mapStateToProps, mapDispatchToProps)(Committees); 
