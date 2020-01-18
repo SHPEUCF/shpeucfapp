@@ -56,7 +56,7 @@ class LoginForm extends Component {
     } = styles
     return (
         <TouchableOpacity
-          style={bottomContainer}
+          style={[bottomContainer, {flex: .4,  alignItems: "flex-start"}]}
           onPress={this.props.goToResetPassword}
         >
           <Text style={resetPasswordText}>Forgot Password?</Text>
@@ -83,36 +83,25 @@ class LoginForm extends Component {
 
     return (
       <View style={styles.buttonContainer}>
-        <View style={{flexDirection: "row"}}> 
+        <View style={{flexDirection: "row", flex: 1, alignItems: "center"}}> 
           <View style={{flex: .3}}></View>
             <View style={{flex: 1}}>
+            <View style={{flex: .5,justifyContent: "center"}}>
             <Button
               title = "Log in"
               onPress={this.onButtonPress.bind(this)}
             />
             </View>
+            {this.renderResetPassword()}
+            </View>
           <View style={{flex: .3}}></View>
         </View>
-        <View style={{flexDirection: "row"}}>
-          <View style={{flex: .3}}></View>
-            <View style={{flex: 1}}>
-              <Button
-                title = "Reset Password"
-                onPress={this.props.goToResetPassword.bind(this)}
-              />
-              </View>
-          <View style={{flex: .3}}></View>
-        </View>
-           <View style={{flexDirection: "row"}}>
-           <View style={{flex: .3}}></View>
-            <View style={{flex: 1}}>
-            <Button
-              title = "Register"
-              onPress={this.props.goToRegistration.bind(this)}
-            />
-          </View>
-          <View style={{flex: .3}}></View>
-        </View>
+        
+              
+              
+           
+            {this.renderSignUpButton()}
+          
       </View>
     );
   }
@@ -163,7 +152,6 @@ class LoginForm extends Component {
               onChangeText={this.onPasswordChange.bind(this)}
             />
           </View>
-          <View style={{flex: .1}}></View>
         {this.renderError()}
         {this.renderButtons()}
       </SafeAreaView>
@@ -210,12 +198,10 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: .7,
-    justifyContent: "space-evenly"
   },
   resetPasswordText: {
     fontWeight: 'bold',
     color: 'white',
-    alignSelf: 'center',
   },
   signUpText: {
     flex: 1,
@@ -224,7 +210,7 @@ const styles = StyleSheet.create({
     // paddingTop: 10,
   },
   bottomContainer: {
-    flex:.3,
+    flex: .6,
     flexDirection: 'row',
     justifyContent: 'center',
   },
