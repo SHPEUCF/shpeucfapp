@@ -74,7 +74,8 @@ const INITIAL_STATE = {
     id: '',
     voted: false,
     applied: false,
-    userCommittees: null
+    userCommittees: null,
+    joinedCommittees: {}
 };
 
 export default (state = INITIAL_STATE, action) => {
