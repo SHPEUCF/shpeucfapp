@@ -144,7 +144,7 @@ import {
                 <Ionicons name="ios-star" size={dimension.height * .03} onPress = {() => this.props.changeUserCommittees({[item.title]: null})} style={{color: '#FECB00'}}/>
               </View>)}
                 {(this.props.userCommittees === null || this.props.userCommittees === undefined || !this.props.userCommittees[item.title])&&(<View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
-                <Ionicons name="ios-star-outline" size={dimension.height * .03} onPress= {() => {if (Object.entries(this.props.userCommittees).length <= 4) this.props.changeUserCommittees({[item.title]: true})}} style={{color: '#FECB00'}}/>
+                <Ionicons name="ios-star-outline" size={dimension.height * .03} onPress= {() => {if (this.props.userCommittees === null || this.props.userCommittees === undefined || Object.entries(this.props.userCommittees).length <= 4) {this.props.changeUserCommittees({[item.title]: true})}}} style={{color: '#FECB00'}}/>
                 </View>)}
             <View style={{flex: .3}}></View>
         </View>
