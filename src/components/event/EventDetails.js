@@ -97,11 +97,12 @@ class EventDetails extends Component {
                             <TouchableOpacity onPress={() => {
                             this.setState({modalVisible: false})
                             this.props.closeCheckIn(this.props.eventID)}}>
-                            <Text style = {{color: "#FECB00"}}>X</Text>
+                             <Ionicons 
+                            name="md-close-circle" 
+                            size={dimension.height * .05} 
+                            color = 'e0e6ed'/>
                             </TouchableOpacity>
-                            <View style = {{paddingTop: 20, paddingBottom: 20}}>
-                                <Text style={[modalText, textColor]}>The event check-in is now open!</Text>
-                                <Text style={[modalText, textColor]}>Please provide everyone the code</Text>
+                            <View style = {{paddingTop: 20}}>
                             </View>
                             <View style = {{alignItems: "center", flex: 2, justifyContent: "center"}}>
                             <QRCode
@@ -110,7 +111,6 @@ class EventDetails extends Component {
                             />
                             </View>
                             <View style = {{paddingTop: 20}}>
-                            <Text style={[modalText, textColor]}>When you close this box the event check-in will close</Text>
                             </View>
                         </View>
                     </View>
@@ -562,7 +562,7 @@ const styles = StyleSheet.create({
         height: dimension.height*.6,
         width: dimension.width*.9,
         padding: 12,
-        backgroundColor: '#21252b',
+        backgroundColor: 'white',
         borderRadius: 12,
     },
     modalBackground: {
