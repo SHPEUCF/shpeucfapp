@@ -15,6 +15,7 @@ import {
   FlatList,
   Text,
   View,
+  SafeAreaView,
   StyleSheet,
   TouchableOpacity,
   Dimensions } from 'react-native';
@@ -77,7 +78,7 @@ class PointsBreakDown extends Component {
 
             breakdown = Object.entries(membersPoints[currentUser.uid].breakdown)
             return (
-                <View style={{flex: 1}}>
+                <SafeAreaView style={{flex: 1}}>
                     <View style={[contentContainerStyle,containerStyle]}>
                         <Text style={[title, topLevelText, textColor]}>Total Points</Text>
                         <Text style={[points, topLevelText, textColor]}>{this.props.membersPoints[currentUser.uid].points}</Text>
@@ -90,7 +91,7 @@ class PointsBreakDown extends Component {
                         this.renderComponent(item)
                         )}
                     />
-                </View>
+                </SafeAreaView>
             )
         }
         else return (
@@ -198,7 +199,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
     },
     textColor: {
-        color: '#e0e6ed'
+        color: '#e0e6ed',
+        textAlign: 'center',
+        fontSize: 18
     },
     topLevelText: {
         fontSize: 20,
