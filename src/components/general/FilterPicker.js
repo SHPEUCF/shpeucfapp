@@ -78,8 +78,9 @@ class FilterPicker extends Component {
 
            
             const {
-                itemStyle,
-                itemTextStyle,
+                containerStyle,
+                contentContainerStyle,
+                textStyle,
             } = styles
 
             let user = item[1]
@@ -90,8 +91,24 @@ class FilterPicker extends Component {
             return(
                 <TouchableOpacity
                 onPress={() => this.clickAction(user, index)}>
-                    <View style={[itemStyle, this.props.pickerItemStyle]}>
-                        <Text style={itemTextStyle}>{user.firstName} {user.lastName}</Text>
+                   <View style={[contentContainerStyle]}>
+                        <View style={containerStyle}>
+                            <View style={{flex:.1}}></View>
+                            <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
+                                <View style = {{flex: 1}}>
+                                <Text style={ [textStyle, {fontWeight: 'bold'}]}>{`${user.firstName} ${user.lastName}`}</Text>
+                                </View>
+                                <View style = {{alignItems: "flex-end", flexDirection: "row", flex: .4}}>
+                                <View style = {{flex: .2}}></View>
+                                <Avatar   
+                                size={dimension.height*.08}
+                                rounded
+                                source={{uri: user.picture}}
+                                />
+                                </View>
+                            </View>
+                            <View style={{flex:.1}}></View>
+                        </View>
                     </View>
                 </TouchableOpacity>
             )
@@ -110,17 +127,11 @@ class FilterPicker extends Component {
                 let user = item[1];
         
                 const {
-                    itemStyle,
-                    itemTextStyle,
                     containerStyle,
                     contentContainerStyle,
-                    progress,
-                    curUserHighlight,
                     textStyle,
-                    index,
-                    textColor,
-                    indexText
                 } = styles
+
                 if(excludeData && excludeData[user.id]) return null;
         
                 let selected = (this.state.selectedNames[`${user.id}`]) ?
@@ -211,7 +222,7 @@ class FilterPicker extends Component {
         }
 
         if(this.props.type === "Single"){
-            picker = <View>
+            picker = <SafeAreaView>
             <View style={[{flexDirection:'row'}, style]}>
                 <Input
                 style={[inputStyle, inputBoxStyle]}
@@ -230,9 +241,8 @@ class FilterPicker extends Component {
             <Modal
             transparent={true}
             visible={this.state.modalVisible}>
-                <View style={modalBackground}>
+                <SafeAreaView style={modalBackground}>
                     <View style={modalStyle}>
-                        <Text style={titleStyle}>{title}</Text>
                         <Input
                         style={[inputStylee, inputStyleee]}
                         onChangeText={onChangeText}
@@ -248,19 +258,22 @@ class FilterPicker extends Component {
                             )}
                             />
                         </View>
-                        <View style={buttonContainer}>
-                            <TouchableOpacity  
-                            style={buttonStyle}
-                            onPress={() => { this.props.onSelect(placeholder)
-                                this.setState({modalVisible: false})
-                                }}>
-                                <Text style={textStyle}>Cancel</Text>
-                            </TouchableOpacity>
+                        <View style={{height: dimension.height *.08, backgroundColor: "#0c0b0b"}}></View>
+                        <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+                            <View style={{flex: .3}}></View>
+                            <View style={{flex: 1}}>
+                                <Button 
+                                title = "Cancel"
+                                onPress={() => { this.props.onSelect(placeholder)
+                                    this.setState({modalVisible: false})
+                                    }}/>
+                            </View>
+                            <View style={{flex: .3}}></View>
                         </View>
                     </View>
-                </View>
+                </SafeAreaView>
             </Modal>
-        </View>
+        </SafeAreaView>
         }
 
         else if (this.props.type === "Multiple") {
