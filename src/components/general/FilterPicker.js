@@ -285,8 +285,7 @@ class FilterPicker extends Component {
                             )}
                             />
                         </View>
-                        <View style={{height: dimension.height *.08, backgroundColor: "#0c0b0b"}}></View>
-                        <View style = {{backgroundColor: "#0c0b0b"}}>
+                        <View style = {{height: dimension.height *.08, backgroundColor: "#0c0b0b"}}>
                             <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%", backgroundColor: "#0c0b0b"}}>
                                 <View style={{flex: .45}}>
                                     <Button 
