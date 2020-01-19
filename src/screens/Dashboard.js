@@ -32,7 +32,8 @@ import {
 	setFlag,
 	fetchAllUsers,
 	getUserCommittees,
-	loadCommittee
+	loadCommittee,
+	changeUserCommittees
 }
 from '../ducks';
 import Flag from 'react-native-flags'
@@ -277,6 +278,11 @@ class Dashboard extends Component {
 		textColor,
 	} = styles;
 
+	const {
+		committeesList,
+		changeUserCommittees
+	} = this.props
+
 	if (this.props.userCommittees === null || this.props.userCommittees === undefined){
 		return (
 		<View style = {{flexDirection: "row", flex: 1, height: "100%", backgroundColor: "#21252b", alignItems: "center"}}>
@@ -293,6 +299,13 @@ class Dashboard extends Component {
 	}
 
 	const committeesArray = Object.entries(this.props.userCommittees)
+
+	committeesArray.forEach(function(element) {
+		if(committeesList[element[0]] === null || committeesList[element[0]] === undefined) {
+			let committee = element[0]
+			changeUserCommittees({[committee]: null})
+		}
+	})
 
 	return(
 	<View style = {{flexDirection: "row", flex: 1, height: "100%", backgroundColor: "#21252b", alignItems: "center"}}>
@@ -898,7 +911,8 @@ const mapStateToProps = ({ user, general, members, events, elect, committees }) 
 	setFlag,
 	fetchAllUsers,
 	getUserCommittees,
-	loadCommittee
+	loadCommittee,
+	changeUserCommittees
 };
 
  export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
