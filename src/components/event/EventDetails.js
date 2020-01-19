@@ -284,7 +284,9 @@ class EventDetails extends Component {
             textColor
         } = styles
 
-        if(eventList[eventID] === null || eventList[eventID] === undefined) return null
+        if(eventList === null || eventList === undefined) {return null}
+
+        if(eventList[eventID] === null || eventList[eventID] === undefined) {return null}
 
         if(privilege !== undefined && privilege.board === true && eventList !== undefined && eventList[eventID] !== undefined && eventList[eventID].attendance !== undefined) {
             var attendants = Object.keys(eventList[eventID].attendance)
@@ -344,6 +346,8 @@ class EventDetails extends Component {
             eventID,
             filterChanged
         } = this.props;
+
+        if(eventList === null || eventList === undefined) {return null}
 
         excludeDataProp = (eventList[eventID] === null || eventList[eventID] === undefined) ? {} : eventList[eventID].attendance  
 
@@ -437,13 +441,17 @@ class EventDetails extends Component {
             )
             }else
             return(
-            <View>
-                <Button 
-                    title = "CHECK IN"
-                    onPress={() => {
-                        this.setState({modalVisible: true})
-                    }}
-                />
+            <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+                <View style={{flex: .3}}></View>
+                    <View style={{flex: 1}}>
+                        <Button 
+                            title = "CHECK IN"
+                            onPress={() => {
+                                this.setState({modalVisible: true})
+                            }}
+                        />
+                    </View>
+                <View style={{flex: .3}}></View>
             </View>
         )
     }
@@ -509,16 +517,18 @@ class EventDetails extends Component {
     }
     
     convertHour(time){
-		var array = time.split(":")
-
-		if(array[2] === "AM") {
-      var hour = "" + (parseInt(array[0])) 
-      return hour + ":" + array[1] + ":" +array[2]
-    }
+        var array = time.split(":")
     
-		var hour = "" + (parseInt(array[0]) - 12) 
-		return hour + ":" + array[1] + ":" +array[2]
-	}
+        if(array[2] === "AM") {
+        var hour = "" + (parseInt(array[0])) 
+        if (hour === "0") hour = "12"
+        return hour + ":" + array[1] + ":" +array[2]
+        }
+        
+        var hour = "" + (parseInt(array[0]) - 12) 
+        if (hour === "0") hour = "12"
+        return hour + ":" + array[1] + ":" +array[2]
+    }
 }
 
 const styles = StyleSheet.create({

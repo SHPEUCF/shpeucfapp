@@ -30,9 +30,10 @@ class CreateEvent extends Component {
     }
 
     componentDidMount() {
-        if(this.props.name !== '')
+        if(this.props.name !== ''){
             this.props.titleChanged("Edit Event");
-
+            this.setState({changedStart: false, changedEnd: false})
+        }
     }
     onTypeChange(text) {
         this.onCommitteeChange('');
@@ -70,22 +71,12 @@ class CreateEvent extends Component {
         this.props.dateChanged(text);
     }
     onStartTimeChange(text) {
-        if (text.hour === 12){
-            text.hour = "0" + 0
-            if (text.period === "PM") text.hour = "" + 12
-        } 
-        else if (text.period === "PM") text.hour = "" + (parseInt(text.hour) + 12)
-
-        this.props.startTimeChanged(`${text.hour}:${text.minute}:${text.period}`);
+        if (!this.state.changedStart && this.props.title === "Edit Event") this.setState({changedStart: true})
+        this.props.startTimeChanged(this.convertToMilitary(text));
     }
     onEndTimeChange(text) {
-        if (text.hour === 12){
-            text.hour = "0" + 0
-            if (text.period === "PM") text.hour = "" + 12
-        } 
-        else if (text.period === "PM") text.hour = "" + (parseInt(text.hour) + 12)
-
-        this.props.endTimeChanged(`${text.hour}:${text.minute}:${text.period}`);
+        if (!this.state.changedEnd && this.props.title === "Edit Event") this.setState({changedEnd: true})
+        this.props.endTimeChanged(this.convertToMilitary(text));
     }
     onLocationChange(text) {
         this.props.locationChanged(text);
@@ -109,6 +100,16 @@ class CreateEvent extends Component {
         }
     }
 
+    convertToMilitary(text){
+        if (text.hour === "12"){
+            text.hour = "0" + 0
+            if (text.period === "PM") {text.hour = "" + 12}
+        } 
+        else if (text.period === "PM") text.hour = "" + (parseInt(text.hour) + 12)
+
+        return `${text.hour}:${text.minute}:${text.period}`
+    }
+
     onButtonPress() {
         const {
             type,
@@ -126,6 +127,16 @@ class CreateEvent extends Component {
         startTimeComp = startTime.split(":")
 
         endTimeComp = endTime.split(":")
+
+        if (!this.state.changedStart && this.props.title === "Edit Event"){
+            var newS = this.convertToMilitary({hour: startTimeComp[0], minute: startTimeComp[1], period: startTimeComp[2]})
+            startTimeComp = newS.split(":")
+        }
+
+        if (!this.state.changedEnd && this.props.title === "Edit Event"){
+            var newE = this.convertToMilitary({hour: endTimeComp[0], minute: endTimeComp[1], period: endTimeComp[2]})
+            endTimeComp = newE.split(":")
+        }
 
         if (type === '') {
             this.EventCreationError('Please enter event type');
@@ -149,9 +160,9 @@ class CreateEvent extends Component {
             if(this.props.title === "Create Event")
             createEvent(type, committee, name, description, date, startTime, endTime, location, points);
             else{
-            editEvent(type, committee, name, description, date, startTime, endTime, location, points, eventID);
-            this.props.startTimeChanged(this.convertHour(this.props.startTime))
-            this.props.endTimeChanged(this.convertHour(this.props.endTime))
+            editEvent(type, committee, name, description, date, `${startTimeComp[0]}:${startTimeComp[1]}:${startTimeComp[2]}`, `${endTimeComp[0]}:${endTimeComp[1]}:${endTimeComp[2]}`, location, points, eventID);
+            this.props.startTimeChanged(this.convertHour(`${startTimeComp[0]}:${startTimeComp[1]}:${startTimeComp[2]}`))
+            this.props.endTimeChanged(this.convertHour(`${endTimeComp[0]}:${endTimeComp[1]}:${endTimeComp[2]}`))
             }
             Actions.pop();
         }
@@ -163,15 +174,23 @@ class CreateEvent extends Component {
     }
 
     convertHour(time){
-		var array = time.split(":")
+    var array = time.split(":")
 
-		if(array[2] === "AM") {
-      var hour = "" + (parseInt(array[0])) 
-      return hour + ":" + array[1] + ":" +array[2]
+    if(array[2] === "AM") {
+    var hour = "" + (parseInt(array[0])) 
+    if (hour === "0") hour = "12"
+    return hour + ":" + array[1] + ":" +array[2]
     }
     
-		var hour = "" + (parseInt(array[0]) - 12) 
-		return hour + ":" + array[1] + ":" +array[2]
+    var hour = "" + (parseInt(array[0]) - 12) 
+    if (hour === "0") hour = "12"
+    return hour + ":" + array[1] + ":" +array[2]
+    }
+    
+    prepend0(time){
+		var array = time.split(":")
+        var hour = "" + (parseInt(array[0])) 
+        return hour + ":" + array[1] + ":" +array[2]
 	}
 
     renderComponent(item) {
@@ -334,8 +353,8 @@ class CreateEvent extends Component {
                             title = "Cancel"
                             onPress={() => {
                                 if(this.props.title === "Edit Event"){
-                                    this.props.startTimeChanged(this.convertHour(this.props.startTime))
-                                    this.props.endTimeChanged(this.convertHour(this.props.endTime))
+                                    this.props.startTimeChanged(this.prepend0(this.props.startTime))
+                                    this.props.endTimeChanged(this.prepend0(this.props.endTime))
                                 }
                                 Actions.pop()}
                         }
