@@ -128,17 +128,17 @@ class Dashboard extends Component {
 		<SafeAreaView style={page}>
 			<StatusBar backgroundColor="#0c0b0b" barStyle="light-content" />
 			{this.renderColorPicker()}
-					<View style={mainContentStyle}>
-						<View style= {{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>				
-						<ScrollView style= {{flex: 1}}>
+			<View style={mainContentStyle}>
+				<View style= {{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>				
+					<ScrollView style= {{flex: 1}}>
 						<View style = {{flex: 1, height: dimension.height *1.3}}>
-						{this.renderHeader()}
+							{this.renderHeader()}
 							<View style={{flex: 1, paddingLeft: "5%", paddingRight: "5%"}}>
 							<View style={{flex: .2, flexDirection: "row"}}></View>
-							<View style={{alignItems: "center", flex: .2, justifyContent: "center"}}>
-								<Text style={[title, textColor]}>Upcoming Events</Text>
-							</View>
-							{this.getFormattedEventList()}
+								<View style={{alignItems: "center", flex: .2, justifyContent: "center"}}>
+									<Text style={[title, textColor]}>Upcoming Events</Text>
+								</View>
+								{this.getFormattedEventList()}
 								<View style={{flex: .03, flexDirection: "row"}}></View>
 								<View style={{flexDirection: "row", alignItems: 'flex-start', flex: .9, borderColor: "white"}}>
 									{this.renderLeaderboard()}
@@ -146,17 +146,13 @@ class Dashboard extends Component {
 									{this.renderCommitteePanel()}
 								</View>
 							</View>
-						{/*<View style={ContainerStyle}>
-							<Text style={[title, textColor]}>Committees</Text>
-							<Text style={textColor}>Coming soon!</Text>
-						</View>*/}
 							{this.renderButtonLinks()}
 						</View>
 					</ScrollView>
 					{this.renderFlags()}
-					</View>
-					{this.renderNewFlag()}
-					</View>
+				</View>
+				{this.renderNewFlag()}
+			</View>
 		</SafeAreaView>
 	  );
    }
@@ -597,9 +593,7 @@ class Dashboard extends Component {
 		} = styles;
 
 		if(event === null){
-			return(
-				<View></View>
-			)
+			return null
 		}
 
 		const {
@@ -651,102 +645,37 @@ class Dashboard extends Component {
 
 	getFormattedEventList() {
 		const {
-			textColor
+			textColor,
+			eventListContainerFull
 		} = styles;
 		
 		let recentEvents = []
+		let singleContainer = {};
+		let events = [];
 		if (this.props.eventList !== null && this.props.eventList !== undefined) {
-			let events = this.sortEvents(this.props.eventList);
-			recentEvents = events.slice(0,3);
-
-			if(events.length === 0){
-				recentEvents.push(null)
-				recentEvents.push(null)
-				recentEvents.push(null)
-
-				return (
-					<View style={{backgroundColor: '#21252b', flex: 1, borderColor: "white", justifyContent: "space-evenly"}}>
-						{recentEvents.map(item => (
-							<View style={{backgroundColor: '#21252b', flex: 1}}>
-								<TouchableOpacity onPress={() => {if (item !== null) {this.viewEvent(item)}}} style={{flex: 1}}>
-									{this.showEvents(item)}
-								</TouchableOpacity>
-								<View style ={{height: dimension.height * .002, backgroundColor: "black", width: "100%", alignSelf: "center"}}></View>
-							</View>
-						))}
-					</View>
-				)
-			}
-
-			if(events.length === 1){
-				recentEvents.push(null)
-				recentEvents.push(null)
-
-				return (
-					<View style={{backgroundColor: '#21252b', flex: 1, borderColor: "white", justifyContent: "space-evenly"}}>
-						{recentEvents.map(item => (
-							<View style={{backgroundColor: '#21252b', flex: 1}}>
-								<TouchableOpacity onPress={() => {if (item !== null) {this.viewEvent(item)}}} style={{flex: 1}}>
-									{this.showEvents(item)}
-								</TouchableOpacity>
-								<View style ={{height: dimension.height * .002, backgroundColor: "black", width: "100%", alignSelf: "center"}}></View>
-							</View>
-						))}
-					</View>
-				)
-			}
-
-			if(events.length === 2){
-				recentEvents.push(null)
-
-				return (
-					<View style={{backgroundColor: '#21252b', flex: 1, borderColor: "white", justifyContent: "space-evenly"}}>
-						{recentEvents.map(item => (
-							<View style={{backgroundColor: '#21252b', flex: 1}}>
-								<TouchableOpacity onPress={() => {if (item !== null) {this.viewEvent(item)}}} style={{flex: 1}}>
-									{this.showEvents(item)}
-								</TouchableOpacity>
-								<View style ={{height: dimension.height * .002, backgroundColor: "black", width: "100%", alignSelf: "center"}}></View>
-							</View>
-						))}
-					</View>
-				)
-			}
-
-
-
-			return (
-				<View style={{backgroundColor: '#21252b', flex: 1, borderColor: "white", justifyContent: "space-evenly"}}>
-					{recentEvents.map(item => (
-						<View style={{backgroundColor: '#21252b', flex: 1}}>
-							<TouchableOpacity onPress={() => this.viewEvent(item)} style={{flex: 1}}>
-								{this.showEvents(item)}
-							</TouchableOpacity>
-							<View style ={{height: dimension.height * .002, backgroundColor: "black", width: "100%", alignSelf: "center"}}></View>
-						</View>
-					))}
-				</View>
-			)
+			events = this.sortEvents(this.props.eventList);
 		}
-		else {
-			recentEvents.push(null)
-				recentEvents.push(null)
-				recentEvents.push(null)
+		recentEvents = events.slice(0,3);
+		if(events.length < 2) singleContainer.flex = .4;
 
-				return (
-					<View style={{backgroundColor: '#21252b', flex: 1, borderColor: "white", justifyContent: "space-evenly"}}>
-						{recentEvents.map(item => (
-							<View style={{backgroundColor: '#21252b', flex: 1}}>
-								<TouchableOpacity onPress={() => {if (item !== null) {this.viewEvent(item)}}} style={{flex: 1}}>
-									{this.showEvents(item)}
-								</TouchableOpacity>
-								<View style ={{height: dimension.height * .002, backgroundColor: "black", width: "100%", alignSelf: "center"}}></View>
-							</View>
-						))}
+		if(events.length === 0) return (
+			<View style={[eventListContainerFull, singleContainer]}>
+				<Text style={[textColor,{fontSize: 20, textAlign: 'center', padding: 20}]}>No Upcoming Events :)</Text>
+			</View>
+		)
+
+		return (
+			<View style={[eventListContainerFull, singleContainer]}>
+				{recentEvents.map(item => (
+					<View style={{backgroundColor: '#21252b', flex: 1, height: 'auto'}}>
+						<TouchableOpacity onPress={() => this.viewEvent(item)} style={{flex: 1}}>
+							{this.showEvents(item)}
+						</TouchableOpacity>
+						<View style ={{height: dimension.height * .002, backgroundColor: "black", width: "100%", alignSelf: "center"}}></View>
 					</View>
-				)
-		}
-
+				))}
+			</View>
+		)
 	}
 
 	isDefined(obj) {
@@ -759,6 +688,11 @@ const styles = StyleSheet.create({
 	page: {
 		flex: 1,
 		backgroundColor: '#0c0b0b'
+	},
+	eventListContainerFull: {
+		backgroundColor: '#21252b',
+		borderColor: "white",
+		flex: .8,
 	},
 	greetingContainerStyle: {
 		paddingLeft: "4%",
