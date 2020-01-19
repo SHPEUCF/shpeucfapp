@@ -10,7 +10,8 @@ import {
     Dimensions,
     FlatList,
     Linking,
-    SafeAreaView
+    SafeAreaView,
+    Alert
 } from 'react-native';
 import { Button, NavBar, FilterPicker } from '../general'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -433,7 +434,16 @@ class EventDetails extends Component {
                         <View style={{flex: .45}}>
                             <Button 
                             title = "Delete event"
-                            onPress={this.deleteButton.bind(this)}
+                            onPress = {
+                                    () => Alert.alert('Confirmation', 'Are you sure you want to delete', [
+                                {
+                                    text: 'Confirm',
+                                    onPress: () => this.deleteButton()
+                                },
+                                {
+                                    text: 'Cancel',
+                                }
+                            ])}
                             />
                         </View>
                     </View>
