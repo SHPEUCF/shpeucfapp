@@ -277,7 +277,22 @@ class Dashboard extends Component {
 		textColor,
 	} = styles;
 
-	const committeesArray = (this.props.userCommittees !== null &&  this.props.userCommittees !== undefined) ? Object.entries(this.props.userCommittees) : ["Add your main committees!"]
+	if (this.props.userCommittees === null || this.props.userCommittees === undefined){
+		return (
+		<View style = {{flexDirection: "row", flex: 1, height: "100%", backgroundColor: "#21252b", alignItems: "center"}}>
+			<View style ={{height: "100%", justifyContent: "flex-start", alignItems: "center", flex: .25, paddingTop: "5%"}}>
+				<Ionicons name="ios-information-circle" size={dimension.height * .028} onPress = {() => Actions["CommitteesD"]({screen: 'dashboard'})} style={{color: '#FECB00'}}/>	
+			</View>
+			<View style = {{flex: 1, backgroundColor: "#21252b",justifyContent: "space-evenly", height: "80%"}}>
+				<View style = {{}}>
+					<Text style={[textColor, {fontSize: dimension.width * .03}]}>Add your main committees!</Text>
+				</View>
+			</View>
+		</View>	
+		)
+	}
+
+	const committeesArray = Object.entries(this.props.userCommittees)
 
 	return(
 	<View style = {{flexDirection: "row", flex: 1, height: "100%", backgroundColor: "#21252b", alignItems: "center"}}>
@@ -658,7 +673,7 @@ class Dashboard extends Component {
 					<View style={{backgroundColor: '#21252b', flex: 1, borderColor: "white", justifyContent: "space-evenly"}}>
 						{recentEvents.map(item => (
 							<View style={{backgroundColor: '#21252b', flex: 1}}>
-								<TouchableOpacity onPress={() => this.viewEvent(item)} style={{flex: 1}}>
+								<TouchableOpacity onPress={() => {if (item !== null) {this.viewEvent(item)}}} style={{flex: 1}}>
 									{this.showEvents(item)}
 								</TouchableOpacity>
 								<View style ={{height: dimension.height * .002, backgroundColor: "black", width: "100%", alignSelf: "center"}}></View>
@@ -675,7 +690,7 @@ class Dashboard extends Component {
 					<View style={{backgroundColor: '#21252b', flex: 1, borderColor: "white", justifyContent: "space-evenly"}}>
 						{recentEvents.map(item => (
 							<View style={{backgroundColor: '#21252b', flex: 1}}>
-								<TouchableOpacity onPress={() => this.viewEvent(item)} style={{flex: 1}}>
+								<TouchableOpacity onPress={() => {if (item !== null) {this.viewEvent(item)}}} style={{flex: 1}}>
 									{this.showEvents(item)}
 								</TouchableOpacity>
 								<View style ={{height: dimension.height * .002, backgroundColor: "black", width: "100%", alignSelf: "center"}}></View>
@@ -709,7 +724,7 @@ class Dashboard extends Component {
 					<View style={{backgroundColor: '#21252b', flex: 1, borderColor: "white", justifyContent: "space-evenly"}}>
 						{recentEvents.map(item => (
 							<View style={{backgroundColor: '#21252b', flex: 1}}>
-								<TouchableOpacity onPress={() => this.viewEvent(item)} style={{flex: 1}}>
+								<TouchableOpacity onPress={() => {if (item !== null) {this.viewEvent(item)}}} style={{flex: 1}}>
 									{this.showEvents(item)}
 								</TouchableOpacity>
 								<View style ={{height: dimension.height * .002, backgroundColor: "black", width: "100%", alignSelf: "center"}}></View>
