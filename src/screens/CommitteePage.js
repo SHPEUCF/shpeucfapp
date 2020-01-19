@@ -114,20 +114,20 @@ class CommitteePage extends Component {
         <SafeAreaView style={{ flex: 1, backgroundColor: '#0c0b0b'}}>
          <View style = {{flexDirection: "row", justifyContent: "space-between", backgroundColor: "black", paddingRight: "10%"}}>
             <NavBar title={this.props.committeeTitle} back onBack={() => Actions.pop()} />
-            <View style = {{flex: .6, alignItems: "center", flexDirection: "row", justifyContent: "center", backgroundColor: "black"}}>
+            {/*<View style = {{flex: .6, alignItems: "center", flexDirection: "row", justifyContent: "center", backgroundColor: "black"}}>
                 {this.renderMemberStatus()}
                 <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
                     <Ionicons name="ios-calendar" size={dimension.height * .03} onPress = {() => this.setState({visible: !this.state.visible})} style={{color: '#FECB00'}}/>
                 </View>
+      </View>*/}
             </View>
-            </View>
-        <ScrollView style={{flex: 1, backgroundColor: "#535C68"}}>
+        <View style={{flex: 1, backgroundColor: "#535C68"}}>
             <View style= {{flex: 1, height: dimension.height * 1}}>
             <View style = {{height: dimension.height * .09, justifyContent: "center",}}>
             {this.renderGreeting()}
             </View>
             {(this.state.visible) && 
-            (<View style= {{backgroundColor: "black", height: dimension.height * .75, marginLeft: "3%", marginRight: "3%"}}>
+            (<View style= {{backgroundColor: "black", flex: .95, marginLeft: "3%", marginRight: "3%"}}>
                 <ScrollView style={{flex:1}}>
                  <Agenda
                     key={JSON.stringify(this.props.eventList)}
@@ -184,9 +184,9 @@ class CommitteePage extends Component {
                      {this.renderButton()}
                 </View>
                 </View>)}
-                {this.renderSelect()}
+                {/*{this.renderSelect()}*/}
                 </View>
-         </ScrollView>
+         </View>
       </SafeAreaView>
 	  );
    }
@@ -426,7 +426,7 @@ class CommitteePage extends Component {
         return (
             <View style = {{alignItems: "center", flex: 1, justifyContent: "center"}}>
                     <Text style={{color: "white", fontSize: 16}}>Welcome to the {this.props.committeeTitle} Committee!</Text>
-                    <Text style={{color: "white", fontSize: 16}}>Board: {this.props.chair.name}</Text>
+                    <Text style={{color: "white", fontSize: 16}}>Current Director: {this.props.chair.name}</Text>
             </View>
         )
    }

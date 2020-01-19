@@ -50,24 +50,23 @@ class Profile extends Component {
               <View style = {{flex: .1}}></View>
               <View style={[fieldContainerStyle, {flex: .3}]}>
                 <View style={{flex: 1, justifyContent: "center"}}>
-                  <Text style={[itemLabelText, textColor]}>Email:</Text>
-                </View>
-                <View style={{flex: 1, justifyContent: "center"}}>
                   <Text style={[itemLabelText, textColor]}>Major:</Text>
                 </View>
                 <View style={{flex: 1, justifyContent: "center"}}>
-                <Text style={[itemLabelText, textColor]}>Points:</Text>
+                 <Text style={[itemLabelText, textColor]}>Points:</Text>
                 </View>
               </View>
               <View style={[fieldContainerStyle]}>
                 <View style={{flex: 1, justifyContent: "center"}}>
-                <Text style={[itemValueText, textColor]}>{email}</Text>
-                </View>
-                <View style={{flex: 1, justifyContent: "center"}}>
                 <Text style={[itemValueText, textColor]}>{major}</Text>
                 </View>
-                <View style={{flex: 1, justifyContent: "center"}}>
-                <Text style={[itemValueText, textColor]}>{points}</Text>
+                <View style={{flex: 1, justifyContent: "center", flexDirection: "row", alignItems: "center"}}>
+                  <TouchableOpacity style = {{flexDirection: "row", flex: 1}} onPress = {() => Actions.pointsBreakDown()}>
+                    <Text style={[itemValueText, textColor]}>{points}</Text>
+                      <View style = {{flex: .2}}>
+                        <Ionicons name="ios-arrow-dropright" size={dimension.height * .025} style={{color: '#FECB00', backgroundColor: "transparent", alignSelf: "center"}}/>
+                      </View>
+                  </TouchableOpacity>
                 </View>
               </View>
               <View style = {{flex: .1}}></View>
@@ -315,7 +314,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   itemValueText: {
-    fontSize: dimension.height*.017,
+    fontSize: dimension.height*.02,
     fontWeight: '500',
 		color: '#fff',
   },

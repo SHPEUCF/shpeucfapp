@@ -49,9 +49,6 @@ class OtherProfile extends Component {
               <View style = {{flex: .1}}></View>
               <View style={[fieldContainerStyle, {flex: .3}]}>
                 <View style={{flex: 1, justifyContent: "center"}}>
-                  <Text style={[itemLabelText, textColor]}>Email:</Text>
-                </View>
-                <View style={{flex: 1, justifyContent: "center"}}>
                   <Text style={[itemLabelText, textColor]}>Major:</Text>
                 </View>
                 <View style={{flex: 1, justifyContent: "center"}}>
@@ -59,9 +56,6 @@ class OtherProfile extends Component {
                 </View>
               </View>
               <View style={[fieldContainerStyle]}>
-                <View style={{flex: 1, justifyContent: "center"}}>
-                <Text style={[itemValueText, textColor]}>{email}</Text>
-                </View>
                 <View style={{flex: 1, justifyContent: "center"}}>
                 <Text style={[itemValueText, textColor]}>{major}</Text>
                 </View>

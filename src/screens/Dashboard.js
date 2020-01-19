@@ -253,7 +253,7 @@ class Dashboard extends Component {
 		<View style={{flex: .3, alignSelf: "center", width: "80%", flexDirection: "row", alignItems: "center"}}>
 			<View style={{flex: 1, height: dimension.height * .003, backgroundColor: "black"}}></View>
 			<View style = {{flex: .6}}>
-			<Ionicons name="ios-arrow-dropright" size={dimension.height * .025} style={{color: '#FECB00', backgroundColor: "transparent", alignSelf: "center"}}/>
+				<Ionicons name="ios-arrow-dropright" size={dimension.height * .025} style={{color: '#FECB00', backgroundColor: "transparent", alignSelf: "center"}}/>
 			</View>
 			<View style={{flex: 1, height: dimension.height * .003, backgroundColor: "black"}}></View>
 		</View>
@@ -640,7 +640,7 @@ class Dashboard extends Component {
 					<View style={{backgroundColor: '#21252b', flex: 1, borderColor: "white", justifyContent: "space-evenly"}}>
 						{recentEvents.map(item => (
 							<View style={{backgroundColor: '#21252b', flex: 1}}>
-								<TouchableOpacity onPress={() => this.viewEvent(item)} style={{flex: 1}}>
+								<TouchableOpacity onPress={() => {if (item !== null) {this.viewEvent(item)}}} style={{flex: 1}}>
 									{this.showEvents(item)}
 								</TouchableOpacity>
 								<View style ={{height: dimension.height * .002, backgroundColor: "black", width: "100%", alignSelf: "center"}}></View>
