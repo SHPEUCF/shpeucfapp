@@ -256,16 +256,18 @@ import {
   }
 
   convertHour(time){
-		var array = time.split(":")
+  var array = time.split(":")
 
-		if(array[2] === "AM") {
-      var hour = "" + (parseInt(array[0])) 
-      return hour + ":" + array[1] + ":" +array[2]
-    }
-
-		var hour = "" + (parseInt(array[0]) - 12) 
-		return hour + ":" + array[1] + ":" +array[2]
-	}
+  if(array[2] === "AM") {
+  var hour = "" + (parseInt(array[0])) 
+  if (hour === "0") hour = "12"
+  return hour + ":" + array[1] + ":" +array[2]
+  }
+  
+  var hour = "" + (parseInt(array[0]) - 12) 
+  if (hour === "0") hour = "12"
+  return hour + ":" + array[1] + ":" +array[2]
+  }
 
   convertNumToDate(date) {
 		var months = ["Jan", "Feb", "Mar", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
