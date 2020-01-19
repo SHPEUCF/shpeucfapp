@@ -119,6 +119,8 @@ class Dashboard extends Component {
 		const {
 		  page,
 		  mainContentStyle,
+		  title,
+		  textColor
 	  } = styles;
 
 	  return (
@@ -128,12 +130,16 @@ class Dashboard extends Component {
 					<View style={mainContentStyle}>
 						<View style= {{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>				
 						<ScrollView style= {{flex: 1}}>
-						<View style = {{flex: 1, height: dimension.height *1.1}}>
+						<View style = {{flex: 1, height: dimension.height *1.3}}>
 						{this.renderHeader()}
 							<View style={{flex: 1, paddingLeft: "5%", paddingRight: "5%"}}>
-							{this.renderEvents()}
+							<View style={{flex: .2, flexDirection: "row"}}></View>
+							<View style={{alignItems: "center", flex: .2, justifyContent: "center"}}>
+								<Text style={[title, textColor]}>Upcoming Events</Text>
+							</View>
+							{this.getFormattedEventList()}
 								<View style={{flex: .03, flexDirection: "row"}}></View>
-								<View style={{flexDirection: "row", alignItems: 'flex-start', flex: .7, borderColor: "white"}}>
+								<View style={{flexDirection: "row", alignItems: 'flex-start', flex: .9, borderColor: "white"}}>
 									{this.renderLeaderboard()}
 									<View style={{flex:.05}}></View>
 									{this.renderCommitteePanel()}
@@ -143,7 +149,6 @@ class Dashboard extends Component {
 							<Text style={[title, textColor]}>Committees</Text>
 							<Text style={textColor}>Coming soon!</Text>
 						</View>*/}
-						
 							{this.renderButtonLinks()}
 						</View>
 					</ScrollView>
@@ -197,14 +202,9 @@ class Dashboard extends Component {
 	} = styles;
 
 	return(
-	<View style={eventsContainer}>
-		<View style={{alignItems: "center", flex: .25, justifyContent: "center"}}>
-			<Text style={[title, textColor]}>Upcoming Events</Text>
-		</View>
-		<View style={{flex: 1}}>
+		<View>
 			{this.getFormattedEventList()}
 		</View>
-	</View>
 	)
   }
 
@@ -313,8 +313,8 @@ class Dashboard extends Component {
 	} = styles;
 
 	return(
-	<View style={{flex: .3, alignItems: 'center', justifyContent: "center"}}>
-		<View style={{flex:.3}}></View>
+	<View style={{flex: .35, alignItems: 'center'}}>
+		<View style={{flex:.1}}></View>
 		<View style={{flexDirection: 'row', justifyContent: 'center', flex: 1, alignItems: "center"}}>
 			<TouchableOpacity style={ContainerStyle} onPress={() => Linking.openURL('https://shpeucf2018-2019.slack.com/')}>
 				<FontAwesomeIcon style={{color: 'black'}} name="slack" size={dimension.height*.04}/>
@@ -329,7 +329,7 @@ class Dashboard extends Component {
 				<FontAwesomeIcon style={{color: 'black'}} name="instagram" size={dimension.height*.04}/>
 			</TouchableOpacity>
 		</View>
-		<View style={{flex:.3}}></View>
+		<View style={{flex:.6}}></View>
 		{this.renderFooter()}
 	</View>
 	)
@@ -337,7 +337,7 @@ class Dashboard extends Component {
 
   renderFooter(){
 	return(
-	<View style={{flex:.5, justifyContent: "center", backgroundColor: "#FECB00", width: "100%"}}>
+	<View style={{flex:.3, justifyContent: "center", backgroundColor: "#FECB00", width: "100%"}}>
 		<View style={{flexDirection: "row", justifyContent: "center"}}>
 			<Text style={{color: "black"}}>SHPE </Text>
 			<Text style={{color: "white"}}>UCF</Text>
@@ -516,16 +516,18 @@ class Dashboard extends Component {
 		this.props.goToViewEvent("dashboard");
 	  }
 
-	  convertHour(time){
-		var array = time.split(":")
+	convertHour(time){
+	var array = time.split(":")
 
-		if(array[2] === "AM") {
-      var hour = "" + (parseInt(array[0])) 
-      return hour + ":" + array[1] + ":" +array[2]
-    }
-    
-		var hour = "" + (parseInt(array[0]) - 12) 
-		return hour + ":" + array[1] + ":" +array[2]
+	if(array[2] === "AM") {
+	var hour = "" + (parseInt(array[0])) 
+	if (hour === "0") hour = "12"
+	return hour + ":" + array[1] + ":" +array[2]
+	}
+	
+	var hour = "" + (parseInt(array[0]) - 12) 
+	if (hour === "0") hour = "12"
+	return hour + ":" + array[1] + ":" +array[2]
 	}
 	
 	sortEvents(eventList){
@@ -566,6 +568,12 @@ class Dashboard extends Component {
 			textColor
 		} = styles;
 
+		if(event === null){
+			return(
+				<View></View>
+			)
+		}
+
 		const {
 			name,
 			date,
@@ -589,6 +597,7 @@ class Dashboard extends Component {
 
 		var realStart = this.convertHour(startTime)
 		var realEnd = this.convertHour(endTime)
+
 
 		return (
 		<View style={{flexDirection: "row", flex: 1}}>
@@ -617,23 +626,71 @@ class Dashboard extends Component {
 			textColor
 		} = styles;
 		
-
+		let recentEvents = []
 		if (this.props.eventList !== null && this.props.eventList !== undefined) {
 			let events = this.sortEvents(this.props.eventList);
-			let recentEvents = events.slice(0,3);
+			recentEvents = events.slice(0,3);
 
 			if(events.length === 0){
+				recentEvents.push(null)
+				recentEvents.push(null)
+				recentEvents.push(null)
+
 				return (
-					<View style={{alignItems:'center', backgroundColor: '#21252b', flex: 1, justifyContent: "center"}}>
-						<Text style={[{fontSize: 16}, textColor]}>No events coming soon</Text>
+					<View style={{backgroundColor: '#21252b', flex: 1, borderColor: "white", justifyContent: "space-evenly"}}>
+						{recentEvents.map(item => (
+							<View style={{backgroundColor: '#21252b', flex: 1}}>
+								<TouchableOpacity onPress={() => this.viewEvent(item)} style={{flex: 1}}>
+									{this.showEvents(item)}
+								</TouchableOpacity>
+								<View style ={{height: dimension.height * .002, backgroundColor: "black", width: "100%", alignSelf: "center"}}></View>
+							</View>
+						))}
 					</View>
 				)
 			}
 
+			if(events.length === 1){
+				recentEvents.push(null)
+				recentEvents.push(null)
+
+				return (
+					<View style={{backgroundColor: '#21252b', flex: 1, borderColor: "white", justifyContent: "space-evenly"}}>
+						{recentEvents.map(item => (
+							<View style={{backgroundColor: '#21252b', flex: 1}}>
+								<TouchableOpacity onPress={() => this.viewEvent(item)} style={{flex: 1}}>
+									{this.showEvents(item)}
+								</TouchableOpacity>
+								<View style ={{height: dimension.height * .002, backgroundColor: "black", width: "100%", alignSelf: "center"}}></View>
+							</View>
+						))}
+					</View>
+				)
+			}
+
+			if(events.length === 2){
+				recentEvents.push(null)
+
+				return (
+					<View style={{backgroundColor: '#21252b', flex: 1, borderColor: "white", justifyContent: "space-evenly"}}>
+						{recentEvents.map(item => (
+							<View style={{backgroundColor: '#21252b', flex: 1}}>
+								<TouchableOpacity onPress={() => this.viewEvent(item)} style={{flex: 1}}>
+									{this.showEvents(item)}
+								</TouchableOpacity>
+								<View style ={{height: dimension.height * .002, backgroundColor: "black", width: "100%", alignSelf: "center"}}></View>
+							</View>
+						))}
+					</View>
+				)
+			}
+
+
+
 			return (
-				<View style={{flex: 1, backgroundColor: '#21252b', borderColor: "white", justifyContent: "space-evenly"}}>
+				<View style={{backgroundColor: '#21252b', flex: 1, borderColor: "white", justifyContent: "space-evenly"}}>
 					{recentEvents.map(item => (
-						<View style={{flex: 1}}>
+						<View style={{backgroundColor: '#21252b', flex: 1}}>
 							<TouchableOpacity onPress={() => this.viewEvent(item)} style={{flex: 1}}>
 								{this.showEvents(item)}
 							</TouchableOpacity>
@@ -644,11 +701,22 @@ class Dashboard extends Component {
 			)
 		}
 		else {
-			return (
-				<View style={{alignItems:'center', backgroundColor: '#21252b', flex: 1, justifyContent: "center"}}>
-					<Text style={[{fontSize: 16}, textColor]}>No events coming soon</Text>
-				</View>
-			)
+			recentEvents.push(null)
+				recentEvents.push(null)
+				recentEvents.push(null)
+
+				return (
+					<View style={{backgroundColor: '#21252b', flex: 1, borderColor: "white", justifyContent: "space-evenly"}}>
+						{recentEvents.map(item => (
+							<View style={{backgroundColor: '#21252b', flex: 1}}>
+								<TouchableOpacity onPress={() => this.viewEvent(item)} style={{flex: 1}}>
+									{this.showEvents(item)}
+								</TouchableOpacity>
+								<View style ={{height: dimension.height * .002, backgroundColor: "black", width: "100%", alignSelf: "center"}}></View>
+							</View>
+						))}
+					</View>
+				)
 		}
 
 	}
@@ -684,7 +752,7 @@ const styles = StyleSheet.create({
 		width: dimension.height  * .07,
 		height: dimension.height * .07,
 		borderRadius: 15,
-		paddingBottom: "7%",
+		paddingBottom: "2%",
 		marginBottom: '2%',
 		marginLeft: '2%',
 		marginRight: '2%',
