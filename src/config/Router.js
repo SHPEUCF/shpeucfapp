@@ -309,6 +309,7 @@ const RouterComponent = () => {
               key="EditProfileForm"
               component={EditProfileForm}
               hideNavBar
+              hideTabBar
             />
             <Scene
             key="pointsBreakDown"
@@ -362,6 +363,7 @@ const RouterComponent = () => {
             key="BackEnd"
             title="BackEnd"
             hideNavBar
+            hideTabBar
            >
               <Scene key="BackEnd"
                 component={BackEnd}

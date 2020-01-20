@@ -30,9 +30,12 @@ import {
 	setDashColor,
 	setFlag,
 	fetchAllUsers,
-    getUserCommittees,
-    committeeChanged,
-    goToCreateEvent,
+  getUserCommittees,
+  committeeChanged,
+  goToCreateEvent,
+  pendingJoin,
+  approveJoin,
+  deleteMemberFromCom
 }
 from '../ducks';
 import Flag from 'react-native-flags'
@@ -114,21 +117,21 @@ class CommitteePage extends Component {
         <SafeAreaView style={{ flex: 1, backgroundColor: '#0c0b0b'}}>
          <View style = {{flexDirection: "row", justifyContent: "space-between", backgroundColor: "black", paddingRight: "10%"}}>
             <NavBar title={this.props.committeeTitle} back onBack={() => Actions.pop()} />
-            {/*<View style = {{flex: .6, alignItems: "center", flexDirection: "row", justifyContent: "center", backgroundColor: "black"}}>
+            <View style = {{flex: .6, alignItems: "center", flexDirection: "row", justifyContent: "center", backgroundColor: "black"}}>
                 {this.renderMemberStatus()}
                 <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
                     <Ionicons name="ios-calendar" size={dimension.height * .03} onPress = {() => this.setState({visible: !this.state.visible})} style={{color: '#FECB00'}}/>
                 </View>
-      </View>*/}
             </View>
-        <View style={{flex: 1, backgroundColor: "#535C68"}}>
+            </View>
+        <ScrollView style={{flex: 1, backgroundColor: "#535C68"}}>
             <View style= {{flex: 1, height: dimension.height * 1}}>
             <View style = {{height: dimension.height * .09, justifyContent: "center",}}>
             {this.renderGreeting()}
             </View>
             {(this.state.visible) && 
             (<View style= {{backgroundColor: "black", flex: .95, marginLeft: "3%", marginRight: "3%"}}>
-                <ScrollView style={{flex:1}}>
+                <View style={{flex:1}}>
                  <Agenda
                     key={JSON.stringify(this.props.eventList)}
                     dashColor={this.props.dashColor}
@@ -171,7 +174,7 @@ class CommitteePage extends Component {
                     selectedDotColor: 'black',
                     }}
                 />
-                </ScrollView>
+                </View>
                 <View style= {{flex: .1, borderTopWidth: 2, borderColor: "#535C68"}}>
                 {(initDate !== dateStr) && ( <TouchableOpacity  style= {{alignItems: "center", justifyContent: "flex-start", flex: 1}} onPress={() => this.chooseToday()}>
                     <View style= {{flex: .25}}></View>
@@ -186,7 +189,7 @@ class CommitteePage extends Component {
                 </View>)}
                 {/*{this.renderSelect()}*/}
                 </View>
-         </View>
+         </ScrollView>
       </SafeAreaView>
 	  );
    }
@@ -195,16 +198,19 @@ class CommitteePage extends Component {
         const {
             joinedMembers,
             pendingMembers,
-            id
+            pendingJoin,
+            approveJoin,
+            deleteMemberFromCom,
+            id,
+            committeeTitle
         } = this.props
         
         if ((joinedMembers === undefined || joinedMembers === null) && (pendingMembers === undefined || pendingMembers === null)){
-
             return (
             <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
                  <Ionicons name="md-person-add" size={dimension.height * .03} 
                  onPress = {() => {
-                    alert("Join request sent!")
+                    this.props.pendingJoin(committeeTitle, id)
                  }} 
                  style={{color: '#FECB00'}}/>
             </View>
@@ -216,8 +222,8 @@ class CommitteePage extends Component {
             <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
                     <Ionicons name="ios-alert" size={dimension.height * .03} 
                     onPress = {() => {
-                        alert("Join pending board member!")
-                        }} 
+                      this.props.pendingJoin(committeeTitle, id)
+                    }} 
                     style={{color: '#FECB00'}}/>
             </View>
             )
@@ -254,7 +260,7 @@ class CommitteePage extends Component {
             <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
                     <Ionicons name="ios-alert" size={dimension.height * .03} 
                     onPress = {() => {
-                        alert("Join pending board member!")
+                        alert("Pending Approval!")
                      }} 
                     style={{color: '#FECB00'}}/>
             </View>
@@ -265,9 +271,9 @@ class CommitteePage extends Component {
             return (
                 <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
                      <Ionicons name="md-person-add" size={dimension.height * .03} 
-                     onPress = {() => {
-                        alert("Join request sent!")
-                     }} 
+                      onPress = {() => {
+                        this.props.pendingJoin(committeeTitle, id)
+                      }}
                      style={{color: '#FECB00'}}/>
                 </View>
             )
@@ -725,9 +731,12 @@ const mapStateToProps = ({ user, general, members, events, elect, committees }) 
 	setDashColor,
 	setFlag,
 	fetchAllUsers,
-    getUserCommittees,
-    committeeChanged,
-    goToCreateEvent,
+  getUserCommittees,
+  committeeChanged,
+  goToCreateEvent,
+  pendingJoin,
+  approveJoin,
+  deleteMemberFromCom
 };
 
  export default connect(mapStateToProps, mapDispatchToProps)(CommitteePage);

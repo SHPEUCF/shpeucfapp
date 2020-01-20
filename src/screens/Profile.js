@@ -49,17 +49,23 @@ class Profile extends Component {
             <View style={{flexDirection: "row", flex: 1.5, justifyContent: "space-evenly"}}>
               <View style = {{flex: .1}}></View>
               <View style={[fieldContainerStyle, {flex: .3}]}>
-                <View style={{flex: 1, justifyContent: "center"}}>
-                  <Text style={[itemLabelText, textColor]}>Major:</Text>
+              <View style={{flex: 1, justifyContent: "center"}}>
+                 <Text style={[itemLabelText, textColor]}>Email:</Text>
                 </View>
+                {(this.props.major !== '') && (<View style={{flex: 1, justifyContent: "center"}}>
+                  <Text style={[itemLabelText, textColor]}>Major:</Text>
+                </View>)}
                 <View style={{flex: 1, justifyContent: "center"}}>
                  <Text style={[itemLabelText, textColor]}>Points:</Text>
                 </View>
               </View>
               <View style={[fieldContainerStyle]}>
-                <View style={{flex: 1, justifyContent: "center"}}>
+              <View style={{flex: 1, justifyContent: "center"}}>
+                <Text style={[itemValueText, textColor]}>{email}</Text>
+              </View>
+              {(this.props.major !== '') && (<View style={{flex: 1, justifyContent: "center"}}>
                 <Text style={[itemValueText, textColor]}>{major}</Text>
-                </View>
+                </View>)}
                 <View style={{flex: 1, justifyContent: "center", flexDirection: "row", alignItems: "center"}}>
                   <TouchableOpacity style = {{flexDirection: "row", flex: 1}} onPress = {() => Actions.pointsBreakDown()}>
                     <Text style={[itemValueText, textColor]}>{points}</Text>

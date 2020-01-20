@@ -48,17 +48,23 @@ class OtherProfile extends Component {
             <View style={{flexDirection: "row", flex: 1.5, justifyContent: "space-evenly"}}>
               <View style = {{flex: .1}}></View>
               <View style={[fieldContainerStyle, {flex: .3}]}>
-                <View style={{flex: 1, justifyContent: "center"}}>
+              <View style={{flex: 1, justifyContent: "center"}}>
+                <Text style={[itemLabelText, textColor]}>Email:</Text>
+              </View>
+              {(this.props.major !== '') && (<View style={{flex: 1, justifyContent: "center"}}>
                   <Text style={[itemLabelText, textColor]}>Major:</Text>
-                </View>
+                </View>)}
                 <View style={{flex: 1, justifyContent: "center"}}>
                 <Text style={[itemLabelText, textColor]}>Points:</Text>
                 </View>
               </View>
               <View style={[fieldContainerStyle]}>
-                <View style={{flex: 1, justifyContent: "center"}}>
+              <View style={{flex: 1, justifyContent: "center"}}>
+                <Text style={[itemValueText, textColor]}>{email}</Text>
+              </View>
+              {(this.props.major !== '') && (<View style={{flex: 1, justifyContent: "center"}}>
                 <Text style={[itemValueText, textColor]}>{major}</Text>
-                </View>
+                </View>)}
                 <View style={{flex: 1, justifyContent: "center"}}>
                 <Text style={[itemValueText, textColor]}>{points}</Text>
                 </View>
@@ -70,7 +76,7 @@ class OtherProfile extends Component {
           {this.renderSocialMedia()}
           <View style={{flex: .3}}></View>
           {this.renderButtons()}
-          <View style={{height: dimension.height *.08, backgroundColor: "#0c0b0b"}}></View>
+          <View style={{height: dimension.height *.08, backgroundColor: "black"}}></View>
           </View>
       </SafeAreaView>
   )

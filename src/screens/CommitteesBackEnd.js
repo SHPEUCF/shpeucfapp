@@ -15,6 +15,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  SafeAreaView
   } from 'react-native';
 
   const dimension = Dimensions.get('window');
@@ -27,7 +28,7 @@ import {
         this.renderCommittees = this.renderCommittees.bind(this);
       }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.getCommittees();
     this.props.fetchAllUsers();
   }
@@ -59,29 +60,29 @@ import {
     const committeesArray = _.toArray(committeesList)
 
     return (
-     <View style={page}>
+     <SafeAreaView style={page}>
         <NavBar title="Committees" back onBack={() => Actions.pop()} />
 
         {this.renderFlatlist(committeesArray)}
 
-         <View style={buttonContainerStyling}>
-            <Button
-            onPress={() => {this.props.committeeTitleChanged("");
-            this.props.committeeDescriptionChanged("");
-            this.props.chairChanged();
-            this.props.goToCommitteeForm("ADD");}}
-            title={"ADD COMMITEES"}
-            >
-            </Button>
-            </View>
-        <View style={buttonContainerStyling}>
-            <Button
-            onPress={() => this.setLevels()}
-            title={"SET ORDER"}
-            >
-            </Button>
-        </View>
+        <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .1, width:"100%"}}>
+          <View style={{flex: .45}}>
+              <Button 
+                 onPress={() => this.setLevels()}
+                 title={"SET ORDER"}
+              />
+          </View>
+          <View style={{flex: .45}}>
+              <Button 
+                onPress={() => {this.props.committeeTitleChanged("");
+                this.props.committeeDescriptionChanged("");
+                this.props.chairChanged();
+                this.props.goToCommitteeForm("ADD");}}
+                title={"ADD COMMITTEES"}
+              />
+          </View>
       </View>
+      </SafeAreaView>
     );
   };
 
@@ -110,7 +111,7 @@ import {
     } = styles;
 
 
-    const color = (isActive) ? {backgroundColor: '#ffd70066'} : {backgroundColor: "#2C3239"}
+    const color = (isActive) ? {backgroundColor: '#ffd70066'} : {backgroundColor: "black"}
     return (
       <TouchableOpacity
         style={[contentContainerStyle, color]}
