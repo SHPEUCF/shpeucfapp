@@ -23,6 +23,7 @@ import {
     deleteEvents,
     getPrivilege,
     checkIn,
+    rsvp,
     openCheckIn,
     closeCheckIn,
     pageLoad,
@@ -356,9 +357,9 @@ class EventDetails extends Component {
             filterChanged
         } = this.props;
 
-        if(eventList === null || eventList === undefined) {return null}
+        if (eventList === null || eventList === undefined) {return null}
 
-        excludeDataProp = (eventList[eventID] === null || eventList[eventID] === undefined) ? {} : eventList[eventID].attendance  
+        let excludeDataProp = (eventList[eventID] === null || eventList[eventID] === undefined) ? {} : eventList[eventID].attendance  
 
         return (
             <View>
@@ -381,6 +382,16 @@ class EventDetails extends Component {
                 />
             </View>
         )
+    }
+
+    renderRSVP() {
+        const {
+            rsvp,
+            eventID,
+            userID
+        } = this.props;
+
+        rsvp(eventID, userID);
     }
     
     checkInMembers(selectedUsers){
@@ -459,19 +470,23 @@ class EventDetails extends Component {
             )
             }else
             return(
-             <View>
-                <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
-                    <View style={{flex: .3}}></View>
-                        <View style={{flex: 1}}>
-                            <Button 
-                                title = "Check In"
-                                onPress={() => {
-                                    this.setState({modalVisible: true})
-                                }}
-                            />
-                        </View>
-                    <View style={{flex: .3}}></View>
-                </View>
+            <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+                <View style={{flex: .3}}></View>
+                    <View style={{flex: 1}}>
+                        <Button 
+                            title = "CHECK IN"
+                            onPress={() => {
+                                this.setState({modalVisible: true})
+                            }}
+                        />
+                        <Button
+                            title = "RSVP"
+                            onPress = {() => {
+                                this.renderRSVP()
+                            }}
+                        />
+                    </View>
+                <View style={{flex: .3}}></View>
             </View>
         )
     }
@@ -702,6 +717,7 @@ const mapDispatchToProps = {
     deleteEvents,
     getPrivilege,
     checkIn,
+    rsvp,
     openCheckIn,
     closeCheckIn,
     pageLoad,
