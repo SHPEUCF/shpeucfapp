@@ -134,7 +134,7 @@ class Dashboard extends Component {
 						<View style = {{flex: 1, height: dimension.height *1.3}}>
 							{this.renderHeader()}
 							<View style={{flex: 1, paddingLeft: "5%", paddingRight: "5%"}}>
-							<View style={{flex: .2, flexDirection: "row"}}></View>
+							<View style={{flex: .13, flexDirection: "row"}}></View>
 								<View style={{alignItems: "center", flex: .2, justifyContent: "center"}}>
 									<Text style={[title, textColor]}>Upcoming Events</Text>
 								</View>
@@ -279,7 +279,7 @@ class Dashboard extends Component {
 		changeUserCommittees
 	} = this.props
 
-	if (this.props.userCommittees === null || this.props.userCommittees === undefined){
+	if (this.props.userCommittees === null || this.props.userCommittees === undefined || committeesList === null || committeesList === undefined){
 		return (
 		<View style = {{flexDirection: "row", flex: 1, height: "100%", backgroundColor: "#21252b", alignItems: "center"}}>
 			<View style ={{height: "100%", justifyContent: "flex-start", alignItems: "center", flex: .25, paddingTop: "5%"}}>
