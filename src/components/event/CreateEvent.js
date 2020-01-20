@@ -20,6 +20,7 @@ import {
     goToCreateEvent,
     goToEvents
 } from '../../ducks'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const dimension = Dimensions.get('window');
 
@@ -227,7 +228,7 @@ class CreateEvent extends Component {
             titleStyle
         } = styles;
 
-        if (this.props.type == "Committee")
+        if (this.props.type == "Committee" && !(this.props.committeesList === null || this.props.committeesList === undefined))
         {
             return (
 
@@ -280,6 +281,13 @@ class CreateEvent extends Component {
                 stringType = this.props.type;
             }
             return (
+                <KeyboardAwareScrollView
+                style={{backgroundColor:  "#0c0b0b"}}
+                resetScrollToCoords={{ x: 0, y: 0}}
+                contentContainerStyle={{flexGrow: 1}}
+                scrollEnabled={false}
+                enableOnAndroid={true}
+                >
                 <SafeAreaView style={styles.formContainerStyle}>
                     <View style={{backgroundColor: "black", flex: 1}}>
                     <View style={{flex: .02}}></View>
@@ -365,6 +373,7 @@ class CreateEvent extends Component {
                     </View>
                     <View style={{height: dimension.height *.08, backgroundColor: "#0c0b0b"}}></View>
                 </SafeAreaView>
+            </KeyboardAwareScrollView>
             )
         }
 }

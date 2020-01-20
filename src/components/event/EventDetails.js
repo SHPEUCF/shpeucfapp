@@ -129,20 +129,28 @@ class EventDetails extends Component {
             }}
             visible={this.state.modalVisible}
             >
-            <View style = {{flex: 1, backgroundColor: "black", justifyContent: "center"}}>
-                <View style ={{flex:.91}}>
+            <SafeAreaView>
+                <View style = {{height: dimension.height, backgroundColor: "black"}}>
+                    <View style = {{flex: .2}}></View>
+                    <View style ={{flex: 1, justifyContent: "flex-start"}}>
                     <QRCodeScanner
                     onRead={this.onSuccess}
                     fadeIn={false}
+                    containerStyle= {{flex: .7}}
                     />
+                    </View>
+                    <View style={{flexDirection: "row", flex: .9, justifyContent: "space-evenly", alignItems: "center", justifyContent:"center", width:"100%"}}>
+                        <View style={{flex: .3}}></View>
+                            <View style={{flex: 1}}>
+                            <Button
+                            title = "DONE"
+                            onPress = {() => this.setState({modalVisible: false})}
+                            />
+                            </View>
+                    <View style={{flex: .3}}></View>
+                    </View>
                 </View>
-                <View style = {{flex:.09}}>
-                    <Button
-                        title = "DONE"
-                        onPress = {() => this.setState({modalVisible: false})}
-                    />
-                </View>
-            </View>
+            </SafeAreaView>
         </Modal>
         
 
@@ -451,17 +459,19 @@ class EventDetails extends Component {
             )
             }else
             return(
-            <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
-                <View style={{flex: .3}}></View>
-                    <View style={{flex: 1}}>
-                        <Button 
-                            title = "CHECK IN"
-                            onPress={() => {
-                                this.setState({modalVisible: true})
-                            }}
-                        />
-                    </View>
-                <View style={{flex: .3}}></View>
+             <View>
+                <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+                    <View style={{flex: .3}}></View>
+                        <View style={{flex: 1}}>
+                            <Button 
+                                title = "Check In"
+                                onPress={() => {
+                                    this.setState({modalVisible: true})
+                                }}
+                            />
+                        </View>
+                    <View style={{flex: .3}}></View>
+                </View>
             </View>
         )
     }
@@ -478,6 +488,8 @@ class EventDetails extends Component {
                 startTime,
                 endTime,
                 location,
+                type,
+                committee
             } = this.props
 
             const { 
@@ -492,10 +504,15 @@ class EventDetails extends Component {
                 final
             } = styles
 
+            var viewName = type + ": " + name;
+            if (committee !== ''){
+            viewName = committee + ": " + name;
+            }
+
             var iconSize = 25
             return (
                 <SafeAreaView style={page}>
-                    <NavBar title={name} back onBack={() => Actions.pop()} />
+                    <NavBar title={viewName} back onBack={() => Actions.pop()} />
                     {this.renderPickMembers()}
                     <View style={container}>
                     <View style={icon_container}>
@@ -520,7 +537,7 @@ class EventDetails extends Component {
                     </View>
                     {this.renderButtons()}
                     {this.renderCodeBox()}
-                    <View style={{height: dimension.height *.08}}></View>
+                    <View style={{height: dimension.height *.08, backgroundColor: "black"}}></View>
                 </SafeAreaView>
             )
         }
@@ -669,12 +686,12 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ events, user, members, general }) => {
-  const { type, name, description, date, startTime, endTime, location, points, eventID, error, code, eventList } = events;
+  const { type, name, description, date, startTime, endTime, location, points, eventID, error, code, eventList, committee } = events;
   const { privilege, firstName, lastName, id} = user;
   const { userList } = members;
   const { filter } = general;
 
-  return { type, name, description, date, startTime, endTime, location, points, eventID, error, privilege, code, eventList, userList, filter, firstName, lastName, id};
+  return { type, name, description, date, startTime, endTime, location, points, eventID, error, privilege, code, eventList, userList, filter, firstName, lastName, id, committee};
 };
 
 const mapDispatchToProps = {

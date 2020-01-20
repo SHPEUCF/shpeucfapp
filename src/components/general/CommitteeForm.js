@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import {View, StyleSheet, Text, ScrollView} from 'react-native';
+import {View, StyleSheet, Text, ScrollView, Dimensions, SafeAreaView} from 'react-native';
 import { Input, Button, FilterPicker } from '../general';
 import {
     addCommittee,
@@ -19,6 +19,7 @@ import Members from '../../ducks/Members';
 
 var idIndex;
 
+const dimension = Dimensions.get('window');
 
 class CommitteeForm extends Component {
     // EventCreationError(text) {
@@ -96,7 +97,7 @@ class CommitteeForm extends Component {
         }
 
             return (
-                <View style={styles.formContainerStyle}>
+                <SafeAreaView style={styles.formContainerStyle}>
                     <View style={styles.headerStyle}>
                         <Text style={styles.headerTextStyle}>{this.props.title + " COMMITTEE"}</Text>
                         {/* <Text style={styles.headerSubtitleStyle}>Registration</Text> */}
@@ -128,16 +129,22 @@ class CommitteeForm extends Component {
                         </View>
                         {this.renderError()}
                     </ScrollView>
-                    <Button
-                        title = {this.props.title + " COMMITTEE"}
-                        onPress={() => { 
-                            this.onButtonPress()}}
-                    />
-                    <Button
-                        title = "CANCEL"
-                        onPress={() => Actions.pop()}
-                    />
-                </View>
+                    <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .1, width:"100%"}}>
+                        <View style={{flex: .45}}>
+                            <Button 
+                                title = {this.props.title + " COMMITTEE"}
+                                onPress={() => { 
+                                    this.onButtonPress()}}
+                            />
+                        </View>
+                        <View style={{flex: .45}}>
+                            <Button 
+                               title = "CANCEL"
+                               onPress={() => Actions.pop()}
+                            />
+                        </View>
+                    </View>
+                </SafeAreaView>
             )
         }
 }
@@ -145,22 +152,32 @@ class CommitteeForm extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E1E1E1',
         justifyContent: 'flex-end',
+    },
+    itemStyle: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        borderBottomColor: '#0002',
+        borderBottomWidth: 1
+    },
+    itemTextStyle: {
+        paddingTop: dimension.height * .03,
+        paddingBottom: dimension.height * .03,
+        flex: 1,
+        fontSize: 16,
+        alignSelf:'center',
     },
     formContainerStyle: {
         flex: 1,
-        paddingTop: 30,
-        padding: 10,
-        paddingBottom: 10,
-        backgroundColor: "#2C3239"
+        backgroundColor: '#0c0b0b'
     },
     headerStyle: {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 5,
-        marginBottom: 10,
+        flex:.5
     },
     headerTextStyle: {
         fontSize: 22,
@@ -181,11 +198,52 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     scrollView: {
-        flex: 0,
+        backgroundColor: "black",
+        height: "50%",
         paddingTop: 0,
         paddingBottom: 0,
-        paddingRight: 10,
-    }
+        paddingLeft: "5%",
+        paddingRight: "5%",
+    },
+    titleStyle: {
+        flex: .13,
+        alignSelf: 'center',
+        fontSize: 20
+    },
+    buttonStyle: {
+        flex: 1,
+        alignSelf: 'center'
+    },
+    flatlistStyle: {
+        flex: .8
+    },
+    buttonContainer:{
+        flex:.2,
+        flexDirection: 'row',
+        borderTopColor: '#0001',
+        borderTopWidth: 1
+    },
+    textStyle:{
+        flex: 1,
+        alignSelf: 'center',
+        fontSize: 18,
+        paddingTop: 5
+    },
+    modalBackground: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#0003',
+        margin: 0,
+        height: dimension.height,
+        width: dimension.width,
+    },
+    modalStyle: {
+        height: dimension.height*.4,
+        width: dimension.width*.8,
+        backgroundColor:'#fff',
+        padding: 12,
+        borderRadius: 12,
+    },
 });
 
 const mapStateToProps = ({ committees, general, members }) => {

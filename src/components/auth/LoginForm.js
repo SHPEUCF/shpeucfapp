@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 import {
   emailChanged,
@@ -9,7 +9,7 @@ import {
   goToRegistration,
   registrationError
 } from '../../ducks';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Spinner, Button, Input } from '../general';
 const dimension = Dimensions.get('window');
 
@@ -29,13 +29,13 @@ class LoginForm extends Component {
         password
       } = this.props;
 
-    if(email === null || email === undefined){
+    if(email === null || email === undefined ||  email === ''){
       this.props.registrationError('Please enter your knights email')
-      return
-    } else if ( password === null || password === undefined){
+    } 
+    else if ( password === null || password === undefined || password === ''){
       this.props.registrationError('Please enter your password')
-      return
-    } else{
+    } 
+    else{
       this.props.loginUser({ email, password });
     }
   }
@@ -115,6 +115,13 @@ class LoginForm extends Component {
       headerSubtitleStyle,
     } = styles
     return (
+      <KeyboardAwareScrollView
+      style={{backgroundColor:  "#0c0b0b"}}
+      resetScrollToCoords={{ x: 0, y: 0}}
+      contentContainerStyle={{flexGrow: 1}}
+      scrollEnabled={true}
+      enableOnAndroid={true}
+      >
       <SafeAreaView style={formContainerStyle}>
         <View style={{flex: 1, backgroundColor: "#FECB00"}}>
           <View style={{flex: .1}}></View>
@@ -155,6 +162,7 @@ class LoginForm extends Component {
         {this.renderError()}
         {this.renderButtons()}
       </SafeAreaView>
+      </KeyboardAwareScrollView>
     );
 
   }
@@ -167,7 +175,7 @@ class LoginForm extends Component {
 const styles = StyleSheet.create({
   formContainerStyle: {
     backgroundColor: '#0c0b0b',
-    flex: 1,
+    height: dimension.height
   },
   headerContainer:{
     flex: .6,

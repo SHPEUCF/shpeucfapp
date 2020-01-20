@@ -31,6 +31,7 @@ import {
   goToLogIn,
   genderChanged,
    } from '../../ducks';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const collegeNames = [];
 collegesJson.map(college => {collegeNames.push(college.collegeName)});

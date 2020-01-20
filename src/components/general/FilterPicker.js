@@ -15,6 +15,7 @@ import { Avatar } from 'react-native-elements'
 import { Alert } from 'react-native';
 import { Button } from './Button'
 import { Actions } from 'react-native-router-flux';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 
 
@@ -100,11 +101,22 @@ class FilterPicker extends Component {
                                 </View>
                                 <View style = {{alignItems: "flex-end", flexDirection: "row", flex: .4}}>
                                 <View style = {{flex: .2}}></View>
-                                <Avatar   
-                                size={dimension.height*.08}
+                                {(user.picture === '') && (
+                                <Avatar
+                                size = {dimension.height*.08}
                                 rounded
-                                source={{uri: user.picture}}
+                                titleStyle={{backgroundColor: this.props.dashColor}}
+                                overlayContainerStyle={{backgroundColor: "black"}}
+                                title={user.firstName[0].concat(user.lastName[0])}
                                 />
+                                )}
+                                {(user.picture !== '') && (
+                                <Avatar
+                                size = {dimension.height*.08}
+                                rounded
+                                source= {{uri: user.picture}}
+                                />
+                                )}
                                 </View>
                             </View>
                             <View style={{flex:.1}}></View>
@@ -157,11 +169,22 @@ class FilterPicker extends Component {
                                 color={"#FECB00"}
                                 />
                                 <View style = {{flex: .2}}></View>
-                                <Avatar   
-                                size={dimension.height*.08}
+                                {(user.picture === '') && (
+                                <Avatar
+                                size = {dimension.height*.08}
                                 rounded
-                                source={{uri: user.picture}}
+                                titleStyle={{backgroundColor: this.props.dashColor}}
+                                overlayContainerStyle={{backgroundColor: "black"}}
+                                title={user.firstName[0].concat(user.lastName[0])}
                                 />
+                                )}
+                                {(user.picture !== '') && (
+                                <Avatar
+                                size = {dimension.height*.08}
+                                rounded
+                                source= {{uri: user.picture}}
+                                />
+                                )}
                                 </View>
                             </View>
                             <View style={{flex:.1}}></View>
@@ -241,12 +264,20 @@ class FilterPicker extends Component {
             <Modal
             transparent={true}
             visible={this.state.modalVisible}>
+            <KeyboardAwareScrollView
+            style={{backgroundColor:  "#0c0b0b"}}
+            resetScrollToCoords={{ x: 0, y: 0}}
+            contentContainerStyle={{flexGrow: 1}}
+            scrollEnabled={false}
+            enableOnAndroid={true}
+            >
                 <SafeAreaView style={modalBackground}>
                     <View style={modalStyle}>
                         <Input
                         style={[inputStylee, inputStyleee]}
                         onChangeText={onChangeText}
                         value={this.props.filter}
+                        placeholder="Search"
                         />
                         <View style={flatlistStyle}>
                             <FlatList
@@ -258,7 +289,7 @@ class FilterPicker extends Component {
                             )}
                             />
                         </View>
-                        <View style={{height: dimension.height *.08, backgroundColor: "#0c0b0b"}}></View>
+                        <View style={{height: dimension.height *.08, backgroundColor: "black"}}></View>
                         <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
                             <View style={{flex: .3}}></View>
                             <View style={{flex: 1}}>
@@ -272,6 +303,7 @@ class FilterPicker extends Component {
                         </View>
                     </View>
                 </SafeAreaView>
+             </KeyboardAwareScrollView>
             </Modal>
         </SafeAreaView>
         }
@@ -281,12 +313,20 @@ class FilterPicker extends Component {
             <Modal
             transparent={true}
             visible={this.state.modalVisible && this.props.visible}>
+            <KeyboardAwareScrollView
+            style={{backgroundColor:  "#0c0b0b"}}
+            resetScrollToCoords={{ x: 0, y: 0}}
+            contentContainerStyle={{flexGrow: 1}}
+            scrollEnabled={false}
+            enableOnAndroid={true}
+            >
                 <SafeAreaView style={modalBackground}>
                     <SafeAreaView style={modalStyle}>
                         <Input
                         style={[inputStylee, inputStyleee]}
                         onChangeText={onChangeText}
                         value={this.props.filter}
+                        placeholder="Search"
                         />
                         <View style={flatlistStyle}>
                             <FlatList
@@ -298,8 +338,8 @@ class FilterPicker extends Component {
                             )}
                             />
                         </View>
-                        <View style = {{height: dimension.height *.08, backgroundColor: "#0c0b0b"}}>
-                            <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%", backgroundColor: "#0c0b0b"}}>
+                        <View style = {{height: dimension.height *.08, backgroundColor: "black"}}>
+                            <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%", backgroundColor: "black"}}>
                                 <View style={{flex: .45}}>
                                     <Button 
                                     title = "Done"
@@ -316,18 +356,22 @@ class FilterPicker extends Component {
                         </View>
                     </SafeAreaView>
                 </SafeAreaView>
+                </KeyboardAwareScrollView>
             </Modal>
+        
         }
 
         else if (this.props.type === "Searchbar") {
             picker = 
-            <View style = {{height: dimension.height *.1}}>
-                <Input
-                style={[inputStylee, inputStyleee, {flex: 1}]}
-                onChangeText={onChangeText}
-                value={this.props.filter}
-                />
-            </View>
+            
+                <View style = {{height: dimension.height *.1}}>
+                    <Input
+                    style={[inputStylee, inputStyleee, {flex: 1}]}
+                    onChangeText={onChangeText}
+                    value={this.props.filter}
+                    placeholder="Search"
+                    />
+                </View>
         }
 
         return (
@@ -414,7 +458,7 @@ const styles = {
         marginTop: 8,
         marginBottom: 8,
         padding: 15,
-        backgroundColor: '#DCDCDC',
+        backgroundColor: 'white',
         borderRadius: 0,
       },
       containerStyle: {

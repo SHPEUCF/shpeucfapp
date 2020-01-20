@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity,TextInput, Image, Dimensions, Platform } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity,TextInput, Image, Dimensions, Platform, SafeAreaView} from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { PickerInput, Input, Button, Spinner, DatePicker } from '../general';
@@ -27,6 +27,9 @@ import {
   editUser,
   goToProfile,
   } from '../../ducks';
+  import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
+  const dimension = Dimensions.get('screen');
 
 const collegeNames = [];
 collegesJson.map(college => {collegeNames.push(college.collegeName)});
@@ -146,9 +149,13 @@ class EditProfileForm extends Component {
       );
     };
     return (
-      <View>
-        {this.renderConfirmButton()}
-        {this.renderCancelButton()}
+      <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+          <View style={{flex: .45}}>
+              {this.renderConfirmButton()}
+          </View>
+          <View style={{flex: .45}}>
+              {this.renderCancelButton()}
+          </View>
       </View>
     );
   }
@@ -294,45 +301,30 @@ class EditProfileForm extends Component {
       )
   }
 
-
   render() {
     var content = this.renderPickers();
     if (this.checkPrivilege('eboard')) content = this.renderIfEboard(); 
     return (
-      <View style={styles.container}>
-        <View style={styles.formContainerStyle}>
-          <View style={styles.headerStyle}>
-            <Text style={styles.headerTextStyle}>Edit Profile</Text>
-
-          </View>
-
-          <ScrollView
-          ref={'scrollView'}
-          decelerationRate={0}
-          snapToAInterval={300}
-          snapToAlignment={"center"}
-          style={styles.scrollView}>
-
-          
-            {content}
-            {/* <Input
-              placeholder='Quote'
-              autoCapitalize='sentences'
-              maxLength={175}
-              numberOfLines={5}
-              multiline={true}
-              value={this.props.quote}
-              onChangeText={this.onQuoteChange.bind(this)}
-              textAlignVertical='top'
-            /> */}
-          </ScrollView>
-
-          {this.renderError()}
-          {this.renderButtons()}
-
-
-        </View>
-      </View>
+      <SafeAreaView style={styles.formContainerStyle}>
+                    <View style={{backgroundColor: "black", flex: 1}}>
+                    <View style={{flex: .02}}></View>
+                    <View style={styles.headerStyle}>
+                        <Text style={styles.headerTextStyle}>{this.props.title}</Text>
+                    </View>
+                    <View style={{flex: .02}}></View>
+                    <ScrollView
+                    ref={(ref)=> (this.scrollView=ref)}
+                    style={styles.scrollView}>
+                        <View>
+                            {content}
+                        </View>
+                    </ScrollView>
+                    <View style={{flex: .5}}></View>
+                        {this.renderError()}
+                        {this.renderButtons()}
+                    </View>
+                    <View style={{height: dimension.height *.08, backgroundColor: "black"}}></View>
+                </SafeAreaView>
     );
   }
 }
@@ -341,73 +333,99 @@ const { height: D_HEIGHT, width: D_WIDTH } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#2C3239',
-    justifyContent: 'flex-end',
+      flex: 1,
+      justifyContent: 'flex-end',
+  },
+  itemStyle: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'column',
+      borderBottomColor: '#0002',
+      borderBottomWidth: 1
+  },
+  itemTextStyle: {
+      paddingTop: dimension.height * .03,
+      paddingBottom: dimension.height * .03,
+      flex: 1,
+      fontSize: 16,
+      alignSelf:'center',
   },
   formContainerStyle: {
-    flex:1,
-    marginLeft: 20,
-    marginRight: 20,
-    paddingTop: 30,
-    paddingBottom:10,
+      flex: 1,
+      backgroundColor: '#0c0b0b'
   },
   headerStyle: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 5,
-    marginBottom: 10,
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flex:.5
   },
   headerTextStyle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#e0e6ed'
+      fontSize: 22,
+      fontWeight: 'bold',
+      color: '#e0e6ed'
   },
   errorTextStyle: {
-    fontSize: 14,
-    alignSelf: 'center',
-    color: 'red',
-    fontWeight: 'bold',
-    padding: 10,
+      fontSize: 14,
+      alignSelf: 'center',
+      color: 'red',
+      fontWeight: 'bold',
+      padding: 10,
   },
-  formButton: {
-    marginTop: 10,
-    marginBottom: 10
-  },
-  logInButton: {
-    fontWeight: 'bold',
-    color: '#000'
-  },
-  logInContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 10
-  },
-  blackText: {
-    color: 'black'
-  },
-  quoteBox: {
-    height: 100,
-    padding: 15,
-    color:'gray',
-    paddingTop: 20,
-    backgroundColor: 'white',
-    borderRadius: 25
-  },
-  pickerTextInput:{
-    flex:1,
-    flexDirection:'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+  pickerTextInput: {
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
   },
   scrollView: {
-    flex: 0,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingRight: 10,
-  }
+      backgroundColor: "black",
+      height: "50%",
+      paddingTop: 0,
+      paddingBottom: 0,
+      paddingLeft: "5%",
+      paddingRight: "5%",
+  },
+  titleStyle: {
+      flex: .13,
+      alignSelf: 'center',
+      fontSize: 20
+  },
+  buttonStyle: {
+      flex: 1,
+      alignSelf: 'center'
+  },
+  flatlistStyle: {
+      flex: .8
+  },
+  buttonContainer:{
+      flex:.2,
+      flexDirection: 'row',
+      borderTopColor: '#0001',
+      borderTopWidth: 1
+  },
+  textStyle:{
+      flex: 1,
+      alignSelf: 'center',
+      fontSize: 18,
+      paddingTop: 5
+  },
+  modalBackground: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#0003',
+      margin: 0,
+      height: dimension.height,
+      width: dimension.width,
+  },
+  modalStyle: {
+      height: dimension.height*.4,
+      width: dimension.width*.8,
+      backgroundColor:'#fff',
+      padding: 12,
+      borderRadius: 12,
+  },
 });
 
 const mapStateToProps = ({ user }) => {
