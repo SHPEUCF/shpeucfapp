@@ -513,7 +513,7 @@ const createUserSuccess = (dispatch, firstName, lastName, email, college, major,
             applied: false,
             flag: "",
             color: '#21252b',
-            committees: "null"
+            committees: null
         })
         .then(() => {firebase.database().ref(`/points/${id}/`).set({
             firstName: firstName,

@@ -11,7 +11,7 @@ const ACTIONS = createActiontypes([
     'COMMITTEE_DESCRIPTION_CHANGED',
     'COMMITTEE_TITLE_CHANGED',
     'CHAIR_CHANGED',
-    'LOAD_COMMITTEE'
+    'LOAD_COMMITTEE',
 ]);
 
 const INITIAL_STATE = {
@@ -230,3 +230,70 @@ export const getCommittees = () => {
     .catch((error) => alert('Order could not be set!', 'Failure'))
     };
   }; 
+
+  export const pendingJoin = (committee, memberId) => {
+    return (dispatch) => {
+        //this needs to find the person but it needs to check for duplicates somehow
+
+        //Alert.alert(candidateId);
+        firebase.database().ref(`/committees/${committee}/pendingMembers/`).update({
+                [memberId]: true
+        })
+        .then(() => alert('Pending Approval!', 'Successful'))
+        .catch((error) => alert('Not succesful!', 'Failure'))
+
+    }
+};
+
+  export const approveJoin = (committee, memberId, dateStr, board) => {
+    return (dispatch) => {
+        //this needs to find the person but it needs to check for duplicates somehow
+
+        //Alert.alert(candidateId);
+        firebase.database().ref(`/committees/${committee}/joinedMembers/`).update({
+                [memberId]: true
+        })
+        .then(() => {
+            firebase.database().ref(`points/${valId}/points`).once('value', snapshot => {
+                points = parseInt(snapshot.val()) + 3;
+                firebase.database().ref(`points/${valId}/points`).set(points)
+                .then(() => firebase.database().ref(`points/${valId}/breakdown/${committee}/`).push({
+                    board: board,
+                    points: 3,
+                    name: "Join Committee",
+                    date: dateStr,
+                    committee: committee,
+                }))
+                .then(() => firebase.database().ref(`users/${valId}/points`).set(points))
+            })
+        .then(() => alert('Member Approved!', 'Successful'))
+        .catch((error) => alert('Member could not be Approved!', 'Failure'))
+
+    })
+    }
+  }
+
+export const deleteMemberFromCom = (committee, memberId, status) => {
+    return (dispatch) => {
+        //this needs to find the person but it needs to check for duplicates somehow
+
+        //Alert.alert(candidateId);
+
+        if(status === "pending"){
+        firebase.database().ref(`/committees/${committee}/pendingMembers/`).update({
+            [memberId]: null
+        })
+        .then(() => alert('Member Removed!', 'Successful'))
+        .catch((error) => alert('Member could not be Removed!', 'Failure'))
+        }
+
+        if(status === "joined"){
+        firebase.database().ref(`/committees/${committee}/joinedMembers/`).update({
+            [memberId]: null
+        })
+        .then(() => alert('Member Removed!', 'Successful'))
+        .catch((error) => alert('Member could not be Removed!', 'Failure'))
+        }
+
+    }
+};
