@@ -19,7 +19,8 @@ class App extends Component {
       projectId: "shpe-ucf",
       storageBucket: "shpe-ucf.appspot.com",
       messagingSenderId: "974032317047",
-    };
+      appId: "1:974032317047:web:0a4a2ad01ac705b90ff472"
+      };
     firebase.initializeApp(config)
     
     // firebase.auth().signOut();
@@ -38,6 +39,7 @@ class App extends Component {
               this.props.loggedIn = true
               Actions.main();
             } else {
+              alert("Please update your app")
               firebase.auth().signOut();
               this.props.loggedIn = false
 
@@ -61,8 +63,8 @@ class App extends Component {
 }
 
 const mapStateToProps = ({ user }) => {
-  const { loggedIn, error } = user;
-  return { loggedIn, error };
+  const { loggedIn } = user;
+  return { loggedIn };
 };
 
 const mapDispatchToProps = { goToLogIn, registrationError };
