@@ -61,7 +61,6 @@ class EventDetails extends Component {
         this.props.endTimeChanged(this.convertHour(this.props.endTime))
     }
 
-
     convertNumToDate(date) {
         var months = ["Jan", "Feb", "Mar", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
         temp_date = date.split("-");
@@ -294,9 +293,9 @@ class EventDetails extends Component {
             textColor
         } = styles
 
-        if(eventList === null || eventList === undefined) {return null}
+        if (eventList === null || eventList === undefined) {return null}
 
-        if(eventList[eventID] === null || eventList[eventID] === undefined) {return null}
+        if (eventList[eventID] === null || eventList[eventID] === undefined) {return null}
 
         if(privilege !== undefined && privilege.board === true && eventList !== undefined && eventList[eventID] !== undefined && eventList[eventID].attendance !== undefined) {
             var attendants = Object.keys(eventList[eventID].attendance)
@@ -393,6 +392,60 @@ class EventDetails extends Component {
 
         rsvp(eventID, userID);
     }
+
+    eventListNum() {
+        
+
+        return "10 people";
+    }
+
+    renderEventListNum(iconSize) {
+        const {
+            privilege,
+            eventList,
+            eventID
+        } = this.props;
+
+        const {
+            icon,
+            icon_container,
+            text,
+            textColor
+        } = styles;
+
+        let numRSVP = 0, numAttendance;
+
+        if (eventList != undefined && eventList[eventID] != undefined) {
+            if (eventList[eventID].attendance != undefined)
+                numAttendance = Object.keys(eventList[eventID].attendance).length;
+            if (eventList[eventID].rsvp != undefined)
+                numRSVP = Object.keys(eventList[eventID].rsvp).length;
+        }
+
+        if (privilege != null && privilege.board) {
+            return ([
+                <View style={icon_container}>
+                    <Ionicons style={[icon, textColor]} name="ios-people" size={iconSize} color='#000'/>
+                    <Text style={[text, textColor]}>{numRSVP} {(numRSVP == 1) ? "person" : "people"} RSVP'd</Text>
+                </View>,
+                numAttendance != undefined && <View style={icon_container}>
+                    <Ionicons style={[icon, textColor]} name="md-people" size={iconSize} color='#000'/>
+                    <Text style={[text, textColor]}>{numAttendance} {(numAttendance == 1) ? "person" : "people"} attended</Text>
+                </View>
+            ])
+        }
+    }
+
+    limitRSVP(date) {
+        temp_date = date.split("-");
+        let thisdate = new Date(), month = (thisdate.getMonth() + 1), 
+            year = thisdate.getFullYear(), day = (thisdate.getDate());
+
+        if (temp_date[0] >= parseInt(year) &&
+            temp_date[1] >= parseInt(month) &&
+            temp_date[2] > parseInt(day))
+            return true;
+    }
     
     checkInMembers(selectedUsers){
         const {
@@ -479,12 +532,12 @@ class EventDetails extends Component {
                                 this.setState({modalVisible: true})
                             }}
                         />
-                        <Button
+                        {(this.limitRSVP(this.props.date)) && (<Button
                             title = "RSVP"
                             onPress = {() => {
                                 this.renderRSVP()
                             }}
-                        />
+                        />)}
                     </View>
                 <View style={{flex: .3}}></View>
             </View>
@@ -519,33 +572,31 @@ class EventDetails extends Component {
                 final
             } = styles
 
-            var viewName = type + ": " + name;
-            if (committee !== ''){
-            viewName = committee + ": " + name;
-            }
+            let viewName = type + ": " + name, iconSize = 25;
+            if (committee !== '') viewName = committee + ": " + name;
 
-            var iconSize = 25
             return (
                 <SafeAreaView style={page}>
                     <NavBar title={viewName} back onBack={() => Actions.pop()} />
                     {this.renderPickMembers()}
                     <View style={container}>
-                    <View style={icon_container}>
-                            <Ionicons style={[icon, textColor]} name="md-calendar" size={iconSize} color='#000000'/>
+                        <View style={icon_container}>
+                            <Ionicons style={[icon, textColor]} name="md-calendar" size={iconSize} color='#000'/>
                             <Text style={[text, textColor]}>{this.convertNumToDate(date)}</Text>
                         </View>
                         <View style={icon_container}>
-                            <Ionicons style={[icon, textColor]} name="md-time" size={iconSize} color='#000000'/>
+                            <Ionicons style={[icon, textColor]} name="md-time" size={iconSize} color='#000'/>
                             <Text style={[text, textColor]}>{startTime}-{endTime}</Text>
                         </View>
                         <View style={icon_container}>
-                            <Ionicons style={[icon, textColor]} name="md-pin" size={iconSize} color='#000000'/>
+                            <Ionicons style={[icon, textColor]} name="md-pin" size={iconSize} color='#000'/>
                             <Text style={[text, textColor]}>{location}</Text>
                         </View>
                         {(description != '') && (<View style={[icon_container, {flex: .7}]}>
-                            <Ionicons style={[icon, textColor]} name="md-list" size={iconSize} color='#000000'/>
+                            <Ionicons style={[icon, textColor]} name="md-list" size={iconSize} color='#000'/>
                             <Text style={[text, textColor]}>{description}</Text>
                         </View>)}
+                        {this.renderEventListNum(iconSize)}
                         <View style = {[icon_container, final]}>
                             {this.renderAttendance()}
                         </View>

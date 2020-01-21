@@ -300,7 +300,7 @@ export const deleteEvents = (eventIDs) => {
 
 export const checkIn = (eventID, val, id, board) => {
 	const { currentUser } = firebase.auth();
-	let points, valId = currentUser.uid;
+	let points = 0, valId = currentUser.uid, rsvpd = false;
 	
 	if (id) valId = id;
 
@@ -308,7 +308,11 @@ export const checkIn = (eventID, val, id, board) => {
 		return (dispatch) => {
 			firebase.database().ref(`events/${eventID}/attendance/${valId}`).once('value', snapshot => {
 				firebase.database().ref(`events/${eventID}/rsvp/${valId}`).once('value', snapshot => {
-					points = (snapshot.exists()) ? 1 : 0;
+					if (snapshot.exists()) {
+						points++;
+						rsvpd = true;
+						val++;
+					}
 				})
 				.then(() => firebase.database().ref(`points/${valId}/points`).once('value', snapshot => {
 					points += parseInt(snapshot.val()) + parseInt(val);
@@ -322,7 +326,8 @@ export const checkIn = (eventID, val, id, board) => {
 							name: snapshot.val().name,
 							date: snapshot.val().date,
 							committee: snapshot.val().committee,
-							board: board
+							board: board,
+							rsvp: rsvpd
 						})})
 						.then(() => firebase.database().ref(`users/${valId}/points`).set(points))
 					})
@@ -338,7 +343,11 @@ export const checkIn = (eventID, val, id, board) => {
 					firebase.database().ref(`events/${eventID}/attendance/${valId}`).once('value', snapshot => {
 						if (!snapshot.exists()) {
 							firebase.database().ref(`events/${eventID}/rsvp/${valId}`).once('value', snapshot => {
-								points = (snapshot.exists()) ? 1 : 0;
+								if (snapshot.exists()) {
+									points++;
+									rsvpd = true;
+									val++;
+								}
 							})
 							.then(() => firebase.database().ref(`points/${valId}/points`).once('value', snapshot => {
 								points += parseInt(snapshot.val()) + parseInt(val);
@@ -352,6 +361,7 @@ export const checkIn = (eventID, val, id, board) => {
 										name: snapshot.val().name,
 										date: snapshot.val().date,
 										committee: snapshot.val().committee,
+										rsvp: rsvpd
 									}))
 									.then(() => firebase.database().ref(`users/${valId}/points`).set(points))
 									.then(() => Alert.alert('Checked In', 'Successful'))
