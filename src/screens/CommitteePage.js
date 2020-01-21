@@ -5,6 +5,7 @@ import { Text, View, StyleSheet, ScrollView, TextInput, Dimensions, TouchableOpa
 import * as Progress from 'react-native-progress';
 import _ from 'lodash';
 import { Spinner, NavBar, Input, Button } from '../components/general'
+import { Avatar } from 'react-native-elements'
 import CodeBox from '../components/event/CodeBox'
 import { Actions } from 'react-native-router-flux';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
@@ -35,7 +36,9 @@ import {
   goToCreateEvent,
   pendingJoin,
   approveJoin,
-  deleteMemberFromCom
+  deleteMemberFromCom,
+  loadCommittee, 
+  openJoin
 }
 from '../ducks';
 import Flag from 'react-native-flags'
@@ -53,7 +56,7 @@ class CommitteePage extends Component {
 
 	constructor(props) {
         super(props);
-        this.state ={status: "closed", day: new Date(), visible: true}
+        this.state ={status: "closed", day: new Date(), visible: true, pending: false, joined: false, update: false}
       }
 
       chooseToday(){
@@ -68,6 +71,13 @@ class CommitteePage extends Component {
         let stringDate = `${year}-${month}-${day}`
         dateStr = stringDate
         initDate = stringDate
+      }
+
+      componentDidUpdate(prevProps){
+
+        if(prevProps.committeesList !== this.props.committeesList){
+            this.props.loadCommittee(this.props.committeesList[this.props.committeeTitle])
+        }
       }
     
       static onRight = function(){
@@ -112,20 +122,19 @@ class CommitteePage extends Component {
 		  modalText
       } = styles;
 
-
 	  return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#0c0b0b'}}>
          <View style = {{flexDirection: "row", justifyContent: "space-between", backgroundColor: "black", paddingRight: "10%"}}>
             <NavBar title={this.props.committeeTitle} back onBack={() => Actions.pop()} />
             <View style = {{flex: .6, alignItems: "center", flexDirection: "row", justifyContent: "center", backgroundColor: "black"}}>
-                {this.renderMemberStatus()}
+                {/* {this.renderMemberStatus()}
                 <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
                     <Ionicons name="ios-calendar" size={dimension.height * .03} onPress = {() => this.setState({visible: !this.state.visible})} style={{color: '#FECB00'}}/>
-                </View>
+                </View> */}
             </View>
             </View>
-        <ScrollView style={{flex: 1, backgroundColor: "#535C68"}}>
-            <View style= {{flex: 1, height: dimension.height * 1}}>
+        <View style={{flex: 1, backgroundColor: "#535C68"}}>
+            <View style= {{flex: 1, height: dimension.height * 1.1}}>
             <View style = {{height: dimension.height * .09, justifyContent: "center",}}>
             {this.renderGreeting()}
             </View>
@@ -133,7 +142,6 @@ class CommitteePage extends Component {
             (<View style= {{backgroundColor: "black", flex: .95, marginLeft: "3%", marginRight: "3%"}}>
                 <View style={{flex:1}}>
                  <Agenda
-                    key={JSON.stringify(this.props.eventList)}
                     dashColor={this.props.dashColor}
                     ref={child => {this.child = child}} {...this.props}
                     selected={this.state.day}
@@ -183,13 +191,16 @@ class CommitteePage extends Component {
                     </Text>
                 </TouchableOpacity>)}
                 </View>
+                
                 <View style={{flex: .1}}>
                      {this.renderButton()}
                 </View>
                 </View>)}
-                {/*{this.renderSelect()}*/}
+                <View style={{flex: .05}}></View>
+                {/* {this.renderSelect()} */}
+                <View style={{flex: .05}}></View>
                 </View>
-         </ScrollView>
+         </View>
       </SafeAreaView>
 	  );
    }
@@ -202,22 +213,49 @@ class CommitteePage extends Component {
             approveJoin,
             deleteMemberFromCom,
             id,
-            committeeTitle
+            committeeTitle,
+            joinOpened
         } = this.props
-        
-        if ((joinedMembers === undefined || joinedMembers === null) && (pendingMembers === undefined || pendingMembers === null)){
-            return (
+
+        if(this.props.chair.id === this.props.id && this.joinOpened){
+          return(
             <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
-                 <Ionicons name="md-person-add" size={dimension.height * .03} 
-                 onPress = {() => {
-                    this.props.pendingJoin(committeeTitle, id)
-                 }} 
-                 style={{color: '#FECB00'}}/>
+                <Ionicons name="md-person-add" size={dimension.height * .03} 
+                onPress = {() => {
+                    this.props.openJoin(committeeTitle, true)
+                }} 
+                style={{color: '#FECB00'}}/>
             </View>
-            )
+          )
+        }
+
+        else if(this.props.chair.id === this.props.id){
+          <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
+              <Ionicons name="md-add-circle" size={dimension.height * .03} 
+              onPress = {() => {
+                  this.props.openJoin(committeeTitle, false)
+              }} 
+              style={{color: '#FECB00'}}/>
+          </View>
         }
         
-        if (joinedMembers === undefined || joinedMembers === null){
+        if ((joinedMembers === undefined || joinedMembers === null) && (pendingMembers === undefined || pendingMembers === null)){
+            if (joinOpened){
+              return (
+              <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
+                  <Ionicons name="md-person-add" size={dimension.height * .03} 
+                  onPress = {() => {
+                      this.props.pendingJoin(committeeTitle, id)
+                  }} 
+                  style={{color: '#FECB00'}}/>
+              </View>
+              )
+            }
+
+            else return null
+        }
+        
+        if ((joinedMembers === undefined || joinedMembers === null) && joinOpened){
             return (
             <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
                     <Ionicons name="ios-alert" size={dimension.height * .03} 
@@ -267,7 +305,7 @@ class CommitteePage extends Component {
              )
         }
 
-        else {
+        else if (joinOpened) {
             return (
                 <View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
                      <Ionicons name="md-person-add" size={dimension.height * .03} 
@@ -279,6 +317,8 @@ class CommitteePage extends Component {
             )
         }
 
+        else return null
+
    }
 
 
@@ -286,16 +326,11 @@ class CommitteePage extends Component {
 
    renderSelect(){
     if(this.props.chair.id === this.props.id){
-
-        if(this.props.joinedMembers){
-
-        }
-
         return(
-            <View style = {{alignItems: "center"}}>
-               {this.renderJoined()}
-               {this.renderPending()}
-               {this.renderLinks()}
+            <View>
+              {this.renderButtons()}
+              {this.renderMembers(this.props.joinedMembers, "joined")}
+              {this.renderMembers(this.props.pendingMembers, "pending")}
             </View>
         )
     }
@@ -303,17 +338,88 @@ class CommitteePage extends Component {
         else  return null
     }   
 
-    renderJoined(){
-        if (this.props.joinedMembers === null || this.props.joinedMembers === undefined) {
-            return (<Text style={{color: "white", fontSize: 16}}>No Committee Members</Text>)
+    renderButtons(){
+      return(
+      <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "flex-start"}}>
+          <View style={{flex: .45}}>
+              <Button
+                title = "Current Members"
+                onPress={() => {
+                  this.setState({joined: true})
+                }}
+              />
+            </View>
+            <View style={{flex: .45}}>
+              <Button
+                title = "Pending Members"
+                onPress={() => {
+                  this.setState({pending: true})
+                }}
+              />
+            </View>
+      </View>)
+    }
+
+    renderMembers(members, status){
+
+        const{
+          userList
+        } = this.props
+
+        const {
+          containerStyle,
+          contentContainerStyle,
+          textStyle,
+      } = styles
+
+        if (members === null || members === undefined || Object.keys(members).length === 0) {            
+            return
         }
 
+
         return(
-            <View>
-                {Object.keys(this.props.joinedMembers).map(item => (
-                    this.renderJoinedMembers(item)
-                ))}
-            </View>
+            <Modal transparent={true} visible={this.state[status]}>
+              <View>
+              {Object.keys(members).map(user => (
+                 <View style={[contentContainerStyle]}>
+                 <View style={containerStyle}>
+                     <View style={{flex:.1}}></View>
+                     <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
+                         <View style = {{flex: 1}}>
+                         <Text style={ [textStyle, {fontWeight: 'bold'}]}>{`${userList[user].firstName} ${userList[user].lastName}`}</Text>
+                         </View>
+                         <View style = {{alignItems: "flex-end", flexDirection: "row", flex: .4}}>
+                         <Ionicons
+                         onPress={() => this.props.callUser(user.id)}
+                         name={'ios-arrow-dropright-circle'}
+                         size={dimension.height*.04}
+                         color={"#FECB00"}
+                         />
+                         <View style = {{flex: .2}}></View>
+                         {(userList[user].picture === '') && (
+                         <Avatar
+                         size = {dimension.height*.08}
+                         rounded
+                         titleStyle={{backgroundColor: this.props.dashColor}}
+                         overlayContainerStyle={{backgroundColor: "black"}}
+                         title={userList[user].firstName[0].concat(userList[user].lastName[0])}
+                         />
+                         )}
+                         {(user.picture !== '') && (
+                         <Avatar
+                         size = {dimension.height*.08}
+                         rounded
+                         source= {{uri: userList[user].picture}}
+                         />
+                         )}
+                         </View>
+                     </View>
+                     <View style={{flex:.1}}></View>
+                 </View>
+             </View>
+              ))}
+              </View>
+            </Modal>
         )
     }
 
@@ -453,7 +559,7 @@ class CommitteePage extends Component {
 
 
    getFormattedEventList(eventList) {
-    if (this.props.committeeEvents === null || this.props.committeeEvents === undefined){
+    if (this.props.committeeEvents === null || this.props.committeeEvents === undefined || this.props.eventList === null || this.props.eventList === undefined){
         return {}
     }
 
@@ -705,8 +811,8 @@ const mapStateToProps = ({ user, general, members, events, elect, committees }) 
 	const { membersPoints, userList } = members;
 	const { eventList } = events;
 	const { election } = elect
-	const { committeeTitle, committeeEvents, chair, description, pendingMembers, joinedMembers, links } = committees 
-	return { firstName, id, loading, privilege, membersPoints, eventList, election, dashColor, flag, userCommittees, committeeEvents, committeeTitle, chair, description, pendingMembers, joinedMembers, links, committeeTitle,  userList};
+	const { committeeTitle, committeeEvents, chair, description, pendingMembers, joinedMembers, links, joinOpened, committeesList } = committees 
+	return { firstName, id, loading, privilege, membersPoints, eventList, election, dashColor, flag, userCommittees, committeeEvents, committeeTitle, chair, description, pendingMembers, joinedMembers, links, committeeTitle,  userList, joinOpened, committeesList};
 };
 
  const mapDispatchToProps = {
@@ -736,7 +842,9 @@ const mapStateToProps = ({ user, general, members, events, elect, committees }) 
   goToCreateEvent,
   pendingJoin,
   approveJoin,
-  deleteMemberFromCom
+  deleteMemberFromCom,
+  loadCommittee, 
+  openJoin
 };
 
  export default connect(mapStateToProps, mapDispatchToProps)(CommitteePage);

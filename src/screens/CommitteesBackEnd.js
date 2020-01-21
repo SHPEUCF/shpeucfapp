@@ -33,6 +33,18 @@ import {
     this.props.fetchAllUsers();
   }
 
+  componentDidUpdate(prevProps){
+
+    if(prevProps.committeesList !== this.props.committeesList){
+        this.setState({data: (_.orderBy(this.props.committeesList, iteratees, order)).map((d, index) => ({
+          committee: d,
+          key: `item-${index}`,
+          label: index,
+          backgroundColor: '#fff',
+        }))})
+    }
+  }
+
   state = {
     data: (_.orderBy(this.props.committeesList, iteratees, order)).map((d, index) => ({
       committee: d,
