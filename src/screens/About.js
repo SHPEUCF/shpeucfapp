@@ -22,7 +22,7 @@ const dimension = Dimensions.get('window');
       title: 'Version',
       icon: 'beenhere',
       screen: 'Version',
-      content: "Current version: v1.0-alpha",
+      content: "Current version: v1.1",
       footer: 'Check our GitHub Page - SHPEUCF'
     }
     ];
