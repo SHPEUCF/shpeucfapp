@@ -353,12 +353,18 @@ class EventDetails extends Component {
             userList,
             eventList,
             eventID,
-            filterChanged
+            filterChanged,
         } = this.props;
 
         if (eventList === null || eventList === undefined) {return null}
 
-        let excludeDataProp = (eventList[eventID] === null || eventList[eventID] === undefined) ? {} : eventList[eventID].attendance  
+        let excludeDataProp = (eventList[eventID] === null || eventList[eventID] === undefined) ? {} : Object.assign({}, eventList[eventID].attendance)
+
+        if (excludeDataProp === null || excludeDataProp === undefined){
+            excludeDataProp = {[this.props.id]: true}
+        }
+
+        else Object.assign(excludeDataProp, {[this.props.id]: true})
 
         return (
             <View>
@@ -523,23 +529,36 @@ class EventDetails extends Component {
             )
             }else
             return(
-            <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+            <View>
+            {(this.limitRSVP(this.props.date)) && (<View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+                <View style={{flex: .45}}>
+                    <Button 
+                        title = "Check in"
+                        onPress={() => {
+                            this.setState({modalVisible: true})
+                        }}
+                    />
+                </View>
+                <View style={{flex: .45}}>
+                <Button
+                    title = "RSVP"
+                    onPress = {() => {
+                        this.renderRSVP()
+                    }}/>
+                </View>
+            </View>)}
+            {(!this.limitRSVP(this.props.date)) && (<View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
                 <View style={{flex: .3}}></View>
                     <View style={{flex: 1}}>
                         <Button 
-                            title = "CHECK IN"
+                            title = "Check in"
                             onPress={() => {
                                 this.setState({modalVisible: true})
                             }}
                         />
-                        {(this.limitRSVP(this.props.date)) && (<Button
-                            title = "RSVP"
-                            onPress = {() => {
-                                this.renderRSVP()
-                            }}
-                        />)}
                     </View>
                 <View style={{flex: .3}}></View>
+            </View>)}
             </View>
         )
     }

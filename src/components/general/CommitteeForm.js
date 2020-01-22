@@ -132,14 +132,14 @@ class CommitteeForm extends Component {
                     <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .1, width:"100%"}}>
                         <View style={{flex: .45}}>
                             <Button 
-                                title = {this.props.title + " COMMITTEE"}
+                                title = {"Done"}
                                 onPress={() => { 
                                     this.onButtonPress()}}
                             />
                         </View>
                         <View style={{flex: .45}}>
                             <Button 
-                               title = "CANCEL"
+                               title = "Cancel"
                                onPress={() => Actions.pop()}
                             />
                         </View>

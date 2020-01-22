@@ -123,6 +123,62 @@ class Leaderboard extends Component {
 
     var re = new RegExp("^"+this.props.filter, "i");
     if (re.test(`${item.firstName} ${item.lastName}`) ){
+
+      if(item.id === this.props.id){
+        return (
+          <View style={contentContainerStyle}>
+              <View style={[containerStyle, {backgroundColor: "#FECB00"}]}>
+                <View style={{flex:.1}}></View>
+                <View style={{flexDirection: 'row', flex: 1, alignItems: "center"}}>
+                  <View style={{justifyContent: "center"}}> 
+                    <View style={index}>
+                      <Text style={textColor} style={indexText}>{item.index}</Text>
+                    </View>
+                  </View>
+                <View >
+                  <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start"}}>
+                    <View>
+                      <View style={{flex: .2}}></View>
+                      <Text style={ [textStyle, {fontWeight: 'bold'}, {color: "black"}]}>{`${item.firstName} ${item.lastName}`}</Text>
+                      <Text style={[textStyle, {fontSize: dimension.width*.04,}, {color: "black"}]}>Points: {item.points}</Text>
+                    </View>
+                    <View>
+                    {(item.picture === '') && (
+                     <Avatar
+                      size = {dimension.height*.08}
+                      rounded
+                      titleStyle={{backgroundColor: item.color}}
+                      overlayContainerStyle={{backgroundColor: item.color}}
+                      title={item.firstName[0].concat(item.lastName[0])}
+                      />
+                    )}
+                    {(item.picture !== '') && (
+                      <Avatar
+                      size = {dimension.height*.08}
+                      rounded
+                      source= {{uri: item.picture}}
+                      />
+                    )}
+                    </View>
+                  </View>
+                  <View style={{flex: .2}}></View>
+                  <View >
+                    <Progress.Bar
+                      style={progress}
+                      progress={item.points / Math.max(sortedMembers[0].points,1)}
+                      indeterminate={false}
+                      height={dimension.width*.03}
+                      width={dimension.width * .75}
+                      color= {'#ffd700'}
+                    />
+                    </View>   
+                </View>
+                </View>
+                <View style={{flex:.1}}></View>
+            </View>
+          </View>
+        )
+      }
         
       return (
         <TouchableOpacity onPress = {() => this.callUser(item.id)}>
@@ -147,8 +203,8 @@ class Leaderboard extends Component {
                      <Avatar
                       size = {dimension.height*.08}
                       rounded
-                      titleStyle={{backgroundColor: this.props.dashColor}}
-                      overlayContainerStyle={{backgroundColor: "black"}}
+                      titleStyle={{backgroundColor: item.color}}
+                      overlayContainerStyle={{backgroundColor: item.color}}
                       title={item.firstName[0].concat(item.lastName[0])}
                       />
                     )}

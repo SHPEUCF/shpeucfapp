@@ -39,7 +39,11 @@ class App extends Component {
               this.props.loggedIn = true
               Actions.main();
             } else {
+
+              if(!correctVersion && firebase.auth().currentUser.emailVerified){
               alert("Please update your app")
+              }
+
               firebase.auth().signOut();
               this.props.loggedIn = false
 

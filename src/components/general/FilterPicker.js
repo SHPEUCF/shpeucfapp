@@ -105,8 +105,8 @@ class FilterPicker extends Component {
                                 <Avatar
                                 size = {dimension.height*.08}
                                 rounded
-                                titleStyle={{backgroundColor: this.props.dashColor}}
-                                overlayContainerStyle={{backgroundColor: "black"}}
+                                titleStyle={{backgroundColor: user.color}}
+                                overlayContainerStyle={{backgroundColor: user.color}}
                                 title={user.firstName[0].concat(user.lastName[0])}
                                 />
                                 )}
@@ -173,8 +173,8 @@ class FilterPicker extends Component {
                                 <Avatar
                                 size = {dimension.height*.08}
                                 rounded
-                                titleStyle={{backgroundColor: this.props.dashColor}}
-                                overlayContainerStyle={{backgroundColor: "black"}}
+                                titleStyle={{backgroundColor: user.color}}
+                                overlayContainerStyle={{backgroundColor: user.color}}
                                 title={user.firstName[0].concat(user.lastName[0])}
                                 />
                                 )}
@@ -264,13 +264,6 @@ class FilterPicker extends Component {
             <Modal
             transparent={true}
             visible={this.state.modalVisible}>
-            <KeyboardAwareScrollView
-            style={{backgroundColor:  "#0c0b0b"}}
-            resetScrollToCoords={{ x: 0, y: 0}}
-            contentContainerStyle={{flexGrow: 1}}
-            scrollEnabled={false}
-            enableOnAndroid={true}
-            >
                 <SafeAreaView style={modalBackground}>
                     <View style={modalStyle}>
                         <Input
@@ -303,7 +296,6 @@ class FilterPicker extends Component {
                         </View>
                     </View>
                 </SafeAreaView>
-             </KeyboardAwareScrollView>
             </Modal>
         </SafeAreaView>
         }
@@ -313,13 +305,6 @@ class FilterPicker extends Component {
             <Modal
             transparent={true}
             visible={this.state.modalVisible && this.props.visible}>
-            <KeyboardAwareScrollView
-            style={{backgroundColor:  "#0c0b0b"}}
-            resetScrollToCoords={{ x: 0, y: 0}}
-            contentContainerStyle={{flexGrow: 1}}
-            scrollEnabled={false}
-            enableOnAndroid={true}
-            >
                 <SafeAreaView style={modalBackground}>
                     <SafeAreaView style={modalStyle}>
                         <Input
@@ -338,7 +323,7 @@ class FilterPicker extends Component {
                             )}
                             />
                         </View>
-                        <View style = {{height: dimension.height *.08, backgroundColor: "black"}}>
+                            <View style={{flex: .2}}>
                             <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%", backgroundColor: "black"}}>
                                 <View style={{flex: .45}}>
                                     <Button 
@@ -354,9 +339,9 @@ class FilterPicker extends Component {
                                 </View>
                             </View>
                         </View>
+                        <View style = {{height: dimension.height *.08, backgroundColor: "black"}}></View>
                     </SafeAreaView>
                 </SafeAreaView>
-                </KeyboardAwareScrollView>
             </Modal>
         
         }

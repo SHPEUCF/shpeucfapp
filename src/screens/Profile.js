@@ -66,14 +66,17 @@ class Profile extends Component {
               {(this.props.major !== '') && (<View style={{flex: 1, justifyContent: "center"}}>
                 <Text style={[itemValueText, textColor]}>{major}</Text>
                 </View>)}
-                <View style={{flex: 1, justifyContent: "center", flexDirection: "row", alignItems: "center"}}>
+                <View style={{flex: 1, justifyContent: "center"}}>
+                <Text style={[itemValueText, textColor]}>{points}</Text>
+                </View>
+                {/* <View style={{flex: 1, justifyContent: "center", flexDirection: "row", alignItems: "center"}}>
                   <TouchableOpacity style = {{flexDirection: "row", flex: 1}} onPress = {() => Actions.pointsBreakDown()}>
                     <Text style={[itemValueText, textColor]}>{points}</Text>
                       <View style = {{flex: .2}}>
                         <Ionicons name="ios-arrow-dropright" size={dimension.height * .025} style={{color: '#FECB00', backgroundColor: "transparent", alignSelf: "center"}}/>
                       </View>
                   </TouchableOpacity>
-                </View>
+                </View> */}
               </View>
               <View style = {{flex: .1}}></View>
               </View>

@@ -81,7 +81,7 @@ import {
           <View style={{flex: .45}}>
               <Button 
                  onPress={() => this.setLevels()}
-                 title={"SET ORDER"}
+                 title={"Set Order"}
               />
           </View>
           <View style={{flex: .45}}>
@@ -90,7 +90,7 @@ import {
                 this.props.committeeDescriptionChanged("");
                 this.props.chairChanged();
                 this.props.goToCommitteeForm("ADD");}}
-                title={"ADD COMMITTEES"}
+                title={"Add Committees"}
               />
           </View>
       </View>
