@@ -10,170 +10,285 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
- 	Dimensions
+  Dimensions,
+  SafeAreaView
 	} from 'react-native';
 import { Avatar, Divider } from 'react-native-elements';
+import Flag from 'react-native-flags'
 
 const dimension = Dimensions.get('window');
 
 class OtherProfile extends Component {
 
   render() {
-    // alert(this.props.loading)
-     if(this.props.loading){
-      return <Spinner>{this.renderContent}</Spinner>
-    }
-    else return (
-      <View>
-        {this.renderContent()}
-      </View>
-    )
-  }
-  
-  renderContent(){
-    const { firstName, lastName, email, major, points, picture, quote } = this.props;
-
-    const {
-      bottomHalfContainerStyle,
-      containerStyle,
-      headerInfoContainer,
-      avatarContainerStyle,
-      taglineContainer,
-      taglineTextStyle,
-      contentContainerStyle,
-      contentItemsContainerStyle,
-      itemLabelContainerStyle,
-      itemLabelText,
-      itemValueContainerStyle,
-      itemValueText,
-      buttonsContainerStyle,
-      editButtonContainer,
-			editLogoContainer,
-      logOutButtonContainer } = styles,
-			dimension = Dimensions.get('window');
-
-      return (
-        <ScrollView>
-          <View style={headerInfoContainer}>
-            <View style={avatarContainerStyle}>
-              <Avatar
-                large
-                rounded
-                source={{uri: picture}}
-                title={`${firstName[0]}${lastName[0]}`}
-                onPress={() => alert("Coming Soon") }
-                activeOpacity={0.7}
-                />
-            </View>
-            <View style={taglineContainer}>
-               <Text
-							 		style={{
-										color: 'white',
-										fontSize: 20,
-										fontWeight: 'bold',
-										textAlign: 'center'}}
-										>{firstName + ' ' + lastName}</Text>
-               <Text
-							 		style={{
-										color: 'white',
-										fontSize: 16,
-										textAlign: 'center',
-										lineHeight: 25,
-										width: dimension.width *.9}}
-										>{quote}</Text>
-            </View>
-              {this.renderSocialMedia()}
-          </View>
-         <View style={{backgroundColor: '#0c0b0b'}}>
-          <View style={contentContainerStyle}>
-            <View style={contentItemsContainerStyle}>
-              <View style={{ height: dimension.height *.1, backgroundColor: '#0c0b0b'}}>
-                <Text style={itemLabelText}></Text>
-              </View>
-              <View style={itemValueContainerStyle}>
-                <Text style={itemValueText}>{/*firstName + ' ' + lastName*/}</Text>
-              </View>
-            </View>
-            <View style={contentItemsContainerStyle}>
-              <View style={itemLabelContainerStyle}>
-                <Text style={itemLabelText}>Email:</Text>
-              </View>
-              <View style={itemValueContainerStyle}>
-                <Text style={itemValueText}>{email}</Text>
-              </View>
-            </View>
-            <View style={contentItemsContainerStyle}>
-              <View style={itemLabelContainerStyle}>
-                <Text style={itemLabelText}>Major:</Text>
-              </View>
-              <View style={itemValueContainerStyle}>
-                <Text style={itemValueText}>{major}</Text>
-              </View>
-            </View>
-            <View style={contentItemsContainerStyle}>
-              <View style={itemLabelContainerStyle}>
-                <Text style={itemLabelText}>Points:</Text>
-              </View>
-              <View style={itemValueContainerStyle}>
-                <Text style={itemValueText}>{points}</Text>
-              </View>
-            </View>
-          </View>
-					<View style={buttonsContainerStyle}>
-              {this.renderButtons()}
-          </View>
-        </View>
-        </ScrollView>
-    )
-
-  }
-
-  renderEditButton(privilege){
-    if (privilege.board)
-      return (
-          <View>
-            <Button
-              title = "EDIT PROFILE"
-              onPress = {() => goToEditOtherProfileForm()}
-            />
-          </View>
+    return (
+          this.renderContent()
       )
-  }
+    }
 
-  renderButtons() {
+  renderContent(){
+    const { firstName, lastName, email, major, points, quote } = this.props;
+
     const {
-      privilege,
-      goToEditOtherProfileForm,
-      } = this.props;
+      bioContainer,
+      taglineContainer,
+      fieldContainerStyle,
+      itemLabelText,
+      itemValueText,
+      textColor
+      } = styles
 
     return (
-      <View>
-      {this.renderEditButton(privilege)}
-        <View>
-          <Button
-            title = "BACK TO LEADERBOARD"
-            onPress={() => Actions.popTo("Leaderboard")}
-          />
-        </View>
+      <SafeAreaView style={{flex: 1, backgroundColor: "#0c0b0b"}}>
+        <View style={{backgroundColor: "black", flex: 1}}>
+        {this.renderPicture()}
+        
+          <View style={[bioContainer]}>
+            <View style= {{flex:.2}}></View>
+            <View style={{flexDirection: "row", flex: 1.5, justifyContent: "space-evenly"}}>
+              <View style = {{flex: .1}}></View>
+              <View style={[fieldContainerStyle, {flex: .3}]}>
+              <View style={{flex: 1, justifyContent: "center"}}>
+                <Text style={[itemLabelText, textColor]}>Email:</Text>
+              </View>
+              {(this.props.major !== '') && (<View style={{flex: 1, justifyContent: "center"}}>
+                  <Text style={[itemLabelText, textColor]}>Major:</Text>
+                </View>)}
+                <View style={{flex: 1, justifyContent: "center"}}>
+                <Text style={[itemLabelText, textColor]}>Points:</Text>
+                </View>
+              </View>
+              <View style={[fieldContainerStyle]}>
+              <View style={{flex: 1, justifyContent: "center"}}>
+                <Text style={[itemValueText, textColor]}>{email}</Text>
+              </View>
+              {(this.props.major !== '') && (<View style={{flex: 1, justifyContent: "center"}}>
+                <Text style={[itemValueText, textColor]}>{major}</Text>
+                </View>)}
+                <View style={{flex: 1, justifyContent: "center"}}>
+                <Text style={[itemValueText, textColor]}>{points}</Text>
+                </View>
+              </View>
+              <View style = {{flex: .1}}></View>
+              </View>
+              <View style= {{flex:.2}}></View>
+          </View>
+          {this.renderSocialMedia()}
+          <View style={{flex: .3}}></View>
+          {this.renderButtons()}
+          <View style={{height: dimension.height *.08, backgroundColor: "black"}}></View>
+          </View>
+      </SafeAreaView>
+  )
+
+  }
+
+  renderPicture() {
+    const {
+      headerInfoContainer,
+      taglineContainer,
+      itemLabelText,
+      nameLabelText,
+      textColor
+    } = styles
+
+    const {
+      firstName,
+      lastName,
+      picture
+    } = this.props
+
+    return (
+      <View style={[headerInfoContainer]}>
+        <View style={{backgroundColor: 'black', flex: 1}}>
+        <View style={{flex: .05, backgroundColor: 'black'}}></View>
+          <View style={{flex: 1, paddingTop: "3%", paddingLeft: "5%", paddingRight: "5%"}}>
+            {(picture === '') && (
+               <Avatar
+               size = {dimension.height*.32}
+               rounded
+               titleStyle={{backgroundColor: this.props.dashColor, height: "100%", width: "100%", justifyContent: "center", paddingTop: '20%'}}
+               title={firstName[0].concat(lastName[0])}
+               />
+            )}
+            {(picture !== '') && (
+               <Avatar
+               size = {dimension.height*.32}
+               rounded
+               source= {{uri: picture}}
+               />
+            )}
+          </View>
+          
+          <View style={[taglineContainer]}>
+              <View  style={{flexDirection: "row", alignItems: "center"}}>
+                <View style={{flex: 1,alignItems: "center"}}>
+                  <Text style={[nameLabelText, textColor]}>{firstName + ' ' + lastName}</Text>
+                </View>
+              </View>
+          </View>
+          <View style={{flex: .05, backgroundColor: "black"}}></View>
+          </View>
       </View>
     )
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      dp: null
+     }
+   }
+
+  openGallery(){
+
+    const Blob = RNFetchBlob.polyfill.Blob
+    const fs = RNFetchBlob.fs
+    window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+    window.Blob = Blob
+    
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      includeBase64: true,
+      compressImageQuality: 0.8,
+      mediaType: 'photo',
+      cropping: true,
+      cropperCircleOverlay: true
+    }).then(image => {
+
+      const imagePath = image.path
+
+      let uploadBlob = null
+
+      const imageRef = firebase.storage().ref("users/profile").child(this.props.id)
+      let mime = 'image/jpg'
+      fs.readFile(imagePath, 'base64')
+        .then((data) => {
+          //console.log(data);
+          return Blob.build(data, { type: `${mime};BASE64` })
+      })
+      .then((blob) => {
+          uploadBlob = blob
+          return imageRef.put(blob, { contentType: mime })
+        })
+        .then(() => {
+          uploadBlob.close()
+          return imageRef.getDownloadURL()
+        })
+        .then((url) => {
+
+          let userData = {}
+          this.props.pictureChanged(url);
+          let obj = {}
+          obj["dp"] = url
+          this.setState(obj)
+
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+
+    })
 
   }
 
-  renderSocialMedia(){
+  renderButtons(){
+    const {
+      buttonsContainerStyle
+    } = styles
+
+    if (this.props.screen !== undefined){
+      return(
+        <SafeAreaView style= {{}}>
+          <SafeAreaView style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "flex-start", width:"100%", position: "absolute", bottom: dimension.height * .032, backgroundColor: "black"}}>
+          <View style={{flex: .3}}></View>
+            <View style={[buttonsContainerStyle, {flex: 1}]}>
+              <Button
+                    title = "Back"
+                    onPress={() => {
+                      Actions.pop()
+                    }}
+                  />
+            </View>
+            <View style={{flex: .3}}></View>
+          </SafeAreaView>
+        </SafeAreaView>
+
+      )
+    }
     return (
-			<View style={styles.editLogoContainer}>
-        <View style= {styles.editLogoContainer}>
-          <TouchableOpacity
-            onPress={() => Actions.PostShow({ title: 'Linkedin', uri: 'https://www.linkedin.com/'})}>
-            <Ionicons name="logo-linkedin" size={40} color='#fff'/>
-          </TouchableOpacity>
+      <SafeAreaView style= {{}}>
+        <SafeAreaView style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "flex-start", width:"100%", position: "absolute", bottom: dimension.height * .032, backgroundColor: "black"}}>
+        {/*<TouchableOpacity onPress={this.props.goToEditProfileForm.bind(this)} style={{backgroundColor: "#FECB00", borderWidth: 1, borderColor: "#0000",flex: 1, alignItems: "center", justifyContent: "center"}}>
+        <View style={{justifyContent: "center"}}>
+          <Text style={{fontSize: 18}}> Edit Profile </Text>
         </View>
-        <View style={styles.editLogoContainer}>
-          <TouchableOpacity
-            onPress={() => Actions.PostShow({ title: 'Github', uri: 'https://www.github.com/'})}>
-            <Ionicons name="logo-github" size={40} color='#fff'/>
-          </TouchableOpacity>
+        </TouchableOpacity>
+        <View style={{flex: .01}}></View>
+        <TouchableOpacity onPress={this.props.logoutUser.bind(this)} style={{backgroundColor: "#FECB00", borderWidth: 1, borderColor: "#0000",flex: 1, alignItems: "center", justifyContent: "center"}}>
+          <Text style={{fontSize: 18}}> Logout </Text>
+      </TouchableOpacity>*/}
+
+      <View style={buttonsContainerStyle}>
+        <Button
+              title = "My Profile"
+              onPress={() => {Actions.push("main")
+                Actions.profile()}
+            }
+            />
+      </View>
+      
+      {(this.props.flag !== '' && this.props.flag !== undefined) && (<View style={{}}>
+                <Flag
+                  type="flat"
+                  code={this.props.flag}
+                  size={32}
+                />
+                </View>)}
+      <View style={buttonsContainerStyle}>
+        <Button
+              title = "Leaderboard"
+              onPress={() => Actions.pop()
+            }
+            />
+      </View>
+
+      </SafeAreaView>
+    </SafeAreaView>
+    )
+  }
+
+    renderSocialMedia(){
+    const {
+      LogoContainer,
+      socialmediarow
+    } = styles
+    return (
+      <View style={{flex: .2}}>
+        <View style={{flex:.03}}></View>
+        <View style={socialmediarow}>
+          <View style= {[LogoContainer, {backgroundColor: this.props.dashColor, flex: 1}]}>
+            <TouchableOpacity
+              onPress={() => {
+                alert("Coming Soon")
+                // Actions.PostShow({ title: 'Linkedin', uri: 'https://www.linkedin.com/'})
+              }
+              }>
+              <Ionicons name="logo-linkedin" size={dimension.height*.045} color='white'/>
+            </TouchableOpacity>
+          </View>
+          <View style={{flex:.01}}></View>
+          <View style= {[LogoContainer, {backgroundColor: this.props.dashColor, flex :1}]}>
+            <TouchableOpacity
+              onPress={() => {
+                alert("Coming Soon")
+              // Actions.PostShow({ title: 'Github', uri: 'https://www.github.com/'})
+              }
+            }>
+              <Ionicons name="ios-mail" size={dimension.height*.045} color='white'/>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     )
@@ -181,90 +296,80 @@ class OtherProfile extends Component {
 }
 
 const styles = StyleSheet.create({
-  bottomHalfContainerStyle: {
-    backgroundColor: 'rgb(240,240,240)'
-  },
   headerInfoContainer: {
-    flex: 1,
-    paddingTop: 30,
-    paddingBottom: 50,
-    backgroundColor: '#2C3239'
-  },
-  avatarContainerStyle: {
-    justifyContent: 'center',
+    flex: 1.4,
+    backgroundColor: 'black',
     alignItems: 'center',
+    borderBottomColor: '#e0e6ed22',
+  },
+  textColor: {
+    color: '#e0e6ed'
   },
   taglineContainer: {
+    flex: .4,
+    paddingBottom: "3%",
     alignItems: 'center',
-    marginTop: 10,
+    justifyContent: "flex-end",
   },
-  taglineTextStyle:{
-    fontSize: 16,
-    fontWeight: '600'
+  fieldContainerStyle: {
+    height: "100%",
+    flexDirection: 'column',
+    alignItems: "flex-start",
+    flex: 1
   },
-  contentContainerStyle: {
-		height: dimension.width,
-    flex: 1,
-    marginTop: 20,
-    marginBottom: 20,
-
-  },
-  contentItemsContainerStyle: {
-    flexDirection: 'row',
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-  },
-  itemLabelContainerStyle: {
-    flex: 1,
-    justifyContent: 'center'
-  },
-  itemLabelText: {
-    fontSize: 18,
+  nameLabelText: {
+    fontSize: dimension.height*.03,
     fontWeight: 'bold',
 		color: '#fff',
-		lineHeight: 26
+		lineHeight: dimension.height * .03
+  },
+  itemLabelText: {
+    fontSize: dimension.height*.02,
+    fontWeight: 'bold',
+		color: '#fff',
+		lineHeight: dimension.height * .03
   },
   itemValueContainerStyle: {
-    flex: 4,
+    flexDirection:'row',
     justifyContent: 'center',
-    alignItems: 'flex-start'
   },
   itemValueText: {
     fontSize: 16,
     fontWeight: '500',
 		color: '#fff',
-		lineHeight: 26
   },
   buttonsContainerStyle: {
-    marginRight: 10,
-    marginLeft: 10,
+    flex: .4,
   },
-  editButtonContainer: {
-    marginTop: 10,
-    marginBottom: 10,
-  },
-	editLogoContainer: {
+	LogoContainer: {
     flex: 1,
-		marginTop: 3,
-		flexDirection: 'row',
-		justifyContent: 'center'
+    alignItems: 'center',
+		justifyContent: 'center',
 	},
-  logOutButtonContainer: {
-    marginTop: 10,
-    marginBottom: 60
-  },
+	socialmediarow: {
+    flex: 1,
+    flexDirection: "row",
+    backgroundColor: "black"
+	},
+	bioContainer: {
+    flex: .7,
+    backgroundColor: '#21252b',
+	},
+	socialmediatext: {
+		flex:1,
+    alignSelf: 'center'
+	},
 });
 
 const mapStateToProps = ({ members, general, user }) => {
-  const { firstName, lastName, email, major, points, picture, quote } = members;
+  const { firstName, lastName, email, major, points, picture, quote, dashColor, flag  } = members;
   const { loading } = general;
   const { privilege } = user;
 
-  return { firstName, lastName, email, major, points, picture, quote, loading, privilege };
+  return { firstName, lastName, email, major, points, picture, quote, loading, privilege, dashColor, flag };
 };
 
 const mapDispatchToProps = {
-  goToEditOtherProfileForm
  };
 
 export default connect(mapStateToProps, mapDispatchToProps)(OtherProfile);

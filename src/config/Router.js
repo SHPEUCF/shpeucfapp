@@ -1,5 +1,5 @@
 import React, {Button, View} from 'react';
-import { Router, Scene, Stack, ActionConst, Actions } from 'react-native-router-flux';
+import { Router, Scene, Stack, ActionConst, Actions} from 'react-native-router-flux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Spinner } from '../components/general';
 import RegistrationForm from '../components/auth/RegistrationForm';
@@ -27,6 +27,7 @@ import OtherProfile from '../screens/OtherProfile';
 import Leaderboard from '../screens/Leaderboard';
 import Conventions from '../screens/Conventions';
 import CommitteesBackEnd from '../screens/CommitteesBackEnd';
+import CommitteePage from '../screens/CommitteePage';
 import Election from '../screens/Election';
 import Committees from '../screens/Committees';
 import ElectionApplication from '../screens/ElectionApplication';
@@ -39,15 +40,17 @@ import Statistics from '../screens/Statistics'
 import More from '../screens/More'
 import PointsBreakDown from '../screens/PointsBreakDown'
 import Dashboard from '../screens/Dashboard'
+import {Dimensions} from 'react-native'
 
 import {
   Resources,
-  CheckIn,
   Forms,
   About,
   EBoard,
-  Version
+  Version,
 } from '../screens/';
+
+const dimension = Dimensions.get('window');
 
 const RouterComponent = () => {
   return (
@@ -80,30 +83,7 @@ const RouterComponent = () => {
             title="Reset Password"
             type={ActionConst.REPLACE}
             hideNavBar
-          />
-          <Scene
-            key="pointsBreakDown"
-            component={PointsBreakDown}
-            title="Points"
-            type={ActionConst.REPLACE}
-            hideNavBar
-          />        
-        </Stack>
-        <Stack key = "events" hideNavBar>
-          <Scene
-            key="createEvent"
-            component={CreateEvent}
-            title="Event Creation"
-            type={ActionConst.REPLACE}
-            hideNavBar
-          />
-          <Scene
-            key="eventDetails"
-            component={EventDetailsForm}
-            title="Event Details"
-            type={ActionConst.REPLACE}
-            hideNavBar
-          />
+          />   
         </Stack>
         <Stack key = "stats" hideNavBar>
           <Scene
@@ -153,12 +133,6 @@ const RouterComponent = () => {
             type={ActionConst.REPLACE}
             hideNavBar
         />
-        <Scene
-          key="EditProfileForm"
-          component={EditProfileForm}
-          type={ActionConst.REPLACE}
-          hideNavBar
-          />
         </Stack>
         
         <Stack key="main"
@@ -167,13 +141,11 @@ const RouterComponent = () => {
           type={ActionConst.RESET}
           activeTintColor={'#E0E6ED'}
           inactiveTintColor={'#C0CCDA'}
-          tabBarStyle={{backgroundColor: '#21252b', paddingTop: '1%'}}
+          tabBarStyle={{backgroundColor: '#21252b', height: dimension.height *.08}}
         >
-          <Scene
-            key="dashboard"
+          <Stack
             hideNavBar
-            component={Dashboard}
-            tabBarLabel="Dashboard"
+            key="dashboard"
             title="Dashboard"
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
@@ -181,37 +153,171 @@ const RouterComponent = () => {
                 size ={30}
                 style={focused ? {color: '#FFC107'} : {color: 'white'}}
               />
-            }
-          />
-
-
-          <Scene
+            }>
+            <Scene
+              key="dashboard"
+              component={Dashboard}
+              title="dashboard"
+              leftTitle="Back"
+            />
+            <Stack
+              hideNavBar
+              key="CommitteePageD"
+              title="CommitteesPage"
+              >
+                <Scene key="CommitteePageD"
+                  component={CommitteePage}
+                  title="CommitteePage"
+                  hideTabBar
+                />
+                <Scene
+                  key="createEventCPD"
+                  component={CreateEvent}
+                  title="Event Creation"
+                />
+                <Stack
+                key="eventDetailsCPD"
+                title="EventDetails"
+                hideNavBar
+                hideTabBar={true}
+                >
+                  <Scene
+                    key="eventDetailsCPD"
+                    component={EventDetailsForm}
+                    title="Event Details"
+                  />
+                  <Scene
+                    key="OtherProfileCPD"
+                    component={OtherProfile}
+                  />
+                </Stack>
+              </Stack>
+           <Stack
+            hideNavBar
+            key="LeaderboardD"
+            title="Leaderboard"
+            >
+              <Scene
+                key="LeaderboardD"
+                component={Leaderboard}
+                title="leaderboard"
+                hideTabBar
+              />
+               <Scene
+              key="OtherProfileD"
+              component={OtherProfile}
+              hideTabBar
+              hideNavBar
+            />
+            </Stack>
+            <Stack
+            
+            key="CommitteesD"
+            title="Committees"
+            >
+              <Scene key="CommitteesD"
+                component={Committees}
+                title="Committees"
+                hideTabBar
+                hideNavBar
+              />
+            </Stack>
+            <Stack
+            key="eventDetailsD"
+            title="EventDetails"
+            hideNavBar
+            hideTabBar={true}
+            >
+              <Scene
+                key="eventDetailsD"
+                component={EventDetailsForm}
+                title="Event Details"
+              />
+              <Scene
+                key="OtherProfileD"
+                component={OtherProfile}
+              />
+              <Scene
+              key="createEventD"
+              component={CreateEvent}
+              title="Event Creation"
+            />
+            </Stack>
+          </Stack>
+          <Stack
             key="event"
             hideNavBar
-            component={Events}
             title="Events"
-            rightTitle="Today"
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
                 name={'ios-calendar'}
                 size ={30}
                 style={focused ? {color: '#FFC107'} : {color: 'white'}}
               />
-            }
-          />
-          <Scene
-            key="profile"
+            }>
+            <Scene
+                key="event"
+                component={Events}
+                title="Profile"
+                leftTitle="Back"
+            />
+            <Scene
+              key="createEventE"
+              component={CreateEvent}
+              title="Event Creation"
+              hideNavBar
+              hideTabBar
+            />
+            <Stack
+            key="eventDetails"
             hideNavBar
-            component={Profile}
+            title="EventDetails"
+            hideNavBar
+            hideTabBar
+            >
+              <Scene
+                key="eventDetails"
+                component={EventDetailsForm}
+                title="Event Details"
+              />
+              <Scene
+                key="OtherProfileE"
+                component={OtherProfile}
+                hideTabBar
+                hideNavBar
+              />
+          </Stack>
+          </Stack>
+          <Stack
+            hideNavBar
+            key="profile"
             title="Profile"
             tabBarIcon={ ({ tintColor, focused }) =>
               <Ionicons
                 name={'ios-person'}
                 size ={30}
-                style={focused ? {color: '#FFC107'} : {color: 'white'}} 
+                style={focused ? {color: '#FFC107'} : {color: 'white'}}
               />
-            }
-          />
+            }>
+            <Scene
+              key="profile"
+              component={Profile}
+              title="Profile"
+              leftTitle="Back"
+            />
+            <Scene
+              key="EditProfileForm"
+              component={EditProfileForm}
+              hideNavBar
+              hideTabBar
+            />
+            <Scene
+            key="pointsBreakDown"
+            component={PointsBreakDown}
+            title="Points"
+            hideNavBar
+             />     
+          </Stack>
           <Stack
             hideNavBar
             key="more"
@@ -229,15 +335,35 @@ const RouterComponent = () => {
               title="More"
               leftTitle="Back"
             />
-            <Scene key="Leaderboard"
+            <Scene
+              key="Leaderboard"
               component={Leaderboard}
-              title="Leaderboard"
+              title="leaderboard"
               hideTabBar
             />
+            <Stack
+            hideNavBar
+            key="LeaderboardM"
+            title="Leaderboard"
+            >
+              <Scene
+                key="LeaderboardM"
+                component={Leaderboard}
+                title="leaderboard"
+                hideTabBar
+              />
+               <Scene
+              key="OtherProfileM"
+              component={OtherProfile}
+              hideTabBar
+              hideNavBar
+            />
+            </Stack>
             <Stack 
             key="BackEnd"
             title="BackEnd"
             hideNavBar
+            hideTabBar
            >
               <Scene key="BackEnd"
                 component={BackEnd}
@@ -254,12 +380,6 @@ const RouterComponent = () => {
               />
             </Stack>
             <Scene
-              key="OtherProfile"
-              component={OtherProfile}
-              hideTabBar
-              hideNavBar
-            />
-            <Scene
               key="EditOtherProfileForm"
               component={EditOtherProfileForm}
               hideNavBar
@@ -270,10 +390,6 @@ const RouterComponent = () => {
             />
             <Scene key="WebPageShow"
               component={WebPageShow}
-            />
-            <Scene key="CheckIn"
-              component={CheckIn}
-              title="Check In"
             />
             <Scene
               key="ElectionApplication"
@@ -297,11 +413,50 @@ const RouterComponent = () => {
              title="Election"
              hideTabBar
             />
-            <Scene key="Committees"
-             component={Committees}
-             title="Committees"
-             hideTabBar
-            />
+            <Stack
+            hideNavBar
+            key="Committees"
+            title="Committees"
+            >
+              <Scene key="Committees"
+                component={Committees}
+                title="Committees"
+                hideTabBar
+              />
+              <Stack
+              hideNavBar
+              key="CommitteePageC"
+              title="CommitteesPage"
+              >
+                <Scene key="CommitteePageC"
+                  component={CommitteePage}
+                  title="CommitteePage"
+                  hideTabBar
+                />
+                <Scene
+                  key="createEventC"
+                  component={CreateEvent}
+                  title="Event Creation"
+                />
+                <Stack
+                key="eventDetailsC"
+                title="EventDetails"
+                hideNavBar
+                hideTabBar={true}
+                >
+                  <Scene
+                    key="eventDetailsC"
+                    component={EventDetailsForm}
+                    title="Event Details"
+                  />
+                  <Scene
+                    key="OtherProfileC"
+                    component={OtherProfile}
+                  />
+
+                </Stack>
+              </Stack>
+              </Stack>
             <Scene key="Conventions"
              component={Conventions}
              title="Conventions"

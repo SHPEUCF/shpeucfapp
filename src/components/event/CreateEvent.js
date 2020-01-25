@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {View, StyleSheet, Text, ScrollView, Modal, Dimensions, FlatList, TouchableOpacity} from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import {View, StyleSheet, Text, ScrollView, Modal, Dimensions, FlatList, TouchableOpacity, SafeAreaView} from 'react-native';
 import { Input, Button, PickerInput, DatePicker, TimePicker } from '../general';
-import { RkAvoidKeyboard, RkButton, RkPicker } from 'react-native-ui-kitten';
 import {
     createEvent,
     editEvent,
@@ -12,13 +12,15 @@ import {
     nameChanged,
     descriptionChanged,
     dateChanged,
-    timeChanged,
+    startTimeChanged,
+    endTimeChanged,
     locationChanged,
     epointsChanged,
     eventError,
     goToCreateEvent,
     goToEvents
 } from '../../ducks'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const dimension = Dimensions.get('window');
 
@@ -28,10 +30,11 @@ class CreateEvent extends Component {
         this.state = {text: this.props.value, modalVisible: false}
     }
 
-    componentWillMount() {
-        if(this.props.name !== '')
+    componentDidMount() {
+        if(this.props.name !== ''){
             this.props.titleChanged("Edit Event");
-
+            this.setState({changedStart: false, changedEnd: false})
+        }
     }
     onTypeChange(text) {
         this.onCommitteeChange('');
@@ -68,8 +71,13 @@ class CreateEvent extends Component {
     onDateChange(text) {
         this.props.dateChanged(text);
     }
-    onTimeChange(text) {
-        this.props.timeChanged(text);
+    onStartTimeChange(text) {
+        if (!this.state.changedStart && this.props.title === "Edit Event") this.setState({changedStart: true})
+        this.props.startTimeChanged(this.convertToMilitary(text));
+    }
+    onEndTimeChange(text) {
+        if (!this.state.changedEnd && this.props.title === "Edit Event") this.setState({changedEnd: true})
+        this.props.endTimeChanged(this.convertToMilitary(text));
     }
     onLocationChange(text) {
         this.props.locationChanged(text);
@@ -93,6 +101,16 @@ class CreateEvent extends Component {
         }
     }
 
+    convertToMilitary(text){
+        if (text.hour === "12"){
+            text.hour = "0" + 0
+            if (text.period === "PM") {text.hour = "" + 12}
+        } 
+        else if (text.period === "PM") text.hour = "" + (parseInt(text.hour) + 12)
+
+        return `${text.hour}:${text.minute}:${text.period}`
+    }
+
     onButtonPress() {
         const {
             type,
@@ -100,32 +118,54 @@ class CreateEvent extends Component {
             name,
             description,
             date,
-            time,
+            startTime,
+            endTime,
             location,
             points,
             eventID
         } = this.props;
 
+        startTimeComp = startTime.split(":")
+
+        endTimeComp = endTime.split(":")
+
+        if (!this.state.changedStart && this.props.title === "Edit Event"){
+            var newS = this.convertToMilitary({hour: startTimeComp[0], minute: startTimeComp[1], period: startTimeComp[2]})
+            startTimeComp = newS.split(":")
+        }
+
+        if (!this.state.changedEnd && this.props.title === "Edit Event"){
+            var newE = this.convertToMilitary({hour: endTimeComp[0], minute: endTimeComp[1], period: endTimeComp[2]})
+            endTimeComp = newE.split(":")
+        }
+
         if (type === '') {
             this.EventCreationError('Please enter event type');
         } else if (name === '') {
             this.EventCreationError('Please enter event name');
-        } else if (description === '') {
-            this.EventCreationError('Please enter a short event description');
         } else if (date === '') {
             this.EventCreationError('Please enter the date of the event');
-        } else if (time === '') {
-            this.EventCreationError('Please enter the time of the event');
+        } else if (startTime === '') {
+            this.EventCreationError('Please enter the starting time of the event');
+        } else if (endTime === '') {
+            this.EventCreationError('Please enter the ending time of the event');
+        } else if (endTimeComp[0] < startTimeComp[0]) {
+            this.EventCreationError('Ending time must be after start time');
+        } else if (endTimeComp[0] === startTimeComp[0] && (endTimeComp[1] <= startTimeComp[1])) {
+            this.EventCreationError('Ending time must be after start time');
         } else if (location === '') {
             this.EventCreationError('Please enter where the event is taking place');
         } else if (points === 0){
             this.EventCreationError('Please enter how many points the event is worth');
         }else{
             if(this.props.title === "Create Event")
-            createEvent(type, committee, name, description, date, time, location, points);
-            else
-            editEvent(type, committee, name, description, date, time, location, points, eventID);
-            this.props.goToEvents();
+            createEvent(type, committee, name, description, date, startTime, endTime, location, points);
+            else{
+            editEvent(type, committee, name, description, date, `${startTimeComp[0]}:${startTimeComp[1]}:${startTimeComp[2]}`, `${endTimeComp[0]}:${endTimeComp[1]}:${endTimeComp[2]}`, location, points, eventID);
+            this.props.startTimeChanged(this.convertHour(`${startTimeComp[0]}:${startTimeComp[1]}:${startTimeComp[2]}`))
+            this.props.endTimeChanged(this.convertHour(`${endTimeComp[0]}:${endTimeComp[1]}:${endTimeComp[2]}`))
+            }
+            Actions.pop();
         }
     }
 
@@ -133,6 +173,26 @@ class CreateEvent extends Component {
         this.onCommitteeChange(item)
         this.setState({text: String(item), modalVisible: false})
     }
+
+    convertHour(time){
+    var array = time.split(":")
+
+    if(array[2] === "AM") {
+    var hour = "" + (parseInt(array[0])) 
+    if (hour === "0") hour = "12"
+    return hour + ":" + array[1] + ":" +array[2]
+    }
+    
+    var hour = "" + (parseInt(array[0]) - 12) 
+    if (hour === "0") hour = "12"
+    return hour + ":" + array[1] + ":" +array[2]
+    }
+    
+    prepend0(time){
+		var array = time.split(":")
+        var hour = "" + (parseInt(array[0])) 
+        return hour + ":" + array[1] + ":" +array[2]
+	}
 
     renderComponent(item) {
 
@@ -168,7 +228,7 @@ class CreateEvent extends Component {
             titleStyle
         } = styles;
 
-        if (this.props.type == "Committee")
+        if (this.props.type == "Committee" && !(this.props.committeesList === null || this.props.committeesList === undefined))
         {
             return (
 
@@ -221,10 +281,20 @@ class CreateEvent extends Component {
                 stringType = this.props.type;
             }
             return (
-                <View style={styles.formContainerStyle}>
+                <KeyboardAwareScrollView
+                style={{backgroundColor:  "#0c0b0b"}}
+                resetScrollToCoords={{ x: 0, y: 0}}
+                contentContainerStyle={{flexGrow: 1}}
+                scrollEnabled={false}
+                enableOnAndroid={true}
+                >
+                <SafeAreaView style={styles.formContainerStyle}>
+                    <View style={{backgroundColor: "black", flex: 1}}>
+                    <View style={{flex: .02}}></View>
                     <View style={styles.headerStyle}>
                         <Text style={styles.headerTextStyle}>{this.props.title}</Text>
                     </View>
+                    <View style={{flex: .02}}></View>
                     <ScrollView
                     ref={(ref)=> (this.scrollView=ref)}
                     style={styles.scrollView}>
@@ -243,7 +313,7 @@ class CreateEvent extends Component {
                             onChangeText={this.onNameChange.bind(this)}
                             />
                             <Input
-                            placeholder="Description"
+                            placeholder="Description (Optional)"
                             value={this.props.description}
                             autoCapitalize="sentences"
                             maxLength={200}
@@ -255,9 +325,14 @@ class CreateEvent extends Component {
                             onSelect={(text) => this.onDateChange(text)}
                             />
                             <TimePicker
-                            placeholder={"Time"}
-                            value={this.props.time}
-                            onSelect={(text) => this.onTimeChange(text)}
+                            placeholder={"Start Time"}
+                            value={this.props.startTime}
+                            onSelect={(text) => this.onStartTimeChange(text)}
+                            />
+                             <TimePicker
+                            placeholder={"End Time"}
+                            value={this.props.endTime}
+                            onSelect={(text) => this.onEndTimeChange(text)}
                             />
                             <Input
                             placeholder="Location"
@@ -271,16 +346,34 @@ class CreateEvent extends Component {
                             />
                         </View>
                     </ScrollView>
+                    <View style={{flex: .5}}></View>
                         {this.renderError()}
+                        <SafeAreaView>
+                        <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+                        <View style={{flex: .45}}>
                         <Button 
                             title = {this.props.title}
                             onPress={this.onButtonPress.bind(this)}
                         />
+                        </View>
+                        <View style={{flex: .45}}>
                         <Button 
-                            title = "CANCEL"
-                            onPress={this.props.goToEvents.bind(this)}
+                            title = "Cancel"
+                            onPress={() => {
+                                if(this.props.title === "Edit Event"){
+                                    this.props.startTimeChanged(this.prepend0(this.props.startTime))
+                                    this.props.endTimeChanged(this.prepend0(this.props.endTime))
+                                }
+                                Actions.pop()}
+                        }
                         />
-                </View>
+                        </View>
+                        </View>
+                    </SafeAreaView>
+                    </View>
+                    <View style={{height: dimension.height *.08, backgroundColor: "#0c0b0b"}}></View>
+                </SafeAreaView>
+            </KeyboardAwareScrollView>
             )
         }
 }
@@ -307,15 +400,13 @@ const styles = StyleSheet.create({
     },
     formContainerStyle: {
         flex: 1,
-        padding: 20,
-        backgroundColor: '#21252b'
+        backgroundColor: '#0c0b0b'
     },
     headerStyle: {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 5,
-        marginBottom: 10,
+        flex:.5
     },
     headerTextStyle: {
         fontSize: 22,
@@ -336,10 +427,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     scrollView: {
-        flex: 0,
+        backgroundColor: "black",
+        height: "50%",
         paddingTop: 0,
         paddingBottom: 0,
-        paddingRight: 10,
+        paddingLeft: "5%",
+        paddingRight: "5%",
     },
     titleStyle: {
         flex: .13,
@@ -383,10 +476,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ events, committees }) => {
-    const { type, title, committee, name, description, date, time, location, points, error, eventID } = events;
+    const { type, title, committee, name, description, date, startTime, endTime, location, points, error, eventID } = events;
     const { committeesList } = committees;
 
-    return { type, title, name, description, date, time, location, points, error, eventID, committeesList, committee };
+    return { type, title, name, description, date, startTime, endTime, location, points, error, eventID, committeesList, committee};
 };
 
 const mapDispatchToProps = {
@@ -398,7 +491,8 @@ const mapDispatchToProps = {
     nameChanged,
     descriptionChanged,
     dateChanged,
-    timeChanged,
+    startTimeChanged,
+    endTimeChanged,
     locationChanged,
     epointsChanged,
     eventError,

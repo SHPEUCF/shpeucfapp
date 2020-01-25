@@ -1,6 +1,6 @@
 {
   "name": "RNImageCropPicker",
-  "version": "0.25.3",
+  "version": "0.26.2",
   "summary": "Select single or multiple images, with cropping option",
   "requires_arc": true,
   "license": "MIT",
@@ -10,7 +10,7 @@
   },
   "source": {
     "git": "https://github.com/ivpusic/react-native-image-crop-picker",
-    "tag": "v#{version}"
+    "tag": "v0.26.2"
   },
   "source_files": "ios/src/*.{h,m}",
   "platforms": {

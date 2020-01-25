@@ -9,7 +9,9 @@ import {
     TextInput,
     Dimensions,
     FlatList,
-    Linking
+    Linking,
+    SafeAreaView,
+    Alert
 } from 'react-native';
 import { Button, NavBar, FilterPicker } from '../general'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -21,13 +23,17 @@ import {
     deleteEvents,
     getPrivilege,
     checkIn,
+    rsvp,
     openCheckIn,
     closeCheckIn,
     pageLoad,
     convertNumToDate,
     fetchAllUsers,
     emailListUsers,
-    filterChanged
+    filterChanged,
+    fetchMemberProfile,
+    startTimeChanged,
+    endTimeChanged,
 } from '../../ducks'
 import { Actions } from 'react-native-router-flux';
 import QRCode from 'react-native-qrcode-svg'
@@ -36,15 +42,23 @@ import QRCodeScanner from 'react-native-qrcode-scanner'
 const dimension = Dimensions.get('screen');
 
 class EventDetails extends Component {
-    
 
-    componentWillMount() {
+    constructor(props){
+        super(props)
+        this.state ={modalVisible: false, pickerVisible: false}
+
+    }
+
+    componentDidMount() {
         this.props.filterChanged("")
-        {this.setState({modalVisible: false, pickerVisible: false})}
+       
         this.props.fetchCode(this.props.eventID)
         if (this.props.privilege !== undefined && this.props.privilege.board) {
             this.props.fetchAllUsers()
         }
+
+        this.props.startTimeChanged(this.convertHour(this.props.startTime))
+        this.props.endTimeChanged(this.convertHour(this.props.endTime))
     }
 
     convertNumToDate(date) {
@@ -54,9 +68,12 @@ class EventDetails extends Component {
     }
 
     onSuccess = (e) => {
-        Linking
-          .openURL(e.data)
-          .catch(err => console.error('An error occured', err));
+        if(this.props.code === e.data){
+            this.checkinButton(this.props.eventID, this.props.points)
+        }
+        else {
+            alert("Incorrect Code")
+         }
       }
     
 
@@ -81,11 +98,12 @@ class EventDetails extends Component {
                             <TouchableOpacity onPress={() => {
                             this.setState({modalVisible: false})
                             this.props.closeCheckIn(this.props.eventID)}}>
-                            <Text style = {{color: "#FECB00"}}>X</Text>
+                             <Ionicons 
+                            name="md-close-circle" 
+                            size={dimension.height * .05} 
+                            color = 'e0e6ed'/>
                             </TouchableOpacity>
-                            <View style = {{paddingTop: 20, paddingBottom: 20}}>
-                                <Text style={[modalText, textColor]}>The event check-in is now open!</Text>
-                                <Text style={[modalText, textColor]}>Please provide everyone the code</Text>
+                            <View style = {{paddingTop: 20}}>
                             </View>
                             <View style = {{alignItems: "center", flex: 2, justifyContent: "center"}}>
                             <QRCode
@@ -94,7 +112,6 @@ class EventDetails extends Component {
                             />
                             </View>
                             <View style = {{paddingTop: 20}}>
-                            <Text style={[modalText, textColor]}>When you close this box the event check-in will close</Text>
                             </View>
                         </View>
                     </View>
@@ -104,19 +121,38 @@ class EventDetails extends Component {
         else
         return (
         
-            <QRCodeScanner
-            onRead={this.onSuccess}
-            topContent={
-              <Text style={styles.centerText}>
-                Go to <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on your computer and scan the QR code.
-              </Text>
-            }
-            bottomContent={
-              <TouchableOpacity style={styles.buttonTouchable}>
-                <Text style={styles.buttonText}>OK. Got it!</Text>
-              </TouchableOpacity>
-            }
-          />
+         <Modal
+            transparent={true}
+            animationType={'fade'}
+            onRequestClose={() => {
+                alert('Modal has been closed.');
+            }}
+            visible={this.state.modalVisible}
+            >
+            <SafeAreaView>
+                <View style = {{height: dimension.height, backgroundColor: "black"}}>
+                    <View style = {{flex: .2}}></View>
+                    <View style ={{flex: 1, justifyContent: "flex-start"}}>
+                    <QRCodeScanner
+                    onRead={this.onSuccess}
+                    fadeIn={false}
+                    containerStyle= {{flex: .7}}
+                    />
+                    </View>
+                    <View style={{flexDirection: "row", flex: .9, justifyContent: "space-evenly", alignItems: "center", justifyContent:"center", width:"100%"}}>
+                        <View style={{flex: .3}}></View>
+                            <View style={{flex: 1}}>
+                            <Button
+                            title = "DONE"
+                            onPress = {() => this.setState({modalVisible: false})}
+                            />
+                            </View>
+                    <View style={{flex: .3}}></View>
+                    </View>
+                </View>
+            </SafeAreaView>
+        </Modal>
+        
 
 
 
@@ -257,6 +293,10 @@ class EventDetails extends Component {
             textColor
         } = styles
 
+        if (eventList === null || eventList === undefined) {return null}
+
+        if (eventList[eventID] === null || eventList[eventID] === undefined) {return null}
+
         if(privilege !== undefined && privilege.board === true && eventList !== undefined && eventList[eventID] !== undefined && eventList[eventID].attendance !== undefined) {
             var attendants = Object.keys(eventList[eventID].attendance)
 
@@ -296,23 +336,46 @@ class EventDetails extends Component {
         this.props.checkIn(ID, points, null);
     }
 
+    callUser(id){
+        this.setState({pickerVisible: false})
+        this.props.pageLoad();
+        this.props.fetchMemberProfile(id);
+
+        if (this.props.screen === "dashboard")  Actions["OtherProfileD"]({screen: this.props.screen})
+        else if (this.props.screen === "events") Actions["OtherProfileE"]({screen: this.props.screen})
+        else if (this.props.screen === ("dashboard" + "committeepage")) Actions["OtherProfileCPD"]({screen: this.props.screen})
+        else if (this.props.screen === ("committees" + "committeepage")) Actions["OtherProfileC"]({screen: this.props.screen})
+    }
+
     renderPickMembers(){
         const {
             filter,
             userList,
             eventList,
             eventID,
-            filterChanged
+            filterChanged,
         } = this.props;
-        if(!this.state.pickerVisible) return null;
+
+        if (eventList === null || eventList === undefined) {return null}
+
+        let excludeDataProp = (eventList[eventID] === null || eventList[eventID] === undefined) ? {} : Object.assign({}, eventList[eventID].attendance)
+
+        if (excludeDataProp === null || excludeDataProp === undefined){
+            excludeDataProp = {[this.props.id]: true}
+        }
+
+        else Object.assign(excludeDataProp, {[this.props.id]: true})
+
         return (
             <View>
                 <FilterPicker
                 title={"Members"}
+                visible={this.state.pickerVisible}
+                callUser={(id) => this.callUser(id)}
                 filter={filter}
                 type="Multiple"
                 data={userList}
-                excludeData={eventList[eventID].attendance}
+                excludeData={excludeDataProp}
                 onChangeText={filterChanged.bind(this)}
                 onClose={() => {
                     this.setState({pickerVisible: false})
@@ -325,66 +388,195 @@ class EventDetails extends Component {
             </View>
         )
     }
+
+    renderRSVP() {
+        const {
+            rsvp,
+            eventID,
+            userID
+        } = this.props;
+
+        rsvp(eventID, userID);
+    }
+
+    eventListNum() {
+        
+
+        return "10 people";
+    }
+
+    renderEventListNum(iconSize) {
+        const {
+            privilege,
+            eventList,
+            eventID
+        } = this.props;
+
+        const {
+            icon,
+            icon_container,
+            text,
+            textColor
+        } = styles;
+
+        let numRSVP = 0, numAttendance;
+
+        if (eventList != undefined && eventList[eventID] != undefined) {
+            if (eventList[eventID].attendance != undefined)
+                numAttendance = Object.keys(eventList[eventID].attendance).length;
+            if (eventList[eventID].rsvp != undefined)
+                numRSVP = Object.keys(eventList[eventID].rsvp).length;
+        }
+
+        if (privilege != null && privilege.board) {
+            return ([
+                <View style={icon_container}>
+                    <Ionicons style={[icon, textColor]} name="ios-people" size={iconSize} color='#000'/>
+                    <Text style={[text, textColor]}>{numRSVP} {(numRSVP == 1) ? "person" : "people"} RSVP'd</Text>
+                </View>,
+                numAttendance != undefined && <View style={icon_container}>
+                    <Ionicons style={[icon, textColor]} name="md-people" size={iconSize} color='#000'/>
+                    <Text style={[text, textColor]}>{numAttendance} {(numAttendance == 1) ? "person" : "people"} attended</Text>
+                </View>
+            ])
+        }
+    }
+
+    limitRSVP(date) {
+        temp_date = date.split("-");
+        let thisdate = new Date(), month = (thisdate.getMonth() + 1), 
+            year = thisdate.getFullYear(), day = (thisdate.getDate());
+
+        if (temp_date[0] >= parseInt(year) &&
+            temp_date[1] >= parseInt(month) &&
+            temp_date[2] > parseInt(day))
+            return true;
+    }
     
     checkInMembers(selectedUsers){
         const {
             checkIn,
             eventID,
             points,
+            id,
+            firstName,
+            lastName
         } = this.props;
 
         let userArr = Object.values(selectedUsers);
         userArr.forEach(function(userID){
-            checkIn(eventID, points, userID)
+            checkIn(eventID, points, userID, {id: id, name: firstName + " " +lastName})
         })
     }
     
+    prepend0(item){
+        var array = item.split(":")
+    
+		var hour = (array[0])  
+
+        if(hour.length === 1){
+            hour = "0" + hour;
+        }
+        
+        return  hour + ":" + array[1] + ":" +array[2]
+    }
+
     renderButtons(){
         if(this.props.privilege !== undefined && this.props.privilege.board === true){
             return (
                 <View>
-                    <Button 
-                        title = "OPEN CHECK-IN"
-                        onPress={this.openCheckInButton.bind(this)}
-                    />
-                    <Button 
-                        title = "CHECK MEMBERS IN"
-                        onPress={() => this.setState({pickerVisible: true})}
-                    />
-                    <Button 
-                        title = "DELETE EVENT"
-                        onPress={this.deleteButton.bind(this)}
-                    />
-                    <Button 
-                        title = "EDIT EVENT"
-                        onPress={this.props.goToCreateEventFromEdit.bind(this)}
-                    />
+                    <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .1, width:"100%"}}>
+                        <View style={{flex: .45}}>
+                            <Button 
+                                title = "Open check-in"
+                                onPress={this.openCheckInButton.bind(this)}
+                            />
+                        </View>
+                        <View style={{flex: .45}}>
+                            <Button 
+                                title = "Manual check-in"
+                                onPress={() => this.setState({pickerVisible: true})}
+                            />
+                        </View>
+                    </View>
+                    <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+                          <View style={{flex: .45}}>
+                            <Button 
+                            title = "Edit event"
+                            onPress={() => {
+                                this.props.startTimeChanged(this.prepend0(this.props.startTime))
+                                this.props.endTimeChanged(this.prepend0(this.props.endTime))
+                                this.props.goToCreateEventFromEdit(this.props.screen)}
+                            }/>
+                        </View>
+                        <View style={{flex: .45}}>
+                            <Button 
+                            title = "Delete event"
+                            onPress = {
+                                    () => Alert.alert('Confirmation', 'Are you sure you want to delete', [
+                                {
+                                    text: 'Confirm',
+                                    onPress: () => this.deleteButton()
+                                },
+                                {
+                                    text: 'Cancel',
+                                }
+                            ])}
+                            />
+                        </View>
+                    </View>
                 </View>
             )
             }else
             return(
             <View>
-                <Button 
-                    title = "CHECK IN"
-                    onPress={() => {
-                        this.setState({modalVisible: true})
-                    }}
-                />
+            {(this.limitRSVP(this.props.date)) && (<View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+                <View style={{flex: .45}}>
+                    <Button 
+                        title = "Check in"
+                        onPress={() => {
+                            this.setState({modalVisible: true})
+                        }}
+                    />
+                </View>
+                <View style={{flex: .45}}>
+                <Button
+                    title = "RSVP"
+                    onPress = {() => {
+                        this.renderRSVP()
+                    }}/>
+                </View>
+            </View>)}
+            {(!this.limitRSVP(this.props.date)) && (<View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+                <View style={{flex: .3}}></View>
+                    <View style={{flex: 1}}>
+                        <Button 
+                            title = "Check in"
+                            onPress={() => {
+                                this.setState({modalVisible: true})
+                            }}
+                        />
+                    </View>
+                <View style={{flex: .3}}></View>
+            </View>)}
             </View>
         )
     }
     render() {
-
         if (this.props.loading) {
             return <Spinner/>
         } 
+
         else {
             const {
                 name,
                 description,
                 date,
-                time,
+                startTime,
+                endTime,
                 location,
+                type,
+                committee
             } = this.props
 
             const { 
@@ -399,43 +591,66 @@ class EventDetails extends Component {
                 final
             } = styles
 
-            var iconSize = 25
+            let viewName = type + ": " + name, iconSize = 25;
+            if (committee !== '') viewName = committee + ": " + name;
+
             return (
-                <View style={page}>
-                    <NavBar title={name} back onBack={() => Actions.pop()} />
+                <SafeAreaView style={page}>
+                    <NavBar title={viewName} back onBack={() => Actions.pop()} />
                     {this.renderPickMembers()}
                     <View style={container}>
                         <View style={icon_container}>
-                            <Ionicons style={[icon, textColor]} name="md-time" size={iconSize} color='#000000'/>
-                            <Text style={[text, textColor]}>{this.convertNumToDate(date)}  {time}</Text>
+                            <Ionicons style={[icon, textColor]} name="md-calendar" size={iconSize} color='#000'/>
+                            <Text style={[text, textColor]}>{this.convertNumToDate(date)}</Text>
                         </View>
                         <View style={icon_container}>
-                            <Ionicons style={[icon, textColor]} name="md-pin" size={iconSize} color='#000000'/>
+                            <Ionicons style={[icon, textColor]} name="md-time" size={iconSize} color='#000'/>
+                            <Text style={[text, textColor]}>{startTime}-{endTime}</Text>
+                        </View>
+                        <View style={icon_container}>
+                            <Ionicons style={[icon, textColor]} name="md-pin" size={iconSize} color='#000'/>
                             <Text style={[text, textColor]}>{location}</Text>
                         </View>
-                        <View style={[icon_container, {flex: .7}]}>
-                            <Ionicons style={[icon, textColor]} name="md-list" size={iconSize} color='#000000'/>
+                        {(description != '') && (<View style={[icon_container, {flex: .7}]}>
+                            <Ionicons style={[icon, textColor]} name="md-list" size={iconSize} color='#000'/>
                             <Text style={[text, textColor]}>{description}</Text>
-                        </View>
+                        </View>)}
+                        {this.renderEventListNum(iconSize)}
                         <View style = {[icon_container, final]}>
                             {this.renderAttendance()}
                         </View>
                     </View>
                     {this.renderButtons()}
                     {this.renderCodeBox()}
-                </View>
+                    <View style={{height: dimension.height *.08, backgroundColor: "black"}}></View>
+                </SafeAreaView>
             )
         }
+    }
+    
+    convertHour(time){
+        var array = time.split(":")
+    
+        if(array[2] === "AM") {
+        var hour = "" + (parseInt(array[0])) 
+        if (hour === "0") hour = "12"
+        return hour + ":" + array[1] + ":" +array[2]
+        }
+        
+        var hour = "" + (parseInt(array[0]) - 12) 
+        if (hour === "0") hour = "12"
+        return hour + ":" + array[1] + ":" +array[2]
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: .95,
+        flex: 1,
         alignItems: 'center',
         flexDirection: 'column',
         justifyContent: 'flex-start',
         padding: 25,
+        backgroundColor: "black"
     },
     modalText: {
         alignSelf: 'center',
@@ -459,7 +674,7 @@ const styles = StyleSheet.create({
         height: dimension.height*.6,
         width: dimension.width*.9,
         padding: 12,
-        backgroundColor: '#21252b',
+        backgroundColor: 'white',
         borderRadius: 12,
     },
     modalBackground: {
@@ -556,12 +771,12 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ events, user, members, general }) => {
-  const { type, name, description, date, time, location, points, eventID, error, code, eventList } = events;
-  const { privilege } = user;
+  const { type, name, description, date, startTime, endTime, location, points, eventID, error, code, eventList, committee } = events;
+  const { privilege, firstName, lastName, id} = user;
   const { userList } = members;
   const { filter } = general;
 
-  return { type, name, description, date, time, location, points, eventID, error, privilege, code, eventList, userList, filter};
+  return { type, name, description, date, startTime, endTime, location, points, eventID, error, privilege, code, eventList, userList, filter, firstName, lastName, id, committee};
 };
 
 const mapDispatchToProps = {
@@ -572,13 +787,17 @@ const mapDispatchToProps = {
     deleteEvents,
     getPrivilege,
     checkIn,
+    rsvp,
     openCheckIn,
     closeCheckIn,
     pageLoad,
     convertNumToDate,
     fetchAllUsers,
     emailListUsers,
-    filterChanged
+    filterChanged,
+    fetchMemberProfile,
+    startTimeChanged,
+    endTimeChanged,
 }
 
 

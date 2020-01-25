@@ -11,14 +11,20 @@ const ACTIONS = createActiontypes([
     'COMMITTEE_DESCRIPTION_CHANGED',
     'COMMITTEE_TITLE_CHANGED',
     'CHAIR_CHANGED',
+    'LOAD_COMMITTEE',
 ]);
 
 const INITIAL_STATE = {
     committeesList: [],
+    committeeEvents: {},
     title: "ADD",
     committeeTitle: "",
     committeeDescription: "",
-    chair: {}
+    joinOpened: false,
+    chair: {},
+    pendingMembers: {},
+    joinedMembers: {},
+    links: {}
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -61,6 +67,17 @@ export default (state = INITIAL_STATE, action) => {
             }
         case ACTIONS.EDIT_COMMITTEE:
             return state
+        case ACTIONS.LOAD_COMMITTEE:
+            return {
+                ...state,
+                committeeTitle: payload.title,
+                committeeEvents: payload.events,
+                chair: payload.chair,
+                pendingMembers: payload.pendingMembers,
+                joinedMembers: payload.joinedMembers,
+                links: payload.links,
+                joinOpened: payload.joinOpened
+            }
         default:
             return state;
     }
@@ -95,7 +112,8 @@ export const getCommittees = () => {
                 title: title,
                 description: description,
                 chair: chair,
-                level: length
+                level: length,
+                joinOpened: false
             })
             .then(() => alert('Committee Added!', 'Successful'))
             .catch((error) => alert('Committee could not be Added!', 'Failure'))
@@ -148,6 +166,19 @@ export const getCommittees = () => {
     }
   }
   };
+
+  export const loadCommittee = (committee) => {
+
+
+        return (dispatch) => {
+
+            dispatch({
+                type: ACTIONS.LOAD_COMMITTEE,
+                payload: committee
+            });
+        
+    }
+    }
   
   export const deleteCommittee = (text, chair) => {
     return (dispatch) => {
@@ -203,3 +234,95 @@ export const getCommittees = () => {
     .catch((error) => alert('Order could not be set!', 'Failure'))
     };
   }; 
+
+//   export const pendingJoin = (committee, memberId) => {
+//     return (dispatch) => {
+//         //this needs to find the person but it needs to check for duplicates somehow
+
+//         //Alert.alert(candidateId);
+//         firebase.database().ref(`/committees/${committee}/pendingMembers/`).update({
+//                 [memberId]: true
+//         })
+//         .then(() => alert('Pending Approval!', 'Successful'))
+//         .catch((error) => alert('Not succesful!', 'Failure'))
+
+//     }
+// };
+
+//   export const approveJoin = (committee, memberId, dateStr, board) => {
+//     return (dispatch) => {
+//         //this needs to find the person but it needs to check for duplicates somehow
+
+//         //Alert.alert(candidateId);
+//         firebase.database().ref(`/committees/${committee}/joinedMembers/`).update({
+//                 [memberId]: true
+//         })
+//         .then(() => {
+//             firebase.database().ref(`points/${valId}/points`).once('value', snapshot => {
+//                 points = parseInt(snapshot.val()) + 3;
+//                 firebase.database().ref(`points/${valId}/points`).set(points)
+//                 .then(() => firebase.database().ref(`points/${valId}/breakdown/${committee}/`).push({
+//                     board: board,
+//                     points: 3,
+//                     name: "Join Committee",
+//                     date: dateStr,
+//                     committee: committee,
+//                 }))
+//                 .then(() => firebase.database().ref(`users/${valId}/points`).set(points))
+//             })
+//         .then(() => alert('Member Approved!', 'Successful'))
+//         .catch((error) => alert('Member could not be Approved!', 'Failure'))
+
+//     })
+//     }
+//   }
+
+// export const deleteMemberFromCom = (committee, memberId, status) => {
+//     return (dispatch) => {
+//         //this needs to find the person but it needs to check for duplicates somehow
+
+//         //Alert.alert(candidateId);
+
+//         if(status === "pending"){
+//         firebase.database().ref(`/committees/${committee}/pendingMembers/`).update({
+//             [memberId]: null
+//         })
+//         .then(() => alert('Member Removed!', 'Successful'))
+//         .catch((error) => alert('Member could not be Removed!', 'Failure'))
+//         }
+
+//         if(status === "joined"){
+//         firebase.database().ref(`/committees/${committee}/joinedMembers/`).update({
+//             [memberId]: null
+//         })
+//         .then(() => alert('Member Removed!', 'Successful'))
+//         .catch((error) => alert('Member could not be Removed!', 'Failure'))
+//         }
+
+//     }
+// };
+
+// export const openJoin = (committee, state) => {
+//     return (dispatch) => {
+//         //this needs to find the person but it needs to check for duplicates somehow
+
+//         //Alert.alert(candidateId);
+
+//         if (state){
+//             firebase.database().ref(`/committees/${committee}/`).update({
+//                 joinOpened: true
+//             })
+//             .then(() => alert('Committee registration has been opened!', 'Successful'))
+//             .catch((error) => alert('Could not open committee registration!', 'Failure'))
+//         }
+        
+
+//         else {
+//             firebase.database().ref(`/committees/${committee}/`).update({
+//                 joinOpened: false
+//             })
+//             .then(() => alert('Committee registration has been closed!', 'Successful'))
+//             .catch((error) => alert('Could not close committee registration!', 'Failure'))
+//         }
+//     }
+// };

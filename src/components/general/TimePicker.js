@@ -52,7 +52,8 @@ class TimePicker extends Component {
             minute,
             period
         } = item
-        this.props.onSelect(`${hour}:${minute}:${period}`)
+        
+        this.props.onSelect(item)
 }
 
     //

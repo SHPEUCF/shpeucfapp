@@ -5,20 +5,22 @@ import { Actions } from 'react-native-router-flux';
 import { goToLogIn, registrationError } from './ducks';
 import Router from './config/Router';
 import AppInfo from '../app.json'
+import { SafeAreaView, StatusBar, View} from 'react-native'
 
 
 class App extends Component {
 
-  componentWillMount() {
+  componentDidMount() {
     // Initialize firebase
     const config = {
-      apiKey: "AIzaSyCeX5lUZUmQxXsWNO8gNXVHqfJs-kQmSaY",
-      authDomain: "shpe-ucf.firebaseapp.com",
-      databaseURL: "https://shpe-ucf.firebaseio.com",
-      projectId: "shpe-ucf",
-      storageBucket: "shpe-ucf.appspot.com",
-      messagingSenderId: "974032317047"
-    };
+    apiKey: "AIzaSyBjuggUaZwZEj0FYMK3x-O7FflhdsOUsx0",
+    authDomain: "shpe-app-test.firebaseapp.com",
+    databaseURL: "https://shpe-app-test.firebaseio.com",
+    projectId: "shpe-app-test",
+    storageBucket: "shpe-app-test.appspot.com",
+    messagingSenderId: "343434443699",
+    appId: "1:343434443699:web:430ce49ccf542aec2fe9c6",
+      };
     firebase.initializeApp(config)
     
     // firebase.auth().signOut();
@@ -37,6 +39,11 @@ class App extends Component {
               this.props.loggedIn = true
               Actions.main();
             } else {
+
+              if(!correctVersion && firebase.auth().currentUser.emailVerified){
+              alert("Please update your app")
+              }
+
               firebase.auth().signOut();
               this.props.loggedIn = false
 
@@ -51,13 +58,17 @@ class App extends Component {
   }
 
   render() {
-    return <Router />;
+    return (
+    <View style={{flex: 1}}>
+      <Router />
+    </View>
+    );
   }
 }
 
 const mapStateToProps = ({ user }) => {
-  const { loggedIn, error } = user;
-  return { loggedIn, error };
+  const { loggedIn } = user;
+  return { loggedIn };
 };
 
 const mapDispatchToProps = { goToLogIn, registrationError };

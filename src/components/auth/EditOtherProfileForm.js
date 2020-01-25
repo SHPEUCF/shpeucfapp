@@ -3,7 +3,6 @@ import { ScrollView, View, Text, StyleSheet, TouchableOpacity,TextInput, Image, 
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { Card, CardSection, Input, Button, Spinner } from '../general';
-import { RkAvoidKeyboard, RkButton, RkPicker } from 'react-native-ui-kitten';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import data from '../../data/Colleges.json';
 import {

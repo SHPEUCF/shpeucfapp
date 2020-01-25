@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { emailChanged, resetPassword, goToLogIn } from '../../ducks';
 import { Card, CardSection, Button, Spinner } from '../general';
 import { Input } from '../general'
+
+const dimension = Dimensions.get('window');
 class ResetPasswordForm extends Component {
 
   onEmailChange(text) {
@@ -71,16 +73,11 @@ class ResetPasswordForm extends Component {
       return (
         <View style={styles.container}>
           <View style={styles.formContainerStyle}>
-            <View style={{flexDirection: 'row', justifyContent: 'center', bottom: 10}}>
-              {/* <Image
-                source={require('../../assets/images/Icon_SHPE_UCF_152x152.png')}
-                style={{width: 150, height: 150}}/> */}
-            </View>
             <View style={styles.headerStyle}>
               <Text style={styles.headerTextStyle}>Reset Password</Text>
               <Text style={styles.headerSubtitleStyle}>Enter your email below</Text>
             </View>
-
+            <View style = {{height: dimension.height *.1}}>
             <Input
               placeholder="Email"
               value={this.props.email}
@@ -88,7 +85,8 @@ class ResetPasswordForm extends Component {
               maxLength={45}
               onChangeText={this.onEmailChange.bind(this)}
               />
-
+            <View style = {{height: dimension.height * .02}}></View>
+            </View>
             {this.renderError()}
             {this.renderButtons()}
           </View>
@@ -106,12 +104,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#0c0b0b',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
   },
   formContainerStyle: {
     marginLeft: 20,
     marginRight: 20,
-    bottom: 90,
   },
   headerStyle: {
     flexDirection: 'column',

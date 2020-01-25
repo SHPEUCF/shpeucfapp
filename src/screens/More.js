@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
-import { ScrollView, FlatList, Text, View, RefreshControl } from 'react-native';
+import { ScrollView, FlatList, Text, View, RefreshControl, Dimensions, SafeAreaView, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { ListItem } from 'react-native-elements';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Spinner, NavBar } from '../components/general'
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 import {
@@ -12,13 +14,14 @@ import {
   updateElection
 } from "../ducks"
 
+const dimension = Dimensions.get('window');
 
 
   const menuItems = [
     {
       title: 'Leaderboard',
       icon: 'format-align-left',
-      screen: 'Leaderboard',
+      screen: 'LeaderboardM',
       privilege: "user",
     },
     {
@@ -27,7 +30,7 @@ import {
       screen: 'Election',
       privilege: "user"
     },
-    {
+    /*{
       title: 'Conventions',
       icon: 'airplanemode-active',
       screen: 'Conventions',
@@ -38,7 +41,7 @@ import {
       icon: 'assignment-ind',
       screen: 'EBoard',
       privilege: "user"
-    },
+    },*/
     {
       title: 'Committees',
       icon: 'assignment-ind',
@@ -70,16 +73,16 @@ class More extends Component {
 
   render() {
     return (
-      <View style={{backgroundColor: '#2C3239', flex: 1}}>
-        <NavBar title="More Options" />
-        <ScrollView
-        //    refreshControl={
-        //   <RefreshControl
-        //     refreshing={this.state.refreshing}
-        //     onRefresh={this._onRefresh}
-        //   />
-        // }
-        >
+      <SafeAreaView style={{backgroundColor: '#0c0b0b', flex: 1}}>
+        <View style={{height: dimension.height * .1, backgroundColor: '#FECB00', borderBottomWidth: 1, borderColor: "black", justifyContent: "center"}}>
+            <Image
+              source={require('../assets/images/SHPE_UCF_Logo.png')}
+              style={{alignSelf: 'center'}}
+              height = {dimension.height * .06}
+              resizeMode="contain"
+            /> 
+          </View>
+        <View>
         <FlatList
           removeClippedSubviews={false}
           extraData={this.props}
@@ -87,8 +90,16 @@ class More extends Component {
           data = {menuItems}
           renderItem={this.renderItem}
         />
-        </ScrollView>
-      </View>
+        </View>
+        <View style={{justifyContent: "center", flex: 1, flexDirection: "row", backgroundColor: "black"}}>
+           <Image
+              source={require('../assets/images/SHPE_logo_FullColor-RGB-2x.png')}
+              style={{alignSelf: 'center'}}
+              height = {dimension.height * dimension.width * .00025}
+              resizeMode="contain"
+            /> 
+        </View>
+      </SafeAreaView>
     );
   }
 
@@ -112,15 +123,17 @@ class More extends Component {
 
     if (privilege !== undefined && privilege[item.privilege] === true ) {
       return(
-        <ListItem
-          containerStyle={{ backgroundColor: '#2C3239', borderBottomColor: 'white', borderBottomWidth: 1}}
-          removeClippedSubviews={false}
-          title={item.title}
-          chevron
-          titleStyle={{ color: 'white'}}
-          leftIcon={{name: item.icon , color: 'white' }}
-          onPress={() => Actions[item.screen]()}
-        />
+        <View>
+          <ListItem
+            containerStyle={{ backgroundColor: 'black', borderBottomColor: 'black'}}
+            removeClippedSubviews={false}
+            title={item.title}
+            titleStyle={{ color: 'white'}}
+            leftIcon={{name: item.icon , color: 'white'}}
+            rightIcon={<Ionicons name="ios-arrow-dropright" size={dimension.height * .025} style={{color: '#FECB00'}}/>}
+            onPress={() => Actions[item.screen]()}
+          />
+        </View>
       )
     }
   }
@@ -128,11 +141,11 @@ class More extends Component {
 }
 
 const mapStateToProps = ({ user, general, elect }) => {
-  const { privilege } = user;
+  const { privilege, dashColor } = user;
   const { loading } = general;
   const { election, apply} = elect;
 
-  return { privilege, loading, election, apply };
+  return { privilege, loading, election, apply, dashColor};
 };
 
 const mapDispatchToProps = {

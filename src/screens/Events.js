@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 import { Button, NavBar } from '../components/general'
 import { Agenda } from 'react-native-calendars';
 import {
@@ -9,7 +10,8 @@ import {
   View,
   StyleSheet,
   ScrollView,
-  Dimensions
+  Dimensions,
+  SafeAreaView
   } from 'react-native';
 import {
   fetchEvents,
@@ -19,7 +21,8 @@ import {
   nameChanged,
   descriptionChanged,
   dateChanged,
-  timeChanged,
+  startTimeChanged,
+  endTimeChanged,
   locationChanged,
   epointsChanged,
   eventIDChanged,
@@ -30,25 +33,41 @@ import { ThemeConsumer } from 'react-native-elements';
 
 const dimension = Dimensions.get('window');
 let dateStr =  ""
+let initDate = ""
 
 class Events extends Component {
+  constructor(props) {
+    super(props);
+    this.state ={status: "closed", day: new Date()}
+  }
 
   componentDidMount(){
     let date = new Date()
-    let month = date.getMonth() + 1
+    let month = this.prepend0((date.getMonth() + 1).toString())
     let year = date.getFullYear()
-    let day = date.getDate()
+    let day = this.prepend0((date.getDate()).toString())
     let stringDate = `${year}-${month}-${day}`
-
     dateStr = stringDate
+    initDate = stringDate
   }
 
   static onRight = function(){
     this.alert(new Date());
   }
 
+  prepend0(item){
+    if(item < 10){
+        return "0" + item;
+    }
+    return item
+}
+
   getDate(item){
     dateStr = item.dateString
+  }
+
+  chooseToday(){
+    this.child.chooseToday()
   }
 
   render() {
@@ -56,14 +75,17 @@ class Events extends Component {
       textColor
     } = styles
     return (
-      <View style={{ flex: 1, backgroundColor: '#0c0b0b'}}>
-        <NavBar title="Events" />
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#0c0b0b'}}>
+        <View style= {{backgroundColor: "black", flex: 1}}>
         <ScrollView style={{flex:1}}>
           <Agenda
-            selected={new Date()}
+            dashColor={this.props.dashColor}
+            ref={child => {this.child = child}} {...this.props}
+            selected={this.state.day}
             //onDayChange={(day)=>{alert('day pressed')}}
+            setPos={(stat) => this.setState({status: stat})}
             passDate={(item) => this.getDate(item)}
-            showWeekNumbers={true}
+            showWeekNumbers={false}
             pastScrollRange={24}
             futureScrollRange={24}
             showScrollIndicator={true}
@@ -71,7 +93,7 @@ class Events extends Component {
             items = {this.getFormattedEventList()}
             // Will only load items for visible month to improve performance later
             // loadItemsForMonth={this.loadItemsForMonth.bind(this)}
-            renderItem={this.renderItem.bind(this)}
+            renderItem={(item) => this.renderItem(item)}
             rowHasChanged={this.rowHasChanged.bind(this)}
             renderEmptyDate={ this.renderEmptyDate.bind(this) }
             renderEmptyData = {this.renderEmptyData.bind(this)}
@@ -80,7 +102,7 @@ class Events extends Component {
               height: dimension.height *.73
             }}
             theme={{
-              backgroundColor: '#0c0b0b',
+              backgroundColor: 'black',
               calendarBackground: '#21252b',
               agendaDayTextColor: '#fff',
               agendaDayNumColor: '#fff',
@@ -98,26 +120,77 @@ class Events extends Component {
             }}
           />
         </ScrollView>
+        <View style= {{flex: .1}}>
+        {(initDate !== dateStr) && ( <TouchableOpacity  style= {{alignItems: "center", justifyContent: "flex-start", flex: 1}} onPress={() => this.chooseToday()}>
+            <View style= {{flex: .25}}></View>
+            <Text style={{color: "white", fontSize: 16}}>
+                Today
+            </Text>
+         </TouchableOpacity>)}
+         </View>
         <View style={{flex: .1}}>
             {this.renderButton()}
         </View>
-      </View>
+        </View>
+      </SafeAreaView>
     );
+  }
+
+  selectButton(){
+    if (this.state.status === "closed") {
+
+      return (<Button
+          title = "Open Calendar"
+          onPress={() =>{
+          this.child.onSnapAfterDrag("closed")
+          this.setState({status: "opened"})
+        }}
+      />)
+    }
+
+    else {
+      return (<Button
+        title = "Close Calendar"
+        onPress={() =>{
+        this.child.onSnapAfterDrag("opened")
+        this.setState({status: "closed"})
+        }}
+      />)
+    }
   }
 
   renderButton(){
     if(this.props.privilege !== undefined && this.props.privilege.board){
-      this.props.nameChanged("");
-
       return (
-          <Button
-              title = "CREATE EVENT"
-              onPress={() =>
-                {
-                this.props.dateChanged(dateStr)
-                this.props.goToCreateEvent()}
-                }
-          />
+        <View style ={{position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+        <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center"}}>
+            <View style={{flex: .45}}>
+              <Button
+                  title = "Create Event"
+                  onPress={() =>
+                    {
+                    this.props.dateChanged(dateStr)
+                    this.props.goToCreateEvent("events")}
+                    }
+              />
+            </View>
+            <View style={{flex: .45}}>
+              {this.selectButton()}
+            </View>
+          </View>
+        </View>
+      )
+    }
+
+    else {
+      return(
+        <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+            <View style={{flex: .3}}></View>
+            <View style={{flex: 1}}>
+              {this.selectButton()}
+            </View>
+            <View style={{flex: .3}}></View>
+          </View>
       )
     }
   }
@@ -150,7 +223,7 @@ class Events extends Component {
       emptyData
     } = styles
     return (
-      <View style={emptyData}>
+      <View style={[emptyData, {backgroundColor: this.props.dashColor}]}>
         <Text style={textColor}>No events to display on this day</Text>
       </View>
     );
@@ -168,36 +241,50 @@ class Events extends Component {
     this.props.nameChanged(item.name)
     this.props.descriptionChanged(item.description)
     this.props.dateChanged(item.date)
-    this.props.timeChanged(item.time)
+    this.props.startTimeChanged(item.startTime)
+    this.props.endTimeChanged(item.endTime)
     this.props.locationChanged(item.location)
     this.props.epointsChanged(item.points)
     this.props.eventIDChanged(item.eventID)
-    this.props.goToViewEvent();
+    this.props.goToViewEvent("events");
   }
 
   renderItem(item) {
-
     const {
       textColor,
       itemContainer
     } = styles
 
-    var viewName = item.name;
+    var viewName = item.type + ": " + item.name;
     if (item.committee !== ''){
       viewName = item.committee + ": " + item.name;
     }
     
     return (
       <TouchableOpacity onPress={this.viewEvent.bind(this,item)}>
-          <View style={itemContainer}>
+          <View style={[itemContainer, {backgroundColor: this.props.dashColor}]}>
             <Text style={[{ fontWeight: 'bold'},textColor]}>{viewName}</Text>
-            <Text style={textColor}>Time: {item.time}</Text>
+            <Text style={textColor}>Time: {this.convertHour(item.startTime)} - {this.convertHour(item.endTime)}</Text>
             <Text style={textColor}>Location: {item.location}</Text>
         </View>
       </TouchableOpacity>
     );
   }
 
+  convertHour(time){
+    var array = time.split(":")
+
+    if(array[2] === "AM") {
+    var hour = "" + (parseInt(array[0])) 
+    if (hour === "0") hour = "12"
+    return hour + ":" + array[1] + ":" +array[2]
+    }
+    
+    var hour = "" + (parseInt(array[0]) - 12) 
+    if (hour === "0") hour = "12"
+    return hour + ":" + array[1] + ":" +array[2]
+    }
+  
   rowHasChanged(r1, r2) {
     return r1.name !== r2.name;
   }
@@ -212,7 +299,7 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   textColor: {
-    color: '#e0e6ed'
+    color: 'white'
   },
   modalTextInput: {
     marginTop: dimension.height*.05,
@@ -255,11 +342,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   emptyData: {
-    height: dimension.height * .015,
-    paddingTop: dimension.height * .030,
-    paddingBottom: dimension.height *.04,
-    marginRight: dimension.height *.010,
-    marginLeft: dimension.height *.010,
+    height: dimension.height * .15,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#21252b',
@@ -273,8 +356,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ events, user }) => {
   const { eventList } = events;
-  const { privilege } = user;
-  return { eventList, privilege };
+  const { privilege, dashColor } = user;
+  return { eventList, privilege, dashColor};
 };
 
 const mapDispatchToProps = {
@@ -285,7 +368,8 @@ const mapDispatchToProps = {
   nameChanged,
   descriptionChanged,
   dateChanged,
-  timeChanged,
+  startTimeChanged,
+  endTimeChanged,
   locationChanged,
   epointsChanged,
   eventIDChanged,

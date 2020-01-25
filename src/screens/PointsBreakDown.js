@@ -15,6 +15,7 @@ import {
   FlatList,
   Text,
   View,
+  SafeAreaView,
   StyleSheet,
   TouchableOpacity,
   Dimensions } from 'react-native';
@@ -45,10 +46,10 @@ class PointsBreakDown extends Component {
         } = styles
 
                return (
-                <View style ={page}>
-                    <NavBar title="Points" back onBack={() => Actions.replace('profile')} />
+                <SafeAreaView style ={page}>
+                    <NavBar title="Points" back onBack={() => Actions.pop()} />
                     {this.renderContent()}
-                </View>
+                </SafeAreaView>
             )
     }
 
@@ -61,7 +62,8 @@ class PointsBreakDown extends Component {
             title,
             points,
             topLevelText,
-            textColor
+            textColor,
+            itemContainer
         } = styles
 
         const {
@@ -77,7 +79,7 @@ class PointsBreakDown extends Component {
 
             breakdown = Object.entries(membersPoints[currentUser.uid].breakdown)
             return (
-                <View style={{flex: 1}}>
+                <SafeAreaView style={{flex: 1}}>
                     <View style={[contentContainerStyle,containerStyle]}>
                         <Text style={[title, topLevelText, textColor]}>Total Points</Text>
                         <Text style={[points, topLevelText, textColor]}>{this.props.membersPoints[currentUser.uid].points}</Text>
@@ -90,11 +92,13 @@ class PointsBreakDown extends Component {
                         this.renderComponent(item)
                         )}
                     />
-                </View>
+                </SafeAreaView>
             )
         }
         else return (
-            <Text style={[textColor, {flex: 1}]}>You have no Points! Go out there and get some points!</Text>
+            <View style = {{flex: 1, height: dimension.height, justifyContent: "center", padding: "10%"}}>
+            <Text style={[textColor]}>You have no Points! Go out there and get some points!</Text>
+            </View>
         )
     }
 
@@ -139,6 +143,12 @@ class PointsBreakDown extends Component {
     )
     }
 
+    convertNumToDate(date) {
+		var months = ["Jan", "Feb", "Mar", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+		temp_date = date.split("-");
+		return `${months[Number(temp_date[1]) - 1]} ${temp_date[2]}`;
+	}
+
    renderInnerComponent(item, section){
     const {
         innerContainerStyle,
@@ -154,9 +164,10 @@ class PointsBreakDown extends Component {
         <TouchableOpacity>
         <View style={innerContentContainerStyle}>
             <View style={innerContainerStyle}>
+
                 <Text style={[title,botLevelText,textColor]}>{item.name}</Text>
                 <Text style={[points,botLevelText,textColor]}>{item.points}</Text>
-                <Text style={[points, botLevelText, textColor]}>{item.date}</Text>
+                <Text style={[botLevelText, textColor]}>{this.convertNumToDate(item.date)}</Text>
             </View>
         </View>
         </TouchableOpacity>
@@ -198,7 +209,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
     },
     textColor: {
-        color: '#e0e6ed'
+        color: '#e0e6ed',
+        textAlign: 'center',
+        fontSize: 18
     },
     topLevelText: {
         fontSize: 20,
@@ -208,29 +221,32 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     botLevelText: {
-        fontSize: 12
+        fontSize: 9
     },
     contentContainerStyle: {
         marginTop: 1,
         backgroundColor: '#2C3239'
     },
     title: {
-        flex: .5
+        flex: 1
     },
     points: {
-        flex: .15
+        flex: 1
     },
     innerContainerStyle: {
         flex: 1,
         flexDirection: 'row',
         height: dimension.height *.07,
         backgroundColor: '#aaa2',
-        paddingVertical: 10,
+        alignItems: "center",
         paddingHorizontal: 15,
     },
     innerContentContainerStyle: {
         margin: 1,
     },
+    itemContainer: {
+        flex: 1
+    }
 });
 
 const mapStateToProps = ({ user, members, events, general }) => {

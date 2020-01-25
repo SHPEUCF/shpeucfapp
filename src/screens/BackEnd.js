@@ -8,7 +8,8 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Dimensions } from 'react-native';
+  Dimensions,
+  SafeAreaView} from 'react-native';
 import { Button } from '../components/general'
 import { ListItem } from 'react-native-elements';
 import { NavBar } from '../components/general';
@@ -47,7 +48,7 @@ class BackEnd extends Component {
         page
     } = styles;
     return (
-      <View style={page}>
+      <SafeAreaView style={page}>
         <NavBar title="Back End" back onBack={() => Actions.pop()} />
         <FlatList
           keyExtractor = {this.keyExtractor}
@@ -55,7 +56,7 @@ class BackEnd extends Component {
           data = {menuItems}
           renderItem={this.renderItem}
         />
-      </View>
+      </SafeAreaView>
     );
   };
 
@@ -70,7 +71,7 @@ class BackEnd extends Component {
         &&  privilege[item.privilege] !== undefined && (!('privilege' in item) || privilege[item.privilege] === true )) {
         return(
         <ListItem
-          containerStyle={{ backgroundColor: '#2C3239', borderBottomColor: 'white', borderBottomWidth: 1}}
+          containerStyle={{ backgroundColor: 'black', borderBottomColor: 'white'}}
           removeClippedSubviews={false}
           title={item.title}
           chevron
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
   },
   page: {
     flex: 1,
-    backgroundColor: '#2C3239',
+    backgroundColor: '#0c0b0b',
   }
 });
 

@@ -54,6 +54,7 @@ class Input extends Component {
         onChangeText={onChangeText}
         style={[inputStyle, style]}
         autoCorrect={autoCorrect}
+        placeholderTextColor="#dadfe1"
         autoCapitalize={autoCapitalize}
         blurOnSubmit={blurOnSubmit}
         placeholder={placeholder}

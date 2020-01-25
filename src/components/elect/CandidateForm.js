@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
 import { Input, Button } from '../general';
-import { RkAvoidKeyboard, RkButton, RkPicker } from 'react-native-ui-kitten';
 import {
     addApplication,
     editApplication,

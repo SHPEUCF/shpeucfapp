@@ -6,11 +6,17 @@ import {
     FlatList,
     Dimensions,
     TouchableOpacity,
-    Text
+    Text,
+    SafeAreaView
 } from 'react-native';
 import { Input } from './Input'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Avatar } from 'react-native-elements'
 import { Alert } from 'react-native';
+import { Button } from './Button'
+import { Actions } from 'react-native-router-flux';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 
 
 const dimension = Dimensions.get('window');
@@ -48,7 +54,8 @@ class FilterPicker extends Component {
         filter: PropTypes.string,
         iconColor: PropTypes.string,
         onChangeText:  PropTypes.func,
-        type: PropTypes.string
+        type: PropTypes.string,
+        itemJSX: PropTypes.func
     }
 
     clickAction(user, index) {
@@ -70,57 +77,136 @@ class FilterPicker extends Component {
     renderComponent(item, index) {
         if (this.props.type === "Single"){
 
-        const {
-            itemStyle,
-            itemTextStyle
-        } = styles
-
-        let user = item[1]
-
-        var re = new RegExp("^"+this.props.filter, "i");
-
-        if (re.test(`${user.firstName} ${user.lastName}`) ){
-        return(
-            <TouchableOpacity
-            onPress={() => this.clickAction(user, index)}>
-                <View style={[itemStyle, this.props.pickerItemStyle]}>
-                    <Text style={itemTextStyle}>{user.firstName} {user.lastName}</Text>
-                </View>
-            </TouchableOpacity>
-        )
-        }
-
-        }
-
-        else if (this.props.type === "Multiple"){
+           
             const {
-                filter,
-                pickerItemStyle,
-                excludeData,
-            } = this.props;
-            let user = item[1];
-    
-            const {
-                itemStyle,
-                itemTextStyle
+                containerStyle,
+                contentContainerStyle,
+                textStyle,
             } = styles
-            if(excludeData && excludeData[user.id]) return null;
-    
-            let selected = (this.state.selectedNames[`${user.id}`]) ?
-                { backgroundColor: '#f00' }: {};
-            var re = new RegExp("^"+filter, "i");
-    
+
+            let user = item[1]
+
+            var re = new RegExp("^"+this.props.filter, "i");
+
             if (re.test(`${user.firstName} ${user.lastName}`) ){
             return(
                 <TouchableOpacity
-                onPress={() => this.selectUserAction(user)}>
-                    <View style={[itemStyle, pickerItemStyle, selected]}>
-                        <Text style={itemTextStyle}>{user.firstName} {user.lastName}</Text>
+                onPress={() => this.clickAction(user, index)}>
+                   <View style={[contentContainerStyle]}>
+                        <View style={containerStyle}>
+                            <View style={{flex:.1}}></View>
+                            <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
+                                <View style = {{flex: 1}}>
+                                <Text style={ [textStyle, {fontWeight: 'bold'}]}>{`${user.firstName} ${user.lastName}`}</Text>
+                                </View>
+                                <View style = {{alignItems: "flex-end", flexDirection: "row", flex: .4}}>
+                                <View style = {{flex: .2}}></View>
+                                {(user.picture === '') && (
+                                <Avatar
+                                size = {dimension.height*.08}
+                                rounded
+                                titleStyle={{backgroundColor: user.color}}
+                                overlayContainerStyle={{backgroundColor: user.color}}
+                                title={user.firstName[0].concat(user.lastName[0])}
+                                />
+                                )}
+                                {(user.picture !== '') && (
+                                <Avatar
+                                size = {dimension.height*.08}
+                                rounded
+                                source= {{uri: user.picture}}
+                                />
+                                )}
+                                </View>
+                            </View>
+                            <View style={{flex:.1}}></View>
+                        </View>
                     </View>
                 </TouchableOpacity>
             )
             }
+            
+
         }
+
+        else if (this.props.type === "Multiple"){
+            
+                const {
+                    filter,
+                    pickerItemStyle,
+                    excludeData,
+                } = this.props;
+                let user = item[1];
+        
+                const {
+                    containerStyle,
+                    contentContainerStyle,
+                    textStyle,
+                } = styles
+
+                if(excludeData && excludeData[user.id]) return null;
+        
+                let selected = (this.state.selectedNames[`${user.id}`]) ?
+                    { backgroundColor: '#f00' }: {};
+                var re = new RegExp("^"+filter, "i");
+        
+                if (re.test(`${user.firstName} ${user.lastName}`) ){
+                return(
+                    <TouchableOpacity
+                    onPress={() => this.selectUserAction(user)}>
+                    <View style={[contentContainerStyle, selected]}>
+                        <View style={containerStyle}>
+                            <View style={{flex:.1}}></View>
+                            <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
+                                <View style = {{flex: 1}}>
+                                <Text style={ [textStyle, {fontWeight: 'bold'}]}>{`${user.firstName} ${user.lastName}`}</Text>
+                                </View>
+                                <View style = {{alignItems: "flex-end", flexDirection: "row", flex: .4}}>
+                                <Ionicons
+                                onPress={() => this.props.callUser(user.id)}
+                                name={'ios-arrow-dropright-circle'}
+                                size={dimension.height*.04}
+                                color={"#FECB00"}
+                                />
+                                <View style = {{flex: .2}}></View>
+                                {(user.picture === '') && (
+                                <Avatar
+                                size = {dimension.height*.08}
+                                rounded
+                                titleStyle={{backgroundColor: user.color}}
+                                overlayContainerStyle={{backgroundColor: user.color}}
+                                title={user.firstName[0].concat(user.lastName[0])}
+                                />
+                                )}
+                                {(user.picture !== '') && (
+                                <Avatar
+                                size = {dimension.height*.08}
+                                rounded
+                                source= {{uri: user.picture}}
+                                />
+                                )}
+                                </View>
+                            </View>
+                            <View style={{flex:.1}}></View>
+                        </View>
+                    </View>
+                    </TouchableOpacity>
+                )
+                }
+            }
+
+        else if (this.props.type === "Searchbar"){
+            var re = new RegExp("^"+this.props.filter, "i");
+            if (re.test(`${item.firstName} ${item.lastName}`) ){
+                return(
+                <TouchableOpacity onPress={() => this.props.onSelect(item)}>
+                    {this.props.itemJSX(item)}
+                </TouchableOpacity>
+                )
+            }
+
+        }
+        
     }
 
    _keyExtractor = (item, index) => index;
@@ -139,7 +225,7 @@ class FilterPicker extends Component {
             buttonContainer,
             flatlistStyle,
             buttonStyle,
-            titleStyle
+            titleStyle,
         } = styles;
 
         const {
@@ -159,7 +245,7 @@ class FilterPicker extends Component {
         }
 
         if(this.props.type === "Single"){
-            picker = <View>
+            picker = <SafeAreaView>
             <View style={[{flexDirection:'row'}, style]}>
                 <Input
                 style={[inputStyle, inputBoxStyle]}
@@ -178,13 +264,13 @@ class FilterPicker extends Component {
             <Modal
             transparent={true}
             visible={this.state.modalVisible}>
-                <View style={modalBackground}>
+                <SafeAreaView style={modalBackground}>
                     <View style={modalStyle}>
-                        <Text style={titleStyle}>{title}</Text>
                         <Input
                         style={[inputStylee, inputStyleee]}
                         onChangeText={onChangeText}
                         value={this.props.filter}
+                        placeholder="Search"
                         />
                         <View style={flatlistStyle}>
                             <FlatList
@@ -196,33 +282,36 @@ class FilterPicker extends Component {
                             )}
                             />
                         </View>
-                        <View style={buttonContainer}>
-                            <TouchableOpacity  
-                            style={buttonStyle}
-                            onPress={() => { this.props.onSelect(placeholder)
-                                this.setState({modalVisible: false})
-                                }}>
-                                <Text style={textStyle}>Cancel</Text>
-                            </TouchableOpacity>
+                        <View style={{height: dimension.height *.08, backgroundColor: "black"}}></View>
+                        <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%"}}>
+                            <View style={{flex: .3}}></View>
+                            <View style={{flex: 1}}>
+                                <Button 
+                                title = "Cancel"
+                                onPress={() => { this.props.onSelect(placeholder)
+                                    this.setState({modalVisible: false})
+                                    }}/>
+                            </View>
+                            <View style={{flex: .3}}></View>
                         </View>
                     </View>
-                </View>
+                </SafeAreaView>
             </Modal>
-        </View>
+        </SafeAreaView>
         }
 
         else if (this.props.type === "Multiple") {
-            picker = <View>
+            picker = 
             <Modal
             transparent={true}
-            visible={this.state.modalVisible}>
-                <View style={modalBackground}>
-                    <View style={modalStyle}>
-                        <Text style={titleStyle}>{title}</Text>
+            visible={this.state.modalVisible && this.props.visible}>
+                <SafeAreaView style={modalBackground}>
+                    <SafeAreaView style={modalStyle}>
                         <Input
                         style={[inputStylee, inputStyleee]}
                         onChangeText={onChangeText}
                         value={this.props.filter}
+                        placeholder="Search"
                         />
                         <View style={flatlistStyle}>
                             <FlatList
@@ -234,29 +323,45 @@ class FilterPicker extends Component {
                             )}
                             />
                         </View>
-                        <View style={buttonContainer}>
-                            <TouchableOpacity  
-                            style={buttonStyle}
-                            onPress={() => this.props.onSelect(this.state.selectedNames)}
-                            >
-                                <Text style={textStyle}>Done</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity  
-                            style={buttonStyle}
-                            onPress={() => this.props.onClose()}>
-                                <Text style={textStyle}>Cancel</Text>
-                            </TouchableOpacity>
+                            <View style={{flex: .2}}>
+                            <View style={{flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * .032, width:"100%", backgroundColor: "black"}}>
+                                <View style={{flex: .45}}>
+                                    <Button 
+                                    title = "Done"
+                                    onPress={() => this.props.onSelect(this.state.selectedNames)}
+                                    />
+                                </View>
+                                <View style={{flex: .45}}>
+                                    <Button 
+                                    title = "Cancel"
+                                    onPress={() => this.props.onClose()}
+                                    />
+                                </View>
+                            </View>
                         </View>
-                    </View>
-                </View>
+                        <View style = {{height: dimension.height *.08, backgroundColor: "black"}}></View>
+                    </SafeAreaView>
+                </SafeAreaView>
             </Modal>
-        </View>
+        
+        }
 
+        else if (this.props.type === "Searchbar") {
+            picker = 
+            
+                <View style = {{height: dimension.height *.1}}>
+                    <Input
+                    style={[inputStylee, inputStyleee, {flex: 1}]}
+                    onChangeText={onChangeText}
+                    value={this.props.filter}
+                    placeholder="Search"
+                    />
+                </View>
         }
 
         return (
             <View>
-            {picker}
+             {picker}
             </View>
         )
     };
@@ -290,7 +395,8 @@ const styles = {
     titleStyle: {
         flex: .13,
         alignSelf: 'center',
-        fontSize: 20
+        fontSize: 20,
+        backgroundColor: "white"
     },
     buttonStyle: {
         flex: 1,
@@ -313,18 +419,12 @@ const styles = {
     },
     modalBackground: {
         justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#0003',
-        margin: 0,
-        height: dimension.height,
-        width: dimension.width,
+        backgroundColor: '#0c0b0b',
+        flex: 1
     },
     modalStyle: {
-        height: dimension.height,
-        width: dimension.width,
-        backgroundColor:'#fff',
-        padding: 12,
-        borderRadius: 12,
+        flex: 1,
+        backgroundColor: 'black',
     },
     inputStyle:{
         flex: 1
@@ -338,16 +438,47 @@ const styles = {
         alignSelf: 'center'
     },
     inputStyleee: {
-        alignSelf: 'center',
-        width: dimension.width,
         color: '#000',
         fontSize: 16,
         marginTop: 8,
         marginBottom: 8,
         padding: 15,
-        backgroundColor: '#DCDCDC',
+        backgroundColor: 'white',
         borderRadius: 0,
-      }
+      },
+      containerStyle: {
+        flex: 1,
+        paddingHorizontal: 15,
+        justifyContent: "center",
+      },
+      screenBackground: {
+        flex: 1,
+        backgroundColor: '#0c0b0b',
+      },
+      curUserHighlight: {
+        // backgroundColor: '#ffd70024',
+        color: '#aa9100'
+      },
+      textStyle: {
+        color: "#e0e6ed",
+        fontSize: dimension.height * .027,
+      },
+      contentContainerStyle: {
+    
+        flex: 1,
+        height: dimension.height*.14,
+        backgroundColor: 'black',
+      },
+      progress: {
+        // flex: 1,
+        justifyContent: 'center',
+        height: dimension.width*.03,
+        borderColor: '#2C3239',
+        backgroundColor: '#2C3239',
+      },
+      textColor: {
+        color: '#e0e6ed'
+      },
 }
 
 export { FilterPicker }
