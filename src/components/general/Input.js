@@ -76,12 +76,6 @@ class Input extends Component {
 		);
 	}
 }
-Input.defaultProps = {
-	maxLength: 45,
-	autoCapitalize: "sentences",
-	autoCorrect: false,
-	placeholder: "Enter text here"
-};
 
 const styles = {
 	inputStyle: {
@@ -94,6 +88,13 @@ const styles = {
 		backgroundColor: "white",
 		borderRadius: 25
 	}
+};
+
+Input.defaultProps = {
+	maxLength: 45,
+	autoCapitalize: "sentences",
+	autoCorrect: false,
+	placeholder: "Enter text here"
 };
 
 export { Input };

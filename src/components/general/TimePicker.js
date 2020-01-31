@@ -163,10 +163,6 @@ class TimePicker extends Component {
 	};
 }
 
-TimePicker.defaultProps = {
-	placeholder: "Choose a Time"
-};
-
 const styles = {
 	titleStyle: {
 		flex: 0.13,
@@ -206,6 +202,10 @@ const styles = {
 		marginTop: 8,
 		marginBottom: 8
 	}
+};
+
+TimePicker.defaultProps = {
+	placeholder: "Choose a Time"
 };
 
 export { TimePicker };

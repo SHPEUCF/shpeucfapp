@@ -132,13 +132,6 @@ class PickerInput extends Component {
 	};
 }
 
-PickerInput.defaultProps = {
-	title: "Give me a title!",
-	placeholder: "Choose an Option",
-	iconSize: 50,
-	iconColor: "white"
-};
-
 const styles = {
 	itemStyle: {
 		flex: 1,
@@ -203,6 +196,13 @@ const styles = {
 		paddingLeft: 10,
 		alignSelf: "center"
 	}
+};
+
+PickerInput.defaultProps = {
+	title: "Give me a title!",
+	placeholder: "Choose an Option",
+	iconSize: 50,
+	iconColor: "white"
 };
 
 export { PickerInput };

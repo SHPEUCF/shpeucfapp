@@ -36,13 +36,6 @@ const Button = ({
 	);
 };
 
-Button.defaultProps = {
-	buttonStyle: styles.bStyle,
-	textStyle: styles.tStyle,
-	numberOfLines: 1,
-	title: "Put a Title!"
-};
-
 const styles = {
 	tStyle: {
 		flex: 1,
@@ -55,10 +48,17 @@ const styles = {
 		alignSelf: "center",
 		backgroundColor: "#FECB00",
 		borderRadius: 15,
-		borderColor: "#0000",
+		borderColor: "#000",
 		borderWidth: 1,
 		padding: 5
 	}
+};
+
+Button.defaultProps = {
+	buttonStyle: styles.bStyle,
+	textStyle: styles.tStyle,
+	numberOfLines: 1,
+	title: "Put a Title!"
 };
 
 export { Button };

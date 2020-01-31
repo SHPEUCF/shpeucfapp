@@ -18,7 +18,7 @@ import {
 } from "../../ducks";
 
 const dimension = Dimensions.get("window");
-let idIndex;S
+let idIndex;
 
 class CommitteeForm extends Component {
 	// EventCreationError(text) {

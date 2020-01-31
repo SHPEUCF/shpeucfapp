@@ -59,10 +59,6 @@ class NavBar extends Component {
 	}
 }
 
-NavBar.defaultProps = {
-	back: false
-};
-
 const dimension = Dimensions.get("window");
 
 const styles = {
@@ -83,6 +79,10 @@ const styles = {
 	childStyle: {
 		paddingRight: "3%"
 	}
+};
+
+NavBar.defaultProps = {
+	back: false
 };
 
 export { NavBar };

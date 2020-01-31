@@ -194,10 +194,6 @@ class DatePicker extends Component {
 	};
 }
 
-DatePicker.defaultProps = {
-	placeholder: "Choose a Date"
-};
-
 const styles = {
 	titleStyle: {
 		flex: 0.13,
@@ -237,6 +233,10 @@ const styles = {
 		marginTop: 8,
 		marginBottom: 8
 	}
+};
+
+DatePicker.defaultProps = {
+	placeholder: "Choose a Date"
 };
 
 export { DatePicker };

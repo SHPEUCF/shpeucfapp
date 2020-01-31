@@ -324,13 +324,6 @@ class FilterPicker extends Component {
 	};
 }
 
-FilterPicker.defaultProps = {
-	title: "Give me a title!",
-	placeholder: "Choose an Option",
-	iconSize: 50,
-	iconColor: "white"
-};
-
 const styles = {
 	itemStyle: {
 		flex: 1,
@@ -413,6 +406,13 @@ const styles = {
 	textColor: {
 		color: "#e0e6ed"
 	}
+};
+
+FilterPicker.defaultProps = {
+	title: "Give me a title!",
+	placeholder: "Choose an Option",
+	iconSize: 50,
+	iconColor: "white"
 };
 
 export { FilterPicker };
