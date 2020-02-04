@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { iew, Text, ScrollView, Dimensions, SafeAreaView } from "react-native";
+import { View, Text, ScrollView, Dimensions, SafeAreaView } from "react-native";
 import { Input, Button, FilterPicker } from "../general";
 import Members from "../../ducks/Members";
 import {
