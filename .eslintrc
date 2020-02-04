@@ -21,7 +21,6 @@
 		"no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
 		"indent": ["error", "tab", {"SwitchCase": 1}],
 		"max-len": ["error", { "code": 120 }],
-		"linebreak-style": ["error", "unix"],
 		"keyword-spacing": ["error", { "before": true }],
 		"space-infix-ops": "error",
 		"comma-spacing": ["error", { "before": false, "after": true }],
