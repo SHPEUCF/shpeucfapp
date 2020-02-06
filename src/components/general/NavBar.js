@@ -1,8 +1,7 @@
-import PropTypes from 'prop-types'
-import React, { Component } from 'react';
-import { StyleSheet, View, Text, Dimensions } from 'react-native';
-import { Actions } from 'react-native-router-flux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { View, Text, Dimensions } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 class NavBar extends Component {
 	constructor(props) {
@@ -20,7 +19,6 @@ class NavBar extends Component {
 			tabBarText,
 			childStyle
 		} = styles;
-
 		const {
 			title,
 			back,
@@ -29,60 +27,62 @@ class NavBar extends Component {
 			style
 		} = this.props;
 
-		if (back) {
+		if (back)
 			return (
-				<View style={[tabBar, style, {flexDirection: 'row'}]}>
-					<View style={{height: dimension.height *.04, width: dimension.height *.04, justifyContent: "center", alignItems: "center", marginLeft: "5%"}}>
-						<Ionicons name="md-arrow-back" size={dimension.height * .03} onPress={onBack} style={{color: '#FECB00'}}/>
+				<View style = { [tabBar, style, { flexDirection: "row" }] }>
+					<View style = {{ height: dimension.height * 0.04, width: dimension.height * 0.04, justifyContent: "center", alignItems: "center", marginLeft: "5%" }}>
+						<Ionicons
+							name = "md-arrow-back"
+							size = { dimension.height * 0.03 }
+							onPress = { onBack } style = {{ color: "#FECB00" }}
+						/>
 					</View>
 					<View>
-						<Text style={tabBarText}>{title}</Text>
+						<Text style = { tabBarText }>{ title }</Text>
 					</View>
-					<View style={childStyle}>
-						{childComponent}
+					<View style = { childStyle }>
+						{ childComponent }
 					</View>
 				</View>
-			)
-		}
-		else {
+			);
+		else
 			return (
-				<View style={[tabBar, style, {flexDirection: 'row'}]}>
+				<View style = { [tabBar, style, { flexDirection: "row" }] }>
 					<View>
-						<Text style={tabBarText}>{title}</Text>
+						<Text style = { tabBarText }>{ title }</Text>
 					</View>
-					<View style={childStyle}>
-						{childComponent}
+					<View style = { childStyle }>
+						{ childComponent }
 					</View>
 				</View>
-			)
-		}
+			);
 	}
 }
 
-NavBar.defaultProps = {
-	back: false
-}
+const dimension = Dimensions.get("window");
 
-const dimension = Dimensions.get('window');
-
-const styles = StyleSheet.create({
+const styles = {
 	tabBar: {
-		justifyContent: 'flex-start',
+		justifyContent: "flex-start",
 		backgroundColor: "black",
-		alignItems:'center',
+		alignItems: "center",
 		borderBottomWidth: 1,
-		borderBottomColor: 'black',
+		borderBottomColor: "black",
 		height: dimension.height * 0.1
 	},
 	tabBarText: {
-		color: 'white',
+		color: "white",
 		fontSize: 20,
-		fontWeight:'bold',
-		paddingLeft: '5%'
+		fontWeight: "bold",
+		paddingLeft: "5%"
 	},
 	childStyle: {
-		paddingRight: '3%'
+		paddingRight: "3%"
 	}
-})
+};
+
+NavBar.defaultProps = {
+	back: false
+};
 
 export { NavBar };
