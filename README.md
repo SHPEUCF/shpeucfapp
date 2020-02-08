@@ -128,7 +128,7 @@ npm install
 
 ...and our [contributors](https://github.com/SHPEUCF/shpeucfapp/graphs/contributors) who participated in this project.
 
-**License**
+**License**  
 This project is licensed under the MIT License. See the [LICENSE.md](LICENSE.md) file for details.
 
 ## Common errors
