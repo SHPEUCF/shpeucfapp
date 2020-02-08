@@ -12,11 +12,10 @@ Follow these instructions to get you started in contributing to the SHPE UCF app
 	* [MacOS](#macos)
 * [Installation](#installation)
 * [Running](#running)
-* [Authors](#authors)
-* [License](#license)
+* [About](#about)
 * [Common errors](#common-errors)
 
-## Prerequisites
+## Pre-requisites
 What do I need to start contributing to the SHPE app?
 
 ### Windows
@@ -91,34 +90,46 @@ To build and test the app you can:
 
 ## Installation
 **Getting your development environment running...**
-1. Install the react-native command line interface by using command prompt/terminal, `npm i -g react-native-cli`.
+1. Install the react-native command line interface by using command prompt/terminal
+```
+npm i -g react-native-cli
+```
 2.  (Optional) [Fork the repository](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) (if you plan on contributing to the app).
 3. Open command prompt/terminal and navigate to the directory you want to download the shpeucf repository, preferably the Desktop.
-4. Clone the original (or forked) repository, `git clone https://github.com/SHPEUCF/shpeucfapp.git`. Note that this will create the folder **shpeucfapp** in the directory you are currently in.
-5. Navigate inside the cloned repository, `cd shpeucfapp`.
-6. Install the dependencies used in this project using the **n**ode **p**ackage **m**anager, `npm install`.
+4. Clone the original (or forked) repository. Note that this will create the folder **shpeucfapp** in the directory you are currently in.
+```
+git clone https://github.com/SHPEUCF/shpeucfapp.git
+```
+5. Navigate inside the cloned repository
+```
+cd shpeucfapp
+```
+6. Install the dependencies used in this project using the **n**ode **p**ackage **m**anager
+```
+npm install
+```
 
 ## Running
 ### Android
 * Open Android Studio and run the Android emulator.
 * Open the terminal/command prompt, navigate to the cloned repository (shpeucfapp), and type `react-native run-android`.
-
 ### iOS
 * Open the terminal, navigate to the cloned repository (shpeucfapp), and type `react-native run-ios`.
 
-## Built With
+## About
+**Built with**
 * [React Native](https://facebook.github.io/react-native/)
 * [Node](https://nodejs.org/en/)
 
-## Authors
-* **Luis Benavides** - *Initial work* - [GitHub Repo](https://github.com/luisbenan)
-* **Haniel Diaz** - *Continued work* - [GitHub Repo](https://github.com/HanielDiaz)
-* **Steven Perdomo** - *Continued work* - [GitHub Repo]()
+**Authors**
+* [Luis Benavides](https://github.com/luisbenan), initial work
+* [Haniel Diaz](https://github.com/HanielDiaz), continued work
+* [Steven Perdomo](https://github.com/esteban737), continued work
 
 ...and our [contributors](https://github.com/SHPEUCF/shpeucfapp/graphs/contributors) who participated in this project.
 
-## License
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+**License**
+This project is licensed under the MIT License. See the [LICENSE.md](LICENSE.md) file for details.
 
 ## Common errors
 <details>
