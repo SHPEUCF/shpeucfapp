@@ -1,4 +1,4 @@
-# SHPE @ UCF Mobile app Development
+# SHPE @ UCF Mobile App Development
 ![SHPE UCF](https://www.shpeucf.com/wp-content/uploads/2019/09/shpe-banner-white-background.png)
 
 An open-source application used to aid in the organization of SHPE @ UCF and simplify everyone's jobs.
