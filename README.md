@@ -46,8 +46,8 @@ Since the building system for React Native uses Python, you will need to install
 
 To build and test the app you can:
 1. [Run on a physical *Android* device](https://facebook.github.io/react-native/docs/running-on-device)
-2. Run on the Android Studio.  
-	a. [Download](https://developer.android.com/studio) Android Studio.
+2. Run on Android Studio.  
+	a. [Download](https://developer.android.com/studio) Android Studio.  
 	b. Download the AVD (Android Virtual Device) inside Android Studio. Go [here](https://developer.android.com/studio/run/managing-avds) for an in-depth guide.
 </details>
 
@@ -68,29 +68,29 @@ The runtime we use to build the app.
 	<summary>Xcode</summary>
 
 * You can only download this through the App Store, version 9.1+.
-* If you want to use a physical device follow [this](https://facebook.github.io/react-native/docs/running-on-device)
-* Make sure you are signed in to your apple account and that your account is a [developer account](https://9to5mac.com/2016/03/27/how-to-create-free-apple-developer-account-sideload-apps/)!
+* If you want to use a physical device follow [this](https://facebook.github.io/react-native/docs/running-on-device).
+* Make sure that you are signed in to your Apple account and that your account is a [developer account](https://9to5mac.com/2016/03/27/how-to-create-free-apple-developer-account-sideload-apps/).
 </details>
 <details>
 	<summary>Java 8 JDK (Optional)</summary>
 	
-Used to build and emulate the app on Android Studio, if you don't want to use XCode (or you want to use both).
+Used to build and emulate the app on Android Studio, if you don't want to use XCode (or you want to use both), or want to see how the app looks on Android.
 * To check your version open terminal and run `java -version`, making sure that it is Java 8. If you don't have this version, you can download it [here](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
-* You will need to add **JAVA_HOME**. For a guide on how to do that, go [here](https://dalanzg.github.io/tips-tutorials/posts/2016/03/21/how-to-set-java_home-on-mac-os-x/)
+* You will need to add **JAVA_HOME**. For a guide on how to do that, go [here](https://dalanzg.github.io/tips-tutorials/posts/2016/03/21/how-to-set-java_home-on-mac-os-x/).
 </details>
 <details>
 	<summary>Android Studio (Optional)</summary>
 
 To build and test the app you can:
-1. Run on a physical *Android* device](https://facebook.github.io/react-native/docs/running-on-device)
-2. Run on the Android Studio.
-	a. [Download](https://developer.android.com/studio) Android Studio.
+1. [Run on a physical *Android* device](https://facebook.github.io/react-native/docs/running-on-device)
+2. Run on Android Studio.  
+	a. [Download](https://developer.android.com/studio) Android Studio.  
 	b. Download the Android Virtual Device (AVD) inside Android Studio. Go [here](https://developer.android.com/studio/run/managing-avds) for an in-depth guide.
 </details>
 
 ## Installation
 **Getting your development environment running...**
-1. Install the react-native command line interface by using command prompt/terminal
+1. Install the react-native command line interface by using command prompt/terminal.
 ```
 npm i -g react-native-cli
 ```
@@ -100,11 +100,11 @@ npm i -g react-native-cli
 ```
 git clone https://github.com/SHPEUCF/shpeucfapp.git
 ```
-5. Navigate inside the cloned repository
+5. Navigate inside the cloned repository.
 ```
 cd shpeucfapp
 ```
-6. Install the dependencies used in this project using the **n**ode **p**ackage **m**anager
+6. Install the dependencies used in this project using the **n**ode **p**ackage **m**anager.
 ```
 npm install
 ```
@@ -148,7 +148,7 @@ This project is licensed under the MIT License. See the [LICENSE.md](LICENSE.md)
 	<summary>Print: Entry, ":CFBundleIdentifier", Does Not Exist</summary>
 
 1. Open the project on Xcode; that is, open "shpeucfapp/ios/shpeucfapp.xcodeproj".
-2. In Xcode, File ->Workspace setting
+2. In Xcode, File -> Workspace setting.
 3. Change Build System to Legacy Build System and click "OK".
 4. Follow these instructions:
 
@@ -156,7 +156,7 @@ This project is licensed under the MIT License. See the [LICENSE.md](LICENSE.md)
   <img height="450" src="https://user-images.githubusercontent.com/2400215/45737941-92981200-bc08-11e8-80fc-978147db7a9a.png">
 </p>
 
-5. In Xcode, Product -> Clean
+5. In Xcode, Product -> Clean.
 6. In Xcode, Click on the project folder on the left side-bar.
 
 <p align="center">
