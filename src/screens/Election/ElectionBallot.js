@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { Button, NavBar } from "../components/general";
+import { Button, NavBar } from "../../components/general";
 import { Avatar } from "react-native-elements";
 import _ from "lodash";
 import { FlatList, Text, View, TouchableOpacity, Dimensions } from "react-native";
@@ -18,7 +18,7 @@ import {
 	goToCandidateForm,
 	vote,
 	editApplication
-} from "../ducks";
+} from "../../ducks";
 
 const dimension = Dimensions.get("window");
 const iterateesPos = ["level"];

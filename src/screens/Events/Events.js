@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button } from "../components/general";
+import { Button } from "../../components/general";
 import { Agenda } from "react-native-calendars";
 import {
 	TouchableOpacity,
@@ -25,7 +25,7 @@ import {
 	eventIDChanged,
 	goToCreateEvent,
 	goToViewEvent
-} from "../ducks";
+} from "../../ducks";
 
 const dimension = Dimensions.get("window");
 let dateStr = "";

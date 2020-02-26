@@ -4,7 +4,7 @@ import { FlatList, View, Dimensions, SafeAreaView, Image } from "react-native";
 import { connect } from "react-redux";
 import { ListItem } from "react-native-elements";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { getPrivilege, pageLoad, updateElection } from "../ducks";
+import { getPrivilege, pageLoad, updateElection } from "../../ducks";
 
 const dimension = Dimensions.get("window");
 
@@ -41,6 +41,8 @@ const menuItems = [
 	}
 ];
 
+var imageUrl = "../../assets/images/";
+
 class More extends Component {
 	constructor(props) {
 		super(props);
@@ -54,7 +56,7 @@ class More extends Component {
 			<SafeAreaView style = {{ backgroundColor: "#0c0b0b", flex: 1 }}>
 				<View style = {{ height: dimension.height * 0.1, backgroundColor: "#FECB00", borderBottomWidth: 1, borderColor: "black", justifyContent: "center" }}>
 					<Image
-						source = { require("../assets/images/SHPE_UCF_Logo.png") }
+						source = { require(imageUrl + "SHPE_UCF_Logo.png") }
 						style = {{ alignSelf: "center" }}
 						height = { dimension.height * 0.06 }
 						resizeMode = "contain"
@@ -71,7 +73,7 @@ class More extends Component {
 				</View>
 				<View style = {{ justifyContent: "center", flex: 1, flexDirection: "row", backgroundColor: "black" }}>
 					<Image
-						source = { require("../assets/images/SHPE_logo_FullColor-RGB-2x.png") }
+						source = { require(imageUrl + "SHPE_logo_FullColor-RGB-2x.png") }
 						style = {{ alignSelf: "center" }}
 						height = { dimension.height * dimension.width * 0.00025 }
 						resizeMode = "contain"

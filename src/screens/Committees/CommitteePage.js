@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Text, View, Dimensions, TouchableOpacity, Modal, SafeAreaView } from "react-native";
-import { Spinner, NavBar, Button } from "../components/general";
+import { Spinner, NavBar, Button } from "../../components/general";
 import { Avatar } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -36,7 +36,7 @@ import {
 	deleteMemberFromCom,
 	loadCommittee,
 	openJoin
-} from "../ducks";
+} from "../../ducks";
 
 const dimension = Dimensions.get("window");
 let dateStr = "";

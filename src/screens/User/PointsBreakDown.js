@@ -1,10 +1,10 @@
-import firebase from "firebase";
 import React, { Component } from "react";
+import firebase from "firebase";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { NavBar } from "../components/general";
+import { NavBar } from "../../components/general";
 import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from "react-native";
-import { fetchMembersPoints, loadUser, fetchEvents, goToViewEvent } from "../ducks";
+import { fetchMembersPoints, loadUser, fetchEvents, goToViewEvent } from "../../ducks";
 
 console.disableYellowBox = true;
 const dimension = Dimensions.get("window");

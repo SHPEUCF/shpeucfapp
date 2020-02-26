@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { NavBar } from "../components/general";
+import { NavBar } from "../../components/general";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import _ from "lodash";
 import { FlatList, Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
@@ -19,7 +19,7 @@ import {
 	eventIDChanged,
 	goToViewEvent,
 	loadCommittee
-} from "../ducks";
+} from "../../ducks";
 
 const dimension = Dimensions.get("window");
 const iteratees = ["level"];

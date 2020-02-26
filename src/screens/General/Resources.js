@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { ScrollView, View, Text } from "react-native";
 import { Actions } from "react-native-router-flux";
 import { List, ListItem } from "react-native-elements";
-import { NavBar } from "../components/general";
+import { NavBar } from "../../components/general";
 
 const resources = [
 	{

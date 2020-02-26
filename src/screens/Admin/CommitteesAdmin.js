@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { Button, NavBar, SortableFlatList } from "../components/general";
+import { Button, NavBar, SortableFlatList } from "../../components/general";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import _ from "lodash";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
@@ -16,13 +16,13 @@ import {
 	committeeDescriptionChanged,
 	committeeTitleChanged,
 	changeLevelsCom
-} from "../ducks";
+} from "../../ducks";
 
 const dimension = Dimensions.get("window");
 const iteratees = ["level"];
 const order = ["asc"];
 
-class CommitteesBackEnd extends Component {
+class CommitteesAdmin extends Component {
 	constructor(props) {
 		super(props);
 		this.renderCommittees = this.renderCommittees.bind(this);
@@ -226,4 +226,4 @@ const mapDispatchToProps = {
 	fetchAllUsers
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CommitteesBackEnd);
+export default connect(mapStateToProps, mapDispatchToProps)(CommitteesAdmin);
