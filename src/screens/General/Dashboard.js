@@ -1,9 +1,11 @@
+
+import React, { Component } from "react";
+
 import firebase from "firebase";
 import { connect } from "react-redux";
-import React, { Component } from "react";
 import * as Progress from "react-native-progress";
 import _ from "lodash";
-import { Spinner, Button } from "../components/general";
+import { Spinner, Button } from "../../components/general";
 import { Actions } from "react-native-router-flux";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import Flag from "react-native-flags";
@@ -47,7 +49,7 @@ import {
 	getUserCommittees,
 	loadCommittee,
 	changeUserCommittees
-} from "../ducks";
+} from "../../ducks";
 
 const dimension = Dimensions.get("window");
 const iteratees = ["points", "lastName", "firstName"];

@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { Text, ScrollView, View } from "react-native";
 import { Actions } from "react-native-router-flux";
 import { List, ListItem } from "react-native-elements";
-import { NavBar } from "../components/general";
+import { NavBar } from "../../components/general";
 
 const forms = [
 	{

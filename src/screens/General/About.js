@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View, SafeAreaView, FlatList, Dimensions } from "react-native";
 import { Actions } from "react-native-router-flux";
 import { ListItem } from "react-native-elements";
-import { NavBar } from "../components/general";
+import { NavBar } from "../../components/general";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 const dimension = Dimensions.get("window");

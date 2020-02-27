@@ -3,24 +3,24 @@ import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import { FlatList, SafeAreaView } from "react-native";
 import { ListItem } from "react-native-elements";
-import { NavBar } from "../components/general";
+import { NavBar } from "../../components/general";
 
 const menuItems = [
 	{
 		title: "Election",
 		icon: "check",
-		screen: "ElectionBackEnd",
+		screen: "ElectionAdmin",
 		privilege: "president"
 	},
 	{
 		title: "Committees",
 		icon: "assignment-ind",
-		screen: "CommitteesBackEnd",
+		screen: "CommitteesAdmin",
 		privilege: "eboard"
 	}
 ];
 
-class BackEnd extends Component {
+class AdminHub extends Component {
 	constructor(props) {
 		super(props);
 	}
@@ -80,8 +80,6 @@ const mapStateToProps = ({ user }) => {
 	return { privilege };
 };
 
-const mapDispatchToProps = {
+const mapDispatchToProps = {};
 
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(BackEnd);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminHub)

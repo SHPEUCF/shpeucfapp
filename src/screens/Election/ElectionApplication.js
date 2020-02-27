@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { Button, Input, NavBar } from "../components/general";
+import { Button, Input, NavBar } from "../../components/general";
 import _ from "lodash";
 import { FlatList, Text, View, Dimensions } from "react-native";
 import {
@@ -17,7 +17,7 @@ import {
 	goToCandidateForm,
 	vote,
 	editApplication
-} from "../ducks";
+} from "../../ducks";
 
 const dimension = Dimensions.get("window");
 const iterateesPos = ["level"];
@@ -360,3 +360,4 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ElectionApplication);
+

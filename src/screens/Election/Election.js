@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { Button, NavBar } from "../components/general";
+import { Button, NavBar } from "../../components/general";
 import { Text, View } from "react-native";
 import {
 	getPositions,
@@ -16,7 +16,7 @@ import {
 	goToCandidateForm,
 	vote,
 	editApplication
-} from "../ducks";
+} from "../../ducks";
 
 class Election extends Component {
 	render() {
@@ -120,5 +120,4 @@ const mapDispatchToProps = {
 	vote,
 	editApplication
 };
-
 export default connect(mapStateToProps, mapDispatchToProps)(Election);

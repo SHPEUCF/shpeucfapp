@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { GeneralContent, NavBar } from "../components/general";
+import { GeneralContent, NavBar } from "../../components/general";
 import { View, SafeAreaView } from "react-native";
 import { Actions } from "react-native-router-flux";
 

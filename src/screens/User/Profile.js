@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import firebase from "firebase";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { connect } from "react-redux";
-import { Button } from "../components/general";
+import { Button } from "../../components/general";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
 import { Avatar } from "react-native-elements";
 import ImagePicker from "react-native-image-crop-picker";
 import RNFetchBlob from "rn-fetch-blob";
 import Flag from "react-native-flags";
-import { loadUser, logoutUser, goToEditProfileForm, pageLoad, pictureChanged } from "../ducks";
+import { loadUser, logoutUser, goToEditProfileForm, pageLoad, pictureChanged } from "../../ducks";
 
 const dimension = Dimensions.get("window");
 class Profile extends Component {

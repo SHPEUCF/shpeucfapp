@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { connect } from "react-redux";
-import { Button } from "../components/general";
+import { Button } from "../../components/general";
 import { Avatar } from "react-native-elements";
 import Flag from "react-native-flags";
 import RNFetchBlob from "rn-fetch-blob";
@@ -373,8 +373,6 @@ const mapStateToProps = ({ members, general, user }) => {
 	};
 };
 
-const mapDispatchToProps = {
-
-};
+const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(OtherProfile);

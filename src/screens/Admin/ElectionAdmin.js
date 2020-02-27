@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { NavBar, Button } from "../components/general";
+import { NavBar, Button } from "../../components/general";
 import _ from "lodash";
 import { FlatList,	Text,	View,	Dimensions } from "react-native";
 import {
@@ -12,14 +12,14 @@ import {
 	closeApplications,
 	openApplications,
 	fetchMemberProfile
-} from "../ducks";
+} from "../../ducks";
 
 const dimension = Dimensions.get("window");
 const iterateesCan = ["votes"];
 const orderCan = ["desc"];
 let winners = [];
 
-class ElectionBackEnd extends Component {
+class ElectionAdmin extends Component {
 	constructor(props) {
 		super(props);
 	}
@@ -251,4 +251,4 @@ const mapDispatchToProps = {
 	fetchMemberProfile
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ElectionBackEnd);
+export default connect(mapStateToProps, mapDispatchToProps)(ElectionAdmin);
