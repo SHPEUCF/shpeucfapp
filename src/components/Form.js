@@ -2,16 +2,19 @@ import React, { Component } from "react";
 import {
 	Button,
 	DatePicker,
+	NavBar,
 	Input,
 	PickerInput,
 	TimePicker
 } from "./";
+import { Actions } from "react-native-router-flux";
 import PropTypes from "prop-types";
+import { View, ScrollView, SafeAreaView } from "react-native";
 
 /*
-	Form Component Help
+	Form Component Info
 	________________________________________________________________
-	Props:
+	PROPS:
 		elements<array>: Required
 			name<string>: Required,
 			camelCaseName<string>: Required
@@ -21,7 +24,9 @@ import PropTypes from "prop-types";
 		initial Values<array>: Not Required
 			name<string>: required,
 			value<any>: required
+		title<string>: Required,
 		onSubmit<function>: Required,
+		onCancel<function>: Not Required,
 		submitButtonName<string>: Not Required
 
 	Output:
@@ -31,7 +36,7 @@ import PropTypes from "prop-types";
 			...
 			nameN<string>: value<any>
 	________________________________________________________________
-	Description:
+	DESCRIPTION:
 		Dynamic Form component allows you to quickly and easily make
 		different forms.
 
@@ -41,9 +46,12 @@ import PropTypes from "prop-types";
 		When you press submit, the form will call onSubmit and pass in
 		the state to the onSubmit function as a parameter.
 
+		When you press cancel a Actions.pop() will be called as well as
+		the onCancel prop.
+
 		**WARNING** isRequired IS NOT YET IMPLEMENTED
 	________________________________________________________________
-	Examples:
+	EXAMPLES:
 		Input:
 			elements = [
 				{
@@ -73,25 +81,60 @@ import PropTypes from "prop-types";
 					}
 				}
 			]
+
+			initialValue = [
+				{
+					name: "firstName",
+					value: "Steven"
+				},
+				{
+					name: "lastName",
+					value: "Perdomo"
+				},
+				{
+					name: "birthday",
+					value: "2001-01-01"
+				},
+				{
+					name: "coolnessLevel",
+					value: "Super Uncool"
+				}
+			]
+
+			title = ""
+
+			onSubmit = (value) => {
+				console.log(`this is the value: ${value}`)
+			}
+
+			onCancel = () => {
+				console.log("I've been cancelled")
+			}
+
+			submitButtonName = "Confirm Coolness Level"
+
 		Output:
-			{
+			this.state = {
 				firstName: "Haniel",
 				lastName: "Diaz",
 				birthday: null || "6969/04/20",
-				eventType: "Super Cool"
+				eventType:  "Super Cool"
 			}
+			onSubmit(this.state)
 */
 
 class Form extends Component {
 	constructor(props) {
 		super(props);
 		let values = {};
-		this.props.initialValues.forEach(item => values[item.name] = item.value);
+		if (this.props.initialValues)
+			this.props.initialValues.forEach(item => values[item.name] = item.value);
 
-		this.setState(values);
+		this.state = values;
+		// console.error(JSON.stringify(this.state));
 	}
 	static propTypes = {
-		elements: PropTypes.array(
+		elements: PropTypes.arrayOf(
 			PropTypes.objectOf(
 				{
 					name: PropTypes.string.isRequired,
@@ -102,7 +145,7 @@ class Form extends Component {
 				}
 			)
 		).isRequired,
-		initialValues: PropTypes.array(
+		initialValues: PropTypes.arrayOf(
 			PropTypes.objectOf(
 				{
 					name: PropTypes.string.isRequired,
@@ -110,7 +153,9 @@ class Form extends Component {
 				}
 			)
 		),
+		title: PropTypes.string.isRequired,
 		onSubmit: PropTypes.func.isRequired,
+		onCancel: PropTypes.func,
 		submitButtonName: PropTypes.string
 	}
 
@@ -134,52 +179,114 @@ class Form extends Component {
 			case "DatePicker":
 				return <DatePicker
 					placeholder = { name }
-					value = { this.state[camelCaseName] }
-					onSelect = { event => this.changeState(name, event.target.value) }
+					value = { this.state[camelCaseName] || "" }
+					onSelect = { value => this.changeState(camelCaseName, value) }
 				/>;
 			case "Input":
 				return <Input
 					placeholder = { name }
-					value = { this.state[camelCaseName] }
-					onChangeText = { event => this.changeState(name, event.target.value) }
+					multiline = { false }
+					value = { this.state[camelCaseName] || "" }
+					onChangeText = { value => this.changeState(camelCaseName, value) }
 				/>;
 			case "PickerInput":
 				if (!options || !options.data) console.error("You must pass in data through the options property ");
 				return <PickerInput
 					placeholder = { name }
-					value = { this.state[camelCaseName] }
+					value = { this.state[camelCaseName] || "" }
 					data = { options.data }
-					onSelect = { event => this.changeState(name, event.target.value) }
+					onSelect = { value => this.changeState(camelCaseName, value) }
 				/>;
 			case "TimePicker":
 				return 	<TimePicker
 					placeholder = { name }
-					value = { this.state[camelCaseName] }
-					onSelect = { event => this.changeState(name, event.target.value) }
+					value = { this.state[camelCaseName] || "" }
+					onSelect = { value => this.changeState(camelCaseName, value) }
 				/>;
 			default:
 				console.error("Please Pick a Correct type",
 					"\nPossible types are [DatePicker, Input, PickerInput, TimePicker]");
+				return null;
 		}
+	}
+
+	renderButtons() {
+		const {
+			onSubmit,
+			onCancel,
+			submitButtonName
+		} = this.props;
+
+		const {
+			buttonsStyle,
+			buttonStyle
+		} = styles;
+
+		return (
+			<View style = { buttonsStyle }>
+				<View style = { buttonStyle }>
+					<Button
+						title = "Cancel"
+						onPress = { () => {
+							Actions.pop();
+							if (onCancel)
+								onCancel();
+						} }
+					/>
+				</View>
+				<View style = { buttonStyle }>
+					<Button
+						title = { submitButtonName || "Confirm" }
+						onPress = { () => {
+							Actions.pop();
+							onSubmit(this.state);
+						} }
+					/>
+				</View>
+			</View>
+		);
 	}
 
 	render() {
 		const {
 			elements,
-			onSubmit,
-			submitButtonName
+			title
 		} = this.props;
 
+		const {
+			container,
+			elementsStyle
+		} = styles;
+
 		return (
-			<Form>
-				{ elements.map(item => this.buildElement(item)) }
-				<Button
-					title = { submitButtonName }
-					onPress = { onSubmit(this.state) }
-				/>
-			</Form>
+			<SafeAreaView style = { container }>
+				<NavBar title = { title || "Pass in a title please" } />
+				<ScrollView style = { elementsStyle }>
+					{ elements.map(item => this.buildElement(item)) }
+				</ScrollView>
+				{ this.renderButtons() }
+			</SafeAreaView>
 		);
 	}
 }
+
+const styles = {
+	container: {
+		flex: 1,
+		backgroundColor: "black"
+	},
+	elementsStyle: {
+		flex: 0.8
+	},
+	buttonsStyle: {
+		flex: 0.2,
+		flexDirection: "row",
+		justifyContent: "space-around",
+		width: "100%"
+	},
+	buttonStyle: {
+		flex: 0.4
+	}
+};
 
 export { Form };
