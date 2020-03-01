@@ -36,12 +36,12 @@ const menuItems = [
 	{
 		title: "BackEnd",
 		icon: "settings",
-		screen: "BackEnd",
+		screen: "AdminHub",
 		privilege: "eboard"
 	}
 ];
 
-var imageUrl = "../../assets/images/";
+const imageUrl = "../../assets/images/";
 
 class More extends Component {
 	constructor(props) {

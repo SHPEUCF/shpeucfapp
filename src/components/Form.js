@@ -5,7 +5,8 @@ import {
 	NavBar,
 	Input,
 	PickerInput,
-	TimePicker
+	TimePicker,
+	FilterPicker
 } from "./";
 import PropTypes from "prop-types";
 import {
@@ -31,6 +32,7 @@ import {
 			value<any>: required
 		title<string>: Required,
 		visible<boolean>: Required,
+		changeVisibility<function>: Required,
 		onSubmit<function>: Required,
 		onCancel<function>: Not Required,
 		submitButtonName<string>: Not Required
@@ -46,13 +48,13 @@ import {
 		Dynamic Form component allows you to quickly and easily make
 		different forms.
 
-		When making a new form, create a definition in FormData.json
-		and pass it in through the elements prop.
-
 		**WARNING** isRequired IS NOT YET IMPLEMENTED
 
 	________________________________________________________________
 	Using Component:
+
+		When making a new form, create a definition in FormData.json
+		and pass it in through the elements prop.
 
 		To view the component you must pass in a visibility state from
 		the parent component.The component will close automatically
@@ -72,53 +74,79 @@ import {
 		FormData.json file inside of the /data folder
 
 	________________________________________________________________
+	Adding your own Component:
+
+	1. Make sure your component is modular and doesn't only work in some specific scenarios
+	2. Add the component to the switch case
+	3. Update the Examples to show how to use your component
+	4(Optional). If your component needs extra data besides a name/camelCaseName, pass in the data through the
+		options property as individual properties.
+	5. Any state management such as value of the component will be handled by the form.js's
+		state
+	6. Test Component
+
+	________________________________________________________________
 	EXAMPLES:
 		Input:
 			elements = [
 				{
-					name: "First Name",
+				placeholder: "First Name",
 					camelCaseName: "firstName",
 					type: "Input",
 					isRequired: true,
 				},
 				{
-					name: "Last Name",
+				placeholder: "Last Name",
 					camelCaseName: "lastName",
 					type: "Input",
 					isRequired: true,
 				},
 				{
-					name: "Birthday",
+				placeholder: "Birthday",
 					camelCaseName: "birthday",
 					type: "DatePicker"
 				},
 				{
-					name: "Coolness Level",
+				placeholder: "Coolness Level",
 					camelCaseName: "coolnessLevel",
 					type: "PickerInput",
 					isRequired: true,
 					options: {
 						data: ["Super Cool", "Cool", "Uncool", "Super Uncool"]
 					}
+				},
+				{
+				placeholder: "Major",
+					camelCaseName: "major",
+					type: "FilterPicker",
+					isRequired: true,
+					options: {
+						data: ["Mechanical Engineering", "Electrical Engineering", "Computer Science"],
+						type: "single"
+					}
 				}
 			]
 
 			initialValue = [
 				{
-					name: "firstName",
+					camelCaseName: "firstName",
 					value: "Steven"
 				},
 				{
-					name: "lastName",
+					camelCaseName: "lastName",
 					value: "Perdomo"
 				},
 				{
-					name: "birthday",
+					camelCaseName: "birthday",
 					value: "2001-01-01"
 				},
 				{
-					name: "coolnessLevel",
+					camelCaseName: "coolnessLevel",
 					value: "Super Uncool"
+				},
+				{
+					camelCaseName: "major",
+					value: "Computer Science"
 				}
 			]
 
@@ -132,7 +160,8 @@ import {
 				console.log("I've been cancelled")
 			}
 
-			visibility = true
+			visibile = this.state.formVisibility
+
 			changeVisibility = (visible) => {
 				this.setState({ formVisibility: visible })
 			}
@@ -144,9 +173,11 @@ import {
 				firstName: "Haniel",
 				lastName: "Diaz",
 				birthday: null || "6969/04/20",
-				eventType:  "Super Cool"
+				coolnessLevel:  "Super Cool",
+				major: "Computer Science"
 			}
 			onSubmit(this.state)
+
 */
 const dimension = Dimensions.get("screen");
 
@@ -155,7 +186,7 @@ class Form extends Component {
 		super(props);
 		let values = {};
 		if (this.props.initialValues)
-			this.props.initialValues.forEach(item => values[item.name] = item.value);
+			this.props.initialValues.forEach(item => values[item.camelCaseName] = item.value);
 
 		this.state = values;
 
@@ -165,7 +196,7 @@ class Form extends Component {
 		elements: PropTypes.arrayOf(
 			PropTypes.objectOf(
 				{
-					name: PropTypes.string.isRequired,
+					placeholder: PropTypes.string.isRequired,
 					camelCaseName: PropTypes.string.isRequired,
 					type: PropTypes.string.isRequired,
 					isRequired: PropTypes.bool,
@@ -176,7 +207,7 @@ class Form extends Component {
 		initialValues: PropTypes.arrayOf(
 			PropTypes.objectOf(
 				{
-					name: PropTypes.string.isRequired,
+					camelCaseName: PropTypes.string.isRequired,
 					value: PropTypes.any
 				}
 			)
@@ -198,7 +229,7 @@ class Form extends Component {
 
 	buildElement(item) {
 		const {
-			name,
+			placeholder,
 			camelCaseName,
 			type,
 			// isRequired,
@@ -208,13 +239,23 @@ class Form extends Component {
 		switch (type) {
 			case "DatePicker":
 				return <DatePicker
-					placeholder = { name }
+					placeholder = { placeholder }
 					value = { this.state[camelCaseName] || "" }
+					onSelect = { value => this.changeState(camelCaseName, value) }
+				/>;
+			case "FilterPicker":
+				if (!options || !options.data) console.error("You must pass in data through the options property ");
+				return <FilterPicker
+					type = { options.type }
+					filter = { this.state.filter }
+					data = { options.data }
+					placeholder = { options.placeholder }
+					onChangeText = { value => this.changeState("filter", value) }
 					onSelect = { value => this.changeState(camelCaseName, value) }
 				/>;
 			case "Input":
 				return <Input
-					placeholder = { name }
+					placeholder = { placeholder }
 					multiline = { false }
 					value = { this.state[camelCaseName] || "" }
 					onChangeText = { value => this.changeState(camelCaseName, value) }
@@ -222,14 +263,14 @@ class Form extends Component {
 			case "PickerInput":
 				if (!options || !options.data) console.error("You must pass in data through the options property ");
 				return <PickerInput
-					placeholder = { name }
+					placeholder = { placeholder }
 					value = { this.state[camelCaseName] || "" }
 					data = { options.data }
 					onSelect = { value => this.changeState(camelCaseName, value) }
 				/>;
 			case "TimePicker":
 				return 	<TimePicker
-					placeholder = { name }
+					placeholder = { placeholder }
 					value = { this.state[camelCaseName] || "" }
 					onSelect = { value => this.changeState(camelCaseName, value) }
 				/>;

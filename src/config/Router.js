@@ -5,7 +5,6 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { Spinner } from "../components/general";
 import RegistrationForm from "../components/auth/RegistrationForm";
 import EditProfileForm from "../components/auth/EditProfileForm";
-import EditOtherProfileForm from "../components/auth/EditOtherProfileForm";
 import LoginForm from "../components/auth/LoginForm";
 import CreateEvent from "../components/event/CreateEvent";
 import EventDetailsForm from "../components/event/EventDetails";
@@ -370,7 +369,7 @@ const RouterComponent = () => {
 						>
 							<Scene
 								key = "AdminHub"
-								component = { AdminHub  }
+								component = { AdminHub }
 							/>
 							<Scene
 								key = "ElectionAdmin"
@@ -385,11 +384,6 @@ const RouterComponent = () => {
 								hideTabBar
 							/>
 						</Stack>
-						<Scene
-							key = "EditOtherProfileForm"
-							component = { EditOtherProfileForm }
-							hideNavBar
-						/>
 						<Scene
 							key = "Resources"
 							component = { Resources }

@@ -11,7 +11,7 @@ const eventTypeOptions = ["Committee", "Social Event", "Volunteer Event", "GBM",
 
 const upsertEventFormData = [
 	{
-		name: "Event Type",
+		placeholder: "Event Type",
 		camelCaseName: "type",
 		type: "PickerInput",
 		isRequired: true,
@@ -20,13 +20,13 @@ const upsertEventFormData = [
 		}
 	},
 	{
-		name: "Name",
+		placeholder: "Name",
 		camelCaseName: "name",
 		type: "Input",
 		isRequired: true
 	},
 	{
-		name: "Description",
+		placeholder: "Description",
 		camelCaseName: "description",
 		type: "Input",
 		isRequired: false,
@@ -35,31 +35,31 @@ const upsertEventFormData = [
 		}
 	},
 	{
-		name: "Date",
+		placeholder: "Date",
 		camelCaseName: "date",
 		type: "DatePicker",
 		isRequired: true
 	},
 	{
-		name: "Start Time",
+		placeholder: "Start Time",
 		camelCaseName: "startTime",
 		type: "TimePicker",
 		isRequired: true
 	},
 	{
-		name: "End Time",
+		placeholder: "End Time",
 		camelCaseName: "endTime",
 		type: "TimePicker",
 		isRequired: false
 	},
 	{
-		name: "Location",
+		placeholder: "Location",
 		camelCaseName: "location",
 		type: "Input",
 		isRequired: true
 	},
 	{
-		name: "Value",
+		placeholder: "Value",
 		camelCaseName: "points",
 		type: "Input",
 		isRequired: true
@@ -68,7 +68,7 @@ const upsertEventFormData = [
 
 const editProfileFormDataRegular = [
 	{
-		name: "College",
+		placeholder: "College",
 		camelCaseName: "college",
 		type: "PickerInput",
 		isRequired: true,
@@ -77,7 +77,7 @@ const editProfileFormDataRegular = [
 		}
 	}
 	// {
-	// 	name: "Major",
+	// placeholder: "Major",
 	// 	camelCaseName: "major",
 	// 	type: "PickerInput",
 	// 	isRequired: true
@@ -86,19 +86,19 @@ const editProfileFormDataRegular = [
 
 const editProfileFormDataPrivileged = [
 	{
-		name: "First Name",
+		placeholder: "First Name",
 		camelCaseName: "firstName",
 		type: "Input",
 		isRequired: true
 	},
 	{
-		name: "Last Name",
+		placeholder: "Last Name",
 		camelCaseName: "lastName",
 		type: "Input",
 		isRequired: true
 	},
 	{
-		name: "Gender",
+		placeholder: "Gender",
 		camelCaseName: "gender",
 		type: "PickerInput",
 		isRequired: false,
@@ -107,7 +107,7 @@ const editProfileFormDataPrivileged = [
 		}
 	},
 	{
-		name: "College",
+		placeholder: "College",
 		camelCasseName: "college",
 		type: "PickerInput",
 		isRequired: false,
@@ -116,13 +116,13 @@ const editProfileFormDataPrivileged = [
 		}
 	},
 	// {
-	// 	name: "Major",
+	// placeholder: "Major",
 	// 	camelCaseName: "major",
 	// 	type: "PickerInput",
 	// 	isRequired: false
 	// },
 	{
-		name: "Continent of Origin",
+		placeholder: "Continent of Origin",
 		camelCaseName: "continent",
 		type: "PickerInput",
 		isRequired: false,
@@ -131,13 +131,13 @@ const editProfileFormDataPrivileged = [
 		}
 	},
 	// {
-	// 	name: "Country of Origin",
+	// placeholder: "Country of Origin",
 	// 	camelCaseName: "country",
 	// 	type: "PickerInput",
 	// 	isRequired: false
 	// },
 	{
-		name: "Birthday",
+		placeholder: "Birthday",
 		camelCaseName: "birthday",
 		type: "DatePicker",
 		isRequired: false
@@ -145,8 +145,37 @@ const editProfileFormDataPrivileged = [
 
 ];
 
+const upsertCommittee = [
+	{
+		placeholder: "Committee Name",
+		camelCaseName: "title",
+		type: "Input",
+		isRequired: true
+	},
+	{
+		placeholder: "Committee Description",
+		camelCaseName: "description",
+		type: "Input",
+		isRequired: true
+	},
+	{
+		placeholder: "Chair",
+		camelCaseName: "chair",
+		type: "PickerInput",
+		isRequired: false,
+		options: {
+			data: {
+				"011": { firstName: "Steven", lastName: "Perdomo", id: "011" },
+				"012": { firstName: "Haniel", lastName: "Diaz", id: "012" },
+				"013": { firstName: "Idel", lastName: "Martinez", id: "013" } },
+			type: "single"
+		}
+	}
+];
+
 export {
 	upsertEventFormData,
 	editProfileFormDataPrivileged,
-	editProfileFormDataRegular
+	editProfileFormDataRegular,
+	upsertCommittee
 };
