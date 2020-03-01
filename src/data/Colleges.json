@@ -1,7 +1,5 @@
-[
-  {
-    "collegeName": "College of Arts & Humanities (CAH)",
-    "degrees": [
+{
+  "College of Arts & Humanities (CAH)" : [
 
       "Architecture",
       "Art",
@@ -22,11 +20,8 @@
       "Theatre",
       "Theatre Studies",
       "Writing and Rhetoric"
-    ]
-  },
-  {
-    "collegeName": "College of Business Administration (CBA)",
-    "degrees": [
+    ],
+    "College of Business Administration (CBA)" : [
 
       "Accounting",
       "Business Economics",
@@ -36,11 +31,8 @@
       "Management",
       "Marketing",
       "Real Estate"
-    ]
-  },
-  {
-    "collegeName": "College of Education & Human Performance (CEDHP)",
-    "degrees": [
+    ],
+      "College of Education & Human Performance (CEDHP)" : [
 
       "Early Childhood Development and Education Track 1: Education: Pr",
       "Early Childhood Development and Education Track 2: Early Childhood Development",
@@ -50,11 +42,8 @@
       "Sport and Exercise Science",
       "Teacher Education",
       "Technical Education and Industry Training"
-    ]
-  },
-  {
-    "collegeName": "College of Engineering & Computer Science (CECS)",
-    "degrees": [
+    ],
+      "College of Engineering & Computer Science (CECS)" : [
 
       "Aerospace Engineering",
       "Civil Engineering",
@@ -66,11 +55,8 @@
       "Industrial Engineering",
       "Information Technology",
       "Mechanical Engineering"
-    ]
-  },
-  {
-    "collegeName": "College of Health & Public Affairs (COHPA)",
-    "degrees": [
+    ],
+      "College of Health & Public Affairs (COHPA)" : [
 
       "Athletic Training",
       "Criminal Justice",
@@ -81,43 +67,28 @@
       "Nonprofit Management",
       "Public Administration",
       "Social Work"
-    ]
-  },
-  {
-    "collegeName": "Rosen College of Hospitality Management (RCHM)",
-    "degrees": [
+    ],
+      "Rosen College of Hospitality Management (RCHM)" : [
 
       "Entertainment Management",
       "Hospitality Management",
       "Restaurant and Foodservice Management"
-    ]
-  },
-  {
-    "collegeName": "College of Medicine (COM)",
-    "degrees": [
+    ],
+      "College of Medicine (COM)" : [
 
       "Biomedical Sciences",
       "Biotechnology",
       "Medical Laboratory Sciences"
-    ]
-  },
-  {
-    "collegeName": "College of Nursing (CON)",
-    "degrees": [
+    ],
+      "College of Nursing (CON)" : [
 
       "Nursing"
-    ]
-  },
-  {
-    "collegeName": "College of Optics & Photonics (CREOL)",
-    "degrees": [
+    ],
+      "College of Optics & Photonics (CREOL)" : [
 
       "Photonic Science and Engineering"
-    ]
-  },
-  {
-    "collegeName": "College of Sciences (COS)",
-    "degrees": [
+    ],
+      "College of Sciences (COS)" : [
 
       "Actuarial Science",
       "Advertising",
@@ -138,14 +109,10 @@
       "Social Sciences",
       "Sociology",
       "Statistics"
-    ]
-  },
-  {
-    "collegeName": "Undergraduate Studies (UGST)",
-    "degrees": [
+    ],
+      "Undergraduate Studies (UGST)" : [
       "Applied Science B.A.S.",
       "Environmental Studies",
       "Interdisciplinary Studies"
     ]
-  }
-]
+}
