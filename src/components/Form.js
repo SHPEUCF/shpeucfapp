@@ -7,9 +7,14 @@ import {
 	PickerInput,
 	TimePicker
 } from "./";
-import { Actions } from "react-native-router-flux";
 import PropTypes from "prop-types";
-import { View, ScrollView, SafeAreaView } from "react-native";
+import {
+	View,
+	ScrollView,
+	SafeAreaView,
+	Modal,
+	Dimensions
+} from "react-native";
 
 /*
 	Form Component Info
@@ -25,6 +30,7 @@ import { View, ScrollView, SafeAreaView } from "react-native";
 			name<string>: required,
 			value<any>: required
 		title<string>: Required,
+		visible<boolean>: Required,
 		onSubmit<function>: Required,
 		onCancel<function>: Not Required,
 		submitButtonName<string>: Not Required
@@ -40,16 +46,31 @@ import { View, ScrollView, SafeAreaView } from "react-native";
 		Dynamic Form component allows you to quickly and easily make
 		different forms.
 
+		When making a new form, create a definition in FormData.json
+		and pass it in through the elements prop.
+
+		**WARNING** isRequired IS NOT YET IMPLEMENTED
+
+	________________________________________________________________
+	Using Component:
+
+		To view the component you must pass in a visibility state from
+		the parent component.The component will close automatically
+		when you pass in a changeVisibility wrapper function
+		(See changeVisibility Example)
+
 		Pass in an elements props with a description of all the fields
-		you want and the form handles all the data management for you.
+		you want and the form handles all the data management
+		for you. (See elements Example)
 
 		When you press submit, the form will call onSubmit and pass in
 		the state to the onSubmit function as a parameter.
+		(See onSubmit Example)
 
-		When you press cancel a Actions.pop() will be called as well as
-		the onCancel prop.
+		If you are using PickerInput you need to pass in data using
+		the options property. **NOTE** You should only use data from the
+		FormData.json file inside of the /data folder
 
-		**WARNING** isRequired IS NOT YET IMPLEMENTED
 	________________________________________________________________
 	EXAMPLES:
 		Input:
@@ -111,6 +132,11 @@ import { View, ScrollView, SafeAreaView } from "react-native";
 				console.log("I've been cancelled")
 			}
 
+			visibility = true
+			changeVisibility = (visible) => {
+				this.setState({ formVisibility: visible })
+			}
+
 			submitButtonName = "Confirm Coolness Level"
 
 		Output:
@@ -122,6 +148,7 @@ import { View, ScrollView, SafeAreaView } from "react-native";
 			}
 			onSubmit(this.state)
 */
+const dimension = Dimensions.get("screen");
 
 class Form extends Component {
 	constructor(props) {
@@ -131,6 +158,7 @@ class Form extends Component {
 			this.props.initialValues.forEach(item => values[item.name] = item.value);
 
 		this.state = values;
+
 		// console.error(JSON.stringify(this.state));
 	}
 	static propTypes = {
@@ -155,6 +183,8 @@ class Form extends Component {
 		),
 		title: PropTypes.string.isRequired,
 		onSubmit: PropTypes.func.isRequired,
+		visible: PropTypes.bool.isRequired,
+		changeVisibility: PropTypes.func.isRequired,
 		onCancel: PropTypes.func,
 		submitButtonName: PropTypes.string
 	}
@@ -214,6 +244,7 @@ class Form extends Component {
 		const {
 			onSubmit,
 			onCancel,
+			changeVisibility,
 			submitButtonName
 		} = this.props;
 
@@ -228,7 +259,7 @@ class Form extends Component {
 					<Button
 						title = "Cancel"
 						onPress = { () => {
-							Actions.pop();
+							changeVisibility(false);
 							if (onCancel)
 								onCancel();
 						} }
@@ -238,7 +269,7 @@ class Form extends Component {
 					<Button
 						title = { submitButtonName || "Confirm" }
 						onPress = { () => {
-							Actions.pop();
+							changeVisibility(false);
 							onSubmit(this.state);
 						} }
 					/>
@@ -250,7 +281,9 @@ class Form extends Component {
 	render() {
 		const {
 			elements,
-			title
+			title,
+			changeVisibility,
+			visible
 		} = this.props;
 
 		const {
@@ -259,13 +292,20 @@ class Form extends Component {
 		} = styles;
 
 		return (
-			<SafeAreaView style = { container }>
-				<NavBar title = { title || "Pass in a title please" } />
-				<ScrollView style = { elementsStyle }>
-					{ elements.map(item => this.buildElement(item)) }
-				</ScrollView>
-				{ this.renderButtons() }
-			</SafeAreaView>
+			<Modal
+				transparent = { false }
+				visible = { visible || false }
+				style = { container }
+				onRequestClose = { () => changeVisibility(false) }
+			>
+				<SafeAreaView style = { container }>
+					<NavBar title = { title || "Pass in a title please" } />
+					<ScrollView style = { elementsStyle }>
+						{ elements.map(item => this.buildElement(item)) }
+					</ScrollView>
+					{ this.renderButtons() }
+				</SafeAreaView>
+			</Modal>
 		);
 	}
 }
@@ -273,6 +313,8 @@ class Form extends Component {
 const styles = {
 	container: {
 		flex: 1,
+		width: dimension.width,
+		height: dimension.height,
 		backgroundColor: "black"
 	},
 	elementsStyle: {
