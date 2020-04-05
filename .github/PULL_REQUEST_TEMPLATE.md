@@ -1,4 +1,4 @@
-<!--- What issue does this PR fix? Add the isue number next to '#'. -->
+<!--- What issue does this PR fix? Add the issue number next to '#'. -->
 Fixes #
 
 ## Description
