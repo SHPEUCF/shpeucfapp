@@ -7,6 +7,5 @@ export * from "./PickerInput";
 export * from "./FilterPicker";
 export * from "./DatePicker";
 export * from "./TimePicker";
-export * from "./WebPageShow"
 export * from "./Spinner";
 export * from "./DraggableFlatList";
