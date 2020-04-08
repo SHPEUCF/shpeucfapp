@@ -24,10 +24,10 @@ import {
 	genderChanged
 } from "../../ducks";
 
-const collegeNames = [];
-collegesJson.map(college => { collegeNames.push(college.collegeName) });
-let majorNames = {};
-collegesJson.map(college => { majorNames[college.collegeName] = college.degrees });
+const collegeNames = Object.keys(collegesJson);
+let colleges = {};
+collegeNames.map(college => { colleges[college] = collegeNames[college] });
+
 const continents = Object.keys(countriesJson);
 let countries = {};
 continents.map(continent => { countries[continent] = countriesJson[continent] });
@@ -121,7 +121,7 @@ class RegistrationForm extends Component {
 		const p1 = college && college !== "" && college != "Do not wish to disclose"
 			? <PickerInput
 				title = { "Major" }
-				data = { majorNames[college] }
+				data = { colleges[college] }
 				placeholder = { "Select major" }
 				onSelect = { (text) => majorChanged(text) }
 			/>
@@ -131,7 +131,7 @@ class RegistrationForm extends Component {
 			<View>
 				<PickerInput
 					title = { "Colleges" }
-					data = { collegeNames }
+					data = { colleges }
 					placeholder = { "Select college" }
 					onSelect = { (text) => collegeChanged(text) } />
 				{ p1 }

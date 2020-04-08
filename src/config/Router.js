@@ -5,7 +5,6 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { Spinner } from "../components/general";
 import RegistrationForm from "../components/auth/RegistrationForm";
 import EditProfileForm from "../components/auth/EditProfileForm";
-import EditOtherProfileForm from "../components/auth/EditOtherProfileForm";
 import LoginForm from "../components/auth/LoginForm";
 import CreateEvent from "../components/event/CreateEvent";
 import EventDetailsForm from "../components/event/EventDetails";
@@ -13,32 +12,52 @@ import ResetPasswordForm from "../components/auth/ResetPasswordForm";
 import CandidateForm from "../components/elect/CandidateForm";
 import PositionForm from "../components/elect/PositionForm";
 import CommitteeForm from "../components/general/CommitteeForm";
-import { WebPageShow } from "../components/general";
 
-// Screens
-// Profile is separate temporarily due to default export from redux connect
+/** All Screen Imports grouped by folder **/
 
-/* look at this page https://github.com/aksonov/react-native-router-flux/issues/2121
-to set button on the navBar */
-import Events from "../screens/Events";
-import Profile from "../screens/Profile";
-import OtherProfile from "../screens/OtherProfile";
-import Leaderboard from "../screens/Leaderboard";
-import CommitteesBackEnd from "../screens/CommitteesBackEnd";
-import CommitteePage from "../screens/CommitteePage";
-import Election from "../screens/Election";
-import Committees from "../screens/Committees";
-import ElectionApplication from "../screens/ElectionApplication";
-import BackEnd from "../screens/BackEnd";
-import ElectionBallot from "../screens/ElectionBallot";
-import ElectionBackEnd from "../screens/ElectionBackEnd";
-import ElectionPositions from "../screens/ElectionPositions";
-import ElectionCandidates from "../screens/ElectionCandidates";
-import More from "../screens/More";
-import PointsBreakDown from "../screens/PointsBreakDown";
-import Dashboard from "../screens/Dashboard";
+/** Import Admin **/
+import {
+	AdminHub,
+	CommitteesAdmin,
+	ElectionAdmin
+} from "../screens";
+
+/** Import Committees **/
+import {
+	CommitteePage,
+	Committees
+} from "../screens";
+
+/** Import Election **/
+import {
+	Election,
+	ElectionApplication,
+	ElectionBallot,
+	ElectionCandidates,
+	ElectionPositions
+} from "../screens";
+
+/** Import Events **/
+import {
+	Events
+} from "../screens";
+
+/** Import General  **/
+import {
+	About,
+	Dashboard,
+	Leaderboard,
+	More
+} from "../screens";
+
+/** Import User **/
+import {
+	OtherProfile,
+	PointsBreakDown,
+	Profile
+} from "../screens";
+
 import { Dimensions } from "react-native";
-import { Resources, Forms, About, EBoard, Version } from "../screens/";
 
 const dimension = Dimensions.get("window");
 
@@ -337,42 +356,28 @@ const RouterComponent = () => {
 							/>
 						</Stack>
 						<Stack
-							key = "BackEnd"
-							title = "BackEnd"
+							key = "AdminHub"
+							title = "AdminHub"
 							hideNavBar
 							hideTabBar
 						>
 							<Scene
-								key = "BackEnd"
-								component = { BackEnd }
+								key = "AdminHub"
+								component = { AdminHub }
 							/>
 							<Scene
-								key = "ElectionBackEnd"
-								component = { ElectionBackEnd }
+								key = "ElectionAdmin"
+								component = { ElectionAdmin }
 								title = "Election"
 								hideTabBar
 							/>
 							<Scene
-								key = "CommitteesBackEnd"
-								component = { CommitteesBackEnd }
+								key = "CommitteesAdmin"
+								component = { CommitteesAdmin }
 								title = "Committees"
 								hideTabBar
 							/>
 						</Stack>
-						<Scene
-							key = "EditOtherProfileForm"
-							component = { EditOtherProfileForm }
-							hideNavBar
-						/>
-						<Scene
-							key = "Resources"
-							component = { Resources }
-							title = "Resources"
-						/>
-						<Scene
-							key = "WebPageShow"
-							component = { WebPageShow }
-						/>
 						<Scene
 							key = "ElectionApplication"
 							component = { ElectionApplication }
@@ -385,11 +390,6 @@ const RouterComponent = () => {
 							title = "Ballot"
 							hideTabBar
 							hideNavBar
-						/>
-						<Scene
-							key = "Forms"
-							component = { Forms }
-							title = "Forms"
 						/>
 						<Scene
 							key = "Election"
@@ -443,17 +443,10 @@ const RouterComponent = () => {
 							</Stack>
 						</Stack>
 						<Scene
+							hideTabBar
 							key = "About"
 							component = { About }
 							title = "About"
-						/>
-						<Scene
-							key = "EBoard"
-							component = { EBoard }
-						/>
-						<Scene
-							key = "Version"
-							component = { Version }
 						/>
 					</Stack>
 				</Stack>

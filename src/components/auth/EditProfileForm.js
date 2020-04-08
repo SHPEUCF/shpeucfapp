@@ -29,10 +29,10 @@ import {
 
 const dimension = Dimensions.get("screen");
 
-const collegeNames = [];
-collegesJson.map(college => { collegeNames.push(college.collegeName) });
-let majorNames = {};
-collegesJson.map(college => { majorNames[college.collegeName] = college.degrees });
+const collegeNames = Object.keys(collegesJson);
+let colleges = {};
+collegeNames.map(college => { colleges[college] = collegeNames[college] });
+
 const continents = Object.keys(countriesJson);
 let countries = {};
 continents.map(continent => { countries[continent] = countriesJson[continent] });
@@ -161,7 +161,7 @@ class EditProfileForm extends Component {
 			? <PickerInput
 				title = { "Major" }
 				value = { major }
-				data = { majorNames[college] }
+				data = { colleges[college] }
 				placeholder = { "Select major" }
 				onSelect = { (text) => majorChanged(text) }
 			/>
@@ -172,7 +172,7 @@ class EditProfileForm extends Component {
 				<PickerInput
 					title = { "Colleges" }
 					value = { college }
-					data = { collegeNames }
+					data = { colleges }
 					placeholder = { "Select college" }
 					onSelect = { (text) => collegeChanged(text) } />
 				{ p1 }
