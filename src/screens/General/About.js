@@ -5,15 +5,16 @@ import { ListItem } from "react-native-elements";
 import { NavBar } from "../../components/general";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { View, Text, SafeAreaView, FlatList, Dimensions, Linking, TouchableOpacity } from "react-native";
-import list from "../../data/AboutItems.json";
+import { menuItems, developers } from "../../data/AboutItems.js";
 
 const dimension = Dimensions.get("window");
 
 class About extends Component {
 	render() {
 		const {
-			textColor,
-			bgColor,
+			textStyle,
+			mainBackground,
+			subBackground,
 			center,
 			titleStyle,
 			contributorStyle,
@@ -22,22 +23,22 @@ class About extends Component {
 		} = styles;
 
 		return (
-			<SafeAreaView style = { [{ backgroundColor: "#0c0b0b" }, containerFlex] }>
+			<SafeAreaView style = { [subBackground, containerFlex] }>
 				<NavBar title = "About" back onBack = { () => Actions.pop() } childComponent = { this.version() } />
-				<View style = { bgColor }>
+				<View style = { mainBackground }>
 					<FlatList
 						keyExtractor = { this.keyExtractor }
-						data = { list.menu }
+						data = { menuItems }
 						renderItem = { this.renderItem }
 					/>
 				</View>
 				<View style = { containerFlex }>
-					<Text style = { [textColor, titleStyle, { fontSize: 20 }] }>Developed by:</Text>
+					<Text style = { [textStyle, titleStyle, { fontSize: 20 }] }>Developed by:</Text>
 					<View>
 						<FlatList
 							numColumns = { 3 }
 							columnWrapperStyle = {{ justifyContent: "space-around" }}
-							data = { list.developers }
+							data = { developers }
 							renderItem = { this.renderDev }
 							keyExtractor = { this.keyExtractor }
 						/>
@@ -45,12 +46,12 @@ class About extends Component {
 					<TouchableOpacity onPress = { () =>
 						Linking.openURL("https://github.com/SHPEUCF/shpeucfapp/graphs/contributors") }
 					>
-						<Text style = { [textColor, contributorStyle] }>
+						<Text style = { [textStyle, contributorStyle] }>
 							...and our amazing contributors.
 						</Text>
 					</TouchableOpacity>
 					<View style = { [center, footer] }>
-						<Text style = { textColor }>Copyright © 2018 SHPE UCF</Text>
+						<Text style = { textStyle }>Copyright © 2018 SHPE UCF</Text>
 					</View>
 				</View>
 			</SafeAreaView>
@@ -61,13 +62,12 @@ class About extends Component {
 
 	version = () => {
 		const {
-			textColor,
-			size
+			textStyle
 		} = styles;
 
 		return (
 			<View style = {{ alignItems: "flex-end" }}>
-				<Text style = { [textColor, size] }>
+				<Text style = { [textStyle, { fontSize: 16 }] }>
 					v1.1
 				</Text>
 			</View>
@@ -76,20 +76,20 @@ class About extends Component {
 
 	renderItem = ({	item }) => {
 		const {
-			titleWeight,
-			bgColor,
-			textColor
+			mainBackground,
+			textStyle,
+			titleStyle
 		} = styles;
 
 		return (
 			<View>
 				<ListItem
-					containerStyle = { bgColor }
+					containerStyle = { mainBackground }
 					onPress = { () => Linking.openURL(item.url) }
 					title = { item.title }
-					titleStyle = { [titleWeight, textColor] }
+					titleStyle = { [textStyle, titleStyle, { padding: 0 }] }
 					subtitle = { item.content }
-					subtitleStyle = { textColor }
+					subtitleStyle = { textStyle }
 					leftIcon = { <Ionicons
 						name = { item.icon }
 						size = { 26 }
@@ -108,8 +108,7 @@ class About extends Component {
 	renderDev = ({ item }) => {
 		const {
 			center,
-			textColor,
-			textSize
+			textStyle
 		} = styles;
 
 		let idx = item.name.indexOf(" ");
@@ -126,8 +125,8 @@ class About extends Component {
 					/>
 				</View>
 				<View style = { center }>
-					<Text style = { [textColor, textSize] }>{ firstName }</Text>
-					<Text style = { [textColor, textSize] }>{ lastName }</Text>
+					<Text style = { [textStyle, { fontSize: 16 }] }>{ firstName }</Text>
+					<Text style = { [textStyle, { fontSize: 16 }] }>{ lastName }</Text>
 				</View>
 			</TouchableOpacity>
 		);
@@ -135,21 +134,23 @@ class About extends Component {
 }
 
 const styles = {
-	bgColor: {
+	mainBackground: {
 		backgroundColor: "#000"
 	},
-	textColor: {
-		color: "#FFF"
+	subBackground: {
+		backgroundColor: "#0c0b0b"
 	},
-	textSize: {
-		fontSize: 16
+	textStyle: {
+		color: "#FFF",
+		fontSize: 14
 	},
 	center: {
 		alignItems: "center"
 	},
 	titleStyle: {
 		fontWeight: "bold",
-		padding: "4%"
+		padding: "4%",
+		fontSize: 16
 	},
 	containerFlex: {
 		flex: 1
