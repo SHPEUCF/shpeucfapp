@@ -12,6 +12,7 @@ Follow these instructions to get you started in contributing to the SHPE UCF app
 	* [MacOS](#macos)
 * [Installation](#installation)
 * [Running](#running)
+* [Contributing](#contributing)
 * [About](#about)
 * [Common errors](#common-errors)
 
@@ -116,6 +117,9 @@ npm install
 ### iOS
 * Open the terminal, navigate to the cloned repository (shpeucfapp), and type `react-native run-ios`.
 
+## Contributing
+For contributing to this project, please check out [contributing](https://github.com/SHPEUCF/shpeucfapp/blob/master/.github/CONTRIBUTING.md) and the [contribution guidelines](https://github.com/SHPEUCF/shpeucfapp/wiki/Contribution-guidelines).
+
 ## About
 **Built with**
 * [React Native](https://facebook.github.io/react-native/)
@@ -129,7 +133,7 @@ npm install
 ...and our [contributors](https://github.com/SHPEUCF/shpeucfapp/graphs/contributors) who participated in this project.
 
 **License**  
-This project is licensed under the MIT License. See the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Common errors
 <details>

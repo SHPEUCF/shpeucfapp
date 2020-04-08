@@ -12,23 +12,21 @@ import ResetPasswordForm from "../components/auth/ResetPasswordForm";
 import CandidateForm from "../components/elect/CandidateForm";
 import PositionForm from "../components/elect/PositionForm";
 import CommitteeForm from "../components/general/CommitteeForm";
-import { WebPageShow } from "../components/general";
 
 /** All Screen Imports grouped by folder **/
-
 
 /** Import Admin **/
 import {
 	AdminHub,
 	CommitteesAdmin,
 	ElectionAdmin
-} from "../screens"
+} from "../screens";
 
-/** Import Comittees **/
+/** Import Committees **/
 import {
 	CommitteePage,
-	Committees,
-} from "../screens"
+	Committees
+} from "../screens";
 
 /** Import Election **/
 import {
@@ -37,31 +35,27 @@ import {
 	ElectionBallot,
 	ElectionCandidates,
 	ElectionPositions
-} from "../screens"
+} from "../screens";
 
 /** Import Events **/
 import {
-	Events,
-} from "../screens"
+	Events
+} from "../screens";
 
 /** Import General  **/
 import {
 	About,
 	Dashboard,
-	Forms,
 	Leaderboard,
-	More,
-	Resources,
-	Version
-} from "../screens"
-
+	More
+} from "../screens";
 
 /** Import User **/
 import {
 	OtherProfile,
 	PointsBreakDown,
 	Profile
-} from "../screens"
+} from "../screens";
 
 import { Dimensions } from "react-native";
 
@@ -385,15 +379,6 @@ const RouterComponent = () => {
 							/>
 						</Stack>
 						<Scene
-							key = "Resources"
-							component = { Resources }
-							title = "Resources"
-						/>
-						<Scene
-							key = "WebPageShow"
-							component = { WebPageShow }
-						/>
-						<Scene
 							key = "ElectionApplication"
 							component = { ElectionApplication }
 							hideTabBar
@@ -405,11 +390,6 @@ const RouterComponent = () => {
 							title = "Ballot"
 							hideTabBar
 							hideNavBar
-						/>
-						<Scene
-							key = "Forms"
-							component = { Forms }
-							title = "Forms"
 						/>
 						<Scene
 							key = "Election"
@@ -463,13 +443,10 @@ const RouterComponent = () => {
 							</Stack>
 						</Stack>
 						<Scene
+							hideTabBar
 							key = "About"
 							component = { About }
 							title = "About"
-						/>
-						<Scene
-							key = "Version"
-							component = { Version }
 						/>
 					</Stack>
 				</Stack>

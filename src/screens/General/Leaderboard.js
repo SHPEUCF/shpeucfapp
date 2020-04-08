@@ -39,6 +39,7 @@ class Leaderboard extends Component {
 		const {
 			screenBackground
 		} = styles;
+
 		const sortedMembers = _.orderBy(this.props.userList, iteratees, order);
 		let pastPoints = 0;
 		let pastIndex = 1;
@@ -54,20 +55,13 @@ class Leaderboard extends Component {
 
 		return (
 			<SafeAreaView style = { screenBackground }>
-				<View style = {{ flexDirection: "row", justifyContent: "space-between", backgroundColor: "black", paddingRight: "10%" }}>
-					<NavBar title = "Leaderboard" back onBack = { () => Actions.pop() } />
-					<View style = {{ flex: 0.2, alignItems: "center", justifyContent: "center", backgroundColor: "black" }}>
-						<Ionicons
-							onPress = { () => {
-								this.props.filterChanged("");
-								this.setState({ search: !this.state.search });
-							} }
-							name = { "ios-search" }
-							size = { dimension.height * 0.04 }
-							color = { "#FECB00" }
-						/>
-					</View>
-				</View>
+				<NavBar
+					title = "Leaderboard"
+					back
+					onBack = { () => Actions.pop() }
+					childComponent = { this.searchButton() }
+					childStyle = {{ flex: 1, paddingRight: "10%" }}
+				/>
 				<View style = {{ flexDirection: "row", backgroundColor: "black" }}>
 					<View style = {{ flex: 1 }}>
 						{ this.state.search
@@ -85,10 +79,7 @@ class Leaderboard extends Component {
 					extraData = { this.props }
 					keyExtractor = { this.keyExtractor }
 					data = { sortedMembers }
-					renderItem = { ({
-						item
-					}) =>
-						this.renderComponent(item, sortedMembers) }
+					renderItem = { ({ item }) => this.renderComponent(item, sortedMembers) }
 				/>
 			</SafeAreaView>
 		);
@@ -216,6 +207,22 @@ class Leaderboard extends Component {
 				</TouchableOpacity>
 			);
 		}
+	}
+
+	searchButton() {
+		return (
+			<View style = {{ alignItems: "flex-end" }}>
+				<Ionicons
+					onPress = { () => {
+						this.props.filterChanged("");
+						this.setState({ search: !this.state.search });
+					} }
+					name = { "ios-search" }
+					size = { dimension.height * 0.04 }
+					color = { "#FECB00" }
+				/>
+			</View>
+		);
 	}
 
 	viewBreakDown() {
