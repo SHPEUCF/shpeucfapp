@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { Button, Input, NavBar } from "../../components/general";
+import { Button, Input, NavBar, ButtonLayout } from "../../components/general";
 import _ from "lodash";
-import { FlatList, Text, View, Dimensions } from "react-native";
+import { FlatList, Text, SafeAreaView, View, Dimensions } from "react-native";
 import {
 	getPositions,
 	goToOtherProfile,
@@ -52,14 +52,14 @@ class ElectionApplication extends Component {
 		const positionsArray = _.orderBy(positions, iterateesPos, orderPos);
 
 		return (
-			<View style = { page }>
+			<SafeAreaView style = { page }>
 				{ this.renderNavBar() }
 				<View style = { contentStyle }>
 					{ this.showListPosition(positionsArray) }
 					{ this.showApplyPosition() }
 				</View>
 				{ this.renderButtons() }
-			</View>
+			</SafeAreaView>
 		);
 	}
 
@@ -145,10 +145,11 @@ class ElectionApplication extends Component {
 				<View style = {{ marginLeft: 12, marginRight: 10, marginBottom: 8 }}>
 					<Text style = { [textStyle, textColor] }>Role: { item.description }</Text>
 				</View>
-				<View style = { button } >
+				<View style = { button }>
 					<Button
 						title = { `Apply for ${item.title}` }
-						onPress = { () => { this.setState({ isListShow: false }); this.setState({ isApplyShow: true }); this.setState({ applyPos: item.title }) } } />
+						onPress = { () => { this.setState({ isListShow: false, isApplyShow: true, applyPos: item.title }) } }
+						 />
 				</View>
 			</View>
 		);
@@ -161,11 +162,11 @@ class ElectionApplication extends Component {
 		} = styles;
 
 		return (
-			<View style = {{ flex: 1, margin: 8, borderBottomWidth: 1, borderColor: "grey" }}>
+			<View style = {{ flex: 1, margin: 8, borderBottomWidth: 1, borderColor: "grey"}}>
 				<View style = {{ marginBottom: 10 }}>
 					<Text style = { [textStyle, textColor] }>Position: { `${item.title}` }</Text>
 				</View>
-				<View style = {{ marginLeft: 12, marginRight: 10, marginBottom: 8 }}>
+				<View style = {{ marginLeft: 12, marginRight: 10}}>
 					<Text style = { [textStyle, textColor] }>Role: { `${item.description}` }</Text>
 				</View>
 				{ this.renderEditButton(item) }
@@ -187,19 +188,19 @@ class ElectionApplication extends Component {
 
 		if (query && !query.approved)
 			return (
-				<View style = { button } >
+				<ButtonLayout>
 					<Button
 						title = { "Edit Application" }
 						onPress = { () => {
 							this.setState({ isListShow: false, isApplyShow: true, applyPos: item.title });
 							this.props.candidatePlanChanged(query.plan);
 						} } />
-				</View>
+				</ButtonLayout>
 			);
 		else if (query && query.approved)
 			return (
 				<View style = {{ marginLeft: 12, marginRight: 10, marginBottom: 8 }}>
-					<Text style = {{ fontSize: 16, fontWeight: "400", lineHeight: 25 }}>You've been approved! Good Luck!</Text>
+					<Text style = {{ fontSize: 16, fontWeight: "400", lineHeight: 25, color: "white" }}>You've been approved! Good Luck!</Text>
 				</View>
 			);
 	}
@@ -238,7 +239,7 @@ class ElectionApplication extends Component {
 			/>;
 
 		return (
-			<View style = { buttonContainer }>
+			<ButtonLayout>
 				{ p1 }
 				<Button
 					title = "Cancel"
@@ -249,7 +250,7 @@ class ElectionApplication extends Component {
 							this.setState({ isApplyShow: false, isListShow: true, applyPos: null });
 					} }
 				/>
-			</View>
+			</ButtonLayout>
 		);
 	}
 
@@ -298,13 +299,15 @@ const styles = {
 	button: {
 		paddingTop: dimension.height * 0.015,
 		paddingBottom: dimension.height * 0.015,
-		marginBottom: 8
+		marginBottom: 8,
+		minWidth: "45%",
+		alignSelf: "center"
 	},
 	buttonContainer: {
 		flex: 0.4
 	},
 	page: {
-		backgroundColor: "#2C3239",
+		backgroundColor: "black",
 		flex: 1
 	},
 	applyInput: {
@@ -360,4 +363,3 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ElectionApplication);
-
