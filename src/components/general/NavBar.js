@@ -3,13 +3,14 @@ import React, { Component } from "react";
 import { View, Text, Dimensions } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
+const dimension = Dimensions.get("window");
+
 class NavBar extends Component {
 	constructor(props) {
 		super(props);
 	}
 
 	static propTypes = {
-		text: PropTypes.string,
 		back: PropTypes.boolean
 	}
 
@@ -17,24 +18,27 @@ class NavBar extends Component {
 		const {
 			tabBar,
 			tabBarText,
-			childStyle
+			rowFlex,
+			backButtonStyle
 		} = styles;
 		const {
 			title,
 			back,
 			onBack,
+			style,
 			childComponent,
-			style
+			childStyle
 		} = this.props;
 
 		if (back)
 			return (
-				<View style = { [tabBar, style, { flexDirection: "row" }] }>
-					<View style = {{ height: dimension.height * 0.04, width: dimension.height * 0.04, justifyContent: "center", alignItems: "center", marginLeft: "5%" }}>
+				<View style = { [tabBar, style, rowFlex] }>
+					<View style = { backButtonStyle }>
 						<Ionicons
 							name = "md-arrow-back"
 							size = { dimension.height * 0.03 }
-							onPress = { onBack } style = {{ color: "#FECB00" }}
+							onPress = { onBack }
+							color = { "#FECB00" }
 						/>
 					</View>
 					<View>
@@ -47,7 +51,7 @@ class NavBar extends Component {
 			);
 		else
 			return (
-				<View style = { [tabBar, style, { flexDirection: "row" }] }>
+				<View style = { [tabBar, style, rowFlex] }>
 					<View>
 						<Text style = { tabBarText }>{ title }</Text>
 					</View>
@@ -58,8 +62,6 @@ class NavBar extends Component {
 			);
 	}
 }
-
-const dimension = Dimensions.get("window");
 
 const styles = {
 	tabBar: {
@@ -76,13 +78,24 @@ const styles = {
 		fontWeight: "bold",
 		paddingLeft: "5%"
 	},
-	childStyle: {
-		paddingRight: "3%"
+	backButtonStyle: {
+		height: dimension.height * 0.04,
+		width: dimension.height * 0.04,
+		justifyContent: "center",
+		alignItems: "center",
+		marginLeft: "5%"
+	},
+	rowFlex: {
+		flexDirection: "row"
 	}
 };
 
 NavBar.defaultProps = {
-	back: false
+	back: false,
+	childStyle: {
+		flex: 1,
+		padding: "3.5%"
+	}
 };
 
 export { NavBar };
