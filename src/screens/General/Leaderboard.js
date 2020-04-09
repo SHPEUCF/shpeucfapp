@@ -71,12 +71,6 @@ class Leaderboard extends Component {
 
 	renderComponent(item, sortedMembers) {
 		const {
-			filter,
-			id
-		} = this.props;
-
-		const {
-			containerStyle,
 			contentContainerStyle,
 			progress,
 			textStyle,
@@ -85,13 +79,14 @@ class Leaderboard extends Component {
 			userContainerColor,
 			itemContentContainer,
 			userInfoContainer,
-			userTextContainer
+			userTextContainer,
+			row
 		} = styles;
 
-		let backgroundColor = item.id === this.props.id ? userContainerColor : {};
+		let currentUserTextStyle = item.id === this.props.id ? userContainerColor : {};
 
 		return (
-			<View style = { [contentContainerStyle, backgroundColor] }>
+			<View style = { contentContainerStyle }>
 				<View style = { itemContentContainer }>
 					<View style = { index }>
 						<Text style = { indexText }>{ item.index }</Text>
@@ -103,7 +98,7 @@ class Leaderboard extends Component {
 									<Text style = { [textStyle, { fontWeight: "bold" }, currentUserTextStyle] }>{ `${item.firstName} ${item.lastName}` }</Text>
 									{ verifiedCheckMark(item) }
 								</View>
-								<Text style = { [textStyle, { fontSize: dimension.width * 0.04 }] }>
+								<Text style = { [textStyle, { fontSize: 15 }, currentUserTextStyle] }>
 									Points: { item.points }
 								</Text>
 							</View>
@@ -181,7 +176,7 @@ const styles = {
 		paddingHorizontal: 15
 	},
 	userContainerColor: {
-		backgroundColor: "#FECB00"
+		color: "#FECB00"
 	},
 	progress: {
 		marginTop: 10,
