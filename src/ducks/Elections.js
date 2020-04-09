@@ -333,8 +333,8 @@ export const addApplication = (fName, lName, plans, position, picture) => {
 		approved: false
 	})
 		.then(() => firebase.database().ref(`/users/${uid}/applied/`).set(true))
-		.then(() => alert("Application Added!", "Successful"))
-		.catch(() => alert("Application could not be Added!", "Failure"));
+		.then(() => alert("Application added!", "Successful"))
+		.catch(() => alert("Application could not be added!", "Failure"));
 };
 
 export const editApplication = (plans, position) => {

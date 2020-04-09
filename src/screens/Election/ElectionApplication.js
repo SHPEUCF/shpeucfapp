@@ -20,11 +20,39 @@ class ElectionApplication extends Component {
 	}
 
 	state = {
-		currentlyApplying: this.props.applied,
-		positionSelected: "",
-		candidatePlan: "",
-		index: null
+		currentlyApplying: false,
+		candidate: {
+			approved: false,
+			firstName: "",
+			lastName: "",
+			picture: "",
+			position: "",
+			plan: "",
+			id: ""
+		},
+		index: null,
+		positions: {}
 	};
+
+	componentWillReceiveProps(nextProps, prevState) {
+		const {
+			positions,
+			id
+		} = nextProps;
+
+		if (positions !== prevState.positions) {
+			let candidate = Object.assign({}, this.state.candidate);
+
+			// Searches for current user within Candidates
+			Object.entries(positions || {}).forEach(entry => {
+				Object.values(entry[1].candidates || {}).forEach(possibleCandidate => {
+					if (possibleCandidate.id === id) candidate = JSON.parse(JSON.stringify(possibleCandidate));
+				});
+			});
+
+			this.setState({ positions, candidate });
+		}
+	}
 
 	componentWillMount() {
 		this.props.getPositions();
@@ -47,7 +75,9 @@ class ElectionApplication extends Component {
 
 		const positionsArray = _.orderBy(positions, iterateesPos, orderPos);
 
-		const content = currentlyApplying || applied ? this.showApplication() : this.renderPositions(positionsArray);
+		const shouldShowApplication = currentlyApplying || applied;
+
+		const content = shouldShowApplication ? this.showApplication() : this.renderPositions(positionsArray);
 
 		return (
 			<SafeAreaView style = { [page, fullFlex] }>
@@ -55,7 +85,7 @@ class ElectionApplication extends Component {
 					title = "Positions"
 					back
 					onBack = { () => {
-						return currentlyApplying ? Actions.pop() : this.setState({ currentlyApplying: false });
+						return shouldShowApplication ? Actions.pop() : this.setState({ currentlyApplying: false });
 					} } />
 				<View style = { fullFlex }>
 					{ content }
@@ -65,17 +95,6 @@ class ElectionApplication extends Component {
 		);
 	}
 
-	findActiveApplicationPosition() {
-		let activeApplicationPosition = null;
-		Object.entries(this.props.positions || {}).forEach(entry => {
-			Object.values(entry[1].candidates || {}).forEach(candidate => {
-				if (candidate.id === this.props.id) activeApplicationPosition = entry[0];
-			});
-		});
-
-		return activeApplicationPosition;
-	}
-
 	showApplication() {
 		const {
 			firstName,
@@ -83,7 +102,7 @@ class ElectionApplication extends Component {
 		} = this.props;
 
 		const {
-			candidatePlan,
+			candidate,
 			positionSelected
 		} = this.state;
 
@@ -95,18 +114,16 @@ class ElectionApplication extends Component {
 			titleStyle
 		} = styles;
 
-		let activeApplicationPosition = this.findActiveApplicationPosition();
 
 		return (
 			<View style = { fullFlex }>
 				<Text style = { [fontLarge, textColor, titleStyle ] }>
-					{ activeApplicationPosition || positionSelected }
+					{ candidate.position || positionSelected }
 				</Text>
 				<Text style = { [fontLarge, textColor] }>
 					{ firstName } { lastName }
 				</Text>
 				<Text style = { [fontLarge, textColor] }>Plan:</Text>
-				{ this.renderError() }
 				<Input
 					numberOfLines = { 10 }
 					style = { halfFlex }
@@ -115,20 +132,15 @@ class ElectionApplication extends Component {
 					blurOnSubmit = { true }
 					multiline = { true }
 					placeholder = "Please write your plan for members to read."
-					value = { candidatePlan }
-					onChangeText = { (plan) => this.setState({ candidatePlan: plan }) }
+					value = { candidate.plan }
+					onChangeText = { (plan) => {
+						let tempCandidate = Object.assign(candidate);
+						tempCandidate.plan = plan;
+						this.setState({ candidate: tempCandidate });
+					 } }
 				/>
 			</View>
 		);
-	}
-
-	renderError() {
-		if (this.props.error)
-			return (
-				<Text style = { styles.errorfontLarge }>
-					{ this.props.error }
-				</Text>
-			);
 	}
 
 	_keyExtractor = (item, index) => index;
@@ -158,7 +170,8 @@ class ElectionApplication extends Component {
 				onPress = { () => {
 					this.setState({ currentlyApplying: true, positionSelected: item.title });
 				} }
-				style = { [positionContainer, fullFlex] }>
+				style = { [positionContainer, fullFlex] }
+			>
 				<View>
 					<Text style = { [fontLarge, textColor] }>{ item.title }</Text>
 					<Text style = { [fontSmall, textColor] }>{ item.description }</Text>
@@ -182,8 +195,7 @@ class ElectionApplication extends Component {
 
 		const {
 			currentlyApplying,
-			positionSelected,
-			candidatePlan
+			candidate
 		} = this.state;
 
 		let submitButton;
@@ -193,9 +205,9 @@ class ElectionApplication extends Component {
 				title = { (applied && "Edit " || "Submit ") + "Application" }
 				onPress = { () => {
 					if (!applied)
-						addApplication(firstName, lastName, candidatePlan, positionSelected, picture);
+						addApplication(firstName, lastName, candidate.plan, candidate.position, picture);
 					else
-						editApplication(candidatePlan, this.findActiveApplicationPosition());
+						editApplication(candidate.plan, candidate.position);
 				} }
 			/>;
 
@@ -213,7 +225,8 @@ class ElectionApplication extends Component {
 	stopApplication() {
 		if (!this.props.applied && this.state.currentlyApplying)
 			this.setState({ currentlyApplying: false });
-		else Actions.pop();
+		else
+			Actions.pop();
 	}
 }
 
@@ -247,7 +260,7 @@ const styles = {
 		justifyContent: "space-between"
 	},
 	titleStyle: {
-		fontweight: "bold",
+		fontWeight: "bold",
 		fontSize: 30
 	}
 };
