@@ -323,25 +323,18 @@ export const addApplication = (fName, lName, plans, position, picture) => {
 		uid
 	} = firebase.auth().currentUser;
 
-	return (dispatch) => {
-		firebase.database().ref(`/election/positions/${position}/candidates/${uid}`).set({
-			firstName: fName,
-			lastName: lName,
-			plan: plans,
-			id: uid,
-			position: position,
-			picture: picture,
-			approved: false
-		})
-			.then(() => firebase.database().ref(`/users/${uid}/applied/`).set(true))
-			.then(() => {
-				dispatch({
-					type: ACTIONS.ADD_APPLICATION
-				});
-			})
-			.then(() => alert("Application Added!", "Successful"))
-			.catch(() => alert("Application could not be Added!", "Failure"));
-	};
+	firebase.database().ref(`/election/positions/${position}/candidates/${uid}`).set({
+		firstName: fName,
+		lastName: lName,
+		plan: plans,
+		id: uid,
+		position: position,
+		picture: picture,
+		approved: false
+	})
+		.then(() => firebase.database().ref(`/users/${uid}/applied/`).set(true))
+		.then(() => alert("Application Added!", "Successful"))
+		.catch(() => alert("Application could not be Added!", "Failure"));
 };
 
 export const editApplication = (plans, position) => {
