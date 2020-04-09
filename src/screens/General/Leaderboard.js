@@ -7,6 +7,7 @@ import _ from "lodash";
 import * as Progress from "react-native-progress";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { FlatList, Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
+import { verifiedCheckMark } from "../../utils/render";
 import {
 	fetchMembersPoints,
 	fetchMemberProfile,
@@ -87,89 +88,48 @@ class Leaderboard extends Component {
 
 	renderComponent(item, sortedMembers) {
 		const {
+			filter,
+			id
+		} = this.props;
+
+		const {
 			containerStyle,
 			contentContainerStyle,
 			progress,
 			textStyle,
 			index,
-			indexText
+			indexText,
+			row
 		} = styles;
 
-		let re = new RegExp("^" + this.props.filter, "i");
+		let re = new RegExp("^" + filter, "i");
 
 		if (re.test(`${item.firstName} ${item.lastName}`)) {
-			if (item.id === this.props.id)
-				return (
-					<View style = { contentContainerStyle }>
-						<View style = { [containerStyle, { backgroundColor: "#FECB00" }] }>
-							<View style = {{ flex: 0.1 }}></View>
-							<View style = {{ flexDirection: "row", flex: 1, alignItems: "center" }}>
-								<View style = {{ justifyContent: "center" }}>
-									<View style = { index }>
-										<Text style = { indexText }>{ item.index }</Text>
-									</View>
-								</View>
-								<View >
-									<View style = {{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
-										<View>
-											<View style = {{ flex: 0.2 }}></View>
-											<Text style = { [textStyle, { fontWeight: "bold" }, { color: "black" }] }>
-												{ `${item.firstName} ${item.lastName}` }
-											</Text>
-											<Text style = { [textStyle, { fontSize: dimension.width * 0.04 }, { color: "black" }] }>Points: { item.points }</Text>
-										</View>
-										<View>
-											{ item.picture === ""
-											&& <Avatar
-												size = { dimension.height * 0.08 }
-												rounded
-												titleStyle = {{ backgroundColor: item.color }}
-												overlayContainerStyle = {{ backgroundColor: item.color }}
-												title = { item.firstName[0].concat(item.lastName[0]) }
-											/> }
-											{ item.picture !== ""
-											&& <Avatar
-												size = { dimension.height * 0.08 }
-												rounded
-												source = {{ uri: item.picture }}
-											/> }
-										</View>
-									</View>
-									<View style = {{ flex: 0.2 }}></View>
-									<View >
-										<Progress.Bar
-											style = { progress }
-											progress = { item.points / Math.max(sortedMembers[0].points, 1) }
-											indeterminate = { false }
-											height = { dimension.width * 0.03 }
-											width = { dimension.width * 0.75 }
-											color = { "#ffd700" }
-										/>
-									</View>
-								</View>
-							</View>
-							<View style = {{ flex: 0.1 }}></View>
-						</View>
-					</View>
-				);
+			let currentUserTextStyle = {};
+			if (item.id === id)
+				currentUserTextStyle = {
+					color: "#FECB00"
+				};
 
 			return (
 				<TouchableOpacity onPress = { () => this.callUser(item.id) }>
 					<View style = { contentContainerStyle }>
 						<View style = { containerStyle }>
 							<View style = {{ flex: 0.1 }}></View>
-							<View style = {{ flexDirection: "row", flex: 1, alignItems: "center" }}>
+							<View style = { row }>
 								<View style = {{ justifyContent: "center" }}>
 									<View style = { index }>
 										<Text style = { indexText }>{ item.index }</Text>
 									</View>
 								</View>
 								<View >
-									<View style = {{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
+									<View style = { [row, { justifyContent: "space-between" }] }>
 										<View>
-											<View style = {{ flex: 0.2 }}></View>
-											<Text style = { [textStyle, { fontWeight: "bold" }] }>{ `${item.firstName} ${item.lastName}` }</Text>
-											<Text style = { [textStyle, { fontSize: dimension.width * 0.04 }] }>Points: { item.points }</Text>
+											<View style = { [row] }>
+												<Text style = { [textStyle, { fontWeight: "bold" }, currentUserTextStyle] }>{ `${item.firstName} ${item.lastName}` }</Text>
+												{ verifiedCheckMark(item) }
+											</View>
+											<Text style = { [textStyle, { fontSize: 15 }, currentUserTextStyle] }>Points: { item.points }</Text>
 										</View>
 										<View>
 											{ item.picture === ""
@@ -188,7 +148,6 @@ class Leaderboard extends Component {
 											/> }
 										</View>
 									</View>
-									<View style = {{ flex: 0.2 }}></View>
 									<View >
 										<Progress.Bar
 											style = { progress }
@@ -242,6 +201,10 @@ const styles = {
 		alignItems: "flex-start",
 		paddingHorizontal: 15
 	},
+	row: {
+		alignItems: "center",
+		flexDirection: "row"
+	},
 	screenBackground: {
 		flex: 1,
 		backgroundColor: "#0c0b0b"
@@ -257,8 +220,9 @@ const styles = {
 		backgroundColor: "black"
 	},
 	progress: {
+		marginTop: 10,
 		justifyContent: "center",
-		height: dimension.width * 0.03,
+		height: 13,
 		borderColor: "#2C3239",
 		backgroundColor: "#2C3239"
 	},
@@ -286,10 +250,12 @@ const mapStateToProps = ({ user, members, general }) => {
 		membersPoints,
 		userList
 	} = members;
+
 	const {
 		picture,
 		id
 	} = user;
+
 	const {
 		filter
 	} = general;
