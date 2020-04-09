@@ -1,7 +1,7 @@
-import { createActiontypes } from "../utils/actions";
+import { createActionTypes } from "../utils/actions";
 
 // handle all things related to Elections
-const ACTIONS = createActiontypes([
+const ACTIONS = createActionTypes([
 	"PAGE_LOAD",
 	"FILTER_CHANGED"
 ]);

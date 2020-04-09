@@ -1,10 +1,10 @@
 import firebase from "firebase";
 import { Actions } from "react-native-router-flux";
 import { Alert } from "react-native";
-import { createActiontypes } from "../utils/actions";
+import { createActionTypes } from "../utils/actions";
 
 // Handle all things related to Events
-const ACTIONS = createActiontypes([
+const ACTIONS = createActionTypes([
 	"FIRST_NAME_CHANGED_MEMBER",
 	"LAST_NAME_CHANGED_MEMBER",
 	"EMAIL_CHANGED_MEMBER",

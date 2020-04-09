@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { Button, NavBar } from "../../components/general";
-import { Text, View } from "react-native";
+import { Button, NavBar, ButtonLayout } from "../../components/general";
+import { Text, View, SafeAreaView } from "react-native";
 import {
 	getPositions,
 	goToOtherProfile,
@@ -48,9 +48,9 @@ class Election extends Component {
 			/>;
 
 		return (
-			<View style = { page }>
+			<SafeAreaView style = { page }>
 				<NavBar
-					title = "Election Candidates"
+					title = "Election"
 					back
 					onBack = { () => Actions.pop() }
 				/>
@@ -61,9 +61,12 @@ class Election extends Component {
 					</View>
 				</View>
 				{ /* <Text style={[textStyle, textColor]}>Your vote today is having a huge impact on the path that SHPE UCF is paving for the future</Text> */ }
-				{ applyButton }
-				{ voteButton }
-			</View>
+				<ButtonLayout>
+					{ voteButton }
+					{ applyButton }
+				</ButtonLayout>
+
+			</SafeAreaView>
 		);
 	}
 }
@@ -71,7 +74,7 @@ class Election extends Component {
 const styles = {
 	page: {
 		flex: 1,
-		backgroundColor: "#2C3239",
+		backgroundColor: "black",
 		paddingBottom: 10
 	},
 	textStyle: {
