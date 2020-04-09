@@ -30,7 +30,6 @@ class ElectionApplication extends Component {
 
 	state = {
 		applying: this.props.applied,
-		editing: !this.props.applied,
 		positionSelected: "",
 		index: null
 	};
@@ -219,7 +218,7 @@ class ElectionApplication extends Component {
 
 	stopApplication() {
 		if (!this.props.applied && this.state.applying)
-			this.setState({ applying: false, editing: false });
+			this.setState({ applying: false });
 		else Actions.pop();
 	}
 }
