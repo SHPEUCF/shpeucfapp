@@ -347,6 +347,28 @@ export const goToOtherProfile = () => {
 	};
 };
 
+/*
+ members: should have list of IDs -> Array<String>
+ privilegeChanged: should have the privilege type that should be changed -> string
+ value: Value that privilege should be changed to -> boolean
+*/
+export const changePrivilegeOfMembers = (members, privilegeChanged, value) => {
+	firebase.database().ref("/users/").once("value", snapshot => {
+		let updates = snapshot.val();
+		members.forEach(memberId => {
+			updates[memberId][privilegeChanged] = value;
+		});
+		firebase.database().ref("/users/").update(updates);
+	});
+	firebase.database().ref("/privileges/").once("value", snapshot => {
+		let updates = snapshot.val();
+		members.forEach(memberId => {
+			updates[memberId][privilegeChanged] = value;
+		});
+		firebase.database().ref("/privileges/").update(updates);
+	});
+};
+
 export const goToEditOtherProfileForm = () => {
 	return (dispatch) => {
 		dispatch({
