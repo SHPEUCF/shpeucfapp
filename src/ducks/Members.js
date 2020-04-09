@@ -48,6 +48,7 @@ const INITIAL_STATE = {
 	confirmPassword: "",
 	nationality: "",
 	dateOfBirth: "",
+	paidMember: false,
 	user: null,
 	loggedIn: null,
 	loading: false,
@@ -125,6 +126,7 @@ export default (state = INITIAL_STATE, action) => {
 				picture: payload.picture,
 				nationality: payload.nationality,
 				dateOfBirth: payload.dateOfBirth,
+				paidMember: payload.paidMember,
 				flag: payload.flag,
 				userCommittees: payload.committees,
 				dashColor: payload.color,
@@ -362,6 +364,17 @@ export const changePrivilegeOfMembers = (members, privilegeChanged, value) => {
 
 		firebase.database().ref("/privileges/").update(updates);
 	});
+
+	if (privilegeChanged === "paidMember")
+		firebase.database().ref("/users/").once("value", snapshot => {
+			let updates = snapshot.val();
+
+			members.forEach(memberId => {
+				updates[memberId][privilegeChanged] = value;
+			});
+
+			firebase.database().ref("/users/").update(updates);
+		});
 };
 
 export const goToEditOtherProfileForm = () => {

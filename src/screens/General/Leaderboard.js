@@ -8,6 +8,7 @@ import * as Progress from "react-native-progress";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Text, View, Dimensions, SafeAreaView } from "react-native";
 import { rankMembers } from "../../utils/actions";
+import { verifiedCheckMark } from "../../utils/render";
 import {
 	fetchMembersPoints,
 	fetchMemberProfile,
@@ -78,13 +79,14 @@ class Leaderboard extends Component {
 			userContainerColor,
 			itemContentContainer,
 			userInfoContainer,
-			userTextContainer
+			userTextContainer,
+			row
 		} = styles;
 
-		let backgroundColor = item.id === this.props.id ? userContainerColor : {};
+		let currentUserTextStyle = item.id === this.props.id ? userContainerColor : {};
 
 		return (
-			<View style = { [contentContainerStyle, backgroundColor] }>
+			<View style = { contentContainerStyle }>
 				<View style = { itemContentContainer }>
 					<View style = { index }>
 						<Text style = { indexText }>{ item.index }</Text>
@@ -92,10 +94,13 @@ class Leaderboard extends Component {
 					<View >
 						<View style = { userInfoContainer }>
 							<View style = { userTextContainer }>
-								<Text style = { [textStyle, { fontWeight: "bold" }] }>
-									{ `${item.firstName} ${item.lastName}` }
-								</Text>
-								<Text style = { [textStyle, { fontSize: dimension.width * 0.04 }] }>
+								<View style = { row }>
+									<Text style = { [textStyle, { fontWeight: "bold" }, currentUserTextStyle] }>
+										{ `${item.firstName} ${item.lastName}` }
+									</Text>
+									{ verifiedCheckMark(item) }
+								</View>
+								<Text style = { [textStyle, { fontSize: 15 }, currentUserTextStyle] }>
 									Points: { item.points }
 								</Text>
 							</View>
@@ -154,6 +159,10 @@ class Leaderboard extends Component {
 }
 
 const styles = {
+	row: {
+		alignItems: "center",
+		flexDirection: "row"
+	},
 	screenBackground: {
 		flex: 1,
 		backgroundColor: "#0c0b0b"
@@ -169,11 +178,12 @@ const styles = {
 		paddingHorizontal: 15
 	},
 	userContainerColor: {
-		backgroundColor: "#FECB00"
+		color: "#FECB00"
 	},
 	progress: {
+		marginTop: 10,
 		justifyContent: "center",
-		height: dimension.width * 0.03,
+		height: 13,
 		borderColor: "#2C3239",
 		backgroundColor: "#2C3239"
 	},
@@ -215,10 +225,12 @@ const mapStateToProps = ({ user, members, general }) => {
 		membersPoints,
 		userList
 	} = members;
+
 	const {
 		picture,
 		id
 	} = user;
+
 	const {
 		filter
 	} = general;

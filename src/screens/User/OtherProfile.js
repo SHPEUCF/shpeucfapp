@@ -8,6 +8,7 @@ import Flag from "react-native-flags";
 import RNFetchBlob from "rn-fetch-blob";
 import firebase from "firebase";
 import ImagePicker from "react-native-image-crop-picker";
+import { verifiedCheckMark } from "../../utils/render";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
 
 const dimension = Dimensions.get("window");
@@ -79,41 +80,40 @@ class OtherProfile extends Component {
 			headerInfoContainer,
 			taglineContainer,
 			nameLabelText,
-			textColor
+			textColor,
+			row
 		} = styles;
+
 		const {
 			firstName,
 			lastName,
-			picture
+			picture,
+			paidMember
 		} = this.props;
 
 		return (
 			<View style = { headerInfoContainer }>
-				<View style = {{ backgroundColor: "black", flex: 1 }}>
-					<View style = {{ flex: 0.05, backgroundColor: "black" }}></View>
-					<View style = {{ flex: 1, paddingTop: "3%", paddingLeft: "5%", paddingRight: "5%" }}>
-						{ picture === ""
-						&& <Avatar
-							size = { dimension.height * 0.32 }
-							rounded
-							titleStyle = {{ backgroundColor: this.props.dashColor, height: "100%", width: "100%", justifyContent: "center", paddingTop: "20%" }}
-							title = { firstName[0].concat(lastName[0]) }
-						/> }
-						{ picture !== ""
-						&& <Avatar
-							size = { dimension.height * 0.32 }
-							rounded
-							source = {{ uri: picture }}
-						/> }
+				<View style = {{ flex: 0.05, backgroundColor: "black" }}></View>
+				<View style = {{ flex: 1, paddingTop: "3%", paddingLeft: "5%", paddingRight: "5%" }}>
+					{ picture === ""
+					&& <Avatar
+						size = { dimension.height * 0.32 }
+						rounded
+						titleStyle = {{ backgroundColor: this.props.dashColor, height: "100%", width: "100%", justifyContent: "center", paddingTop: "20%" }}
+						title = { firstName[0].concat(lastName[0]) }
+					/> }
+					{ picture !== ""
+					&& <Avatar
+						size = { dimension.height * 0.32 }
+						rounded
+						source = {{ uri: picture }}
+					/> }
+				</View>
+				<View style = { [taglineContainer] }>
+					<View style = { row }>
+						<Text style = { [nameLabelText, textColor] }>{ firstName } { lastName }</Text>
+						{ verifiedCheckMark({ paidMember }) }
 					</View>
-					<View style = { taglineContainer }>
-						<View style = {{ flexDirection: "row", alignItems: "center" }}>
-							<View style = {{ flex: 1, alignItems: "center" }}>
-								<Text style = { [nameLabelText, textColor] }>{ firstName + " " + lastName }</Text>
-							</View>
-						</View>
-					</View>
-					<View style = {{ flex: 0.05, backgroundColor: "black" }}></View>
 				</View>
 			</View>
 		);
@@ -283,6 +283,11 @@ const styles = {
 	textColor: {
 		color: "#e0e6ed"
 	},
+	row: {
+		flex: 1,
+		alignItems: "center",
+		flexDirection: "row"
+	},
 	taglineContainer: {
 		flex: 0.4,
 		paddingBottom: "3%",
@@ -349,7 +354,8 @@ const mapStateToProps = ({ members, general, user }) => {
 		picture,
 		quote,
 		dashColor,
-		flag
+		flag,
+		paidMember
 	} = members;
 	const {
 		loading
@@ -369,7 +375,8 @@ const mapStateToProps = ({ members, general, user }) => {
 		loading,
 		privilege,
 		dashColor,
-		flag
+		flag,
+		paidMember
 	};
 };
 
