@@ -19,7 +19,7 @@ export const createActionTypes = actionTypes => actionTypes
 	.map(type => ({ [type]: `module/${type}`	}))
 	.reduce((types, type) => ({ ...types, ...type }), {});
 
-// MemberPanel needs should be made into it;s own component
+// MemberPanel needs should be made into its own component
 export const MemberPanel = (user) => {
 	const {
 		textStyle,

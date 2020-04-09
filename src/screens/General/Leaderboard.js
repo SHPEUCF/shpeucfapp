@@ -82,6 +82,7 @@ class Leaderboard extends Component {
 		} = styles;
 
 		let backgroundColor = item.id === this.props.id ? userContainerColor : {};
+
 		return (
 			<View style = { [contentContainerStyle, backgroundColor] }>
 				<View style = { itemContentContainer }>

@@ -79,10 +79,7 @@ class ElectionBallot extends Component {
 				data = { positionsArray }
 				extraData = { this.state }
 				keyExtractor = { this._keyExtractor }
-				renderItem = { ({
-					item, index
-				}) =>
-					this.renderCandidatesList(item, index) }
+				renderItem = { ({ item, index }) => this.renderCandidatesList(item, index) }
 			/>
 		);
 	}
@@ -111,7 +108,7 @@ class ElectionBallot extends Component {
 						this.setState({ isBallotShow: true });
 					} }>
 					<Text style = { [{ fontWeight: "bold", fontSize: 20, alignSelf: "center" }, textColor] }>
-						{ item.firstName + " " + item.lastName }
+						{ `${item.firstName} ${item.lastName}` }
 					</Text>
 					<View style = {{ flex: 1 }}>
 						{ this.renderPicture(item) }

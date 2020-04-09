@@ -515,29 +515,33 @@ class EventDetails extends Component {
 						<View style = { iconContainer }>
 							<Ionicons
 								style = { [icon, textColor] }
-								name = "md-calendar" size = { iconSize }
+								name = "md-calendar"
+								size = { iconSize }
 								color = "#000" />
 							<Text style = { [text, textColor] }>{ this.convertNumToDate(date) }</Text>
 						</View>
 						<View style = { iconContainer }>
 							<Ionicons
 								style = { [icon, textColor] }
-								name = "md-time" size = { iconSize }
+								name = "md-time"
+								size = { iconSize }
 								color = "#000" />
 							<Text style = { [text, textColor] }>{ startTime }-{ endTime }</Text>
 						</View>
 						<View style = { iconContainer }>
 							<Ionicons
 								style = { [icon, textColor] }
-								name = "md-pin" size = { iconSize }
+								name = "md-pin"
+								size = { iconSize }
 								color = "#000" />
 							<Text style = { [text, textColor] }>{ location }</Text>
 						</View>
-						{ description != ""
+						{ description
 						&& <View style = { [iconContainer, { flex: 0.7 }] }>
-							<Ionicons 
+							<Ionicons
 								style = { [icon, textColor] }
-								name = "md-list" size = { iconSize }
+								name = "md-list"
+								size = { iconSize }
 								color = "#000" />
 							<Text style = { [text, textColor] }>{ description }</Text>
 						</View> }

@@ -57,7 +57,7 @@ class ButtonLayout extends Component {
 			buttonIndex++;
 		}
 
-		for (; buttonIndex + 2 <= length; buttonIndex = buttonIndex + 2) {
+		for (; buttonIndex + 2 <= length; buttonIndex += 2) {
 			iconVar = null;
 
 			if (icon && Math.trunc(buttonIndex / 2) + 1 === icon.layer)

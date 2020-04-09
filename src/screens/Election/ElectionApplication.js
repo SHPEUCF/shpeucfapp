@@ -170,7 +170,7 @@ class ElectionApplication extends Component {
 				<View style = {{ marginBottom: 10 }}>
 					<Text style = { [textStyle, textColor] }>Position: { `${item.title}` }</Text>
 				</View>
-				<View style = {{ marginLeft: 12, marginRight: 10}}>
+				<View style = {{ marginLeft: 12, marginRight: 10 }}>
 					<Text style = { [textStyle, textColor] }>Role: { `${item.description}` }</Text>
 				</View>
 				{ this.renderEditButton(item) }
@@ -181,8 +181,8 @@ class ElectionApplication extends Component {
 	renderEditButton(item) {
 		const {
 			id,
-			ApprovedTextStyle,
-			ApprovedTextContainer
+			approvedTextStyle,
+			approvedTextContainer
 		} = this.props;
 
 		let query = _.get(item, ["candidates", id], null);
@@ -202,8 +202,8 @@ class ElectionApplication extends Component {
 			);
 		else if (query && query.approved)
 			return (
-				<View style = { ApprovedTextContainer }>
-					<Text style = { ApprovedTextStyle }>You've been approved! Good Luck!</Text>
+				<View style = { approvedTextContainer }>
+					<Text style = { approvedTextStyle }>You've been approved! Good Luck!</Text>
 				</View>
 			);
 	}
@@ -323,13 +323,13 @@ const styles = {
 		borderBottomWidth: 1,
 		borderColor: "grey"
 	},
-	ApprovedTextStyle: {
+	approvedTextStyle: {
 		fontSize: 16,
 		ontWeight: "400",
 		lineHeight: 25,
 		color: "white"
 	},
-	ApprovedTextContainer: {
+	approvedTextContainer: {
 		marginLeft: 12,
 		marginRight: 10,
 		marginBottom: 8

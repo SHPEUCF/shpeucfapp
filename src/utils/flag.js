@@ -86,7 +86,6 @@ export const CustomFlag = (props) => {
 						autoCorrect = { false }
 						maxLength = { 2 }
 					/>
-
 					<View style = { modalButtonContainer }>
 						<View style = { modalButton }>
 							<Button

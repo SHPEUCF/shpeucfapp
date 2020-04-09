@@ -9,19 +9,28 @@ import { goToLogIn, registrationError } from "./ducks";
 
 class App extends Component {
 	componentDidMount() {
-		// Initialize firebase
+		// firebase.auth().signOut();
+
 		const config = {
 			apiKey: "AIzaSyCeX5lUZUmQxXsWNO8gNXVHqfJs-kQmSaY",
-				authDomain: "shpe-ucf.firebaseapp.com",
-				databaseURL: "https://shpe-ucf.firebaseio.com",
-				projectId: "shpe-ucf",
-				storageBucket: "shpe-ucf.appspot.com",
-				messagingSenderId: "974032317047",
-				appId: "1:974032317047:web:0a4a2ad01ac705b90ff472"
-			};
-		firebase.initializeApp(config);
+			authDomain: "shpe-ucf.firebaseapp.com",
+			databaseURL: "https://shpe-ucf.firebaseio.com",
+			projectId: "shpe-ucf",
+			storageBucket: "shpe-ucf.appspot.com",
+			messagingSenderId: "974032317047",
+			appId: "1:974032317047:web:0a4a2ad01ac705b90ff472"
+		};
 
-		// firebase.auth().signOut();
+		if (!firebase.apps.length) firebase.initializeApp(config);
+		else {
+			if (!this.props.loggedIn) Actions.login();
+			else Actions.main();
+		}
+
+		this.verifyLogIn();
+	}
+
+	verifyLogIn() {
 		firebase.auth().onAuthStateChanged((user) => {
 			let correctVersion = false;
 

@@ -380,7 +380,7 @@ class Dashboard extends Component {
 						>
 							<FontAwesomeIcon
 								style = { black }
-								name = {data[1]}
+								name = { data[1] }
 								size = { dimension.height * 0.04 }
 							/>
 						</TouchableOpacity>
