@@ -94,8 +94,10 @@ class Leaderboard extends Component {
 					<View >
 						<View style = { userInfoContainer }>
 							<View style = { userTextContainer }>
-								<View style = { [row] }>
-									<Text style = { [textStyle, { fontWeight: "bold" }, currentUserTextStyle] }>{ `${item.firstName} ${item.lastName}` }</Text>
+								<View style = { row }>
+									<Text style = { [textStyle, { fontWeight: "bold" }, currentUserTextStyle] }>
+										{ `${item.firstName} ${item.lastName}` }
+									</Text>
 									{ verifiedCheckMark(item) }
 								</View>
 								<Text style = { [textStyle, { fontSize: 15 }, currentUserTextStyle] }>
