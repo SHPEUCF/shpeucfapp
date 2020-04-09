@@ -17,11 +17,10 @@ const Button = ({
 		bStyle,
 		tStyle
 	} = styles;
+
 	return (
-		<TouchableOpacity
-			onPress = { onPress }>
-			<View style = { [bStyle, buttonStyle, { height }, { width }] }
-			>
+		<TouchableOpacity onPress = { onPress }>
+			<View style = { [bStyle, buttonStyle, { height }, { width }] }>
 				<Text
 					style = { [tStyle, textStyle] }
 					accessibilityLabel = { accessibilityLabel }

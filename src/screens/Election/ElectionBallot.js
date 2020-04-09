@@ -23,20 +23,20 @@ import {
 const dimension = Dimensions.get("window");
 const iterateesPos = ["level"];
 const orderPos = ["asc"];
-const iterateesCan = ["lastName", "firstName"];
-const orderCan = ["asc", "asc"];
+const iterateesCandidate = ["lastName", "firstName"];
+const orderCandidate = ["asc", "asc"];
 let dict = [];
 
 class ElectionBallot extends Component {
 	constructor(props) {
 		super(props);
-		this.renderCand = this.renderCand.bind(this);
+		this.renderCandidate = this.renderCandidate.bind(this);
 	}
 
 	state = {
 		index: null,
 		isBallotShow: true,
-		isCand: false,
+		isCandidate: false,
 		applyPos: null,
 		listCandidates: null,
 		application: "Submit"
@@ -62,7 +62,7 @@ class ElectionBallot extends Component {
 				{ this.renderNavBar() }
 				<View style = { contentStyle }>
 					{ this.showBallot(positionsArray) }
-					{ this.renderCand() }
+					{ this.renderCandidate() }
 				</View>
 				{ this.renderButtons() }
 			</SafeAreaView>
@@ -107,10 +107,12 @@ class ElectionBallot extends Component {
 							first: item.firstName,
 							last: item.lastName
 						};
-						this.setState({ isCand: false });
+						this.setState({ isCandidate: false });
 						this.setState({ isBallotShow: true });
 					} }>
-					<Text style = { [{ fontWeight: "bold", fontSize: 20, alignSelf: "center" }, textColor] }>{ item.firstName + " " + item.lastName }</Text>
+					<Text style = { [{ fontWeight: "bold", fontSize: 20, alignSelf: "center" }, textColor] }>
+						{ item.firstName + " " + item.lastName }
+					</Text>
 					<View style = {{ flex: 1 }}>
 						{ this.renderPicture(item) }
 						<View style = { contentContainerStyle }>
@@ -140,14 +142,14 @@ class ElectionBallot extends Component {
 		);
 	}
 
-	renderCand() {
+	renderCandidate() {
 		const {
 			tab,
 			textStyle,
 			textColor
 		} = styles;
 
-		if (!this.state.isCand)	return null;
+		if (!this.state.isCandidate) return null;
 
 		return (
 			<View style = {{ flex: 1 }}>
@@ -198,16 +200,16 @@ class ElectionBallot extends Component {
 				<TouchableOpacity onPress = { () => {
 					this.setState({
 						isBallotShow: false,
-						isCand: true,
-						listCandidates: _.orderBy(item.candidates, iterateesCan, orderCan),
+						isCandidate: true,
+						listCandidates: _.orderBy(item.candidates, iterateesCandidate, orderCandidate),
 						applyPos: item.title,
 						index: index
 					});
-					this.renderCand();
+					this.renderCandidate();
 				} }>
 					<View style = { [container, { flexDirection: "row" }] }>
 						<Text style = { [textStyle, textColor, { flex: 6 }] }>{ `${item.title}` }</Text>
-						<View style = {{alignContent: "flex-start", width: 200}}>
+						<View style = {{ alignContent: "flex-start", width: 200 }}>
 							{ this.renderAllVotes(index) }
 						</View>
 					</View>
@@ -232,9 +234,6 @@ class ElectionBallot extends Component {
 
 	renderButtons() {
 		const {
-			buttonContainer
-		} = styles;
-		const {
 			vote,
 			id
 		} = this.props;
@@ -245,7 +244,7 @@ class ElectionBallot extends Component {
 		if (!isBallotShow)
 			return (
 				<Button title = "Ballot" onPress = { () => {
-					this.setState({ isCand: false, isBallotShow: true });
+					this.setState({ isCandidate: false, isBallotShow: true });
 				} } />
 			);
 		else
@@ -256,7 +255,8 @@ class ElectionBallot extends Component {
 							vote(id, dict);
 							dict = [];
 							Actions.popTo("Election");
-						} } />
+						} }
+					/>
 					<Button
 						title = "Cancel"
 						onPress = { () => { Actions.pop() } }
@@ -278,7 +278,7 @@ class ElectionBallot extends Component {
 					if (isBallotShow)
 						Actions.pop();
 					else
-						this.setState({ isCand: false, isBallotShow: true });
+						this.setState({ isCandidate: false, isBallotShow: true });
 				} }
 			/>
 		);
@@ -340,7 +340,7 @@ const styles = {
 		backgroundColor: "#2C3239",
 		alignItems: "center",
 		justifyContent: "center",
-		borderBottomColor: "#e0e6ed22",
+		borderBottomColor: "gray",
 		borderBottomWidth: 1,
 		padding: 1
 	}

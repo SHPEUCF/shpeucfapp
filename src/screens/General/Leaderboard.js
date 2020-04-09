@@ -7,6 +7,7 @@ import _ from "lodash";
 import * as Progress from "react-native-progress";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Text, View, Dimensions, SafeAreaView } from "react-native";
+import { rankMembers } from "../../utils/actions";
 import {
 	fetchMembersPoints,
 	fetchMemberProfile,
@@ -42,17 +43,7 @@ class Leaderboard extends Component {
 		} = styles;
 
 		const sortedMembers = _.orderBy(this.props.userList, iteratees, order);
-		let pastPoints = 0;
-		let pastIndex = 1;
-
-		sortedMembers.forEach((x, index) => {
-			x.index = x.points !== 0 ? index + 1 : sortedMembers.length;
-			if (x.points === pastPoints)
-				x.index = pastIndex;
-
-			pastPoints = x.points;
-			pastIndex = x.index;
-		});
+		rankMembers(sortedMembers, this.props.id);
 
 		return (
 			<SafeAreaView style = { screenBackground }>

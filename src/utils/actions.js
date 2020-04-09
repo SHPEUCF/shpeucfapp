@@ -15,13 +15,11 @@ const userAvatar = ({ item }) => {
 };
 export const StableAvatar = React.memo(userAvatar);
 
-export const createActiontypes = actionTypes => actionTypes
+export const createActionTypes = actionTypes => actionTypes
 	.map(type => ({ [type]: `module/${type}`	}))
-	.reduce((types, type) => ({ ...types, ...type }),
-		{}
-	);
+	.reduce((types, type) => ({ ...types, ...type }), {});
 
-// MamberPanel needs should be made into it;s own component
+// MemberPanel needs should be made into it;s own component
 export const MemberPanel = (user) => {
 	const {
 		textStyle,
@@ -53,6 +51,24 @@ export const MemberPanel = (user) => {
 		</View>
 	);
 };
+
+export const rankMembers = (sortedMembers, userId) => {
+	let currentMember;
+	let pastPoints = 0;
+	let pastIndex = 1;
+
+	sortedMembers.forEach((x, index) => {
+		x.index = x.points !== 0 ? index + 1 : sortedMembers.length;
+		if (x.points === pastPoints) x.index = pastIndex;
+		if (x.id === userId) currentMember = x;
+
+		pastPoints = x.points;
+		pastIndex = x.index;
+	});
+
+	return currentMember;
+};
+
 const styles = {
 	textStyle: {
 		color: "#e0e6ed",
@@ -77,4 +93,4 @@ const styles = {
 		paddingHorizontal: 15,
 		justifyContent: "center"
 	}
-}
+};

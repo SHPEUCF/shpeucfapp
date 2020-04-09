@@ -30,7 +30,7 @@ import { ButtonLayout } from "./ButtonLayout";
 			data = { list }
 			regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
 			selectBy = { (data) => { return data.id } }
-			itemJSX = { (data) => this.renderCheckInCompoent(data) }
+			itemJSX = { (data) => this.renderCheckInComponent(data) }
 			onSelect = { (selectedUsers) => {
 				this.checkInMembers(selectedUsers);
 			} }
@@ -70,13 +70,11 @@ class FilterList extends Component {
 		if (value) {
 			// process initial values and store them into the selected state property
 
-			// single values get displayed and stored
-			// also checks for empty objects
 			if (type === "Single" && Object.values(value).length !== 0) {
 				this.setState({ val: regexFunc(value) });
 				selectedObj[selectBy(value)] = value;
 			}
-			// multiple values get processed indiviualy and stored into the state property
+			// multiple values get processed individually and stored into the state property
 			// compatible with both array and object values
 			else {
 				valArray = Array.isArray(value) ? value : Object.values(value);
@@ -140,14 +138,14 @@ class FilterList extends Component {
 				&& <View>
 					{ this.renderSearchBox() }
 				</View> }
-				{ this.renderFlatlist() }
+				{ this.renderFlatList() }
 			</View>;
 		}
 
 		else {
 			// renders selectively based on whether a CustomForm was supplied
 			picker = <SafeAreaView>
-				{ !CustomForm && <View style = {{flexDirection: "row"}}>
+				{ !CustomForm && <View style = {{ flexDirection: "row" }}>
 					<Input
 						style = { [selectionStyle, selectionBoxStyle] }
 						value = { val }
@@ -192,9 +190,9 @@ class FilterList extends Component {
 		return (
 			<SafeAreaView style = { [modalBackground, modalBackgroundStyle] }>
 				{ this.renderSearchBox() }
-				{ this.renderFlatlist() }
+				{ this.renderFlatList() }
 				{ this.renderButtons() }
-				<View style = {{ height: dimension.height * 0.08, backgroundColor: "black" }}></View>
+				<View style = {{ height: dimension.height * 0.08, backgroundColor: "black" }} />
 			</SafeAreaView>
 		);
 	}
@@ -208,6 +206,7 @@ class FilterList extends Component {
 			searchBoxStyle,
 			placeholder
 		} = this.props;
+
 		return (
 			<View style = { searchBoxContainer }>
 				<Input
@@ -220,7 +219,7 @@ class FilterList extends Component {
 		);
 	}
 
-	renderFlatlist() {
+	renderFlatList() {
 		const {
 			data
 		} = this.props;
@@ -250,20 +249,15 @@ class FilterList extends Component {
 			selected
 		} = this.state;
 
-		// regular expression format variable
 		let re = new RegExp("^" + filter, "i");
-		// used to change background color of a selected componeent
 		let backgroundColor = {};
-		// onSelect prop is used as a placeholder
 		let pressAction = (data) => onSelect(data);
 
 		let regexVal = regexFunc(data);
 		let desiredVal = selectBy(data);
 
 		if (type !== "Searchbar") {
-			// determines if the data has been chosen already and styles appropriately
 			backgroundColor = selected[`${desiredVal}`] ? { backgroundColor: "#f00" } : {};
-			// applies auxiliary select function that adds pressed data to state
 			pressAction = (data) => this.select(data, desiredVal);
 		}
 
@@ -290,17 +284,12 @@ class FilterList extends Component {
 
 		let selectedData = Object.assign({}, selected);
 
-		// determines of data has already been selected and deselects accordingly
 		if (selectedData[`${desiredVal}`]) { selectedData[`${desiredVal}`] = undefined }
 		else {
-			// deselects former selected option
 			if (type === "Single") selectedData = {};
-			// data select
 			selectedData[`${desiredVal}`] = data;
 		}
-		this.setState({
-			selected: selectedData
-		});
+		this.setState({ selected: selectedData });
 	}
 
 	renderButtons() {

@@ -1,26 +1,23 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
-import { Avatar } from "react-native-elements";
 import { connect } from "react-redux";
 import { View, Text, ScrollView, Dimensions, SafeAreaView } from "react-native";
 import { Input, Button, FilterList, ButtonLayout } from "../general";
-import Members from "../../ducks/Members";
+import { MemberPanel } from "../../utils/actions";
 import {
 	addCommittee,
 	editCommittee,
 	committeeTitleChanged,
 	committeeDescriptionChanged,
 	deleteCommittee,
-	chairChanged,
+	chairPersonChanged,
 	fetchAllUsers,
 	filterChanged,
 	assignPosition
 } from "../../ducks";
-import { MemberPanel } from "../../utils/actions";
 
 const dimension = Dimensions.get("window");
-let idIndex;
 
 class CommitteeForm extends Component {
 	// EventCreationError(text) {
@@ -28,7 +25,10 @@ class CommitteeForm extends Component {
 	// }
 	constructor(props) {
 		super(props);
-		this.state = { oldTitle: this.props.committeeTitle, oldChair: this.props.chair };
+		this.state = {
+			oldTitle: this.props.committeeTitle,
+			oldChair: this.props.chair
+		};
 	}
 
 	componentWillMount() {
@@ -46,7 +46,7 @@ class CommitteeForm extends Component {
 			);
 	}
 
-	onButtonPress() {
+	submitForm() {
 		const {
 			committeeTitle,
 			committeeDescription,
@@ -88,7 +88,8 @@ class CommitteeForm extends Component {
 				</View>
 				<ScrollView
 					ref = { (ref) => this.scrollView = ref }
-					style = { styles.scrollView }>
+					style = { styles.scrollView }
+				>
 					<View>
 						<Input
 							placeholder = "Committee Title"
@@ -107,7 +108,7 @@ class CommitteeForm extends Component {
 							placeholder = { "Director/Chairperson" }
 							regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
 							selectBy = { (data) => { return data.id } }
-							onSelect = { (data) => { this.props.chairChanged(data) } }
+							onSelect = { (data) => { this.props.chairPersonChanged(data) } }
 							itemJSX = { (data) => MemberPanel(data) }
 						/>
 					</View>
@@ -116,9 +117,8 @@ class CommitteeForm extends Component {
 				<ButtonLayout>
 					<Button
 						title = { "Done" }
-						onPress = { () => {	this.onButtonPress() } }
+						onPress = { () => {	this.submitForm() } }
 					/>
-
 					<Button
 						title = "Cancel"
 						onPress = { () => Actions.pop() }
@@ -229,7 +229,7 @@ const mapDispatchToProps = {
 	committeeTitleChanged,
 	committeeDescriptionChanged,
 	deleteCommittee,
-	chairChanged,
+	chairPersonChanged,
 	fetchAllUsers,
 	filterChanged,
 	assignPosition

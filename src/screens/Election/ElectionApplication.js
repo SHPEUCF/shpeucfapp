@@ -55,15 +55,15 @@ class ElectionApplication extends Component {
 			<SafeAreaView style = { page }>
 				{ this.renderNavBar() }
 				<View style = { contentStyle }>
-					{ this.showListPosition(positionsArray) }
-					{ this.showApplyPosition() }
+					{ this.renderPositions(positionsArray) }
+					{ this.showApplication() }
 				</View>
 				{ this.renderButtons() }
 			</SafeAreaView>
 		);
 	}
 
-	showApplyPosition() {
+	showApplication() {
 		const {
 			applyTitle,
 			applyInput,
@@ -109,7 +109,7 @@ class ElectionApplication extends Component {
 
 	_keyExtractor = (item, index) => index;
 
-	showListPosition(positionsArray) {
+	renderPositions(positionsArray) {
 		if (!this.state.isListShow) return null;
 
 		return (
@@ -120,25 +120,26 @@ class ElectionApplication extends Component {
 					keyExtractor = { this._keyExtractor }
 					renderItem = { ({ item }) => {
 						if (this.props.applied)
-							return this.renderListPositionApplied(item);
+							return this.renderPositionApplied(item);
 						else
-							return this.renderListPositionComponent(item);
+							return this.renderPositionComponent(item);
 					} }
 				/>
 			</View>
 		);
 	}
 
-	renderListPositionComponent(item) {
+	renderPositionComponent(item) {
 		const {
 			button,
 			textStyle,
-			textColor
+			textColor,
+			positionContainer
 		} = styles;
 		this.state.application = "Submit";
 
 		return (
-			<View style = {{ flex: 1, margin: 8, borderBottomWidth: 1, borderColor: "grey" }}>
+			<View style = { positionContainer }>
 				<View style = {{ marginBottom: 10 }}>
 					<Text style = { [textStyle, textColor] }>Position: { item.title }</Text>
 				</View>
@@ -148,21 +149,24 @@ class ElectionApplication extends Component {
 				<View style = { button }>
 					<Button
 						title = { `Apply for ${item.title}` }
-						onPress = { () => { this.setState({ isListShow: false, isApplyShow: true, applyPos: item.title }) } }
+						onPress = { () => {
+							this.setState({ isListShow: false, isApplyShow: true, applyPos: item.title });
+						} }
 						 />
 				</View>
 			</View>
 		);
 	}
 
-	renderListPositionApplied(item) {
+	renderPositionApplied(item) {
 		const {
 			textStyle,
-			textColor
+			textColor,
+			positionContainer
 		} = styles;
 
 		return (
-			<View style = {{ flex: 1, margin: 8, borderBottomWidth: 1, borderColor: "grey"}}>
+			<View style = { positionContainer }>
 				<View style = {{ marginBottom: 10 }}>
 					<Text style = { [textStyle, textColor] }>Position: { `${item.title}` }</Text>
 				</View>
@@ -176,10 +180,9 @@ class ElectionApplication extends Component {
 
 	renderEditButton(item) {
 		const {
-			button
-		} = styles;
-		const {
-			id
+			id,
+			ApprovedTextStyle,
+			ApprovedTextContainer
 		} = this.props;
 
 		let query = _.get(item, ["candidates", id], null);
@@ -199,8 +202,8 @@ class ElectionApplication extends Component {
 			);
 		else if (query && query.approved)
 			return (
-				<View style = {{ marginLeft: 12, marginRight: 10, marginBottom: 8 }}>
-					<Text style = {{ fontSize: 16, fontWeight: "400", lineHeight: 25, color: "white" }}>You've been approved! Good Luck!</Text>
+				<View style = { ApprovedTextContainer }>
+					<Text style = { ApprovedTextStyle }>You've been approved! Good Luck!</Text>
 				</View>
 			);
 	}
@@ -215,7 +218,6 @@ class ElectionApplication extends Component {
 			lastName,
 			candidatePlan,
 			addApplication,
-			buttonContainer,
 			picture
 		} = this.props;
 		const {
@@ -224,10 +226,10 @@ class ElectionApplication extends Component {
 			isListShow
 		} = this.state;
 
-		let p1;
+		let submitButton;
 
 		if (!isListShow)
-			p1 = <Button
+			submitButton = <Button
 				title = { application }
 				onPress = { () => {
 					if (application === "Submit")
@@ -240,7 +242,7 @@ class ElectionApplication extends Component {
 
 		return (
 			<ButtonLayout>
-				{ p1 }
+				{ submitButton }
 				<Button
 					title = "Cancel"
 					onPress = { () => {
@@ -314,6 +316,23 @@ const styles = {
 		flex: 0.4,
 		textAlignVertical: "top",
 		height: dimension.height * 0.3
+	},
+	positionContainer: {
+		flex: 1,
+		margin: 8,
+		borderBottomWidth: 1,
+		borderColor: "grey"
+	},
+	ApprovedTextStyle: {
+		fontSize: 16,
+		ontWeight: "400",
+		lineHeight: 25,
+		color: "white"
+	},
+	ApprovedTextContainer: {
+		marginLeft: 12,
+		marginRight: 10,
+		marginBottom: 8
 	}
 };
 

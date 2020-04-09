@@ -1,18 +1,19 @@
 import React, { Component } from "react";
-import firebase from "firebase";
 import { connect } from "react-redux";
 import _ from "lodash";
-import { Spinner, Button } from "../../components/general";
+import { Spinner } from "../../components/general";
 import { Actions } from "react-native-router-flux";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import Flag from "react-native-flags";
 import { ColorPicker } from "react-native-color-picker";
+import { RenderFlags, CustomFlag } from "../../utils/flag";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { rankMembers } from "../../utils/actions";
+import { months } from "../../data/DateItems";
 import {
 	Text,
 	View,
 	ScrollView,
-	TextInput,
 	Dimensions,
 	TouchableOpacity,
 	Linking,
@@ -89,8 +90,14 @@ class Dashboard extends Component {
 			dashCommitteesContainer,
 			innerScrollContainer,
 			dashboardContent,
-			upcomingEventsContainter
+			upcomingEventsContainer
 		} = styles;
+
+		const {
+			customFlagVisible,
+			customFlagText,
+			flagsVisible
+		} = this.state;
 
 		return (
 			<SafeAreaView style = { page }>
@@ -100,7 +107,7 @@ class Dashboard extends Component {
 					<View style = { innerScrollContainer }>
 						{ this.renderHeader() }
 						<View style = { dashboardContent }>
-							<View style = { upcomingEventsContainter }>
+							<View style = { upcomingEventsContainer }>
 								<Text style = { [title, textColor] }>Upcoming Events</Text>
 							</View>
 							{ this.getFormattedEventList() }
@@ -112,8 +119,18 @@ class Dashboard extends Component {
 						{ this.renderButtonLinks() }
 					</View>
 				</ScrollView>
-				{ this.renderFlags() }
-				{ this.rendercustomFlag() }
+				<RenderFlags
+					flagsVisible = { flagsVisible }
+					changeVisibility = { (val) => this.setState({ flagsVisible: val }) }
+					flagPicked = { (text) => this.flagPicked(text) }
+				/>
+				<CustomFlag
+					customFlagVisible = { customFlagVisible }
+					customFlagText = { customFlagText }
+					changeText = { (text) => this.setState({ customFlagText: text }) }
+					changeVisibility = { (val) => this.setState({ customFlagVisible: val }) }
+					flagPicked = { (text) => this.flagPicked(text) }
+				/>
 			</SafeAreaView>
 		);
 	}
@@ -149,8 +166,6 @@ class Dashboard extends Component {
 			greetingContainer
 		} = styles;
 
-		const months = ["January", "February", "March", "April", "May", "June", "July",
-			"August", "September", "October", "November", "December"];
 		const date = new Date();
 		let time = date.getHours();
 		let day = date.getDate();
@@ -167,19 +182,17 @@ class Dashboard extends Component {
 
 	renderHeaderFlag() {
 		return (
-			<View>
-				<TouchableOpacity onPress = { () => this.setState({ flagsVisible: !this.state.flagsVisible }) } >
-					<Flag
-						type = "flat"
-						code = { this.props.flag }
-						size = { 32 }
-					/>
-				</TouchableOpacity>
-			</View>
+			<TouchableOpacity onPress = { () => this.setState({ flagsVisible: !this.state.flagsVisible }) } >
+				<Flag
+					type = "flat"
+					code = { this.props.flag }
+					size = { 32 }
+				/>
+			</TouchableOpacity>
 		);
 	}
 
-	flagPicked(flag) {
+	 flagPicked(flag) {
 		if (flag === "") {
 			this.setState({ flagsVisible: false, customFlagVisible: true });
 		}
@@ -350,48 +363,28 @@ class Dashboard extends Component {
 			black
 		} = styles;
 
+		let buttonLinks = [
+			["https://shpeucf2018-2019.slack.com/", "slack"],
+			["https://www.facebook.com/shpeucfchapter/", "facebook"],
+			["https://www.shpeucf.com/", "globe"],
+			["https://www.instagram.com/shpeucf/?hl=en", "instagram"]
+		];
+
 		return (
 			<View style = { socialMediaContainer }>
 				<View style = { buttonRowContainer }>
-					<TouchableOpacity
-						style = { socialMediaButton }
-						onPress = { () => Linking.openURL("https://shpeucf2018-2019.slack.com/") }
-					>
-						<FontAwesomeIcon
-							style = { black }
-							name = "slack"
-							size = { dimension.height * 0.04 }
-						/>
-					</TouchableOpacity>
-					<TouchableOpacity
-						style = { socialMediaButton }
-						onPress = { () => Linking.openURL("https://www.facebook.com/shpeucfchapter/") }
-					>
-						<FontAwesomeIcon
-							style = { black }
-							name = "facebook"
-							size = { dimension.height * 0.04 }
-						/>
-					</TouchableOpacity>
-					<TouchableOpacity
-						style = { socialMediaButton }
-						onPress = { () => Linking.openURL("https://www.shpeucf.com/") }
-					>
-						<FontAwesomeIcon
-							style = { black }
-							name = "globe"
-							size = { dimension.height * 0.04 }
-						/>
-					</TouchableOpacity>
-					<TouchableOpacity
-						style = { socialMediaButton }
-						onPress = { () => Linking.openURL("https://www.instagram.com/shpeucf/?hl=en") }
-					>
-						<FontAwesomeIcon
-							style = { black }
-							name = "instagram" size = { dimension.height * 0.04 }
-						/>
-					</TouchableOpacity>
+					{ buttonLinks.map(data =>
+						<TouchableOpacity
+							style = { socialMediaButton }
+							onPress = { () => Linking.openURL(data[0]) }
+						>
+							<FontAwesomeIcon
+								style = { black }
+								name = {data[1]}
+								size = { dimension.height * 0.04 }
+							/>
+						</TouchableOpacity>
+					) }
 				</View>
 				{ this.renderFooter() }
 			</View>
@@ -416,119 +409,9 @@ class Dashboard extends Component {
 		);
 	}
 
-	renderFlags() {
-		const {
-			flagModal,
-			flagColumn
-		} = styles;
-
-		const flagHeight = { height: dimension.height - 0.3 * dimension.height };
-		const countriesL = ["AR", "BO", "BR", "CL", "CO", "CR", "CU", "DO", "EC", "SV", "GQ", "GT", "HN"];
-		const countriesR = ["MX", "NI", "PA", "PY", "PE", "PR", "RO", "ES", "TT", "US", "UY", "VE", ""];
-
-		return (
-			<Modal visible = { this.state.flagsVisible } transparent = { true }>
-				<SafeAreaView >
-					<TouchableOpacity
-						style = { [flagModal, flagHeight] }
-						onPress = { () => this.setState({ flagsVisible: false }) }
-					>
-						<View style = { flagColumn }>
-							{ countriesL.map(item =>
-								<TouchableOpacity onPress = { () => this.flagPicked(item) }>
-									<Flag
-										type = "flat"
-										code = { item }
-										size = { 32 }
-									/>
-								</TouchableOpacity>
-							) }
-						</View>
-						<View style = { flagColumn }>
-							{ countriesR.map(item =>
-								<TouchableOpacity onPress = { () => this.flagPicked(item) }>
-									<Flag
-										type = "flat"
-										code = { item }
-										size = { 32 }
-									/>
-								</TouchableOpacity>
-							) }
-						</View>
-					</TouchableOpacity>
-				</SafeAreaView>
-			</Modal>
-		);
-	}
-
-	rendercustomFlag() {
-		const {
-			textColor,
-			modalText,
-			modalButton,
-			modalButtonContainer
-		} = styles;
-
-		return (
-			<Modal visible = { this.state.customFlagVisible } transparent = { true }>
-				<View style = { styles.modalBackground }>
-					<View style = { styles.modalContent }>
-						<Text style = { [modalText, textColor] }>
-							Look up your two digit country ISO code and enter it!
-						</Text>
-						<TextInput
-							style = { styles.modalTextInput }
-							onChangeText = { (text) => this.setState({ text: text }) }
-							value = { this.state.customFlagText }
-							autoCapitalize = { "characters" }
-							autoCorrect = { false }
-							maxLength = { 2 }
-						/>
-
-						<View style = { modalButtonContainer }>
-							<View style = { modalButton }>
-								<Button
-									title = "Done"
-									onPress = { () => {
-										this.flagPicked(this.state.customFlagText);
-										this.setState({ customFlagVisible: false });
-									} }
-								/>
-							</View>
-							<View style = { modalButton }>
-								<Button
-									title = "Cancel"
-									onPress = { () => this.setState({ customFlagVisible: false }) }
-								/>
-							</View>
-						</View>
-					</View>
-				</View>
-			</Modal>
-		);
-	}
-
 	calculateRankings() {
-		const {
-			currentUser
-		} = firebase.auth();
-
 		let sortedMembers = _.orderBy(this.props.membersPoints, iteratees, order);
-		let currentMember;
-		let pastPoints = 0;
-		let pastIndex = 1;
-
-		sortedMembers.forEach((x, index) => {
-			x.index = x.points !== 0 ? index + 1 : sortedMembers.length;
-			if (x.points === pastPoints)
-				x.index = pastIndex;
-
-			if (x.id === currentUser.uid)
-				currentMember = x;
-
-			pastPoints = x.points;
-			pastIndex = x.index;
-		});
+		let currentMember = rankMembers(sortedMembers, this.props.id);
 		sortedMembers.splice(2);
 
 		if (this.isDefined(currentMember)
@@ -634,7 +517,7 @@ class Dashboard extends Component {
 		let realStart = this.convertHour(startTime);
 		let realEnd = this.convertHour(endTime);
 
-		if (committee !== "") viewType = committee;
+		if (committee) viewType = committee;
 
 		return (
 			<View style = { eventItemInnerContainer }>
@@ -716,7 +599,7 @@ const styles = {
 		flexDirection: "row",
 		flex: 1,
 		alignItems: "center",
-		paddingRight: 10
+		paddingRight: 20
 	},
 	eventTextContainer: {
 		flex: 1,
@@ -784,14 +667,6 @@ const styles = {
 		width: dimension.width * 0.06,
 		alignItems: "center"
 	},
-	modalContent: {
-		height: dimension.height * 0.5,
-		width: dimension.width * 0.8,
-		padding: dimension.height * 0.008,
-		backgroundColor: "#21252b",
-		alignItems: "center",
-		justifyContent: "space-around"
-	},
 	modalBackground: {
 		justifyContent: "center",
 		alignItems: "center",
@@ -799,14 +674,6 @@ const styles = {
 		height: dimension.height,
 		width: dimension.width,
 		backgroundColor: "#000a"
-	},
-	modalButtonContainer: {
-		flexDirection: "row",
-		 justifyContent: "space-evenly",
-		 width: "100%"
-	},
-	modalButton: {
-		flex: 0.45
 	},
 	committeesPanelContainer: {
 		flexDirection: "row",
@@ -875,34 +742,6 @@ const styles = {
 		flexDirection: "row",
 		justifyContent: "center"
 	},
-	flagModal: { position: "absolute",
-	 flexDirection: "row",
-	 width: dimension.width,
-	 justifyContent: "space-between",
-	 top: dimension.height * 0.15,
-	 paddingLeft: "2%",
-	 paddingRight: "2%"
-	},
-	flagColumn: {
-		justifyContent: "space-evenly"
-	},
-	modalText: {
-		textAlign: "center",
-		fontSize: 16
-	},
-	modalTextInput: {
-		height: 80,
-		textAlign: "center",
-		width: dimension.width * 0.6,
-		backgroundColor: "#e0e6ed22",
-		borderColor: "#e0e6ed",
-		borderRadius: 16,
-		borderWidth: 3,
-		borderStyle: "solid",
-		fontWeight: "bold",
-		fontSize: 60,
-		color: "#E0E6ED"
-	},
 	eventsContainer: {
 		flex: 1,
 		flexDirection: "column"
@@ -944,7 +783,7 @@ const styles = {
 	black: {
 		color: "black"
 	},
-	upcomingEventsContainter: {
+	upcomingEventsContainer: {
 		alignItems: "center",
 		flex: 0.2,
 		justifyContent: "center",

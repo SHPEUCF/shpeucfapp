@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Button, NavBar, FilterList, ButtonLayout } from "../general";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { Avatar } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import QRCode from "react-native-qrcode-svg";
 import QRCodeScanner from "react-native-qrcode-scanner";
+import { months } from "../../data/DateItems";
 import {
 	View,
 	TouchableOpacity,
@@ -59,7 +59,6 @@ class EventDetails extends Component {
 	}
 
 	convertNumToDate(date) {
-		let months = ["Jan", "Feb", "Mar", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 		let tempDate = date.split("-");
 
 		return `${months[Number(tempDate[1]) - 1]} ${tempDate[2]}`;
@@ -249,13 +248,13 @@ class EventDetails extends Component {
 			return (
 				<View style = { [fullFlex, lineOnTop] }>
 					<View style = { attendanceContainer }>
-						<View style = { icon }></View>
+						<View style = { icon } />
 						<Text style = { [attendance, textColor] }>Attendance</Text>
 						<Ionicons
 							style = { [icon, textColor] }
 							name = "md-mail"
 							size = { 35 }
-							color = 'e0e6ed'
+							color = "e0e6ed"
 							onPress = { () => this.sendListToMail(attendants) }
 						/>
 					</View>
@@ -276,7 +275,7 @@ class EventDetails extends Component {
 		this.setState({ modalVisible: true });
 	}
 
-	deleteButton() {
+	confirmDelete() {
 		this.props.deleteEvents(this.props.eventID);
 		Actions.pop();
 	}
@@ -426,7 +425,7 @@ class EventDetails extends Component {
 			buttons = <ButtonLayout>
 				<Button
 					title = "Open check-in"
-					onPress = { this.openCheckInButton.bind(this) }
+					onPress = { () => this.openCheckInButton() }
 				/>
 				{ this.renderPickMembers() }
 				<Button
@@ -442,7 +441,7 @@ class EventDetails extends Component {
 					onPress = { () => Alert.alert("Confirmation", "Are you sure you want to delete", [
 						{
 							text: "Confirm",
-							onPress: () => this.deleteButton()
+							onPress: () => this.confirmDelete()
 						},
 						{
 							text: "Cancel"
@@ -514,20 +513,32 @@ class EventDetails extends Component {
 					<NavBar title = { viewName } back onBack = { () => Actions.pop() } />
 					<View style = { container }>
 						<View style = { iconContainer }>
-							<Ionicons style = { [icon, textColor] } name = "md-calendar" size = { iconSize } color = '#000' />
+							<Ionicons
+								style = { [icon, textColor] }
+								name = "md-calendar" size = { iconSize }
+								color = "#000" />
 							<Text style = { [text, textColor] }>{ this.convertNumToDate(date) }</Text>
 						</View>
 						<View style = { iconContainer }>
-							<Ionicons style = { [icon, textColor] } name = "md-time" size = { iconSize } color = '#000' />
+							<Ionicons
+								style = { [icon, textColor] }
+								name = "md-time" size = { iconSize }
+								color = "#000" />
 							<Text style = { [text, textColor] }>{ startTime }-{ endTime }</Text>
 						</View>
 						<View style = { iconContainer }>
-							<Ionicons style = { [icon, textColor] } name = "md-pin" size = { iconSize } color = '#000' />
+							<Ionicons
+								style = { [icon, textColor] }
+								name = "md-pin" size = { iconSize }
+								color = "#000" />
 							<Text style = { [text, textColor] }>{ location }</Text>
 						</View>
 						{ description != ""
 						&& <View style = { [iconContainer, { flex: 0.7 }] }>
-							<Ionicons style = { [icon, textColor] } name = "md-list" size = { iconSize } color = '#000' />
+							<Ionicons 
+								style = { [icon, textColor] }
+								name = "md-list" size = { iconSize }
+								color = "#000" />
 							<Text style = { [text, textColor] }>{ description }</Text>
 						</View> }
 						{ this.renderEventListNum(iconSize) }

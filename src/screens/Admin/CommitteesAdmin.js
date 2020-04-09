@@ -12,7 +12,7 @@ import {
 	editCommittee,
 	fetchAllUsers,
 	addCommittee,
-	chairChanged,
+	chairPersonChanged,
 	committeeDescriptionChanged,
 	committeeTitleChanged,
 	changeLevelsCom
@@ -65,7 +65,7 @@ class CommitteesAdmin extends Component {
 		return (
 			<SafeAreaView style = { page }>
 				<NavBar title = "Committees" back onBack = { () => Actions.pop() } />
-				{ this.renderFlatlist(committeesArray) }
+				{ this.renderFlatList(committeesArray) }
 				<View>
 					<ButtonLayout>
 						<Button
@@ -76,7 +76,7 @@ class CommitteesAdmin extends Component {
 							onPress = { () => {
 								this.props.committeeTitleChanged("");
 								this.props.committeeDescriptionChanged("");
-								this.props.chairChanged({});
+								this.props.chairPersonChanged({});
 								this.props.goToCommitteeForm("ADD");
 							} }
 							title = { "Add Committees" }
@@ -89,7 +89,7 @@ class CommitteesAdmin extends Component {
 
 	_keyExtractor = (item, index) => index;
 
-	renderFlatlist() {
+	renderFlatList() {
 		return (
 			<View style = {{ flex: 1 }}>
 				<SortableFlatList
@@ -98,9 +98,7 @@ class CommitteesAdmin extends Component {
 					keyExtractor = { (item) => `draggable-item-${item.key}` }
 					renderItem = { this.renderCommittees }
 					scrollPercent = { 5 }
-					onMoveEnd = { ({
-						data
-					}) => this.setState({ data }) }
+					onMoveEnd = { ({ data }) => this.setState({ data }) }
 				/>
 			</View>
 		);
@@ -150,7 +148,7 @@ class CommitteesAdmin extends Component {
 	viewCommittee(item) {
 		this.props.committeeTitleChanged(item.title);
 		this.props.committeeDescriptionChanged(item.description);
-		this.props.chairChanged(item.chair);
+		this.props.chairPersonChanged(item.chair);
 		this.props.goToCommitteeForm("EDIT");
 	}
 
@@ -217,7 +215,7 @@ const mapDispatchToProps = {
 	deleteCommittee,
 	addCommittee,
 	editCommittee,
-	chairChanged,
+	chairPersonChanged,
 	committeeDescriptionChanged,
 	committeeTitleChanged,
 	changeLevelsCom,

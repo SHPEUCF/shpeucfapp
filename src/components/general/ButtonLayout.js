@@ -25,7 +25,7 @@ class ButtonLayout extends Component {
 			containerStyle
 		} = this.props;
 
-		let i = 0;
+		let buttonIndex = 0;
 		let realButtons = [];
 		let length;
 		let layers = [];
@@ -52,29 +52,28 @@ class ButtonLayout extends Component {
 
 		if (length % 2 === 1) {
 			layers.push(
-				this.renderSingleButton(realButtons[i])
+				this.renderSingleButton(realButtons[buttonIndex])
 			);
-			i++;
+			buttonIndex++;
 		}
 
-		for (; i + 2 <= length;) {
+		for (; buttonIndex + 2 <= length; buttonIndex = buttonIndex + 2) {
 			iconVar = null;
 
-			if (icon && Math.trunc(i / 2) + 1 === icon.layer)
+			if (icon && Math.trunc(buttonIndex / 2) + 1 === icon.layer)
 				iconVar = icon.data;
 
 			layers.push(
 				<View style = { doubleLayer }>
 					<View style = { buttonContainer }>
-					    { realButtons[i] }
+					    { realButtons[buttonIndex] }
 					</View>
 					{ iconVar }
 					<View style = { buttonContainer }>
-					    { realButtons[i + 1] }
+					    { realButtons[buttonIndex + 1] }
 					</View>
 				</View>
 			);
-			i = i + 2;
 		}
 
 		return (
@@ -92,6 +91,7 @@ class ButtonLayout extends Component {
 		let layerPadding = {};
 
 		if (index !== 0) layerPadding = { paddingTop: dimension.height * 0.02 };
+
 		return (
 			<View style = { layerPadding }>
 				{ item }
