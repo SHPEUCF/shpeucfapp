@@ -3,23 +3,14 @@ import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import { Button, Input, NavBar, ButtonLayout } from "../../components/general";
 import _ from "lodash";
-import { FlatList, Text, SafeAreaView, View, Dimensions } from "react-native";
+import { FlatList, Text, SafeAreaView, View, TouchableOpacity } from "react-native";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import {
 	getPositions,
-	goToOtherProfile,
-	pageLoad,
-	getPrivilege,
 	addApplication,
-	candidateFNameChanged,
-	candidateLNameChanged,
-	candidatePlanChanged,
-	candidatePositionChanged,
-	goToCandidateForm,
-	vote,
 	editApplication
 } from "../../ducks";
 
-const dimension = Dimensions.get("window");
 const iterateesPos = ["level"];
 const orderPos = ["asc"];
 
@@ -29,12 +20,39 @@ class ElectionApplication extends Component {
 	}
 
 	state = {
-		isApplyShow: false,
+		currentlyApplying: false,
+		candidate: {
+			approved: false,
+			firstName: "",
+			lastName: "",
+			picture: "",
+			position: "",
+			plan: "",
+			id: ""
+		},
 		index: null,
-		isListShow: true,
-		applyPos: null,
-		application: "Submit"
+		positions: {}
 	};
+
+	componentWillReceiveProps(nextProps, prevState) {
+		const {
+			positions,
+			id
+		} = nextProps;
+
+		if (positions !== prevState.positions) {
+			let candidate = Object.assign({}, this.state.candidate);
+
+			// Searches for current user within Candidates
+			Object.entries(positions || {}).forEach(entry => {
+				Object.values(entry[1].candidates || {}).forEach(possibleCandidate => {
+					if (possibleCandidate.id === id) candidate = JSON.parse(JSON.stringify(possibleCandidate));
+				});
+			});
+
+			this.setState({ positions, candidate });
+		}
+	}
 
 	componentWillMount() {
 		this.props.getPositions();
@@ -42,21 +60,35 @@ class ElectionApplication extends Component {
 
 	render() {
 		const {
-			page,
-			contentStyle
-		} = styles;
+			currentlyApplying
+		} = this.state;
+
 		const {
-			positions
+			positions,
+			applied
 		} = this.props;
+
+		const {
+			page,
+			fullFlex
+		} = styles;
 
 		const positionsArray = _.orderBy(positions, iterateesPos, orderPos);
 
+		const shouldShowApplication = currentlyApplying || applied;
+
+		const content = shouldShowApplication ? this.showApplication() : this.renderPositions(positionsArray);
+
 		return (
-			<SafeAreaView style = { page }>
-				{ this.renderNavBar() }
-				<View style = { contentStyle }>
-					{ this.renderPositions(positionsArray) }
-					{ this.showApplication() }
+			<SafeAreaView style = { [page, fullFlex] }>
+				<NavBar
+					title = "Positions"
+					back
+					onBack = { () => {
+						return shouldShowApplication ? Actions.pop() : this.setState({ currentlyApplying: false });
+					} } />
+				<View style = { fullFlex }>
+					{ content }
 				</View>
 				{ this.renderButtons() }
 			</SafeAreaView>
@@ -65,178 +97,116 @@ class ElectionApplication extends Component {
 
 	showApplication() {
 		const {
-			applyTitle,
-			applyInput,
+			firstName,
+			lastName
+		} = this.props;
+
+		const {
+			candidate,
+			positionSelected
+		} = this.state;
+
+		const {
+			fullFlex,
+			halfFlex,
 			textColor,
-			textStyle
+			fontLarge,
+			titleStyle
 		} = styles;
 
-		if (!this.state.isApplyShow) return null;
-
 		return (
-			<View style = {{ flex: 1 }}>
-				<View style = {{ flex: 1, margin: 8 }}>
-					<Text style = { [applyTitle, textColor] }>{ this.state.applyPos }</Text>
-					<View style = {{ marginTop: 10, marginBottom: 8 }}>
-						<Text style = { [textStyle, textColor] }>Name: { this.props.firstName } { this.props.lastName }</Text>
-					</View>
-					<Text style = { [textStyle, textColor] }>Plan:</Text>
-					{ this.renderError() }
-					<View style = {{ flex: 1 }}>
-						<Input style = { applyInput }
-							blurOnSubmit = { true }
-							multiline = { true }
-							placeholder = "Please write your plan for members to read."
-							value = { this.props.candidatePlan }
-							onChangeText = { this.onPlanChange.bind(this) }
-						/>
-					</View>
-				</View>
-			</View>
-		);
-	}
-
-	renderError() {
-		if (this.props.error)
-			return (
-				<View>
-					<Text style = { styles.errorTextStyle }>
-						{ this.props.error }
-					</Text>
-				</View>
-			);
-	}
-
-	_keyExtractor = (item, index) => index;
-
-	renderPositions(positionsArray) {
-		if (!this.state.isListShow) return null;
-
-		return (
-			<View>
-				<FlatList
-					data = { positionsArray }
-					extraData = { this.state }
-					keyExtractor = { this._keyExtractor }
-					renderItem = { ({ item }) => {
-						if (this.props.applied)
-							return this.renderPositionApplied(item);
-						else
-							return this.renderPositionComponent(item);
-					} }
+			<View style = { fullFlex }>
+				<Text style = { [fontLarge, textColor, titleStyle ] }>
+					{ candidate.position || positionSelected }
+				</Text>
+				<Text style = { [fontLarge, textColor] }>
+					{ firstName } { lastName }
+				</Text>
+				<Text style = { [fontLarge, textColor] }>Plan:</Text>
+				<Input
+					numberOfLines = { 10 }
+					style = { halfFlex }
+					textAlignVertical = "top"
+					maxLength = { 250 }
+					blurOnSubmit = { true }
+					multiline = { true }
+					placeholder = "Please write your plan for members to read."
+					value = { candidate.plan }
+					onChangeText = { (plan) => {
+						let tempCandidate = Object.assign(candidate);
+						tempCandidate.plan = plan;
+						this.setState({ candidate: tempCandidate });
+					 } }
 				/>
 			</View>
 		);
 	}
 
+	_keyExtractor = (item, index) => index;
+
+	renderPositions(positionsArray) {
+		return (
+			<FlatList
+				data = { positionsArray }
+				extraData = { this.state }
+				keyExtractor = { this._keyExtractor }
+				renderItem = { ({ item }) => this.renderPositionComponent(item) }
+			/>
+		);
+	}
+
 	renderPositionComponent(item) {
 		const {
-			button,
-			textStyle,
+			fontLarge,
+			fontSmall,
 			textColor,
-			positionContainer
-		} = styles;
-		this.state.application = "Submit";
-
-		return (
-			<View style = { positionContainer }>
-				<View style = {{ marginBottom: 10 }}>
-					<Text style = { [textStyle, textColor] }>Position: { item.title }</Text>
-				</View>
-				<View style = {{ marginLeft: 12, marginRight: 10, marginBottom: 8 }}>
-					<Text style = { [textStyle, textColor] }>Role: { item.description }</Text>
-				</View>
-				<View style = { button }>
-					<Button
-						title = { `Apply for ${item.title}` }
-						onPress = { () => {
-							this.setState({ isListShow: false, isApplyShow: true, applyPos: item.title });
-						} }
-						 />
-				</View>
-			</View>
-		);
-	}
-
-	renderPositionApplied(item) {
-		const {
-			textStyle,
-			textColor,
+			fullFlex,
 			positionContainer
 		} = styles;
 
 		return (
-			<View style = { positionContainer }>
-				<View style = {{ marginBottom: 10 }}>
-					<Text style = { [textStyle, textColor] }>Position: { `${item.title}` }</Text>
+			<TouchableOpacity
+				onPress = { () => {
+					this.setState({ currentlyApplying: true, positionSelected: item.title });
+				} }
+				style = { [positionContainer, fullFlex] }
+			>
+				<View>
+					<Text style = { [fontLarge, textColor] }>{ item.title }</Text>
+					<Text style = { [fontSmall, textColor] }>{ item.description }</Text>
 				</View>
-				<View style = {{ marginLeft: 12, marginRight: 10 }}>
-					<Text style = { [textStyle, textColor] }>Role: { `${item.description}` }</Text>
-				</View>
-				{ this.renderEditButton(item) }
-			</View>
+				<MaterialIcons
+					name = "assignment"
+					color = "#FECB00"
+					size = { 35 }
+				/>
+			</TouchableOpacity>
 		);
-	}
-
-	renderEditButton(item) {
-		const {
-			id,
-			approvedTextStyle,
-			approvedTextContainer
-		} = this.props;
-
-		let query = _.get(item, ["candidates", id], null);
-
-		this.state.application = "Edit";
-
-		if (query && !query.approved)
-			return (
-				<ButtonLayout>
-					<Button
-						title = { "Edit Application" }
-						onPress = { () => {
-							this.setState({ isListShow: false, isApplyShow: true, applyPos: item.title });
-							this.props.candidatePlanChanged(query.plan);
-						} } />
-				</ButtonLayout>
-			);
-		else if (query && query.approved)
-			return (
-				<View style = { approvedTextContainer }>
-					<Text style = { approvedTextStyle }>You've been approved! Good Luck!</Text>
-				</View>
-			);
-	}
-
-	onPlanChange(text) {
-		this.props.candidatePlanChanged(text);
 	}
 
 	renderButtons() {
 		const {
 			firstName,
 			lastName,
-			candidatePlan,
-			addApplication,
+			applied,
 			picture
 		} = this.props;
+
 		const {
-			application,
-			applyPos,
-			isListShow
+			currentlyApplying,
+			candidate
 		} = this.state;
 
 		let submitButton;
 
-		if (!isListShow)
+		if (currentlyApplying || applied)
 			submitButton = <Button
-				title = { application }
+				title = { (applied && "Edit " || "Submit ") + "Application" }
 				onPress = { () => {
-					if (application === "Submit")
-						addApplication(firstName, lastName, candidatePlan, applyPos, picture);
+					if (!applied)
+						addApplication(firstName, lastName, candidate.plan, candidate.position, picture);
 					else
-						editApplication(candidatePlan, applyPos);
-					this.setState({ isApplyShow: false, isListShow: true });
+						editApplication(candidate.plan, candidate.position);
 				} }
 			/>;
 
@@ -245,104 +215,60 @@ class ElectionApplication extends Component {
 				{ submitButton }
 				<Button
 					title = "Cancel"
-					onPress = { () => {
-						if (isListShow)
-							Actions.pop();
-						else
-							this.setState({ isApplyShow: false, isListShow: true, applyPos: null });
-					} }
+					onPress = { () => this.stopApplication() }
 				/>
 			</ButtonLayout>
 		);
 	}
 
-	renderNavBar() {
-		const {
-			isListShow
-		} = this.state;
-
-		return (
-			<NavBar
-				title = "Positions"
-				back
-				onBack = { () => {
-					if (isListShow)
-						Actions.pop();
-					else
-						this.setState({ isApplyShow: false, isListShow: true, applyPos: null });
-				} }
-			/>
-		);
+	stopApplication() {
+		if (!this.props.applied && this.state.currentlyApplying)
+			this.setState({ currentlyApplying: false });
+		else
+			Actions.pop();
 	}
 }
 
 const styles = {
-	applyTitle: {
-		alignSelf: "center",
-		fontSize: 20,
-		fontWeight: "bold"
+	fontLarge: {
+		fontSize: 20
 	},
-	containerStyle: {
-		flex: 1,
-		justifyContent: "center",
-		alignItems: "flex-start",
-		paddingVertical: 10,
-		paddingHorizontal: 15
-	},
-	contentStyle: {
-		flex: 1
-	},
-	textStyle: {
-		fontSize: 18
+	fontSmall: {
+		fontSize: 13
 	},
 	textColor: {
 		color: "#e0e6ed"
 	},
-	button: {
-		paddingTop: dimension.height * 0.015,
-		paddingBottom: dimension.height * 0.015,
-		marginBottom: 8,
-		minWidth: "45%",
-		alignSelf: "center"
-	},
-	buttonContainer: {
-		flex: 0.4
-	},
 	page: {
 		backgroundColor: "black",
+		paddingLeft: 10,
+		paddingRight: 10
+	},
+	fullFlex: {
 		flex: 1
 	},
-	applyInput: {
-		flex: 0.4,
-		textAlignVertical: "top",
-		height: dimension.height * 0.3
+	halfFlex: {
+		flex: 0.5
 	},
 	positionContainer: {
-		flex: 1,
-		margin: 8,
+		paddingTop: "8%",
+		paddingBottom: "5%",
+		borderBottomColor: "#FFFA",
 		borderBottomWidth: 1,
-		borderColor: "grey"
+		flexDirection: "row",
+		justifyContent: "space-between"
 	},
-	approvedTextStyle: {
-		fontSize: 16,
-		ontWeight: "400",
-		lineHeight: 25,
-		color: "white"
-	},
-	approvedTextContainer: {
-		marginLeft: 12,
-		marginRight: 10,
-		marginBottom: 8
+	titleStyle: {
+		fontWeight: "bold",
+		fontSize: 30
 	}
 };
 
 const mapStateToProps = ({ elect, user }) => {
 	const {
-		election,
-		positions,
-		candidatePlan,
-		apply
+		positions
 	} = elect;
+
 	const {
 		firstName,
 		lastName,
@@ -353,32 +279,18 @@ const mapStateToProps = ({ elect, user }) => {
 	} = user;
 
 	return {
-		election,
 		positions,
-		candidatePlan,
 		firstName,
 		lastName,
 		id,
 		voted,
-		apply,
 		applied,
 		picture
 	};
 };
 
 const mapDispatchToProps = {
-	getPositions,
-	goToOtherProfile,
-	pageLoad,
-	getPrivilege,
-	addApplication,
-	goToCandidateForm,
-	candidateFNameChanged,
-	candidateLNameChanged,
-	candidatePlanChanged,
-	candidatePositionChanged,
-	vote,
-	editApplication
+	getPositions
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ElectionApplication);
