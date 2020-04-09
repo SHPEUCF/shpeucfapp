@@ -8,10 +8,12 @@ All Screen Exports here grouped by folder
 import AdminHub from "./Admin/AdminHub";
 import CommitteesAdmin from "./Admin/CommitteesAdmin";
 import ElectionAdmin from "./Admin/ElectionAdmin";
+import MemberAdmin from "./Admin/MemberAdmin";
 export {
 	AdminHub,
 	CommitteesAdmin,
-	ElectionAdmin
+	ElectionAdmin,
+	MemberAdmin
 };
 
 /** Export Committees **/

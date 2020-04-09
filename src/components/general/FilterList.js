@@ -301,7 +301,7 @@ class FilterList extends Component {
 			regexFunc
 		} = this.props;
 
-		let output = selected;
+		let output = Object.values(selected);
 		let value = "";
 
 		return (
@@ -309,9 +309,13 @@ class FilterList extends Component {
 				<Button
 					title = "Done"
 					onPress = { () => {
+						if (output.length === 0) {
+							alert("You never selected anything!");
+							return;
+						}
 						if (type === "Single") {
 							// automatically derives output value from selected state and displays selected value
-							output = Object.values(selected)[0];
+							output = output[0];
 							value = regexFunc(output);
 						}
 						this.props.onSelect(output);

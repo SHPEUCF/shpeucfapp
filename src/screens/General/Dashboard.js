@@ -676,9 +676,9 @@ const styles = {
 		backgroundColor: "#000a"
 	},
 	modalContent: {
-		height: dimension.height * 0.5,
-		width: dimension.width * 0.8,
-		padding: dimension.height * 0.008,
+		height: "50%",
+		width: "80%",
+		padding: 10,
 		backgroundColor: "#21252b"
 	},
 	committeesPanelContainer: {
