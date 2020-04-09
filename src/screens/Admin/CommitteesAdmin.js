@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { Button, NavBar, SortableFlatList } from "../../components/general";
+import { Button, NavBar, SortableFlatList, ButtonLayout } from "../../components/general";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import _ from "lodash";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
@@ -66,24 +66,22 @@ class CommitteesAdmin extends Component {
 			<SafeAreaView style = { page }>
 				<NavBar title = "Committees" back onBack = { () => Actions.pop() } />
 				{ this.renderFlatlist(committeesArray) }
-				<View style = {{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * 0.1, width: "100%" }}>
-					<View style = {{ flex: 0.45 }}>
+				<View>
+					<ButtonLayout>
 						<Button
 							onPress = { () => this.setLevels() }
 							title = { "Set Order" }
 						/>
-					</View>
-					<View style = {{ flex: 0.45 }}>
 						<Button
 							onPress = { () => {
 								this.props.committeeTitleChanged("");
 								this.props.committeeDescriptionChanged("");
-								this.props.chairChanged();
+								this.props.chairChanged({});
 								this.props.goToCommitteeForm("ADD");
 							} }
 							title = { "Add Committees" }
 						/>
-					</View>
+					</ButtonLayout>
 				</View>
 			</SafeAreaView>
 		);

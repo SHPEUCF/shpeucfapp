@@ -88,14 +88,9 @@ class Dashboard extends Component {
 			textColor,
 			dashCommitteesContainer,
 			innerScrollContainer,
-			dashboardContent
+			dashboardContent,
+			upcomingEventsContainter
 		} = styles;
-
-		let upcomingEventsContainter = {
-			alignItems: "center",
-			flex: 0.2,
-			justifyContent: "center"
-		 };
 
 		return (
 			<SafeAreaView style = { page }>
@@ -105,15 +100,12 @@ class Dashboard extends Component {
 					<View style = { innerScrollContainer }>
 						{ this.renderHeader() }
 						<View style = { dashboardContent }>
-							<View style = {{ flex: 0.1, flexDirection: "row" }}></View>
 							<View style = { upcomingEventsContainter }>
 								<Text style = { [title, textColor] }>Upcoming Events</Text>
 							</View>
 							{ this.getFormattedEventList() }
-							<View style = {{ flex: 0.03, flexDirection: "row" }}></View>
 							<View style = { dashCommitteesContainer }>
 								{ this.renderLeaderboard() }
-								<View style = {{ flex: 0.05 }}></View>
 								{ this.renderCommitteePanel() }
 							</View>
 						</View>
@@ -230,7 +222,8 @@ class Dashboard extends Component {
 			leaderboardContainer,
 			leaderboardContentDivider,
 			leaderboardDividerLine,
-			leaderboardArrow
+			leaderboardArrow,
+			gold
 		} = styles;
 
 		let memberObj = this.calculateRankings();
@@ -246,7 +239,7 @@ class Dashboard extends Component {
 			<TouchableOpacity style = { leaderboardContainer } onPress = { () => Actions.LeaderboardD() }>
 				<View style = { leaderboardContent }>
 					<Text style = { [title, textColor] }>Top Member</Text>
-					<Text style = {{ color: "white" }}>{ sortedMembers[0].firstName } { sortedMembers[0].lastName }</Text>
+					<Text style = { textColor }>{ sortedMembers[0].firstName } { sortedMembers[0].lastName }</Text>
 				</View>
 				<View style = { leaderboardContentDivider }>
 					<View style = { leaderboardDividerLine }></View>
@@ -254,7 +247,7 @@ class Dashboard extends Component {
 						<Ionicons
 							name = "ios-arrow-dropright"
 							size = { dimension.height * 0.025 }
-							style = {{ color: "#FECB00" }}
+							style = { gold }
 						/>
 					</View>
 					<View style = { leaderboardDividerLine }></View>
@@ -278,7 +271,8 @@ class Dashboard extends Component {
 			selectCommitteesIcon,
 			committeeNameContainer,
 			leaderboardArrow,
-			committeesPlaceHolder
+			committeesPlaceHolder,
+			gold
 		} = styles;
 
 		const {
@@ -317,15 +311,13 @@ class Dashboard extends Component {
 						<View style = { committeeNameContainer }>
 							<Text style = { [textColor, { fontSize: dimension.width * 0.03 }] }>{ item[0] }</Text>
 						</View>
-						<View style = {{ flex: 0.1 }}></View>
 						<View style = { leaderboardArrow }>
 							<Ionicons
 								name = "ios-arrow-dropright"
 								size = { dimension.height * 0.025 }
-								style = {{ color: "#FECB00" }}
+								style = { gold }
 							/>
 						</View>
-						<View style = {{ flex: 0.1 }}></View>
 					</TouchableOpacity>
 				) }
 			</View>;
@@ -337,7 +329,7 @@ class Dashboard extends Component {
 					<Ionicons
 						name = "ios-information-circle"
 						size = { dimension.height * 0.028 }
-						onPress = { () => Actions["CommitteesD"]({ screen: "dashboard" }) } style = {{ color: "#FECB00" }}
+						onPress = { () => Actions["CommitteesD"]({ screen: "dashboard" }) } style = { gold }
 					/>
 				</View>
 				{ content }
@@ -354,19 +346,19 @@ class Dashboard extends Component {
 		const {
 			socialMediaButton,
 			socialMediaContainer,
-			buttonRowContainer
+			buttonRowContainer,
+			black
 		} = styles;
 
 		return (
 			<View style = { socialMediaContainer }>
-				<View style = {{ flex: 0.1 }}></View>
 				<View style = { buttonRowContainer }>
 					<TouchableOpacity
 						style = { socialMediaButton }
 						onPress = { () => Linking.openURL("https://shpeucf2018-2019.slack.com/") }
 					>
 						<FontAwesomeIcon
-							style = {{ color: "black" }}
+							style = { black }
 							name = "slack"
 							size = { dimension.height * 0.04 }
 						/>
@@ -376,7 +368,7 @@ class Dashboard extends Component {
 						onPress = { () => Linking.openURL("https://www.facebook.com/shpeucfchapter/") }
 					>
 						<FontAwesomeIcon
-							style = {{ color: "black" }}
+							style = { black }
 							name = "facebook"
 							size = { dimension.height * 0.04 }
 						/>
@@ -386,7 +378,7 @@ class Dashboard extends Component {
 						onPress = { () => Linking.openURL("https://www.shpeucf.com/") }
 					>
 						<FontAwesomeIcon
-							style = {{ color: "black" }}
+							style = { black }
 							name = "globe"
 							size = { dimension.height * 0.04 }
 						/>
@@ -396,12 +388,11 @@ class Dashboard extends Component {
 						onPress = { () => Linking.openURL("https://www.instagram.com/shpeucf/?hl=en") }
 					>
 						<FontAwesomeIcon
-							style = {{ color: "black" }}
+							style = { black }
 							name = "instagram" size = { dimension.height * 0.04 }
 						/>
 					</TouchableOpacity>
 				</View>
-				<View style = {{ flex: 0.6 }}></View>
 				{ this.renderFooter() }
 			</View>
 		);
@@ -410,14 +401,16 @@ class Dashboard extends Component {
 	renderFooter() {
 		const {
 			footer,
-			footerText
+			footerText,
+			black,
+			textColor
 		} = styles;
 
 		return (
 			<View style = { footer }>
 				<View style = { footerText }>
-					<Text style = {{ color: "black" }}>SHPE </Text>
-					<Text style = {{ color: "white" }}>UCF</Text>
+					<Text style = { black }>SHPE </Text>
+					<Text style = { textColor }>UCF</Text>
 				</View>
 			</View>
 		);
@@ -621,7 +614,9 @@ class Dashboard extends Component {
 		const {
 			leaderboardArrow,
 			eventTextContainer,
-			eventItemInnerContainer
+			eventItemInnerContainer,
+			eventTextStyle,
+			gold
 		} = styles;
 
 		const {
@@ -643,18 +638,18 @@ class Dashboard extends Component {
 
 		return (
 			<View style = { eventItemInnerContainer }>
-				<View style = {{ flex: 0.1 }}></View>
 				<View style = { eventTextContainer }>
-					<View style = {{ alignItems: "flex-start" }}>
-						<Text style = {{ color: "white", fontSize: dimension.width * 0.035 }}>{ viewType }: { name }</Text>
-						<Text style = {{ color: "white", fontSize: dimension.width * 0.035 }}>{ this.convertNumToDate(date) } - { realStart } - { realEnd } </Text>
-					</View>
+					<Text style = { eventTextStyle }>{ viewType }: { name }</Text>
+					<Text style = { eventTextStyle }>
+						{ this.convertNumToDate(date) } - { realStart } - { realEnd }
+					</Text>
 				</View>
-				<View style = {{ flex: 0.08 }}></View>
 				<View style = { leaderboardArrow }>
-					<Ionicons name = "ios-arrow-dropright" size = { dimension.height * 0.025 } style = {{ color: "#FECB00" }} />
+					<Ionicons
+						name = "ios-arrow-dropright"
+						size = { dimension.height * 0.025 }
+						style = { gold } />
 				</View>
-				<View style = {{ flex: 0.04 }}></View>
 			</View>
 		);
 	}
@@ -679,14 +674,11 @@ class Dashboard extends Component {
 
 		if (events.length === 0) content = <Text style = { [textColor, eventEmptyText ] }>No Upcoming Events</Text>;
 
-		else {
-			content = recentEvents.map(item =>
-				<TouchableOpacity onPress = { () => this.viewEvent(item) } style = { eventsItem }>
-					{ this.showEvents(item) }
-					<View style = {{ height: dimension.height * 0.002, backgroundColor: "black", width: "100%" }}></View>
-				</TouchableOpacity>
-			);
-		}
+		else content = recentEvents.map(item =>
+			<TouchableOpacity onPress = { () => this.viewEvent(item) } style = { eventsItem }>
+				{ this.showEvents(item) }
+			</TouchableOpacity>
+		);
 
 		return (
 			<View style = { [eventListContainerFull, singleContainer] }>
@@ -718,15 +710,18 @@ const styles = {
 	eventsItem: {
 		backgroundColor: "#21252b",
 		flex: 1,
+		borderBottomWidth: 5
 	},
-	eventItemInnerContainer: { 
+	eventItemInnerContainer: {
 		flexDirection: "row",
 		flex: 1,
-		alignItems: "center"
+		alignItems: "center",
+		paddingRight: 10
 	},
 	eventTextContainer: {
 		flex: 1,
 		alignItems: "flex-start",
+		paddingLeft: 20
 	},
 	headerContainer: {
 		paddingLeft: "4%",
@@ -764,7 +759,8 @@ const styles = {
 	},
 	leaderboardContainer: {
 		backgroundColor: "#21252b",
-		flex: 1
+		flex: 1,
+		marginRight: 5
 	},
 	leaderboardContent: {
 		flex: 1,
@@ -817,7 +813,8 @@ const styles = {
 		flex: 1,
 		height: "100%",
 		backgroundColor: "#21252b",
-		alignItems: "center"
+		alignItems: "center",
+		marginLeft: 5
 	},
 	committeesListContainer: {
 		flex: 1,
@@ -836,12 +833,13 @@ const styles = {
 	committeeItemContainer: {
 		flexDirection: "row",
 		alignItems: "center",
-		flex: 1
+		flex: 1,
+		paddingRight: 20
 	},
 	committeeNameContainer: {
 		flex: 1,
 		alignItems: "flex-start",
-		justifyContent: "space-evenly" 
+		justifyContent: "space-evenly"
 	},
 	index: {
 		color: "#000",
@@ -868,7 +866,7 @@ const styles = {
 		flex: 1,
 		alignItems: "center"
 	},
-	footer: { flex: 0.3,
+	footer: { flex: 0.2,
 		justifyContent: "center",
 		backgroundColor: "#FECB00",
 		width: "100%"
@@ -909,6 +907,10 @@ const styles = {
 		flex: 1,
 		flexDirection: "column"
 	},
+	eventTextStyle: {
+		color: "white",
+		fontSize: dimension.width * 0.035
+	},
 	containerTextStyle: {
 		flex: 3,
 		justifyContent: "center",
@@ -919,7 +921,8 @@ const styles = {
 	dashCommitteesContainer: {
 		flexDirection: "row",
 		alignItems: "flex-start",
-		flex: 0.9
+		flex: 0.9,
+		paddingTop: 10
 	},
 	innerScrollContainer: {
 		height: dimension.height * 1.3
@@ -934,7 +937,18 @@ const styles = {
 		alignItems: "center",
 		paddingLeft: "2%",
 		paddingRight: "2%"
-
+	},
+	gold: {
+		color: "#FECB00"
+	},
+	black: {
+		color: "black"
+	},
+	upcomingEventsContainter: {
+		alignItems: "center",
+		flex: 0.2,
+		justifyContent: "center",
+		padding: 20
 	}
 };
 
