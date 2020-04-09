@@ -31,6 +31,7 @@ class ElectionApplication extends Component {
 	state = {
 		applying: this.props.applied,
 		editing: !this.props.applied,
+		positionSelected: "",
 		index: null
 	};
 
@@ -71,13 +72,22 @@ class ElectionApplication extends Component {
 		);
 	}
 
+	findActiveApplicationPosition() {
+		let activeApplicationPosition = null;
+		Object.entries(this.props.positions || {}).forEach(entry => {
+			Object.values(entry[1].candidates || {}).forEach(candidate => {
+				if (candidate.id === this.props.id) activeApplicationPosition = entry[0];
+			});
+		});
+
+		return activeApplicationPosition;
+	}
+
 	showApplication() {
 		const {
 			firstName,
 			lastName,
-			id,
-			candidatePlan,
-			positions
+			candidatePlan
 		} = this.props;
 
 		const {
@@ -88,18 +98,13 @@ class ElectionApplication extends Component {
 			titleStyle
 		} = styles;
 
-		// alert(JSON.stringify(Object.entries(positions)[0][1].candidates));
-		let activeApplicationPosition = "";
-
-		Object.entries(positions || {}).forEach(entry => {
-			Object.values(entry[1].candidates || {}).forEach(candidate => {
-				if (candidate.id === id) activeApplicationPosition = entry[0];
-			});
-		});
+		let activeApplicationPosition = this.findActiveApplicationPosition();
 
 		return (
 			<View style = { fullFlex }>
-				<Text style = { [fontLarge, textColor, titleStyle ] }>{ this.state.positionSelected || activeApplicationPosition }</Text>
+				<Text style = { [fontLarge, textColor, titleStyle ] }>
+					{ activeApplicationPosition || this.state.positionSelected }
+				</Text>
 				<Text style = { [fontLarge, textColor] }>
 					{ firstName } { lastName }
 				</Text>
@@ -179,27 +184,25 @@ class ElectionApplication extends Component {
 			firstName,
 			lastName,
 			candidatePlan,
-			addApplication,
 			applied,
 			picture
 		} = this.props;
 
 		const {
-			positionSelected,
-			applying
+			applying,
+			positionSelected
 		} = this.state;
 
 		let submitButton;
 
-		if (applying)
+		if (applying || applied)
 			submitButton = <Button
 				title = { (applied && "Edit " || "Submit ") + "Application" }
 				onPress = { () => {
 					if (!applied)
 						addApplication(firstName, lastName, candidatePlan, positionSelected, picture);
 					else
-						editApplication(candidatePlan, positionSelected);
-					this.stopApplication();
+						editApplication(candidatePlan, this.findActiveApplicationPosition());
 				} }
 			/>;
 
@@ -208,19 +211,14 @@ class ElectionApplication extends Component {
 				{ submitButton }
 				<Button
 					title = "Cancel"
-					onPress = { () => {
-						if (!applying)
-							Actions.pop();
-						else
-							this.stopApplication();
-					} }
+					onPress = { () => this.stopApplication() }
 				/>
 			</ButtonLayout>
 		);
 	}
 
 	stopApplication() {
-		if (!this.props.applied)
+		if (!this.props.applied && this.state.applying)
 			this.setState({ applying: false, editing: false });
 		else Actions.pop();
 	}
@@ -268,6 +266,7 @@ const mapStateToProps = ({ elect, user }) => {
 		candidatePlan,
 		apply
 	} = elect;
+
 	const {
 		firstName,
 		lastName,
@@ -296,7 +295,6 @@ const mapDispatchToProps = {
 	goToOtherProfile,
 	pageLoad,
 	getPrivilege,
-	addApplication,
 	goToCandidateForm,
 	candidateFNameChanged,
 	candidateLNameChanged,
