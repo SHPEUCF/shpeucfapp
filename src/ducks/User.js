@@ -54,7 +54,6 @@ const INITIAL_STATE = {
 	college: "",
 	major: "",
 	quote: "",
-	paidMember: false,
 	// Using URL below to avoid RN warning of empty source.uri as there's a delay fetching.
 	// Will improve fetching later, just need to get rid of the warning for now.
 	picture: "",
@@ -237,7 +236,6 @@ export default (state = INITIAL_STATE, action) => {
 				email: payload.email,
 				major: payload.major,
 				quote: payload.quote,
-				paidMember: payload.paidMember,
 				continent: payload.continent,
 				nationality: payload.nationality,
 				gender: payload.gender,
@@ -518,7 +516,6 @@ const createUserSuccess = (dispatch, firstName, lastName, email, college, major,
 		gender: gender,
 		birthday: birthday,
 		id: id,
-		paidMember: false,
 		voted: false,
 		applied: false,
 		flag: "",
