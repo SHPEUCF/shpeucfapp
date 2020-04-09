@@ -37,19 +37,9 @@ import {
 	startTimeChanged,
 	endTimeChanged
 } from "../../ducks";
+import { MemberPanel } from "../../utils/actions";
 
 const dimension = Dimensions.get("screen");
-
-const userAvatar = ({ item }) => {
-	return (
-		<Avatar
-			size = { dimension.height * 0.08 }
-			rounded
-			source = {{ uri: item.picture }}
-		/>
-	);
-};
-const StableAvatar = React.memo(userAvatar);
 
 class EventDetails extends Component {
 	constructor(props) {
@@ -171,50 +161,6 @@ class EventDetails extends Component {
 		}
 	}
 
-	renderCheckInCompoent(user) {
-		const {
-			textStyle,
-			contentContainerStyle
-		} = styles;
-
-		return (
-			<View style = { contentContainerStyle }>
-				<View style = {{ flex: 0.1 }}></View>
-				<View style = {{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-					<View style = {{ flex: 1 }}>
-						<Text style = { [textStyle, { fontWeight: "bold" }] }>{ `${user.firstName} ${user.lastName}` }</Text>
-					</View>
-					<View style = {{ alignItems: "flex-end", flexDirection: "row", flex: 0.4 }}>
-						<Ionicons
-							onPress = { () => {
-								this.child.changeVisible(false);
-								this.callUser(user.id);
-							 } }
-							name = { "ios-arrow-dropright-circle" }
-							size = { dimension.height * 0.04 }
-							color = { "#FECB00" }
-						/>
-						<View style = {{ flex: 0.2 }}></View>
-						{ user.picture === ""
-						&& <Avatar
-							size = { dimension.height * 0.08 }
-							rounded
-							titleStyle = {{ backgroundColor: user.color }}
-							overlayContainerStyle = {{ backgroundColor: user.color }}
-							title = { user.firstName[0].concat(user.lastName[0]) }
-						/> }
-						{ user.picture !== ""
-						&& <StableAvatar
-							 item = { user }
-						/>
-						}
-					</View>
-				</View>
-				<View style = {{ flex: 0.1 }}></View>
-			</View>
-		);
-	}
-
 	convertArrayOfObjectsToCSV(args) {
 		let result;
 		let ctr;
@@ -291,7 +237,8 @@ class EventDetails extends Component {
 			attendance,
 			attendanceContainer,
 			icon,
-			textColor
+			textColor,
+			fullFlex
 		} = styles;
 
 		if (!eventList || !eventList[eventID]) return null;
@@ -300,7 +247,7 @@ class EventDetails extends Component {
 			let attendants = Object.keys(eventList[eventID].attendance);
 
 			return (
-				<View style = { [{ flex: 1, flexDirection: "column" }, lineOnTop] }>
+				<View style = { [fullFlex, lineOnTop] }>
 					<View style = { attendanceContainer }>
 						<View style = { icon }></View>
 						<Text style = { [attendance, textColor] }>Attendance</Text>
@@ -312,15 +259,13 @@ class EventDetails extends Component {
 							onPress = { () => this.sendListToMail(attendants) }
 						/>
 					</View>
-					<View style = {{flex: 1}}>
-						<FlatList
-							data = { attendants }
-							extraData = { this.state }
-							numColumns = { 2 }
-							keyExtractor = { this._keyExtractor }
-							renderItem = { ({ item }) => this.renderComponent(item) }
-						/>
-					</View>
+					<FlatList
+						data = { attendants }
+						extraData = { this.state }
+						numColumns = { 2 }
+						keyExtractor = { this._keyExtractor }
+						renderItem = { ({ item }) => this.renderComponent(item) }
+					/>
 				</View>
 			);
 		}
@@ -382,7 +327,7 @@ class EventDetails extends Component {
 					data = { list }
 					regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
 					selectBy = { (data) => { return data.id } }
-					itemJSX = { (data) => this.renderCheckInCompoent(data) }
+					itemJSX = { (data) => MemberPanel(data) }
 					onSelect = { (selectedUsers) => {
 						this.checkInMembers(selectedUsers);
 					} }
@@ -746,11 +691,8 @@ const styles = {
 		color: "#e0e6ed",
 		fontSize: dimension.width * 0.05
 	},
-	contentContainerStyle: {
-		height: dimension.height * 0.18,
-		alignItems: "flex-start",
-		paddingHorizontal: 15,
-		justifyContent: "center"
+	fullFlex: {
+		flex: 1
 	}
 };
 

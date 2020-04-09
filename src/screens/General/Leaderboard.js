@@ -16,23 +16,11 @@ import {
 	loadUser,
 	filterChanged
 } from "../../ducks";
+import { StableAvatar } from "../../utils/actions";
 
 const dimension = Dimensions.get("window");
 const iteratees = ["points", "lastName", "firstName"];
 const order = ["desc", "asc", "asc"];
-
-// Created this functional component to fix current Avatar flickering issue on ios
-// Should be fixed in the next React Native Elements Update
-const userAvatar = ({ item }) => {
-	return (
-		<Avatar
-			size = { dimension.height * 0.08 }
-			rounded
-			source = {{ uri: item.picture }}
-		/>
-	);
-};
-const StableAvatar = React.memo(userAvatar);
 
 class Leaderboard extends Component {
 	constructor(props) {
@@ -98,23 +86,26 @@ class Leaderboard extends Component {
 			indexText,
 			userContainerColor,
 			itemContentContainer,
-			userInfoContainer
+			userInfoContainer,
+			userTextContainer
 		} = styles;
 
 		let backgroundColor = item.id === this.props.id ? userContainerColor : {};
 		return (
 			<View style = { [contentContainerStyle, backgroundColor] }>
-				<View style = {{ flex: 0.1 }}></View>
 				<View style = { itemContentContainer }>
 					<View style = { index }>
 						<Text style = { indexText }>{ item.index }</Text>
 					</View>
 					<View >
 						<View style = { userInfoContainer }>
-							<View>
-								<View style = {{ flex: 0.2 }}></View>
-								<Text style = { [textStyle, { fontWeight: "bold" }] }>{ `${item.firstName} ${item.lastName}` }</Text>
-								<Text style = { [textStyle, { fontSize: dimension.width * 0.04 }] }>Points: { item.points }</Text>
+							<View style = { userTextContainer }>
+								<Text style = { [textStyle, { fontWeight: "bold" }] }>
+									{ `${item.firstName} ${item.lastName}` }
+								</Text>
+								<Text style = { [textStyle, { fontSize: dimension.width * 0.04 }] }>
+									Points: { item.points }
+								</Text>
 							</View>
 							{ item.picture === ""
 							&& <Avatar
@@ -129,7 +120,6 @@ class Leaderboard extends Component {
 								item = { item }
 							/> }
 						</View>
-						<View style = {{ flex: 0.2 }}></View>
 						<Progress.Bar
 							style = { progress }
 							progress = { item.points / Math.max(sortedMembers[0].points, 1) }
@@ -140,7 +130,6 @@ class Leaderboard extends Component {
 						/>
 					</View>
 				</View>
-				<View style = {{ flex: 0.1 }}></View>
 			</View>
 		);
 	}
@@ -220,8 +209,12 @@ const styles = {
 	},
 	userInfoContainer: {
 		flexDirection: "row",
-		 justifyContent: "space-between",
-		 alignItems: "flex-start"
+		justifyContent: "space-between",
+		alignItems: "flex-start",
+		paddingBottom: 20
+	},
+	userTextContainer: {
+		paddingTop: 5
 	}
 };
 
