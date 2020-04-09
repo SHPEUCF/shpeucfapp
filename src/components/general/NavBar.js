@@ -35,10 +35,10 @@ class NavBar extends Component {
 				<View style = { [tabBar, style, rowFlex] }>
 					<View style = { backButtonStyle }>
 						<Ionicons
-							name = "md-arrow-back"
+							name = "ios-arrow-dropleft"
 							size = { dimension.height * 0.03 }
-							onPress = { onBack }
 							color = { "#FECB00" }
+							onPress = { onBack }
 						/>
 					</View>
 					<View>

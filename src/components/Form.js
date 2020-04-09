@@ -6,7 +6,7 @@ import {
 	Input,
 	PickerInput,
 	TimePicker,
-	FilterPicker
+	FilterList
 } from "./";
 import PropTypes from "prop-types";
 import {
@@ -243,16 +243,16 @@ class Form extends Component {
 					value = { this.state[camelCaseName] || "" }
 					onSelect = { value => this.changeState(camelCaseName, value) }
 				/>;
-			case "FilterPicker":
-				if (!options || !options.data) console.error("You must pass in data through the options property ");
-				return <FilterPicker
-					type = { options.type }
-					filter = { this.state.filter }
-					data = { options.data }
-					placeholder = { options.placeholder }
-					onChangeText = { value => this.changeState("filter", value) }
-					onSelect = { value => this.changeState(camelCaseName, value) }
-				/>;
+			// case "FilterPicker":
+			// 	if (!options || !options.data) console.error("You must pass in data through the options property ");
+			// 	return <FilterPicker
+			// 		type = { options.type }
+			// 		filter = { this.state.filter }
+			// 		data = { options.data }
+			// 		placeholder = { options.placeholder }
+			// 		onChangeText = { value => this.changeState("filter", value) }
+			// 		onSelect = { value => this.changeState(camelCaseName, value) }
+			// 	/>;
 			case "Input":
 				return <Input
 					placeholder = { placeholder }
