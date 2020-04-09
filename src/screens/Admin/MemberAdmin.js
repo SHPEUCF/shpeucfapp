@@ -44,13 +44,9 @@ class MemberAdmin extends Component {
 	}
 
 	makeUserList(value) {
-		const {
-			userList
-		} = this.props;
-
 		let list = {};
 
-		Object.entries(userList).forEach(function(user) {
+		Object.entries(this.props.userList).forEach(function(user) {
 			let userId = user[0];
 			let userData = user[1];
 
