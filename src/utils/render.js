@@ -6,10 +6,10 @@ export const verifiedCheckMark = ({ paidMember }) => {
 	const {
 		verifiedCheckMark
 	} = styles;
+
 	if (paidMember)
 		return (
 			<Ionicons
-
 				name = "ios-checkmark-circle"
 				size = { 25 }
 				style = { verifiedCheckMark }
