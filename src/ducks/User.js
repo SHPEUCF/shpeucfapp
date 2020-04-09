@@ -1,10 +1,10 @@
 import firebase from "firebase";
 import { Actions } from "react-native-router-flux";
 import { Alert } from "react-native";
-import { createActiontypes } from "../utils/actions";
+import { createActionTypes } from "../utils/actions";
 
 // handle all things related to Users
-const ACTIONS = createActiontypes([
+const ACTIONS = createActionTypes([
 	"FIRST_NAME_CHANGED",
 	"LAST_NAME_CHANGED",
 	"EMAIL_CHANGED",
@@ -54,7 +54,6 @@ const INITIAL_STATE = {
 	college: "",
 	major: "",
 	quote: "",
-	paidMember: false,
 	// Using URL below to avoid RN warning of empty source.uri as there's a delay fetching.
 	// Will improve fetching later, just need to get rid of the warning for now.
 	picture: "",
@@ -66,6 +65,7 @@ const INITIAL_STATE = {
 	nationality: "Do not wish to disclose",
 	gender: "Do not wish to disclose",
 	birthday: "0000-00-00",
+	paidMember: false,
 	user: null,
 	loggedIn: null,
 	loading: false,
@@ -237,13 +237,13 @@ export default (state = INITIAL_STATE, action) => {
 				email: payload.email,
 				major: payload.major,
 				quote: payload.quote,
-				paidMember: payload.paidMember,
 				continent: payload.continent,
 				nationality: payload.nationality,
 				gender: payload.gender,
 				birthday: payload.birthday,
 				points: payload.points,
 				picture: payload.picture,
+				paidMember: payload.paidMember,
 				voted: payload.voted,
 				applied: payload.applied,
 				id: payload.id,
@@ -517,8 +517,8 @@ const createUserSuccess = (dispatch, firstName, lastName, email, college, major,
 		nationality: nationality,
 		gender: gender,
 		birthday: birthday,
-		id: id,
 		paidMember: false,
+		id: id,
 		voted: false,
 		applied: false,
 		flag: "",

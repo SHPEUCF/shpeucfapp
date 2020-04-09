@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { Button, Input, NavBar } from "../../components/general";
+import { Button, Input, NavBar, ButtonLayout } from "../../components/general";
 import _ from "lodash";
-import { FlatList, Text, View, Dimensions } from "react-native";
+import { FlatList, Text, SafeAreaView, View, Dimensions } from "react-native";
 import {
 	getPositions,
 	goToOtherProfile,
@@ -52,18 +52,18 @@ class ElectionApplication extends Component {
 		const positionsArray = _.orderBy(positions, iterateesPos, orderPos);
 
 		return (
-			<View style = { page }>
+			<SafeAreaView style = { page }>
 				{ this.renderNavBar() }
 				<View style = { contentStyle }>
-					{ this.showListPosition(positionsArray) }
-					{ this.showApplyPosition() }
+					{ this.renderPositions(positionsArray) }
+					{ this.showApplication() }
 				</View>
 				{ this.renderButtons() }
-			</View>
+			</SafeAreaView>
 		);
 	}
 
-	showApplyPosition() {
+	showApplication() {
 		const {
 			applyTitle,
 			applyInput,
@@ -109,7 +109,7 @@ class ElectionApplication extends Component {
 
 	_keyExtractor = (item, index) => index;
 
-	showListPosition(positionsArray) {
+	renderPositions(positionsArray) {
 		if (!this.state.isListShow) return null;
 
 		return (
@@ -120,52 +120,57 @@ class ElectionApplication extends Component {
 					keyExtractor = { this._keyExtractor }
 					renderItem = { ({ item }) => {
 						if (this.props.applied)
-							return this.renderListPositionApplied(item);
+							return this.renderPositionApplied(item);
 						else
-							return this.renderListPositionComponent(item);
+							return this.renderPositionComponent(item);
 					} }
 				/>
 			</View>
 		);
 	}
 
-	renderListPositionComponent(item) {
+	renderPositionComponent(item) {
 		const {
 			button,
 			textStyle,
-			textColor
+			textColor,
+			positionContainer
 		} = styles;
 		this.state.application = "Submit";
 
 		return (
-			<View style = {{ flex: 1, margin: 8, borderBottomWidth: 1, borderColor: "grey" }}>
+			<View style = { positionContainer }>
 				<View style = {{ marginBottom: 10 }}>
 					<Text style = { [textStyle, textColor] }>Position: { item.title }</Text>
 				</View>
 				<View style = {{ marginLeft: 12, marginRight: 10, marginBottom: 8 }}>
 					<Text style = { [textStyle, textColor] }>Role: { item.description }</Text>
 				</View>
-				<View style = { button } >
+				<View style = { button }>
 					<Button
 						title = { `Apply for ${item.title}` }
-						onPress = { () => { this.setState({ isListShow: false }); this.setState({ isApplyShow: true }); this.setState({ applyPos: item.title }) } } />
+						onPress = { () => {
+							this.setState({ isListShow: false, isApplyShow: true, applyPos: item.title });
+						} }
+						 />
 				</View>
 			</View>
 		);
 	}
 
-	renderListPositionApplied(item) {
+	renderPositionApplied(item) {
 		const {
 			textStyle,
-			textColor
+			textColor,
+			positionContainer
 		} = styles;
 
 		return (
-			<View style = {{ flex: 1, margin: 8, borderBottomWidth: 1, borderColor: "grey" }}>
+			<View style = { positionContainer }>
 				<View style = {{ marginBottom: 10 }}>
 					<Text style = { [textStyle, textColor] }>Position: { `${item.title}` }</Text>
 				</View>
-				<View style = {{ marginLeft: 12, marginRight: 10, marginBottom: 8 }}>
+				<View style = {{ marginLeft: 12, marginRight: 10 }}>
 					<Text style = { [textStyle, textColor] }>Role: { `${item.description}` }</Text>
 				</View>
 				{ this.renderEditButton(item) }
@@ -175,10 +180,9 @@ class ElectionApplication extends Component {
 
 	renderEditButton(item) {
 		const {
-			button
-		} = styles;
-		const {
-			id
+			id,
+			approvedTextStyle,
+			approvedTextContainer
 		} = this.props;
 
 		let query = _.get(item, ["candidates", id], null);
@@ -187,19 +191,19 @@ class ElectionApplication extends Component {
 
 		if (query && !query.approved)
 			return (
-				<View style = { button } >
+				<ButtonLayout>
 					<Button
 						title = { "Edit Application" }
 						onPress = { () => {
 							this.setState({ isListShow: false, isApplyShow: true, applyPos: item.title });
 							this.props.candidatePlanChanged(query.plan);
 						} } />
-				</View>
+				</ButtonLayout>
 			);
 		else if (query && query.approved)
 			return (
-				<View style = {{ marginLeft: 12, marginRight: 10, marginBottom: 8 }}>
-					<Text style = {{ fontSize: 16, fontWeight: "400", lineHeight: 25 }}>You've been approved! Good Luck!</Text>
+				<View style = { approvedTextContainer }>
+					<Text style = { approvedTextStyle }>You've been approved! Good Luck!</Text>
 				</View>
 			);
 	}
@@ -214,7 +218,6 @@ class ElectionApplication extends Component {
 			lastName,
 			candidatePlan,
 			addApplication,
-			buttonContainer,
 			picture
 		} = this.props;
 		const {
@@ -223,10 +226,10 @@ class ElectionApplication extends Component {
 			isListShow
 		} = this.state;
 
-		let p1;
+		let submitButton;
 
 		if (!isListShow)
-			p1 = <Button
+			submitButton = <Button
 				title = { application }
 				onPress = { () => {
 					if (application === "Submit")
@@ -238,8 +241,8 @@ class ElectionApplication extends Component {
 			/>;
 
 		return (
-			<View style = { buttonContainer }>
-				{ p1 }
+			<ButtonLayout>
+				{ submitButton }
 				<Button
 					title = "Cancel"
 					onPress = { () => {
@@ -249,7 +252,7 @@ class ElectionApplication extends Component {
 							this.setState({ isApplyShow: false, isListShow: true, applyPos: null });
 					} }
 				/>
-			</View>
+			</ButtonLayout>
 		);
 	}
 
@@ -298,19 +301,38 @@ const styles = {
 	button: {
 		paddingTop: dimension.height * 0.015,
 		paddingBottom: dimension.height * 0.015,
-		marginBottom: 8
+		marginBottom: 8,
+		minWidth: "45%",
+		alignSelf: "center"
 	},
 	buttonContainer: {
 		flex: 0.4
 	},
 	page: {
-		backgroundColor: "#2C3239",
+		backgroundColor: "black",
 		flex: 1
 	},
 	applyInput: {
 		flex: 0.4,
 		textAlignVertical: "top",
 		height: dimension.height * 0.3
+	},
+	positionContainer: {
+		flex: 1,
+		margin: 8,
+		borderBottomWidth: 1,
+		borderColor: "grey"
+	},
+	approvedTextStyle: {
+		fontSize: 16,
+		ontWeight: "400",
+		lineHeight: 25,
+		color: "white"
+	},
+	approvedTextContainer: {
+		marginLeft: 12,
+		marginRight: 10,
+		marginBottom: 8
 	}
 };
 
@@ -360,4 +382,3 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ElectionApplication);
-

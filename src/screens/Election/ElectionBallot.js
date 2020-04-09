@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { Button, NavBar } from "../../components/general";
+import { Button, NavBar, ButtonLayout } from "../../components/general";
 import { Avatar } from "react-native-elements";
 import _ from "lodash";
-import { FlatList, Text, View, TouchableOpacity, Dimensions } from "react-native";
+import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from "react-native";
 import {
 	getPositions,
 	goToOtherProfile,
@@ -23,20 +23,20 @@ import {
 const dimension = Dimensions.get("window");
 const iterateesPos = ["level"];
 const orderPos = ["asc"];
-const iterateesCan = ["lastName", "firstName"];
-const orderCan = ["asc", "asc"];
+const iterateesCandidate = ["lastName", "firstName"];
+const orderCandidate = ["asc", "asc"];
 let dict = [];
 
 class ElectionBallot extends Component {
 	constructor(props) {
 		super(props);
-		this.renderCand = this.renderCand.bind(this);
+		this.renderCandidate = this.renderCandidate.bind(this);
 	}
 
 	state = {
 		index: null,
 		isBallotShow: true,
-		isCand: false,
+		isCandidate: false,
 		applyPos: null,
 		listCandidates: null,
 		application: "Submit"
@@ -58,14 +58,14 @@ class ElectionBallot extends Component {
 		const positionsArray = _.orderBy(positions, iterateesPos, orderPos);
 
 		return (
-			<View style = { page }>
+			<SafeAreaView style = { page }>
 				{ this.renderNavBar() }
 				<View style = { contentStyle }>
 					{ this.showBallot(positionsArray) }
-					{ this.renderCand() }
+					{ this.renderCandidate() }
 				</View>
 				{ this.renderButtons() }
-			</View>
+			</SafeAreaView>
 		);
 	}
 
@@ -75,17 +75,12 @@ class ElectionBallot extends Component {
 		if (!this.state.isBallotShow) return null;
 
 		return (
-			<View>
-				<FlatList
-					data = { positionsArray }
-					extraData = { this.state }
-					keyExtractor = { this._keyExtractor }
-					renderItem = { ({
-						item, index
-					}) =>
-						this.renderCandidatesList(item, index) }
-				/>
-			</View>
+			<FlatList
+				data = { positionsArray }
+				extraData = { this.state }
+				keyExtractor = { this._keyExtractor }
+				renderItem = { ({ item, index }) => this.renderCandidatesList(item, index) }
+			/>
 		);
 	}
 
@@ -109,10 +104,12 @@ class ElectionBallot extends Component {
 							first: item.firstName,
 							last: item.lastName
 						};
-						this.setState({ isCand: false });
+						this.setState({ isCandidate: false });
 						this.setState({ isBallotShow: true });
 					} }>
-					<Text style = { [{ fontWeight: "bold", fontSize: 20, alignSelf: "center" }, textColor] }>{ item.firstName + " " + item.lastName }</Text>
+					<Text style = { [{ fontWeight: "bold", fontSize: 20, alignSelf: "center" }, textColor] }>
+						{ `${item.firstName} ${item.lastName}` }
+					</Text>
 					<View style = {{ flex: 1 }}>
 						{ this.renderPicture(item) }
 						<View style = { contentContainerStyle }>
@@ -142,14 +139,14 @@ class ElectionBallot extends Component {
 		);
 	}
 
-	renderCand() {
+	renderCandidate() {
 		const {
 			tab,
 			textStyle,
 			textColor
 		} = styles;
 
-		if (!this.state.isCand)	return null;
+		if (!this.state.isCandidate) return null;
 
 		return (
 			<View style = {{ flex: 1 }}>
@@ -200,16 +197,18 @@ class ElectionBallot extends Component {
 				<TouchableOpacity onPress = { () => {
 					this.setState({
 						isBallotShow: false,
-						isCand: true,
-						listCandidates: _.orderBy(item.candidates, iterateesCan, orderCan),
+						isCandidate: true,
+						listCandidates: _.orderBy(item.candidates, iterateesCandidate, orderCandidate),
 						applyPos: item.title,
 						index: index
 					});
-					this.renderCand();
+					this.renderCandidate();
 				} }>
 					<View style = { [container, { flexDirection: "row" }] }>
 						<Text style = { [textStyle, textColor, { flex: 6 }] }>{ `${item.title}` }</Text>
-						{ this.renderAllVotes(index) }
+						<View style = {{ alignContent: "flex-start", width: 200 }}>
+							{ this.renderAllVotes(index) }
+						</View>
 					</View>
 				</TouchableOpacity>
 			</View>
@@ -224,18 +223,13 @@ class ElectionBallot extends Component {
 
 		let vote = dict[index];
 
-		if (!vote)
+		if (vote)
 			return (
-				<Text style = { [textStyle, textColor] }> -> { vote.first } { vote.last }</Text>
+				<Text style = { [textStyle, textColor] }> { vote.first } { vote.last }</Text>
 			);
-		else
-			<Text style = { [textStyle, textColor, { flex: 0.2 }] }>></Text>;
 	}
 
 	renderButtons() {
-		const {
-			buttonContainer
-		} = styles;
 		const {
 			vote,
 			id
@@ -247,23 +241,24 @@ class ElectionBallot extends Component {
 		if (!isBallotShow)
 			return (
 				<Button title = "Ballot" onPress = { () => {
-					this.setState({ isCand: false, isBallotShow: true });
+					this.setState({ isCandidate: false, isBallotShow: true });
 				} } />
 			);
 		else
 			return (
-				<View style = { buttonContainer }>
+				<ButtonLayout>
 					<Button
 						title = "Submit" onPress = { () => {
 							vote(id, dict);
 							dict = [];
 							Actions.popTo("Election");
-						} } />
+						} }
+					/>
 					<Button
 						title = "Cancel"
 						onPress = { () => { Actions.pop() } }
 					/>
-				</View>
+				</ButtonLayout>
 			);
 	}
 
@@ -280,7 +275,7 @@ class ElectionBallot extends Component {
 					if (isBallotShow)
 						Actions.pop();
 					else
-						this.setState({ isCand: false, isBallotShow: true });
+						this.setState({ isCandidate: false, isBallotShow: true });
 				} }
 			/>
 		);
@@ -296,7 +291,7 @@ const styles = {
 		fontSize: 18
 	},
 	page: {
-		backgroundColor: "#0c0b0b",
+		backgroundColor: "black",
 		flex: 1
 	},
 	tab: {
@@ -328,10 +323,9 @@ const styles = {
 		borderColor: "#e0e6ed22"
 	},
 	container: {
-		flex: 1,
-		backgroundColor: "#2C3239",
-		borderBottomWidth: 1,
-		borderColor: "#e0e6ed",
+		alignItems: "center",
+		height: dimension.height * 0.1,
+		backgroundColor: "black",
 		padding: 10,
 		paddingTop: 20,
 		paddingBottom: 20
@@ -343,7 +337,7 @@ const styles = {
 		backgroundColor: "#2C3239",
 		alignItems: "center",
 		justifyContent: "center",
-		borderBottomColor: "#e0e6ed22",
+		borderBottomColor: "gray",
 		borderBottomWidth: 1,
 		padding: 1
 	}

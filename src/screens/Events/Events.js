@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button } from "../../components/general";
+import { Button, ButtonLayout } from "../../components/general";
 import { Agenda } from "react-native-calendars";
 import {
 	TouchableOpacity,
@@ -120,9 +120,7 @@ class Events extends Component {
 							</Text>
 						</TouchableOpacity> }
 					</View>
-					<View style = {{ flex: 0.1 }}>
-						{ this.renderButton() }
-					</View>
+					{ this.renderButton() }
 				</View>
 			</SafeAreaView>
 		);
@@ -152,35 +150,18 @@ class Events extends Component {
 	}
 
 	renderButton() {
-		if (this.props.privilege && this.props.privilege.board)
-			return (
-				<View style = {{ position: "absolute", bottom: dimension.height * 0.032, width: "100%" }}>
-					<View style = {{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
-						<View style = {{ flex: 0.45 }}>
-							<Button
-								title = "Create Event"
-								onPress = { () => {
-									this.props.dateChanged(dateStr);
-									this.props.goToCreateEvent("events");
-								} }
-							/>
-						</View>
-						<View style = {{ flex: 0.45 }}>
-							{ this.selectButton() }
-						</View>
-					</View>
-				</View>
-			);
-		else
-			return (
-				<View style = {{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * 0.032, width: "100%" }}>
-					<View style = {{ flex: 0.3 }}></View>
-					<View style = {{ flex: 1 }}>
-						{ this.selectButton() }
-					</View>
-					<View style = {{ flex: 0.3 }}></View>
-				</View>
-			);
+		return (
+			<ButtonLayout>
+				{ this.props.privilege && this.props.privilege.board && <Button
+					title = "Create Event"
+					onPress = { () => {
+						this.props.dateChanged(dateStr);
+						this.props.goToCreateEvent("events");
+					} }
+				/> }
+				{ this.selectButton() }
+			</ButtonLayout>
+		);
 	}
 
 	getFormattedEventList() {

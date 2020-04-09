@@ -2,12 +2,10 @@ import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { connect } from "react-redux";
-import { Button } from "../../components/general";
+import { ButtonLayout, NavBar } from "../../components/general";
 import { Avatar } from "react-native-elements";
 import Flag from "react-native-flags";
-import RNFetchBlob from "rn-fetch-blob";
-import firebase from "firebase";
-import ImagePicker from "react-native-image-crop-picker";
+import { verifiedCheckMark } from "../../utils/render";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
 
 const dimension = Dimensions.get("window");
@@ -33,6 +31,7 @@ class OtherProfile extends Component {
 
 		return (
 			<SafeAreaView style = {{ flex: 1, backgroundColor: "#0c0b0b" }}>
+				<NavBar back onBack = { () => Actions.pop() } />
 				<View style = {{ backgroundColor: "black", flex: 1 }}>
 					{ this.renderPicture() }
 					<View style = { [bioContainer] }>
@@ -66,9 +65,7 @@ class OtherProfile extends Component {
 						<View style = {{ flex: 0.2 }}></View>
 					</View>
 					{ this.renderSocialMedia() }
-					<View style = {{ flex: 0.3 }}></View>
-					{ this.renderButtons() }
-					<View style = {{ height: dimension.height * 0.08, backgroundColor: "black" }}></View>
+					{ this.renderFlag() }
 				</View>
 			</SafeAreaView>
 		);
@@ -79,41 +76,39 @@ class OtherProfile extends Component {
 			headerInfoContainer,
 			taglineContainer,
 			nameLabelText,
-			textColor
+			textColor,
+			row
 		} = styles;
+
 		const {
 			firstName,
 			lastName,
-			picture
+			picture,
+			paidMember
 		} = this.props;
 
 		return (
 			<View style = { headerInfoContainer }>
-				<View style = {{ backgroundColor: "black", flex: 1 }}>
-					<View style = {{ flex: 0.05, backgroundColor: "black" }}></View>
-					<View style = {{ flex: 1, paddingTop: "3%", paddingLeft: "5%", paddingRight: "5%" }}>
-						{ picture === ""
-						&& <Avatar
-							size = { dimension.height * 0.32 }
-							rounded
-							titleStyle = {{ backgroundColor: this.props.dashColor, height: "100%", width: "100%", justifyContent: "center", paddingTop: "20%" }}
-							title = { firstName[0].concat(lastName[0]) }
-						/> }
-						{ picture !== ""
-						&& <Avatar
-							size = { dimension.height * 0.32 }
-							rounded
-							source = {{ uri: picture }}
-						/> }
+				<View style = {{ flex: 1, paddingTop: "8%", marginBottom: "30%" }}>
+					{ picture === ""
+					&& <Avatar
+						size = { dimension.height * 0.32 }
+						rounded
+						titleStyle = {{ backgroundColor: this.props.dashColor, height: "100%", width: "100%", justifyContent: "center", paddingTop: "20%" }}
+						title = { firstName[0].concat(lastName[0]) }
+					/> }
+					{ picture !== ""
+					&& <Avatar
+						size = { dimension.height * 0.32 }
+						rounded
+						source = {{ uri: picture }}
+					/> }
+				</View>
+				<View style = { [taglineContainer] }>
+					<View style = { row }>
+						<Text style = { [nameLabelText, textColor] }>{ firstName } { lastName }</Text>
+						{ verifiedCheckMark({ paidMember }) }
 					</View>
-					<View style = { taglineContainer }>
-						<View style = {{ flexDirection: "row", alignItems: "center" }}>
-							<View style = {{ flex: 1, alignItems: "center" }}>
-								<Text style = { [nameLabelText, textColor] }>{ firstName + " " + lastName }</Text>
-							</View>
-						</View>
-					</View>
-					<View style = {{ flex: 0.05, backgroundColor: "black" }}></View>
 				</View>
 			</View>
 		);
@@ -126,115 +121,23 @@ class OtherProfile extends Component {
 		};
 	}
 
-	openGallery() {
-		const Blob = RNFetchBlob.polyfill.Blob;
-		const fs = RNFetchBlob.fs;
+	renderFlag() {
 
-		window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
-		window.Blob = Blob;
-
-		ImagePicker.openPicker({
-			width: 300,
-			height: 400,
-			includeBase64: true,
-			compressImageQuality: 0.8,
-			mediaType: "photo",
-			cropping: true,
-			cropperCircleOverlay: true
-		}).then(image => {
-			const imagePath = image.path;
-			let uploadBlob = null;
-			let mime = "image/jpg";
-			const imageRef = firebase.storage().ref("users/profile").child(this.props.id);
-
-			fs.readFile(imagePath, "base64")
-				.then((data) => {
-					// console.log(data);
-
-					return Blob.build(data, { type: `${mime};BASE64` });
-				})
-				.then((blob) => {
-					uploadBlob = blob;
-
-					return imageRef.put(blob, { contentType: mime });
-				})
-				.then(() => {
-					uploadBlob.close();
-
-					return imageRef.getDownloadURL();
-				})
-				.then((url) => {
-					let obj = {};
-
-					this.props.pictureChanged(url);
-					obj["dp"] = url;
-					this.setState(obj);
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		});
-	}
-
-	renderButtons() {
-		const {
-			buttonsContainerStyle
-		} = styles;
-
-		if (this.props.screen)
-			return (
-				<SafeAreaView style = {{}}>
-					<SafeAreaView style = {{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "flex-start", width: "100%", position: "absolute", bottom: dimension.height * 0.032, backgroundColor: "black" }}>
-						<View style = {{ flex: 0.3 }}></View>
-						<View style = { [buttonsContainerStyle, { flex: 1 }] }>
-							<Button
-								title = "Back"
-								onPress = { () => { Actions.pop()	} }
-							/>
-						</View>
-						<View style = {{ flex: 0.3 }}></View>
-					</SafeAreaView>
-				</SafeAreaView>
-			);
+		let flag = null;
+		if (this.props.flag !== "" && this.props.flag) {
+			flag = <Flag
+				type = "flat"
+				code = { this.props.flag }
+				size = { 32 }
+			/>;
+		}
 
 		return (
-			<SafeAreaView style = {{}}>
-				<SafeAreaView style = {{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "flex-start", width: "100%", position: "absolute", bottom: dimension.height * 0.032, backgroundColor: "black" }}>
-					{ /* <TouchableOpacity onPress={this.props.goToEditProfileForm.bind(this)} style={{backgroundColor: "#FECB00", borderWidth: 1, borderColor: "#0000",flex: 1, alignItems: "center", justifyContent: "center"}}>
-						<View style={{justifyContent: "center"}}>
-							<Text style={{fontSize: 18}}> Edit Profile </Text>
-						</View>
-					</TouchableOpacity>
-					<View style={{flex: .01}}></View>
-					<TouchableOpacity onPress={this.props.logoutUser.bind(this)} style={{backgroundColor: "#FECB00", borderWidth: 1, borderColor: "#0000",flex: 1, alignItems: "center", justifyContent: "center"}}>
-						<Text style={{fontSize: 18}}> Logout </Text>
-					</TouchableOpacity>*/ }
-					<View style = { buttonsContainerStyle }>
-						<Button
-							title = "My Profile"
-							onPress = { () => {
-								Actions.push("main");
-								Actions.profile();
-							} }
-						/>
-					</View>
-					{ this.props.flag !== ""
-						&& this.props.flag
-						&& <View style = {{}}>
-							<Flag
-								type = "flat"
-								code = { this.props.flag }
-								size = { 32 }
-							/>
-						</View> }
-					<View style = { buttonsContainerStyle }>
-						<Button
-							title = "Leaderboard"
-							onPress = { () => Actions.pop() }
-						/>
-					</View>
-				</SafeAreaView>
-			</SafeAreaView>
+			<ButtonLayout>
+				<View style = {{ alignItems: "center" }}>
+					{ flag }
+				</View>
+			</ButtonLayout>
 		);
 	}
 
@@ -282,6 +185,11 @@ const styles = {
 	},
 	textColor: {
 		color: "#e0e6ed"
+	},
+	row: {
+		flex: 1,
+		alignItems: "center",
+		flexDirection: "row"
 	},
 	taglineContainer: {
 		flex: 0.4,
@@ -349,7 +257,8 @@ const mapStateToProps = ({ members, general, user }) => {
 		picture,
 		quote,
 		dashColor,
-		flag
+		flag,
+		paidMember
 	} = members;
 	const {
 		loading
@@ -369,7 +278,8 @@ const mapStateToProps = ({ members, general, user }) => {
 		loading,
 		privilege,
 		dashColor,
-		flag
+		flag,
+		paidMember
 	};
 };
 

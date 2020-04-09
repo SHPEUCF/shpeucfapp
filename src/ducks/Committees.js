@@ -1,16 +1,16 @@
-import { createActiontypes } from "../utils/actions";
+import { createActionTypes } from "../utils/actions";
 import { Actions } from "react-native-router-flux";
 import firebase from "firebase";
 
 // handle all things related to Elections
-const ACTIONS = createActiontypes([
+const ACTIONS = createActionTypes([
 	"GET_COMMITTEES",
 	"GO_TO_COMMITTEE_FORM",
 	"EDIT_COMMITTEE",
 	"DELETE_COMMITTEE",
 	"COMMITTEE_DESCRIPTION_CHANGED",
 	"COMMITTEE_TITLE_CHANGED",
-	"CHAIR_CHANGED",
+	"CHAIR_PERSON_CHANGED",
 	"LOAD_COMMITTEE"
 ]);
 
@@ -60,7 +60,7 @@ export default (state = INITIAL_STATE, action) => {
 				...state,
 				committeeDescription: payload
 			};
-		case ACTIONS.CHAIR_CHANGED:
+		case ACTIONS.CHAIR_PERSON_CHANGED:
 			return {
 				...state,
 				chair: payload
@@ -203,9 +203,9 @@ export const committeeDescriptionChanged = (text) => {
 	};
 };
 
-export const chairChanged = (person) => {
+export const chairPersonChanged = (person) => {
 	return {
-		type: ACTIONS.CHAIR_CHANGED,
+		type: ACTIONS.CHAIR_PERSON_CHANGED,
 		payload: person
 	};
 };

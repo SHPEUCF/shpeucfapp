@@ -26,7 +26,7 @@ import {
 
 const collegeNames = Object.keys(collegesJson);
 let colleges = {};
-collegeNames.map(college => { colleges[college] = collegeNames[college] });
+collegeNames.map(college => { colleges[college] = collegesJson[college] });
 
 const continents = Object.keys(countriesJson);
 let countries = {};
@@ -115,23 +115,26 @@ class RegistrationForm extends Component {
 		const {
 			college,
 			collegeChanged,
+			major,
 			majorChanged
 		} = this.props;
 
-		const p1 = college && college !== "" && college != "Do not wish to disclose"
+		const p1 = colleges && college
 			? <PickerInput
 				title = { "Major" }
+				value = { major }
 				data = { colleges[college] }
 				placeholder = { "Select major" }
 				onSelect = { (text) => majorChanged(text) }
 			/>
-			: <View></View>;
+			: null;
 
 		return (
 			<View>
 				<PickerInput
 					title = { "Colleges" }
-					data = { colleges }
+					value = { college }
+					data = { collegeNames }
 					placeholder = { "Select college" }
 					onSelect = { (text) => collegeChanged(text) } />
 				{ p1 }
@@ -146,7 +149,7 @@ class RegistrationForm extends Component {
 			nationalityChanged
 		} = this.props;
 
-		const p1 = continent && continent !== "" && continent !== "Do not wish to disclose"
+		const p1 = continent && continent !== "Do not wish to disclose"
 			? <PickerInput
 				title = { "Nationality" }
 				data = { countries[continent] }

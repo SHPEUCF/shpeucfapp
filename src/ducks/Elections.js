@@ -1,8 +1,8 @@
 import firebase from "firebase";
 import { Actions } from "react-native-router-flux";
-import { createActiontypes } from "../utils/actions";
+import { createActionTypes } from "../utils/actions";
 // handle all things related to Elections
-const ACTIONS = createActiontypes([
+const ACTIONS = createActionTypes([
 	"OPEN_ELECTION",
 	"CLOSE_ELECTION",
 	"OPEN_APPLICATIONS",

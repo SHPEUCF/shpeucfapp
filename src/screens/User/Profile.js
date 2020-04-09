@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import firebase from "firebase";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { connect } from "react-redux";
-import { Button } from "../../components/general";
+import { Button, ButtonLayout } from "../../components/general";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
 import { Avatar } from "react-native-elements";
 import ImagePicker from "react-native-image-crop-picker";
 import RNFetchBlob from "rn-fetch-blob";
 import Flag from "react-native-flags";
+import { verifiedCheckMark } from "../../utils/render";
 import { loadUser, logoutUser, goToEditProfileForm, pageLoad, pictureChanged } from "../../ducks";
 
 const dimension = Dimensions.get("window");
@@ -65,21 +66,12 @@ class Profile extends Component {
 								<View style = {{ flex: 1, justifyContent: "center" }}>
 									<Text style = { [itemValueText, textColor] }>{ points }</Text>
 								</View>
-								{ /* <View style={{flex: 1, justifyContent: "center", flexDirection: "row", alignItems: "center"}}>
-									<TouchableOpacity style = {{flexDirection: "row", flex: 1}} onPress = {() => Actions.pointsBreakDown()}>
-									<Text style={[itemValueText, textColor]}>{points}</Text>
-										<View style = {{flex: .2}}>
-											<Ionicons name="ios-arrow-dropright" size={dimension.height * .025} style={{color: '#FECB00', backgroundColor: "transparent", alignSelf: "center"}}/>
-										</View>
-									</TouchableOpacity>
-								</View> */ }
 							</View>
 							<View style = {{ flex: 0.1 }}></View>
 						</View>
 						<View style = {{ flex: 0.2 }}></View>
 					</View>
 					{ this.renderSocialMedia() }
-					<View style = {{ flex: 0.3 }}></View>
 					{ this.renderButtons() }
 				</View>
 			</SafeAreaView>
@@ -91,44 +83,42 @@ class Profile extends Component {
 			headerInfoContainer,
 			taglineContainer,
 			nameLabelText,
-			textColor
+			textColor,
+			row
 		} = styles;
+
 		const {
 			firstName,
 			lastName,
-			picture
+			picture,
+			privilege
 		} = this.props;
 
 		return (
 			<View style = { [headerInfoContainer] }>
-				<View style = {{ backgroundColor: "black", flex: 1 }}>
-					<View style = {{ flex: 0.05, backgroundColor: "black" }}></View>
-					<View style = {{ flex: 1, paddingTop: "3%", paddingLeft: "5%", paddingRight: "5%" }}>
-						{ picture === ""
-						&& <Avatar
-							size = { dimension.height * 0.32 }
-							rounded
-							titleStyle = {{ backgroundColor: this.props.dashColor }}
-							overlayContainerStyle = {{ backgroundColor: this.props.dashColor }}
-							title = { firstName[0].concat(lastName[0]) }
-							onPress = { () => this.openGallery() }
-						/>	}
-						{ picture !== ""
-						&& <Avatar
-							size = { dimension.height * 0.32 }
-							rounded
-							source = {{ uri: picture }}
-							onPress = { () => this.openGallery() }
-						/> }
+				<View style = {{ flex: 1, paddingTop: "8%", marginBottom: "30%" }}>
+					{ picture === ""
+					&& <Avatar
+						size = { dimension.height * 0.32 }
+						rounded
+						titleStyle = {{ backgroundColor: this.props.dashColor }}
+						overlayContainerStyle = {{ backgroundColor: this.props.dashColor }}
+						title = { firstName[0].concat(lastName[0]) }
+						onPress = { () => this.openGallery() }
+					/>	}
+					{ picture !== ""
+					&& <Avatar
+						size = { dimension.height * 0.32 }
+						rounded
+						source = {{ uri: picture }}
+						onPress = { () => this.openGallery() }
+					/> }
+				</View>
+				<View style = { [taglineContainer] }>
+					<View style = { row }>
+						<Text style = { [nameLabelText, textColor] }>{ firstName } { lastName }</Text>
+						{ verifiedCheckMark(privilege || {}) }
 					</View>
-					<View style = { [taglineContainer] }>
-						<View style = {{ flexDirection: "row", alignItems: "center" }}>
-							<View style = {{ flex: 1, alignItems: "center" }}>
-								<Text style = { [nameLabelText, textColor] }>{ firstName + " " + lastName }</Text>
-							</View>
-						</View>
-					</View>
-					<View style = {{ flex: 0.05, backgroundColor: "black" }}></View>
 				</View>
 			</View>
 		);
@@ -191,40 +181,29 @@ class Profile extends Component {
 	}
 
 	renderButtons() {
-		const {
-			buttonsContainerStyle
-		} = styles;
+		let icon = this.props.flag !== "" && this.props.flag ? {
+			data: <Flag
+				type = "flat"
+				code = { this.props.flag }
+				size = { 32 }
+			/>,
+			layer: 1
+		} : null;
 
 		return (
-			<View style = {{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * 0.032, width: "100%" }}>
-				{ /* <TouchableOpacity onPress={this.props.goToEditProfileForm.bind(this)} style={{backgroundColor: "#FECB00", borderWidth: 1, borderColor: "#0000",flex: 1, alignItems: "center", justifyContent: "center"}}>
-					<View style={{justifyContent: "center"}}>
-					<Text style={{fontSize: 18}}> Edit Profile </Text>
-					</View>
-					</TouchableOpacity>
-					<View style={{flex: .01}}></View>
-					<TouchableOpacity onPress={this.props.logoutUser.bind(this)} style={{backgroundColor: "#FECB00", borderWidth: 1, borderColor: "#0000",flex: 1, alignItems: "center", justifyContent: "center"}}>
-					<Text style={{fontSize: 18}}> Logout </Text>
-				</TouchableOpacity>*/ }
-				<View style = { buttonsContainerStyle }>
+			<View>
+				<ButtonLayout
+					icon = { icon }
+				>
 					<Button
 						title = "Edit profile"
 						onPress = { this.props.goToEditProfileForm.bind(this) }
 					/>
-				</View>
-				{ this.props.flag !== "" && this.props.flag && <View style = {{}}>
-					<Flag
-						type = "flat"
-						code = { this.props.flag }
-						size = { 32 }
-					/>
-				</View> }
-				<View style = { buttonsContainerStyle }>
 					<Button
 						title = "Logout"
 						onPress = { this.props.logoutUser.bind(this) }
 					/>
-				</View>
+				</ButtonLayout>
 			</View>
 		);
 	}
@@ -243,7 +222,6 @@ class Profile extends Component {
 						<TouchableOpacity
 							onPress = { () => {
 								alert("Coming Soon");
-								// Actions.PostShow({ title: 'Linkedin', uri: 'https://www.linkedin.com/'})
 							} }>
 							<Ionicons name = "logo-linkedin" size = { dimension.height * 0.045 } color = 'white' />
 						</TouchableOpacity>
@@ -253,7 +231,6 @@ class Profile extends Component {
 						<TouchableOpacity
 							onPress = { () => {
 								alert("Coming Soon");
-								// Actions.PostShow({ title: 'Github', uri: 'https://www.github.com/'})
 							} }>
 							<Ionicons name = "ios-mail" size = { dimension.height * 0.045 } color = 'white' />
 						</TouchableOpacity>
@@ -273,6 +250,11 @@ const styles = {
 	},
 	textColor: {
 		color: "#e0e6ed"
+	},
+	row: {
+		flex: 1,
+		alignItems: "center",
+		flexDirection: "row"
 	},
 	taglineContainer: {
 		flex: 0.4,
@@ -341,7 +323,8 @@ const mapStateToProps = ({ user, general }) => {
 		quote,
 		id,
 		dashColor,
-		flag
+		flag,
+		privilege
 	} = user;
 	const {
 		loading
@@ -358,7 +341,9 @@ const mapStateToProps = ({ user, general }) => {
 		loading,
 		id,
 		dashColor,
-		flag };
+		flag,
+		privilege
+	 };
 };
 
 const mapDispatchToProps = {

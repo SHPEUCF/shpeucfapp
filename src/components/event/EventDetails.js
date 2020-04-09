@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button, NavBar, FilterPicker } from "../general";
+import { Button, NavBar, FilterList, ButtonLayout } from "../general";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Actions } from "react-native-router-flux";
 import QRCode from "react-native-qrcode-svg";
 import QRCodeScanner from "react-native-qrcode-scanner";
+import { months } from "../../data/DateItems";
 import {
 	View,
 	TouchableOpacity,
@@ -36,13 +37,14 @@ import {
 	startTimeChanged,
 	endTimeChanged
 } from "../../ducks";
+import { MemberPanel } from "../../utils/actions";
 
 const dimension = Dimensions.get("screen");
 
 class EventDetails extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { modalVisible: false, pickerVisible: false };
+		this.state = { modalVisible: false };
 	}
 
 	componentDidMount() {
@@ -57,7 +59,6 @@ class EventDetails extends Component {
 	}
 
 	convertNumToDate(date) {
-		let months = ["Jan", "Feb", "Mar", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 		let tempDate = date.split("-");
 
 		return `${months[Number(tempDate[1]) - 1]} ${tempDate[2]}`;
@@ -235,7 +236,8 @@ class EventDetails extends Component {
 			attendance,
 			attendanceContainer,
 			icon,
-			textColor
+			textColor,
+			fullFlex
 		} = styles;
 
 		if (!eventList || !eventList[eventID]) return null;
@@ -244,15 +246,15 @@ class EventDetails extends Component {
 			let attendants = Object.keys(eventList[eventID].attendance);
 
 			return (
-				<View style = { [{ flex: 1, flexDirection: "column" }, lineOnTop] }>
+				<View style = { [fullFlex, lineOnTop] }>
 					<View style = { attendanceContainer }>
-						<View style = {{ flex: 0.5 }} />
+						<View style = { icon } />
 						<Text style = { [attendance, textColor] }>Attendance</Text>
 						<Ionicons
-							style = { [icon, { alignSelf: "center" }, textColor] }
+							style = { [icon, textColor] }
 							name = "md-mail"
 							size = { 35 }
-							color = 'e0e6ed'
+							color = "e0e6ed"
 							onPress = { () => this.sendListToMail(attendants) }
 						/>
 					</View>
@@ -273,7 +275,7 @@ class EventDetails extends Component {
 		this.setState({ modalVisible: true });
 	}
 
-	deleteButton() {
+	confirmDelete() {
 		this.props.deleteEvents(this.props.eventID);
 		Actions.pop();
 	}
@@ -295,35 +297,38 @@ class EventDetails extends Component {
 
 	renderPickMembers() {
 		const {
-			filter,
 			userList,
 			eventList,
-			eventID,
-			filterChanged
+			eventID
 		} = this.props;
 
 		if (!eventList) return null;
 
+		let list = Object.assign({}, userList);
 		let excludeDataProp = !eventList[eventID] ? {} : Object.assign({}, eventList[eventID].attendance);
-
+		let Wrapper = (props) => <Button
+			title = "Manual Check In"
+			onPress = { props.onPress }
+		/>;
 		if (!excludeDataProp) excludeDataProp = { [this.props.id]: true };
 		else Object.assign(excludeDataProp, { [this.props.id]: true });
 
+		Object.keys(excludeDataProp).forEach(function (key) {
+			delete list[key];
+		});
+
 		return (
 			<View>
-				<FilterPicker
-					title = { "Members" }
-					visible = { this.state.pickerVisible }
-					callUser = { (id) => this.callUser(id) }
-					filter = { filter }
+				<FilterList
+					ref = { child => { this.child = child } } { ...this.props }
 					type = "Multiple"
-					data = { userList }
-					excludeData = { excludeDataProp }
-					onChangeText = { filterChanged.bind(this) }
-					onClose = { () => {	this.setState({ pickerVisible: false }) } }
+					CustomForm = { Wrapper }
+					data = { list }
+					regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
+					selectBy = { (data) => { return data.id } }
+					itemJSX = { (data) => MemberPanel(data) }
 					onSelect = { (selectedUsers) => {
 						this.checkInMembers(selectedUsers);
-						this.setState({ pickerVisible: false });
 					} }
 				/>
 			</View>
@@ -398,8 +403,8 @@ class EventDetails extends Component {
 		} = this.props;
 
 		let userArr = Object.values(selectedUsers);
-		userArr.forEach(function(userID) {
-			checkIn(eventID, points, userID, { id: id, name: firstName + " " + lastName });
+		userArr.forEach(function(user) {
+			checkIn(eventID, points, user.id, { id: id, name: firstName + " " + lastName });
 		});
 	}
 
@@ -414,79 +419,63 @@ class EventDetails extends Component {
 	}
 
 	renderButtons() {
-		if (this.props.privilege && this.props.privilege.board)
-			return (
-				<View>
-					<View style = {{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * 0.1, width: "100%" }}>
-						<View style = {{ flex: 0.45 }}>
-							<Button
-								title = "Open check-in"
-								onPress = { this.openCheckInButton.bind(this) }
-							/>
-						</View>
-						<View style = {{ flex: 0.45 }}>
-							<Button
-								title = "Manual check-in"
-								onPress = { () => this.setState({ pickerVisible: true }) }
-							/>
-						</View>
-					</View>
-					<View style = {{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * 0.032, width: "100%" }}>
-						<View style = {{ flex: 0.45 }}>
-							<Button
-								title = "Edit event"
-								onPress = { () => {
-									this.props.startTimeChanged(this.prepend0(this.props.startTime));
-									this.props.endTimeChanged(this.prepend0(this.props.endTime));
-									this.props.goToCreateEventFromEdit(this.props.screen);
-								} } />
-						</View>
-						<View style = {{ flex: 0.45 }}>
-							<Button
-								title = "Delete event"
-								onPress = { () => Alert.alert("Confirmation", "Are you sure you want to delete", [
-									{
-										text: "Confirm",
-										onPress: () => this.deleteButton()
-									},
-									{
-										text: "Cancel"
-									}
-								]) }
-							/>
-						</View>
-					</View>
-				</View>
-			);
-		else
-			return (
-				<View>
-					{ this.limitRSVP(this.props.date) && <View style = {{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * 0.032, width: "100%" }}>
-						<View style = {{ flex: 0.45 }}>
-							<Button
-								title = "Check in"
-								onPress = { () => { this.setState({ modalVisible: true }) } }
-							/>
-						</View>
-						<View style = {{ flex: 0.45 }}>
-							<Button
-								title = "RSVP"
-								onPress = { () => {	this.renderRSVP() } }
-							/>
-						</View>
-					</View> }
-					{ !this.limitRSVP(this.props.date) && <View style = {{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * 0.032, width: "100%" }}>
-						<View style = {{ flex: 0.3 }}></View>
-						<View style = {{ flex: 1 }}>
-							<Button
-								title = "Check in"
-								onPress = { () => { this.setState({ modalVisible: true })	} }
-							/>
-						</View>
-						<View style = {{ flex: 0.3 }}></View>
-					</View> }
-				</View>
-			);
+		let buttons = [];
+
+		if (this.props.privilege && this.props.privilege.board) {
+			buttons = <ButtonLayout>
+				<Button
+					title = "Open check-in"
+					onPress = { () => this.openCheckInButton() }
+				/>
+				{ this.renderPickMembers() }
+				<Button
+					title = "Edit event"
+					onPress = { () => {
+						this.props.startTimeChanged(this.prepend0(this.props.startTime));
+						this.props.endTimeChanged(this.prepend0(this.props.endTime));
+						this.props.goToCreateEventFromEdit(this.props.screen);
+					} }
+				/>
+				<Button
+					title = "Delete event"
+					onPress = { () => Alert.alert("Confirmation", "Are you sure you want to delete", [
+						{
+							text: "Confirm",
+							onPress: () => this.confirmDelete()
+						},
+						{
+							text: "Cancel"
+						}
+					]) }
+				/>
+			</ButtonLayout>
+			;
+		}
+
+		else {
+			buttons = <ButtonLayout>
+				<Button
+					title = "Check in"
+					onPress = { () => { this.setState({ modalVisible: true }) } }
+				/>
+				{ this.limitRSVP(this.props.date) && <Button
+					title = "RSVP"
+					onPress = { () => {	this.renderRSVP() } }
+				/> }
+
+				{ !this.limitRSVP(this.props.date) && <Button
+					title = "Check in"
+					onPress = { () => { this.setState({ modalVisible: true }) } }
+				/> }
+			</ButtonLayout>
+			;
+		}
+
+		return (
+			<View>
+				{ buttons }
+			</View>
+		);
 	}
 
 	render() {
@@ -522,23 +511,38 @@ class EventDetails extends Component {
 			return (
 				<SafeAreaView style = { page }>
 					<NavBar title = { viewName } back onBack = { () => Actions.pop() } />
-					{ this.renderPickMembers() }
 					<View style = { container }>
 						<View style = { iconContainer }>
-							<Ionicons style = { [icon, textColor] } name = "md-calendar" size = { iconSize } color = '#000' />
+							<Ionicons
+								style = { [icon, textColor] }
+								name = "md-calendar"
+								size = { iconSize }
+								color = "#000" />
 							<Text style = { [text, textColor] }>{ this.convertNumToDate(date) }</Text>
 						</View>
 						<View style = { iconContainer }>
-							<Ionicons style = { [icon, textColor] } name = "md-time" size = { iconSize } color = '#000' />
+							<Ionicons
+								style = { [icon, textColor] }
+								name = "md-time"
+								size = { iconSize }
+								color = "#000" />
 							<Text style = { [text, textColor] }>{ startTime }-{ endTime }</Text>
 						</View>
 						<View style = { iconContainer }>
-							<Ionicons style = { [icon, textColor] } name = "md-pin" size = { iconSize } color = '#000' />
+							<Ionicons
+								style = { [icon, textColor] }
+								name = "md-pin"
+								size = { iconSize }
+								color = "#000" />
 							<Text style = { [text, textColor] }>{ location }</Text>
 						</View>
 						{ description != ""
 						&& <View style = { [iconContainer, { flex: 0.7 }] }>
-							<Ionicons style = { [icon, textColor] } name = "md-list" size = { iconSize } color = '#000' />
+							<Ionicons
+								style = { [icon, textColor] }
+								name = "md-list"
+								size = { iconSize }
+								color = "#000" />
 							<Text style = { [text, textColor] }>{ description }</Text>
 						</View> }
 						{ this.renderEventListNum(iconSize) }
@@ -546,8 +550,8 @@ class EventDetails extends Component {
 							{ this.renderAttendance() }
 						</View>
 					</View>
-					{ this.renderButtons() }
 					{ this.renderCodeBox() }
+					{ this.renderButtons() }
 					<View style = {{ height: dimension.height * 0.08, backgroundColor: "black" }}></View>
 				</SafeAreaView>
 			);
@@ -628,13 +632,14 @@ const styles = {
 		flex: 0.2
 	},
 	attendanceContainer: {
-		flex: 0.5,
-		flexDirection: "row"
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center"
 	},
 	attendance: {
+		flex: 0.8,
 		fontSize: 20,
-		alignSelf: "center",
-		flex: 0.8
+		textAlign: "center"
 	},
 	text: {
 		flex: 1,
@@ -653,7 +658,7 @@ const styles = {
 	},
 	page: {
 		flex: 1,
-		backgroundColor: "#0c0b0b"
+		backgroundColor: "black"
 	},
 	tabBar: {
 		height: dimension.height * 0.1,
@@ -696,6 +701,13 @@ const styles = {
 	},
 	buttonTouchable: {
 		padding: 16
+	},
+	textStyle: {
+		color: "#e0e6ed",
+		fontSize: dimension.width * 0.05
+	},
+	fullFlex: {
+		flex: 1
 	}
 };
 
