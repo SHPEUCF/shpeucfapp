@@ -19,8 +19,9 @@ import CommitteeForm from "../components/general/CommitteeForm";
 import {
 	AdminHub,
 	CommitteesAdmin,
-	ElectionAdmin
-} from "../screens";
+	ElectionAdmin,
+	MemberAdmin
+} from "../screens"
 
 /** Import Committees **/
 import {
@@ -375,6 +376,12 @@ const RouterComponent = () => {
 								key = "CommitteesAdmin"
 								component = { CommitteesAdmin }
 								title = "Committees"
+								hideTabBar
+							/>
+							<Scene
+								key = "MemberAdmin"
+								component = { MemberAdmin }
+								title = "Members"
 								hideTabBar
 							/>
 						</Stack>

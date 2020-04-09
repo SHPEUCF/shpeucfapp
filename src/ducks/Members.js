@@ -362,7 +362,9 @@ export const changePrivilegeOfMembers = (members, privilegeChanged, value) => {
 			updates[memberId][privilegeChanged] = value;
 		});
 
-		firebase.database().ref("/privileges/").update(updates);
+		firebase.database().ref("/privileges/").update(updates)
+			.then(() => alert("Changes Succesful"))
+			.catch(() => alert("Changes were not successful"));
 	});
 
 	if (privilegeChanged === "paidMember")
@@ -373,7 +375,8 @@ export const changePrivilegeOfMembers = (members, privilegeChanged, value) => {
 				updates[memberId][privilegeChanged] = value;
 			});
 
-			firebase.database().ref("/users/").update(updates);
+			firebase.database().ref("/users/").update(updates)
+				.catch(() => alert("Changes were not successful"));
 		});
 };
 
