@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { NavBar, Button } from "../../components/general";
+import { NavBar, Button, ButtonLayout } from "../../components/general";
 import _ from "lodash";
-import { FlatList,	Text,	View,	Dimensions } from "react-native";
+import { FlatList,	Text,	SafeAreaView,	Dimensions, View } from "react-native";
 import {
 	openElection,
 	closeElection,
@@ -54,7 +54,7 @@ class ElectionAdmin extends Component {
 		}
 
 		return (
-			<View style = { page }>
+			<SafeAreaView style = { page }>
 				<NavBar title = "Election" back onBack = { () => Actions.pop() } />
 				<View style = { content }>
 					<Text style = { textColor }>Total Votes: { this.props.numOfVotes }</Text>
@@ -62,27 +62,29 @@ class ElectionAdmin extends Component {
 				<View style = {{ flex: 20 }}>
 					{ this.renderFlatlist(positionOrder) }
 				</View>
-				<View style = { buttonContainerStyling }>
-					{ this.openOrClose() }
-				</View>
-				<View style = { buttonContainerStyling }>
-					{ this.applyOpenOrClose() }
-				</View>
-				<View style = { buttonContainerStyling }>
-					<Button
-						onPress = { () => Actions.ElectionPositions() }
-						title = { "MANAGE POSITIONS" }
-					>
-					</Button>
-				</View>
-				<View style = { buttonContainerStyling }>
-					<Button
-						onPress = { () => Actions.ElectionCandidates() }
-						title = { "MANAGE CANDIDATES" }
-					>
-					</Button>
-				</View>
-			</View>
+				<ButtonLayout>
+					<View style = { buttonContainerStyling }>
+						{ this.openOrClose() }
+					</View>
+					<View style = { buttonContainerStyling }>
+						{ this.applyOpenOrClose() }
+					</View>
+					<View style = { buttonContainerStyling }>
+						<Button
+							onPress = { () => Actions.ElectionPositions() }
+							title = { "Manage Positions" }
+						>
+						</Button>
+					</View>
+					<View style = { buttonContainerStyling }>
+						<Button
+							onPress = { () => Actions.ElectionCandidates() }
+							title = { "Manage Candidates" }
+						>
+						</Button>
+					</View>
+				</ButtonLayout>
+			</SafeAreaView>
 		);
 	}
 
@@ -104,14 +106,14 @@ class ElectionAdmin extends Component {
 			return (
 				<Button
 					onPress = { () => this.props.closeElection() }
-					title = { "CLOSE ELECTION" }
+					title = { "Close Election" }
 				/>
 			);
 		else
 			return (
 				<Button
 					onPress = { () => this.props.openElection() }
-					title = { "OPEN ELECTION" }
+					title = { "Open Election" }
 				/>
 			);
 	}
@@ -121,14 +123,14 @@ class ElectionAdmin extends Component {
 			return (
 				<Button
 					onPress = { () => this.props.closeApplications() }
-					title = { "CLOSE APPLICATIONS" }
+					title = { "Close Applications" }
 				/>
 			);
 		else
 			return (
 				<Button
 					onPress = { () => this.props.openApplications() }
-					title = { "OPEN APPLICATIONS" }
+					title = { "Open Applications" }
 				/>
 			);
 	}
@@ -221,7 +223,7 @@ const styles = {
 	},
 	page: {
 		flex: 1,
-		backgroundColor: "#2C3239"
+		backgroundColor: "black"
 	}
 };
 

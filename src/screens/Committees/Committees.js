@@ -361,8 +361,7 @@ const styles = {
 		flexDirection: "row"
 	},
 	content: {
-		flex: 0.98,
-		backgroundColor: "black"
+		flex: 0.98
 	},
 	buttonContainerStyle: {
 		flex: 0.5,

@@ -109,7 +109,7 @@ class More extends Component {
 						leftIcon = {{ name: item.icon, color: "white" }}
 						rightIcon = { <Ionicons
 							name = "ios-arrow-dropright"
-							size = { dimension.height * 0.025 }
+							size = { 22 }
 							style = {{ color: "#FECB00" }}
 						/> }
 						onPress = { () => Actions[item.screen]() }

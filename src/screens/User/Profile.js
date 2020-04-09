@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import firebase from "firebase";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { connect } from "react-redux";
-import { Button } from "../../components/general";
+import { Button, ButtonLayout } from "../../components/general";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
 import { Avatar } from "react-native-elements";
 import ImagePicker from "react-native-image-crop-picker";
@@ -72,7 +72,6 @@ class Profile extends Component {
 						<View style = {{ flex: 0.2 }}></View>
 					</View>
 					{ this.renderSocialMedia() }
-					<View style = {{ flex: 0.3 }}></View>
 					{ this.renderButtons() }
 				</View>
 			</SafeAreaView>
@@ -97,7 +96,7 @@ class Profile extends Component {
 
 		return (
 			<View style = { [headerInfoContainer] }>
-				<View style = {{ flex: 1, paddingTop: "8%" }}>
+				<View style = {{ flex: 1, paddingTop: "8%", marginBottom: "30%" }}>
 					{ picture === ""
 					&& <Avatar
 						size = { dimension.height * 0.32 }
@@ -182,31 +181,29 @@ class Profile extends Component {
 	}
 
 	renderButtons() {
-		const {
-			buttonsContainerStyle
-		} = styles;
+		let icon = this.props.flag !== "" && this.props.flag ? {
+			data: <Flag
+				type = "flat"
+				code = { this.props.flag }
+				size = { 32 }
+			/>,
+			layer: 1
+		} : null;
 
 		return (
-			<View style = {{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * 0.032, width: "100%" }}>
-				<View style = { buttonsContainerStyle }>
+			<View>
+				<ButtonLayout
+					icon = { icon }
+				>
 					<Button
 						title = "Edit profile"
 						onPress = { this.props.goToEditProfileForm.bind(this) }
 					/>
-				</View>
-				{ this.props.flag !== "" && this.props.flag && <View style = {{}}>
-					<Flag
-						type = "flat"
-						code = { this.props.flag }
-						size = { 32 }
-					/>
-				</View> }
-				<View style = { buttonsContainerStyle }>
 					<Button
 						title = "Logout"
 						onPress = { this.props.logoutUser.bind(this) }
 					/>
-				</View>
+				</ButtonLayout>
 			</View>
 		);
 	}
