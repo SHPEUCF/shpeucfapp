@@ -114,7 +114,6 @@ class ElectionApplication extends Component {
 			titleStyle
 		} = styles;
 
-
 		return (
 			<View style = { fullFlex }>
 				<Text style = { [fontLarge, textColor, titleStyle ] }>
