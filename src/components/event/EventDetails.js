@@ -536,7 +536,7 @@ class EventDetails extends Component {
 								color = "#000" />
 							<Text style = { [text, textColor] }>{ location }</Text>
 						</View>
-						{ description
+						{ description != ""
 						&& <View style = { [iconContainer, { flex: 0.7 }] }>
 							<Ionicons
 								style = { [icon, textColor] }

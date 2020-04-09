@@ -675,6 +675,12 @@ const styles = {
 		width: dimension.width,
 		backgroundColor: "#000a"
 	},
+	modalContent: {
+		height: dimension.height * 0.5,
+		width: dimension.width * 0.8,
+		padding: dimension.height * 0.008,
+		backgroundColor: "#21252b"
+	},
 	committeesPanelContainer: {
 		flexDirection: "row",
 		flex: 1,
