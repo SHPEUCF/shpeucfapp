@@ -7,16 +7,7 @@ import { FlatList, Text, SafeAreaView, View, TouchableOpacity } from "react-nati
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import {
 	getPositions,
-	goToOtherProfile,
-	pageLoad,
-	getPrivilege,
 	addApplication,
-	candidateFNameChanged,
-	candidateLNameChanged,
-	candidatePlanChanged,
-	candidatePositionChanged,
-	goToCandidateForm,
-	vote,
 	editApplication
 } from "../../ducks";
 
@@ -29,8 +20,9 @@ class ElectionApplication extends Component {
 	}
 
 	state = {
-		applying: this.props.applied,
+		currentlyApplying: this.props.applied,
 		positionSelected: "",
+		candidatePlan: "",
 		index: null
 	};
 
@@ -40,7 +32,7 @@ class ElectionApplication extends Component {
 
 	render() {
 		const {
-			applying
+			currentlyApplying
 		} = this.state;
 
 		const {
@@ -55,14 +47,16 @@ class ElectionApplication extends Component {
 
 		const positionsArray = _.orderBy(positions, iterateesPos, orderPos);
 
-		const content = applying || applied ? this.showApplication() : this.renderPositions(positionsArray);
+		const content = currentlyApplying || applied ? this.showApplication() : this.renderPositions(positionsArray);
 
 		return (
 			<SafeAreaView style = { [page, fullFlex] }>
 				<NavBar
 					title = "Positions"
 					back
-					onBack = { () => applying ? Actions.pop() : this.setState({ applying: false }) } />
+					onBack = { () => {
+						return currentlyApplying ? Actions.pop() : this.setState({ currentlyApplying: false });
+					} } />
 				<View style = { fullFlex }>
 					{ content }
 				</View>
@@ -85,9 +79,13 @@ class ElectionApplication extends Component {
 	showApplication() {
 		const {
 			firstName,
-			lastName,
-			candidatePlan
+			lastName
 		} = this.props;
+
+		const {
+			candidatePlan,
+			positionSelected
+		} = this.state;
 
 		const {
 			fullFlex,
@@ -102,7 +100,7 @@ class ElectionApplication extends Component {
 		return (
 			<View style = { fullFlex }>
 				<Text style = { [fontLarge, textColor, titleStyle ] }>
-					{ activeApplicationPosition || this.state.positionSelected }
+					{ activeApplicationPosition || positionSelected }
 				</Text>
 				<Text style = { [fontLarge, textColor] }>
 					{ firstName } { lastName }
@@ -118,7 +116,7 @@ class ElectionApplication extends Component {
 					multiline = { true }
 					placeholder = "Please write your plan for members to read."
 					value = { candidatePlan }
-					onChangeText = { (plan) => this.onPlanChange(plan) }
+					onChangeText = { (plan) => this.setState({ candidatePlan: plan }) }
 				/>
 			</View>
 		);
@@ -158,7 +156,7 @@ class ElectionApplication extends Component {
 		return (
 			<TouchableOpacity
 				onPress = { () => {
-					this.setState({ applying: true, positionSelected: item.title });
+					this.setState({ currentlyApplying: true, positionSelected: item.title });
 				} }
 				style = { [positionContainer, fullFlex] }>
 				<View>
@@ -174,27 +172,23 @@ class ElectionApplication extends Component {
 		);
 	}
 
-	onPlanChange(text) {
-		this.props.candidatePlanChanged(text);
-	}
-
 	renderButtons() {
 		const {
 			firstName,
 			lastName,
-			candidatePlan,
 			applied,
 			picture
 		} = this.props;
 
 		const {
-			applying,
-			positionSelected
+			currentlyApplying,
+			positionSelected,
+			candidatePlan
 		} = this.state;
 
 		let submitButton;
 
-		if (applying || applied)
+		if (currentlyApplying || applied)
 			submitButton = <Button
 				title = { (applied && "Edit " || "Submit ") + "Application" }
 				onPress = { () => {
@@ -217,8 +211,8 @@ class ElectionApplication extends Component {
 	}
 
 	stopApplication() {
-		if (!this.props.applied && this.state.applying)
-			this.setState({ applying: false });
+		if (!this.props.applied && this.state.currentlyApplying)
+			this.setState({ currentlyApplying: false });
 		else Actions.pop();
 	}
 }
@@ -260,10 +254,7 @@ const styles = {
 
 const mapStateToProps = ({ elect, user }) => {
 	const {
-		election,
-		positions,
-		candidatePlan,
-		apply
+		positions
 	} = elect;
 
 	const {
@@ -276,30 +267,18 @@ const mapStateToProps = ({ elect, user }) => {
 	} = user;
 
 	return {
-		election,
 		positions,
-		candidatePlan,
 		firstName,
 		lastName,
 		id,
 		voted,
-		apply,
 		applied,
 		picture
 	};
 };
 
 const mapDispatchToProps = {
-	getPositions,
-	goToOtherProfile,
-	pageLoad,
-	getPrivilege,
-	goToCandidateForm,
-	candidateFNameChanged,
-	candidateLNameChanged,
-	candidatePlanChanged,
-	candidatePositionChanged,
-	vote
+	getPositions
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ElectionApplication);
