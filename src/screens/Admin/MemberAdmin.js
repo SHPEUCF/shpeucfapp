@@ -58,11 +58,11 @@ class MemberAdmin extends Component {
 
 	createButton(value) {
 		let title = value ? "Add" : "Remove";
-
 		let ButtonWrapper = (props) => <Button
 			title = { title }
 			onPress = { props.onPress }
 		/>;
+
 		return ButtonWrapper;
 	}
 }

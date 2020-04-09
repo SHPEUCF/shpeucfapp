@@ -68,7 +68,7 @@ class AdminHub extends Component {
 					rightIcon = { <Ionicons
 						name = "ios-arrow-dropright"
 						size = { 22 }
-						style = {{ color: "#FECB00" }}
+						color = "#FECB00"
 					/> }
 					onPress = { () => Actions[item.screen]() }
 				/>
