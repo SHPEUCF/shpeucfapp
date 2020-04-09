@@ -40,6 +40,7 @@ const INITIAL_STATE = {
 	quote: "",
 	// Using URL below to avoid RN warning of empty source.uri as there's a delay fetching.
 	// Will improve fetching later, just need to get rid of the warning for now.
+	// eslint-disable-next-line max-len
 	picture: "https://cdn0.iconfinder.com/data/icons/superuser-web-kit/512/686909-user_people_man_human_head_person-512.png",
 	points: 0,
 	privilege: {},
@@ -275,27 +276,27 @@ export const fetchMemberProfile = (userID) => {
 	};
 };
 
-export const editMember = (firstNameU, lastNameU, emailU, collegeU, majorU, pointsU, quoteU, idU, nationalityU, dateBirthU) => {
+export const editMember = (firstName, lastName, email, college, major, points, quote, id, nationality, dateOfBirth) => {
 	return (dispatch) => {
-		firebase.database().ref(`/users/${idU}/`).update({
-			firstName: firstNameU,
-			lastName: lastNameU,
-			email: emailU,
-			college: collegeU,
-			major: majorU,
-			points: pointsU,
-			quote: quoteU,
-			nationality: nationalityU,
-			dateOfBirth: dateBirthU
+		firebase.database().ref(`/users/${id}/`).update({
+			firstName,
+			lastName,
+			email,
+			college,
+			major,
+			points,
+			quote,
+			nationality,
+			dateOfBirth
 		})
-			.then(() => firebase.database().ref(`/points/${idU}/`).update({
-				firstName: firstNameU,
-				lastName: lastNameU,
-				points: pointsU
+			.then(() => firebase.database().ref(`/points/${id}/`).update({
+				firstName,
+				lastName,
+				points
 			}))
-			.then(() => firebase.database().ref(`/privileges/${idU}/`).update({
-				firstName: firstNameU,
-				lastName: lastNameU,
+			.then(() => firebase.database().ref(`/privileges/${id}/`).update({
+				firstName,
+				lastName,
 				user: true,
 				board: false,
 				eboard: false,
