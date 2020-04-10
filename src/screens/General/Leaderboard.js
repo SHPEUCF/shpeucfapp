@@ -7,8 +7,7 @@ import _ from "lodash";
 import * as Progress from "react-native-progress";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Text, View, Dimensions, SafeAreaView } from "react-native";
-import { rankMembers } from "../../utils/actions";
-import { verifiedCheckMark } from "../../utils/render";
+import { verifiedCheckMark, rankMembers } from "../../utils/render";
 import {
 	fetchMembersPoints,
 	fetchMemberProfile,

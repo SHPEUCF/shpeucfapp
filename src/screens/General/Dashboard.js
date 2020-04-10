@@ -8,7 +8,7 @@ import Flag from "react-native-flags";
 import { ColorPicker } from "react-native-color-picker";
 import { RenderFlags, CustomFlag } from "../../utils/flag";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { rankMembers } from "../../utils/actions";
+import { rankMembers } from "../../utils/render";
 import { months } from "../../data/DateItems";
 import {
 	Text,

@@ -337,12 +337,15 @@ export const addApplication = (fName, lName, plans, position, picture) => {
 		.catch(() => alert("Application could not be added!", "Failure"));
 };
 
-export const editApplication = (plans, position) => {
+export const editApplication = ({ plan, position, picture }) => {
 	const {
 		uid
 	} = firebase.auth().currentUser;
 
-	firebase.database().ref(`/election/positions/${position}/candidates/${uid}/plan`).set(plans)
+	firebase.database().ref(`/election/positions/${position}/candidates/${uid}`).update({
+		 plan,
+		 picture
+	})
 		.then(() => alert("Candidate Edited!", "Successful"))
 		.catch((error) => {
 			console.error(error);

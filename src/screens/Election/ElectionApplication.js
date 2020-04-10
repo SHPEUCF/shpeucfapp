@@ -5,6 +5,8 @@ import { Button, Input, NavBar, ButtonLayout } from "../../components/general";
 import _ from "lodash";
 import { FlatList, Text, SafeAreaView, View, TouchableOpacity } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { Avatar } from "react-native-elements";
+import { openGallery } from "../../utils/render.js";
 import {
 	getPositions,
 	addApplication,
@@ -46,7 +48,7 @@ class ElectionApplication extends Component {
 			// Searches for current user within Candidates
 			Object.entries(positions || {}).forEach(entry => {
 				Object.values(entry[1].candidates || {}).forEach(possibleCandidate => {
-					if (possibleCandidate.id === id) candidate = JSON.parse(JSON.stringify(possibleCandidate));
+					if (possibleCandidate.id === id) candidate = Object.assign({}, possibleCandidate);
 				});
 			});
 
@@ -54,7 +56,7 @@ class ElectionApplication extends Component {
 		}
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		this.props.getPositions();
 	}
 
@@ -85,7 +87,7 @@ class ElectionApplication extends Component {
 					title = "Positions"
 					back
 					onBack = { () => {
-						return shouldShowApplication ? Actions.pop() : this.setState({ currentlyApplying: false });
+						return !shouldShowApplication ? Actions.pop() : this.setState({ currentlyApplying: false });
 					} } />
 				<View style = { fullFlex }>
 					{ content }
@@ -108,24 +110,43 @@ class ElectionApplication extends Component {
 
 		const {
 			fullFlex,
-			halfFlex,
 			textColor,
 			fontLarge,
-			titleStyle
+			titleStyle,
+			inputContainer,
+			column
 		} = styles;
 
 		return (
-			<View style = { fullFlex }>
+			<View style = { [fullFlex, column ] }>
 				<Text style = { [fontLarge, textColor, titleStyle ] }>
 					{ candidate.position || positionSelected }
 				</Text>
+				<Avatar
+					size = { 200 }
+					rounded
+					title = "ADD IMAGE"
+					titleStyle = { fontLarge }
+					source = { candidate.picture && { uri: candidate.picture } }
+					onPress = { () => {
+						openGallery(
+							`/election/positions/${candidate.position || positionSelected}/candidates/${this.props.id}`,
+							this.props.id,
+							(url) => {
+								let candidate = Object.assign({}, this.state.candidate);
+								candidate.picture = url;
+
+								this.setState({ candidate });
+							}
+						);
+					} }
+				/>
 				<Text style = { [fontLarge, textColor] }>
 					{ firstName } { lastName }
 				</Text>
-				<Text style = { [fontLarge, textColor] }>Plan:</Text>
 				<Input
 					numberOfLines = { 10 }
-					style = { halfFlex }
+					style = { inputContainer }
 					textAlignVertical = "top"
 					maxLength = { 250 }
 					blurOnSubmit = { true }
@@ -194,7 +215,8 @@ class ElectionApplication extends Component {
 
 		const {
 			currentlyApplying,
-			candidate
+			candidate,
+			positionSelected
 		} = this.state;
 
 		let submitButton;
@@ -203,10 +225,15 @@ class ElectionApplication extends Component {
 			submitButton = <Button
 				title = { (applied && "Edit " || "Submit ") + "Application" }
 				onPress = { () => {
-					if (!applied)
-						addApplication(firstName, lastName, candidate.plan, candidate.position, picture);
-					else
-						editApplication(candidate.plan, candidate.position);
+					if (!applied) {
+						addApplication(firstName, lastName, candidate.plan,
+									   positionSelected, candidate.picture || picture);
+						Actions.pop();
+					}
+					else {
+						editApplication(candidate);
+						Actions.pop();
+					}
 				} }
 			/>;
 
@@ -236,6 +263,10 @@ const styles = {
 	fontSmall: {
 		fontSize: 13
 	},
+	column: {
+		justifyContent: "space-between",
+		alignItems: "center"
+	},
 	textColor: {
 		color: "#e0e6ed"
 	},
@@ -247,8 +278,9 @@ const styles = {
 	fullFlex: {
 		flex: 1
 	},
-	halfFlex: {
-		flex: 0.5
+	inputContainer: {
+		flex: 0.5,
+		width: "80%"
 	},
 	positionContainer: {
 		paddingTop: "8%",
