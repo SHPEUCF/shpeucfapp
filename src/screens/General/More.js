@@ -16,9 +16,15 @@ const menuItems = [
 		privilege: "user"
 	},
 	{
-		title: "Election",
+		title: "Voting",
 		icon: "done",
-		screen: "Election",
+		screen: "ElectionBallot",
+		privilege: "user"
+	},
+	{
+		title: "Apply for Eboard",
+		icon: "assignment",
+		screen: "ElectionApplication",
 		privilege: "user"
 	},
 	{
@@ -93,11 +99,20 @@ class More extends Component {
 		const {
 			election,
 			privilege,
-			apply
+			apply,
+			voted
 		} = this.props;
 
-		if (item.title === "Election" && (!election && !apply || !privilege.paidMember))
+		let onPress = Actions[item.screen];
+
+		if (item.title === "Voting") {
+			if (!election || !privilege.paidMember) return null;
+			else if (voted) onPress = (message) => alert(message);
+		}
+
+		if (item.title === "Apply for Eboard" && (!apply || !privilege.paidMember))
 			return null;
+
 		if (privilege && privilege[item.privilege])
 			return (
 				<View>
@@ -112,7 +127,7 @@ class More extends Component {
 							size = { 22 }
 							style = {{ color: "#FECB00" }}
 						/> }
-						onPress = { () => Actions[item.screen]() }
+						onPress = { () => onPress("You already voted!") }
 					/>
 				</View>
 			);
@@ -122,7 +137,8 @@ class More extends Component {
 const mapStateToProps = ({ user, general, elect }) => {
 	const {
 		privilege,
-		dashColor
+		dashColor,
+		voted
 	} = user;
 	const {
 		loading
@@ -132,7 +148,7 @@ const mapStateToProps = ({ user, general, elect }) => {
 		apply
 	} = elect;
 
-	return { privilege, loading, election, apply, dashColor };
+	return { privilege, loading, election, apply, dashColor, voted };
 };
 
 const mapDispatchToProps = {
