@@ -225,11 +225,15 @@ class ElectionApplication extends Component {
 			submitButton = <Button
 				title = { (applied && "Edit " || "Submit ") + "Application" }
 				onPress = { () => {
-					if (!applied)
+					if (!applied) {
 						addApplication(firstName, lastName, candidate.plan,
-							positionSelected, candidate.picture || picture);
-					else
+									   positionSelected, candidate.picture || picture);
+						Actions.pop();
+					}
+					else {
 						editApplication(candidate);
+						Actions.pop();
+					}
 				} }
 			/>;
 
