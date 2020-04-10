@@ -5,6 +5,7 @@ import { Button, Input, NavBar, ButtonLayout } from "../../components/general";
 import _ from "lodash";
 import { FlatList, Text, SafeAreaView, View, TouchableOpacity } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Avatar } from "react-native-elements";
 import {
 	getPositions,
@@ -80,18 +81,27 @@ class ElectionApplication extends Component {
 		const content = shouldShowApplication ? this.showApplication() : this.renderPositions(positionsArray);
 
 		return (
-			<SafeAreaView style = { [page, fullFlex] }>
-				<NavBar
-					title = "Positions"
-					back
-					onBack = { () => {
-						return !shouldShowApplication || applied ? Actions.pop() : this.setState({ currentlyApplying: false });
-					} } />
-				<View style = { fullFlex }>
-					{ content }
-				</View>
-				{ this.renderButtons() }
-			</SafeAreaView>
+			<KeyboardAwareScrollView
+				style = {{ backgroundColor: "#0c0b0b" }}
+				resetScrollToCoords = {{ x: 0, y: 0 }}
+				contentContainerStyle = {{ flexGrow: 1 }}
+				scrollEnabled = { true }
+				enableOnAndroid = { true }
+			>
+				<SafeAreaView style = { [page, fullFlex] }>
+					<NavBar
+						title = "Positions"
+						back
+						onBack = { () => {
+							return !shouldShowApplication || applied
+								? Actions.pop() : this.setState({ currentlyApplying: false });
+						} } />
+					<View style = { fullFlex }>
+						{ content }
+					</View>
+					{ this.renderButtons() }
+				</SafeAreaView>
+			</KeyboardAwareScrollView>
 		);
 	}
 
