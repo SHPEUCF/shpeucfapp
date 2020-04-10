@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { FlatList, SafeAreaView } from "react-native";
 import { ListItem } from "react-native-elements";
 import { NavBar } from "../../components/general";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const menuItems = [
 	{
@@ -16,6 +17,12 @@ const menuItems = [
 		title: "Committees",
 		icon: "assignment-ind",
 		screen: "CommitteesAdmin",
+		privilege: "eboard"
+	},
+	{
+		title: "Members",
+		icon: "people",
+		screen: "MemberAdmin",
 		privilege: "eboard"
 	}
 ];
@@ -56,9 +63,13 @@ class AdminHub extends Component {
 					containerStyle = {{ backgroundColor: "black", borderBottomColor: "white" }}
 					removeClippedSubviews = { false }
 					title = { item.title }
-					chevron
 					titleStyle = {{ color: "white" }}
 					leftIcon = {{ name: item.icon, color: "white" }}
+					rightIcon = { <Ionicons
+						name = "ios-arrow-dropright"
+						size = { 22 }
+						color = "#FECB00"
+					/> }
 					onPress = { () => Actions[item.screen]() }
 				/>
 			);

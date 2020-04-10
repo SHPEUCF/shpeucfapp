@@ -402,8 +402,7 @@ class EventDetails extends Component {
 			lastName
 		} = this.props;
 
-		let userArr = Object.values(selectedUsers);
-		userArr.forEach(function(user) {
+		selectedUsers.forEach(function(user) {
 			checkIn(eventID, points, user.id, { id: id, name: firstName + " " + lastName });
 		});
 	}
