@@ -1,5 +1,5 @@
 import { createActionTypes } from "../utils/actions";
-
+import firebase from "firebase";
 // handle all things related to Elections
 const ACTIONS = createActionTypes([
 	"PAGE_LOAD",
@@ -44,4 +44,10 @@ export const filterChanged = (text) => {
 		type: ACTIONS.FILTER_CHANGED,
 		payload: text
 	};
+};
+
+export const storeImageUrl = (url, filePath) => {
+	firebase.database().ref(`${filePath}/`).update({
+		picture: url
+	});
 };
