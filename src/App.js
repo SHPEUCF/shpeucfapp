@@ -12,14 +12,13 @@ class App extends Component {
 		// firebase.auth().signOut();
 
 		const config = {
-			apiKey: "AIzaSyBjuggUaZwZEj0FYMK3x-O7FflhdsOUsx0",
-			authDomain: "shpe-app-test.firebaseapp.com",
-			databaseURL: "https://shpe-app-test.firebaseio.com",
-			projectId: "shpe-app-test",
-			storageBucket: "shpe-app-test.appspot.com",
-			messagingSenderId: "343434443699",
-			appId: "1:343434443699:web:cf6c97d92b587f552fe9c6",
-			measurementId: "G-GSYW7PBMTZ"
+			apiKey: "AIzaSyCeX5lUZUmQxXsWNO8gNXVHqfJs-kQmSaY",
+			authDomain: "shpe-ucf.firebaseapp.com",
+			databaseURL: "https://shpe-ucf.firebaseio.com/",
+			projectId: "shpe-ucf",
+			storageBucket: "shpe-ucf.appspot.com",
+			messagingSenderId: "974032317047",
+			appId: "1:974032317047:web:0a4a2ad01ac705b90ff472"
 		};
 
 		if (!firebase.apps.length) firebase.initializeApp(config);
