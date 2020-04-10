@@ -357,8 +357,8 @@ export const goToOtherProfile = () => {
 export const changePrivilegeOfMembers = (members, privilegeChanged, value) => {
 	firebase.database().ref("/privileges/").once("value", snapshot => {
 		let updates = snapshot.val();
-
 		members.forEach(memberId => {
+			if (!updates[memberId]) updates[memberId] = {};
 			updates[memberId][privilegeChanged] = value;
 		});
 
