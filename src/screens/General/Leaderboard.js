@@ -17,7 +17,6 @@ import {
 	loadUser,
 	filterChanged
 } from "../../ducks";
-import { StableAvatar } from "../../utils/actions";
 
 const dimension = Dimensions.get("window");
 const iteratees = ["points", "lastName", "firstName"];
@@ -112,9 +111,12 @@ class Leaderboard extends Component {
 								title = { item.firstName[0].concat(item.lastName[0]) }
 							/>	}
 							{ item.picture !== ""
-							&& <StableAvatar
-								item = { item }
-							/> }
+							&& <Avatar
+								size = "large"
+								rounded
+								source = {{ uri: item.picture }}
+							/>
+							}
 						</View>
 						<Progress.Bar
 							style = { progress }

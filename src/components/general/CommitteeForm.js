@@ -4,7 +4,7 @@ import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import { View, Text, ScrollView, Dimensions, SafeAreaView } from "react-native";
 import { Input, Button, FilterList, ButtonLayout } from "../general";
-import { MemberPanel } from "../../utils/actions";
+import { MemberPanel } from "../../utils/render";
 import {
 	addCommittee,
 	editCommittee,

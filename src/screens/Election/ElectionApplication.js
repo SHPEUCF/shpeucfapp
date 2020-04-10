@@ -6,7 +6,6 @@ import _ from "lodash";
 import { FlatList, Text, SafeAreaView, View, TouchableOpacity } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Avatar } from "react-native-elements";
-import { openGallery } from "../../utils/render.js";
 import {
 	getPositions,
 	addApplication,
@@ -15,7 +14,6 @@ import {
 
 const iterateesPos = ["level"];
 const orderPos = ["asc"];
-
 class ElectionApplication extends Component {
 	constructor(props) {
 		super(props);
@@ -87,7 +85,7 @@ class ElectionApplication extends Component {
 					title = "Positions"
 					back
 					onBack = { () => {
-						return !shouldShowApplication ? Actions.pop() : this.setState({ currentlyApplying: false });
+						return !shouldShowApplication || applied ? Actions.pop() : this.setState({ currentlyApplying: false });
 					} } />
 				<View style = { fullFlex }>
 					{ content }
@@ -100,7 +98,8 @@ class ElectionApplication extends Component {
 	showApplication() {
 		const {
 			firstName,
-			lastName
+			lastName,
+			picture
 		} = this.props;
 
 		const {
@@ -127,19 +126,7 @@ class ElectionApplication extends Component {
 					rounded
 					title = "ADD IMAGE"
 					titleStyle = { fontLarge }
-					source = { candidate.picture && { uri: candidate.picture } }
-					onPress = { () => {
-						openGallery(
-							`/election/positions/${candidate.position || positionSelected}/candidates/${this.props.id}`,
-							this.props.id,
-							(url) => {
-								let candidate = Object.assign({}, this.state.candidate);
-								candidate.picture = url;
-
-								this.setState({ candidate });
-							}
-						);
-					} }
+					source = {{ uri: picture }}
 				/>
 				<Text style = { [fontLarge, textColor] }>
 					{ firstName } { lastName }
