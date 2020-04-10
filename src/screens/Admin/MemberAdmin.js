@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { NavBar, Button, ButtonLayout, FilterList } from "../../components/general";
 import { SafeAreaView, View, Text } from "react-native";
 import { changePrivilegeOfMembers } from "../../ducks";
-import { MemberPanel } from "../../utils/actions"
+import { MemberPanel } from "../../utils/render";
 
 class MemberAdmin extends Component {
 	constructor(props) {

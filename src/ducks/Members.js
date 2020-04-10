@@ -363,7 +363,7 @@ export const changePrivilegeOfMembers = (members, privilegeChanged, value) => {
 		});
 
 		firebase.database().ref("/privileges/").update(updates)
-			.then(() => alert("Changes succesful"))
+			.then(() => alert("Changes successful"))
 			.catch(() => alert("Changes were not successful"));
 	});
 
