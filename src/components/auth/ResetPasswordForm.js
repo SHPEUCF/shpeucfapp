@@ -78,7 +78,7 @@ class ResetPasswordForm extends Component {
 							<Text style = { styles.headerTextStyle }>Reset Password</Text>
 							<Text style = { styles.headerSubtitleStyle }>Enter your email below</Text>
 						</View>
-						<View style = {{ height: dimension.height * 0.1 }}>
+						<View style = {{ height: dimension.height * 0.12 }}>
 							<Input
 								placeholder = "Email"
 								value = { this.props.email }
@@ -144,7 +144,7 @@ const styles = {
 		marginBottom: 10
 	},
 	loginButton: {
-		color: "#000",
+		color: "white",
 		flexDirection: "row",
 		justifyContent: "center"
 	},

@@ -42,7 +42,8 @@ const ACTIONS = createActionTypes([
 	"GO_TO_REGISTRATION",
 	"GO_TO_EDIT_PROFILE_FORM",
 	"QUOTE_CHANGED",
-	"PAGE_LOAD"
+	"PAGE_LOAD",
+	"RESET_PASSWORD"
 ]);
 
 const INITIAL_STATE = {
@@ -273,6 +274,8 @@ export default (state = INITIAL_STATE, action) => {
 		case ACTIONS.GO_TO_REGISTRATION:
 			return INITIAL_STATE;
 		case ACTIONS.GO_TO_EDIT_PROFILE_FORM:
+			return state;
+		case ACTIONS.RESET_PASSWORD:
 			return state;
 		default:
 			return state;
