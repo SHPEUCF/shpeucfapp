@@ -129,8 +129,7 @@ class More extends Component {
 const mapStateToProps = ({ user, general, elect }) => {
 	const {
 		privilege,
-		dashColor,
-		voted
+		dashColor
 	} = user;
 	const {
 		loading
@@ -140,7 +139,7 @@ const mapStateToProps = ({ user, general, elect }) => {
 		apply
 	} = elect;
 
-	return { privilege, loading, election, apply, dashColor, voted };
+	return { privilege, loading, election, apply, dashColor };
 };
 
 const mapDispatchToProps = {
