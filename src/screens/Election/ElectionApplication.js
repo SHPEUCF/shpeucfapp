@@ -223,7 +223,7 @@ class ElectionApplication extends Component {
 				onPress = { () => {
 					if (!applied) {
 						addApplication(firstName, lastName, candidate.plan,
-									   positionSelected, candidate.picture || picture);
+									   positionSelected, picture);
 						Actions.pop();
 					}
 					else {

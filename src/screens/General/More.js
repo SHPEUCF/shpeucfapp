@@ -19,13 +19,13 @@ const menuItems = [
 		title: "Voting",
 		icon: "done",
 		screen: "ElectionBallot",
-		privilege: "user"
+		privilege: "paidMember"
 	},
 	{
 		title: "Apply for Eboard",
 		icon: "assignment",
 		screen: "ElectionApplication",
-		privilege: "user"
+		privilege: "paidMember"
 	},
 	{
 		title: "Committees",
@@ -99,19 +99,11 @@ class More extends Component {
 		const {
 			election,
 			privilege,
-			apply,
-			voted
+			apply
 		} = this.props;
 
-		let onPress = Actions[item.screen];
-
-		if (item.title === "Voting") {
-			if (!election || !privilege.paidMember) return null;
-			else if (voted) onPress = (message) => alert(message);
-		}
-
-		if (item.title === "Apply for Eboard" && (!apply || !privilege.paidMember))
-			return null;
+		if (item.title === "Voting" && !election) return null;
+		if (item.title === "Apply for Eboard" && !apply) return null;
 
 		if (privilege && privilege[item.privilege])
 			return (
@@ -127,7 +119,7 @@ class More extends Component {
 							size = { 22 }
 							style = {{ color: "#FECB00" }}
 						/> }
-						onPress = { () => onPress("You already voted!") }
+						onPress = { () => Actions[item.screen]() }
 					/>
 				</View>
 			);

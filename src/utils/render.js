@@ -25,17 +25,6 @@ export const verifiedCheckMark = ({ paidMember }) => {
 		);
 };
 
-// Created this functional component to fix current Avatar flickering issue on ios
-// Should be fixed in the next React Native Elements Update
-// const userAvatar = (props) => {
-// 	return (
-// 		<View>
-// 			{ props.children }
-// 		</View>
-// 	);
-// };
-// export const StableAvatar = React.memo(userAvatar);
-
 // MemberPanel needs should be made into its own component
 export const MemberPanel = (user) => {
 	const {
@@ -64,8 +53,7 @@ export const MemberPanel = (user) => {
 						size = "large"
 						rounded
 						source = {{ uri: user.picture }}
-					/>
-					}
+					/> }
 				</View>
 			</View>
 		</View>

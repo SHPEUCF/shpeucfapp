@@ -109,14 +109,13 @@ class Leaderboard extends Component {
 								titleStyle = {{ backgroundColor: item.color }}
 								overlayContainerStyle = {{ backgroundColor: item.color }}
 								title = { item.firstName[0].concat(item.lastName[0]) }
-							/>	}
+							/> }
 							{ item.picture !== ""
 							&& <Avatar
 								size = "large"
 								rounded
 								source = {{ uri: item.picture }}
-							/>
-							}
+							/> }
 						</View>
 						<Progress.Bar
 							style = { progress }
