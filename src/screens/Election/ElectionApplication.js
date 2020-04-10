@@ -124,7 +124,6 @@ class ElectionApplication extends Component {
 				<Avatar
 					size = { 200 }
 					rounded
-					title = "ADD IMAGE"
 					titleStyle = { fontLarge }
 					source = {{ uri: picture }}
 				/>
