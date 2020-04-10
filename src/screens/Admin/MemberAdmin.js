@@ -46,10 +46,7 @@ class MemberAdmin extends Component {
 	makeUserList(value) {
 		let list = {};
 
-		Object.entries(this.props.userList).forEach(function(user) {
-			let userId = user[0];
-			let userData = user[1];
-
+		Object.entries(this.props.userList).forEach(function([userId, userData]) {
 			if (!userData.paidMember == value) list[userId] = userData;
 		});
 
