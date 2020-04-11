@@ -7,6 +7,8 @@ import { FlatList, Text, SafeAreaView, View, TouchableOpacity } from "react-nati
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Avatar } from "react-native-elements";
+import { openGallery } from "../../utils/render";
+import FastImage from "react-native-fast-image";
 import {
 	getPositions,
 	addApplication,
@@ -38,11 +40,13 @@ class ElectionApplication extends Component {
 	componentWillReceiveProps(nextProps, prevState) {
 		const {
 			positions,
-			id
+			id,
+			picture
 		} = nextProps;
 
 		if (positions !== prevState.positions) {
 			let candidate = Object.assign({}, this.state.candidate);
+			candidate.picture = picture;
 
 			// Searches for current user within Candidates
 			Object.entries(positions || {}).forEach(entry => {
@@ -84,8 +88,8 @@ class ElectionApplication extends Component {
 			<KeyboardAwareScrollView
 				style = {{ backgroundColor: "#0c0b0b" }}
 				resetScrollToCoords = {{ x: 0, y: 0 }}
-				contentContainerStyle = {{ flexGrow: 1 }}
-				scrollEnabled = { true }
+				contentContainerStyle = {{ height: "100%" }}
+				scrollEnabled = { false }
 				enableOnAndroid = { true }
 			>
 				<SafeAreaView style = { [page, fullFlex] }>
@@ -108,8 +112,7 @@ class ElectionApplication extends Component {
 	showApplication() {
 		const {
 			firstName,
-			lastName,
-			picture
+			lastName
 		} = this.props;
 
 		const {
@@ -134,8 +137,11 @@ class ElectionApplication extends Component {
 				<Avatar
 					size = { 200 }
 					rounded
+					onPress = { () => this.callOpenGallery(candidate) }
+					ImageComponent = { FastImage }
+					title = "Add Image"
 					titleStyle = { fontLarge }
-					source = {{ uri: picture }}
+					source = { candidate.picture && { uri: candidate.picture } }
 				/>
 				<Text style = { [fontLarge, textColor] }>
 					{ firstName } { lastName }
@@ -156,6 +162,18 @@ class ElectionApplication extends Component {
 					 } }
 				/>
 			</View>
+		);
+	}
+
+	callOpenGallery(candidate) {
+		openGallery(
+			`/election/positions/${candidate.position || this.state.positionSelected}/candidates/${this.props.id}`, "",
+			(url) => {
+				let candidate = Object.assign({}, this.state.candidate);
+				candidate.picture = url;
+
+				this.setState({ candidate });
+			}
 		);
 	}
 
@@ -222,14 +240,16 @@ class ElectionApplication extends Component {
 
 		if (currentlyApplying || applied)
 			submitButton = <Button
-				title = { (applied && "Edit " || "Submit ") + "Application" }
+				title = { "Submit " + (applied && "Changes " || "Application ") }
 				onPress = { () => {
 					if (!applied) {
 						addApplication(firstName, lastName, candidate.plan,
-									   positionSelected, picture);
+									   positionSelected, candidate.picture || picture);
 						Actions.pop();
 					}
 					else {
+						candidate.firstName = firstName;
+						candidate.lastName = lastName;
 						editApplication(candidate);
 						Actions.pop();
 					}
@@ -248,6 +268,7 @@ class ElectionApplication extends Component {
 	}
 
 	stopApplication() {
+		this.setState({ candidate: {} });
 		if (!this.props.applied && this.state.currentlyApplying)
 			this.setState({ currentlyApplying: false });
 		else
@@ -281,7 +302,7 @@ const styles = {
 		flex: 1
 	},
 	inputContainer: {
-		flex: 0.5,
+		maxHeight: 250,
 		width: "80%"
 	},
 	positionContainer: {
