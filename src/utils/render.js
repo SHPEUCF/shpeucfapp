@@ -5,9 +5,14 @@ import { Avatar } from "react-native-elements";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import ImagePicker from "react-native-image-crop-picker";
 import RNFetchBlob from "rn-fetch-blob";
+import FastImage from "react-native-fast-image";
 import {
 	storeImageUrl
 } from "../ducks";
+
+export const stockImg = {
+	uri: "https://cdn0.iconfinder.com/data/icons/superuser-web-kit/512/686909-user_people_man_human_head_person-512.png"
+};
 
 // You pass in the privileges prop or user object
 export const verifiedCheckMark = ({ paidMember }) => {
@@ -35,6 +40,8 @@ export const MemberPanel = (user) => {
 		AvatarContainer
 	} = styles;
 
+	truncateNames(user);
+
 	return (
 		<View style = { contentContainerStyle }>
 			<View style = { userInfoContainer }>
@@ -53,6 +60,7 @@ export const MemberPanel = (user) => {
 						size = "large"
 						rounded
 						source = {{ uri: user.picture }}
+						ImageComponent = { FastImage }
 					/> }
 				</View>
 			</View>
@@ -77,6 +85,11 @@ export const rankMembers = (sortedMembers, userId) => {
 	return currentMember;
 };
 
+export const truncateNames = (item) => {
+	item.firstName = item.firstName.split(" ")[0];
+	item.lastName = item.lastName.split(" ")[0];
+};
+
 export const openGallery = (filePath, fileName, onImageStoreFunction) => {
 	const Blob = RNFetchBlob.polyfill.Blob;
 	const fs = RNFetchBlob.fs;
@@ -95,7 +108,9 @@ export const openGallery = (filePath, fileName, onImageStoreFunction) => {
 		const imagePath = image.path;
 		let uploadBlob = null;
 		let mime = "image/jpg";
-		const imageRef = firebase.storage().ref(filePath).child(fileName);
+		// Normally pictures are uploaded under a consistent filename so that pictures are automatically overwritten
+		// If there is no consistent filename passed in, this will allow for infite uploads to the same filepath
+		const imageRef = firebase.storage().ref(filePath).child(fileName || image.filename);
 
 		fs.readFile(imagePath, "base64")
 			.then((data) => {

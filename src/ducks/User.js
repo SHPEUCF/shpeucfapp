@@ -55,8 +55,6 @@ const INITIAL_STATE = {
 	college: "",
 	major: "",
 	quote: "",
-	// Using URL below to avoid RN warning of empty source.uri as there's a delay fetching.
-	// Will improve fetching later, just need to get rid of the warning for now.
 	picture: "",
 	points: 0,
 	privilege: {},

@@ -531,7 +531,7 @@ class EventDetails extends Component {
 							<Text style = { [text, textColor] }>{ location }</Text>
 						</View>
 						{ description != ""
-						&& <View style = { [iconContainer, { flex: 0.7 }] }>
+						&& <View style = { iconContainer }>
 							<Ionicons
 								style = { [icon, textColor] }
 								name = "md-list"
@@ -619,7 +619,7 @@ const styles = {
 		color: "#e0e6ed"
 	},
 	iconContainer: {
-		flex: 0.2,
+		paddingVertical: 5,
 		flexDirection: "row"
 	},
 	icon: {

@@ -31,7 +31,7 @@ const dimension = Dimensions.get("screen");
 
 const collegeNames = Object.keys(collegesJson);
 let colleges = {};
-collegeNames.map(college => { colleges[college] = collegeNames[college] });
+collegeNames.map(college => { colleges[college] = collegesJson[college] });
 
 const continents = Object.keys(countriesJson);
 let countries = {};
@@ -172,7 +172,7 @@ class EditProfileForm extends Component {
 				<PickerInput
 					title = { "Colleges" }
 					value = { college }
-					data = { colleges }
+					data = { collegeNames }
 					placeholder = { "Select college" }
 					onSelect = { (text) => collegeChanged(text) } />
 				{ p1 }
@@ -264,38 +264,8 @@ class EditProfileForm extends Component {
 			);
 	}
 
-	renderPickers() {
-		const {
-			college,
-			collegeChanged,
-			majorChanged
-		} = this.props;
-
-		const p1 = college && college !== ""
-			? <PickerInput
-				title = { "Colleges" }
-				value = { this.props.major }
-				data = { majorNames[college] }
-				placeholder = { "Select College" }
-				onSelect = { (text) => majorChanged(text) }
-			/>
-			: <View></View>;
-
-		return (
-			<View>
-				<PickerInput
-					title = { "Colleges" }
-					value = { this.props.college }
-					data = { collegeNames }
-					placeholder = { "Select College" }
-					onSelect = { (text) => collegeChanged(text) } />
-				{ p1 }
-			</View>
-		);
-	}
-
 	render() {
-		let content = this.renderPickers();
+		let content = this.renderCollegePickers();
 
 		if (this.checkPrivilege("eboard")) content = this.renderIfEboard();
 

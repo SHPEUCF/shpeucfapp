@@ -8,6 +8,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { Text, View, SafeAreaView, FlatList, TouchableOpacity, Modal } from "react-native";
 import { Button, NavBar, ButtonLayout } from "../../components/general";
 import { getPositions, vote, getVotes } from "../../ducks";
+import { stockImg, truncateNames } from "../../utils/render";
+import FastImage from "react-native-fast-image";
 
 const iterateesPos = ["level"];
 const orderPos = ["asc"];
@@ -119,12 +121,9 @@ class ElectionBallot extends Component {
 						<Text style = { titleStyle }>{ item.title }</Text>
 					</View>
 					<View style = { [spacing, mainBackground] }>
-						<FlatList
-							data = { candidateList }
-							keyExtractor = { this.keyExtractor }
-							renderItem = { ({ item }) => this.renderCandidate(item) }
-							ItemSeparatorComponent = { () => <View style = { spacing } /> }
-						/>
+						{ candidateList.map(candidate => <View>
+							{ this.renderCandidate(candidate) }
+						</View>) }
 					</View>
 				</View>
 			);
@@ -136,8 +135,11 @@ class ElectionBallot extends Component {
 			candidateStyle,
 			textColor,
 			titleStyle,
-			flex
+			flex,
+			centerItems
 		} = styles;
+
+		truncateNames(candidate);
 
 		const {
 			approved,
@@ -154,30 +156,33 @@ class ElectionBallot extends Component {
 						style = { [candidateStyle, flex] }
 						onPress = { () => this.setState({ visibleCandidate: candidate, visible: true }) }
 					>
-						<View style = { [flex, { alignItems: "center" }] }>
+						<View style = { [flex, centerItems] }>
 							{ this.renderPicture(picture) }
 						</View>
 						<Text style = { [center, textColor, titleStyle, { flex: 1.5 }] }>
 							{ firstName } { lastName }
 						</Text>
-						<Ionicons
-							name = "ios-arrow-dropright"
-							size = { 22 }
-							color = { "#FECB00" }
-							style = { [center, { flex: 0.2 }] }
-						/>
+						<View style = { [centerItems, { flex: 0.3 }] }>
+							<Ionicons
+								name = "ios-arrow-dropright"
+								size = { 22 }
+								color = { "#FECB00" }
+							/>
+						</View>
 					</TouchableOpacity>
 				</View>
 			);
 	}
 
 	renderPicture(picture, size = 45) {
+		let pic = picture !== "" ? { uri: picture } : stockImg;
+
 		return (
 			<Avatar
 				size = { size }
 				rounded
-				source = {{ uri: picture }}
-				activeOpacity = { 0.7 }
+				source = { pic }
+				ImageComponent = { FastImage }
 			/>
 		);
 	}
@@ -229,15 +234,23 @@ class ElectionBallot extends Component {
 			modalContent,
 			textColor,
 			planStyle,
-			titleStyle
+			titleStyle,
+			closeModalBar
 		} = styles;
 
 		return (
 			<Modal transparent = { true } visible = { this.state.visible } animationType = "slide">
-				<TouchableOpacity
-					style = { modalBackground }
-					onPress = { () => this.setState({ visible: false, visibleCandidate: {} }) }
-				>
+				<View style = { modalBackground }>
+					<TouchableOpacity
+						style = { closeModalBar }
+						onPress = { () => this.setState({ visible: false, visibleCandidate: {} }) }
+					>
+						<Ionicons
+							name = "ios-close-circle"
+							size = { 40 }
+							color = "white"
+						/>
+					</TouchableOpacity>
 					<View style = { modalContent }>
 						{ this.renderPicture(picture, 110) }
 						<Text style = { [textColor, titleStyle, { paddingVertical: "8%" }] }>
@@ -245,7 +258,7 @@ class ElectionBallot extends Component {
 						</Text>
 						<Text style = { [textColor, planStyle] }>{ plan }</Text>
 					</View>
-				</TouchableOpacity>
+				</View>
 			</Modal>
 		);
 	}
@@ -289,7 +302,8 @@ const styles = {
 		alignSelf: "center"
 	},
 	candidateStyle: {
-		flexDirection: "row"
+		flexDirection: "row",
+		padding: 7
 	},
 	spacing: {
 		padding: "5%"
@@ -303,16 +317,30 @@ const styles = {
 		width: "95%",
 		backgroundColor: "rgba(33, 37, 43, 0.98)",
 		alignItems: "center",
-		borderRadius: 5,
+		borderBottomLeftRadius: 5,
+		borderBottomRightRadius: 5,
 		padding: "6%"
 	},
 	modalBackground: {
 		alignItems: "center",
 		height: "100%",
-		justifyContent: "center"
+		justifyContent: "center",
+		backgroundColor: "#000a"
+	},
+	closeModalBar: {
+		backgroundColor: "#FECB00",
+		width: "95%",
+		alignItems: "center",
+		justifyContent: "center",
+		borderTopRightRadius: 5,
+		borderTopLeftRadius: 5
 	},
 	planStyle: {
 		fontSize: 18
+	},
+	centerItems: {
+		justifyContent: "center",
+		alignItems: "center"
 	}
 };
 
