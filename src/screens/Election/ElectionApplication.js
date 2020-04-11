@@ -284,7 +284,8 @@ const styles = {
 		borderBottomColor: "#FFFA",
 		borderBottomWidth: 1,
 		flexDirection: "row",
-		justifyContent: "space-between"
+		justifyContent: "space-between",
+		paddingHorizontal: 30
 	},
 	titleStyle: {
 		fontWeight: "bold",
