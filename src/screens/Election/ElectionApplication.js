@@ -176,9 +176,11 @@ class ElectionApplication extends Component {
 		const {
 			fontLarge,
 			fontSmall,
+			fontBold,
 			textColor,
 			fullFlex,
-			positionContainer
+			positionContainer,
+			iconContainer
 		} = styles;
 
 		return (
@@ -188,14 +190,15 @@ class ElectionApplication extends Component {
 				} }
 				style = { [positionContainer, fullFlex] }
 			>
-				<View>
-					<Text style = { [fontLarge, textColor] }>{ item.title }</Text>
+				<View style = { fullFlex }>
+					<Text style = { [fontLarge, textColor, fontBold] }>{ item.title }</Text>
 					<Text style = { [fontSmall, textColor] }>{ item.description }</Text>
 				</View>
 				<MaterialIcons
 					name = "assignment"
 					color = "#FECB00"
 					size = { 35 }
+					style = { iconContainer }
 				/>
 			</TouchableOpacity>
 		);
@@ -259,6 +262,9 @@ const styles = {
 	fontSmall: {
 		fontSize: 13
 	},
+	fontBold: {
+		fontWeight: "bold"
+	},
 	column: {
 		justifyContent: "space-between",
 		alignItems: "center"
@@ -290,6 +296,10 @@ const styles = {
 	titleStyle: {
 		fontWeight: "bold",
 		fontSize: 30
+	},
+	iconContainer: {
+		flex: 0.15,
+		paddingLeft: 20
 	}
 };
 

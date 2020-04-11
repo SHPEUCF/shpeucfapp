@@ -22,7 +22,7 @@ const menuItems = [
 		privilege: "paidMember"
 	},
 	{
-		title: "Apply for Eboard",
+		title: "E-Board Application",
 		icon: "assignment",
 		screen: "ElectionApplication",
 		privilege: "paidMember"
@@ -103,7 +103,7 @@ class More extends Component {
 		} = this.props;
 
 		if (item.title === "Voting" && !election) return null;
-		if (item.title === "Apply for Eboard" && !apply) return null;
+		if (item.title === "E-Board Application" && !apply) return null;
 
 		if (privilege && privilege[item.privilege])
 			return (
