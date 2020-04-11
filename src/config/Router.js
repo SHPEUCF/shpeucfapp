@@ -31,7 +31,6 @@ import {
 
 /** Import Election **/
 import {
-	Election,
 	ElectionApplication,
 	ElectionBallot,
 	ElectionCandidates,
@@ -397,12 +396,6 @@ const RouterComponent = () => {
 							title = "Ballot"
 							hideTabBar
 							hideNavBar
-						/>
-						<Scene
-							key = "Election"
-							component = { Election }
-							title = "Election"
-							hideTabBar
 						/>
 						<Stack
 							hideNavBar

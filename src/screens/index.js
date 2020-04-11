@@ -25,13 +25,11 @@ export {
 };
 
 /** Export Election **/
-import Election from "./Election/Election";
 import ElectionApplication from "./Election/ElectionApplication";
 import ElectionBallot from "./Election/ElectionBallot";
 import ElectionCandidates from "./Election/ElectionCandidates";
 import ElectionPositions from "./Election/ElectionPositions";
 export {
-	Election,
 	ElectionApplication,
 	ElectionBallot,
 	ElectionCandidates,
