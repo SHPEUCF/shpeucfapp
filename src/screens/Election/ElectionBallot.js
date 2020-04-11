@@ -327,7 +327,8 @@ const styles = {
 		justifyContent: "center",
 		backgroundColor: "#000a"
 	},
-	closeModalBar: { backgroundColor: "#FECB00",
+	closeModalBar: {
+		backgroundColor: "#FECB00",
 		width: "95%",
 		alignItems: "center",
 		justifyContent: "center",
