@@ -7,7 +7,7 @@ import _ from "lodash";
 import * as Progress from "react-native-progress";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Text, View, Dimensions, SafeAreaView } from "react-native";
-import { verifiedCheckMark, rankMembers } from "../../utils/render";
+import { verifiedCheckMark, rankMembers, truncateNames } from "../../utils/render";
 import {
 	fetchMembersPoints,
 	fetchMemberProfile,
@@ -82,6 +82,7 @@ class Leaderboard extends Component {
 		} = styles;
 
 		let currentUserTextStyle = item.id === this.props.id ? userContainerColor : {};
+		truncateNames(item);
 
 		return (
 			<View style = { contentContainerStyle }>
@@ -216,7 +217,8 @@ const styles = {
 		paddingBottom: 20
 	},
 	userTextContainer: {
-		paddingTop: 5
+		paddingTop: 5,
+		width: "62%"
 	}
 };
 
