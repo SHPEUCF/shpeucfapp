@@ -16,10 +16,16 @@ const menuItems = [
 		privilege: "user"
 	},
 	{
-		title: "Election",
+		title: "Voting",
 		icon: "done",
-		screen: "Election",
-		privilege: "user"
+		screen: "ElectionBallot",
+		privilege: "paidMember"
+	},
+	{
+		title: "Apply for Eboard",
+		icon: "assignment",
+		screen: "ElectionApplication",
+		privilege: "paidMember"
 	},
 	{
 		title: "Committees",
@@ -96,8 +102,9 @@ class More extends Component {
 			apply
 		} = this.props;
 
-		if (item.title === "Election" && (!election && !apply || !privilege.paidMember))
-			return null;
+		if (item.title === "Voting" && !election) return null;
+		if (item.title === "Apply for Eboard" && !apply) return null;
+
 		if (privilege && privilege[item.privilege])
 			return (
 				<View>

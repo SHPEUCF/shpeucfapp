@@ -5,8 +5,8 @@ import { Button, Input, NavBar, ButtonLayout } from "../../components/general";
 import _ from "lodash";
 import { FlatList, Text, SafeAreaView, View, TouchableOpacity } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Avatar } from "react-native-elements";
-import { openGallery } from "../../utils/render.js";
 import {
 	getPositions,
 	addApplication,
@@ -15,7 +15,6 @@ import {
 
 const iterateesPos = ["level"];
 const orderPos = ["asc"];
-
 class ElectionApplication extends Component {
 	constructor(props) {
 		super(props);
@@ -82,25 +81,35 @@ class ElectionApplication extends Component {
 		const content = shouldShowApplication ? this.showApplication() : this.renderPositions(positionsArray);
 
 		return (
-			<SafeAreaView style = { [page, fullFlex] }>
-				<NavBar
-					title = "Positions"
-					back
-					onBack = { () => {
-						return !shouldShowApplication ? Actions.pop() : this.setState({ currentlyApplying: false });
-					} } />
-				<View style = { fullFlex }>
-					{ content }
-				</View>
-				{ this.renderButtons() }
-			</SafeAreaView>
+			<KeyboardAwareScrollView
+				style = {{ backgroundColor: "#0c0b0b" }}
+				resetScrollToCoords = {{ x: 0, y: 0 }}
+				contentContainerStyle = {{ flexGrow: 1 }}
+				scrollEnabled = { true }
+				enableOnAndroid = { true }
+			>
+				<SafeAreaView style = { [page, fullFlex] }>
+					<NavBar
+						title = "Positions"
+						back
+						onBack = { () => {
+							return !shouldShowApplication || applied
+								? Actions.pop() : this.setState({ currentlyApplying: false });
+						} } />
+					<View style = { fullFlex }>
+						{ content }
+					</View>
+					{ this.renderButtons() }
+				</SafeAreaView>
+			</KeyboardAwareScrollView>
 		);
 	}
 
 	showApplication() {
 		const {
 			firstName,
-			lastName
+			lastName,
+			picture
 		} = this.props;
 
 		const {
@@ -125,21 +134,8 @@ class ElectionApplication extends Component {
 				<Avatar
 					size = { 200 }
 					rounded
-					title = "ADD IMAGE"
 					titleStyle = { fontLarge }
-					source = { candidate.picture && { uri: candidate.picture } }
-					onPress = { () => {
-						openGallery(
-							`/election/positions/${candidate.position || positionSelected}/candidates/${this.props.id}`,
-							this.props.id,
-							(url) => {
-								let candidate = Object.assign({}, this.state.candidate);
-								candidate.picture = url;
-
-								this.setState({ candidate });
-							}
-						);
-					} }
+					source = {{ uri: picture }}
 				/>
 				<Text style = { [fontLarge, textColor] }>
 					{ firstName } { lastName }
@@ -227,7 +223,7 @@ class ElectionApplication extends Component {
 				onPress = { () => {
 					if (!applied) {
 						addApplication(firstName, lastName, candidate.plan,
-									   positionSelected, candidate.picture || picture);
+									   positionSelected, picture);
 						Actions.pop();
 					}
 					else {

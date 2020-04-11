@@ -42,7 +42,7 @@ class AdminHub extends Component {
 				<NavBar title = "Back End" back onBack = { () => Actions.pop() } />
 				<FlatList
 					keyExtractor = { this.keyExtractor }
-					extraData = { this.state }
+					extraData = { this.props }
 					data = { menuItems }
 					renderItem = { this.renderItem }
 				/>

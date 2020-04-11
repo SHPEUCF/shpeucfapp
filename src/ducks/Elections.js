@@ -172,19 +172,15 @@ export default (state = INITIAL_STATE, action) => {
 };
 
 export const openElection = () => {
-	return (dispatch) => {
-		firebase.database().ref("/election/").update({
-			votes: 0,
-			election: true
-		})
-			.then(() => {
-				dispatch({
-					type: ACTIONS.OPEN_ELECTION,
-					payload: true
-				});
+	return () => {
+		firebase.database().ref("/election/votes/").once("value", snapshot => {
+			firebase.database().ref("/election/").update({
+				votes: snapshot.val() ? snapshot.val() : 0,
+				election: true
 			})
-			.then(() => alert("Election Started!", "Successful"))
-			.catch(() => alert("Election could not be Started!", "Failure"));
+				.then(() => alert("Election Started!", "Successful"))
+				.catch(() => alert("Election could not be Started!", "Failure"));
+		});
 	};
 };
 

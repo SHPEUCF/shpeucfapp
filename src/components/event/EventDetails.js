@@ -37,7 +37,7 @@ import {
 	startTimeChanged,
 	endTimeChanged
 } from "../../ducks";
-import { MemberPanel } from "../../utils/actions";
+import { MemberPanel } from "../../utils/render";
 
 const dimension = Dimensions.get("screen");
 
@@ -460,11 +460,6 @@ class EventDetails extends Component {
 				{ this.limitRSVP(this.props.date) && <Button
 					title = "RSVP"
 					onPress = { () => {	this.renderRSVP() } }
-				/> }
-
-				{ !this.limitRSVP(this.props.date) && <Button
-					title = "Check in"
-					onPress = { () => { this.setState({ modalVisible: true }) } }
 				/> }
 			</ButtonLayout>
 			;
