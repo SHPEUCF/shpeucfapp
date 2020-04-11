@@ -474,16 +474,21 @@ export const goToPositionForm = (text) => {
 	};
 };
 
-export const vote = (userId, dict) => {
+export const vote = (candidateObj) => {
+	const {
+		uid
+	} = firebase.auth().currentUser;
+
 	let votes;
+	let candidateList = Object.entries(candidateObj);
 
 	return () => {
 		firebase.database().ref("/voting/").once("value", snapshot => {
 			let obj = snapshot.val();
 
-			dict.forEach(function (item) {
-				obj[item.key][item.value][userId] = true;
-				obj[item.key][item.value].votes = snapshot.val()[item.key][item.value].votes + 1;
+			candidateList.forEach(([position, candidateID]) => {
+				obj[position][candidateID][uid] = true;
+				obj[position][candidateID].votes = snapshot.val()[position][candidateID].votes + 1;
 			});
 
 			firebase.database().ref("/voting/").update(obj);
@@ -492,8 +497,8 @@ export const vote = (userId, dict) => {
 				votes = parseInt(snapshot.val()) + 1;
 				firebase.database().ref("/election/votes").set(votes);
 			}))
-			.then(() => firebase.database().ref(`/users/${userId}/voted/`).set(true))
-			.then(() => alert("Vote Cast!", "Successful"))
+			.then(() => firebase.database().ref(`/users/${uid}/voted/`).set(true))
+			.then(() => alert("Vote cast!", "Successful"))
 			.catch(() => alert("Vote could not be cast!", "Failure"));
 	};
 };
