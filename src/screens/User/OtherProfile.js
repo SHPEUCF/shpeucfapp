@@ -193,9 +193,10 @@ const styles = {
 	},
 	taglineContainer: {
 		flex: 0.4,
-		paddingBottom: "3%",
+		paddingVertical: "3%",
 		alignItems: "center",
-		justifyContent: "flex-end"
+		justifyContent: "flex-end",
+		width: "70%"
 	},
 	fieldContainerStyle: {
 		height: "100%",

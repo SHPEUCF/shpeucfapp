@@ -105,6 +105,7 @@ export const openGallery = (filePath, fileName, onImageStoreFunction) => {
 		cropping: true,
 		cropperCircleOverlay: true
 	}).then(image => {
+		if (!image.filename) image.filename = image.path.split("/").pop();
 		const imagePath = image.path;
 		let uploadBlob = null;
 		let mime = "image/jpg";
@@ -124,7 +125,6 @@ export const openGallery = (filePath, fileName, onImageStoreFunction) => {
 			})
 			.then(() => {
 				uploadBlob.close();
-
 				return imageRef.getDownloadURL();
 			})
 			.then((url) => {

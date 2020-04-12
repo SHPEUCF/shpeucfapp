@@ -90,7 +90,7 @@ class ElectionApplication extends Component {
 				resetScrollToCoords = {{ x: 0, y: 0 }}
 				contentContainerStyle = {{ height: "100%" }}
 				scrollEnabled = { false }
-				enableOnAndroid = { true }
+				enableOnAndroid = { false }
 			>
 				<SafeAreaView style = { [page, fullFlex] }>
 					<NavBar
@@ -240,7 +240,7 @@ class ElectionApplication extends Component {
 
 		if (currentlyApplying || applied)
 			submitButton = <Button
-				title = { "Submit " + (applied && "Changes " || "Application ") }
+				title = { "Submit " + (applied && "Changes" || "Application") }
 				onPress = { () => {
 					if (!applied) {
 						addApplication(firstName, lastName, candidate.plan,
@@ -268,7 +268,15 @@ class ElectionApplication extends Component {
 	}
 
 	stopApplication() {
-		this.setState({ candidate: {} });
+		this.setState({ candidate: {
+			approved: false,
+			firstName: "",
+			lastName: "",
+			picture: this.state.candidate.picture,
+			position: "",
+			plan: "",
+			id: ""
+		} });
 		if (!this.props.applied && this.state.currentlyApplying)
 			this.setState({ currentlyApplying: false });
 		else
