@@ -6,19 +6,26 @@ import Router from "./config/Router";
 import AppInfo from "../app.json";
 import { View } from "react-native";
 import { goToLogIn, registrationError } from "./ducks";
+import {
+	apiKey,
+	authDomain,
+	databaseURL,
+	projectId,
+	storageBucket,
+	messagingSenderId,
+	appId
+} from "react-native-dotenv";
 
 class App extends Component {
 	componentDidMount() {
-		// firebase.auth().signOut();
-
 		const config = {
-			apiKey: "AIzaSyCeX5lUZUmQxXsWNO8gNXVHqfJs-kQmSaY",
-			authDomain: "shpe-ucf.firebaseapp.com",
-			databaseURL: "https://shpe-ucf.firebaseio.com/",
-			projectId: "shpe-ucf",
-			storageBucket: "shpe-ucf.appspot.com",
-			messagingSenderId: "974032317047",
-			appId: "1:974032317047:web:0a4a2ad01ac705b90ff472"
+			apiKey: apiKey,
+			authDomain: authDomain,
+			databaseURL: databaseURL,
+			projectId: projectId,
+			storageBucket: storageBucket,
+			messagingSenderId: messagingSenderId,
+			appId: appId
 		};
 
 		if (!firebase.apps.length) firebase.initializeApp(config);
