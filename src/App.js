@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import firebase from "firebase";
+import { config } from "../firebaseconfig";
 import { connect } from "react-redux";
 import { Actions } from "react-native-router-flux";
 import Router from "./config/Router";
@@ -9,18 +10,7 @@ import { goToLogIn, registrationError } from "./ducks";
 
 class App extends Component {
 	componentDidMount() {
-		// firebase.auth().signOut();
-
-		const config = {
-			apiKey: "AIzaSyCeX5lUZUmQxXsWNO8gNXVHqfJs-kQmSaY",
-			authDomain: "shpe-ucf.firebaseapp.com",
-			databaseURL: "https://shpe-ucf.firebaseio.com/",
-			projectId: "shpe-ucf",
-			storageBucket: "shpe-ucf.appspot.com",
-			messagingSenderId: "974032317047",
-			appId: "1:974032317047:web:0a4a2ad01ac705b90ff472"
-		};
-
+		// firebase.auth().signO
 		if (!firebase.apps.length) firebase.initializeApp(config);
 		else {
 			if (!this.props.loggedIn) Actions.login();

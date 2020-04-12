@@ -29,6 +29,9 @@ build/
 local.properties
 *.iml
 
+# Firebase API Info
+firebaseconfig.js
+
 # node.js
 #
 node_modules/
