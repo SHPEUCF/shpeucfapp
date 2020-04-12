@@ -1,16 +1,33 @@
 import React, { Component } from "react";
 import firebase from "firebase";
-import { config } from "../firebaseconfig";
 import { connect } from "react-redux";
 import { Actions } from "react-native-router-flux";
 import Router from "./config/Router";
 import AppInfo from "../app.json";
 import { View } from "react-native";
 import { goToLogIn, registrationError } from "./ducks";
+import {
+	apiKey,
+	authDomain,
+	databaseURL,
+	projectId,
+	storageBucket,
+	messagingSenderId,
+	appId
+} from "react-native-dotenv";
 
 class App extends Component {
 	componentDidMount() {
-		// firebase.auth().signO
+		const config = {
+			apiKey: apiKey,
+			authDomain: authDomain,
+			databaseURL: databaseURL,
+			projectId: projectId,
+			storageBucket: storageBucket,
+			messagingSenderId: messagingSenderId,
+			appId: appId
+		};
+
 		if (!firebase.apps.length) firebase.initializeApp(config);
 		else {
 			if (!this.props.loggedIn) Actions.login();
