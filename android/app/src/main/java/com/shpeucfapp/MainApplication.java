@@ -9,6 +9,7 @@ import com.facebook.react.bridge.JavaScriptExecutorFactory;
 import com.facebook.react.ReactApplication;
 import com.reactnativecommunity.rnpermissions.RNPermissionsPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
+import com.dylanvann.fastimage.FastImageViewPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;

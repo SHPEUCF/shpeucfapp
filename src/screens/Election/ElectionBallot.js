@@ -174,7 +174,7 @@ class ElectionBallot extends Component {
 			);
 	}
 
-	renderPicture(picture, size = 45) {
+	renderPicture(picture, size = 50) {
 		let pic = picture !== "" ? { uri: picture } : stockImg;
 
 		return (
@@ -252,7 +252,7 @@ class ElectionBallot extends Component {
 						/>
 					</TouchableOpacity>
 					<View style = { modalContent }>
-						{ this.renderPicture(picture, 110) }
+						{ this.renderPicture(picture, 200) }
 						<Text style = { [textColor, titleStyle, { paddingVertical: "8%" }] }>
 							{ firstName } { lastName }
 						</Text>

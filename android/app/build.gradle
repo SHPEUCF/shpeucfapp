@@ -183,6 +183,7 @@ android {
 dependencies {
     implementation project(':react-native-permissions')
     implementation project(':react-native-vector-icons')
+    implementation project(':react-native-fast-image')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
