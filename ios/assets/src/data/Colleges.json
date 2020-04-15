@@ -1,0 +1,118 @@
+{
+  "College of Arts & Humanities (CAH)" : [
+
+      "Architecture",
+      "Art",
+      "Digital Media",
+      "English",
+      "Entertainment Management",
+      "Film",
+      "French",
+      "History",
+      "Humanities and Cultural Studies",
+      "Latin American Studies",
+      "Music",
+      "Music Education",
+      "Philosophy",
+      "Photography",
+      "Religion and Cultural Studies",
+      "Spanish",
+      "Theatre",
+      "Theatre Studies",
+      "Writing and Rhetoric"
+    ],
+    "College of Business Administration (CBA)" : [
+
+      "Accounting",
+      "Business Economics",
+      "Economics",
+      "Finance",
+      "Integrated Business",
+      "Management",
+      "Marketing",
+      "Real Estate"
+    ],
+      "College of Education & Human Performance (CEDHP)" : [
+
+      "Early Childhood Development and Education Track 1: Education: Pr",
+      "Early Childhood Development and Education Track 2: Early Childhood Development",
+      "Elementary Education",
+      "Exceptional Student Education",
+      "Secondary Education",
+      "Sport and Exercise Science",
+      "Teacher Education",
+      "Technical Education and Industry Training"
+    ],
+      "College of Engineering & Computer Science (CECS)" : [
+
+      "Aerospace Engineering",
+      "Civil Engineering",
+      "Computer Engineering",
+      "Computer Science",
+      "Construction Engineering",
+      "Electrical Engineering",
+      "Environmental Engineering",
+      "Industrial Engineering",
+      "Information Technology",
+      "Mechanical Engineering"
+    ],
+      "College of Health & Public Affairs (COHPA)" : [
+
+      "Athletic Training",
+      "Criminal Justice",
+      "Health Informatics and Information Management",
+      "Health Sciences",
+      "Health Services Administration",
+      "Legal Studies",
+      "Nonprofit Management",
+      "Public Administration",
+      "Social Work"
+    ],
+      "Rosen College of Hospitality Management (RCHM)" : [
+
+      "Entertainment Management",
+      "Hospitality Management",
+      "Restaurant and Foodservice Management"
+    ],
+      "College of Medicine (COM)" : [
+
+      "Biomedical Sciences",
+      "Biotechnology",
+      "Medical Laboratory Sciences"
+    ],
+      "College of Nursing (CON)" : [
+
+      "Nursing"
+    ],
+      "College of Optics & Photonics (CREOL)" : [
+
+      "Photonic Science and Engineering"
+    ],
+      "College of Sciences (COS)" : [
+
+      "Actuarial Science",
+      "Advertising",
+      "Anthropology",
+      "Biology",
+      "Chemistry",
+      "Communication & Conflict",
+      "Communication Sciences and Disorders",
+      "Forensic Science",
+      "Human Communication",
+      "International and Global Studies",
+      "Journalism",
+      "Mathematics",
+      "Physics B.A. & B.S.",
+      "Political Science",
+      "Psychology",
+      "Radio",
+      "Social Sciences",
+      "Sociology",
+      "Statistics"
+    ],
+      "Undergraduate Studies (UGST)" : [
+      "Applied Science B.A.S.",
+      "Environmental Studies",
+      "Interdisciplinary Studies"
+    ]
+}
