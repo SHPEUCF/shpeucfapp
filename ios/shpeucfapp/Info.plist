@@ -42,7 +42,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Add an optional profile picture to your account so that you can customize your profile with an image</string>
+	<string>Add optional pictures to your account so that you can customize your profile with images</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
