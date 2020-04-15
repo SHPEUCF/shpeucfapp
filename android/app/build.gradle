@@ -128,11 +128,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.shpeucf"
+        applicationId "com.shpeucfapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2100001
-        versionName "1.1"
+        versionCode 2100002
+        versionName "1.12"
         vectorDrawables.useSupportLibrary = true
         missingDimensionStrategy 'react-native-camera', 'general'
     }
