@@ -8,6 +8,7 @@ import * as Progress from "react-native-progress";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Text, View, Dimensions, SafeAreaView } from "react-native";
 import { verifiedCheckMark, rankMembers, truncateNames } from "../../utils/render";
+import FastImage from "react-native-fast-image";
 import {
 	fetchMembersPoints,
 	fetchMemberProfile,
@@ -116,6 +117,7 @@ class Leaderboard extends Component {
 								size = "large"
 								rounded
 								source = {{ uri: item.picture }}
+								ImageComponent = { FastImage }
 							/> }
 						</View>
 						<Progress.Bar
