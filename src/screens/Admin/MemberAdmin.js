@@ -26,7 +26,7 @@ class MemberAdmin extends Component {
 					<ButtonLayout>
 						{ [true, false].map(value =>
 							<FilterList
-								type = "Multiple"
+								multiple = { true }
 								CustomForm = { this.createButton(value) }
 								data = { this.makeUserList(value) }
 								regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }

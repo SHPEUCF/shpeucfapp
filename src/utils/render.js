@@ -68,7 +68,7 @@ export const MemberPanel = (user) => {
 	);
 };
 
-export const rankMembers = (sortedMembers, userId) => {
+export const rankMembersAndReturnsCurrentUser = (sortedMembers, userId) => {
 	let currentMember;
 	let pastPoints = 0;
 	let pastIndex = 1;

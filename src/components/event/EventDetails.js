@@ -48,14 +48,24 @@ class EventDetails extends Component {
 	}
 
 	componentDidMount() {
-		this.props.filterChanged("");
+		const {
+			filterChanged,
+			fetchCode,
+			eventID,
+			activeUser,
+			startTime,
+			endTime,
+			startTimeChanged,
+			endTimeChanged
+		} = this.props;
 
-		this.props.fetchCode(this.props.eventID);
-		if (this.props.privilege && this.props.privilege.board)
-			this.props.fetchAllUsers();
+		filterChanged("");
+		fetchCode(eventID);
+		if (activeUser.privilege && activeUser.privilege.board)
+			fetchAllUsers();
 
-		this.props.startTimeChanged(this.convertHour(this.props.startTime));
-		this.props.endTimeChanged(this.convertHour(this.props.endTime));
+		startTimeChanged(this.convertHour(startTime));
+		endTimeChanged(this.convertHour(endTime));
 	}
 
 	convertNumToDate(date) {
@@ -73,11 +83,18 @@ class EventDetails extends Component {
 
 	renderCodeBox() {
 		const {
+			activeUser,
+			closeCheckIn,
+			eventID,
+			code
+		} = this.props;
+
+		const {
 			modalBackground,
 			modalContent
 		} = styles;
 
-		if (this.props.privilege && this.props.privilege.board)
+		if (activeUser.privilege && activeUser.privilege.board)
 			return (
 				<Modal
 					transparent = { true }
@@ -86,7 +103,7 @@ class EventDetails extends Component {
 						<View style = { modalContent }>
 							<TouchableOpacity onPress = { () => {
 								this.setState({ modalVisible: false });
-								this.props.closeCheckIn(this.props.eventID);
+								closeCheckIn(eventID);
 							} }>
 								<Ionicons
 									name = "md-close-circle"
@@ -97,7 +114,7 @@ class EventDetails extends Component {
 							<View style = {{ paddingTop: 20 }}></View>
 							<View style = {{ alignItems: "center", flex: 2, justifyContent: "center" }}>
 								<QRCode
-									value = { this.props.code }
+									value = { code }
 									size = { 300 }
 								/>
 							</View>
@@ -299,7 +316,8 @@ class EventDetails extends Component {
 		const {
 			userList,
 			eventList,
-			eventID
+			eventID,
+			activeUser
 		} = this.props;
 
 		if (!eventList) return null;
@@ -310,8 +328,8 @@ class EventDetails extends Component {
 			title = "Manual Check In"
 			onPress = { props.onPress }
 		/>;
-		if (!excludeDataProp) excludeDataProp = { [this.props.id]: true };
-		else Object.assign(excludeDataProp, { [this.props.id]: true });
+		if (!excludeDataProp) excludeDataProp = { [activeUser.id]: true };
+		else Object.assign(excludeDataProp, { [activeUser.id]: true });
 
 		Object.keys(excludeDataProp).forEach(function (key) {
 			delete list[key];
@@ -320,8 +338,7 @@ class EventDetails extends Component {
 		return (
 			<View>
 				<FilterList
-					ref = { child => { this.child = child } } { ...this.props }
-					type = "Multiple"
+					multiple = { true }
 					CustomForm = { Wrapper }
 					data = { list }
 					regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
@@ -418,9 +435,20 @@ class EventDetails extends Component {
 	}
 
 	renderButtons() {
+		const {
+			activeUser,
+			startTime,
+			endTime,
+			screen,
+			date,
+			startTimeChanged,
+			endTimeChanged,
+			goToCreateEventFromEdit
+		} = this.props;
+
 		let buttons = [];
 
-		if (this.props.privilege && this.props.privilege.board) {
+		if (activeUser.privilege && activeUser.privilege.board) {
 			buttons = <ButtonLayout>
 				<Button
 					title = "Open check-in"
@@ -430,9 +458,9 @@ class EventDetails extends Component {
 				<Button
 					title = "Edit event"
 					onPress = { () => {
-						this.props.startTimeChanged(this.prepend0(this.props.startTime));
-						this.props.endTimeChanged(this.prepend0(this.props.endTime));
-						this.props.goToCreateEventFromEdit(this.props.screen);
+						startTimeChanged(this.prepend0(startTime));
+						endTimeChanged(this.prepend0(endTime));
+						goToCreateEventFromEdit(screen);
 					} }
 				/>
 				<Button
@@ -450,14 +478,13 @@ class EventDetails extends Component {
 			</ButtonLayout>
 			;
 		}
-
 		else {
 			buttons = <ButtonLayout>
 				<Button
 					title = "Check in"
 					onPress = { () => { this.setState({ modalVisible: true }) } }
 				/>
-				{ this.limitRSVP(this.props.date) && <Button
+				{ this.limitRSVP(date) && <Button
 					title = "RSVP"
 					onPress = { () => {	this.renderRSVP() } }
 				/> }
@@ -722,10 +749,7 @@ const mapStateToProps = ({ events, user, members, general }) => {
 		committee
 	} = events;
 	const {
-		privilege,
-		firstName,
-		lastName,
-		id
+		activeUser
 	} = user;
 	const {
 		userList
@@ -745,14 +769,11 @@ const mapStateToProps = ({ events, user, members, general }) => {
 		points,
 		eventID,
 		error,
-		privilege,
 		code,
 		eventList,
 		userList,
 		filter,
-		firstName,
-		lastName,
-		id,
+		activeUser,
 		committee
 	};
 };

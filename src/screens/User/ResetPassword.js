@@ -1,32 +1,28 @@
 import React, { Component } from "react";
 import { View, Text, TouchableOpacity, Dimensions } from "react-native";
+import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { Button, Spinner } from "../general";
-import { Input } from "../general";
-import { emailChanged, resetPassword, goToLogIn } from "../../ducks";
+import { Button, Spinner } from "../../components/general";
+import { Input } from "../../components/general";
+import { resetPassword } from "../../ducks";
 
 const dimension = Dimensions.get("window");
 
-class ResetPasswordForm extends Component {
-	onEmailChange(text) {
-		this.props.emailChanged(text);
-	}
+class ResetPassword extends Component {
+	constructor(props) {
+		super(props);
 
-	onButtonPress() {
-		const {
-			email, resetPassword
-		} = this.props;
-		resetPassword({ email });
+		this.state = {
+			email: ""
+		};
 	}
 
 	renderError() {
 		if (this.props.error)
 			return (
-				<View>
-					<Text style = { styles.errorTextStyle }>
-						{ this.props.error }
-					</Text>
-				</View>
+				<Text style = { styles.errorTextStyle }>
+					{ this.props.error }
+				</Text>
 			);
 	}
 
@@ -34,19 +30,24 @@ class ResetPasswordForm extends Component {
 		return (
 			<Button
 				title = "RESET"
-				onPress = { this.onButtonPress.bind(this) }
+				onPress = { ()=> this.props.resetPassword(this.state.email) }
 			/>
 		);
 	}
 
 	LogInButton() {
+		const {
+			resetPasswordContainer,
+			loginButton,
+			insteadButton
+		} = styles;
 		return (
-			<View style = { styles.resetPasswordContainer }>
+			<View style = { resetPasswordContainer }>
 				<TouchableOpacity
-					onPress = { this.props.goToLogIn }>
-					<Text style = { styles.loginButton }>Log In </Text>
+					onPress = { Actions.login() }>
+					<Text style = { loginButton }>Log In </Text>
 				</TouchableOpacity>
-				<Text style = { styles.insteadButton }> instead?</Text>
+				<Text style = { insteadButton }> instead?</Text>
 			</View>
 		);
 	}
@@ -68,23 +69,30 @@ class ResetPasswordForm extends Component {
 	}
 
 	renderContent() {
+		const {
+			container,
+			formContainerStyle,
+			headerStyle,
+			headerTextStyle,
+			headerSubtitleStyle
+		} = styles;
 		if (this.props.loggedIn)
 			return <Spinner />;
 		else
 			return (
-				<View style = { styles.container }>
-					<View style = { styles.formContainerStyle }>
-						<View style = { styles.headerStyle }>
-							<Text style = { styles.headerTextStyle }>Reset Password</Text>
-							<Text style = { styles.headerSubtitleStyle }>Enter your email below</Text>
+				<View style = { container }>
+					<View style = { formContainerStyle }>
+						<View style = { headerStyle }>
+							<Text style = { headerTextStyle }>Reset Password</Text>
+							<Text style = { headerSubtitleStyle }>Enter your email below</Text>
 						</View>
 						<View style = {{ height: dimension.height * 0.12 }}>
 							<Input
 								placeholder = "Email"
-								value = { this.props.email }
+								value = { this.state.email }
 								autoCapitalize = "none"
 								maxLength = { 45 }
-								onChangeText = { this.onEmailChange.bind(this) }
+								onChangeText = { (email) => this.setState({ email }) }
 							/>
 							<View style = {{ height: dimension.height * 0.02 }}></View>
 						</View>
@@ -155,17 +163,13 @@ const styles = {
 };
 
 const mapStateToProps = ({ user }) => {
-	const {
-		email, error
-	} = user;
+	const { error } = user;
 
-	return { email, error };
+	return { error };
 };
 
 const mapDispatchToProps = {
-	emailChanged,
-	resetPassword,
-	goToLogIn
+	resetPassword
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ResetPasswordForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ResetPassword);
