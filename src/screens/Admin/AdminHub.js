@@ -54,10 +54,12 @@ class AdminHub extends Component {
 
 	renderItem = ({ item }) => {
 		const {
-			privilege
+			activeUser
 		} = this.props;
 
-		if (privilege && item && privilege[item.privilege] && (!("privilege" in item) || privilege[item.privilege]))
+		if (activeUser.privilege && item
+			&& activeUser.privilege[item.privilege] && (!("privilege" in item)
+			|| activeUser.privilege[item.privilege]))
 			return (
 				<ListItem
 					containerStyle = {{ backgroundColor: "black", borderBottomColor: "white" }}
@@ -85,12 +87,12 @@ const styles = {
 
 const mapStateToProps = ({ user }) => {
 	const {
-		privilege
+		activeUser
 	} = user;
 
-	return { privilege };
+	return { activeUser };
 };
 
 const mapDispatchToProps = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminHub)
+export default connect(mapStateToProps, mapDispatchToProps)(AdminHub);

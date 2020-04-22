@@ -102,7 +102,6 @@ class CommitteeForm extends Component {
 							onChangeText = { this.props.committeeDescriptionChanged.bind(this) }
 						/>
 						<FilterList
-							type = "Single"
 							data = { userList }
 							value = { userList[chair.id] }
 							placeholder = { "Director/Chairperson" }

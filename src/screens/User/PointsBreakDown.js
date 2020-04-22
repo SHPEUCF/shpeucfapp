@@ -6,7 +6,6 @@ import { NavBar } from "../../components/general";
 import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from "react-native";
 import { fetchMembersPoints, loadUser, fetchEvents, goToViewEvent } from "../../ducks";
 
-console.disableYellowBox = true;
 const dimension = Dimensions.get("window");
 
 class PointsBreakDown extends Component {

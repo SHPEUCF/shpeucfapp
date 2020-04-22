@@ -6,9 +6,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import _ from "lodash";
 import { FlatList, Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
 import {
+	editUser,
 	getCommittees,
-	changeUserCommittees,
-	getUserCommittees,
 	typeChanged,
 	nameChanged,
 	descriptionChanged,
@@ -116,6 +115,10 @@ class Committees extends Component {
 			textColor
 		} = styles;
 
+		const {
+			activeUser
+		} = this.props;
+
 		if (this.props.screen === "dashboard")
 			return (
 				<View >
@@ -124,18 +127,24 @@ class Committees extends Component {
 						<View style = { containerStyle }>
 							<Text style = { [textColor, { fontSize: 16 }] }>{ item.title }</Text>
 						</View>
-						{ this.props.userCommittees && this.props.userCommittees[item.title]
+						{ activeUser.userCommittees && activeUser.userCommittees[item.title]
 							&& <View
 								style = {{ backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end" }}
 							>
 								<Ionicons
 									name = "ios-star"
 									size = { dimension.height * 0.03 }
-									onPress = { () => this.props.changeUserCommittees({ [item.title]: null }) }
+									onPress = { () => {
+										editUser({ userCommittees: {
+											...activeUser.userCommittees,
+											...{ [item.title]: null }
+										} });
+										this.setState({});
+									} }
 									style = {{ color: "#FECB00" }}
 								/>
 							</View> }
-						{ (!this.props.userCommittees || !this.props.userCommittees[item.title])
+						{ (!activeUser.userCommittees || !activeUser.userCommittees[item.title])
 						&& <View
 							style = {{ backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end" }}
 						>
@@ -143,8 +152,11 @@ class Committees extends Component {
 								name = "ios-star-outline"
 								size = { dimension.height * 0.03 }
 								onPress = { () => {
-									if (!this.props.userCommittees || Object.entries(this.props.userCommittees).length <= 4)
-										this.props.changeUserCommittees({ [item.title]: true });
+									if (!activeUser.userCommittees || Object.entries(activeUser.userCommittees).length <= 4)
+										editUser({ userCommittees: {
+											...activeUser.userCommittees,
+											...{ [item.title]: true }
+										} });
 								} }
 								style = {{ color: "#FECB00" }}
 							/>
@@ -381,23 +393,15 @@ const styles = {
 };
 
 const mapStateToProps = ({ committees, user, events }) => {
-	const {
-		committeesList
-	} = committees;
-	const {
-		userCommittees
-	} = user;
-	const {
-		eventList
-	} = events;
+	const { committeesList } = committees;
+	const { activeUser } = user;
+	const { eventList } = events;
 
-	return { committeesList, Committees, userCommittees, eventList };
+	return { committeesList, activeUser, eventList };
 };
 
 const mapDispatchToProps = {
 	getCommittees,
-	changeUserCommittees,
-	getUserCommittees,
 	typeChanged,
 	nameChanged,
 	descriptionChanged,

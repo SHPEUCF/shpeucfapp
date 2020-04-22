@@ -4,7 +4,7 @@ import { FlatList, View, Dimensions, SafeAreaView, Image } from "react-native";
 import { connect } from "react-redux";
 import { ListItem } from "react-native-elements";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { getPrivilege, pageLoad, updateElection } from "../../ducks";
+import { pageLoad, updateElection } from "../../ducks";
 
 const dimension = Dimensions.get("window");
 
@@ -58,30 +58,36 @@ class More extends Component {
 	}
 
 	render() {
+		const {
+			alignSelf,
+			header,
+			mainBackgroundColor,
+			secondaryBackgroundColor,
+			fullFlex
+		} = styles;
+
 		return (
-			<SafeAreaView style = {{ backgroundColor: "#0c0b0b", flex: 1 }}>
-				<View style = {{ height: dimension.height * 0.1, backgroundColor: "#FECB00", borderBottomWidth: 1, borderColor: "black", justifyContent: "center" }}>
+			<SafeAreaView style = { [mainBackgroundColor, fullFlex] }>
+				<View style = { [header, secondaryBackgroundColor] }>
 					<Image
 						source = { require(imageUrl + "SHPE_UCF_Logo.png") }
-						style = {{ alignSelf: "center" }}
+						style = { alignSelf }
 						height = { dimension.height * 0.06 }
 						resizeMode = "contain"
 					/>
 				</View>
-				<View>
-					<FlatList
-						removeClippedSubviews = { false }
-						extraData = { this.props }
-						keyExtractor = { this.keyExtractor }
-						data = { menuItems }
-						renderItem = { this.renderItem }
-					/>
-				</View>
-				<View style = {{ justifyContent: "center", flex: 1, flexDirection: "row", backgroundColor: "black" }}>
+				<FlatList
+					removeClippedSubviews = { false }
+					extraData = { this.props }
+					keyExtractor = { this.keyExtractor }
+					data = { menuItems }
+					renderItem = { this.renderItem }
+				/>
+				<View style = { [fullFlex, mainBackgroundColor] }>
 					<Image
 						source = { require(imageUrl + "SHPE_logo_FullColor-RGB-2x.png") }
-						style = {{ alignSelf: "center" }}
-						height = { dimension.height * dimension.width * 0.00025 }
+						style = { alignSelf }
+						height = { 80 }
 						resizeMode = "contain"
 					/>
 				</View>
@@ -98,9 +104,20 @@ class More extends Component {
 	renderItem = ({	item }) => {
 		const {
 			election,
+			activeUser
+		} = this.props;
+
+		const {
 			privilege,
 			apply
-		} = this.props;
+		} = activeUser;
+
+		const {
+			mainBackgroundColor,
+			bottomBorder,
+			primaryTextColor,
+			secondaryTextColor
+		} = styles;
 
 		if (item.title === "Voting" && !election) return null;
 		if (item.title === "E-Board Application" && !apply) return null;
@@ -109,15 +126,15 @@ class More extends Component {
 			return (
 				<View>
 					<ListItem
-						containerStyle = {{ backgroundColor: "black", borderBottomColor: "black" }}
+						containerStyle = { [mainBackgroundColor, bottomBorder] }
 						removeClippedSubviews = { false }
 						title = { item.title }
-						titleStyle = {{ color: "white" }}
+						titleStyle = { primaryTextColor }
 						leftIcon = {{ name: item.icon, color: "white" }}
 						rightIcon = { <Ionicons
 							name = "ios-arrow-dropright"
 							size = { 22 }
-							style = {{ color: "#FECB00" }}
+							style = { secondaryTextColor }
 						/> }
 						onPress = { () => Actions[item.screen]() }
 					/>
@@ -126,24 +143,47 @@ class More extends Component {
 	}
 }
 
+const styles = {
+	header: {
+		height: "10%",
+		justifyContent: "center"
+	},
+	mainBackgroundColor: {
+		backgroundColor: "black"
+	},
+	secondaryBackgroundColor: {
+		backgroundColor: "#FECB00"
+	},
+	bottomBorder: {
+		borderBottomWidth: 1,
+		borderColor: "black"
+	},
+	fullFlex: {
+		flex: 1
+	},
+	primaryTextColor: {
+		color: "white"
+	},
+	secondaryTextColor: {
+		color: "#FECB00"
+	},
+	alignSelf: {
+		alignSelf: "center"
+	}
+};
+
 const mapStateToProps = ({ user, general, elect }) => {
-	const {
-		privilege,
-		dashColor
-	} = user;
-	const {
-		loading
-	} = general;
+	const { activeUser } = user;
+	const { loading } = general;
 	const {
 		election,
 		apply
 	} = elect;
 
-	return { privilege, loading, election, apply, dashColor };
+	return { loading, election, apply, activeUser };
 };
 
 const mapDispatchToProps = {
-	getPrivilege,
 	pageLoad,
 	updateElection
 };
