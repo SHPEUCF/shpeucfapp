@@ -1,4 +1,4 @@
-<!--- What issue does this PR fix? Add the issue number next to '#'. -->
+<!--- What issue does this PR fix? Add the issue number next to '#'. If more than one, separate by commas and add additional hashes next to each issue. -->
 Fixes #
 
 ## Description
@@ -7,10 +7,10 @@ Fixes #
 
 ## Types of changes
 <!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Bug fix (non-breaking change that fixes an issue)
+- [ ] New feature (non-breaking change that adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] Other (specify below)
+- [ ] Other <!--- Specify below -->
 
 ## Checklist:
 <!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
