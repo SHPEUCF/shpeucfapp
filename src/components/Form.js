@@ -140,7 +140,7 @@ import { Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicke
  * 			elements= { elements }
  * 			initialValue = { initialValues }
  * 			title = "The Title"
- * 			visibile = { this.state.formVisibility }
+ * 			visible = { this.state.formVisibility }
  * 			changeVisibility = { (visible) => this.setState({ formVisibility: visible }) }
  * 			onSubmit = { (value) => console.log(`this is the value: ${value}`) }
  * 			onCancel = { () => console.log("I've been cancelled") }

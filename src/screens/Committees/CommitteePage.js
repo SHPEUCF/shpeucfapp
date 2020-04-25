@@ -72,64 +72,32 @@ class CommitteePage extends Component {
 							{ this.renderGreeting() }
 						</View>
 						{ this.state.visible
-	&& <View style = {{ backgroundColor: "black", flex: 0.95, marginLeft: "3%", marginRight: "3%" }}>
-		<View style = {{ flex: 1 }}>
-			<Agenda
-				dashColor = { this.props.activeUser.color }
-				ref = { child => { this.child = child } } { ...this.props }
-				selected = { this.state.day }
-				// onDayChange={(day) => {alert('day pressed')}}
-				setPos = { (stat) => this.setState({ status: stat }) }
-				passDate = { (item) => this.getDate(item) }
-				showWeekNumbers = { false }
-				pastScrollRange = { 24 }
-				futureScrollRange = { 24 }
-				showScrollIndicator = { true }
-				markedItems = { this.markedItems.bind(this) }
-				items = { formatEventList(
-					filterEvents(Object.keys(this.props.committeeEvents || {}), this.props.sortedEvents)
-				) }
-				// Will only load items for visible month to improve performance later
-				// loadItemsForMonth={this.loadItemsForMonth.bind(this)}
-				renderItem = { (item) => this.renderItem(item) }
-				rowHasChanged = { this.rowHasChanged.bind(this) }
-				renderEmptyDate = { this.renderEmptyDate.bind(this) }
-				renderEmptyData = { this.renderEmptyData.bind(this) }
-
-				style = {{
-					height: dimension.height * 0.73
-				}}
-				theme = {{
-					backgroundColor: "black",
-					calendarBackground: "#21252b",
-					agendaDayTextColor: "#fff",
-					agendaDayNumColor: "#fff",
-					dayTextColor: "#fff",
-					monthTextColor: "#FECB00",
-					textSectionTitleColor: "#FECB00",
-					textDisabledColor: "#999",
-					selectedDayTextColor: "#000",
-					selectedDayBackgroundColor: "#FECB00",
-					todayTextColor: "#44a1ff",
-					textDayFontSize: 15,
-					textMonthFontSize: 16,
-					textDayHeaderFontSize: 14,
-					selectedDotColor: "black"
-				}}
-			/>
-		</View>
-		<View style = {{ flex: 0.1, borderTopWidth: 2, borderColor: "#535C68" }}>
-			{ initDate !== dateStr && <TouchableOpacity style = {{ alignItems: "center", justifyContent: "flex-start", flex: 1 }} onPress = { () => this.chooseToday() }>
-				<View style = {{ flex: 0.25 }}></View>
-				<Text style = {{ color: "white", fontSize: 16 }}>
-	Today
-				</Text>
-			</TouchableOpacity> }
-		</View>
-		<View style = {{ flex: 0.1 }}>
-			{ this.renderButton() }
-		</View>
-	</View> }
+							&& <View style = {{ backgroundColor: "black", flex: 0.95, marginLeft: "3%", marginRight: "3%" }}>
+								<View style = {{ flex: 1 }}>
+									<Agenda
+										selected = { this.state.day }
+										passDate = { (item) => dateStr = item.dateString }
+										items = { formatEventList(
+											filterEvents(
+												Object.keys(this.props.committeeEvents || {}),
+												this.props.sortedEvents
+											)
+										) }
+										style = {{ height: dimension.height * 0.73 }}
+									/>
+								</View>
+								<View style = {{ flex: 0.1, borderTopWidth: 2, borderColor: "#535C68" }}>
+									{ initDate !== dateStr && <TouchableOpacity style = {{ alignItems: "center", justifyContent: "flex-start", flex: 1 }} onPress = { () => this.chooseToday() }>
+										<View style = {{ flex: 0.25 }}></View>
+										<Text style = {{ color: "white", fontSize: 16 }}>
+											Today
+										</Text>
+									</TouchableOpacity> }
+								</View>
+								<View style = {{ flex: 0.1 }}>
+									{ this.renderButton() }
+								</View>
+							</View> }
 						<View style = {{ flex: 0.05 }}></View>
 						{ /* {this.renderSelect()} */ }
 						<View style = {{ flex: 0.05 }}></View>
