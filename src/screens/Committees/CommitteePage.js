@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Text, View, Dimensions, TouchableOpacity, Modal, SafeAreaView } from "react-native";
-import { Spinner, NavBar, Button } from "../../components/general";
+import { Spinner, NavBar, Button, Agenda } from "../../components/general";
 import { Avatar } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { Agenda } from "react-native-calendars";
 import {
 	loadUser,
 	pageLoad,
@@ -111,45 +110,10 @@ class CommitteePage extends Component {
 	&& <View style = {{ backgroundColor: "black", flex: 0.95, marginLeft: "3%", marginRight: "3%" }}>
 		<View style = {{ flex: 1 }}>
 			<Agenda
-				dashColor = { this.props.dashColor }
-				ref = { child => { this.child = child } } { ...this.props }
 				selected = { this.state.day }
-				// onDayChange={(day) => {alert('day pressed')}}
-				setPos = { (stat) => this.setState({ status: stat }) }
-				passDate = { (item) => this.getDate(item) }
-				showWeekNumbers = { false }
-				pastScrollRange = { 24 }
-				futureScrollRange = { 24 }
-				showScrollIndicator = { true }
-				markedItems = { this.markedItems.bind(this) }
-				items = { this.getFormattedEventList(this.props.eventList) }
-				// Will only load items for visible month to improve performance later
-				// loadItemsForMonth={this.loadItemsForMonth.bind(this)}
-				renderItem = { (item) => this.renderItem(item) }
-				rowHasChanged = { this.rowHasChanged.bind(this) }
-				renderEmptyDate = { this.renderEmptyDate.bind(this) }
-				renderEmptyData = { this.renderEmptyData.bind(this) }
-
-				style = {{
-					height: dimension.height * 0.73
-				}}
-				theme = {{
-					backgroundColor: "black",
-					calendarBackground: "#21252b",
-					agendaDayTextColor: "#fff",
-					agendaDayNumColor: "#fff",
-					dayTextColor: "#fff",
-					monthTextColor: "#FECB00",
-					textSectionTitleColor: "#FECB00",
-					textDisabledColor: "#999",
-					selectedDayTextColor: "#000",
-					selectedDayBackgroundColor: "#FECB00",
-					todayTextColor: "#44a1ff",
-					textDayFontSize: 15,
-					textMonthFontSize: 16,
-					textDayHeaderFontSize: 14,
-					selectedDotColor: "black"
-				}}
+				passDate = { (item) => dateStr = item.dateString }
+				items = { this.getFormattedEventList() }
+				style = {{ height: dimension.height * 0.73 }}
 			/>
 		</View>
 		<View style = {{ flex: 0.1, borderTopWidth: 2, borderColor: "#535C68" }}>
