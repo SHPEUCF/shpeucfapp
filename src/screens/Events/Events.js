@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button, ButtonLayout } from "../../components/general";
+import { Button, ButtonLayout, Form } from "../../components/";
 import { Agenda } from "react-native-calendars";
+import { goToViewEvent } from "../../utils/router";
+import { formatEventList } from "../../utils/events";
+import { loadEvent, createEvent } from "../../ducks";
+import { upsertEventFormData } from "../../data/FormData";
 import {
 	TouchableOpacity,
 	Text,
@@ -10,22 +14,6 @@ import {
 	Dimensions,
 	SafeAreaView
 } from "react-native";
-import {
-	fetchEvents,
-	getPrivilege,
-	committeeChanged,
-	typeChanged,
-	nameChanged,
-	descriptionChanged,
-	dateChanged,
-	startTimeChanged,
-	endTimeChanged,
-	locationChanged,
-	epointsChanged,
-	eventIDChanged,
-	goToCreateEvent,
-	goToViewEvent
-} from "../../ducks";
 
 const dimension = Dimensions.get("window");
 let dateStr = "";
@@ -34,18 +22,24 @@ let initDate = "";
 class Events extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { status: "closed", day: new Date() };
+		this.state = {
+			status: "closed",
+			day: new Date(),
+			eventFormVisibility: false
+	 };
 	}
 
 	componentDidMount() {
+		dateStr = this.getTodaysDate();
+		initDate = this.getTodaysDate();
+	}
+
+	getTodaysDate() {
 		let date = new Date();
 		let month = this.prepend0((date.getMonth() + 1).toString());
 		let year = date.getFullYear();
 		let day = this.prepend0(date.getDate().toString());
-		let stringDate = `${year}-${month}-${day}`;
-
-		dateStr = stringDate;
-		initDate = stringDate;
+		return `${year}-${month}-${day}`;
 	}
 
 	static onRight = function() {
@@ -68,9 +62,16 @@ class Events extends Component {
 		return (
 			<SafeAreaView style = {{ flex: 1, backgroundColor: "#0c0b0b" }}>
 				<View style = {{ backgroundColor: "black", flex: 1 }}>
+					<Form
+						elements = { upsertEventFormData }
+						title = "Create Event"
+						initialValues = { [{ camelCaseName: "date", value: this.getTodaysDate() }] }
+						visible = { this.state.eventFormVisibility }
+						changeVisibility = { (visible) => this.setState({ eventFormVisibility: visible }) }
+						onSubmit = { (value) => createEvent(value) }
+					/>
 					<ScrollView style = {{ flex: 1 }}>
 						<Agenda
-							dashColor = { this.props.activeUser.color }
 							ref = { child => { this.child = child } } { ...this.props }
 							selected = { this.state.day }
 							// onDayChange={(day) => {alert('day pressed')}}
@@ -81,7 +82,7 @@ class Events extends Component {
 							futureScrollRange = { 24 }
 							showScrollIndicator = { true }
 							markedItems = { this.markedItems.bind(this) }
-							items = { this.getFormattedEventList() }
+							items = { formatEventList(this.props.sortedEvents) }
 							// Will only load items for visible month to improve performance later
 							// loadItemsForMonth={this.loadItemsForMonth.bind(this)}
 							renderItem = { (item) => this.renderItem(item) }
@@ -127,7 +128,7 @@ class Events extends Component {
 	}
 
 	selectButton() {
-		if (this.state.status === "closed")
+		if (this.state.status === "close")
 			return (
 				<Button
 					title = "Open Calendar"
@@ -150,37 +151,17 @@ class Events extends Component {
 	}
 
 	renderButton() {
-		const {
-			activeUser,
-			dateChanged,
-			goToCreateEvent
-		} = this.props;
+		const { activeUser } = this.props;
+
 		return (
 			<ButtonLayout>
 				{ activeUser.privilege && activeUser.privilege.board && <Button
 					title = "Create Event"
-					onPress = { () => {
-						dateChanged(dateStr);
-						goToCreateEvent("events");
-					} }
+					onPress = { () => this.setState({ eventFormVisibility: true }) }
 				/> }
 				{ this.selectButton() }
 			</ButtonLayout>
 		);
-	}
-
-	getFormattedEventList() {
-		let events = this.props.eventList;
-		let dates = {};
-
-		for (let props in events) {
-			events[props]["eventID"] = props;
-			if (!dates[events[props].date])
-				dates[events[props].date] = [events[props]];
-			else
-				dates[events[props].date].push(events[props]);
-		}
-		return dates;
 	}
 
 	renderEmptyDate() {
@@ -208,17 +189,8 @@ class Events extends Component {
 	}
 
 	viewEvent(item) {
-		this.props.typeChanged(item.type);
-		this.props.committeeChanged(item.committee);
-		this.props.nameChanged(item.name);
-		this.props.descriptionChanged(item.description);
-		this.props.dateChanged(item.date);
-		this.props.startTimeChanged(item.startTime);
-		this.props.endTimeChanged(item.endTime);
-		this.props.locationChanged(item.location);
-		this.props.epointsChanged(item.points);
-		this.props.eventIDChanged(item.eventID);
-		this.props.goToViewEvent("events");
+		this.props.loadEvent(item);
+		goToViewEvent("events");
 	}
 
 	renderItem(item) {
@@ -228,7 +200,7 @@ class Events extends Component {
 		} = styles;
 
 		let viewName = item.type + ": " + item.name;
-		if (item.committee !== "")
+		if (item.committee)
 			viewName = item.committee + ": " + item.name;
 
 		return (
@@ -236,28 +208,12 @@ class Events extends Component {
 				<View style = { [itemContainer, { backgroundColor: this.props.activeUser.color }] }>
 					<Text style = { [{ fontWeight: "bold" }, textColor] }>{ viewName }</Text>
 					<Text style = { textColor }>
-						Time: { this.convertHour(item.startTime) } - { this.convertHour(item.endTime) }
+						Time: { item.startTime } - { item.endTime }
 					</Text>
 					<Text style = { textColor }>Location: { item.location }</Text>
 				</View>
 			</TouchableOpacity>
 		);
-	}
-
-	convertHour(time) {
-		let array = time.split(":");
-		let hour;
-
-		if (array[2] === "AM") {
-			hour = "" + parseInt(array[0]);
-			if (hour === "0") hour = "12";
-
-			return hour + ":" + array[1] + ":" + array[2];
-		}
-		hour = "" + (parseInt(array[0]) - 12);
-		if (hour === "0") hour = "12";
-
-		return hour + ":" + array[1] + ":" + array[2];
 	}
 
 	rowHasChanged(r1, r2) {
@@ -266,42 +222,8 @@ class Events extends Component {
 }
 
 const styles = {
-	container: {
-		flex: 1,
-		alignItems: "center",
-		justifyContent: "flex-start",
-		margin: 5
-	},
 	textColor: {
 		color: "white"
-	},
-	modalTextInput: {
-		marginTop: dimension.height * 0.05,
-		height: dimension.height * 0.091,
-		textAlign: "center",
-		width: dimension.width * 0.6,
-		backgroundColor: "#FECB0022",
-		borderColor: "#FECB00",
-		borderRadius: dimension.height * 0.01,
-		borderWidth: dimension.width * 0.01,
-		borderStyle: "solid",
-		fontWeight: "bold",
-		fontSize: 60
-	},
-	modalContent: {
-		height: dimension.height * 0.35,
-		width: dimension.width * 0.8,
-		padding: 12,
-		backgroundColor: "#fff",
-		borderRadius: 12
-	},
-	modalBackground: {
-		justifyContent: "center",
-		alignItems: "center",
-		margin: 0,
-		height: dimension.height,
-		width: dimension.width,
-		backgroundColor: "#000a"
 	},
 	itemContainer: {
 		flex: 1,
@@ -310,10 +232,6 @@ const styles = {
 		padding: dimension.height * 0.020,
 		marginRight: dimension.height * 0.010,
 		marginTop: dimension.height * 0.02
-	},
-	headerTextStyle: {
-		fontSize: 22,
-		fontWeight: "bold"
 	},
 	emptyData: {
 		height: dimension.height * 0.15,
@@ -326,31 +244,12 @@ const styles = {
 };
 
 const mapStateToProps = ({ events, user }) => {
-	const {
-		eventList
-	} = events;
-	const {
-		activeUser
-	} = user;
+	const { sortedEvents } = events;
+	const { activeUser } = user;
 
-	return { eventList, activeUser };
+	return { sortedEvents, activeUser };
 };
 
-const mapDispatchToProps = {
-	fetchEvents,
-	getPrivilege,
-	committeeChanged,
-	typeChanged,
-	nameChanged,
-	descriptionChanged,
-	dateChanged,
-	startTimeChanged,
-	endTimeChanged,
-	locationChanged,
-	epointsChanged,
-	eventIDChanged,
-	goToCreateEvent,
-	goToViewEvent
-};
+const mapDispatchToProps = { loadEvent };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Events);

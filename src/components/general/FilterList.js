@@ -258,7 +258,7 @@ class FilterList extends Component {
 		let regexVal = regexFunc(data);
 		let desiredVal = selectBy(data);
 
-		if (!search) {
+		if (search === undefined || search === null) {
 			backgroundColor = selected[`${desiredVal}`] ? { backgroundColor: "#f00" } : {};
 			pressAction = (data) => this.select(data, desiredVal);
 		}

@@ -1,39 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Text, View, Dimensions, TouchableOpacity, Modal, SafeAreaView } from "react-native";
+import { Text, View, Dimensions, TouchableOpacity, SafeAreaView } from "react-native";
 import { Spinner, NavBar, Button } from "../../components/general";
-import { Avatar } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { Agenda } from "react-native-calendars";
-import {
-	loadUser,
-	pageLoad,
-	fetchMembersPoints,
-	fetchMemberProfile,
-	fetchEvents,
-	getPrivilege,
-	updateElection,
-	typeChanged,
-	nameChanged,
-	descriptionChanged,
-	dateChanged,
-	startTimeChanged,
-	endTimeChanged,
-	locationChanged,
-	epointsChanged,
-	eventIDChanged,
-	goToViewEvent,
-	getCommittees,
-	fetchAllUsers,
-	committeeChanged,
-	goToCreateEvent,
-	pendingJoin,
-	approveJoin,
-	deleteMemberFromCom,
-	loadCommittee,
-	openJoin
-} from "../../ducks";
+import { goToViewEvent } from "../../utils/router";
+import { formatEventList, filterEvents } from "../../utils/events";
+import { loadCommittee, loadEvent } from "../../ducks";
 
 const dimension = Dimensions.get("window");
 let dateStr = "";
@@ -113,7 +86,9 @@ class CommitteePage extends Component {
 				futureScrollRange = { 24 }
 				showScrollIndicator = { true }
 				markedItems = { this.markedItems.bind(this) }
-				items = { this.getFormattedEventList(this.props.eventList) }
+				items = { formatEventList(
+					filterEvents(Object.keys(this.props.committeeEvents || {}), this.props.sortedEvents)
+				) }
 				// Will only load items for visible month to improve performance later
 				// loadItemsForMonth={this.loadItemsForMonth.bind(this)}
 				renderItem = { (item) => this.renderItem(item) }
@@ -164,27 +139,6 @@ class CommitteePage extends Component {
 		);
 	}
 
-	renderButtons() {
-		return (
-			<View style = {{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "flex-start" }}>
-				<View style = {{ flex: 0.45 }}>
-					<Button
-						title = "Current Members"
-						onPress = { () => {
-							this.setState({ joined: true });
-						} }
-					/>
-				</View>
-				<View style = {{ flex: 0.45 }}>
-					<Button
-						title = "Pending Members"
-						onPress = { () => {
-							this.setState({ pending: true });
-						} }
-					/>
-				</View>
-			</View>);
-	}
 	selectButton() {
 		if (this.state.status === "closed")
 
@@ -206,36 +160,13 @@ class CommitteePage extends Component {
 	}
 
 	renderButton() {
-		if (this.props.activeUser.privilege && this.props.activeUser.privilege.board && this.props.chair.id === this.props.activeUser.id)
-
-			return (
-				<View style = {{ position: "absolute", bottom: dimension.height * 0.025, width: "100%" }}>
-					<View style = {{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
-						<View style = {{ flex: 0.45 }}>
-							<Button
-								title = "Create Event"
-								onPress = { () => {
-									this.props.dateChanged(dateStr);
-									this.props.goToCreateEvent(this.props.screen + "committeepage", { type: "Committee", committee: this.props.committeeTitle, points: 2 });
-								} }
-							/>
-						</View>
-						<View style = {{ flex: 0.45 }}>
-							{ this.selectButton() }
-						</View>
-					</View>
+		return (
+			<View style = {{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * 0.025, width: "100%" }}>
+				<View style = {{ flex: 1, marginHorizontal: "25%" }}>
+					{ this.selectButton() }
 				</View>
-			);
-		else
-			return (
-				<View style = {{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * 0.025, width: "100%" }}>
-					<View style = {{ flex: 0.3 }}></View>
-					<View style = {{ flex: 1 }}>
-						{ this.selectButton() }
-					</View>
-					<View style = {{ flex: 0.3 }}></View>
-				</View>
-			);
+			</View>
+		);
 	}
 
 	renderJoinedMembers(item) {
@@ -278,30 +209,6 @@ class CommitteePage extends Component {
 		);
 	}
 
-	getFormattedEventList(eventList) {
-		if (!this.props.committeeEvents || !this.props.eventList || !this.props.eventList)
-			return {};
-
-		let events = {};
-		Object.keys(this.props.committeeEvents).forEach(function(element) {
-			Object.assign(events, { [element]: eventList[element] });
-		});
-
-		let dates = {};
-
-		for (let props in events) {
-			if (!events[props]) continue;
-
-			events[props]["eventID"] = props;
-			if (!dates[events[props].date])
-				dates[events[props].date] = [events[props]];
-			else
-				dates[events[props].date].push(events[props]);
-		}
-
-		return dates;
-	}
-
 	renderEmptyDate() {
 		return (
 			<View>
@@ -330,17 +237,8 @@ class CommitteePage extends Component {
 	}
 
 	viewEvent(item) {
-		this.props.typeChanged(item.type);
-		this.props.committeeChanged(item.committee);
-		this.props.nameChanged(item.name);
-		this.props.descriptionChanged(item.description);
-		this.props.dateChanged(item.date);
-		this.props.startTimeChanged(item.startTime);
-		this.props.endTimeChanged(item.endTime);
-		this.props.locationChanged(item.location);
-		this.props.epointsChanged(item.points);
-		this.props.eventIDChanged(item.eventID);
-		this.props.goToViewEvent(this.props.screen + "committeepage");
+		loadEvent(item);
+		goToViewEvent(this.props.screen + "committeepage");
 	}
 
 	renderItem(item) {
@@ -521,22 +419,11 @@ const styles = {
 };
 
 const mapStateToProps = ({ user, general, members, events, elect, committees }) => {
-	const {
-		activeUser
-	} = user;
-	const {
-		loading
-	} = general;
-	const {
-		membersPoints,
-		userList
-	} = members;
-	const {
-		eventList
-	} = events;
-	const {
-		election
-	} = elect;
+	const { activeUser } = user;
+	const { loading } = general;
+	const { membersPoints, userList } = members;
+	const { sortedEvents } = events;
+	const { election } = elect;
 	const {
 		committeeTitle,
 		committeeEvents,
@@ -553,7 +440,7 @@ const mapStateToProps = ({ user, general, members, events, elect, committees }) 
 		activeUser,
 		loading,
 		membersPoints,
-		eventList,
+		sortedEvents,
 		election,
 		committeeEvents,
 		committeeTitle,
@@ -567,33 +454,6 @@ const mapStateToProps = ({ user, general, members, events, elect, committees }) 
 		committeesList };
 };
 
-const mapDispatchToProps = {
-	loadUser,
-	pageLoad,
-	fetchMembersPoints,
-	fetchMemberProfile,
-	fetchEvents,
-	getPrivilege,
-	updateElection,
-	typeChanged,
-	nameChanged,
-	descriptionChanged,
-	dateChanged,
-	startTimeChanged,
-	endTimeChanged,
-	locationChanged,
-	epointsChanged,
-	eventIDChanged,
-	goToViewEvent,
-	getCommittees,
-	fetchAllUsers,
-	committeeChanged,
-	goToCreateEvent,
-	pendingJoin,
-	approveJoin,
-	deleteMemberFromCom,
-	loadCommittee,
-	openJoin
-};
+const mapDispatchToProps = { loadCommittee };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CommitteePage);

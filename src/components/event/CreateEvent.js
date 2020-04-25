@@ -177,8 +177,8 @@ class CreateEvent extends Component {
 			if (this.props.title === "Create Event") { createEvent(type, committee, name, description, date, startTime, endTime, location, points) }
 			else {
 				editEvent(type, committee, name, description, date, `${startTimeComp[0]}:${startTimeComp[1]}:${startTimeComp[2]}`, `${endTimeComp[0]}:${endTimeComp[1]}:${endTimeComp[2]}`, location, points, eventID);
-				this.props.startTimeChanged(this.convertHour(`${startTimeComp[0]}:${startTimeComp[1]}:${startTimeComp[2]}`));
-				this.props.endTimeChanged(this.convertHour(`${endTimeComp[0]}:${endTimeComp[1]}:${endTimeComp[2]}`));
+				// this.props.startTimeChanged(this.convertHour(`${startTimeComp[0]}:${startTimeComp[1]}:${startTimeComp[2]}`));
+				// this.props.endTimeChanged(this.convertHour(`${endTimeComp[0]}:${endTimeComp[1]}:${endTimeComp[2]}`));
 			}
 			Actions.pop();
 		}
@@ -189,22 +189,6 @@ class CreateEvent extends Component {
 		this.setState({ text: String(item), modalVisible: false });
 	}
 
-	convertHour(time) {
-		let array = time.split(":");
-		let hour;
-
-		if (array[2] === "AM") {
-			hour = "" + parseInt(array[0]);
-			if (hour === "0") hour = "12";
-
-			return hour + ":" + array[1] + ":" + array[2];
-		}
-
-		hour = "" + (parseInt(array[0]) - 12);
-		if (hour === "0") hour = "12";
-
-		return hour + ":" + array[1] + ":" + array[2];
-	}
 
 	prepend0(time) {
 		let array = time.split(":");

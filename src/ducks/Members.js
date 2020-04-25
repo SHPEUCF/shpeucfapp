@@ -262,7 +262,7 @@ export const fetchMemberProfile = (userID) => {
 		currentUser
 	} = firebase.auth();
 	let id = typeof userID === "undefined" ? currentUser.uid : userID;
-
+	console.log(userID);
 	return (dispatch) => {
 		if (currentUser)
 			firebase.database().ref(`/users/${id}/`).on("value", snapshot => {

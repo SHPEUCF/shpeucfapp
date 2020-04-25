@@ -222,21 +222,12 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ user, members, events, general }) => {
-	const {
-		membersPoints
-	} = members;
-	const {
-		id
-	} = user;
-	const {
-		eventList
-	} = events;
-	const {
-		loading
-	} = general;
+const mapStateToProps = ({ user, members, general }) => {
+	const { membersPoints } = members;
+	const { id } = user;
+	const { loading } = general;
 
-	return { membersPoints, id, eventList, loading };
+	return { membersPoints, id, loading };
 };
 
 const mapDispatchToProps = {
