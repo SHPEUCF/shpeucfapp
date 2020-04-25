@@ -70,7 +70,7 @@ class Events extends Component {
 				<View style = {{ backgroundColor: "black", flex: 1 }}>
 					<ScrollView style = {{ flex: 1 }}>
 						<Agenda
-							dashColor = { this.props.dashColor }
+							dashColor = { this.props.activeUser.color }
 							ref = { child => { this.child = child } } { ...this.props }
 							selected = { this.state.day }
 							// onDayChange={(day) => {alert('day pressed')}}
@@ -150,13 +150,18 @@ class Events extends Component {
 	}
 
 	renderButton() {
+		const {
+			activeUser,
+			dateChanged,
+			goToCreateEvent
+		} = this.props;
 		return (
 			<ButtonLayout>
-				{ this.props.privilege && this.props.privilege.board && <Button
+				{ activeUser.privilege && activeUser.privilege.board && <Button
 					title = "Create Event"
 					onPress = { () => {
-						this.props.dateChanged(dateStr);
-						this.props.goToCreateEvent("events");
+						dateChanged(dateStr);
+						goToCreateEvent("events");
 					} }
 				/> }
 				{ this.selectButton() }
@@ -189,13 +194,13 @@ class Events extends Component {
 		} = styles;
 
 		return (
-			<View style = { [emptyData, { backgroundColor: this.props.dashColor }] }>
+			<View style = { [emptyData, { backgroundColor: this.props.activeUser.color }] }>
 				<Text style = { textColor }>No events to display on this day</Text>
 			</View>
 		);
 	}
 
-	markedItems() {
+	markedItems(items) {
 		const markedItems = {};
 		Object.keys(items).forEach(key => { markedItems[key] = { selected: true, marked: true } });
 
@@ -228,9 +233,11 @@ class Events extends Component {
 
 		return (
 			<TouchableOpacity onPress = { this.viewEvent.bind(this, item) }>
-				<View style = { [itemContainer, { backgroundColor: this.props.dashColor }] }>
+				<View style = { [itemContainer, { backgroundColor: this.props.activeUser.color }] }>
 					<Text style = { [{ fontWeight: "bold" }, textColor] }>{ viewName }</Text>
-					<Text style = { textColor }>Time: { this.convertHour(item.startTime) } - { this.convertHour(item.endTime) }</Text>
+					<Text style = { textColor }>
+						Time: { this.convertHour(item.startTime) } - { this.convertHour(item.endTime) }
+					</Text>
 					<Text style = { textColor }>Location: { item.location }</Text>
 				</View>
 			</TouchableOpacity>
@@ -323,11 +330,10 @@ const mapStateToProps = ({ events, user }) => {
 		eventList
 	} = events;
 	const {
-		privilege,
-		dashColor
+		activeUser
 	} = user;
 
-	return { eventList, privilege, dashColor };
+	return { eventList, activeUser };
 };
 
 const mapDispatchToProps = {

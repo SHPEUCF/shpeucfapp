@@ -7,7 +7,7 @@ import _ from "lodash";
 import * as Progress from "react-native-progress";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Text, View, Dimensions, SafeAreaView } from "react-native";
-import { verifiedCheckMark, rankMembers, truncateNames } from "../../utils/render";
+import { verifiedCheckMark, rankMembersAndReturnsCurrentUser, truncateNames } from "../../utils/render";
 import FastImage from "react-native-fast-image";
 import {
 	fetchMembersPoints,
@@ -41,9 +41,13 @@ class Leaderboard extends Component {
 		const {
 			screenBackground
 		} = styles;
+		const {
+			userList,
+			activeUser
+		} = this.props;
 
-		const sortedMembers = _.orderBy(this.props.userList, iteratees, order);
-		rankMembers(sortedMembers, this.props.id);
+		const sortedMembers = _.orderBy(userList, iteratees, order);
+		rankMembersAndReturnsCurrentUser(sortedMembers, activeUser.id);
 
 		return (
 			<SafeAreaView style = { screenBackground }>
@@ -55,8 +59,6 @@ class Leaderboard extends Component {
 					childStyle = {{ flex: 1, paddingRight: "10%" }}
 				/>
 				<FilterList
-					title = { "Members" }
-					type = "Searchbar"
 					data = { sortedMembers }
 					search = { this.state.search }
 					placeholder = "Find user"
@@ -81,8 +83,7 @@ class Leaderboard extends Component {
 			userTextContainer,
 			row
 		} = styles;
-
-		let currentUserTextStyle = item.id === this.props.id ? userContainerColor : {};
+		let currentUserTextStyle = item.id === this.props.activeUser.id ? userContainerColor : {};
 		truncateNames(item);
 
 		return (
@@ -231,15 +232,14 @@ const mapStateToProps = ({ user, members, general }) => {
 	} = members;
 
 	const {
-		picture,
-		id
+		activeUser
 	} = user;
 
 	const {
 		filter
 	} = general;
 
-	return { membersPoints, id, picture, filter, userList };
+	return { membersPoints, activeUser, filter, userList };
 };
 
 const mapDispatchToProps = {

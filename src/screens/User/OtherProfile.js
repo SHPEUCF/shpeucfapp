@@ -94,7 +94,7 @@ class OtherProfile extends Component {
 					&& <Avatar
 						size = { dimension.height * 0.32 }
 						rounded
-						titleStyle = {{ backgroundColor: this.props.dashColor, height: "100%", width: "100%", justifyContent: "center", paddingTop: "20%" }}
+						titleStyle = {{ backgroundColor: this.props.color, height: "100%", width: "100%", justifyContent: "center", paddingTop: "20%" }}
 						title = { firstName[0].concat(lastName[0]) }
 					/> }
 					{ picture !== ""
@@ -151,7 +151,7 @@ class OtherProfile extends Component {
 			<View style = {{ flex: 0.2 }}>
 				<View style = {{ flex: 0.03 }}></View>
 				<View style = { socialmediarow }>
-					<View style = { [LogoContainer, { backgroundColor: this.props.dashColor, flex: 1 }] }>
+					<View style = { [LogoContainer, { backgroundColor: this.props.color, flex: 1 }] }>
 						<TouchableOpacity
 							onPress = { () => {
 								alert("Coming Soon");
@@ -161,7 +161,7 @@ class OtherProfile extends Component {
 						</TouchableOpacity>
 					</View>
 					<View style = {{ flex: 0.01 }}></View>
-					<View style = { [LogoContainer, { backgroundColor: this.props.dashColor, flex: 1 }] }>
+					<View style = { [LogoContainer, { backgroundColor: this.props.color, flex: 1 }] }>
 						<TouchableOpacity
 							onPress = { () => {
 								alert("Coming Soon");
@@ -257,7 +257,7 @@ const mapStateToProps = ({ members, general, user }) => {
 		points,
 		picture,
 		quote,
-		dashColor,
+		color,
 		flag,
 		paidMember
 	} = members;
@@ -265,7 +265,7 @@ const mapStateToProps = ({ members, general, user }) => {
 		loading
 	} = general;
 	const {
-		privilege
+		activeUser
 	} = user;
 
 	return {
@@ -277,8 +277,8 @@ const mapStateToProps = ({ members, general, user }) => {
 		picture,
 		quote,
 		loading,
-		privilege,
-		dashColor,
+		activeUser,
+		color,
 		flag,
 		paidMember
 	};

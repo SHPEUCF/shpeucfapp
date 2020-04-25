@@ -25,10 +25,7 @@ import {
 	eventIDChanged,
 	goToViewEvent,
 	getCommittees,
-	setDashColor,
-	setFlag,
 	fetchAllUsers,
-	getUserCommittees,
 	committeeChanged,
 	goToCreateEvent,
 	pendingJoin,
@@ -95,12 +92,6 @@ class CommitteePage extends Component {
 			<SafeAreaView style = {{ flex: 1, backgroundColor: "#0c0b0b" }}>
 				<View style = {{ flexDirection: "row", justifyContent: "space-between", backgroundColor: "black", paddingRight: "10%" }}>
 					<NavBar title = { this.props.committeeTitle } back onBack = { () => Actions.pop() } />
-					<View style = {{ flex: 0.6, alignItems: "center", flexDirection: "row", justifyContent: "center", backgroundColor: "black" }}>
-						{ /* {this.renderMemberStatus()}
-	<View style= {{backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end"}}>
-	<Ionicons name="ios-calendar" size={dimension.height * .03} onPress = {() => this.setState({visible: !this.state.visible})} style={{color: '#FECB00'}}/>
-	</View> */ }
-					</View>
 				</View>
 				<View style = {{ flex: 1, backgroundColor: "#535C68" }}>
 					<View style = {{ flex: 1, height: dimension.height * 1.1 }}>
@@ -111,7 +102,7 @@ class CommitteePage extends Component {
 	&& <View style = {{ backgroundColor: "black", flex: 0.95, marginLeft: "3%", marginRight: "3%" }}>
 		<View style = {{ flex: 1 }}>
 			<Agenda
-				dashColor = { this.props.dashColor }
+				dashColor = { this.props.activeUser.color }
 				ref = { child => { this.child = child } } { ...this.props }
 				selected = { this.state.day }
 				// onDayChange={(day) => {alert('day pressed')}}
@@ -173,117 +164,6 @@ class CommitteePage extends Component {
 		);
 	}
 
-	renderMemberStatus() {
-		const {
-			joinedMembers,
-			pendingMembers,
-			id,
-			committeeTitle,
-			joinOpened
-		} = this.props;
-
-		if (this.props.chair.id === this.props.id && this.joinOpened)
-			return (
-				<View style = {{ backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end" }}>
-					<Ionicons name = "md-person-add" size = { dimension.height * 0.03 }
-						onPress = { () => {
-							this.props.openJoin(committeeTitle, true);
-						} }
-						style = {{ color: "#FECB00" }} />
-				</View>
-			);
-		else if (this.props.chair.id === this.props.id)
-			<View style = {{ backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end" }}>
-				<Ionicons name = "md-add-circle" size = { dimension.height * 0.03 }
-					onPress = { () => {
-						this.props.openJoin(committeeTitle, false);
-					} }
-					style = {{ color: "#FECB00" }} />
-			</View>;
-
-		if (!joinedMembers && !pendingMembers)
-			if (joinOpened) {
-				return (
-					<View style = {{ backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end" }}>
-						<Ionicons name = "md-person-add" size = { dimension.height * 0.03 }
-							onPress = { () => {
-								this.props.pendingJoin(committeeTitle, id);
-							} }
-							style = {{ color: "#FECB00" }} />
-					</View>
-				);
-			}
-			else return null;
-
-		if (!joinedMembers && joinOpened)
-			return (
-				<View style = {{ backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end" }}>
-					<Ionicons name = "ios-alert" size = { dimension.height * 0.03 }
-						onPress = { () => {
-							this.props.pendingJoin(committeeTitle, id);
-						} }
-						style = {{ color: "#FECB00" }} />
-				</View>
-			);
-		else if (!pendingMembers)
-			if (joinedMembers[id] || joinedMembers[id]) {
-				return (
-					<View style = {{ backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end" }}>
-						<Ionicons name = "ios-checkmark-circle" size = { dimension.height * 0.03 }
-							onPress = { () => {
-								alert("You're a committee member!");
-							} }
-							style = {{ color: "#FECB00" }} />
-					</View>
-				);
-			}
-
-		if (joinedMembers[id] || joinedMembers[id])
-			return (
-				<View style = {{ backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end" }}>
-					<Ionicons name = "ios-checkmark-circle" size = { dimension.height * 0.03 }
-						onPress = { () => {
-							alert("You're a committee member!");
-						} }
-						style = {{ color: "#FECB00" }} />
-				</View>
-			);
-
-		if (pendingMembers[id] || pendingMembers[id])
-			return (
-				<View style = {{ backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end" }}>
-					<Ionicons name = "ios-alert" size = { dimension.height * 0.03 }
-						onPress = { () => {
-							alert("Pending Approval!");
-						} }
-						style = {{ color: "#FECB00" }} />
-				</View>
-			);
-		else if (joinOpened)
-			return (
-				<View style = {{ backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end" }}>
-					<Ionicons name = "md-person-add" size = { dimension.height * 0.03 }
-						onPress = { () => {
-							this.props.pendingJoin(committeeTitle, id);
-						} }
-						style = {{ color: "#FECB00" }} />
-				</View>
-			);
-		else return null;
-	}
-
-	renderSelect() {
-		if (this.props.chair.id === this.props.id)
-			return (
-				<View>
-					{ this.renderButtons() }
-					{ this.renderMembers(this.props.joinedMembers, "joined") }
-					{ this.renderMembers(this.props.pendingMembers, "pending") }
-				</View>
-			);
-		else return null;
-	}
-
 	renderButtons() {
 		return (
 			<View style = {{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "flex-start" }}>
@@ -305,66 +185,6 @@ class CommitteePage extends Component {
 				</View>
 			</View>);
 	}
-
-	renderMembers(members, status) {
-		const {
-			userList
-		} = this.props;
-		const {
-			containerStyle,
-			contentContainerStyle,
-			textStyle
-		} = styles;
-
-		if (!members || Object.keys(members).length === 0)
-			return;
-
-		return (
-			<Modal transparent = { true } visible = { this.state[status] }>
-				<View>
-					{ Object.keys(members).map(user =>
-						<View style = { [contentContainerStyle] }>
-							<View style = { containerStyle }>
-								<View style = {{ flex: 0.1 }}></View>
-								<View style = {{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-									<View style = {{ flex: 1 }}>
-										<Text style = { [textStyle, { fontWeight: "bold" }] }>{ `${userList[user].firstName} ${userList[user].lastName}` }</Text>
-									</View>
-									<View style = {{ alignItems: "flex-end", flexDirection: "row", flex: 0.4 }}>
-										<Ionicons
-											onPress = { () => this.props.callUser(user.id) }
-											name = { "ios-arrow-dropright-circle" }
-											size = { dimension.height * 0.04 }
-											color = { "#FECB00" }
-										/>
-										<View style = {{ flex: 0.2 }}></View>
-										{ userList[user].picture === ""
-	&& <Avatar
-		size = { dimension.height * 0.08 }
-		rounded
-		titleStyle = {{ backgroundColor: this.props.dashColor }}
-		overlayContainerStyle = {{ backgroundColor: "black" }}
-		title = { userList[user].firstName[0].concat(userList[user].lastName[0]) }
-	/>
-										}
-										{ user.picture !== ""
-	&& <Avatar
-		size = { dimension.height * 0.08 }
-		rounded
-		source = {{ uri: userList[user].picture }}
-	/>
-										}
-									</View>
-								</View>
-								<View style = {{ flex: 0.1 }}></View>
-							</View>
-						</View>
-					) }
-				</View>
-			</Modal>
-		);
-	}
-
 	selectButton() {
 		if (this.state.status === "closed")
 
@@ -386,7 +206,7 @@ class CommitteePage extends Component {
 	}
 
 	renderButton() {
-		if (this.props.privilege && this.props.privilege.board && this.props.chair.id === this.props.id)
+		if (this.props.activeUser.privilege && this.props.activeUser.privilege.board && this.props.chair.id === this.props.activeUser.id)
 
 			return (
 				<View style = {{ position: "absolute", bottom: dimension.height * 0.025, width: "100%" }}>
@@ -431,34 +251,8 @@ class CommitteePage extends Component {
 		);
 	}
 
-	renderPending() {
-		if (!this.props.pendingMembers)
-			return <Text style = {{ color: "white", fontSize: 16 }}>No Pending Members</Text>;
-
-		return (
-			<View>
-				{ Object.keys(this.props.pendingMembers).map(item =>
-					this.renderPendingMembers(item)
-				) }
-			</View>
-		);
-	}
-
-	renderPendingMembers() {
-		let user = this.props.userList[item];
-
-		const {
-			firstName,
-			lastName
-		} = user;
-
-		return (
-			<Text style = {{ color: "white", fontSize: 16 }}>Pending: { firstName } { lastName }</Text>
-		);
-	}
-
 	renderGreeting() {
-		if (this.props.chair.id === this.props.id)
+		if (this.props.chair.id === this.props.activeUser.id)
 			return (
 				<View style = {{ alignItems: "center", flex: 1, justifyContent: "center" }}>
 					<Text style = {{ color: "white", fontSize: 16 }}>Welcome to Your Committee!</Text>
@@ -522,7 +316,7 @@ class CommitteePage extends Component {
 		} = styles;
 
 		return (
-			<View style = { [emptyData, { backgroundColor: this.props.dashColor }] }>
+			<View style = { [emptyData, { backgroundColor: this.props.activeUser.color }] }>
 				<Text style = { textColor }>No events to display on this day</Text>
 			</View>
 		);
@@ -557,7 +351,7 @@ class CommitteePage extends Component {
 
 		return (
 			<TouchableOpacity onPress = { () => this.viewEvent(item) }>
-				<View style = { [itemContainer, { backgroundColor: this.props.dashColor }] }>
+				<View style = { [itemContainer, { backgroundColor: this.props.activeUser.color }] }>
 					<Text style = { [{ fontWeight: "bold" }, textColor] }>{ item.name }</Text>
 					<Text style = { textColor }>Time: { this.convertHour(item.startTime) } - { this.convertHour(item.endTime) }</Text>
 					<Text style = { textColor }>Location: { item.location }</Text>
@@ -728,12 +522,7 @@ const styles = {
 
 const mapStateToProps = ({ user, general, members, events, elect, committees }) => {
 	const {
-		firstName,
-		id,
-		dashColor,
-		flag,
-		userCommittees,
-		privilege
+		activeUser
 	} = user;
 	const {
 		loading
@@ -761,16 +550,11 @@ const mapStateToProps = ({ user, general, members, events, elect, committees }) 
 	} = committees;
 
 	return {
-		firstName,
-		id,
+		activeUser,
 		loading,
-		privilege,
 		membersPoints,
 		eventList,
 		election,
-		dashColor,
-		flag,
-		userCommittees,
 		committeeEvents,
 		committeeTitle,
 		chair,
@@ -802,10 +586,7 @@ const mapDispatchToProps = {
 	eventIDChanged,
 	goToViewEvent,
 	getCommittees,
-	setDashColor,
-	setFlag,
 	fetchAllUsers,
-	getUserCommittees,
 	committeeChanged,
 	goToCreateEvent,
 	pendingJoin,

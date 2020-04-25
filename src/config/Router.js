@@ -3,12 +3,8 @@ import React from "react";
 import { Router, Scene, Stack, ActionConst } from "react-native-router-flux";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Spinner } from "../components/general";
-import RegistrationForm from "../components/auth/RegistrationForm";
-import EditProfileForm from "../components/auth/EditProfileForm";
-import LoginForm from "../components/auth/LoginForm";
 import CreateEvent from "../components/event/CreateEvent";
 import EventDetailsForm from "../components/event/EventDetails";
-import ResetPasswordForm from "../components/auth/ResetPasswordForm";
 import CandidateForm from "../components/elect/CandidateForm";
 import PositionForm from "../components/elect/PositionForm";
 import CommitteeForm from "../components/general/CommitteeForm";
@@ -21,7 +17,7 @@ import {
 	CommitteesAdmin,
 	ElectionAdmin,
 	MemberAdmin
-} from "../screens"
+} from "../screens";
 
 /** Import Committees **/
 import {
@@ -52,9 +48,11 @@ import {
 
 /** Import User **/
 import {
+	Login,
 	OtherProfile,
 	PointsBreakDown,
-	Profile
+	Profile,
+	ResetPassword
 } from "../screens";
 
 import { Dimensions } from "react-native";
@@ -74,21 +72,14 @@ const RouterComponent = () => {
 					/>
 					<Scene
 						key = "login"
-						component = { LoginForm }
+						component = { Login }
 						title = "Login"
 						type = { ActionConst.REPLACE }
 						hideNavBar
 					/>
 					<Scene
-						key = "registration"
-						component = { RegistrationForm }
-						title = "Create Account"
-						type = { ActionConst.REPLACE }
-						hideNavBar
-					/>
-					<Scene
 						key = "resetPassword"
-						component = { ResetPasswordForm }
+						component = { ResetPassword }
 						title = "Reset Password"
 						type = { ActionConst.REPLACE }
 						hideNavBar
@@ -300,12 +291,6 @@ const RouterComponent = () => {
 							component = { Profile }
 							title = "Profile"
 							leftTitle = "Back"
-						/>
-						<Scene
-							key = "EditProfileForm"
-							component = { EditProfileForm }
-							hideNavBar
-							hideTabBar
 						/>
 						<Scene
 							key = "pointsBreakDown"

@@ -4,7 +4,9 @@ fields are displayed
 */
 
 import Countries from "./Countries.json";
-import Colleges from "./Colleges.json";
+import Majors from "./Majors.json";
+
+// data
 
 const genderOptions = ["Female", "Male", "Other", "Do not wish to disclose"];
 const eventTypeOptions = ["Committee", "Social Event", "Volunteer Event", "GBM", "Workshop", "Other"];
@@ -68,23 +70,71 @@ const upsertEventFormData = [
 
 const editProfileFormDataRegular = [
 	{
-		placeholder: "College",
-		camelCaseName: "college",
+		placeholder: "Gender",
+		camelCaseName: "gender",
 		type: "PickerInput",
-		isRequired: true,
+		isRequired: false,
 		options: {
-			data: Object.keys(Countries)
+			data: genderOptions
+		}
+	},
+	{
+		placeholder: "Major",
+		camelCaseName: "major",
+		type: "FilterList",
+		isRequired: false,
+		options: {
+			data: Majors
+		}
+	},
+	{
+		placeholder: "Country of Origin",
+		camelCaseName: "country",
+		type: "FilterList",
+		isRequired: false,
+		options: {
+			data: Countries
 		}
 	}
-	// {
-	// placeholder: "Major",
-	// 	camelCaseName: "major",
-	// 	type: "PickerInput",
-	// 	isRequired: true
-	// }
 ];
 
 const editProfileFormDataPrivileged = [
+	{
+		placeholder: "Gender",
+		camelCaseName: "gender",
+		type: "PickerInput",
+		isRequired: false,
+		options: {
+			data: genderOptions
+		}
+	},
+	{
+		placeholder: "Major",
+		camelCaseName: "major",
+		type: "FilterList",
+		isRequired: false,
+		options: {
+			data: Majors
+		}
+	},
+	{
+		placeholder: "Country of Origin",
+		camelCaseName: "country",
+		type: "FilterList",
+		isRequired: false,
+		options: {
+			data: Countries
+		}
+	},
+	{
+		placeholder: "Birthday",
+		camelCaseName: "birthday",
+		type: "DatePicker",
+		isRequired: false
+	}
+];
+
+const registrationFormData = [
 	{
 		placeholder: "First Name",
 		camelCaseName: "firstName",
@@ -98,6 +148,24 @@ const editProfileFormDataPrivileged = [
 		isRequired: true
 	},
 	{
+		placeholder: "Knights email",
+		camelCaseName: "email",
+		type: "Input",
+		isRequired: true,
+		options: {
+			keyboardType: "email-address"
+		}
+	},
+	{
+		placeholder: "Password",
+		camelCaseName: "password",
+		type: "Input",
+		isRequired: true,
+		options: {
+			secureTextEntry: true
+		}
+	},
+	{
 		placeholder: "Gender",
 		camelCaseName: "gender",
 		type: "PickerInput",
@@ -107,42 +175,29 @@ const editProfileFormDataPrivileged = [
 		}
 	},
 	{
-		placeholder: "College",
-		camelCasseName: "college",
-		type: "PickerInput",
+		placeholder: "Major",
+		camelCaseName: "major",
+		type: "FilterList",
 		isRequired: false,
 		options: {
-			data: Object.keys(Colleges)
+			data: Majors
 		}
 	},
-	// {
-	// placeholder: "Major",
-	// 	camelCaseName: "major",
-	// 	type: "PickerInput",
-	// 	isRequired: false
-	// },
 	{
-		placeholder: "Continent of Origin",
-		camelCaseName: "continent",
-		type: "PickerInput",
+		placeholder: "Country of Origin",
+		camelCaseName: "country",
+		type: "FilterList",
 		isRequired: false,
 		options: {
-			data: Object.keys(Countries)
+			data: Countries
 		}
 	},
-	// {
-	// placeholder: "Country of Origin",
-	// 	camelCaseName: "country",
-	// 	type: "PickerInput",
-	// 	isRequired: false
-	// },
 	{
 		placeholder: "Birthday",
 		camelCaseName: "birthday",
 		type: "DatePicker",
 		isRequired: false
 	}
-
 ];
 
 const upsertCommittee = [
@@ -177,5 +232,29 @@ export {
 	upsertEventFormData,
 	editProfileFormDataPrivileged,
 	editProfileFormDataRegular,
+	registrationFormData,
 	upsertCommittee
+};
+
+// functions
+
+/**
+ * @param {Object} user a user object
+ * @returns {Array} an Array of initialValues made from the user props
+ */
+const convertUserToInitialValues = (user) => {
+	let initialValues = [];
+
+	Object.entries(user).forEach(([key, value]) => {
+		initialValues.push({
+			camelCaseName: key,
+			value: value
+		});
+	});
+
+	return initialValues;
+};
+
+export {
+	convertUserToInitialValues
 };

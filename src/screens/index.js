@@ -54,11 +54,15 @@ export {
 };
 
 /** Export User **/
+import Login from "./User/Login";
 import OtherProfile from "./User/OtherProfile";
 import PointsBreakDown from "./User/PointsBreakDown";
 import Profile from "./User/Profile";
+import ResetPassword from "./User/ResetPassword";
 export {
+	Login,
 	OtherProfile,
 	PointsBreakDown,
-	Profile
+	Profile,
+	ResetPassword
 };
