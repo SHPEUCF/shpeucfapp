@@ -11,7 +11,7 @@ import { Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicke
  * 		@property {String}   type
  * 		@property {boolean=} isRequired
  * 		@property {any=}     options
- * @typedef InitialValue:
+ * @typedef {Object} InitialValue:
  * 		@property {String}   name
  * 		@property {any}      value
  */
@@ -20,7 +20,7 @@ import { Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicke
  * Form Component Info
  * ________________________________________________________________
  * 	Props:
- *		@param {Elements}        elements         An array of the names of Elements.
+ *		@param {Elements[]}      elements         An array of the names of Elements.
  *		@param {InitialValue[]=} initialValues    An array of initial Values.
  *		@param {String}          title            Displayed at the top of the form.
  *		@param {Boolean}         visible          Used to determine whether the form is visible.
