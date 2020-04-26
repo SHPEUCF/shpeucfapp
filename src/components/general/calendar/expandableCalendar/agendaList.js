@@ -59,12 +59,13 @@ getSectionIndex(date) {
 
 componentDidUpdate(prevProps) {
 	const { updateSource, date } = this.props.context;
-	if (date !== prevProps.context.date)
+	if (date !== prevProps.context.date) {
 	// NOTE: on first init data should set first section to the current date!!!
 		if (updateSource !== UPDATE_SOURCES.LIST_DRAG && updateSource !== UPDATE_SOURCES.CALENDAR_INIT) {
 			const sectionIndex = this.getSectionIndex(date);
 			this.scrollToSection(sectionIndex);
 		}
+	}
 }
 
 scrollToSection(sectionIndex) {
@@ -123,7 +124,13 @@ renderSectionHeader = ({ section: { title } }) => {
 	const sectionTitle = date === today ? `${todayString.toUpperCase()}, ${date}` : date;
 
 	return (
-		<Text allowFontScaling = { false } style = { [this.style.sectionText, this.props.sectionStyle] } onLayout = { this.onHeaderLayout }>{ sectionTitle }</Text>
+		<Text
+			allowFontScaling = { false }
+			style = { [this.style.sectionText, this.props.sectionStyle] }
+			onLayout = { this.onHeaderLayout }
+		>
+			{ sectionTitle }
+		</Text>
 	);
 }
 
@@ -150,7 +157,7 @@ render() {
 }
 
 // getItemLayout = (data, index) => {
-//   return {length: commons.screenWidth, offset: commons.screenWidth  * index, index};
+//	 return {length: commons.screenWidth, offset: commons.screenWidth	* index, index};
 // }
 }
 

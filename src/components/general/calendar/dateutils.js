@@ -2,15 +2,15 @@ const XDate = require("xdate");
 
 function sameMonth(a, b) {
 	return a instanceof XDate && b instanceof XDate
-    && a.getFullYear() === b.getFullYear()
-    && a.getMonth() === b.getMonth();
+		&& a.getFullYear() === b.getFullYear()
+		&& a.getMonth() === b.getMonth();
 }
 
 function sameDate(a, b) {
 	return a instanceof XDate && b instanceof XDate
-    && a.getFullYear() === b.getFullYear()
-    && a.getMonth() === b.getMonth()
-    && a.getDate() === b.getDate();
+		&& a.getFullYear() === b.getFullYear()
+		&& a.getMonth() === b.getMonth()
+		&& a.getDate() === b.getDate();
 }
 
 function isGTE(a, b) {
