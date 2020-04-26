@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Text, View, Dimensions, TouchableOpacity, SafeAreaView } from "react-native";
 import { Spinner, NavBar, Button } from "../../components/general";
 import { Actions } from "react-native-router-flux";
-import { Agenda } from "react-native-calendars";
+import { Agenda } from "../../components/general/calendar";
 import { goToViewEvent } from "../../utils/router";
 import { formatEventList, filterEvents } from "../../utils/events";
 import { loadCommittee, loadEvent } from "../../ducks";

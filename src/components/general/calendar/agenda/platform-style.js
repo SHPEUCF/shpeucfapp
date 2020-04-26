@@ -14,14 +14,12 @@ export default function platformStyles(appStyle) {
 			left: 0,
 			right: 0,
 			top: 0,
-			alignItems: "center",
-			bottom: dimension.height - dimension.height * 0.35,
+			alignItems: "flex-end",
+			bottom: dimension.height - dimension.height * 0.28,
 			flexDirection: "row",
 			paddingLeft: 16,
 			paddingRight: 16,
 			justifyContent: "space-evenly",
-			paddingTop: 15,
-			paddingBottom: 7,
 			backgroundColor: appStyle.calendarBackground
 		}
 	};

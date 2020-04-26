@@ -57,7 +57,6 @@ class Events extends Component {
 							onSubmit = { (value) => createEvent(value) }
 						/>
 						<Agenda
-							selected = { this.state.day }
 							passDate = { (item) => dateStr = item.dateString }
 							items = { formatEventList(this.props.sortedEvents) }
 							style = {{ height: dimension.height * 0.73 }}

@@ -12,7 +12,7 @@ import { AGENDA_CALENDAR_KNOB } from "../testIDs";
 import { DefaultItem, DefaultEmptyData } from "../default-props/eventProps";
 
 const dimension = Dimensions.get("window");
-const today = XDate(true);
+const today = XDate();
 const HEADER_HEIGHT = dimension.height * 0.18;
 const KNOB_HEIGHT = 24;
 // Fallback when RN version is < 0.44
@@ -110,8 +110,8 @@ export default class AgendaView extends Component {
 			calendarIsReady: false,
 			calendarScrollable: false,
 			firstResevationLoad: false,
-			selectedDay: parseDate(this.props.selected) || XDate(true),
-			topDay: parseDate(this.props.selected) || XDate(true),
+			selectedDay: parseDate(this.props.selected) || XDate(),
+			topDay: parseDate(this.props.selected) || XDate(),
 			opened: false
 		};
 
@@ -128,7 +128,7 @@ export default class AgendaView extends Component {
 	}
 
 	calendarOffset() {
-		return 90 - dimension.height / 2.7;
+		return 90 - (this.viewHeight / 2);
 	}
 
 	initialScrollPadPosition() {
@@ -467,11 +467,11 @@ export default class AgendaView extends Component {
 					<View style = { this.styles.buttonsLayout }>
 						<View style = { this.styles.buttonContainer }>
 							{ Math.abs(today.diffDays(this.state.selectedDay)) >= 1
-						&& <Text onPress = { () => this.chooseToday() } style = {{ color: "white", fontSize: 20 }}>TODAY</Text>
+						&& <Text onPress = { () => this.chooseToday() } style = {{ color: "white", fontSize: 18 }}>Today</Text>
 							}
 						</View>
 						<View style = { this.styles.buttonContainer }>
-							<Text onPress = { () => this.openCloseCalendar() } style = {{ color: "white", fontSize: 20 }}>
+							<Text onPress = { () => this.openCloseCalendar() } style = {{ color: "white", fontSize: 18 }}>
 								{ this.state.opened ? "Close" : "Open" }
 							</Text>
 						</View>

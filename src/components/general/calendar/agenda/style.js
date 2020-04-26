@@ -41,7 +41,9 @@ export default function styleConstructor(theme = {}) {
 		},
 		buttonsLayout: {
 			flexDirection: "row",
-			justifyContent: "space-between"
+			justifyContent: "space-between",
+			height: dimension.height * 0.04,
+			alignItems: "center"
 		},
 		buttonContainer: {
 			width: "30%",

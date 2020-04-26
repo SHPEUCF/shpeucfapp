@@ -12,7 +12,7 @@ export default function platformStyles(appStyle) {
 		weekdays: {
 			position: "absolute",
 			alignItems: "center",
-			bottom: dimension.height - dimension.height * 0.35,
+			bottom: dimension.height - dimension.height * 0.34,
 			left: 0,
 			right: 0,
 			top: 0,
@@ -20,8 +20,6 @@ export default function platformStyles(appStyle) {
 			justifyContent: "space-evenly",
 			paddingLeft: 16,
 			paddingRight: 16,
-			paddingTop: 15,
-			paddingBottom: 7,
 			backgroundColor: appStyle.calendarBackground
 		}
 	};
