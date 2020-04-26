@@ -25,9 +25,6 @@ rules:
   no-floating-decimal: error               # require floating decimals to be complete
   space-before-blocks: error               # require space before curly brace for blocks
   no-whitespace-before-property: error     # disallow whitespace before accessing properties
-  no-tabs:                                 # disallow tabs in statements in a single line
-    - error
-    - allowIndentationTabs: true
   one-var:                                 # require one variable declaration per let/const
     - error
     - never
@@ -81,6 +78,7 @@ rules:
       comments: 160
       ignoreStrings: true
       ignoreTemplateLiterals: true
+      ignoreTrailingComments: true
   # React-Native
   react-native/no-inline-styles: warn      # disallow inline styles
   # React
