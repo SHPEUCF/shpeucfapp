@@ -127,14 +127,14 @@ class Profile extends Component {
 						titleStyle = {{ backgroundColor: color }}
 						overlayContainerStyle = {{ backgroundColor: color }}
 						title = { firstName[0].concat(lastName[0]) }
-						onPress = { () => openGallery(`users/${id}/picture`, id) }
+						onPress = { () => openGallery(`users/${id}`, id) }
 					/>	}
 					{ picture !== ""
 					&& <Avatar
 						size = { dimension.height * 0.32 }
 						rounded
 						source = {{ uri: picture }}
-						onPress = { () => openGallery(`users/${id}/picture`, id) }
+						onPress = { () => openGallery(`users/${id}`, id) }
 					/> }
 				</View>
 				<View style = { [taglineContainer] }>
