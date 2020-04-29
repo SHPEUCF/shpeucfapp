@@ -83,6 +83,7 @@ class Leaderboard extends Component {
 			userTextContainer,
 			row
 		} = styles;
+
 		let currentUserTextStyle = item.id === this.props.activeUser.id ? userContainerColor : {};
 		truncateNames(item);
 
@@ -149,10 +150,6 @@ class Leaderboard extends Component {
 				/>
 			</View>
 		);
-	}
-
-	viewBreakDown() {
-		Actions.pointsBreakDown();
 	}
 
 	callUser(id) {
@@ -226,18 +223,9 @@ const styles = {
 };
 
 const mapStateToProps = ({ user, members, general }) => {
-	const {
-		membersPoints,
-		userList
-	} = members;
-
-	const {
-		activeUser
-	} = user;
-
-	const {
-		filter
-	} = general;
+	const { membersPoints, userList } = members;
+	const { activeUser } = user;
+	const { filter } = general;
 
 	return { membersPoints, activeUser, filter, userList };
 };

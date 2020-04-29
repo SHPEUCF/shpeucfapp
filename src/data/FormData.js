@@ -52,7 +52,7 @@ const upsertEventFormData = [
 		placeholder: "End Time",
 		camelCaseName: "endTime",
 		type: "TimePicker",
-		isRequired: false
+		isRequired: true
 	},
 	{
 		placeholder: "Location",
@@ -63,6 +63,9 @@ const upsertEventFormData = [
 	{
 		placeholder: "Value",
 		camelCaseName: "points",
+		options: {
+			keyboardType: "numeric"
+		},
 		type: "Input",
 		isRequired: true
 	}
@@ -239,22 +242,19 @@ export {
 // functions
 
 /**
- * @param {Object} user a user object
+ * @param {Object} obj and object with the props that match the camelcaseNames of the data
  * @returns {Array} an Array of initialValues made from the user props
  */
-const convertUserToInitialValues = (user) => {
+const convertObjectToInitialValues = (obj) => {
 	let initialValues = [];
 
-	Object.entries(user).forEach(([key, value]) => {
-		initialValues.push({
-			camelCaseName: key,
-			value: value
-		});
+	Object.entries(obj).forEach(([key, value]) => {
+		initialValues.push({ camelCaseName: key, value: value });
 	});
 
 	return initialValues;
 };
 
 export {
-	convertUserToInitialValues
+	convertObjectToInitialValues
 };

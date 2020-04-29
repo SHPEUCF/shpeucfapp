@@ -264,7 +264,7 @@ export const fetchMemberProfile = (userID) => {
 	let id = typeof userID === "undefined" ? currentUser.uid : userID;
 
 	return (dispatch) => {
-		if (currentUser)
+		if (currentUser) {
 			firebase.database().ref(`/users/${id}/`).on("value", snapshot => {
 				dispatch({
 					type: ACTIONS.FETCH_MEMBER_PROFILE,
@@ -275,6 +275,7 @@ export const fetchMemberProfile = (userID) => {
 					payload: false
 				});
 			});
+		}
 	};
 };
 
@@ -313,11 +314,12 @@ export const editMember = (firstName, lastName, email, college, major, points, q
 
 export const assignPosition = (title, types, id, oldChair) => {
 	return (dispatch) => {
-		if (oldChair)
+		if (oldChair) {
 			firebase.database().ref(`/users/${oldChair.id}/${types}`).remove()
 				.then(() => firebase.database().ref(`/privileges/${oldChair.id}/`).update({
 					[types]: false
 				}));
+		}
 		firebase.database().ref(`/users/${id}/`).update({ [types]: title })
 			.then(() => firebase.database().ref(`/privileges/${id}/`).update({
 				[types]: true
@@ -367,7 +369,7 @@ export const changePrivilegeOfMembers = (members, privilegeChanged, value) => {
 			.catch(() => alert("Changes were not successful"));
 	});
 
-	if (privilegeChanged === "paidMember")
+	if (privilegeChanged === "paidMember") {
 		firebase.database().ref("/users/").once("value", snapshot => {
 			let updates = snapshot.val();
 
@@ -378,6 +380,7 @@ export const changePrivilegeOfMembers = (members, privilegeChanged, value) => {
 			firebase.database().ref("/users/").update(updates)
 				.catch(() => alert("Changes were not successful"));
 		});
+	}
 };
 
 export const goToEditOtherProfileForm = () => {

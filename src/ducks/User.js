@@ -76,6 +76,7 @@ export default (state = INITIAL_STATE, action) => {
  * @access     private
  * @param {String}   error An Error Message
  */
+
 const showFirebaseError = (dispatch, error) => {
 	let errorMessage;
 
@@ -110,6 +111,7 @@ const showFirebaseError = (dispatch, error) => {
  * @param {String}   email a student knights email
  * @param {String}   password a password that meets the requirements
  */
+
 export const createUser = (user, email, password) => {
 	return (dispatch) => {
 		firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -126,6 +128,7 @@ export const createUser = (user, email, password) => {
  * @access     private
  * @param {Object}   user a user object with all desired user properties
  */
+
 const createUserSuccess = (user) => {
 	const {
 		currentUser
@@ -173,6 +176,7 @@ const createUserSuccess = (user) => {
  * @access     public
  * @param {String}   email a student knights email
  */
+
 export const resetPassword = (email) => {
 	return (dispatch) => {
 		firebase.auth().sendPasswordResetEmail(email)
@@ -193,6 +197,7 @@ export const resetPassword = (email) => {
  * @param {String}   email a student knights email
  * @param {String}   password the user's password
  */
+
 export const loginUser = (email, password) => {
 	return (dispatch) => {
 		firebase.auth().signInWithEmailAndPassword(email, password)
@@ -220,6 +225,7 @@ export const loginUser = (email, password) => {
  * @access     public
  * @param {String}   userID OPTIONAL- the desired user's userID
  */
+
 export const loadUser = (userID) => {
 	const {
 		currentUser
@@ -228,7 +234,7 @@ export const loadUser = (userID) => {
 	const id = typeof userID === "undefined" ? currentUser.uid : userID;
 
 	return (dispatch) => {
-		if (currentUser)
+		if (currentUser) {
 			firebase.database().ref(`/users/${id}/`).on("value", userSnapshot => {
 				const user = userSnapshot.val();
 
@@ -243,6 +249,7 @@ export const loadUser = (userID) => {
 					});
 				});
 			});
+		}
 	};
 };
 
@@ -272,6 +279,7 @@ export const loadUser = (userID) => {
  * }
  *
  */
+
 export const editUser = (user) => {
 	const {
 		currentUser
@@ -292,6 +300,7 @@ export const editUser = (user) => {
  *
  * ***DO NOT PASS IN THROUGH mapDispatchToProps***
  */
+
 export const logoutUser = () => {
 	firebase.auth().signOut()
 		.then(Actions.login())

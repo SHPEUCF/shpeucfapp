@@ -11,7 +11,7 @@ import { loadUser, logoutUser, pageLoad, editUser } from "../../ducks";
 import {
 	editProfileFormDataPrivileged,
 	editProfileFormDataRegular,
-	convertUserToInitialValues
+	convertObjectToInitialValues
 } from "../../data/FormData";
 import { Form } from "../../components";
 
@@ -53,7 +53,7 @@ class Profile extends Component {
 			<SafeAreaView style = {{ flex: 1, backgroundColor: "#0c0b0b" }}>
 				<Form
 					elements = { privilege.eboard ? editProfileFormDataPrivileged : editProfileFormDataRegular }
-					initialValues = { convertUserToInitialValues(this.props.activeUser) }
+					initialValues = { convertObjectToInitialValues(this.props.activeUser) }
 					title = "Edit Profile"
 					visible = { this.state.editProfileFormVisibility }
 					changeVisibility = { (visible) => this.setState({ editProfileFormVisibility: visible }) }
