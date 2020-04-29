@@ -16,16 +16,17 @@ class TimePicker extends Component {
 			time = [prependZero(time[0]), ...time[1].split(" ")];
 		}
 
-		const isInitiliazed = time.length === 3;
+		const isInitialized = time.length === 3;
+		if (isInitialized) this.update({ hour: time[0], minute: time[1], period: time[2] });
 
 		this.state = {
-			hour: isInitiliazed ? time[0] : "",
-			minute: isInitiliazed ? time[1] : "",
-			period: isInitiliazed ? time[2] : "",
+			hour: isInitialized ? time[0] : "",
+			minute: isInitialized ? time[1] : "",
+			period: isInitialized ? time[2] : "",
 			hourArr: Array.from({ length: 12 }, (v, k) => k + 1),
 			minuteArr: [0, 15, 30, 45],
 			periodArr: ["AM", "PM"],
-			focused: isInitiliazed
+			focused: isInitialized
 		};
 	}
 

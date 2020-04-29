@@ -1,14 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Button, ButtonLayout, Form, Agenda } from "../../components/";
-import { formatEventList } from "../../utils/events";
+import { formatEventListForCalendar } from "../../utils/events";
 import { loadEvent, createEvent } from "../../ducks";
 import { upsertEventFormData } from "../../data/FormData";
-import {
-	View,
-	Dimensions,
-	SafeAreaView
-} from "react-native";
+import { View, Dimensions, SafeAreaView } from "react-native";
 
 const dimension = Dimensions.get("window");
 let dateStr = "";
@@ -21,6 +17,7 @@ class Events extends Component {
 			day: new Date(),
 			eventFormVisibility: false
 	 };
+	 dateStr = this.getTodaysDate();
 	}
 
 	componentDidMount() {
@@ -32,6 +29,7 @@ class Events extends Component {
 		let month = this.prepend0((date.getMonth() + 1).toString());
 		let year = date.getFullYear();
 		let day = this.prepend0(date.getDate().toString());
+
 		return `${year}-${month}-${day}`;
 	}
 
@@ -58,7 +56,7 @@ class Events extends Component {
 						/>
 						<Agenda
 							passDate = { (item) => dateStr = item.dateString }
-							items = { formatEventList(this.props.sortedEvents) }
+							items = { formatEventListForCalendar(this.props.sortedEvents) }
 							style = {{ height: dimension.height * 0.73 }}
 						/>
 					</View>

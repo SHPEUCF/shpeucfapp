@@ -10,4 +10,4 @@ export function goToViewEvent(screen) {
 	else if (screen === "events") Actions["eventDetails"]({ screen: screen });
 	else if (screen === "dashboard" + "committeepage") Actions["eventDetailsCPD"]({ screen: screen });
 	else if (screen === "committees" + "committeepage") Actions["eventDetailsC"]({ screen: screen });
-};
+}

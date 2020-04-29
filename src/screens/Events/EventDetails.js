@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button, NavBar, FilterList, ButtonLayout, Form } from "../";
+import { Button, NavBar, FilterList, ButtonLayout, Form } from "../../components";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Actions } from "react-native-router-flux";
 import QRCode from "react-native-qrcode-svg";

@@ -12,7 +12,6 @@ const ACTIONS = createActionTypes([
 
 const INITIAL_STATE = {
 	activeEvent: {},
-	sortedFutureEvents: [],
 	sortedEvents: []
 };
 
@@ -23,11 +22,7 @@ export default (state = INITIAL_STATE, action) => {
 
 	switch (action.type) {
 		case ACTIONS.STORE_SORTED_EVENTS:
-			return {
-				...state,
-				sortedFutureEvents: payload.sortedFutureEvents,
-				sortedEvents: payload.sortedEvents
-			};
+			return { ...state, sortedEvents: payload };
 		case ACTIONS.LOAD_EVENT:
 			return { ...state, activeEvent: payload };
 		default:
@@ -59,7 +54,7 @@ export default (state = INITIAL_STATE, action) => {
 /**
  * @description Makes a firebase call that pulls in all the events.
  *
- * The events are stored in sortedEvents and a seperate version that only holds future events is stored in sortedFutureEvents
+ * The events are stored in sortedEvents
  *
  * @access     public
  */
@@ -67,47 +62,19 @@ export default (state = INITIAL_STATE, action) => {
 export const getEvents = () => {
 	return (dispatch) => {
 		firebase.database().ref("events/").on("value", snapshot => {
-			let events = snapshot.val();
-
-			const sortedEvents = _.orderBy(snapshot.val(), ["date", "startTime", "endTime"], ["asc", "asc", "asc"]);
+			let sortedEvents = _.orderBy(snapshot.val(), ["date", "startTime", "endTime"], ["asc", "asc", "asc"]);
 
 			// Converts all Military time to Standard Time.
-			let index = 0;
-			for (let props in events) {
-				sortedEvents[index].startTime = convertMilitaryToStandardTime(sortedEvents[index].startTime);
-				events[props].startTime = convertMilitaryToStandardTime(events[props].startTime);
-				sortedEvents[index].endTime = convertMilitaryToStandardTime(sortedEvents[index].endTime);
-				events[props].endTime = convertMilitaryToStandardTime(events[props].endTime);
-				index++;
-			}
-			storeSortedFutureEvents(dispatch, sortedEvents);
+			sortedEvents = sortedEvents.map(event => {
+				event.startTime = convertMilitaryToStandardTime(event.startTime);
+				event.endTime = convertMilitaryToStandardTime(event.endTime);
+
+				return event;
+			});
+
+			dispatch({ type: ACTIONS.STORE_SORTED_EVENTS, payload: sortedEvents });
 		});
 	};
-};
-
-/**
- * @description Sorts events and removes old events and stores it in sortedEventsList
- *
- * @access     private
- */
-const storeSortedFutureEvents = (dispatch, sortedEvents) => {
-	const today = new Date();
-
-	// Removes any past events
-	const sortedFutureEvents = sortedEvents.filter(event => {
-		let endTime = "99:99";
-		if (event.endTime)
-			endTime = event.endTime.split(":");
-		let tempDate = event.date.split("-");
-
-		return !(tempDate[0] < today.getFullYear() || tempDate[1] < today.getMonth() + 1
-		|| tempDate[2] < today.getDate() || tempDate[2] === today.getDate() && endTime[0] < today.getHours());
-	});
-
-	dispatch({
-		type: ACTIONS.STORE_SORTED_EVENTS,
-		payload: { sortedFutureEvents, sortedEvents }
-	});
 };
 
 /**
@@ -172,7 +139,8 @@ function makeCode(length = 4) {
 
 export const editEvent = (event) => {
 	firebase.database().ref(`events/${event.id}`).once("value", snapshot => {
-		firebase.database().ref(`committees/${snapshot.val().committee}/events/`).update({ [event.id]: null });
+		if (snapshot.val())
+			firebase.database().ref(`committees/${snapshot.val().committee}/events/`).update({ [event.id]: null });
 	})
 		.then(() => {
 			firebase.database().ref(`/events/${event.id}`).update(event);

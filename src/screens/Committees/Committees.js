@@ -5,8 +5,8 @@ import { NavBar } from "../../components/general";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import _ from "lodash";
 import { FlatList, Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
-import { 	goToViewEvent } from "../../utils/router";
-import { 	filterEvents } from "../../utils/events";
+import { goToViewEvent } from "../../utils/router";
+import { filterEvents } from "../../utils/events";
 import { editUser, loadEvent, getCommittees, loadCommittee } from "../../ducks";
 
 const dimension = Dimensions.get("window");

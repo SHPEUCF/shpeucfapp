@@ -9,8 +9,9 @@ import { ColorPicker } from "react-native-color-picker";
 import { RenderFlags, CustomFlag } from "../../utils/flag";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { rankMembersAndReturnsCurrentUser } from "../../utils/render";
-import { 	goToViewEvent } from "../../utils/router";
+import { goToViewEvent } from "../../utils/router";
 import { months } from "../../data/DateItems";
+import { filterPastEvents } from "../../utils/events";
 import {
 	Text,
 	View,
@@ -231,7 +232,6 @@ class Dashboard extends Component {
 			sortedMembers,
 			currentMember
 		} = memberObj;
-
 
 		if (!currentMember) return null;
 
@@ -473,11 +473,11 @@ class Dashboard extends Component {
 		} = styles;
 
 		const {
-			sortedFutureEvents
+			sortedEvents
 		} = this.props;
 
 		let recentEvents = [];
-		const events = sortedFutureEvents || [];
+		const events = filterPastEvents(sortedEvents) || [];
 		let singleContainer = {};
 		let content = null;
 
@@ -485,14 +485,15 @@ class Dashboard extends Component {
 
 		if (events.length < 2) singleContainer.flex = 0.4;
 
-		if (events.length === 0)
-			content = <Text style = { [textColor, eventEmptyText ] }>No Upcoming Events</Text>;
+		if (events.length === 0) { content = <Text style = { [textColor, eventEmptyText ] }>No Upcoming Events</Text> }
 
-		else content = recentEvents.map(item =>
-			<TouchableOpacity onPress = { () => this.viewEvent(item) } style = { eventsItem }>
-				{ this.showEvents(item) }
-			</TouchableOpacity>
-		);
+		else {
+			content = recentEvents.map(item =>
+				<TouchableOpacity onPress = { () => this.viewEvent(item) } style = { eventsItem }>
+					{ this.showEvents(item) }
+				</TouchableOpacity>
+			);
+		}
 
 		return (
 			<View style = { [eventListContainerFull, singleContainer] }>
@@ -731,14 +732,14 @@ const styles = {
 const mapStateToProps = ({ user, members, events, elect, committees }) => {
 	const { activeUser } = user;
 	const { membersPoints } = members;
-	const { sortedFutureEvents } = events;
+	const { sortedEvents } = events;
 	const { election } = elect;
 	const { committeesList } = committees;
 
 	return {
 		activeUser,
 		membersPoints,
-		sortedFutureEvents,
+		sortedEvents,
 		election,
 		committeesList
 	};

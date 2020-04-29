@@ -50,16 +50,32 @@ export const prependZero = (number) => number < 10 ? "0" + number : number;
  * @param {Object[]} events An array of all the events that you want to format.
  */
 
-export function formatEventList(events) {
+export function formatEventListForCalendar(events) {
 	let dates = {};
 
 	events.forEach((event) => {
-		if (!dates[event.date]) dates[event.date] = [event];
-		else dates[event.date].push(event);
+		if (!dates[event.date])
+			dates[event.date] = [event];
+		else
+			dates[event.date].push(event);
 	});
 
 	return dates;
 }
+
+/**
+ * @description Filters out all events that have passed; only leaving future events.
+ *
+ * @param {Object[]} sortedEvents A sorted array of all the events.
+ * @access     public
+ */
+
+export const filterPastEvents = sortedEvents => sortedEvents.filter(event => {
+	const today = new Date();
+	const [year, month, date] = event.date.split("-");
+
+	return !(year < today.getFullYear() || month < 	today.getMonth() + 1 || date < today.getDate());
+});
 
 /**
  * @description Filters out all events that aren't inside of the eventIds array.

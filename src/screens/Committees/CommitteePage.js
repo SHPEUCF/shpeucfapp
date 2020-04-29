@@ -5,7 +5,7 @@ import { Spinner, NavBar, Button } from "../../components/general";
 import { Actions } from "react-native-router-flux";
 import { Agenda } from "../../components/general/calendar";
 import { goToViewEvent } from "../../utils/router";
-import { formatEventList, filterEvents } from "../../utils/events";
+import { formatEventListForCalendar, filterEvents } from "../../utils/events";
 import { loadCommittee, loadEvent } from "../../ducks";
 
 const dimension = Dimensions.get("window");
@@ -77,7 +77,7 @@ class CommitteePage extends Component {
 									<Agenda
 										selected = { this.state.day }
 										passDate = { (item) => dateStr = item.dateString }
-										items = { formatEventList(
+										items = { formatEventListForCalendar(
 											filterEvents(
 												Object.keys(this.props.committeeEvents || {}),
 												this.props.sortedEvents
