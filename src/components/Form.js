@@ -11,7 +11,7 @@ import { Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicke
  * 		@property {String}   type
  * 		@property {boolean=} isRequired
  * 		@property {any=}     options
- * @typedef InitialValue:
+ * @typedef {Object} InitialValue:
  * 		@property {String}   name
  * 		@property {any}      value
  */
@@ -20,7 +20,7 @@ import { Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicke
  * Form Component Info
  * ________________________________________________________________
  * 	Props:
- *		@param {Elements}        elements         An array of the names of Elements.
+ *		@param {Elements[]}      elements         An array of the names of Elements.
  *		@param {InitialValue[]=} initialValues    An array of initial Values.
  *		@param {String}          title            Displayed at the top of the form.
  *		@param {Boolean}         visible          Used to determine whether the form is visible.
@@ -138,9 +138,9 @@ import { Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicke
  *
  * 		<Form
  * 			elements= { elements }
- * 			initialValue = { initialValeues }
+ * 			initialValue = { initialValues }
  * 			title = "The Title"
- * 			visibile = { this.state.formVisibility }
+ * 			visible = { this.state.formVisibility }
  * 			changeVisibility = { (visible) => this.setState({ formVisibility: visible }) }
  * 			onSubmit = { (value) => console.log(`this is the value: ${value}`) }
  * 			onCancel = { () => console.log("I've been cancelled") }
@@ -154,7 +154,7 @@ import { Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicke
  * 			birthday: null || "6969/04/20",
  * 			coolnessLevel:  "Super Cool",
  * 			major: "Computer Science"
- * 		}x
+ * 		}
  * 		onSubmit(this.state)
  *
 **/
@@ -221,7 +221,7 @@ class Form extends Component {
 					type = { options.type }
 					placeholder = { placeholder }
 					data = { options.data }
-					value = { options.value || this.state[camelCaseName] }
+					value = { this.state[camelCaseName] || "" }
 					regexFunc = { options.regexFunc }
 					selectBy = { options.selectBy }
 					itemJSX = { options.itemJSX }
@@ -233,10 +233,16 @@ class Form extends Component {
 				return <Input
 					placeholder = { placeholder }
 					multiline = { false }
-					value = { this.state[camelCaseName] || "" }
+					// Next line is checking for 0 to make sure it displays 0 correctly
+					value = { this.state[camelCaseName] === 0 ? 0 : this.state[camelCaseName] || "" }
 					secureTextEntry = { options && options.secureTextEntry }
 					keyboardType = { options && options.keyboardType }
-					onChangeText = { value => this.changeState(camelCaseName, value) }
+					onChangeText = { value => {
+						if (options && options.keyboardType === "numeric")
+							this.changeState(camelCaseName, parseInt(value));
+						else
+							this.changeState(camelCaseName, value);
+					} }
 				/>;
 			case "PickerInput":
 				if (!options || !options.data)
@@ -261,16 +267,13 @@ class Form extends Component {
 	}
 
 	renderButtons() {
-		const { onSubmit, onCancel, changeVisibility, submitButtonName } = this.props;
+		const { onCancel, changeVisibility, submitButtonName } = this.props;
 
 		return (
 			<ButtonLayout>
 				<Button
 					title = { submitButtonName || "Confirm" }
-					onPress = { () => {
-						changeVisibility(false);
-						onSubmit(this.state);
-					} }
+					onPress = { () => this.submit() }
 				/>
 				<Button
 					title = "Cancel"
@@ -281,6 +284,21 @@ class Form extends Component {
 				/>
 			</ButtonLayout>
 		);
+	}
+
+	submit() {
+		let formIsValid = true;
+		this.props.elements.forEach((element) => {
+			if (formIsValid && element.isRequired && this.state[element.camelCaseName] !== 0
+				&& !this.state[element.camelCaseName]) {
+				alert(`Please input a value into the ${element.placeholder} field.`);
+				formIsValid = false;
+			}
+		});
+		if (formIsValid) {
+			this.props.changeVisibility(false);
+			this.props.onSubmit(this.state);
+		}
 	}
 
 	render() {
@@ -311,6 +329,7 @@ const styles = {
 		flex: 1,
 		width: "100%",
 		height: "100%",
+		paddingHorizontal: "3%",
 		backgroundColor: "black"
 	},
 	elementsStyle: {

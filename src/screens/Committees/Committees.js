@@ -5,20 +5,9 @@ import { NavBar } from "../../components/general";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import _ from "lodash";
 import { FlatList, Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
-import {
-	editUser,
-	getCommittees,
-	typeChanged,
-	nameChanged,
-	descriptionChanged,
-	dateChanged,
-	timeChanged,
-	locationChanged,
-	epointsChanged,
-	eventIDChanged,
-	goToViewEvent,
-	loadCommittee
-} from "../../ducks";
+import { goToViewEvent } from "../../utils/router";
+import { filterEvents } from "../../utils/events";
+import { editUser, loadEvent, getCommittees, loadCommittee } from "../../ducks";
 
 const dimension = Dimensions.get("window");
 const iteratees = ["level"];
@@ -83,24 +72,10 @@ class Committees extends Component {
 					data = { committees }
 					extraData = { this.props }
 					keyExtractor = { this._keyExtractor }
-					renderItem = { ({
-						item
-					}) =>
-						this.renderCommittees(item) }
+					renderItem = { ({ item }) => this.renderCommittees(item) }
 				/>
 			</View>
 		);
-	}
-
-	sortEvents(eventIds, eventList) {
-		let events = {};
-		eventIds.forEach(function(element) {
-			Object.assign(events, { [element]: eventList[element] });
-		});
-
-		let sortedEvents = _.orderBy(events, ["date", "startTime", "endTime"], ["asc", "asc", "asc"]);
-
-		return sortedEvents;
 	}
 
 	viewCommittee(item) {
@@ -116,7 +91,8 @@ class Committees extends Component {
 		} = styles;
 
 		const {
-			activeUser
+			activeUser,
+			sortedEvents
 		} = this.props;
 
 		if (this.props.screen === "dashboard")
@@ -212,7 +188,7 @@ class Committees extends Component {
 				{ this.state.opened[item.title] && item.events
 				&& <View style = {{}}>
 					<FlatList
-						data = { this.sortEvents(Object.keys(item.events), this.props.eventList) }
+						data = { filterEvents(Object.keys(item.events), sortedEvents) }
 						extraData = { this.props }
 						keyExtractor = { this._keyExtractor }
 						renderItem = { ({
@@ -226,15 +202,8 @@ class Committees extends Component {
 	}
 
 	viewEvent(item) {
-		this.props.typeChanged(item.type);
-		this.props.nameChanged(item.name);
-		this.props.descriptionChanged(item.description);
-		this.props.dateChanged(item.date);
-		this.props.timeChanged(item.time);
-		this.props.locationChanged(item.location);
-		this.props.epointsChanged(item.points);
-		this.props.eventIDChanged(item.eventID);
-		this.props.goToViewEvent();
+		loadEvent(item);
+		goToViewEvent();
 	}
 
 	renderEvents(event) {
@@ -395,23 +364,11 @@ const styles = {
 const mapStateToProps = ({ committees, user, events }) => {
 	const { committeesList } = committees;
 	const { activeUser } = user;
-	const { eventList } = events;
+	const { sortedEvents } = events;
 
-	return { committeesList, activeUser, eventList };
+	return { committeesList, activeUser, sortedEvents };
 };
 
-const mapDispatchToProps = {
-	getCommittees,
-	typeChanged,
-	nameChanged,
-	descriptionChanged,
-	dateChanged,
-	timeChanged,
-	locationChanged,
-	epointsChanged,
-	eventIDChanged,
-	goToViewEvent,
-	loadCommittee
-};
+const mapDispatchToProps = { getCommittees, loadCommittee };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Committees);

@@ -9,7 +9,9 @@ import { ColorPicker } from "react-native-color-picker";
 import { RenderFlags, CustomFlag } from "../../utils/flag";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { rankMembersAndReturnsCurrentUser } from "../../utils/render";
+import { goToViewEvent } from "../../utils/router";
 import { months } from "../../data/DateItems";
+import { filterPastEvents } from "../../utils/events";
 import {
 	Text,
 	View,
@@ -24,21 +26,11 @@ import {
 
 import {
 	loadUser,
+	loadEvent,
 	editUser,
 	pageLoad,
 	fetchMembersPoints,
-	fetchEvents,
-	typeChanged,
-	committeeChanged,
-	nameChanged,
-	descriptionChanged,
-	dateChanged,
-	startTimeChanged,
-	endTimeChanged,
-	locationChanged,
-	epointsChanged,
-	eventIDChanged,
-	goToViewEvent,
+	getEvents,
 	getCommittees,
 	fetchAllUsers,
 	loadCommittee,
@@ -68,7 +60,7 @@ class Dashboard extends Component {
 		this.props.updateElection();
 		this.props.getCommittees();
 		this.props.fetchMembersPoints();
-		this.props.fetchEvents();
+		this.props.getEvents();
 		this.props.loadUser();
 		this.props.fetchAllUsers();
 	}
@@ -240,7 +232,6 @@ class Dashboard extends Component {
 			sortedMembers,
 			currentMember
 		} = memberObj;
-
 
 		if (!currentMember) return null;
 
@@ -427,65 +418,8 @@ class Dashboard extends Component {
 	}
 
 	viewEvent(item) {
-		this.props.typeChanged(item.type);
-		this.props.committeeChanged(item.committee);
-		this.props.nameChanged(item.name);
-		this.props.descriptionChanged(item.description);
-		this.props.dateChanged(item.date);
-		this.props.startTimeChanged(item.startTime);
-		this.props.endTimeChanged(item.endTime);
-		this.props.locationChanged(item.location);
-		this.props.epointsChanged(item.points);
-		this.props.eventIDChanged(item.eventID);
-		this.props.goToViewEvent("dashboard");
-	}
-
-	convertHour(time) {
-		let hour;
-		let array = time.split(":");
-
-		if (array[2] === "AM") {
-			hour = "" + parseInt(array[0]);
-			if (hour === "0") hour = "12";
-
-			return hour + ":" + array[1] + ":" + array[2];
-		}
-
-		hour = "" + (parseInt(array[0]) - 12);
-		if (hour === "0") hour = "12";
-
-		return hour + ":" + array[1] + ":" + array[2];
-	}
-
-	sortEvents(eventList) {
-		let thisdate = new Date();
-		let month = thisdate.getMonth() + 1;
-		let year = thisdate.getFullYear();
-		let day = thisdate.getDate();
-		let hour = thisdate.getHours();
-		let min = thisdate.getMinutes();
-		let events = {};
-
-		Object.keys(eventList).forEach(function(element) {
-			let eventObj = eventList[element];
-			let endTime = eventObj.endTime.split(":");
-			let tempDate = eventObj.date.split("-");
-
-			if (tempDate[0] < year) return;
-			if (tempDate[1] < month) return;
-			if (tempDate[2] < day) return;
-			if (tempDate[2] == day)
-				if (endTime[0] < hour) return;
-				else if (endTime[0] == hour)
-					if (endTime[1] < min) return;
-
-			Object.assign(eventObj, { eventID: element });
-			Object.assign(events, { [element]: eventObj });
-		});
-
-		let sortedEvents = _.orderBy(events, ["date", "startTime", "endTime"], ["asc", "asc", "asc"]);
-
-		return sortedEvents;
+		this.props.loadEvent(item);
+		goToViewEvent("dashboard");
 	}
 
 	showEvents(event) {
@@ -509,8 +443,6 @@ class Dashboard extends Component {
 		if (!event) return null;
 
 		let viewType = type;
-		let realStart = this.convertHour(startTime);
-		let realEnd = this.convertHour(endTime);
 
 		if (committee) viewType = committee;
 
@@ -519,7 +451,7 @@ class Dashboard extends Component {
 				<View style = { eventTextContainer }>
 					<Text style = { eventTextStyle }>{ viewType }: { name }</Text>
 					<Text style = { eventTextStyle }>
-						{ this.convertNumToDate(date) } - { realStart } - { realEnd }
+						{ this.convertNumToDate(date) } - { startTime } - { endTime }
 					</Text>
 				</View>
 				<View style = { leaderboardArrow }>
@@ -540,23 +472,28 @@ class Dashboard extends Component {
 			eventsItem
 		} = styles;
 
+		const {
+			sortedEvents
+		} = this.props;
+
 		let recentEvents = [];
+		const events = filterPastEvents(sortedEvents) || [];
 		let singleContainer = {};
-		let events = [];
 		let content = null;
 
-		if (this.props.eventList) events = this.sortEvents(this.props.eventList);
 		recentEvents = events.slice(0, 3);
 
 		if (events.length < 2) singleContainer.flex = 0.4;
 
-		if (events.length === 0) content = <Text style = { [textColor, eventEmptyText ] }>No Upcoming Events</Text>;
+		if (events.length === 0) { content = <Text style = { [textColor, eventEmptyText ] }>No Upcoming Events</Text> }
 
-		else content = recentEvents.map(item =>
-			<TouchableOpacity onPress = { () => this.viewEvent(item) } style = { eventsItem }>
-				{ this.showEvents(item) }
-			</TouchableOpacity>
-		);
+		else {
+			content = recentEvents.map(item =>
+				<TouchableOpacity onPress = { () => this.viewEvent(item) } style = { eventsItem }>
+					{ this.showEvents(item) }
+				</TouchableOpacity>
+			);
+		}
 
 		return (
 			<View style = { [eventListContainerFull, singleContainer] }>
@@ -795,14 +732,14 @@ const styles = {
 const mapStateToProps = ({ user, members, events, elect, committees }) => {
 	const { activeUser } = user;
 	const { membersPoints } = members;
-	const { eventList } = events;
+	const { sortedEvents } = events;
 	const { election } = elect;
 	const { committeesList } = committees;
 
 	return {
 		activeUser,
 		membersPoints,
-		eventList,
+		sortedEvents,
 		election,
 		committeesList
 	};
@@ -810,19 +747,10 @@ const mapStateToProps = ({ user, members, events, elect, committees }) => {
 
 const mapDispatchToProps = {
 	loadUser,
+	loadEvent,
 	pageLoad,
 	fetchMembersPoints,
-	fetchEvents,
-	typeChanged,
-	committeeChanged,
-	nameChanged,
-	descriptionChanged,
-	dateChanged,
-	startTimeChanged,
-	endTimeChanged,
-	locationChanged,
-	epointsChanged,
-	eventIDChanged,
+	getEvents,
 	goToViewEvent,
 	getCommittees,
 	fetchAllUsers,

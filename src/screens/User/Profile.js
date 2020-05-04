@@ -11,7 +11,7 @@ import { loadUser, logoutUser, pageLoad, editUser } from "../../ducks";
 import {
 	editProfileFormDataPrivileged,
 	editProfileFormDataRegular,
-	convertUserToInitialValues
+	convertObjectToInitialValues
 } from "../../data/FormData";
 import { Form } from "../../components";
 
@@ -53,7 +53,7 @@ class Profile extends Component {
 			<SafeAreaView style = {{ flex: 1, backgroundColor: "#0c0b0b" }}>
 				<Form
 					elements = { privilege.eboard ? editProfileFormDataPrivileged : editProfileFormDataRegular }
-					initialValues = { convertUserToInitialValues(this.props.activeUser) }
+					initialValues = { convertObjectToInitialValues(this.props.activeUser) }
 					title = "Edit Profile"
 					visible = { this.state.editProfileFormVisibility }
 					changeVisibility = { (visible) => this.setState({ editProfileFormVisibility: visible }) }
@@ -127,14 +127,14 @@ class Profile extends Component {
 						titleStyle = {{ backgroundColor: color }}
 						overlayContainerStyle = {{ backgroundColor: color }}
 						title = { firstName[0].concat(lastName[0]) }
-						onPress = { () => openGallery(`users/${id}/picture`, id) }
+						onPress = { () => openGallery(`users/${id}`, id) }
 					/>	}
 					{ picture !== ""
 					&& <Avatar
 						size = { dimension.height * 0.32 }
 						rounded
 						source = {{ uri: picture }}
-						onPress = { () => openGallery(`users/${id}/picture`, id) }
+						onPress = { () => openGallery(`users/${id}`, id) }
 					/> }
 				</View>
 				<View style = { [taglineContainer] }>
