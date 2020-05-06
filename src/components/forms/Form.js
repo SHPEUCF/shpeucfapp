@@ -1,33 +1,41 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { ScrollView, SafeAreaView, Modal } from "react-native";
-import { Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicker, FilterList } from "./";
+import { ScrollView, SafeAreaView, Modal, View } from "react-native";
+import { Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicker, FilterList } from "..";
+import { MultiElement } from "./MultiElement";
 
 /**
  * Types
  * @typedef {Object} Elements:
- * 		@property {String}   name
- * 		@property {String}   camelCaseName
- * 		@property {String}   type
- * 		@property {boolean=} isRequired
- * 		@property {any=}     options
+ * 		@property {String}  			 name
+ * 		@property {String}   			 camelCaseName
+ * 		@property {String}   			 type
+ * 		@property {boolean=} 			 isRequired
+ * 		@property {any=}     			 options
+ *		@property {{ConditionalValue}=}  conditionalValues	An object containing ConditionalValue target objects
  * @typedef {Object} InitialValue:
- * 		@property {String}   name
- * 		@property {any}      value
+ * 		@property {String}   			 name
+ * 		@property {any}      			 value
+ * @typedef {Object} ConditionalValue:
+ * 		@property {Function} 			 getValue			Function that is used to obtain the new value for the [camelCaseName] element
+ * @typedef {Object} CustomVerification:
+ * 		@property {String[]} 			 camelCaseNames		Desired data to be verified
+ * 		@property {Function} 			 verification
  */
 
 /**
  * Form Component Info
  * ________________________________________________________________
  * 	Props:
- *		@param {Elements[]}      elements         An array of the names of Elements.
- *		@param {InitialValue[]=} initialValues    An array of initial Values.
- *		@param {String}          title            Displayed at the top of the form.
- *		@param {Boolean}         visible          Used to determine whether the form is visible.
- *		@param {Function}        changeVisibility Used to change the visibility of the form.
- *		@param {Function}        onSubmit         Called to pass all the form values into.
- *		@param {Function=}       onCancel         Called when the cancel button is pressed.
- *		@param {String=}         submitButtonName Displayed on the submit button
+ *		@param {Elements[]}      		elements         	An array of the names of Elements.
+ *		@param {InitialValue[]=} 		initialValues    	An array of initial Values.
+ *		@param {String}          		title            	Displayed at the top of the form.
+ *		@param {Boolean}         		visible          	Used to determine whether the form is visible.
+ *		@param {Function}        		changeVisibility 	Used to change the visibility of the form.
+ *		@param {Function}        		onSubmit         	Called to pass all the form values into.
+ *		@param {Function=}       		onCancel         	Called when the cancel button is pressed.
+ *		@param {String=}         		submitButtonName 	Displayed on the submit button
+ *		@param {CustomVerification=}    customVerification 	Used for additional data verification
  *
  *	Output:
  *
@@ -39,9 +47,6 @@ import { Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicke
  * ________________________________________________________________
  * @description Dynamic Form component allows you to quickly and easily make
  * 		different forms.
- *
- * @description **WARNING** isRequired IS NOT YET IMPLEMENTED
- *
  * ________________________________________________________________
  * Using Component:
  *
@@ -166,7 +171,6 @@ class Form extends Component {
 		let values = {};
 		if (this.props.initialValues)
 			this.props.initialValues.forEach(item => values[item.camelCaseName] = item.value);
-
 		this.state = values;
 	}
 
@@ -198,9 +202,26 @@ class Form extends Component {
 		submitButtonName: PropTypes.string
 	}
 
-	changeState(name, val = "") {
-		this.setState({
-			[name]: val
+	changeState(item, val = "") {
+		const { conditionalValues, camelCaseName } = item;
+		let update = { [camelCaseName]: val };
+		if (conditionalValues) this.applyConditionalValues(conditionalValues, val, update);
+		if (this.props.onChange) this.props.onChange(Object.assign(this.state, update));
+		this.setState(update);
+	}
+
+	applyConditionalValues(conditionalValues, keyValue, updateObj) {
+		Object.entries(conditionalValues).map(([target, obj]) => {
+			// finds target element in case the target element also has conditional values and verifies if it exists
+			let index = this.props.elements.findIndex(element => target === element.camelCaseName);
+			if (index === -1) return;
+
+			let element = this.props.elements[index];
+			let value = obj.getValue(keyValue);
+			let valueObj = { [target]: value };
+
+			Object.assign(updateObj, valueObj);
+			if (element.conditionalValues) this.applyConditionalValues(element.conditionalValues, value, updateObj);
 		});
 	}
 
@@ -212,7 +233,7 @@ class Form extends Component {
 				return <DatePicker
 					placeholder = { placeholder }
 					value = { this.state[camelCaseName] || "" }
-					onSelect = { value => this.changeState(camelCaseName, value) }
+					onSelect = { value => this.changeState(item, value) }
 				/>;
 			case "FilterList":
 				if (!options || !options.data)
@@ -227,7 +248,7 @@ class Form extends Component {
 					itemJSX = { options.itemJSX }
 					customForm = { options.customForm }
 					search = { options.search }
-					onSelect = { value => this.changeState(camelCaseName, value) }
+					onSelect = { value => this.changeState(item, value) }
 				/>;
 			case "Input":
 				return <Input
@@ -239,9 +260,11 @@ class Form extends Component {
 					keyboardType = { options && options.keyboardType }
 					onChangeText = { value => {
 						if (options && options.keyboardType === "numeric")
-							this.changeState(camelCaseName, parseInt(value));
+							this.changeState(item, parseInt(value));
+						else if (value === "")
+							this.changeState(item, null);
 						else
-							this.changeState(camelCaseName, value);
+							 this.changeState(item, value);
 					} }
 				/>;
 			case "PickerInput":
@@ -251,13 +274,19 @@ class Form extends Component {
 					placeholder = { placeholder }
 					value = { this.state[camelCaseName] || "" }
 					data = { options.data }
-					onSelect = { value => this.changeState(camelCaseName, value) }
+					onSelect = { value => this.changeState(item, value) }
 				/>;
 			case "TimePicker":
 				return 	<TimePicker
 					placeholder = { placeholder }
 					value = { this.state[camelCaseName] || "" }
-					onSelect = { value => this.changeState(camelCaseName, value) }
+					onSelect = { value => this.changeState(item, value) }
+				/>;
+			case "MultiElement":
+				return <MultiElement
+					elements = { options.elements }
+					initialState = { this.state }
+					onSelect = { (item, value) => this.changeState(item, value) }
 				/>;
 			default:
 				console.error("Please Pick a Correct type",
@@ -286,27 +315,80 @@ class Form extends Component {
 		);
 	}
 
-	submit() {
+	submit = () => {
 		let formIsValid = true;
-		this.props.elements.forEach((element) => {
-			if (formIsValid && element.isRequired && this.state[element.camelCaseName] !== 0
-				&& !this.state[element.camelCaseName]) {
-				alert(`Please input a value into the ${element.placeholder} field.`);
-				formIsValid = false;
+		let targetState;
+		let submitState = Object.assign({}, this.state);
+
+		this.props.elements.forEach(element => {
+			switch (element.type) {
+				case "MultiElement": {
+					element.options.elements.forEach(multiElement => {
+						let formatObj = multiElement.options.formatValue;
+						targetState = submitState[multiElement.camelCaseName];
+						if (formIsValid && multiElement.isRequired && targetState !== 0 && !targetState) {
+							alert(`Please input a value into the ${multiElement.placeholder} field.`);
+							formIsValid = false;
+						}
+						if (formatObj) {
+							const { camelCaseNames, format, revert } = formatObj;
+							if (!(format && revert))
+								console.error(`The formatValue object of the -${multiElement.camelCaseName}- element should have both a format and revert function. Check the FormData`);
+							if (Array.isArray(camelCaseNames)) {
+								let values = camelCaseNames.map(name => submitState[name]);
+								submitState[multiElement.camelCaseName] = format(values);
+							}
+							else { submitState[multiElement.camelCaseName] = format(submitState[camelCaseNames]) }
+						}
+					});
+					break;
+				}
+				default: {
+					targetState = submitState[element.camelCaseName];
+					if (formIsValid && element.isRequired && targetState !== 0
+						&& !targetState) {
+						alert(`Please input a value into the ${element.placeholder} field.`);
+						formIsValid = false;
+					}
+				}
 			}
 		});
+
+		if (formIsValid && this.props.customVerification) {
+			const { camelCaseNames, verification } = this.props.customVerification;
+
+			if (Array.isArray(camelCaseNames)) {
+				let values = camelCaseNames.map(name => submitState[name]);
+				formIsValid = verification(values);
+			}
+			else { formIsValid = verification(submitState[camelCaseNames]) }
+		}
+
 		if (formIsValid) {
 			this.props.changeVisibility(false);
-			this.props.onSubmit(this.state);
+			this.props.onSubmit(submitState);
+			this.resetState();
 		}
 	}
 
+	resetState() {
+		let resetState = {};
+		Object.keys(this.state).forEach(key => {
+			resetState[key] = null;
+		});
+		if (this.props.initialValues)
+			this.props.initialValues.forEach(item => resetState[item.camelCaseName] = item.value);
+		this.setState(resetState);
+	}
+
 	render() {
-		const { elements, title, changeVisibility, visible } = this.props;
+		const { elements, title, changeVisibility, visible, justElements } = this.props;
 		const { container, elementsStyle } = styles;
 
-		return (
-			<Modal
+		let renderForm = justElements ? <View style = { elementsStyle }>
+			{ elements.map(item => this.buildElement(item)) }
+		</View>
+			: <Modal
 				transparent = { false }
 				visible = { visible || false }
 				style = { container }
@@ -319,8 +401,9 @@ class Form extends Component {
 					</ScrollView>
 					{ this.renderButtons() }
 				</SafeAreaView>
-			</Modal>
-		);
+			</Modal>;
+
+		return renderForm;
 	}
 }
 

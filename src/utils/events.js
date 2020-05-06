@@ -11,6 +11,7 @@ export function convertStandardToMilitaryTime(standardTime) {
 	let time = standardTime.split(":");
 	time = [parseInt(time[0]), ...time[1].split(" ")];
 
+	time[0] = time[0] === 12 ? 0 : time[0];
 	time[0] += time[2] === "AM" ? 0 : 12;
 	time[0] = time[0] < 10 ? "0" + time[0] : String(time[0]);
 
@@ -30,6 +31,7 @@ export function convertMilitaryToStandardTime(militaryTime) {
 	let time = militaryTime.split(":");
 	const period = time[0] >= 12 ? "PM" : "AM";
 	time[0] -= time[0] > 12 ? 12 : 0;
+	time[0] = time[0] === 0 ? 12 : time[0];
 
 	return `${time[0]}:${time[1]} ${period}`;
 }
@@ -64,6 +66,32 @@ export function formatEventListForCalendar(events) {
 }
 
 /**
+ * @description Verifies whether an events times are valid
+ *
+ * @param {String} s Start Time
+ * @param {String} e End Time
+ */
+
+export function timeVerification(s, e) {
+	let start = s.split(":");
+	let end = e.split(":");
+	if (end[0] < start[0] || (end[0] === start[0] && end[1] <= start[1])) {
+		alert("Ending time must be after start time");
+		return false;
+	}
+	else { return true }
+}
+
+/**
+ * @description predefined time verification object to be used with forms
+ */
+
+export const customVerificationForTime = {
+	camelCaseNames: ["startTime", "endTime"],
+	verification: ([s, e]) => timeVerification(s, e)
+};
+
+/**
  * @description Filters out all events that have passed; only leaving future events.
  *
  * @param {Object[]} sortedEvents A sorted array of all the events.
@@ -74,7 +102,8 @@ export const filterPastEvents = sortedEvents => sortedEvents.filter(event => {
 	const today = new Date();
 	const [year, month, date] = event.date.split("-");
 
-	return !(year < today.getFullYear() || month < 	today.getMonth() + 1 || date < today.getDate());
+	return !(year < today.getFullYear() || month < 	today.getMonth() + 1 ||
+	(month == today.getMonth() + 1 && date < today.getDate()));
 });
 
 /**

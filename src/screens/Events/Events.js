@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Button, ButtonLayout, Form, Agenda } from "../../components/";
-import { formatEventListForCalendar } from "../../utils/events";
+import { formatEventListForCalendar, customVerificationForTime } from "../../utils/events";
 import { loadEvent, createEvent } from "../../ducks";
 import { upsertEventFormData } from "../../data/FormData";
 import { View, Dimensions, SafeAreaView } from "react-native";
+import _ from "lodash";
 
 const dimension = Dimensions.get("window");
 let dateStr = "";
@@ -15,10 +16,15 @@ class Events extends Component {
 		this.state = {
 			status: "closed",
 			day: new Date(),
-			eventFormVisibility: false
+			eventFormVisibility: false,
+			agendaRefresh: false
 	 };
 	 dateStr = this.getTodaysDate();
 	}
+
+	didBlurSubscription = this.props.navigation.addListener("didBlur",
+		() => this.setState({ agendaRefresh: !this.state.agendaRefresh })
+	);
 
 	componentDidMount() {
 		dateStr = this.getTodaysDate();
@@ -47,17 +53,19 @@ class Events extends Component {
 				<View style = {{ backgroundColor: "black", flex: 1 }}>
 					<View style = {{ flex: 1 }}>
 						<Form
-							elements = { upsertEventFormData }
+							elements = { upsertEventFormData(Object.keys(this.props.committeesList)) }
 							title = "Create Event"
 							initialValues = { [{ camelCaseName: "date", value: dateStr }] }
 							visible = { this.state.eventFormVisibility }
 							changeVisibility = { (visible) => this.setState({ eventFormVisibility: visible }) }
 							onSubmit = { (value) => createEvent(value) }
+							customVerification = { customVerificationForTime }
 						/>
 						<Agenda
 							passDate = { (item) => dateStr = item.dateString }
 							items = { formatEventListForCalendar(this.props.sortedEvents) }
 							style = {{ height: dimension.height * 0.73 }}
+							refresh = { this.state.agendaRefresh }
 						/>
 					</View>
 					{ this.renderButton() }
@@ -80,11 +88,12 @@ class Events extends Component {
 	}
 }
 
-const mapStateToProps = ({ events, user }) => {
+const mapStateToProps = ({ events, user, committees }) => {
 	const { sortedEvents } = events;
 	const { activeUser } = user;
+	const { committeesList } = committees;
 
-	return { sortedEvents, activeUser };
+	return { sortedEvents, activeUser, committeesList };
 };
 
 const mapDispatchToProps = { loadEvent };

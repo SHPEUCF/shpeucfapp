@@ -11,14 +11,46 @@ import Majors from "./Majors.json";
 const genderOptions = ["Female", "Male", "Other", "Do not wish to disclose"];
 const eventTypeOptions = ["Committee", "Social Event", "Volunteer Event", "GBM", "Workshop", "Other"];
 
-const upsertEventFormData = [
+const upsertEventFormData = (committees) => [
 	{
-		placeholder: "Event Type",
-		camelCaseName: "type",
-		type: "PickerInput",
-		isRequired: true,
+		type: "MultiElement",
 		options: {
-			data: eventTypeOptions
+			elements: [
+				{
+					placeholder: "Event Type",
+					camelCaseName: "type",
+					type: "PickerInput",
+					isRequired: true,
+					conditionalValues: {
+						points: {
+							getValue: (input) => {
+								let values = {
+									"Social Event": 3,
+									"Volunteer Event": 3,
+									"GBM": 5,
+									"Workshop": 3,
+									"Committee": 2
+								};
+								return values[input];
+							}
+						}
+					},
+					options: {
+						formatValue: {
+							camelCaseNames: ["type", "committee"],
+							format: ([type, committee]) => committee ? `${type}: ${committee}` : type,
+							revert: type => type.split(":")[0]
+						},
+						data: eventTypeOptions
+					}
+				},
+				{
+					placeholder: "Committee Name",
+					camelCaseName: "committee",
+					type: "PickerInput",
+					options: { selectionArray: [committees] }
+				}
+			]
 		}
 	},
 	{
@@ -46,6 +78,17 @@ const upsertEventFormData = [
 		placeholder: "Start Time",
 		camelCaseName: "startTime",
 		type: "TimePicker",
+		conditionalValues: {
+			endTime: {
+				getValue: (input) => {
+					let time = input.split(":");
+					let hourPlusOne = parseInt(time[0]) + 1;
+					let newHour = hourPlusOne === 24 ? 0 : hourPlusOne;
+					newHour = newHour < 10 ? "0" + newHour : String(newHour);
+					return `${newHour}:${time[1]}`;
+				}
+			}
+		},
 		isRequired: true
 	},
 	{

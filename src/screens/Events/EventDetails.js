@@ -21,6 +21,7 @@ import {
 } from "react-native";
 
 import { MemberPanel } from "../../utils/render";
+import { customVerificationForTime } from "../../utils/events";
 
 const dimension = Dimensions.get("screen");
 
@@ -445,12 +446,13 @@ class EventDetails extends Component {
 				<SafeAreaView style = { page }>
 					<NavBar title = { viewName } back onBack = { () => Actions.pop() } />
 					<Form
-						elements = { upsertEventFormData }
+						elements = { upsertEventFormData(Object.keys(this.props.committeesList)) }
 						title = "Edit Event"
 						initialValues = { convertObjectToInitialValues(this.props.activeEvent) }
 						visible = { this.state.eventFormVisibility }
 						changeVisibility = { (visible) => this.setState({ eventFormVisibility: visible }) }
 						onSubmit = { (value) => editEvent(value) }
+						customVerification = { customVerificationForTime }
 					/>
 					<View style = { container }>
 						<View style = { iconContainer }>
@@ -635,12 +637,13 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ events, user, members }) => {
+const mapStateToProps = ({ events, user, members, committees }) => {
 	const { activeEvent } = events;
 	const { activeUser } = user;
 	const { userList } = members;
+	const { committeesList } = committees;
 
-	return { activeEvent, userList, activeUser };
+	return { activeEvent, userList, activeUser, committeesList };
 };
 
 const mapDispatchToProps = { deleteEvent, checkIn, rsvp, pageLoad, fetchAllUsers };
