@@ -2,22 +2,20 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import {	View } from "react-native";
 import { Input } from "./Input";
-import { convertStandardToMilitaryTime, prependZero } from "../../utils/events";
+import { convertStandardToMilitaryTime, convertMilitaryToStandardTime, prependZero } from "../../utils/events";
 import { PickerInput } from "./PickerInput";
 
 class TimePicker extends Component {
+	static propTypes = {
+		value: PropTypes.string,
+		placeholder: PropTypes.string.isRequired,
+		onSelect: PropTypes.func.isRequired
+	}
+
 	constructor(props) {
 		super(props);
 
-		let time = [];
-
-		if (this.props.value) {
-			time = this.props.value.split(":");
-			time = [prependZero(time[0]), ...time[1].split(" ")];
-		}
-
-		const isInitialized = time.length === 3;
-		if (isInitialized) this.update({ hour: time[0], minute: time[1], period: time[2] });
+		let [time, isInitialized] = this.initializeTimePicker();
 
 		this.state = {
 			hour: isInitialized ? time[0] : "",
@@ -30,10 +28,33 @@ class TimePicker extends Component {
 		};
 	}
 
-	static propTypes = {
-		value: PropTypes.string,
-		placeholder: PropTypes.string.isRequired,
-		onSelect: PropTypes.func.isRequired
+	componentDidUpdate(prevProps) {
+		if (prevProps.value !== this.props.value) {
+			let [time, isInitialized] = this.initializeTimePicker();
+
+			this.setState({
+				hour: isInitialized ? time[0] : "",
+				minute: isInitialized ? time[1] : "",
+				period: isInitialized ? time[2] : "",
+				focused: isInitialized
+			});
+		}
+	}
+
+	initializeTimePicker() {
+		let time = [];
+
+		if (this.props.value) {
+			time = this.props.value.split(":");
+			if (time[1].length === 2) time = convertMilitaryToStandardTime(`${time[0]}:${time[1]}`).split(":");
+
+			time = [prependZero(time[0]), ...time[1].split(" ")];
+		}
+
+		const isInitialized = time.length === 3;
+		if (isInitialized) this.update({ hour: time[0], minute: time[1], period: time[2] });
+
+		return [time, isInitialized];
 	}
 
 	update({ hour, minute, period }) {
