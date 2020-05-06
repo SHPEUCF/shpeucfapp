@@ -1,213 +1,50 @@
 import firebase from "firebase";
 import { Actions } from "react-native-router-flux";
-import { Alert } from "react-native";
 import { createActionTypes } from "../utils/actions";
 
 // handle all things related to Users
 const ACTIONS = createActionTypes([
-	"FIRST_NAME_CHANGED",
-	"LAST_NAME_CHANGED",
-	"EMAIL_CHANGED",
-	"MAJOR_CHANGED",
-	"COLLEGE_CHANGED",
-	"POINTS_CHANGED",
-	"PRIVILEGE_CHANGED",
-	"GET_PRIVILEGE",
-	"PICTURE_CHANGED",
-	"PASSWORD_CHANGED",
-	"CONFIRM_PASSWORD_CHANGED",
-	"REGISTRATION_ERROR",
-	"SET_DASH_COLOR",
-	"SET_FLAG",
 	"SHOW_FIREBASE_ERROR",
 	"VERIFIED_USER",
 	"LOGIN_USER",
-	"GET_USER_COMMITTEES",
-	"CHANGE_USER_COMMITTEES",
-	"ENTER_APP",
-	"LOAD_USER",
-	"LOGIN_USER_FAIL",
 	"LOGOUT_USER",
-	"CREATE_USER",
-	"CREATE_USER_SUCCESS",
-	"CREATE_USER_FAIL",
-	"EDIT_USER",
-	"CONTINENT_CHANGED",
-	"NATIONALITY_CHANGED",
-	"GENDER_CHANGED",
-	"BIRTH_DATE_CHANGED",
-	"GO_TO_RESET_PASSWORD",
-	"GO_TO_LOGIN",
-	"GO_TO_PROFILE",
-	"GO_TO_REGISTRATION",
-	"GO_TO_EDIT_PROFILE_FORM",
-	"QUOTE_CHANGED",
-	"PAGE_LOAD",
-	"RESET_PASSWORD"
+	"LOAD_USER_AND_PRIVILEGE"
 ]);
 
 const INITIAL_STATE = {
-	firstName: "",
-	dashColor: "#21252b",
-	flag: "",
-	lastName: "",
-	email: "",
-	college: "",
-	major: "",
-	quote: "",
-	picture: "",
-	points: 0,
-	privilege: {},
-	password: "",
-	confirmPassword: "",
-	continent: "Do not wish to disclose",
-	nationality: "Do not wish to disclose",
-	gender: "Do not wish to disclose",
-	birthday: "0000-00-00",
-	paidMember: false,
-	user: null,
+	activeUser: {
+		firstName: "",
+		color: "#21252b",
+		flag: "",
+		lastName: "",
+		email: "",
+		major: "Do not wish to disclose",
+		picture: "",
+		points: 0,
+		privilege: {},
+		country: "Do not wish to disclose",
+		gender: "Do not wish to disclose",
+		birthday: "0000-00-00",
+		paidMember: false,
+		id: "",
+		voted: false,
+		applied: false,
+		userCommittees: {}
+	},
 	loggedIn: null,
-	loading: false,
 	error: "",
-	id: "",
-	voted: false,
-	applied: false,
-	userCommittees: null,
-	joinedCommittees: {}
+	loading: false
 };
 
 export default (state = INITIAL_STATE, action) => {
 	const {
 		payload
 	} = action;
-
 	switch (action.type) {
-		case ACTIONS.FIRST_NAME_CHANGED:
-			return {
-				...state,
-				firstName: payload
-			};
-		case ACTIONS.LAST_NAME_CHANGED:
-			return {
-				...state,
-				lastName: payload
-			};
-		case ACTIONS.EMAIL_CHANGED:
-			return {
-				...state,
-				email: payload
-			};
-		case ACTIONS.COLLEGE_CHANGED:
-			return {
-				...state,
-				college: payload
-			};
-		case ACTIONS.MAJOR_CHANGED:
-			return {
-				...state,
-				major: payload
-			};
-		case ACTIONS.PASSWORD_CHANGED:
-			return {
-				...state,
-				password: payload
-			};
-		case ACTIONS.POINTS_CHANGED:
-			return {
-				...state,
-				points: payload
-			};
-		case ACTIONS.PRIVILEGE_CHANGED:
-			return {
-				...state,
-				privilege: payload
-			};
-		case ACTIONS.PICTURE_CHANGED:
-			return {
-				...state,
-				picture: payload
-			};
-		case ACTIONS.CONFIRM_PASSWORD_CHANGED:
-			return {
-				...state,
-				confirmPassword: payload
-			};
-		case ACTIONS.QUOTE_CHANGED:
-			return {
-				...state,
-				quote: payload
-			};
-		case ACTIONS.CONTINENT_CHANGED:
-			return {
-				...state,
-				continent: payload
-			};
-		case ACTIONS.NATIONALITY_CHANGED:
-			return {
-				...state,
-				nationality: payload
-			};
-		case ACTIONS.GENDER_CHANGED:
-			return {
-				...state,
-				gender: payload
-			};
-		case ACTIONS.BIRTH_DATE_CHANGED:
-			return {
-				...state,
-				birthday: payload
-			};
-		case ACTIONS.REGISTRATION_ERROR:
-			return {
-				...state,
-				error: payload
-			};
-		case ACTIONS.SET_DASH_COLOR:
-			return {
-				...state,
-				dashColor: payload
-			};
-		case ACTIONS.SET_FLAG:
-			return {
-				...state,
-				flag: payload
-			};
 		case ACTIONS.SHOW_FIREBASE_ERROR:
 			return {
 				...state,
 				error: payload
-			};
-		case ACTIONS.CREATE_USER:
-			return {
-				...state,
-				loading: true,
-				error: ""
-			};
-		case ACTIONS.CREATE_USER_SUCCESS:
-			return {
-				...state,
-				...INITIAL_STATE
-			};
-		case ACTIONS.CREATE_USER_FAIL:
-			return {
-				...state,
-				error: payload,
-				loading: false
-			};
-
-		case ACTIONS.EDIT_USER:
-			return {
-				...state,
-				firstName: payload
-			};
-		case ACTIONS.CHANGE_USER_COMMITTEES:
-			return {
-				...state
-			};
-		case ACTIONS.GET_PRIVILEGE:
-			return {
-				...state,
-				privilege: payload
 			};
 		case ACTIONS.LOGIN_USER:
 			return {
@@ -215,227 +52,30 @@ export default (state = INITIAL_STATE, action) => {
 				loading: true,
 				error: ""
 			};
-		case ACTIONS.GET_USER_COMMITTEES:
-			return {
-				...state,
-				userCommittees: payload
-			};
-		case ACTIONS.ENTER_APP:
-			return {
-				...state,
-				...INITIAL_STATE,
-				user: payload,
-				loggedIn: true
-			};
-		case ACTIONS.LOAD_USER:
-			return {
-				...state,
-				firstName: payload.firstName,
-				lastName: payload.lastName,
-				college: payload.college,
-				email: payload.email,
-				major: payload.major,
-				quote: payload.quote,
-				continent: payload.continent,
-				nationality: payload.nationality,
-				gender: payload.gender,
-				birthday: payload.birthday,
-				points: payload.points,
-				picture: payload.picture,
-				paidMember: payload.paidMember,
-				voted: payload.voted,
-				applied: payload.applied,
-				id: payload.id,
-				flag: payload.flag,
-				userCommittees: payload.committees,
-				dashColor: payload.color,
-				loading: false
-			};
-		case ACTIONS.LOGIN_USER_FAIL:
-			return {
-				...state,
-				error: payload,
-				loading: false,
-				password: ""
-			};
 		case ACTIONS.LOGOUT_USER:
 			return {
 				...state,
 				...INITIAL_STATE
 			};
-		case ACTIONS.GO_TO_RESET_PASSWORD:
-			return INITIAL_STATE;
-		case ACTIONS.GO_TO_LOGIN:
-			return INITIAL_STATE;
-		case ACTIONS.GO_TO_PROFILE:
-			return state;
-		case ACTIONS.GO_TO_REGISTRATION:
-			return INITIAL_STATE;
-		case ACTIONS.GO_TO_EDIT_PROFILE_FORM:
-			return state;
-		case ACTIONS.RESET_PASSWORD:
-			return state;
+		case ACTIONS.LOAD_USER_AND_PRIVILEGE:
+			return {
+				...state,
+				activeUser: payload
+			};
 		default:
 			return state;
 	}
 };
 
-export const firstNameChanged = (text) => {
-	return {
-		type: ACTIONS.FIRST_NAME_CHANGED,
-		payload: text
-	};
-};
+/* Redux Action Creators */
 
-export const lastNameChanged = (text) => {
-	return {
-		type: ACTIONS.LAST_NAME_CHANGED,
-		payload: text
-	};
-};
-
-export const emailChanged = (text) => {
-	return {
-		type: ACTIONS.EMAIL_CHANGED,
-		payload: text
-	};
-};
-
-export const collegeChanged = (text) => {
-	return {
-		type: ACTIONS.COLLEGE_CHANGED,
-		payload: text
-	};
-};
-
-export const majorChanged = (text) => {
-	return {
-		type: ACTIONS.MAJOR_CHANGED,
-		payload: text
-	};
-};
-
-export const passwordChanged = (text) => {
-	return {
-		type: ACTIONS.PASSWORD_CHANGED,
-		payload: text
-	};
-};
-
-export const pointsChanged = (text) => {
-	return {
-		type: ACTIONS.POINTS_CHANGED,
-		payload: text
-	};
-};
-
-export const birthDateChanged = (text) => {
-	return {
-		type: ACTIONS.BIRTH_DATE_CHANGED,
-		payload: text
-	};
-};
-
-export const continentChanged = (text) => {
-	return {
-		type: ACTIONS.CONTINENT_CHANGED,
-		payload: text
-	};
-};
-
-export const nationalityChanged = (text) => {
-	return {
-		type: ACTIONS.NATIONALITY_CHANGED,
-		payload: text
-	};
-};
-
-export const genderChanged = (text) => {
-	return {
-		type: ACTIONS.GENDER_CHANGED,
-		payload: text
-	};
-};
-
-export const privilegeChanged = (text) => {
-	return {
-		type: ACTIONS.PRIVILEGE_CHANGED,
-		payload: text
-	};
-};
-
-export const pictureChanged = (text) => {
-	const {
-		currentUser
-	} = firebase.auth();
-
-	let id = currentUser.uid;
-
-	firebase.database().ref(`/users/${id}/`).update({
-		picture: text
-	});
-
-	return {
-		type: ACTIONS.PICTURE_CHANGED,
-		payload: text
-	};
-};
-
-export const confirmPasswordChanged = (text) => {
-	return {
-		type: ACTIONS.CONFIRM_PASSWORD_CHANGED,
-		payload: text
-	};
-};
-
-export const quoteChanged = (text) => {
-	return {
-		type: ACTIONS.QUOTE_CHANGED,
-		payload: text
-	};
-};
-
-export const registrationError = (error) => {
-	return (dispatch) => {
-		dispatch({
-			type: ACTIONS.REGISTRATION_ERROR,
-			payload: error
-		});
-	};
-};
-
-export const setDashColor = (color) => {
-	const {
-		currentUser
-	} = firebase.auth();
-
-	let id = currentUser.uid;
-
-	return (dispatch) => {
-		firebase.database().ref(`/users/${id}/color`).set(color);
-		dispatch({
-			type: ACTIONS.SET_DASH_COLOR,
-			payload: color
-		});
-	};
-};
-
-export const setFlag = (flag) => {
-	const {
-		currentUser
-	} = firebase.auth();
-
-	let id = currentUser.uid;
-
-	firebase.database().ref(`/users/${id}/flag`).set(flag);
-
-	return (dispatch) => {
-		dispatch({
-			type: ACTIONS.SET_FLAG,
-			payload: flag
-		});
-	};
-};
+/**
+ * Changes the error on the reducer. This information should later be read
+ * and displayed in some way to the user.
+ *
+ * @access     private
+ * @param {String}   error An Error Message
+ */
 
 const showFirebaseError = (dispatch, error) => {
 	let errorMessage;
@@ -460,167 +100,87 @@ const showFirebaseError = (dispatch, error) => {
 	});
 };
 
-// Registration Actions
-export const createUser = (firstName, lastName, email, college, major, points, picture, password, quote, continent, nationality, gender, birthday) => {
-	return (dispatch) => {
-		dispatch({
-			type: ACTIONS.CREATE_USER
-		});
+/**
+ * Creates a user on Firebase using their knights email as the username with their
+ * desired password. Then if succeeded it calls createUserSuccess().
+ *
+ * Needs to be passed through mapDispatchToProps to ensure error functionality works
+ *
+ * @access     public
+ * @param {Object}   user a user object with all desired user properties
+ * @param {String}   email a student knights email
+ * @param {String}   password a password that meets the requirements
+ */
 
+export const createUser = (user, email, password) => {
+	return (dispatch) => {
 		firebase.auth().createUserWithEmailAndPassword(email, password)
-		// .then(() => firebase.auth().signInWithEmailAndPassword(email, password))
-			.then(() => createUserSuccess(dispatch, firstName, lastName, email, college, major, points, picture, quote, continent, nationality, gender, birthday))
-			.catch((error) => createUserFail(dispatch, error));
+			.then(() => createUserSuccess(user))
+			.catch((error) => showFirebaseError(dispatch, error));
 	};
 };
 
-const createUserFail = (dispatch, error) => {
-	firebase.auth().signOut();
-	let errorMessage;
+/**
+ * Creates a user on Firebase Database with the desired fields. Then displays
+ * an alert to the user letting them know to check their email.
+ *
+ *
+ * @access     private
+ * @param {Object}   user a user object with all desired user properties
+ */
 
-	switch (error.code) {
-		case "auth/user-not-found":
-			errorMessage = "There is no user record corresponding to this identifier";
-			break;
-		case "auth/invalid-email":
-			errorMessage = "Enter a valid email";
-			break;
-		case "auth/wrong-password":
-			errorMessage = "Incorrect credentials";
-			break;
-		default:
-			errorMessage = error.message;
-	}
-
-	dispatch({
-		type: ACTIONS.CREATE_USER_FAIL,
-		payload: errorMessage
-	});
-};
-
-const createUserSuccess = (dispatch, firstName, lastName, email, college, major, points, picture, quote, continent, nationality, gender, birthday) => {
+const createUserSuccess = (user) => {
 	const {
 		currentUser
 	} = firebase.auth();
 
-	let id = currentUser.uid;
-
-	firebase.database().ref(`/users/${id}/`).set({
-		firstName: firstName,
-		lastName: lastName,
-		email: email,
-		college: college,
-		major: major,
-		points: points,
-		picture: picture,
-		quote: quote,
-		continent: continent,
-		nationality: nationality,
-		gender: gender,
-		birthday: birthday,
-		paidMember: false,
-		id: id,
-		voted: false,
-		applied: false,
-		flag: "",
-		color: "#21252b",
-		committees: null
-	})
+	firebase.database().ref(`/users/${currentUser.uid}/`)
+		.set({ ...INITIAL_STATE.activeUser, ...user, id: currentUser.uid })
 		.then(() => {
-			firebase.database().ref(`/points/${id}/`).set({
-				firstName: firstName,
-				lastName: lastName,
-				points: points,
-				id: id
+			firebase.database().ref(`/points/${currentUser.uid}/`).set({
+				firstName: user.firstName,
+				lastName: user.lastName,
+				points: 0,
+				id: currentUser.uid
 			});
 		})
 		.then(() => {
-			firebase.database().ref(`/privileges/${id}/`).set({
-				firstName: firstName,
-				lastName: lastName,
+			firebase.database().ref(`/privileges/${currentUser.uid}/`).set({
+				firstName: user.firstName,
+				lastName: user.lastName,
 				user: true,
 				board: false,
 				eboard: false,
 				president: false,
-				id: id,
+				id: currentUser.uid,
 				paidMember: false
 			});
 		})
 		.then(() => {
-			currentUser.sendEmailVerification();
-			alert(`We sent a verification to: ${email}. Please open your email and verify your account`);
+			currentUser.sendEmailVerification()
+				.catch(() => alert("We were not able to send an email."
+						+ " Please contact the Tech Director for assistance"))
+				.then(() => alert(`We sent a verification to: ${user.email}.
+						Please open your email and verify your account`));
 		})
 		.then(() => firebase.auth().signOut())
 		.catch((error) => alert(error));
-
-	dispatch({
-		type: ACTIONS.CREATE_USER_SUCCESS
-	});
 };
 
-export const editUser = (firstName, lastName, email, college, major, quote, continent, nationality, gender, birthday) => {
-	const {
-		currentUser
-	} = firebase.auth();
+/**
+ * Sends a request to firebase to reset the password using the email. Then displays an alert
+ * to the user that an email to reset their password was sent to them.
+ *
+ * Needs to be passed through mapDispatchToProps to ensure error functionality works
+ *
+ * @access     public
+ * @param {String}   email a student knights email
+ */
 
-	firebase.database().ref(`/users/${currentUser.uid}/`).update({
-		firstName: firstName,
-		lastName: lastName,
-		email: email,
-		college: college,
-		major: major,
-		quote: quote,
-		continent: continent,
-		nationality: nationality,
-		gender: gender,
-		birthday: birthday
-	})
-		.then(() => firebase.database().ref(`/points/${currentUser.uid}/`).update({
-			firstName: firstName,
-			lastName: lastName
-		}))
-		.then(() => firebase.database().ref(`/privileges/${currentUser.uid}/`).update({
-			firstName: firstName,
-			lastName: lastName
-		}))
-		.then(() => Alert.alert("Account Updated"));
-};
-
-export const getPrivilege = () => {
-	const {
-		currentUser
-	} = firebase.auth();
-
+export const resetPassword = (email) => {
 	return (dispatch) => {
-		if (currentUser)
-			firebase.database().ref(`/privileges/${currentUser.uid}/`)
-				.on("value", snapshot => {
-					dispatch({
-						type: ACTIONS.GET_PRIVILEGE,
-						payload: snapshot.val()
-					});
-				})
-			;
-	};
-};
-
-// Login Actions
-const isVerifiedUser = ({ email, password }) => {
-	return (dispatch) => {
-		dispatch({
-			type: ACTIONS.VERIFIED_USER
-		});
-	};
-};
-
-export const resetPassword = ({	email }) => {
-	return (dispatch) => {
-		dispatch({
-			type: ACTIONS.RESET_PASSWORD
-		});
-
 		firebase.auth().sendPasswordResetEmail(email)
-			.then(() => Alert.alert("Reset Started",
+			.then(() => alert("Reset Started",
 				`If an account with email ${email} exists, a reset password email will be sent. \
 				Please check your email.`))
 			.then(() => Actions.login())
@@ -628,12 +188,18 @@ export const resetPassword = ({	email }) => {
 	};
 };
 
-export const loginUser = ({	email, password }) => {
-	return (dispatch) => {
-		dispatch({
-			type: ACTIONS.LOGIN_USER
-		});
+/**
+ * Sends a request to firebase to login to the account.
+ *
+ * If the user is not verified then they will be alerted to check their email.
+ *
+ * @access     public
+ * @param {String}   email a student knights email
+ * @param {String}   password the user's password
+ */
 
+export const loginUser = (email, password) => {
+	return (dispatch) => {
 		firebase.auth().signInWithEmailAndPassword(email, password)
 			.then(() => {
 				if (!firebase.auth().currentUser.emailVerified) {
@@ -644,136 +210,99 @@ export const loginUser = ({	email, password }) => {
 					});
 				}
 			})
-			.then(user => loginUserSuccess(dispatch, user))
-			.catch(error => loginUserFail(dispatch, error));
+			.catch(error => showFirebaseError(dispatch, error));
 	};
 };
 
-export const changeUserCommittees = (change) => {
-	const {
-		currentUser
-	} = firebase.auth();
-
-	let id = currentUser.uid;
-
-	firebase.database().ref(`/users/${id}/committees`).update(change);
-
-	return (dispatch) => {
-		dispatch({
-			type: ACTIONS.CHANGE_USER_COMMITTEES
-		});
-	};
-};
-
-const loginUserSuccess = (dispatch, user) => {
-	dispatch({
-		type: ACTIONS.ENTER_APP,
-		payload: user
-	});
-};
+/**
+ * Sends a GET request to firebase to load some user's information.
+ *
+ * This can load the logged in user or if a userID is passed in then it will load
+ * that user instead.
+ *
+ * Needs to be passed through mapDispatchToProps
+ *
+ * @access     public
+ * @param {String}   userID OPTIONAL- the desired user's userID
+ */
 
 export const loadUser = (userID) => {
 	const {
 		currentUser
 	} = firebase.auth();
 
-	let id = typeof userID === "undefined" ? currentUser.uid : userID;
+	const id = typeof userID === "undefined" ? currentUser.uid : userID;
 
 	return (dispatch) => {
-		if (currentUser)
-			firebase.database().ref(`/users/${id}/`).on("value", snapshot => {
-				dispatch({
-					type: ACTIONS.LOAD_USER,
-					payload: snapshot.val()
-				});
-				dispatch({
-					type: ACTIONS.PAGE_LOAD,
-					payload: false
+		if (currentUser) {
+			firebase.database().ref(`/users/${id}/`).on("value", userSnapshot => {
+				const user = userSnapshot.val();
+
+				firebase.database().ref(`/privileges/${id}/`).on("value", privilegeSnapshot => {
+					const userWithPrivilege = {
+						...user,
+						privilege: privilegeSnapshot.val()
+					};
+					dispatch({
+						type: ACTIONS.LOAD_USER_AND_PRIVILEGE,
+						payload: userWithPrivilege
+					});
 				});
 			});
+		}
 	};
 };
 
-export const loginUserFail = (dispatch, error) => {
-	let errorMessage;
+/* FireBase Functions that don't use Redux */
 
-	switch (error.code) {
-		case "auth/user-not-found":
-			errorMessage = "There is no user record corresponding to this identifier";
-			break;
-		case "auth/invalid-email":
-			errorMessage = "Enter a valid email";
-			break;
-		case "auth/wrong-password":
-			errorMessage = "Incorrect credentials";
-			break;
-		case "auth/network-request-failed":
-			errorMessage = "Network error. Check your Internet connectivity.";
-			break;
-		default:
-			errorMessage = error.message;
-	}
+/**
+ * Sends an UPDATE request and updates the user on the database.
+ *
+ * To use you can send all fields of a user that you would like to change.
+ * omitting fields does not break the code.
+ *
+ * ***DO NOT PASS IN THROUGH mapDispatchToProps***
+ *
+ * @access     public
+ * @param {Object}   user        User is an object that can store any subset of props that you would want to edit.
+ *
+ * **Things you can not edit using this function:**
+ * ["firstName", "lastName", "points", "voted", "privileges", "paidMember"]
+ * @example
+ * user = {
+ * 	nationality: "Cuban",
+ * 	gender: "Male"
+ * }
+ *
+ * user = {
+ * 	picture: "someUrl.jpg"
+ * }
+ *
+ */
 
-	dispatch({
-		type: ACTIONS.LOGIN_USER_FAIL,
-		payload: errorMessage
+export const editUser = (user) => {
+	const {
+		currentUser
+	} = firebase.auth();
+
+	const invalidProperties = ["firstName", "lastName", "points", "voted", "privileges", "paidMember"];
+
+	invalidProperties.forEach(prop => {
+		if (prop in user) console.error(`Please do not try to edit ${prop}!`);
 	});
+
+	firebase.database().ref(`/users/${currentUser.uid}/`).update(user)
+		.catch(error => alert(error));
 };
+
+/**
+ * Sends an signOut request to firebase
+ *
+ * ***DO NOT PASS IN THROUGH mapDispatchToProps***
+ */
 
 export const logoutUser = () => {
-	return (dispatch) => {
-		dispatch({
-			type: ACTIONS.LOGOUT_USER
-		});
-
-		firebase.auth().signOut()
-			.then(Actions.login())
-			.then(Alert.alert("Signed Out", "Have a great day!"));
-	};
-};
-
-export const goToResetPassword = () => {
-	return (dispatch) => {
-		dispatch({
-			type: ACTIONS.GO_TO_RESET_PASSWORD
-		});
-		Actions.resetPassword();
-	};
-};
-
-export const goToLogIn = () => {
-	return (dispatch) => {
-		dispatch({
-			type: ACTIONS.GO_TO_LOGIN
-		});
-		Actions.login();
-	};
-};
-
-export const goToProfile = () => {
-	return (dispatch) => {
-		dispatch({
-			type: ACTIONS.GO_TO_PROFILE
-		});
-		Actions.profile();
-	};
-};
-
-export const goToRegistration = () => {
-	return (dispatch) => {
-		dispatch({
-			type: ACTIONS.GO_TO_REGISTRATION
-		});
-		Actions.registration();
-	};
-};
-
-export const goToEditProfileForm = () => {
-	Actions.EditProfileForm();
-
-	return (dispatch) => {
-		dispatch({
-			type: ACTIONS.GO_TO_EDIT_PROFILE_FORM
-		});
-	};
+	firebase.auth().signOut()
+		.then(Actions.login())
+		.then(alert("Signed Out", "Have a great day!"));
 };

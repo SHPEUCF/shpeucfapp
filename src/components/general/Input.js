@@ -53,7 +53,7 @@ class Input extends Component {
 
 		return (
 			<TextInput
-				value = { value }
+				value = { "" + value }
 				onChangeText = { onChangeText }
 				style = { [inputStyle, style] }
 				autoCorrect = { autoCorrect }

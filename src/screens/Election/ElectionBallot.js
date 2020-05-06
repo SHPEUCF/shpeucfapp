@@ -66,7 +66,7 @@ class ElectionBallot extends Component {
 
 		const {
 			positions,
-			voted
+			activeUser
 		} = this.props;
 
 		const positionsArray = _.orderBy(positions, iterateesPos, orderPos);
@@ -85,7 +85,7 @@ class ElectionBallot extends Component {
 						ItemSeparatorComponent = { () => this.renderSeparator() }
 					/>
 				</View>
-				{ !voted && <ButtonLayout>
+				{ !activeUser.voted && <ButtonLayout>
 					<Button title = "Submit" onPress = { () => this.submitVote() } />
 					<Button title = "Cancel" onPress = { () => { Actions.pop() } } />
 				</ButtonLayout> }
@@ -206,7 +206,7 @@ class ElectionBallot extends Component {
 	}
 
 	updateSelection(isChecked, { position, id }) {
-		if (this.props.voted) {
+		if (this.props.activeUser.voted) {
 			alert("You have already voted!");
 		}
 		else {
@@ -266,7 +266,7 @@ class ElectionBallot extends Component {
 	submitVote() {
 		const {
 			vote
-		} = this.props;
+		} = this.props.activeUser;
 
 		if (_.isEmpty(this.state.selectedCandidates)) {
 			alert("Please vote for at least one candidate!");
@@ -352,14 +352,15 @@ const mapStateToProps = ({ elect, user }) => {
 		votes
 	} = elect;
 
-	const {
-		firstName,
-		lastName,
-		id,
-		voted
-	} = user;
+	const { activeUser } = user;
 
-	return { election, positions, candidatePlan, votes, firstName, lastName, id, voted };
+	return {
+		election,
+		positions,
+		candidatePlan,
+		votes,
+		activeUser
+	};
 };
 
 const mapDispatchToProps = {

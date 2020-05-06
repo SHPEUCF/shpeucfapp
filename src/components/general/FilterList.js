@@ -6,15 +6,25 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { Button } from "./Button";
 import { ButtonLayout } from "./ButtonLayout";
 
-/*
+const dimension = Dimensions.get("window");
+
+/**
 	FilterList
+	@class
 
-	Documentation in progress
+	@param {(String[] | Object[])}  data        An array of the data that will be displayed.
+	@param {(String | Object)}      value	      The initial value of the FilterList component.
+	@param {String}                 placeholder The placeholder in the searchbar.
+	@param {Function}               onSelect    Used to pass the selected Value to the parent.
+	@param {Function=}              regexFunc   {Optional} Specifies what props to show when rendering.
+	@param {Function=}              selectBy    {Optional} Specifies how to store value in the case of duplicate strings.
+	@param {Function=}              itemJSX     {Optional} Determines how each item will be rendered.
+	@param {Boolean=}               multiple    {Optional} Allows user to select multiple items.
+	@param {Boolean=}               search      {Optional} Determines the visibility of the searchbar.
 
-	Full Examples
+	@example
 		Single
-		<FilterPicker
-			type = "Single"
+		<FilterList
 			data = { userList }
 			value = { userList[chair.id] }
 			placeholder = { "Director/Chairperson" }
@@ -24,8 +34,8 @@ import { ButtonLayout } from "./ButtonLayout";
 			itemJSX = { (data) => this.renderMemberComponent(data) }
 		/>
 		Multiple
-		<FilterPicker
-			type = "Multiple"
+		<FilterList
+			multiple = true
 			CustomForm = { Wrapper }
 			data = { list }
 			regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
@@ -36,9 +46,7 @@ import { ButtonLayout } from "./ButtonLayout";
 			} }
 		/>
 		SearchBar
-		<FilterPicker
-			title = { "Members" }
-			type = "Searchbar"
+		<FilterList
 			data = { sortedMembers }
 			search = { this.state.search }
 			placeholder = "Find user"
@@ -46,9 +54,7 @@ import { ButtonLayout } from "./ButtonLayout";
 			onSelect = { (data) => this.callUser(data.id) }
 			itemJSX = { (data) => this.renderComponent(data, sortedMembers) }
 		/>
-*/
-
-const dimension = Dimensions.get("window");
+**/
 
 class FilterList extends Component {
 	constructor(props) {
@@ -58,19 +64,18 @@ class FilterList extends Component {
 
 	componentDidMount() {
 		const {
-			type,
 			value,
 			regexFunc,
-			selectBy
+			selectBy,
+			multiple
 		} = this.props;
 
 		let valArray;
 		let selectedObj = {};
-
 		if (value) {
 			// process initial values and store them into the selected state property
 
-			if (type === "Single" && Object.values(value).length !== 0) {
+			if (!multiple && Object.values(value).length !== 0) {
 				this.setState({ val: regexFunc(value) });
 				selectedObj[selectBy(value)] = value;
 			}
@@ -100,7 +105,6 @@ class FilterList extends Component {
 		placeholder: PropTypes.string,
 		onSelect: PropTypes.func,
 		filter: PropTypes.string,
-		type: PropTypes.string,
 		regexFunc: PropTypes.func,
 		selectBy: PropTypes.func,
 		itemJSX: PropTypes.func,
@@ -112,7 +116,6 @@ class FilterList extends Component {
 	render = () => {
 		const {
 			placeholder,
-			type,
 			CustomForm,
 			search,
 			selectionBoxStyle,
@@ -131,9 +134,8 @@ class FilterList extends Component {
 
 		let picker = null;
 
-		if (type === "Searchbar") {
-			if (search == null) console.log("You didn't pass in a prop to control the searchbar!");
-			picker = <View style = {{ height: dimension.height }}>
+		if (search != null || search != undefined) {
+			picker = <View style = {{ height: "100%" }}>
 				{ search
 				&& <View>
 					{ this.renderSearchBox() }
@@ -241,7 +243,7 @@ class FilterList extends Component {
 			onSelect,
 			regexFunc,
 			selectBy,
-			type
+			search
 		} = this.props;
 
 		const {
@@ -256,12 +258,12 @@ class FilterList extends Component {
 		let regexVal = regexFunc(data);
 		let desiredVal = selectBy(data);
 
-		if (type !== "Searchbar") {
+		if (search === undefined || search === null) {
 			backgroundColor = selected[`${desiredVal}`] ? { backgroundColor: "#f00" } : {};
 			pressAction = (data) => this.select(data, desiredVal);
 		}
 
-		if (re.test(regexVal))
+		if (re.test(regexVal)) {
 			return (
 				<TouchableOpacity
 					onPress = { () => pressAction(data) }>
@@ -270,13 +272,14 @@ class FilterList extends Component {
 					</View>
 				</TouchableOpacity>
 			);
+		}
 	}
 
 	_keyExtractor = (item, index) => index;
 
 	select(data, desiredVal) {
 		const {
-			type
+			multiple
 		} = this.props;
 		const {
 			selected
@@ -286,7 +289,7 @@ class FilterList extends Component {
 
 		if (selectedData[`${desiredVal}`]) { selectedData[`${desiredVal}`] = undefined }
 		else {
-			if (type === "Single") selectedData = {};
+			if (!multiple) selectedData = {};
 			selectedData[`${desiredVal}`] = data;
 		}
 		this.setState({ selected: selectedData });
@@ -297,7 +300,7 @@ class FilterList extends Component {
 			selected
 		} = this.state;
 		const {
-			type,
+			multiple,
 			regexFunc
 		} = this.props;
 
@@ -313,7 +316,7 @@ class FilterList extends Component {
 							alert("You never selected anything!");
 							return;
 						}
-						if (type === "Single") {
+						if (!multiple) {
 							// automatically derives output value from selected state and displays selected value
 							output = output[0];
 							value = regexFunc(output);
@@ -395,7 +398,6 @@ const styles = {
 };
 
 FilterList.defaultProps = {
-	title: "Give me a title!",
 	placeholder: "Choose an Option",
 	iconSize: 50,
 	iconColor: "white",

@@ -8,8 +8,10 @@ import Flag from "react-native-flags";
 import { ColorPicker } from "react-native-color-picker";
 import { RenderFlags, CustomFlag } from "../../utils/flag";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { rankMembers } from "../../utils/render";
+import { rankMembersAndReturnsCurrentUser } from "../../utils/render";
+import { goToViewEvent } from "../../utils/router";
 import { months } from "../../data/DateItems";
+import { filterPastEvents } from "../../utils/events";
 import {
 	Text,
 	View,
@@ -21,30 +23,17 @@ import {
 	SafeAreaView,
 	StatusBar
 } from "react-native";
+
 import {
 	loadUser,
+	loadEvent,
+	editUser,
 	pageLoad,
 	fetchMembersPoints,
-	fetchEvents,
-	getPrivilege,
-	typeChanged,
-	committeeChanged,
-	nameChanged,
-	descriptionChanged,
-	dateChanged,
-	startTimeChanged,
-	endTimeChanged,
-	locationChanged,
-	epointsChanged,
-	eventIDChanged,
-	goToViewEvent,
+	getEvents,
 	getCommittees,
-	setDashColor,
-	setFlag,
 	fetchAllUsers,
-	getUserCommittees,
 	loadCommittee,
-	changeUserCommittees,
 	updateElection
 } from "../../ducks";
 
@@ -68,18 +57,16 @@ class Dashboard extends Component {
 	);
 
 	componentDidMount() {
-		this.props.pageLoad();
 		this.props.updateElection();
 		this.props.getCommittees();
 		this.props.fetchMembersPoints();
-		this.props.fetchEvents();
-		this.props.getPrivilege();
+		this.props.getEvents();
 		this.props.loadUser();
 		this.props.fetchAllUsers();
 	}
 
 	render() {
-		return this.props.loading ? <Spinner /> : this.renderContent();
+		return this.props.activeUser.loading ? <Spinner /> : this.renderContent();
 	}
 
 	renderContent() {
@@ -141,7 +128,7 @@ class Dashboard extends Component {
 			headerOptionsContainer
 		} = styles;
 
-		let dashColor = { backgroundColor: this.props.dashColor };
+		let dashColor = { backgroundColor: this.props.activeUser.color };
 		let chevronColor = { color: "white" };
 
 		return (
@@ -174,7 +161,9 @@ class Dashboard extends Component {
 
 		return (
 			<View style = { greetingContainer }>
-				<Text style = { [textColor, { fontSize: 20 }] }>{ greeting }, { this.props.firstName }.</Text>
+				<Text style = { [textColor, { fontSize: 20 }] }>
+					{ greeting }, { this.props.activeUser.firstName }.
+				</Text>
 				<Text style = { textColor }>Today is { months[month] } { day }</Text>
 			</View>
 		);
@@ -185,7 +174,7 @@ class Dashboard extends Component {
 			<TouchableOpacity onPress = { () => this.setState({ flagsVisible: !this.state.flagsVisible }) } >
 				<Flag
 					type = "flat"
-					code = { this.props.flag }
+					code = { this.props.activeUser.flag }
 					size = { 32 }
 				/>
 			</TouchableOpacity>
@@ -193,13 +182,11 @@ class Dashboard extends Component {
 	}
 
 	 flagPicked(flag) {
-		if (flag === "") {
+		if (flag === "")
 			this.setState({ flagsVisible: false, customFlagVisible: true });
-		}
-		else {
-			this.props.setFlag(flag);
-			this.setState({ flagsVisible: false });
-		}
+		else
+			editUser({ flag });
+		this.setState({ flagsVisible: false });
 	}
 
 	renderColorPicker() {
@@ -211,7 +198,7 @@ class Dashboard extends Component {
 				<View style = { [styles.modalBackground, modalColor] }>
 					<ColorPicker
 						defaultColor = "#21252b"
-						oldColor = { this.props.dashColor }
+						oldColor = { this.props.activeUser.color }
 						onColorSelected = { color => this.colorPicked(color) }
 						style = { [styles.modalContent, pickerColor] }
 					/>
@@ -221,7 +208,7 @@ class Dashboard extends Component {
 	}
 
 	colorPicked(color) {
-		this.props.setDashColor(color);
+		editUser({ color });
 		this.setState({ colorPickerVisible: false });
 	}
 
@@ -290,14 +277,12 @@ class Dashboard extends Component {
 
 		const {
 			committeesList,
-			changeUserCommittees,
-			userCommittees
+			activeUser
 		} = this.props;
 
 		let content = null;
 		let committeesArray = null;
-
-		if (!this.props.userCommittees || !committeesList) {
+		if (!activeUser.userCommittees || !committeesList) {
 			content = <View style = { committeesPlaceHolder }>
 				<View>
 					<Text style = { [textColor, { fontSize: dimension.width * 0.03 }] }>Add your main committees!</Text>
@@ -306,12 +291,12 @@ class Dashboard extends Component {
 		}
 
 		else {
-			committeesArray = Object.entries(userCommittees);
+			committeesArray = Object.entries(activeUser.userCommittees);
 
 			committeesArray.forEach(function(element) {
 				if (!committeesList[element[0]]) {
 					let committee = element[0];
-					changeUserCommittees({ [committee]: null });
+					editUser({ userCommittees: { ...activeUser.userCommittees, [committee]: null } });
 				}
 			});
 
@@ -373,8 +358,9 @@ class Dashboard extends Component {
 		return (
 			<View style = { socialMediaContainer }>
 				<View style = { buttonRowContainer }>
-					{ buttonLinks.map(data =>
+					{ buttonLinks.map((data, index) =>
 						<TouchableOpacity
+							key = { index }
 							style = { socialMediaButton }
 							onPress = { () => Linking.openURL(data[0]) }
 						>
@@ -411,7 +397,7 @@ class Dashboard extends Component {
 
 	calculateRankings() {
 		let sortedMembers = _.orderBy(this.props.membersPoints, iteratees, order);
-		let currentMember = rankMembers(sortedMembers, this.props.id);
+		let currentMember = rankMembersAndReturnsCurrentUser(sortedMembers, this.props.activeUser.id);
 		sortedMembers.splice(2);
 
 		if (this.isDefined(currentMember)
@@ -432,65 +418,8 @@ class Dashboard extends Component {
 	}
 
 	viewEvent(item) {
-		this.props.typeChanged(item.type);
-		this.props.committeeChanged(item.committee);
-		this.props.nameChanged(item.name);
-		this.props.descriptionChanged(item.description);
-		this.props.dateChanged(item.date);
-		this.props.startTimeChanged(item.startTime);
-		this.props.endTimeChanged(item.endTime);
-		this.props.locationChanged(item.location);
-		this.props.epointsChanged(item.points);
-		this.props.eventIDChanged(item.eventID);
-		this.props.goToViewEvent("dashboard");
-	}
-
-	convertHour(time) {
-		let hour;
-		let array = time.split(":");
-
-		if (array[2] === "AM") {
-			hour = "" + parseInt(array[0]);
-			if (hour === "0") hour = "12";
-
-			return hour + ":" + array[1] + ":" + array[2];
-		}
-
-		hour = "" + (parseInt(array[0]) - 12);
-		if (hour === "0") hour = "12";
-
-		return hour + ":" + array[1] + ":" + array[2];
-	}
-
-	sortEvents(eventList) {
-		let thisdate = new Date();
-		let month = thisdate.getMonth() + 1;
-		let year = thisdate.getFullYear();
-		let day = thisdate.getDate();
-		let hour = thisdate.getHours();
-		let min = thisdate.getMinutes();
-		let events = {};
-
-		Object.keys(eventList).forEach(function(element) {
-			let eventObj = eventList[element];
-			let endTime = eventObj.endTime.split(":");
-			let tempDate = eventObj.date.split("-");
-
-			if (tempDate[0] < year) return;
-			if (tempDate[1] < month) return;
-			if (tempDate[2] < day) return;
-			if (tempDate[2] == day)
-				if (endTime[0] < hour) return;
-				else if (endTime[0] == hour)
-					if (endTime[1] < min) return;
-
-			Object.assign(eventObj, { eventID: element });
-			Object.assign(events, { [element]: eventObj });
-		});
-
-		let sortedEvents = _.orderBy(events, ["date", "startTime", "endTime"], ["asc", "asc", "asc"]);
-
-		return sortedEvents;
+		this.props.loadEvent(item);
+		goToViewEvent("dashboard");
 	}
 
 	showEvents(event) {
@@ -514,8 +443,6 @@ class Dashboard extends Component {
 		if (!event) return null;
 
 		let viewType = type;
-		let realStart = this.convertHour(startTime);
-		let realEnd = this.convertHour(endTime);
 
 		if (committee) viewType = committee;
 
@@ -524,7 +451,7 @@ class Dashboard extends Component {
 				<View style = { eventTextContainer }>
 					<Text style = { eventTextStyle }>{ viewType }: { name }</Text>
 					<Text style = { eventTextStyle }>
-						{ this.convertNumToDate(date) } - { realStart } - { realEnd }
+						{ this.convertNumToDate(date) } - { startTime } - { endTime }
 					</Text>
 				</View>
 				<View style = { leaderboardArrow }>
@@ -545,23 +472,28 @@ class Dashboard extends Component {
 			eventsItem
 		} = styles;
 
+		const {
+			sortedEvents
+		} = this.props;
+
 		let recentEvents = [];
+		const events = filterPastEvents(sortedEvents) || [];
 		let singleContainer = {};
-		let events = [];
 		let content = null;
 
-		if (this.props.eventList) events = this.sortEvents(this.props.eventList);
 		recentEvents = events.slice(0, 3);
 
 		if (events.length < 2) singleContainer.flex = 0.4;
 
-		if (events.length === 0) content = <Text style = { [textColor, eventEmptyText ] }>No Upcoming Events</Text>;
+		if (events.length === 0) { content = <Text style = { [textColor, eventEmptyText ] }>No Upcoming Events</Text> }
 
-		else content = recentEvents.map(item =>
-			<TouchableOpacity onPress = { () => this.viewEvent(item) } style = { eventsItem }>
-				{ this.showEvents(item) }
-			</TouchableOpacity>
-		);
+		else {
+			content = recentEvents.map(item =>
+				<TouchableOpacity onPress = { () => this.viewEvent(item) } style = { eventsItem }>
+					{ this.showEvents(item) }
+				</TouchableOpacity>
+			);
+		}
 
 		return (
 			<View style = { [eventListContainerFull, singleContainer] }>
@@ -797,68 +729,32 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ user, general, members, events, elect, committees }) => {
-	const {
-		firstName,
-		id,
-		dashColor,
-		flag,
-		userCommittees
-	} = user;
-	const {
-		loading
-	} = general;
-	const {
-		membersPoints
-	} = members;
-	const {
-		eventList
-	} = events;
-	const {
-		election
-	} = elect;
-	const {
-		committeesList
-	} = committees;
+const mapStateToProps = ({ user, members, events, elect, committees }) => {
+	const { activeUser } = user;
+	const { membersPoints } = members;
+	const { sortedEvents } = events;
+	const { election } = elect;
+	const { committeesList } = committees;
 
 	return {
-		firstName,
-		id,
-		loading,
+		activeUser,
 		membersPoints,
-		eventList,
+		sortedEvents,
 		election,
-		dashColor,
-		committeesList,
-		flag,
-		userCommittees
+		committeesList
 	};
 };
 
 const mapDispatchToProps = {
 	loadUser,
+	loadEvent,
 	pageLoad,
 	fetchMembersPoints,
-	fetchEvents,
-	getPrivilege,
-	typeChanged,
-	committeeChanged,
-	nameChanged,
-	descriptionChanged,
-	dateChanged,
-	startTimeChanged,
-	endTimeChanged,
-	locationChanged,
-	epointsChanged,
-	eventIDChanged,
+	getEvents,
 	goToViewEvent,
 	getCommittees,
-	setDashColor,
-	setFlag,
 	fetchAllUsers,
-	getUserCommittees,
 	loadCommittee,
-	changeUserCommittees,
 	updateElection
 };
 

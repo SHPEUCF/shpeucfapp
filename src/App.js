@@ -16,6 +16,8 @@ import {
 	appId
 } from "react-native-dotenv";
 
+console.ignoredYellowBox = ["Setting a timer"];
+
 class App extends Component {
 	componentDidMount() {
 		const config = {
@@ -28,11 +30,12 @@ class App extends Component {
 			appId: appId
 		};
 
-		if (!firebase.apps.length) firebase.initializeApp(config);
-		else {
-			if (!this.props.loggedIn) Actions.login();
-			else Actions.main();
-		}
+		if (!firebase.apps.length)
+			firebase.initializeApp(config);
+		else if (!this.props.loggedIn)
+			Actions.login();
+		else
+			Actions.main();
 
 		this.verifyLogIn();
 	}

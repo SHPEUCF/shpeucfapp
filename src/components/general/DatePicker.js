@@ -138,6 +138,7 @@ class DatePicker extends Component {
 				<View>
 					<Input
 						placeholder = { placeholder }
+						value = ""
 						onFocus = { () => this.setState({ focused: true }) }
 					/>
 				</View>

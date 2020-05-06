@@ -38,8 +38,10 @@ export {
 
 /** Export Events **/
 import Events from "./Events/Events";
+import EventDetails from "./Events/EventDetails";
 export {
-	Events
+	Events,
+	EventDetails
 };
 
 /** Export General **/
@@ -54,11 +56,15 @@ export {
 };
 
 /** Export User **/
+import Login from "./User/Login";
 import OtherProfile from "./User/OtherProfile";
 import PointsBreakDown from "./User/PointsBreakDown";
 import Profile from "./User/Profile";
+import ResetPassword from "./User/ResetPassword";
 export {
+	Login,
 	OtherProfile,
 	PointsBreakDown,
-	Profile
+	Profile,
+	ResetPassword
 };

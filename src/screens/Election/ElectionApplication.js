@@ -113,7 +113,7 @@ class ElectionApplication extends Component {
 		const {
 			firstName,
 			lastName
-		} = this.props;
+		} = this.props.activeUser;
 
 		const {
 			candidate,
@@ -167,7 +167,8 @@ class ElectionApplication extends Component {
 
 	callOpenGallery(candidate) {
 		openGallery(
-			`/election/positions/${candidate.position || this.state.positionSelected}/candidates/${this.props.id}`, "",
+			// eslint-disable-next-line max-len
+			`/election/positions/${candidate.position || this.state.positionSelected}/candidates/${this.props.activeUser.id}`, "",
 			(url) => {
 				let candidate = Object.assign({}, this.state.candidate);
 				candidate.picture = url;
@@ -228,7 +229,7 @@ class ElectionApplication extends Component {
 			lastName,
 			applied,
 			picture
-		} = this.props;
+		} = this.props.activeUser;
 
 		const {
 			currentlyApplying,
@@ -277,7 +278,7 @@ class ElectionApplication extends Component {
 			plan: "",
 			id: ""
 		} });
-		if (!this.props.applied && this.state.currentlyApplying)
+		if (!this.props.activeUser.applied && this.state.currentlyApplying)
 			this.setState({ currentlyApplying: false });
 		else
 			Actions.pop();
@@ -333,27 +334,12 @@ const styles = {
 };
 
 const mapStateToProps = ({ elect, user }) => {
-	const {
-		positions
-	} = elect;
-
-	const {
-		firstName,
-		lastName,
-		id,
-		voted,
-		applied,
-		picture
-	} = user;
+	const { positions } = elect;
+	const { activeUser } = user;
 
 	return {
 		positions,
-		firstName,
-		lastName,
-		id,
-		voted,
-		applied,
-		picture
+		activeUser
 	};
 };
 

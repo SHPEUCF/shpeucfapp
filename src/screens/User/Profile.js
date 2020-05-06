@@ -1,18 +1,29 @@
 import React, { Component } from "react";
-import firebase from "firebase";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { connect } from "react-redux";
 import { Button, ButtonLayout } from "../../components/general";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
 import { Avatar } from "react-native-elements";
-import ImagePicker from "react-native-image-crop-picker";
-import RNFetchBlob from "rn-fetch-blob";
 import Flag from "react-native-flags";
+import { openGallery } from "../../utils/render";
 import { verifiedCheckMark } from "../../utils/render";
-import { loadUser, logoutUser, goToEditProfileForm, pageLoad, pictureChanged } from "../../ducks";
+import { loadUser, logoutUser, pageLoad, editUser } from "../../ducks";
+import {
+	editProfileFormDataPrivileged,
+	editProfileFormDataRegular,
+	convertObjectToInitialValues
+} from "../../data/FormData";
+import { Form } from "../../components";
 
 const dimension = Dimensions.get("window");
 class Profile extends Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			editProfileFormVisibility: false
+		};
+	}
 	shouldComponentUpdate(nextProps) {
 		return nextProps.firstName || nextProps.lastName || nextProps.firstName !== "";
 	}
@@ -27,8 +38,9 @@ class Profile extends Component {
 		const {
 			email,
 			major,
-			points
-		} = this.props;
+			points,
+			privilege
+		} = this.props.activeUser;
 		const {
 			bioContainer,
 			fieldContainerStyle,
@@ -39,6 +51,15 @@ class Profile extends Component {
 
 		return (
 			<SafeAreaView style = {{ flex: 1, backgroundColor: "#0c0b0b" }}>
+				<Form
+					elements = { privilege.eboard ? editProfileFormDataPrivileged : editProfileFormDataRegular }
+					initialValues = { convertObjectToInitialValues(this.props.activeUser) }
+					title = "Edit Profile"
+					visible = { this.state.editProfileFormVisibility }
+					changeVisibility = { (visible) => this.setState({ editProfileFormVisibility: visible }) }
+					onSubmit = { ({ gender, major, country, birthday }) =>
+						editUser({ gender, major, country, birthday }) }
+				/>
 				<View style = {{ flex: 1, backgroundColor: "black" }}>
 					{ this.renderPicture() }
 					<View style = { [bioContainer] }>
@@ -49,7 +70,7 @@ class Profile extends Component {
 								<View style = {{ flex: 1, justifyContent: "center" }}>
 									<Text style = { [itemLabelText, textColor] }>Email:</Text>
 								</View>
-								{ this.props.major !== "" && <View style = {{ flex: 1, justifyContent: "center" }}>
+								{ major !== "" && <View style = {{ flex: 1, justifyContent: "center" }}>
 									<Text style = { [itemLabelText, textColor] }>Major:</Text>
 								</View> }
 								<View style = {{ flex: 1, justifyContent: "center" }}>
@@ -60,7 +81,7 @@ class Profile extends Component {
 								<View style = {{ flex: 1, justifyContent: "center" }}>
 									<Text style = { [itemValueText, textColor] }>{ email }</Text>
 								</View>
-								{ this.props.major !== "" && <View style = {{ flex: 1, justifyContent: "center" }}>
+								{ major !== "" && <View style = {{ flex: 1, justifyContent: "center" }}>
 									<Text style = { [itemValueText, textColor] }>{ major }</Text>
 								</View> }
 								<View style = {{ flex: 1, justifyContent: "center" }}>
@@ -91,8 +112,10 @@ class Profile extends Component {
 			firstName,
 			lastName,
 			picture,
-			privilege
-		} = this.props;
+			privilege,
+			color,
+			id
+		} = this.props.activeUser;
 
 		return (
 			<View style = { [headerInfoContainer] }>
@@ -101,17 +124,17 @@ class Profile extends Component {
 					&& <Avatar
 						size = { dimension.height * 0.32 }
 						rounded
-						titleStyle = {{ backgroundColor: this.props.dashColor }}
-						overlayContainerStyle = {{ backgroundColor: this.props.dashColor }}
+						titleStyle = {{ backgroundColor: color }}
+						overlayContainerStyle = {{ backgroundColor: color }}
 						title = { firstName[0].concat(lastName[0]) }
-						onPress = { () => this.openGallery() }
+						onPress = { () => openGallery(`users/${id}`, id) }
 					/>	}
 					{ picture !== ""
 					&& <Avatar
 						size = { dimension.height * 0.32 }
 						rounded
 						source = {{ uri: picture }}
-						onPress = { () => this.openGallery() }
+						onPress = { () => openGallery(`users/${id}`, id) }
 					/> }
 				</View>
 				<View style = { [taglineContainer] }>
@@ -124,67 +147,15 @@ class Profile extends Component {
 		);
 	}
 
-	constructor(props) {
-		super(props);
-		this.state = {
-			dp: null
-		};
-	}
-
-	openGallery() {
-		const Blob = RNFetchBlob.polyfill.Blob;
-		const fs = RNFetchBlob.fs;
-		window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
-		window.Blob = Blob;
-
-		ImagePicker.openPicker({
-			width: 300,
-			height: 400,
-			includeBase64: true,
-			compressImageQuality: 0.8,
-			mediaType: "photo",
-			cropping: true,
-			cropperCircleOverlay: true
-		}).then(image => {
-			const imagePath = image.path;
-			let uploadBlob = null;
-			let mime = "image/jpg";
-			const imageRef = firebase.storage().ref("users/profile").child(this.props.id);
-
-			fs.readFile(imagePath, "base64")
-				.then((data) => {
-					// console.log(data);
-
-					return Blob.build(data, { type: `${mime};BASE64` });
-				})
-				.then((blob) => {
-					uploadBlob = blob;
-
-					return imageRef.put(blob, { contentType: mime });
-				})
-				.then(() => {
-					uploadBlob.close();
-
-					return imageRef.getDownloadURL();
-				})
-				.then((url) => {
-					let obj = {};
-
-					this.props.pictureChanged(url);
-					obj["dp"] = url;
-					this.setState(obj);
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		});
-	}
-
 	renderButtons() {
-		let icon = this.props.flag !== "" && this.props.flag ? {
+		const {
+			flag
+		} = this.props.activeUser;
+
+		let icon = flag !== "" && flag ? {
 			data: <Flag
 				type = "flat"
-				code = { this.props.flag }
+				code = { flag }
 				size = { 32 }
 			/>,
 			layer: 1
@@ -197,11 +168,11 @@ class Profile extends Component {
 				>
 					<Button
 						title = "Edit profile"
-						onPress = { this.props.goToEditProfileForm.bind(this) }
+						onPress = { () => this.setState({ editProfileFormVisibility: true }) }
 					/>
 					<Button
 						title = "Logout"
-						onPress = { this.props.logoutUser.bind(this) }
+						onPress = { () => logoutUser() }
 					/>
 				</ButtonLayout>
 			</View>
@@ -214,11 +185,15 @@ class Profile extends Component {
 			socialmediarow
 		} = styles;
 
+		const {
+			color
+		} = this.props.activeUser;
+
 		return (
 			<View style = {{ flex: 0.2 }}>
 				<View style = {{ flex: 0.03 }}></View>
 				<View style = { socialmediarow }>
-					<View style = { [logoContainer, { backgroundColor: this.props.dashColor, flex: 1 }] }>
+					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
 						<TouchableOpacity
 							onPress = { () => {
 								alert("Coming Soon");
@@ -227,7 +202,7 @@ class Profile extends Component {
 						</TouchableOpacity>
 					</View>
 					<View style = {{ flex: 0.01 }}></View>
-					<View style = { [logoContainer, { backgroundColor: this.props.dashColor, flex: 1 }] }>
+					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
 						<TouchableOpacity
 							onPress = { () => {
 								alert("Coming Soon");
@@ -314,45 +289,18 @@ const styles = {
 };
 
 const mapStateToProps = ({ user, general }) => {
-	const {
-		firstName,
-		lastName,
-		email,
-		major,
-		points,
-		picture,
-		quote,
-		id,
-		dashColor,
-		flag,
-		privilege
-	} = user;
-	const {
-		loading
-	} = general;
+	const { activeUser } = user;
+	const { loading } = general;
 
 	return {
-		firstName,
-		lastName,
-		email,
-		major,
-		points,
-		picture,
-		quote,
-		loading,
-		id,
-		dashColor,
-		flag,
-		privilege
+		activeUser,
+		loading
 	 };
 };
 
 const mapDispatchToProps = {
 	loadUser,
-	logoutUser,
-	goToEditProfileForm,
-	pageLoad,
-	pictureChanged
+	pageLoad
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
