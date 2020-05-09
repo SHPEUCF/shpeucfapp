@@ -1,24 +1,26 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import _ from "lodash";
 import { ScrollView, SafeAreaView, Modal, View } from "react-native";
 import { Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicker, FilterList } from "..";
 import { MultiElement } from "./MultiElement";
 import { validateElements } from "../../utils/form";
+import { copyStateAndSetValuesToNull } from "../../utils/general";
 
 /**
  * Types
  * @typedef {Object} Element:
- * 		@property {String}                  placeholder
- * 		@property {String}                  camelCaseName
- * 		@property {String}                  type
- * 		@property {boolean=}                isRequired
- * 		@property {any=}                    options
- *		@property {ConditionalValue=}       conditionalValues  An object containing ConditionalValue target objects
+ *		@property {String}                   placeholder           PlaceHolder that will be shown inside of each element.
+ *		@property {String}                   camelCaseName         Unique name in camelCase format.
+ *		@property {String}                   type                  Type of element.
+ *		@property {boolean=}                 isRequired            Optional field to determine if element should be required.
+ *		@property {Options=}                 options               Optional fields for element-specific functionality.
+ *		@property {ConditionalValue=}        conditionalValues     An object containing ConditionalValue target objects.
  * @typedef {Object} ConditionalValue:
- * 		@property {Function}                getValue          Function that is used to obtain the new value for the [camelCaseName] element
+ * 		@property {Function}                 getValue              Function that is used to obtain the new value for the [camelCaseName] element
  * @typedef {Object} CustomVerification:
- * 		@property {String[]}                camelCaseNames    Desired data to be verified
- * 		@property {Function}                verification
+ * 		@property {String[]}                 camelCaseNames        Desired data to be verified.
+ * 		@property {Function}                 verification          Function that gets all the desired data and performs some check on it.
  */
 
 /**
@@ -148,12 +150,7 @@ import { validateElements } from "../../utils/form";
 class Form extends Component {
 	constructor(props) {
 		super(props);
-
-		let values = {};
-		for (let camelCaseName in props.initialValues)
-			values[camelCaseName] = props.initialValues[camelCaseName].value;
-
-		this.state = values;
+		this.state = this.props.initialValues || {};
 	}
 
 	static propTypes = {
@@ -202,6 +199,7 @@ class Form extends Component {
 		switch (type) {
 			case "DatePicker":
 				return <DatePicker
+					key = { camelCaseName }
 					placeholder = { placeholder }
 					value = { this.state[camelCaseName] || "" }
 					onSelect = { value => this.changeState(element, value) }
@@ -210,6 +208,7 @@ class Form extends Component {
 				if (!options || !options.data)
 					console.error("You must pass in data through the options property to use FilterList");
 				return <FilterList
+					key = { camelCaseName }
 					type = { options.type }
 					placeholder = { placeholder }
 					data = { options.data }
@@ -223,6 +222,7 @@ class Form extends Component {
 				/>;
 			case "Input":
 				return <Input
+					key = { camelCaseName }
 					placeholder = { placeholder }
 					multiline = { false }
 					// Next line is checking for 0 to make sure it displays 0 correctly
@@ -242,6 +242,7 @@ class Form extends Component {
 				if (!options || !options.data)
 					console.error("You must pass in data through the options property to use PickerInput");
 				return <PickerInput
+					key = { camelCaseName }
 					placeholder = { placeholder }
 					value = { this.state[camelCaseName] || "" }
 					data = { options.data }
@@ -249,14 +250,16 @@ class Form extends Component {
 				/>;
 			case "TimePicker":
 				return 	<TimePicker
+					key = { camelCaseName }
 					placeholder = { placeholder }
 					value = { this.state[camelCaseName] || "" }
 					onSelect = { value => this.changeState(element, value) }
 				/>;
 			case "MultiElement":
 				return <MultiElement
+					key = { camelCaseName }
 					elements = { options.elements }
-					value = { this.state[camelCaseName] || {} }
+					value = { this.state[camelCaseName] || "" }
 					formatValue = { options.formatValue }
 					onSelect = { (elementsAndValues) => {
 						elementsAndValues.forEach(({ element, value }) => this.changeState(element, value));
@@ -292,7 +295,7 @@ class Form extends Component {
 		let formIsValid = true;
 		let submitState = Object.assign({}, this.state);
 
-		formIsValid = validateElements(this.props.element, this.state);
+		formIsValid = validateElements(this.props.elements, this.state);
 
 		if (!formIsValid) return;
 
@@ -305,21 +308,16 @@ class Form extends Component {
 			}
 			else { formIsValid = verification(submitState[camelCaseNames]) }
 		}
-
-		this.props.changeVisibility(false);
-		this.props.onSubmit(submitState);
 		this.resetState();
+		this.props.onSubmit(submitState);
+		this.props.changeVisibility(false);
 	}
 
 	resetState() {
-		let resetState = {};
-
-		Object.keys(this.state).forEach(key => resetState[key] = null);
-
-		if (this.props.initialValues)
-			this.props.initialValues.forEach(item => resetState[item.camelCaseName] = item.value);
-
-		this.setState(resetState);
+		let initialState = copyStateAndSetValuesToNull(this.state);
+		Object.assign(initialState, this.props.initialValues);
+		console.log(initialState);
+		this.setState(this.initialState);
 	}
 
 	render() {

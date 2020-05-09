@@ -1,49 +1,40 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Button, ButtonLayout, Agenda } from "../../components/";
-import { formatEventListForCalendar } from "../../utils/events";
-import { loadEvent } from "../../ducks";
+import { formatEventListForCalendar, prependZero } from "../../utils/events";
+import { loadEvent, createEvent } from "../../ducks";
 import { EventForm } from "../../data/FormData";
 import { View, Dimensions, SafeAreaView } from "react-native";
 
 const dimension = Dimensions.get("window");
-let dateStr = "";
 
 class Events extends Component {
 	constructor(props) {
 		super(props);
+
 		this.state = {
 			status: "closed",
 			day: new Date(),
 			eventFormVisibility: false,
 			agendaRefresh: false
 	 };
-	 dateStr = this.getTodaysDate();
 	}
 
 	didBlurSubscription = this.props.navigation.addListener("didBlur",
 		() => this.setState({ agendaRefresh: !this.state.agendaRefresh })
 	);
 
-	componentDidMount() {
-		dateStr = this.getTodaysDate();
-	}
-
 	getTodaysDate() {
 		let date = new Date();
-		let month = this.prepend0((date.getMonth() + 1).toString());
+		let month = prependZero((date.getMonth() + 1).toString());
 		let year = date.getFullYear();
-		let day = this.prepend0(date.getDate().toString());
+		let day = prependZero(date.getDate().toString());
 
 		return `${year}-${month}-${day}`;
 	}
 
 	static onRight = function() {
 		this.alert(new Date());
-	}
-
-	prepend0(item) {
-		return item < 10 ? "0" + item : item;
 	}
 
 	render() {
@@ -54,12 +45,12 @@ class Events extends Component {
 					<View style = { [fullFlex] }>
 						<EventForm
 							title = "Create Event"
-							initialValues = { [{ camelCaseName: "date", value: dateStr }] }
+							initialValues = {{ date: this.getTodaysDate() }}
 							visible = { this.state.eventFormVisibility }
+							onSubmit = { event => createEvent(event) }
 							changeVisibility = { (visible) => this.setState({ eventFormVisibility: visible }) }
 						/>
 						<Agenda
-							passDate = { (item) => dateStr = item.dateString }
 							items = { formatEventListForCalendar(this.props.sortedEvents) }
 							style = {{ height: dimension.height * 0.73 }}
 							refresh = { this.state.agendaRefresh }

@@ -23,7 +23,7 @@ class DatePicker extends Component {
 	}
 
 		static propTypes = {
-			value: PropTypes.object,
+			value: PropTypes.string,
 			placeholder: PropTypes.string.isRequired,
 			onSelect: PropTypes.func.isRequired
 		}

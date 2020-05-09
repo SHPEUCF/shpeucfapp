@@ -102,6 +102,7 @@ export const loadEvent = (event) => {
  */
 
 export const createEvent = (event) => {
+	console.log(event)
 	firebase.database().ref("/events/").push({ ...event, eventActive: false, code: makeCode() })
 		.then(snapshot => {
 			firebase.database().ref(`/events/${snapshot.key}/id`).set(snapshot.key);

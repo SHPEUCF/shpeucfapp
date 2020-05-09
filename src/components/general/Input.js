@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { TextInput } from "react-native";
 
-class Input extends Component {
+class Input extends PureComponent {
 	constructor(props) {
 		super(props);
 	}

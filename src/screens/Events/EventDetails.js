@@ -6,7 +6,7 @@ import { Actions } from "react-native-router-flux";
 import QRCode from "react-native-qrcode-svg";
 import QRCodeScanner from "react-native-qrcode-scanner";
 import { months } from "../../data/DateItems";
-import { upsertEventFormData, convertObjectToInitialValues } from "../../data/FormData";
+import { EventForm } from "../../data/FormData";
 import { deleteEvent, editEvent, checkIn, rsvp, pageLoad, fetchAllUsers } from "../../ducks";
 import {
 	View,
@@ -21,7 +21,6 @@ import {
 } from "react-native";
 
 import { MemberPanel } from "../../utils/render";
-import { customVerificationForTime } from "../../utils/events";
 
 const dimension = Dimensions.get("screen");
 
@@ -445,14 +444,12 @@ class EventDetails extends Component {
 			return (
 				<SafeAreaView style = { page }>
 					<NavBar title = { viewName } back onBack = { () => Actions.pop() } />
-					<Form
-						elements = { upsertEventFormData(Object.keys(this.props.committeesList)) }
+					<EventForm
 						title = "Edit Event"
-						initialValues = { convertObjectToInitialValues(this.props.activeEvent) }
+						initialValues = { this.props.activeEvent }
 						visible = { this.state.eventFormVisibility }
+						onSubmit = { event => editEvent(event) }
 						changeVisibility = { (visible) => this.setState({ eventFormVisibility: visible }) }
-						onSubmit = { (value) => editEvent(value) }
-						customVerification = { customVerificationForTime }
 					/>
 					<View style = { container }>
 						<View style = { iconContainer }>

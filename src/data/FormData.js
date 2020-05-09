@@ -9,7 +9,6 @@ import Majors from "./Majors.json";
 import { changeHourBy, timeVerification } from "../utils/events";
 import { useSelector } from "react-redux";
 import { Form } from "../components";
-import { createEvent } from "../ducks";
 
 // data
 const genderOptions = ["Female", "Male", "Other", "Do not wish to disclose"];
@@ -33,9 +32,9 @@ export const EventForm = (props) => {
 			isRequired: true,
 			options: {
 				formatValue: {
-					revert: ({ type }) => {
+					revert: (type) => {
 						if (type) {
-							const [eventType, committee] = type.split(":");
+							const [eventType, committee] = type.split(": ");
 							return { type: eventType, committee };
 						}
 						return null;
@@ -54,11 +53,11 @@ export const EventForm = (props) => {
 						options: {
 							data: eventTypeOptions,
 							formatValue: {
-								format: ({ type, committee }) => committee ? `${type}: ${committee}` : type,
+								format: ({ type, committee }) => committee ? `${type}: ${committee}` : type.trim(),
 								revert: ({ type }) => {
 									if (type) {
 										const [eventType, committee] = type.split(": ");
-										return { type: eventType, committee };
+										return { type: eventType.trim(), committee };
 									}
 									return null;
 								}
@@ -108,10 +107,6 @@ export const EventForm = (props) => {
 				{
 					name: "endTime",
 					value: (time) => changeHourBy(time, 1)
-				},
-				{
-					name: "type",
-					value: () => { return { type: "Committee: Tech" } }
 				}
 			],
 			isRequired: true
@@ -146,7 +141,6 @@ export const EventForm = (props) => {
 				camelCaseNames: ["startTime", "endTime"],
 				verification: ([s, e]) => timeVerification(s, e)
 			}}
-			onSubmit = { (value) => createEvent(value) }
 			{ ...props }
 		/>
 	);

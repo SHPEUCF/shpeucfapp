@@ -7,7 +7,7 @@
  */
 
 export function validateElements(elements, values, shouldAlert = true) {
-	let formIsValid = true;
+	let formIsValid = elements.length > 0;
 
 	elements.forEach(element => {
 		const elementFromState = values[element.camelCaseName];

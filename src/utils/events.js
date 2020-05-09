@@ -72,9 +72,9 @@ export function formatEventListForCalendar(events) {
  * @param {String} e End Time
  */
 
-export function timeVerification(s, e) {
-	let start = s.split(":");
-	let end = e.split(":");
+export function timeVerification(startTime, endTime) {
+	let start = startTime.split(":");
+	let end = endTime.split(":");
 	if (end[0] < start[0] || (end[0] === start[0] && end[1] <= start[1])) {
 		alert("Ending time must be after start time");
 		return false;

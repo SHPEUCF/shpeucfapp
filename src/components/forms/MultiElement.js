@@ -1,24 +1,25 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { Form } from "./Form";
 import { validateElements } from "../../utils/form";
 import _ from "lodash";
+import { copyStateAndSetValuesToNull } from "../../utils/general";
 
 /**
  *Types
- *@typedef {Object} Element:
- *		@property {String}                   name
- *		@property {String}                   camelCaseName
- *		@property {String}                   type
- *		@property {boolean=}                 isRequired
- *		@property {Options}                  options
+ * @typedef {Object} Element:
+ *		@property {String}                   placeholder               PlaceHolder that will be shown inside of each element.
+ *		@property {String}                   camelCaseName             Unique name in camelCase format.
+ *		@property {String}                   type                      Type of element.
+ *		@property {boolean=}                 isRequired                Optional field to determine if element should be required.
+ *		@property {Options=}                 options                   Optional fields for element-specific functionality.
  *		@property {ConditionalValue=}        conditionalValues         An object containing ConditionalValue target objects.
- *@typedef {Object} ConditionalValue:
- *		@property {Function}                 getValue                  Function that is used to obtain the new value for the [camelCaseName] element.
- *@typedef {Object} Options:
- *		@property {(String | Number)[]=}     data                      Only the first element should have this property.
- *		@property {(String | Number)[][]=}   selectionArray            All other elements use this property to query for their data.
+ * @typedef {Object} ConditionalValue:
+ *		@property {String}                   name                      camelCaseName of the element that is being affected.
+ *		@property {Function}                 value                     Function that returns the value that the affected element will be set to.
+ * @typedef {Object} Options:
  *	 	@property {Function}                 showIfParentValueEquals   Function that checks the parent value and returns whether the element should be shown.
+ *	 	@property {String}                   parent                    camelCaseName of the parent element.
  *		@property {Function=}                childData                 Optional function that checks the parent value and returns the data of the child.
  */
 
@@ -26,9 +27,9 @@ import _ from "lodash";
  * Form Component Info
  * ________________________________________________________________
  *	Props:
- *		@param {Elements[]}         elements            An array of the names of Elements.
- *		@param {Object=}            initialState        An object of initial state values.
- *		@param {Function}           onSelect            Updates parent form whenever a value is changed.
+ *		@param {Element[]}         elements            An array of the names of Elements.
+ *		@param {any=}              value               An object of initial state values.
+ *		@param {Function}          onSelect            Updates parent form whenever a value is changed.
  *
  *	Output:
  *
@@ -63,13 +64,27 @@ import _ from "lodash";
  *
  */
 
-class MultiElement extends Component {
+class MultiElement extends PureComponent {
 	constructor(props) {
 		super(props);
-		const { initialValue, formatValue } = props;
 
 		this.state = {};
-		if (initialValue) this.state = (formatValue) ? formatValue.revert(this.initialValue) : initialValue;
+	}
+
+	componentDidMount() {
+		const { value, formatValue } = this.props;
+
+		if (value) {
+			if (formatValue) {
+				const newState = formatValue.revert(value);
+
+				this.childForm.setState(newState);
+				this.setState(newState);
+			}
+			else {
+				this.childForm.setState(value);
+			}
+		}
 	}
 
 	static propTypes = {
@@ -86,7 +101,7 @@ class MultiElement extends Component {
 		).isRequired,
 		onSelect: PropTypes.func.isRequired,
 		formatValue: PropTypes.shape({
-			format: PropTypes.func.isRequired,
+			format: PropTypes.func,
 			revert: PropTypes.func.isRequired
 		}),
 		initialValue: PropTypes.any,
@@ -94,48 +109,46 @@ class MultiElement extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		const {
-			formatValue
-		} = this.props;
+		const { formatValue } = this.props;
+
 		if (formatValue && formatValue.revert) {
 			let newValue = {};
 			let oldValue = {};
 
-			if (this.props.value)
-				newValue = formatValue.revert(this.props.value);
-			if (prevProps.value)
-				oldValue = formatValue.revert(prevProps.value);
-			if (!_.isEqual(newValue, oldValue))
-				this.onChange(newValue);
+			if (this.props.value) newValue = formatValue.revert(this.props.value);
+			if (prevProps.value) oldValue = formatValue.revert(prevProps.value);
+
+			if (!_.isEqual(newValue, oldValue)) this.updateState(newValue);
 		}
 		else if (!_.isEqual(this.props.value, prevProps.value)) {
-			this.onChange(this.props.value);
+			this.updateState(this.props.value);
 		}
 	}
 
 	/**
 	 * @description Creates a formatted array based off the elements passed in and the state.
 	 *
-	 * @returns {Object} Shape is: { element, value }.
+	 * @returns {Object[]} Shape is: [{ element, value }, ..., { element, value }].
 	 */
 
-	formatElementsToSubmit = (elements, state) => elements.map((element, index) => {
-		if (index === 0 && element.options && element.options.formatValue)
-			return { element, value: element.options.formatValue.format(state) };
+	formatElementsToSubmit = (elements, state, stateIsNull = false) => elements.map((element, index) => {
+		let value = null;
 
-		return { element, value: state[element.camelCaseName] };
+		if (!stateIsNull && index === 0 && element.options && element.options.formatValue)
+			value = element.options.formatValue.format(state);
+
+		if (!value && state[element.camelCaseName])
+			value = state[element.camelCaseName];
+
+		return { element, value };
 	});
-
-	copyStateAndSetValuesToNull() {
-		let newStateValue = {};
-		for (let name in this.state) newStateValue[name] = null;
-		return newStateValue;
-	}
 
 	/**
 	 * @description Verifies if all required fields have been selected.
 	 *
 	 * If all required fields have been filled in then it calls onSelect and passes the values in the format { element, value}.
+	 *
+	 * @param {Object} state the updated state.
 	 */
 
 	verifyAndSubmit(state) {
@@ -144,8 +157,8 @@ class MultiElement extends Component {
 
 		let formattedOutputElements = [];
 		if (!formIsValid) {
-			const nullState = this.copyStateAndSetValuesToNull();
-			formattedOutputElements = this.formatElementsToSubmit(this.props.elements, nullState);
+			const nullState = copyStateAndSetValuesToNull(this.state);
+			formattedOutputElements = this.formatElementsToSubmit(this.props.elements, nullState, true);
 		}
 		else { formattedOutputElements = this.formatElementsToSubmit(this.props.elements, state) }
 
@@ -160,10 +173,11 @@ class MultiElement extends Component {
 	 * @param {Object} elementValuesFromForm Object with all the values from Form. Is of shape { camelCaseName: value }
 	 */
 
-	onChange(elementValuesFromForm) {
-		const newStateValue = this.copyStateAndSetValuesToNull();
+	updateState(elementValuesFromForm) {
+		const newStateValue = copyStateAndSetValuesToNull(this.state);
 
 		let parentElementHasChanged = false;
+		if (Object.keys(elementValuesFromForm).length === 0) return;
 
 		for (let name in elementValuesFromForm) {
 			if (!parentElementHasChanged)
@@ -182,6 +196,8 @@ class MultiElement extends Component {
 	 * @description Adds data prop to any element that needs it.
 	 *
 	 * @param {Element[]} visibleElements An array of all visible elements.
+	 *
+	 * @return {Element[]} Array of formatted visible elements
 	 */
 
 	formatVisibleElements(visibleElements) {
@@ -203,11 +219,14 @@ class MultiElement extends Component {
 
 	/**
 	 * @description Filters out elements from the props that shouldn't be visible based on the current state
+	 *
+	 * @param {Object} state the updated state.
+	 *
+	 * @returns {Element[]} Array of visible elements
 	 */
 
 	findVisibleElements(state) {
 		const { elements } = this.props;
-
 		let visibleElements = elements.filter(
 			({ options }, index) => index === 0 || options && options.showIfParentValueEquals(state[options.parent])
 		);
@@ -221,9 +240,10 @@ class MultiElement extends Component {
 
 		return <Form
 			ref = { form => this.childForm = form }
+			visible = { true }
 			elements = { formattedVisibleElements }
 			initialValues = { this.state }
-			onChange = { (state) => this.onChange(state) }
+			onChange = { (state) => this.updateState(state) }
 			justElements
 		/>;
 	}
