@@ -9,7 +9,10 @@ class Input extends PureComponent {
 
 	static propTypes = {
 		children: PropTypes.any,
-		value: PropTypes.string.isRequired,
+		value: PropTypes.oneOfType([
+			PropTypes.string,
+			PropTypes.number
+		]).isRequired,
 		onChangeText: PropTypes.func,
 		placeholder: PropTypes.string,
 		blurOnSubmit: PropTypes.bool,

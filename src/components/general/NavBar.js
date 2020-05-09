@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { View, Text, Dimensions } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { Actions } from "react-native-router-flux";
 
 const dimension = Dimensions.get("window");
 
@@ -11,7 +12,9 @@ class NavBar extends Component {
 	}
 
 	static propTypes = {
-		back: PropTypes.boolean
+		title: PropTypes.string,
+		back: PropTypes.bool,
+		onBack: PropTypes.func
 	}
 
 	render() {
@@ -30,7 +33,7 @@ class NavBar extends Component {
 			childStyle
 		} = this.props;
 
-		if (back)
+		if (back) {
 			return (
 				<View style = { [tabBar, style, rowFlex] }>
 					<View style = { backButtonStyle }>
@@ -49,7 +52,8 @@ class NavBar extends Component {
 					</View>
 				</View>
 			);
-		else
+		}
+		else {
 			return (
 				<View style = { [tabBar, style, rowFlex] }>
 					<View>
@@ -60,6 +64,7 @@ class NavBar extends Component {
 					</View>
 				</View>
 			);
+		}
 	}
 }
 
@@ -92,6 +97,7 @@ const styles = {
 
 NavBar.defaultProps = {
 	back: false,
+	onBack: () => Actions.pop(),
 	childStyle: {
 		flex: 1,
 		padding: "3.5%"
