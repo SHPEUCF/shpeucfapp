@@ -3,116 +3,154 @@ The order you put in the data reflects the order that the
 fields are displayed
 */
 
+import React from "react";
 import Countries from "./Countries.json";
 import Majors from "./Majors.json";
+import { changeHourBy, timeVerification } from "../utils/events";
+import { useSelector } from "react-redux";
+import { Form } from "../components";
+import { createEvent } from "../ducks";
 
 // data
-
 const genderOptions = ["Female", "Male", "Other", "Do not wish to disclose"];
 const eventTypeOptions = ["Committee", "Social Event", "Volunteer Event", "GBM", "Workshop", "Other"];
 
-const upsertEventFormData = (committees) => [
-	{
-		type: "MultiElement",
-		options: {
-			elements: [
-				{
-					placeholder: "Event Type",
-					camelCaseName: "type",
-					type: "PickerInput",
-					isRequired: true,
-					conditionalValues: {
-						points: {
-							getValue: (input) => {
-								let values = {
-									"Social Event": 3,
-									"Volunteer Event": 3,
-									"GBM": 5,
-									"Workshop": 3,
-									"Committee": 2
-								};
-								return values[input];
+export const EventForm = (props) => {
+	const eventTypeToPointsMap = {
+		"Social Event": 3,
+		"Volunteer Event": 3,
+		"GBM": 5,
+		"Workshop": 3
+	};
+	const committeesList = useSelector(state => Object.keys(state.committees.committeesList));
+	committeesList.forEach(committee => eventTypeToPointsMap["Committee: " + committee] = 2);
+
+	const EventFormData = [
+		{
+			placeholder: "Event Type",
+			camelCaseName: "type",
+			type: "MultiElement",
+			isRequired: true,
+			options: {
+				formatValue: {
+					revert: ({ type }) => {
+						if (type) {
+							const [eventType, committee] = type.split(":");
+							return { type: eventType, committee };
+						}
+						return null;
+					}
+				},
+				elements: [
+					{
+						placeholder: "Event Type",
+						camelCaseName: "type",
+						type: "PickerInput",
+						isRequired: true,
+						conditionalValues: [{
+							name: "points",
+							value: (eventType) => eventTypeToPointsMap[eventType]
+						}],
+						options: {
+							data: eventTypeOptions,
+							formatValue: {
+								format: ({ type, committee }) => committee ? `${type}: ${committee}` : type,
+								revert: ({ type }) => {
+									if (type) {
+										const [eventType, committee] = type.split(": ");
+										return { type: eventType, committee };
+									}
+									return null;
+								}
 							}
 						}
 					},
-					options: {
-						formatValue: {
-							camelCaseNames: ["type", "committee"],
-							format: ([type, committee]) => committee ? `${type}: ${committee}` : type,
-							revert: type => type.split(":")[0]
-						},
-						data: eventTypeOptions
+					{
+						placeholder: "Committee Name",
+						camelCaseName: "committee",
+						type: "PickerInput",
+						isRequired: true,
+						options: {
+							data: committeesList,
+							parent: "type",
+							showIfParentValueEquals: (parentValue) => "Committee" === parentValue
+						}
 					}
-				},
-				{
-					placeholder: "Committee Name",
-					camelCaseName: "committee",
-					type: "PickerInput",
-					options: { selectionArray: [committees] }
-				}
-			]
-		}
-	},
-	{
-		placeholder: "Name",
-		camelCaseName: "name",
-		type: "Input",
-		isRequired: true
-	},
-	{
-		placeholder: "Description",
-		camelCaseName: "description",
-		type: "Input",
-		isRequired: false,
-		options: {
-			multiline: true
-		}
-	},
-	{
-		placeholder: "Date",
-		camelCaseName: "date",
-		type: "DatePicker",
-		isRequired: true
-	},
-	{
-		placeholder: "Start Time",
-		camelCaseName: "startTime",
-		type: "TimePicker",
-		conditionalValues: {
-			endTime: {
-				getValue: (input) => {
-					let time = input.split(":");
-					let hourPlusOne = parseInt(time[0]) + 1;
-					let newHour = hourPlusOne === 24 ? 0 : hourPlusOne;
-					newHour = newHour < 10 ? "0" + newHour : String(newHour);
-					return `${newHour}:${time[1]}`;
-				}
+				]
 			}
 		},
-		isRequired: true
-	},
-	{
-		placeholder: "End Time",
-		camelCaseName: "endTime",
-		type: "TimePicker",
-		isRequired: true
-	},
-	{
-		placeholder: "Location",
-		camelCaseName: "location",
-		type: "Input",
-		isRequired: true
-	},
-	{
-		placeholder: "Value",
-		camelCaseName: "points",
-		options: {
-			keyboardType: "numeric"
+		{
+			placeholder: "Name",
+			camelCaseName: "name",
+			type: "Input",
+			isRequired: true
 		},
-		type: "Input",
-		isRequired: true
-	}
-];
+		{
+			placeholder: "Description",
+			camelCaseName: "description",
+			type: "Input",
+			isRequired: false,
+			options: {
+				multiline: true
+			}
+		},
+		{
+			placeholder: "Date",
+			camelCaseName: "date",
+			type: "DatePicker",
+			isRequired: true
+		},
+		{
+			placeholder: "Start Time",
+			camelCaseName: "startTime",
+			type: "TimePicker",
+			conditionalValues: [
+				{
+					name: "endTime",
+					value: (time) => changeHourBy(time, 1)
+				},
+				{
+					name: "type",
+					value: () => { return { type: "Committee: Tech" } }
+				}
+			],
+			isRequired: true
+		},
+		{
+			placeholder: "End Time",
+			camelCaseName: "endTime",
+			type: "TimePicker",
+			isRequired: true
+		},
+		{
+			placeholder: "Location",
+			camelCaseName: "location",
+			type: "Input",
+			isRequired: true
+		},
+		{
+			placeholder: "Value",
+			camelCaseName: "points",
+			options: {
+				keyboardType: "numeric"
+			},
+			type: "Input",
+			isRequired: true
+		}
+	];
+
+	return (
+		<Form
+			elements = { EventFormData }
+			customVerification = {{
+				camelCaseNames: ["startTime", "endTime"],
+				verification: ([s, e]) => timeVerification(s, e)
+			}}
+			onSubmit = { (value) => createEvent(value) }
+			{ ...props }
+		/>
+	);
+};
 
 const editProfileFormDataRegular = [
 	{
@@ -275,7 +313,6 @@ const upsertCommittee = [
 ];
 
 export {
-	upsertEventFormData,
 	editProfileFormDataPrivileged,
 	editProfileFormDataRegular,
 	registrationFormData,

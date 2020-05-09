@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button, ButtonLayout, Form, Agenda } from "../../components/";
-import { formatEventListForCalendar, customVerificationForTime } from "../../utils/events";
-import { loadEvent, createEvent } from "../../ducks";
-import { upsertEventFormData } from "../../data/FormData";
+import { Button, ButtonLayout, Agenda } from "../../components/";
+import { formatEventListForCalendar } from "../../utils/events";
+import { loadEvent } from "../../ducks";
+import { EventForm } from "../../data/FormData";
 import { View, Dimensions, SafeAreaView } from "react-native";
-import _ from "lodash";
 
 const dimension = Dimensions.get("window");
 let dateStr = "";
@@ -48,18 +47,16 @@ class Events extends Component {
 	}
 
 	render() {
+		const { mainBackgroundColor, secondaryBackgroundColor, fullFlex } = styles;
 		return (
-			<SafeAreaView style = {{ flex: 1, backgroundColor: "#0c0b0b" }}>
-				<View style = {{ backgroundColor: "black", flex: 1 }}>
-					<View style = {{ flex: 1 }}>
-						<Form
-							elements = { upsertEventFormData(Object.keys(this.props.committeesList)) }
+			<SafeAreaView style = { [fullFlex, mainBackgroundColor] }>
+				<View style = { [fullFlex, secondaryBackgroundColor] }>
+					<View style = { [fullFlex] }>
+						<EventForm
 							title = "Create Event"
 							initialValues = { [{ camelCaseName: "date", value: dateStr }] }
 							visible = { this.state.eventFormVisibility }
 							changeVisibility = { (visible) => this.setState({ eventFormVisibility: visible }) }
-							onSubmit = { (value) => createEvent(value) }
-							customVerification = { customVerificationForTime }
 						/>
 						<Agenda
 							passDate = { (item) => dateStr = item.dateString }
@@ -88,12 +85,23 @@ class Events extends Component {
 	}
 }
 
-const mapStateToProps = ({ events, user, committees }) => {
+const styles = {
+	mainBackgroundColor: {
+		backgroundColor: "#0c0b0b"
+	},
+	secondaryBackgroundColor: {
+		backgroundColor: "black"
+	},
+	fullFlex: {
+		flex: 1
+	}
+};
+
+const mapStateToProps = ({ events, user }) => {
 	const { sortedEvents } = events;
 	const { activeUser } = user;
-	const { committeesList } = committees;
 
-	return { sortedEvents, activeUser, committeesList };
+	return { sortedEvents, activeUser };
 };
 
 const mapDispatchToProps = { loadEvent };

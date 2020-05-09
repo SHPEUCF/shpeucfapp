@@ -1,30 +1,34 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Form } from "./Form";
+import { validateElements } from "../../utils/form";
+import _ from "lodash";
 
 /**
- * Types
- * @typedef {Object} Elements:
- * 		@property {String}  			 name
- * 		@property {String}   			 camelCaseName
- * 		@property {String}   			 type
- * 		@property {boolean=} 			 isRequired
- * 		@property {{Options}}     		 options
- *		@property {{ConditionalValue}=}  conditionalValues	An object containing ConditionalValue target objects
- * @typedef {Object} ConditionalValue:
- * 		@property {Function} 			 getValue			Function that is used to obtain the new value for the [camelCaseName] element
- * @typedef {Object} Options:
- * 		@property {(String | Number)[]=} 			     data				Only the first element should have this property
- * 		@property {(String | Number)[][]=} 			     selectionArray	    All other elements use this property to query for their data
+ *Types
+ *@typedef {Object} Element:
+ *		@property {String}                   name
+ *		@property {String}                   camelCaseName
+ *		@property {String}                   type
+ *		@property {boolean=}                 isRequired
+ *		@property {Options}                  options
+ *		@property {ConditionalValue=}        conditionalValues         An object containing ConditionalValue target objects.
+ *@typedef {Object} ConditionalValue:
+ *		@property {Function}                 getValue                  Function that is used to obtain the new value for the [camelCaseName] element.
+ *@typedef {Object} Options:
+ *		@property {(String | Number)[]=}     data                      Only the first element should have this property.
+ *		@property {(String | Number)[][]=}   selectionArray            All other elements use this property to query for their data.
+ *	 	@property {Function}                 showIfParentValueEquals   Function that checks the parent value and returns whether the element should be shown.
+ *		@property {Function=}                childData                 Optional function that checks the parent value and returns the data of the child.
  */
 
 /**
  * Form Component Info
  * ________________________________________________________________
- * 	Props:
- *		@param {Elements[]}         elements         	An array of the names of Elements.
- *		@param {Object=} 		    initialState   	    An object of initial state values.
-  *		@param {Function} 		    onSelect   	        Updates parent form whenever a value is changed
+ *	Props:
+ *		@param {Elements[]}         elements            An array of the names of Elements.
+ *		@param {Object=}            initialState        An object of initial state values.
+ *		@param {Function}           onSelect            Updates parent form whenever a value is changed.
  *
  *	Output:
  *
@@ -40,10 +44,34 @@ import { Form } from "./Form";
  * ________________________________________________________________
  */
 
-// initial values for the nested form
-let formValues = [];
+/**
+ *
+ *
+ * ideas
+ *
+ * initial values should be an object. This multiElement might require a format and unformat in the options
+ *
+ * Maybe Make a state that handles the visibility This needs to be configurable as to when to make what visible
+ *
+ * Make a state that determines the value of the next componenent, this needs to be configurable
+ *
+ * return only when all inputs are valid
+ *
+ *
+ * format is how you combine the values of the multiElement to return them.
+ * revert is how you divide the values that were formatted to set the initial values if necessary.
+ *
+ */
 
 class MultiElement extends Component {
+	constructor(props) {
+		super(props);
+		const { initialValue, formatValue } = props;
+
+		this.state = {};
+		if (initialValue) this.state = (formatValue) ? formatValue.revert(this.initialValue) : initialValue;
+	}
+
 	static propTypes = {
 		elements: PropTypes.arrayOf(
 			PropTypes.shape(
@@ -57,124 +85,145 @@ class MultiElement extends Component {
 			)
 		).isRequired,
 		onSelect: PropTypes.func.isRequired,
-		initialState: PropTypes.shape({})
+		formatValue: PropTypes.shape({
+			format: PropTypes.func.isRequired,
+			revert: PropTypes.func.isRequired
+		}),
+		initialValue: PropTypes.any,
+		value: PropTypes.any
 	}
 
-	constructor(props) {
-		super(props);
-		const { elements, initialState } = this.props;
-		let limit = 1;
-		let values = [];
+	componentDidUpdate(prevProps) {
+		const {
+			formatValue
+		} = this.props;
+		if (formatValue && formatValue.revert) {
+			let newValue = {};
+			let oldValue = {};
 
-		if (initialState) {
-			values = elements.map((element, index) => {
-				let value = initialState[element.camelCaseName];
-
-				if (value) {
-					value = this.formatValue(element, value);
-					this.selectUpcomingElementData(element, index, value);
-				}
-
-				// nested form needs initial values in a different format
-				formValues.push({ camelCaseName: element.camelCaseName, value: value });
-				// this value format is used in the MultiElement state
-				return { [element.camelCaseName]: value };
-			});
-			values = values.filter(value => Object.values(value)[0] ? true : false);
-			// extends inital visibleElements length if an element is unlocked after processing all initial values
-			limit = (values.length !== elements.length && elements[values.length].options.data)
-				? values.length + 1
-				: values.length;
+			if (this.props.value)
+				newValue = formatValue.revert(this.props.value);
+			if (prevProps.value)
+				oldValue = formatValue.revert(prevProps.value);
+			if (!_.isEqual(newValue, oldValue))
+				this.onChange(newValue);
 		}
-
-		this.state = { visibleElements: elements.slice(0, limit), values: values };
-	}
-
-	formatValue(element, value) {
-		let formatObj = element.options.formatValue;
-		if (formatObj) {
-			const { format, revert } = formatObj;
-			if (!(format && revert))
-				console.error(`The formatValue object of the -${element.camelCaseName}- element should have both a format and revert function. Check the FormData`);
-			value = revert(value);
-			this.props.onSelect(element, value);
-			return value;
-		}
-		else { return value }
-	}
-
-	// unlocks next element in the initial chain by querying for its data in the current element
-	selectUpcomingElementData(element, index, value) {
-		const { elements } = this.props;
-		let valIndex = element.options.data.findIndex(val => val === value);
-		if (index < elements.length - 1) {
-			let query = elements[index + 1].options.selectionArray[valIndex];
-			if (query) elements[index + 1].options.data = query;
+		else if (!_.isEqual(this.props.value, prevProps.value)) {
+			this.onChange(this.props.value);
 		}
 	}
 
-	componentDidUpdate(prevProps, prevState) {
-		if (this.state.values !== prevState.values) {
-			const { elements } = this.props;
+	/**
+	 * @description Creates a formatted array based off the elements passed in and the state.
+	 *
+	 * @returns {Object} Shape is: { element, value }.
+	 */
 
-			// resets element values whenever earlier element values have been modified
-			for (let i = this.state.values.length; i < prevState.values.length; i++) {
-				this.form.changeState(elements[i], null);
-				this.props.onSelect(elements[i], null);
+	formatElementsToSubmit = (elements, state) => elements.map((element, index) => {
+		if (index === 0 && element.options && element.options.formatValue)
+			return { element, value: element.options.formatValue.format(state) };
+
+		return { element, value: state[element.camelCaseName] };
+	});
+
+	copyStateAndSetValuesToNull() {
+		let newStateValue = {};
+		for (let name in this.state) newStateValue[name] = null;
+		return newStateValue;
+	}
+
+	/**
+	 * @description Verifies if all required fields have been selected.
+	 *
+	 * If all required fields have been filled in then it calls onSelect and passes the values in the format { element, value}.
+	 */
+
+	verifyAndSubmit(state) {
+		const visibleElements = this.findVisibleElements(state);
+		let formIsValid = validateElements(visibleElements, state, false);
+
+		let formattedOutputElements = [];
+		if (!formIsValid) {
+			const nullState = this.copyStateAndSetValuesToNull();
+			formattedOutputElements = this.formatElementsToSubmit(this.props.elements, nullState);
+		}
+		else { formattedOutputElements = this.formatElementsToSubmit(this.props.elements, state) }
+
+		this.props.onSelect(formattedOutputElements);
+	}
+
+	/**
+	 * @description Updates state of multiElement and the form.
+	 *
+	 * Initializes a state with all null values to ensure children value get reset.
+	 *
+	 * @param {Object} elementValuesFromForm Object with all the values from Form. Is of shape { camelCaseName: value }
+	 */
+
+	onChange(elementValuesFromForm) {
+		const newStateValue = this.copyStateAndSetValuesToNull();
+
+		let parentElementHasChanged = false;
+
+		for (let name in elementValuesFromForm) {
+			if (!parentElementHasChanged)
+				newStateValue[name] = elementValuesFromForm[name];
+			else
+				this.childForm.setState({ [name]: null });
+
+			if (!_.isEqual(this.state[name], newStateValue[name])) parentElementHasChanged = true;
+		}
+
+		this.setState(newStateValue);
+		this.verifyAndSubmit(newStateValue);
+	}
+
+	/**
+	 * @description Adds data prop to any element that needs it.
+	 *
+	 * @param {Element[]} visibleElements An array of all visible elements.
+	 */
+
+	formatVisibleElements(visibleElements) {
+		return visibleElements.map((element, index) => {
+			if (index !== 0 && visibleElements[index - 1].childData) {
+				let newElement = Object.assign({}, element);
+
+				newElement.options = {
+					...element.options,
+					data: visibleElements[index - 1].childData(this.state[element.options.parent])
+				};
+
+				return newElement;
 			}
-		}
-	}
 
-	processNewState(state) {
-		const { values } = this.state;
-		const { elements } = this.props;
-
-		let newValue;
-		let index = -1;
-
-		// finds the element value that has been changed and saves the element index
-		elements.some((element, ind) => {
-			let valueObj = values[ind];
-			if (!(valueObj && state[element.camelCaseName] === Object.values(valueObj)[0])) {
-				index = ind;
-				newValue = state[element.camelCaseName];
-				return true;
-			}
-			else {
-				return false;
-			}
+			return element;
 		});
+	}
 
-		if (newValue) {
-			let element = elements[index];
-			let updatedValues = Object.assign([], this.state.values);
-			let valIndex = element.options.data.findIndex(val => val === newValue);
-			let limit;
+	/**
+	 * @description Filters out elements from the props that shouldn't be visible based on the current state
+	 */
 
-			updatedValues.splice(index, 1, { [element.camelCaseName]: newValue });
+	findVisibleElements(state) {
+		const { elements } = this.props;
 
-			// update parent form
-			this.props.onSelect(element, newValue);
+		let visibleElements = elements.filter(
+			({ options }, index) => index === 0 || options && options.showIfParentValueEquals(state[options.parent])
+		);
 
-			// unlocks next element
-			if (elements.length !== index + 1) {
-				let query = elements[index + 1].options.selectionArray[valIndex];
-				if (query) {
-					elements[index + 1].options.data = query;
-					limit = index + 2;
-				}
-				else { limit = index + 1 }
-			}
-			this.setState({ visibleElements: elements.slice(0, limit), values: updatedValues.slice(0, index + 1) });
-		}
+		return visibleElements;
 	}
 
 	render() {
+		const visibleElements = this.findVisibleElements(this.state);
+		const formattedVisibleElements = this.formatVisibleElements(visibleElements);
+
 		return <Form
-			ref = { form => this.form = form }
-			elements = { this.state.visibleElements }
-			initialValues = { formValues }
-			onChange = { (state) => this.processNewState(state) }
+			ref = { form => this.childForm = form }
+			elements = { formattedVisibleElements }
+			initialValues = { this.state }
+			onChange = { (state) => this.onChange(state) }
 			justElements
 		/>;
 	}

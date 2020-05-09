@@ -83,13 +83,18 @@ export function timeVerification(s, e) {
 }
 
 /**
- * @description predefined time verification object to be used with forms
+ * @description Changes an hour by a certain amount and returns the new hour.
+ *
+ * @param {string} time   The hour that you want to change, **Must be Military Time**
+ * @param {number} amount The amount that you want to change the hour by.
  */
 
-export const customVerificationForTime = {
-	camelCaseNames: ["startTime", "endTime"],
-	verification: ([s, e]) => timeVerification(s, e)
-};
+export function changeHourBy(time, amount) {
+	const [hour, minute] = time.split(":");
+	let newHour = parseInt(hour) + amount;
+	newHour = prependZero(newHour % 24);
+	return `${newHour}:${minute}`;
+}
 
 /**
  * @description Filters out all events that have passed; only leaving future events.
