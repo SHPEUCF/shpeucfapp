@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
-import { Button, SortableFlatList, NavBar, ButtonLayout } from "../../components/general";
+import { Button, SortableFlatList, NavBar, ButtonLayout } from "../../components";
 import {
 	openElection,
 	closeElection,

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
-import { Spinner } from "../../components/general";
+import { Spinner } from "../../components";
 import { Actions } from "react-native-router-flux";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import Flag from "react-native-flags";
