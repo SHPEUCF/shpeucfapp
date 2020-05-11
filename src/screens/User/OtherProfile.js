@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { connect } from "react-redux";
-import { ButtonLayout, NavBar } from "../../components/general";
+import { Alert, ButtonLayout, NavBar } from "../../components";
 import { Avatar } from "react-native-elements";
 import Flag from "react-native-flags";
 import { verifiedCheckMark } from "../../utils/render";
@@ -154,7 +154,7 @@ class OtherProfile extends Component {
 					<View style = { [LogoContainer, { backgroundColor: this.props.color, flex: 1 }] }>
 						<TouchableOpacity
 							onPress = { () => {
-								alert("Coming Soon");
+								Alert.alert("Coming Soon");
 								// Actions.PostShow({ title: 'Linkedin', uri: 'https://www.linkedin.com/'})
 							} }>
 							<Ionicons name = "logo-linkedin" size = { dimension.height * 0.045 } color = 'white' />
@@ -164,7 +164,7 @@ class OtherProfile extends Component {
 					<View style = { [LogoContainer, { backgroundColor: this.props.color, flex: 1 }] }>
 						<TouchableOpacity
 							onPress = { () => {
-								alert("Coming Soon");
+								Alert.alert("Coming Soon");
 								// Actions.PostShow({ title: 'Github', uri: 'https://www.github.com/'})
 							} } >
 							<Ionicons name = "ios-mail" size = { dimension.height * 0.045 } color = 'white' />

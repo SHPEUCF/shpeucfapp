@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button, ButtonLayout, Form, Agenda } from "../../components/";
+import { Alert, Button, ButtonLayout, Form, Agenda } from "../../components";
 import { formatEventListForCalendar } from "../../utils/events";
 import { loadEvent, createEvent } from "../../ducks";
 import { upsertEventFormData } from "../../data/FormData";
@@ -34,7 +34,7 @@ class Events extends Component {
 	}
 
 	static onRight = function() {
-		this.alert(new Date());
+		Alert.alert(new Date());
 	}
 
 	prepend0(item) {

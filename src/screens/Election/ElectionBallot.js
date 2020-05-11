@@ -6,7 +6,7 @@ import { Avatar } from "react-native-elements";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Text, View, SafeAreaView, FlatList, TouchableOpacity, Modal } from "react-native";
-import { Button, NavBar, ButtonLayout } from "../../components/general";
+import { Alert, Button, NavBar, ButtonLayout } from "../../components";
 import { getPositions, vote, getVotes } from "../../ducks";
 import { stockImg, truncateNames } from "../../utils/render";
 import FastImage from "react-native-fast-image";
@@ -207,7 +207,7 @@ class ElectionBallot extends Component {
 
 	updateSelection(isChecked, { position, id }) {
 		if (this.props.activeUser.voted) {
-			alert("You have already voted!");
+			Alert.alert("You have already voted!");
 		}
 		else {
 			let selectedCandidates = Object.assign({}, this.state.selectedCandidates);
@@ -269,7 +269,7 @@ class ElectionBallot extends Component {
 		} = this.props.activeUser;
 
 		if (_.isEmpty(this.state.selectedCandidates)) {
-			alert("Please vote for at least one candidate!");
+			Alert.alert("Please vote for at least one candidate!");
 		}
 		else {
 			vote(this.state.selectedCandidates);

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { ScrollView, SafeAreaView, Modal } from "react-native";
-import { Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicker, FilterList } from "./";
+import { Alert, Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicker, FilterList } from "./";
 
 /**
  * Types
@@ -291,7 +291,7 @@ class Form extends Component {
 		this.props.elements.forEach((element) => {
 			if (formIsValid && element.isRequired && this.state[element.camelCaseName] !== 0
 				&& !this.state[element.camelCaseName]) {
-				alert(`Please input a value into the ${element.placeholder} field.`);
+				Alert.alert(`Please input a value into the ${element.placeholder} field.`);
 				formIsValid = false;
 			}
 		});

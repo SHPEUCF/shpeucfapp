@@ -6,6 +6,7 @@ import Router from "./config/Router";
 import AppInfo from "../app.json";
 import { View } from "react-native";
 import { goToLogIn, registrationError } from "./ducks";
+import { Alert } from "./components";
 import {
 	apiKey,
 	authDomain,
@@ -54,7 +55,7 @@ class App extends Component {
 					}
 					else {
 						if (!correctVersion && firebase.auth().currentUser.emailVerified)
-							alert("Please update your app");
+							Alert.alert("Please update your app");
 						firebase.auth().signOut();
 						this.props.loggedIn = false;
 						// Actions.login();
@@ -72,6 +73,7 @@ class App extends Component {
 		return (
 			<View style = {{ flex: 1 }}>
 				<Router />
+				<Alert.AlertBox />
 			</View>
 		);
 	}
