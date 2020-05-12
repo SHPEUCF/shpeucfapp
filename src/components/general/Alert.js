@@ -17,14 +17,14 @@ class AlertComponent extends Component {
 
 	changeAlert(updatedAlert) {
 		this.setState({ visible: true, ...updatedAlert }, () => {
-			Animate.sliding({ relative: { ratio: 0.375 }, duration: 800, easing: ["out", "back"], easeValue: 1 });
+			Animate.animation({ relative: { ratio: 0.375 }, duration: 800, easing: ["out", "back"], easeValue: 1 });
 		});
 	}
 
 	close(button) {
 		const buttonPress = this.state[button] && this.state[button].onPress;
 
-		Animate.sliding({ relative: { ratio: 1.0 }, duration: 800, easing: "back", easeValue: 1 }, () => {
+		Animate.animation({ relative: { ratio: 1.0 }, duration: 800, easing: "back", easeValue: 1 }, () => {
 			this.setState({ visible: false });
 			buttonPress && buttonPress();
 		});
@@ -34,7 +34,7 @@ class AlertComponent extends Component {
 		const { title, padding, center, titleContainer, textTitleContainer } = styles;
 
 		const icon = () => {
-			switch (this.state.type) {
+			switch (this.state.type || "alert") {
 				case "confirmation":
 					return <Icon name = "questioncircleo" color = "white" size = { 24 } />;
 				case "success":
@@ -52,7 +52,7 @@ class AlertComponent extends Component {
 					{ icon() }
 				</View>
 				<View style = { textTitleContainer }>
-					<Text style = { title } numberOfLines = { 2 }>{ this.state.title }</Text>
+					<Text style = { title } numberOfLines = { 2 }>{ this.state.title || "Alert" }</Text>
 				</View>
 			</View>
 		);
@@ -129,20 +129,20 @@ export class Alert {
 	static AlertBox = () => <AlertComponent ref = { alert => (this.AlertComponent = alert) } />;
 
 	/**
-	 * @param {string}   message               Message for alert to display.
-	 * @param {Object}   config
-	 * @param {string=}  config.title          Title of alert.
-	 * @param {string=}  config.type           Type of alert to display.
-	 *                                         ["alert", "confirmation", "error", "success"]
-	 * @param {Object}   config.submit         Config or function to execute with submit button.
-	 * @param {string}   config.submit.title   Title of confirm button.
-	 * @param {Function} config.submit.onPress onPress of confirm button.
-	 * @param {Object}   config.cancel         Config or function to execute with cancel button.
-	 * @param {string}   config.cancel.title   Title of cancel button.
-	 * @param {Function} config.cancel.onPress onPress of cancel button.
+	 * @param {string}    message                Message for alert to display.
+	 * @param {Object}    config
+	 * @param {string=}   config.title           Title of alert.
+	 * @param {string=}   config.type            Type of alert to display.
+	 *                                           ["alert", "confirmation", "error", "success"]
+	 * @param {Object}    config.submit          Config or function to execute with submit button.
+	 * @param {string}    config.submit.title    Title of confirm button.
+	 * @param {Function}  config.submit.onPress  onPress of confirm button.
+	 * @param {Object}    config.cancel          Config or function to execute with cancel button.
+	 * @param {string}    config.cancel.title    Title of cancel button.
+	 * @param {Function}  config.cancel.onPress  onPress of cancel button.
  */
-	static alert(message, { title = "Alert", type = "alert", submit, cancel } = { title: "Alert", type: "alert" }) {
-		this.AlertComponent.changeAlert({ message, title, type, submit, cancel });
+	static alert(message, config = { title: "Alert", type: "alert" }) {
+		this.AlertComponent.changeAlert({ message, ...config });
 	}
 }
 
