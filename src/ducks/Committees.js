@@ -140,8 +140,8 @@ export const editCommittee = (title, description, chair, oldTitle) => {
 						chair: chair,
 						level: level
 					}))
-					.then(() => Alert.alert("Committee Edited!", { type: "success", title: "Successful" }))
-					.catch(() => Alert.alert("Committee could not be Edited!", { type: "error", title: "Failure" }));
+					.then(() => Alert.alert("Committee edited!", { type: "success", title: "Successful" }))
+					.catch(() => Alert.alert("Committee could not be edited!", { type: "error", title: "Failure" }));
 			});
 		};
 	else
@@ -156,8 +156,8 @@ export const editCommittee = (title, description, chair, oldTitle) => {
 						type: ACTIONS.EDIT_COMMITTEE
 					});
 				})
-				.then(() => Alert.alert("Committee Edited!", { type: "success", title: "Successful" }))
-				.catch(() => Alert.alert("Committee could not be Edited!", { type: "error", title: "Failure" }));
+				.then(() => Alert.alert("Committee edited!", { type: "success", title: "Successful" }))
+				.catch(() => Alert.alert("Committee could not be edited!", { type: "error", title: "Failure" }));
 		};
 };
 

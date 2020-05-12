@@ -295,8 +295,8 @@ export const editPosition = (title, description, oldTitle) => {
 					description: description,
 					level: level
 				}))
-				.then(() => Alert.alert("Position Edited!", { type: "success", title: "Successful" }))
-				.catch(() => Alert.alert("Position could not be Edited!", { type: "error", title: "Failure" }));
+				.then(() => Alert.alert("Position edited!", { type: "success", title: "Successful" }))
+				.catch(() => Alert.alert("Position could not be edited!", { type: "error", title: "Failure" }));
 		};
 	}
 	else {
@@ -310,8 +310,8 @@ export const editPosition = (title, description, oldTitle) => {
 						type: ACTIONS.EDIT_POSITION
 					});
 				})
-				.then(() => Alert.alert("Position Edited!", { type: "success", title: "Successful" }))
-				.catch(() => Alert.alert("Position could not be Edited!", { type: "error", title: "Failure" }));
+				.then(() => Alert.alert("Position edited!", { type: "success", title: "Successful" }))
+				.catch(() => Alert.alert("Position could not be edited!", { type: "error", title: "Failure" }));
 		};
 	}
 };
@@ -346,10 +346,10 @@ export const editApplication = ({ plan, position, picture, firstName, lastName }
 		 firstName,
 		 lastName
 	})
-		.then(() => Alert.alert("Candidate Edited!", { type: "success", title: "Successful" }))
+		.then(() => Alert.alert("Candidate edited!", { type: "success", title: "Successful" }))
 		.catch((error) => {
 			console.error(error);
-			Alert.alert("Candidate could not be Edited!", { type: "error", title: "Failure" });
+			Alert.alert("Candidate could not be edited!", { type: "error", title: "Failure" });
 		});
 };
 
