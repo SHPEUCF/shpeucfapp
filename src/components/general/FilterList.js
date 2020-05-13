@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { View,	Modal,	FlatList,	Dimensions,	TouchableOpacity,	Text,	SafeAreaView } from "react-native";
-import { Input } from "./Input";
+import { Alert, Button, ButtonLayout, Input } from "./";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { Button } from "./Button";
-import { ButtonLayout } from "./ButtonLayout";
 
 const dimension = Dimensions.get("window");
 
@@ -313,7 +311,7 @@ class FilterList extends Component {
 					title = "Done"
 					onPress = { () => {
 						if (output.length === 0) {
-							alert("You never selected anything!");
+							Alert.alert("You never selected anything!");
 							return;
 						}
 						if (!multiple) {

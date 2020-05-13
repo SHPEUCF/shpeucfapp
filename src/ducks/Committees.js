@@ -1,6 +1,7 @@
 import { createActionTypes } from "../utils/actions";
 import { Actions } from "react-native-router-flux";
 import firebase from "firebase";
+import { Alert } from "../components";
 
 // handle all things related to Elections
 const ACTIONS = createActionTypes([
@@ -115,8 +116,8 @@ export const addCommittee = (title, description, chair, length) => {
 			level: length,
 			joinOpened: false
 		})
-			.then(() => alert("Committee Added!", "Successful"))
-			.catch(() => alert("Committee could not be Added!", "Failure"));
+			.then(() => Alert.alert("Committee Added!", { type: "success", title: "Successful" }))
+			.catch(() => Alert.alert("Committee could not be Added!", { type: "error", title: "Failure" }));
 	};
 };
 
@@ -139,10 +140,8 @@ export const editCommittee = (title, description, chair, oldTitle) => {
 						chair: chair,
 						level: level
 					}))
-					.then(() => alert("Committee Edited!", "Successful"))
-					.catch(() => {
-						alert("Committee could not be Edited!", "Failure");
-					});
+					.then(() => Alert.alert("Committee edited!", { type: "success", title: "Successful" }))
+					.catch(() => Alert.alert("Committee could not be edited!", { type: "error", title: "Failure" }));
 			});
 		};
 	else
@@ -157,8 +156,8 @@ export const editCommittee = (title, description, chair, oldTitle) => {
 						type: ACTIONS.EDIT_COMMITTEE
 					});
 				})
-				.then(() => alert("Committee Edited!", "Successful"))
-				.catch(() => alert("Committee could not be Edited!", "Failure"));
+				.then(() => Alert.alert("Committee edited!", { type: "success", title: "Successful" }))
+				.catch(() => Alert.alert("Committee could not be edited!", { type: "error", title: "Failure" }));
 		};
 };
 
@@ -184,8 +183,8 @@ export const deleteCommittee = (text, chair) => {
 					type: ACTIONS.DELETE_COMMITTEE
 				});
 			})
-			.then(() => alert("Committee Deleted!", "Successful"))
-			.catch(() => alert("Committee could not be deleted!", "Failure"));
+			.then(() => Alert.alert("Committee Deleted!", { type: "success", title: "Successful" }))
+			.catch(() => Alert.alert("Committee could not be deleted!", { type: "error", title: "Failure" }));
 	};
 };
 
@@ -220,8 +219,8 @@ export const changeLevelsCom = (committees) => {
 			});
 			firebase.database().ref("/committees/").update(obj);
 		})
-			.then(() => alert("Order Set!", "Successful"))
-			.catch(() => alert("Order could not be set!", "Failure"));
+			.then(() => Alert.alert("Order Set!", { type: "success", title: "Successful" }))
+			.catch(() => Alert.alert("Order could not be set!", { type: "error", title: "Failure" }));
 	};
 };
 
@@ -233,8 +232,8 @@ export const changeLevelsCom = (committees) => {
 // 		firebase.database().ref(`/committees/${committee}/pendingMembers/`).update({
 // 			[memberId]: true
 // 		})
-// 			.then(() => alert("Pending Approval!", "Successful"))
-// 			.catch(() => alert("Not succesful!", "Failure"));
+// 			.then(() => Alert.alert("Pending Approval!", { type: "success", title: "Successful" }))
+// 			.catch(() => Alert.alert("Not successful!", { type: "error", title: "Failure" }));
 // 	};
 // };
 
@@ -259,8 +258,8 @@ export const changeLevelsCom = (committees) => {
 // 						}))
 // 						.then(() => firebase.database().ref(`users/${valId}/points`).set(points));
 // 				})
-// 					.then(() => alert("Member Approved!", "Successful"))
-// 					.catch(() => alert("Member could not be Approved!", "Failure"));
+// 					.then(() => Alert.alert("Member Approved!", { type: "success", title: "Successful" }))
+// 					.catch(() => Alert.alert("Member could not be Approved!", { type: "error", title: "Failure" }));
 // 			});
 // 	};
 // };
@@ -275,15 +274,15 @@ export const changeLevelsCom = (committees) => {
 // 			firebase.database().ref(`/committees/${committee}/pendingMembers/`).update({
 // 				[memberId]: null
 // 			})
-// 				.then(() => alert("Member Removed!", "Successful"))
-// 				.catch(() => alert("Member could not be Removed!", "Failure"));
+// 				.then(() => Alert.alert("Member Removed!", { type: "success", title: "Successful" }))
+// 				.catch(() => Alert.alert("Member could not be Removed!", { type: "error", title: "Failure" }));
 
 // 		if (status === "joined")
 // 			firebase.database().ref(`/committees/${committee}/joinedMembers/`).update({
 // 				[memberId]: null
 // 			})
-// 				.then(() => alert("Member Removed!", "Successful"))
-// 				.catch(() => alert("Member could not be Removed!", "Failure"));
+// 				.then(() => Alert.alert("Member Removed!", { type: "success", title: "Successful" }))
+// 				.catch(() => Alert.alert("Member could not be Removed!", { type: "error", title: "Failure" }));
 // 	};
 // };
 
@@ -297,14 +296,14 @@ export const changeLevelsCom = (committees) => {
 // 			firebase.database().ref(`/committees/${committee}/`).update({
 // 				joinOpened: true
 // 			})
-// 				.then(() => alert("Committee registration has been opened!", "Successful"))
-// 				.catch(() => alert("Could not open committee registration!", "Failure"));
+// 				.then(() => Alert.alert("Committee registration has been opened!", { type: "success", title: "Successful" }))
+// 				.catch(() => Alert.alert("Could not open committee registration!", { type: "error", title: "Failure" }));
 
 // 		else
 // 			firebase.database().ref(`/committees/${committee}/`).update({
 // 				joinOpened: false
 // 			})
-// 				.then(() => alert("Committee registration has been closed!", "Successful"))
-// 				.catch(() => alert("Could not close committee registration!", "Failure"));
+// 				.then(() => Alert.alert("Committee registration has been closed!", { type: "success", title: "Successful" }))
+// 				.catch(() => Alert.alert("Could not close committee registration!", { type: "error", title: "Failure" }));
 // 	};
 // };

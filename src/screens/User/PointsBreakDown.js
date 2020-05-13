@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import firebase from "firebase";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { NavBar } from "../../components/general";
+import { NavBar } from "../../components";
 import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from "react-native";
 import { fetchMembersPoints, loadUser, fetchEvents, goToViewEvent } from "../../ducks";
 

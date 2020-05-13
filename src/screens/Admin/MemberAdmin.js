@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { NavBar, Button, ButtonLayout, FilterList } from "../../components/general";
+import { NavBar, Button, ButtonLayout, FilterList } from "../../components";
 import { SafeAreaView, View, Text } from "react-native";
 import { changePrivilegeOfMembers } from "../../ducks";
 import { MemberPanel } from "../../utils/render";

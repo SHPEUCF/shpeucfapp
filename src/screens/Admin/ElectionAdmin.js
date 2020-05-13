@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { NavBar, Button, ButtonLayout } from "../../components/general";
+import { NavBar, Button, ButtonLayout } from "../../components";
 import _ from "lodash";
 import { FlatList,	Text,	SafeAreaView,	Dimensions, View } from "react-native";
 import {

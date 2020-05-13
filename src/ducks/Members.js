@@ -1,6 +1,6 @@
 import firebase from "firebase";
 import { Actions } from "react-native-router-flux";
-import { Alert } from "react-native";
+import { Alert } from "../components";
 import { createActionTypes } from "../utils/actions";
 
 // Handle all things related to Events
@@ -365,8 +365,8 @@ export const changePrivilegeOfMembers = (members, privilegeChanged, value) => {
 		});
 
 		firebase.database().ref("/privileges/").update(updates)
-			.then(() => alert("Changes successful"))
-			.catch(() => alert("Changes were not successful"));
+			.then(() =>Alert.alert("Changes successful", { type: "success" }))
+			.catch(() =>Alert.alert("Changes were not successful", { type: "error" }));
 	});
 
 	if (privilegeChanged === "paidMember") {
@@ -378,7 +378,7 @@ export const changePrivilegeOfMembers = (members, privilegeChanged, value) => {
 			});
 
 			firebase.database().ref("/users/").update(updates)
-				.catch(() => alert("Changes were not successful"));
+				.catch(() =>Alert.alert("Changes were not successful", { type: "error" }));
 		});
 	}
 };

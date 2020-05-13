@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { connect } from "react-redux";
-import { Button, ButtonLayout } from "../../components/general";
+import { Alert, Button, ButtonLayout } from "../../components";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
 import { Avatar } from "react-native-elements";
 import Flag from "react-native-flags";
@@ -194,20 +194,14 @@ class Profile extends Component {
 				<View style = {{ flex: 0.03 }}></View>
 				<View style = { socialmediarow }>
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
-						<TouchableOpacity
-							onPress = { () => {
-								alert("Coming Soon");
-							} }>
-							<Ionicons name = "logo-linkedin" size = { dimension.height * 0.045 } color = 'white' />
+						<TouchableOpacity onPress = { () => Alert.alert("Coming Soon") }>
+							<Ionicons name = "logo-linkedin" size = { dimension.height * 0.045 } color = "white" />
 						</TouchableOpacity>
 					</View>
 					<View style = {{ flex: 0.01 }}></View>
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
-						<TouchableOpacity
-							onPress = { () => {
-								alert("Coming Soon");
-							} }>
-							<Ionicons name = "ios-mail" size = { dimension.height * 0.045 } color = 'white' />
+						<TouchableOpacity onPress = { () => Alert.alert("Coming Soon") }>
+							<Ionicons name = "ios-mail" size = { dimension.height * 0.045 } color = "white" />
 						</TouchableOpacity>
 					</View>
 				</View>
