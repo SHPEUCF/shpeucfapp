@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { View } from "react-native";
 import { Input } from "./Input";
 import { PickerInput } from "./PickerInput";
+import { prepend0 } from "../../utils/events";
 
 class DatePicker extends Component {
 	constructor(props) {
@@ -15,98 +16,92 @@ class DatePicker extends Component {
 			month: date.length === 3 ? date[1] : "",
 			day: date.length === 3 ? date[2] : "",
 			year: date.length === 3 ? date[0] : "",
+			focused: date.length === 3,
 			monthArr: Array.from({ length: 12 }, (v, k) => k + 1),
-			dayArr: Array.from({ length: 31 }, (v, k) => k + 1),
-			yearArr: Array.from({ length: 101 }, (v, k) => new Date().getFullYear() - k),
-			focused: date.length === 3
+			yearArr: Array.from({ length: 20 }, (v, k) => new Date().getFullYear() + k) // We only need about 20 years ahead... right?
 		};
 	}
 
-		static propTypes = {
-			value: PropTypes.object,
-			placeholder: PropTypes.string.isRequired,
-			onSelect: PropTypes.func.isRequired
+	static propTypes = {
+		value: PropTypes.object,
+		placeholder: PropTypes.string.isRequired,
+		onSelect: PropTypes.func.isRequired
+	}
+
+	// Returns an array of days in the current state's month when called
+	dayArr() {
+		const {
+			month,
+			day,
+			year
+		} = this.state;
+
+		console.log(this.state);
+
+		// Return the correct array of days based on the selected month
+		// Defining # of days for each month is easier than whatever monstrosity was here before
+		const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+		// If the state's day is more than the max days in a month, set the day to the max day
+		const maxDayCheck = (maxDay) => { if (day > maxDay) this.setState({ day: maxDay }); };
+
+		if (parseInt(month) == 2 && this.isLeapYear(year)) {
+			maxDayCheck(29);
+			return Array.from({ length: 29 }, (v, k) => k + 1);
 		}
-
-		prepend0(item) {
-			if (item < 10)
-				return "0" + item;
-
-			return item;
+		else {
+			maxDayCheck(daysInMonth[parseInt(month) - 1]);
+			return Array.from({ length: daysInMonth[parseInt(month) - 1] }, (v, k) => k + 1);
 		}
+	}
 
-		leapYear(year) {
-			return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
-		}
+	// Returns true if the input year is a leap year
+	isLeapYear(year) {
+		return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+	}
 
-		update(item) {
-			const {
-				month,
-				day,
-				year
-			} = item;
-			this.props.onSelect(`${year}-${month}-${day}`);
-		}
+	update(item) {
+		const {
+			month,
+			day,
+			year
+		} = item;
+		this.props.onSelect(`${year}-${month}-${day}`);
+	}
 
-		clickActionMonth(item) {
-			const {
-				day,
-				year
-			} = this.state;
+	clickActionMonth(item) {
+		const {
+			day,
+			year
+		} = this.state;
 
-			item = this.prepend0(item);
+		item = prepend0(item);
+		this.setState({ month: item });
 
-			this.setState({ month: item });
-			const month30 = [false, false, false, true, false, true,
-				false, false, true, false, true, false];
+		if (day !== "" && year !== "") this.update({ day: day, month: item, year: year });
+	}
 
-			if (item === 2)
-				if (year != 0 && this.leapYear(year)) {
-					this.setState({ dayArr: Array.from({ length: 29 }, (v, k) => k + 1) });
-					if (day > 29) this.setState({ day: 29 });
-				}
-				else {
-					this.setState({ dayArr: Array.from({ length: 28 }, (v, k) => k + 1) });
-					if (day > 28) this.setState({ day: 28 });
-				}
-			if (month30[item]) {
-				this.setState({ dayArr: Array.from({ length: 30 }, (v, k) => k + 1) });
-				if (day > 30) this.setState({ day: 30 });
-			}
-			else if (item !== 2) {
-				this.setState({ dayArr: Array.from({ length: 31 }, (v, k) => k + 1) });
-			}
-			if (day !== "" && year !== "")
-				this.update({ day: day, month: item, year: year });
-		}
-		clickActionDay(item) {
-			const {
-				month,
-				year
-			} = this.state;
+	clickActionDay(item) {
+		const {
+			month,
+			year
+		} = this.state;
 
-			item = this.prepend0(item);
-			this.setState({ day: item });
+		item = prepend0(item);
+		this.setState({ day: item });
 
-			if (month !== "" && year !== "")
-				this.update({ day: item, month: month, year: year });
-		}
+		if (month !== "" && year !== "") this.update({ day: item, month: month, year: year });
+	}
 
-		clickActionYear(item) {
-			const {
-				month,
-				day
-			} = this.state;
+	clickActionYear(item) {
+		const {
+			month,
+			day
+		} = this.state;
 
-			this.setState({ year: item });
-
-			if (month === "2" && this.leapYear(item)) {
-				this.setState({ dayArr: Array.from({ length: 29 }, (v, k) => k + 1) });
-				if (day > 29) this.setState({ day: "29" });
-			}
-			if (month !== "" && day !== "")
-				this.update({ day: day, month: month, year: item });
-		}
+		this.setState({ year: item });
+		if (month !== "" && day !== "") this.update({ day: day, month: month, year: item });
+	}
 
 	_keyExtractor = (item, index) => index;
 
@@ -126,14 +121,13 @@ class DatePicker extends Component {
 			day,
 			year,
 			monthArr,
-			dayArr,
 			yearArr,
 			focused
 		} = this.state;
 
 		let iconSize = 32;
 
-		if (!focused)
+		if (!focused) {
 			return (
 				<View>
 					<Input
@@ -143,7 +137,8 @@ class DatePicker extends Component {
 					/>
 				</View>
 			);
-		else
+		}
+		else {
 			return (
 				<View>
 					<View style = { datePickerStyle }>
@@ -163,7 +158,7 @@ class DatePicker extends Component {
 						</View>
 						<View style = { fieldContainer }>
 							<PickerInput
-								data = { dayArr }
+								data = { this.dayArr() }
 								style = { style }
 								title = { "Enter a Day" }
 								inputBoxStyle = { inputBoxStyle }
@@ -192,6 +187,7 @@ class DatePicker extends Component {
 					</View>
 				</View>
 			);
+		}
 	};
 }
 
