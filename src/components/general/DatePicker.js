@@ -36,8 +36,6 @@ class DatePicker extends Component {
 			year
 		} = this.state;
 
-		console.log(this.state);
-
 		// Return the correct array of days based on the selected month
 		// Defining # of days for each month is easier than whatever monstrosity was here before
 		const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -69,38 +67,23 @@ class DatePicker extends Component {
 		this.props.onSelect(`${year}-${month}-${day}`);
 	}
 
-	clickActionMonth(item) {
+	// Calls the update function and sets M/D/Y based on a given value and type
+	clickAction(item, type) {
 		const {
+			month,
 			day,
 			year
 		} = this.state;
 
 		item = prepend0(item);
-		this.setState({ month: item });
 
-		if (day !== "" && year !== "") this.update({ day: day, month: item, year: year });
-	}
+		switch (type) {
+			case "month": this.setState({ month: item }); break;
+			case "day": this.setState({ day: item }); break;
+			case "year": this.setState({ year: item }); break;
+		}
 
-	clickActionDay(item) {
-		const {
-			month,
-			year
-		} = this.state;
-
-		item = prepend0(item);
-		this.setState({ day: item });
-
-		if (month !== "" && year !== "") this.update({ day: item, month: month, year: year });
-	}
-
-	clickActionYear(item) {
-		const {
-			month,
-			day
-		} = this.state;
-
-		this.setState({ year: item });
-		if (month !== "" && day !== "") this.update({ day: day, month: month, year: item });
+		if (month !== "" && day !== "" && year !== "") this.update({ day: day, month: month, year: year });
 	}
 
 	_keyExtractor = (item, index) => index;
@@ -152,7 +135,7 @@ class DatePicker extends Component {
 								iconSize = { iconSize }
 								iconColor = 'black'
 								value = { month }
-								onSelect = { (text) => this.clickActionMonth(text) }
+								onSelect = { (text) => this.clickAction(text, "month") }
 								placeholder = { "MM" }
 							/>
 						</View>
@@ -166,7 +149,7 @@ class DatePicker extends Component {
 								iconSize = { iconSize }
 								iconColor = 'black'
 								value = { day }
-								onSelect = { (text) => this.clickActionDay(text) }
+								onSelect = { (text) => this.clickAction(text, "day") }
 								placeholder = { "DD" }
 							/>
 						</View>
@@ -180,7 +163,7 @@ class DatePicker extends Component {
 								iconColor = 'black'
 								dropDownArrowStyle = { dropDownArrowStyle }
 								value = { year }
-								onSelect = { (text) => this.clickActionYear(text) }
+								onSelect = { (text) => this.clickAction(text, "year") }
 								placeholder = { "YYYY" }
 							/>
 						</View>
