@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { View } from "react-native";
-import { Input } from "./";
-import { PickerInput } from "./";
+import { Input, PickerInput } from "./";
 import { prepend0 } from "../../utils/events";
 
 class DatePicker extends Component {
@@ -35,7 +34,9 @@ class DatePicker extends Component {
 		const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 		const monthInt = parseInt(month);
 
-		const setMaxDay = (maxDay) => { if (day > maxDay) this.setState({ day: maxDay }); };
+		const setMaxDay = (maxDay) => {
+			if (day > maxDay) this.setState({ day: maxDay });
+		};
 
 		if (monthInt == 2 && this.isLeapYear(year)) {
 			setMaxDay(29);
@@ -56,25 +57,25 @@ class DatePicker extends Component {
 	 * Calls the setDate function and sets the month/day/year based on a given value and type.
 	 * Month and day will be prepended with a single 0.
 	 *
-	 * @param {Number} item Number that contains the value of month/day/year.
-	 * @param {String} type String that describes the type of value being changed. Must be "month", "day", or "year".
+	 * @param {Number}  item Number that contains the value of month/day/year.
+	 * @param {String}  type String that describes which value is being changed. Must be "month", "day", or "year".
 	*/
 	changeStateOfType(item, type) {
 		const { month, day, year } = this.state;
 
+		const callback = () => { if (month && day && year) this.setDate({ month, day, year }); };
+
 		switch (type) {
 			case "month":
-				this.setState({ month: prepend0(item) });
+				this.setState({ month: prepend0(item) }, callback);
 				break;
 			case "day":
-				this.setState({ day: prepend0(item) });
+				this.setState({ day: prepend0(item) }, callback);
 				break;
 			case "year":
-				this.setState({ year: item });
+				this.setState({ year: item }, callback);
 				break;
 		}
-
-		if (month && day && year) this.setDate({ month, day, year });
 	}
 
 	render = () => {
@@ -82,18 +83,16 @@ class DatePicker extends Component {
 		const { month, day, year, monthArray, yearArray, focused } = this.state;
 		const { placeholder } = this.props;
 
-		let iconSize = 32;
+		const defaultPickerStyle = {
+			style,
+			inputBoxStyle,
+			iconSize: 32,
+			iconColor: "black",
+			dropDownArrowStyle
+		};
 
 		if (!focused) {
-			return (
-				<View>
-					<Input
-						placeholder = { placeholder }
-						value = ""
-						onFocus = { () => this.setState({ focused: true }) }
-					/>
-				</View>
-			);
+			return <Input placeholder = { placeholder } value = "" onFocus = { () => this.setState({ focused: true }) } />;
 		}
 		else {
 			return (
@@ -101,43 +100,31 @@ class DatePicker extends Component {
 					<View style = { fieldContainer }>
 						<PickerInput
 							data = { monthArray }
-							style = { style }
 							title = { "Enter a Month" }
-							inputBoxStyle = { inputBoxStyle }
-							dropDownArrowStyle = { dropDownArrowStyle }
-							iconSize = { iconSize }
-							iconColor = 'black'
 							value = { month }
 							onSelect = { (text) => this.changeStateOfType(text, "month") }
 							placeholder = { "MM" }
+							{ ...defaultPickerStyle }
 						/>
 					</View>
 					<View style = { fieldContainer }>
 						<PickerInput
 							data = { this.getDayArray() }
-							style = { style }
 							title = { "Enter a Day" }
-							inputBoxStyle = { inputBoxStyle }
-							dropDownArrowStyle = { dropDownArrowStyle }
-							iconSize = { iconSize }
-							iconColor = 'black'
 							value = { day }
 							onSelect = { (text) => this.changeStateOfType(text, "day") }
 							placeholder = { "DD" }
+							{ ...defaultPickerStyle }
 						/>
 					</View>
 					<View style = { fieldContainer }>
 						<PickerInput
 							data = { yearArray }
-							style = { style }
 							title = { "Enter a Year" }
-							inputBoxStyle = { inputBoxStyle }
-							iconSize = { iconSize }
-							iconColor = 'black'
-							dropDownArrowStyle = { dropDownArrowStyle }
 							value = { year }
 							onSelect = { (text) => this.changeStateOfType(text, "year") }
 							placeholder = { "YYYY" }
+							{ ...defaultPickerStyle }
 						/>
 					</View>
 				</View>
