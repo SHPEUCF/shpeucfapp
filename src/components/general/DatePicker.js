@@ -21,6 +21,8 @@ class DatePicker extends Component {
 		};
 	}
 
+	defaultProps = { placeholder: "Choose a Date" }
+
 	static propTypes = {
 		value: PropTypes.object,
 		placeholder: PropTypes.string.isRequired,
@@ -38,7 +40,7 @@ class DatePicker extends Component {
 			if (day > maxDay) this.setState({ day: maxDay });
 		};
 
-		if (monthInt == 2 && this.isLeapYear(year)) {
+		if (monthInt === 2 && this.isLeapYear(year)) {
 			setMaxDay(29);
 
 			return Array.from({ length: 29 }, (v, k) => k + 1);
@@ -82,7 +84,6 @@ class DatePicker extends Component {
 		const { style, datePickerStyle, fieldContainer, inputBoxStyle, dropDownArrowStyle } = styles;
 		const { month, day, year, monthArray, yearArray, focused } = this.state;
 		const { placeholder } = this.props;
-
 		const defaultPickerStyle = {
 			style,
 			inputBoxStyle,
@@ -164,7 +165,5 @@ const styles = {
 		marginBottom: 8
 	}
 };
-
-DatePicker.defaultProps = { placeholder: "Choose a Date" };
 
 export { DatePicker };
