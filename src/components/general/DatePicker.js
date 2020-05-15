@@ -34,20 +34,20 @@ class DatePicker extends Component {
 		const { month, day, year } = this.state;
 
 		const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-		const monthInt = parseInt(month);
+		const monthIndex = parseInt(month);
 
 		const setMaxDay = (maxDay) => {
 			if (day > maxDay) this.setState({ day: maxDay });
 		};
 
-		if (monthInt === 2 && this.isLeapYear(year)) {
+		if (monthIndex === 2 && this.isLeapYear(year)) {
 			setMaxDay(29);
 
 			return Array.from({ length: 29 }, (v, k) => k + 1);
 		}
-		setMaxDay(daysInMonth[monthInt - 1]);
+		setMaxDay(daysInMonth[monthIndex - 1]);
 
-		return Array.from({ length: daysInMonth[monthInt - 1] }, (v, k) => k + 1);
+		return Array.from({ length: daysInMonth[monthIndex - 1] }, (v, k) => k + 1);
 	}
 
 	isLeapYear = (year) => (year % 4 === 0) && (year % 100 !== 0) || (year % 400 === 0)
@@ -59,13 +59,13 @@ class DatePicker extends Component {
 	 * Calls the setDate function and sets the month/day/year based on a given value and type.
 	 * Month and day will be prepended with a single 0.
 	 *
-	 * @param {Number}  item Number that contains the value of month/day/year.
-	 * @param {String}  type String that describes which value is being changed. Must be "month", "day", or "year".
+	 * @param {Number}  item - Number that contains the value of month/day/year.
+	 * @param {String}  type - String that describes which value is being changed. Must be "month", "day", or "year".
 	*/
 	changeStateOfType(item, type) {
 		const callback = () => {
 			const { month, day, year } = this.state;
-			if (month && day && year) this.setDate({ month, day, year });
+			if (month && day && year) this.setDate(this.state);
 		};
 
 		switch (type) {
@@ -85,6 +85,7 @@ class DatePicker extends Component {
 		const { style, datePickerStyle, fieldContainer, inputBoxStyle, dropDownArrowStyle } = styles;
 		const { month, day, year, monthArray, yearArray, focused } = this.state;
 		const { placeholder } = this.props;
+
 		const defaultPickerStyle = {
 			style,
 			inputBoxStyle,
