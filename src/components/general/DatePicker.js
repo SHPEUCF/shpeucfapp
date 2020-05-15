@@ -11,166 +11,124 @@ class DatePicker extends Component {
 
 		let date = [];
 		if (this.props.value) date = this.props.value.split("-");
-
+		console.log(date);
 		this.state = {
 			month: date.length === 3 ? date[1] : "",
 			day: date.length === 3 ? date[2] : "",
 			year: date.length === 3 ? date[0] : "",
-			focused: date.length === 3,
-			monthArr: Array.from({ length: 12 }, (v, k) => k + 1),
-			yearArr: Array.from({ length: 20 }, (v, k) => new Date().getFullYear() + k) // We only need about 20 years ahead... right?
+			monthArray: Array.from({ length: 12 }, (v, k) => k + 1),
+			yearArray: Array.from({ length: 20 }, (v, k) => new Date().getFullYear() + k) // We only need about 20 years ahead... right?
 		};
 	}
 
 	static propTypes = {
 		value: PropTypes.object,
-		placeholder: PropTypes.string.isRequired,
 		onSelect: PropTypes.func.isRequired
 	}
 
-	// Returns an array of days in the current state's month when called
-	dayArr() {
-		const {
-			month,
-			day,
-			year
-		} = this.state;
+	/** Returns an array of days in the current state's month when called */
+	getDayArray() {
+		const { month, day, year } = this.state;
 
-		// Return the correct array of days based on the selected month
-		// Defining # of days for each month is easier than whatever monstrosity was here before
 		const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+		const monthInt = parseInt(month);
 
 		// If the state's day is more than the max days in a month, set the day to the max day
-		const maxDayCheck = (maxDay) => { if (day > maxDay) this.setState({ day: maxDay }); };
+		const setMaxDay = (maxDay) => { if (day > maxDay) this.setState({ day: maxDay }); };
 
-		if (parseInt(month) == 2 && this.isLeapYear(year)) {
-			maxDayCheck(29);
+		if (monthInt == 2 && this.isLeapYear(year)) {
+			setMaxDay(29);
 			return Array.from({ length: 29 }, (v, k) => k + 1);
 		}
-		else {
-			maxDayCheck(daysInMonth[parseInt(month) - 1]);
-			return Array.from({ length: daysInMonth[parseInt(month) - 1] }, (v, k) => k + 1);
-		}
+		setMaxDay(daysInMonth[monthInt - 1]);
+		return Array.from({ length: daysInMonth[monthInt - 1] }, (v, k) => k + 1);
 	}
 
-	// Returns true if the input year is a leap year
-	isLeapYear(year) {
-		return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
-	}
+	/**
+	 * Returns true if the input year is a leap year. Must be an int.
+	 * @param {Number} year Any year such as 2020 or 101
+	*/
+	isLeapYear(year) { return (year % 4 === 0) && (year % 100 != 0) || (year % 400 == 0) }
 
-	update(item) {
-		const {
-			month,
-			day,
-			year
-		} = item;
+	/** Sets the date by calling the onSelect function in the Form component. */
+	setDate(item) {
+		const { month, day, year } = item;
 		this.props.onSelect(`${year}-${month}-${day}`);
 	}
 
-	// Calls the update function and sets M/D/Y based on a given value and type
-	clickAction(item, type) {
-		const {
-			month,
-			day,
-			year
-		} = this.state;
-
-		item = prepend0(item);
-
+	/**
+	 * Calls the setDate function and sets the month/day/year based on a given value and type.
+	 * @param {Number} item Any number.
+	 * @param {String} type A string that is "month", "day", "year".
+	*/
+	setMDY(item, type) {
+		const { month, day, year } = this.state;
+		// Month and Day is prepended with a 0.
+		// Do note that the day January 1, 2000 will show up as 01/01/2000 instead of 1/1/2000.
 		switch (type) {
-			case "month": this.setState({ month: item }); break;
-			case "day": this.setState({ day: item }); break;
-			case "year": this.setState({ year: item }); break;
+			case "month": this.setState({ month: prepend0(item) });
+				break;
+			case "day": this.setState({ day: prepend0(item) });
+				break;
+			case "year": this.setState({ year: item });
+				break;
 		}
 
-		if (month !== "" && day !== "" && year !== "") this.update({ day: day, month: month, year: year });
+		if (month && day && year) this.setDate({ month, day, year });
 	}
 
-	_keyExtractor = (item, index) => index;
-
 	render = () => {
-		const {
-			style,
-			datePickerStyle,
-			fieldContainer,
-			inputBoxStyle,
-			dropDownArrowStyle
-		} = styles;
-		const {
-			placeholder
-		} = this.props;
-		const {
-			month,
-			day,
-			year,
-			monthArr,
-			yearArr,
-			focused
-		} = this.state;
+		const { style, datePickerStyle, fieldContainer, inputBoxStyle, dropDownArrowStyle } = styles;
+		const { month, day, year, monthArray, yearArray } = this.state;
 
 		let iconSize = 32;
 
-		if (!focused) {
-			return (
-				<View>
-					<Input
-						placeholder = { placeholder }
-						value = ""
-						onFocus = { () => this.setState({ focused: true }) }
+		return (
+			<View style = { datePickerStyle }>
+				<View style = { fieldContainer }>
+					<PickerInput
+						data = { monthArray }
+						style = { style }
+						title = { "Enter a Month" }
+						inputBoxStyle = { inputBoxStyle }
+						dropDownArrowStyle = { dropDownArrowStyle }
+						iconSize = { iconSize }
+						iconColor = 'black'
+						value = { month }
+						onSelect = { (text) => this.setMDY(text, "month") }
+						placeholder = { "MM" }
 					/>
 				</View>
-			);
-		}
-		else {
-			return (
-				<View>
-					<View style = { datePickerStyle }>
-						<View style = { fieldContainer }>
-							<PickerInput
-								data = { monthArr }
-								style = { style }
-								title = { "Enter a Month" }
-								inputBoxStyle = { inputBoxStyle }
-								dropDownArrowStyle = { dropDownArrowStyle }
-								iconSize = { iconSize }
-								iconColor = 'black'
-								value = { month }
-								onSelect = { (text) => this.clickAction(text, "month") }
-								placeholder = { "MM" }
-							/>
-						</View>
-						<View style = { fieldContainer }>
-							<PickerInput
-								data = { this.dayArr() }
-								style = { style }
-								title = { "Enter a Day" }
-								inputBoxStyle = { inputBoxStyle }
-								dropDownArrowStyle = { dropDownArrowStyle }
-								iconSize = { iconSize }
-								iconColor = 'black'
-								value = { day }
-								onSelect = { (text) => this.clickAction(text, "day") }
-								placeholder = { "DD" }
-							/>
-						</View>
-						<View style = { fieldContainer }>
-							<PickerInput
-								data = { yearArr }
-								style = { style }
-								title = { "Enter a Year" }
-								inputBoxStyle = { inputBoxStyle }
-								iconSize = { iconSize }
-								iconColor = 'black'
-								dropDownArrowStyle = { dropDownArrowStyle }
-								value = { year }
-								onSelect = { (text) => this.clickAction(text, "year") }
-								placeholder = { "YYYY" }
-							/>
-						</View>
-					</View>
+				<View style = { fieldContainer }>
+					<PickerInput
+						data = { this.getDayArray() }
+						style = { style }
+						title = { "Enter a Day" }
+						inputBoxStyle = { inputBoxStyle }
+						dropDownArrowStyle = { dropDownArrowStyle }
+						iconSize = { iconSize }
+						iconColor = 'black'
+						value = { day }
+						onSelect = { (text) => this.setMDY(text, "day") }
+						placeholder = { "DD" }
+					/>
 				</View>
-			);
-		}
+				<View style = { fieldContainer }>
+					<PickerInput
+						data = { yearArray }
+						style = { style }
+						title = { "Enter a Year" }
+						inputBoxStyle = { inputBoxStyle }
+						iconSize = { iconSize }
+						iconColor = 'black'
+						dropDownArrowStyle = { dropDownArrowStyle }
+						value = { year }
+						onSelect = { (text) => this.setMDY(text, "year") }
+						placeholder = { "YYYY" }
+					/>
+				</View>
+			</View>
+		);
 	};
 }
 
@@ -213,10 +171,6 @@ const styles = {
 		marginTop: 8,
 		marginBottom: 8
 	}
-};
-
-DatePicker.defaultProps = {
-	placeholder: "Choose a Date"
 };
 
 export { DatePicker };

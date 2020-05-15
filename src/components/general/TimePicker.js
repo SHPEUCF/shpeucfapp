@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import {	View } from "react-native";
 import { Input } from "./Input";
-import { convertStandardToMilitaryTime, prependZero } from "../../utils/events";
+import { convertStandardToMilitaryTime, prepend0 } from "../../utils/events";
 import { PickerInput } from "./PickerInput";
 
 class TimePicker extends Component {
@@ -13,7 +13,7 @@ class TimePicker extends Component {
 
 		if (this.props.value) {
 			time = this.props.value.split(":");
-			time = [prependZero(time[0]), ...time[1].split(" ")];
+			time = [prepend0(time[0]), ...time[1].split(" ")];
 		}
 
 		const isInitialized = time.length === 3;
@@ -39,7 +39,7 @@ class TimePicker extends Component {
 	update({ hour, minute, period }) {
 		if (hour !== "" && minute !== "" && period !== "") {
 			this.props.onSelect(
-				convertStandardToMilitaryTime(`${prependZero(hour)}:${prependZero(minute)} ${period}`)
+				convertStandardToMilitaryTime(`${prepend0(hour)}:${prepend0(minute)} ${period}`)
 			);
 		}
 	}
