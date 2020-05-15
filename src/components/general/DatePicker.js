@@ -63,9 +63,10 @@ class DatePicker extends Component {
 	 * @param {String}  type String that describes which value is being changed. Must be "month", "day", or "year".
 	*/
 	changeStateOfType(item, type) {
-		const { month, day, year } = this.state;
-
-		const callback = () => { if (month && day && year) this.setDate({ month, day, year }); };
+		const callback = () => {
+			const { month, day, year } = this.state;
+			if (month && day && year) this.setDate({ month, day, year });
+		};
 
 		switch (type) {
 			case "month":
