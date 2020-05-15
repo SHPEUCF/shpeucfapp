@@ -130,15 +130,6 @@ class DatePicker extends Component {
 }
 
 const styles = {
-	titleStyle: {
-		flex: 0.13,
-		alignSelf: "center",
-		fontSize: 20
-	},
-	buttonStyle: {
-		flex: 1,
-		alignSelf: "center"
-	},
 	fieldContainer: {
 		flex: 1,
 		flexDirection: "row",
