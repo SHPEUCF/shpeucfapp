@@ -92,7 +92,7 @@ export function timeVerification(startTime, endTime) {
 export function changeHourBy(time, amount) {
 	const [hour, minute] = time.split(":");
 	let newHour = parseInt(hour) + amount;
-	newHour = prependZero(newHour % 24);
+	newHour = prepend0(newHour % 24);
 	return `${newHour}:${minute}`;
 }
 

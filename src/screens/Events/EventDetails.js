@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Alert, Button, NavBar, FilterList, ButtonLayout, Form } from "../../components";
+import { Alert, Button, NavBar, FilterList, ButtonLayout } from "../../components";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Actions } from "react-native-router-flux";
 import QRCode from "react-native-qrcode-svg";
@@ -256,7 +256,7 @@ class EventDetails extends Component {
 	}
 
 	confirmDelete() {
-		deleteEvent(this.props.activeEvent);
+		this.props.deleteEvent(this.props.activeEvent);
 		Actions.pop();
 	}
 
@@ -407,6 +407,7 @@ class EventDetails extends Component {
 		if (this.props.loading) {
 			return <Spinner />;
 		}
+
 		else {
 			const {
 				name,

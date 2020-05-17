@@ -44,7 +44,7 @@ export const DefaultEmptyData = () => {
 };
 
 const viewEvent = (item, dispatch) => {
-	dispatch(loadEvent(item));
+	dispatch(loadEvent(item.id));
 	goToViewEvent("events");
 };
 

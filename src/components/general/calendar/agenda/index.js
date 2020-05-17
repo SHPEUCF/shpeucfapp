@@ -529,7 +529,7 @@ AgendaView.defaultProps = {
 	renderItem: (reservation) => <DefaultItem item = { reservation } />,
 	renderEmptyData: () => <DefaultEmptyData />,
 	renderEmptyDate: () => <View></View>,
-	rowHasChanged: (r1, r2) => r1.name !== r2.name,
+	rowHasChanged: (r1, r2) => r1 !== r2,
 	pastScrollRange: 24,
 	futureScrollRange: 24,
 	theme: {

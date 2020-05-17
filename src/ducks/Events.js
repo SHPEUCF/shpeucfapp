@@ -8,7 +8,8 @@ import { Alert } from "../components";
 const ACTIONS = createActionTypes([
 	"STORE_SORTED_EVENTS",
 	"LOAD_EVENT",
-	"PAGE_LOAD"
+	"PAGE_LOAD",
+	"DELETE_EVENT"
 ]);
 
 const INITIAL_STATE = {
@@ -26,6 +27,8 @@ export default (state = INITIAL_STATE, action) => {
 			return { ...state, sortedEvents: payload };
 		case ACTIONS.LOAD_EVENT:
 			return { ...state, activeEvent: payload };
+		case ACTIONS.DELETE_EVENT:
+			return { ...state, activeEvent: {} };
 		default:
 			return state;
 	}
@@ -87,8 +90,17 @@ export const getEvents = () => {
  * @param {Event}   event The event you want to load into the redux.
  */
 
-export const loadEvent = (event) => {
-	return (dispatch) => dispatch({ type: ACTIONS.LOAD_EVENT, payload: event });
+export const loadEvent = (id) => {
+	return (dispatch) => {
+		firebase.database().ref(`/events/${id}`).on("value", snapshot => {
+			let event = snapshot.val();
+
+			event.startTime = convertMilitaryToStandardTime(event.startTime);
+			event.endTime = convertMilitaryToStandardTime(event.endTime);
+
+			dispatch({ type: ACTIONS.LOAD_EVENT, payload: event });
+		});
+	};
 };
 
 /* FireBase Functions that don't use Redux */
@@ -103,7 +115,6 @@ export const loadEvent = (event) => {
  */
 
 export const createEvent = (event) => {
-	console.log(event)
 	firebase.database().ref("/events/").push({ ...event, eventActive: false, code: makeCode() })
 		.then(snapshot => {
 			firebase.database().ref(`/events/${snapshot.key}/id`).set(snapshot.key);
@@ -160,12 +171,21 @@ export const editEvent = (event) => {
  */
 
 export const deleteEvent = (event) => {
-	firebase.database().ref("events").update({ [event.id]: null })
-		.then(() => {
-			firebase.database().ref(`committees/${event.committee}/events/`).update({ [event.id]: null });
-		})
-		.then(() => Alert.alert("Event deleted", { type: "success", title: "Successful" }))
-		.catch(() => Alert.alert("Event deletion failed", { type: "error", title: "Failure" }));
+	let eventRef = firebase.database().ref(`events/${event.id}`);
+
+	return (dispatch) => {
+		// takes off the event listener at the location of the active event before deletion
+		eventRef.off("value");
+
+		eventRef.set(null)
+			.then(() => {
+				firebase.database().ref(`committees/${event.committee}/events/`).update({ [event.id]: null });
+			})
+			.then(() => Alert.alert("Event deleted", { type: "success", title: "Successful" }))
+			.catch(() => Alert.alert("Event deletion failed", { type: "error", title: "Failure" }));
+
+		dispatch({ type: ACTIONS.DELETE_EVENT });
+	};
 };
 
 /**
