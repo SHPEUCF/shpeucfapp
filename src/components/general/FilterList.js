@@ -57,10 +57,14 @@ const dimension = Dimensions.get("window");
 class FilterList extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { val: "", modalVisible: false, filter: "", selected: {} };
+		this.state = { val: "", modalVisible: false, filter: "", selected: this.processInitialValues() };
 	}
 
-	componentDidMount() {
+	componentDidUpdate(prevProps) {
+		if (prevProps.value !== this.props.value) this.setState(this.processInitialValues());
+	}
+
+	processInitialValues() {
 		const {
 			value,
 			regexFunc,
@@ -70,6 +74,7 @@ class FilterList extends Component {
 
 		let valArray;
 		let selectedObj = {};
+
 		if (value) {
 			// process initial values and store them into the selected state property
 
@@ -85,7 +90,7 @@ class FilterList extends Component {
 					selectedObj[selectBy(item)] = item;
 				});
 			}
-			this.setState({ selected: selectedObj });
+			return { selected: selectedObj };
 		}
 	}
 
@@ -249,7 +254,7 @@ class FilterList extends Component {
 			selected
 		} = this.state;
 
-		let re = new RegExp("^" + filter, "i");
+		let re = new RegExp((filter || " ") + "+", "i");
 		let backgroundColor = {};
 		let pressAction = (data) => onSelect(data);
 
@@ -302,14 +307,14 @@ class FilterList extends Component {
 			regexFunc
 		} = this.props;
 
-		let output = Object.values(selected);
-		let value = "";
-
 		return (
 			<ButtonLayout>
 				<Button
 					title = "Done"
 					onPress = { () => {
+						let output = Object.values(selected);
+						let value = "";
+
 						if (output.length === 0) {
 							Alert.alert("You never selected anything!");
 							return;

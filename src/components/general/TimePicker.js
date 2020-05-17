@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {	View } from "react-native";
+import { View } from "react-native";
 import { Input } from "./Input";
-import { convertStandardToMilitaryTime, convertMilitaryToStandardTime, prependZero } from "../../utils/events";
+import { convertStandardToMilitaryTime, convertMilitaryToStandardTime, prepend0 } from "../../utils/events";
 import { PickerInput } from "./PickerInput";
 
 class TimePicker extends Component {
@@ -48,7 +48,7 @@ class TimePicker extends Component {
 			time = this.props.value.split(":");
 			if (time[1].length === 2) time = convertMilitaryToStandardTime(`${time[0]}:${time[1]}`).split(":");
 
-			time = [prependZero(time[0]), ...time[1].split(" ")];
+			time = [prepend0(time[0]), ...time[1].split(" ")];
 		}
 
 		const isInitialized = time.length === 3;
