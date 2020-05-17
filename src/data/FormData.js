@@ -19,10 +19,10 @@ export const EventForm = (props) => {
 		"Social Event": 3,
 		"Volunteer Event": 3,
 		"GBM": 5,
-		"Workshop": 3
+		"Workshop": 3,
+		"Committee": 2
 	};
 	const committeesList = useSelector(state => Object.keys(state.committees.committeesList));
-	committeesList.forEach(committee => eventTypeToPointsMap["Committee: " + committee] = 2);
 
 	const EventFormData = [
 		{
@@ -32,12 +32,10 @@ export const EventForm = (props) => {
 			isRequired: true,
 			options: {
 				formatValue: {
-					revert: (type) => {
-						if (type) {
-							const [eventType, committee] = type.split(": ");
-							return { type: eventType, committee };
-						}
-						return null;
+					format: ({ type, committee }) => committee ? `${type}: ${committee}` : type.trim(),
+					revert: ({ type }) => {
+						const [eventType, , ] = type.split(": ");
+						return eventType;
 					}
 				},
 				elements: [
@@ -48,20 +46,10 @@ export const EventForm = (props) => {
 						isRequired: true,
 						conditionalValues: [{
 							name: "points",
-							value: (eventType) => eventTypeToPointsMap[eventType]
+							value: (eventType) => eventTypeToPointsMap[eventType && eventType.split(": ")[0]]
 						}],
 						options: {
-							data: eventTypeOptions,
-							formatValue: {
-								format: ({ type, committee }) => committee ? `${type}: ${committee}` : type.trim(),
-								revert: ({ type }) => {
-									if (type) {
-										const [eventType, committee] = type.split(": ");
-										return { type: eventType.trim(), committee };
-									}
-									return null;
-								}
-							}
+							data: eventTypeOptions
 						}
 					},
 					{
@@ -103,12 +91,10 @@ export const EventForm = (props) => {
 			placeholder: "Start Time",
 			camelCaseName: "startTime",
 			type: "TimePicker",
-			conditionalValues: [
-				{
-					name: "endTime",
-					value: (time) => changeHourBy(time, 1)
-				}
-			],
+			conditionalValues: [{
+				name: "endTime",
+				value: (time) => changeHourBy(time, 1)
+			}],
 			isRequired: true
 		},
 		{

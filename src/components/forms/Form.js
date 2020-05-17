@@ -4,7 +4,6 @@ import _ from "lodash";
 import { ScrollView, SafeAreaView, Modal, View } from "react-native";
 import { Alert, Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicker, FilterList } from "..";
 import { MultiElement } from "./MultiElement";
-import { validateElements } from "../../utils/form";
 import { copyStateAndSetValuesToNull } from "../../utils/general";
 
 /**
@@ -29,10 +28,11 @@ import { copyStateAndSetValuesToNull } from "../../utils/general";
  * 	Props:
  *		@param {Element[]}             elements             An array of the names of Elements.
  *		@param {Object=}               initialValues        An array of initial Values.
- *		@param {String}                title                Displayed at the top of the form.
+ *		@param {String=}               title                Displayed at the top of the form.
  *		@param {Boolean}               visible              Used to determine whether the form is visible.
- *		@param {Function}              changeVisibility     Used to change the visibility of the form.
- *		@param {Function}              onSubmit             Called to pass all the form values into.
+ *		@param {Function=}             changeVisibility     Used to change the visibility of the form.
+ *		@param {Function=}             onSubmit             Called to pass all the form values into when submitting.
+ *		@param {Function=}             onChange             Called to pass all the form values into after any value change.
  *		@param {String=}               submitButtonName     Displayed on the submit button
  *		@param {CustomVerification=}   customVerification   Used for additional data verification
  *
@@ -166,11 +166,16 @@ class Form extends Component {
 			)
 		).isRequired,
 		initialValues: PropTypes.object,
-		title: PropTypes.string.isRequired,
-		onSubmit: PropTypes.func.isRequired,
+		title: PropTypes.string,
+		onSubmit: PropTypes.func,
+		onChange: PropTypes.func,
 		visible: PropTypes.bool.isRequired,
-		changeVisibility: PropTypes.func.isRequired,
+		changeVisibility: PropTypes.func,
 		submitButtonName: PropTypes.string
+	}
+
+	componentDidUpdate(prevProps) {
+		if (!_.isEqual(prevProps.initialValues, this.props.initialValues)) this.setState(this.props.initialValues);
 	}
 
 	changeState(element, newValue) {
@@ -184,12 +189,15 @@ class Form extends Component {
 	}
 
 	applyConditionalValues(conditionalValues, parentValue) {
+		const { elements } = this.props;
+
+		// contains all elements including nested elements that may be present in element.options
+		const iterableElements = elements.flatMap(element => (element.options && element.options.elements) || element);
+
 		conditionalValues.map(newElement => {
-			const affectedElement = this.props.elements.find(element => element.camelCaseName === newElement.name);
+			const affectedElement = iterableElements.find(({ camelCaseName }) => camelCaseName === newElement.name);
 
-			if (!affectedElement) return;
-
-			this.changeState(affectedElement, newElement.value(parentValue));
+			if (affectedElement) this.changeState(affectedElement, newElement.value(parentValue));
 		});
 	}
 
@@ -259,7 +267,13 @@ class Form extends Component {
 				return <MultiElement
 					key = { camelCaseName }
 					elements = { options.elements }
-					value = { this.state[camelCaseName] || "" }
+					// immediately invoked function finds any state values that are specific to the elements in the MultiElement
+					value = { (valueObj => {
+						options.elements.forEach(({ camelCaseName }) => {
+							Object.assign(valueObj, { [camelCaseName]: this.state[camelCaseName] });
+						});
+						return valueObj;
+					})({}) }
 					formatValue = { options.formatValue }
 					onSelect = { (elementsAndValues) => {
 						elementsAndValues.forEach(({ element, value }) => this.changeState(element, value));
@@ -284,6 +298,7 @@ class Form extends Component {
 				<Button
 					title = "Cancel"
 					onPress = { () => {
+						this.resetState();
 						changeVisibility(false);
 					} }
 				/>
@@ -295,11 +310,9 @@ class Form extends Component {
 		let formIsValid = true;
 		let submitState = Object.assign({}, this.state);
 
-		formIsValid = validateElements(this.props.elements, this.state);
+		formIsValid = this.validateElements(this.props.elements, this.state);
 
-		if (!formIsValid) return;
-
-		if (this.props.customVerification) {
+		if (formIsValid && this.props.customVerification) {
 			const { camelCaseNames, verification } = this.props.customVerification;
 
 			if (Array.isArray(camelCaseNames)) {
@@ -308,16 +321,41 @@ class Form extends Component {
 			}
 			else { formIsValid = verification(submitState[camelCaseNames]) }
 		}
+
+		if (!formIsValid) return;
+
 		this.resetState();
 		this.props.onSubmit(submitState);
 		this.props.changeVisibility(false);
 	}
 
+	validateElements(elements, values) {
+		let formIsValid = elements.length > 0;
+
+		// contains all elements including nested elements that may be present in element.options
+		const iterableElements = elements.flatMap(element => (element.options && element.options.elements) || element);
+
+		iterableElements.forEach(element => {
+			const elementFromState = values[element.camelCaseName];
+
+			if (formIsValid && element.isRequired && elementFromState !== 0 && !elementFromState) {
+				Alert.alert(`Please input a value into the ${element.placeholder} field.`);
+				formIsValid = false;
+			}
+
+			if (formIsValid && element.isValid && element.isValid(elementFromState)) {
+				Alert.alert(`${element.placeholder} should be in the shape ${element.validForm}`);
+				formIsValid = false;
+			}
+		});
+
+		return formIsValid;
+	}
+
 	resetState() {
 		let initialState = copyStateAndSetValuesToNull(this.state);
 		Object.assign(initialState, this.props.initialValues);
-		console.log(initialState);
-		this.setState(this.initialState);
+		this.setState(initialState);
 	}
 
 	render() {
