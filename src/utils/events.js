@@ -44,7 +44,7 @@ export function convertMilitaryToStandardTime(militaryTime) {
  * @returns {String} The number as a string. It may have  a 0 prepended to it, if it was originally single digit.
  */
 
-export const prependZero = (number) => number < 10 ? "0" + number : number;
+export const prepend0 = (number) => number < 10 ? "0" + number : number;
 
 /**
  * @description Formats event to work with the calendar component.

@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button, NavBar, FilterList, ButtonLayout, Form } from "../../components";
+import { Alert, Button, NavBar, FilterList, ButtonLayout, Form } from "../../components";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Actions } from "react-native-router-flux";
 import QRCode from "react-native-qrcode-svg";
 import QRCodeScanner from "react-native-qrcode-scanner";
+import { MemberPanel } from "../../utils/render";
 import { months } from "../../data/DateItems";
 import { EventForm } from "../../data/FormData";
 import { deleteEvent, editEvent, checkIn, rsvp, pageLoad, fetchAllUsers } from "../../ducks";
@@ -16,11 +17,8 @@ import {
 	Dimensions,
 	FlatList,
 	Linking,
-	SafeAreaView,
-	Alert
+	SafeAreaView
 } from "react-native";
-
-import { MemberPanel } from "../../utils/render";
 
 const dimension = Dimensions.get("screen");
 
@@ -51,7 +49,7 @@ class EventDetails extends Component {
 		if (this.props.activeEvent.code === e.data)
 			checkIn(this.props.activeEvent, this.props.activeUser);
 		else
-			alert("Incorrect Code");
+			Alert.alert("Incorrect Code");
 	}
 
 	renderCodeBox() {
@@ -98,7 +96,7 @@ class EventDetails extends Component {
 				<Modal
 					transparent = { true }
 					animationType = { "fade" }
-					onRequestClose = { () => { alert("Modal has been closed.") } }
+					onRequestClose = { () => { Alert.alert("Modal has been closed.") } }
 					visible = { this.state.modalVisible }
 				>
 					<SafeAreaView>
@@ -204,11 +202,11 @@ class EventDetails extends Component {
 			------------------\n\n" + csv;
 		let link = `mailto:${email}?subject=event: ${activeEvent.name}&body=` + data;
 		if (!Linking.canOpenURL(link)) {
-			alert("Email could not be sent", "Failure");
+			Alert.alert("Email could not be sent", { type: "error", title: "Failure" });
 		}
 		else {
 			Linking.openURL(link);
-			alert("Email app should be opened");
+			Alert.alert("Email app should be opened");
 		}
 	}
 
@@ -377,15 +375,9 @@ class EventDetails extends Component {
 				/>
 				<Button
 					title = "Delete event"
-					onPress = { () => Alert.alert("Confirmation", "Are you sure you want to delete", [
-						{
-							text: "Confirm",
-							onPress: () => this.confirmDelete()
-						},
-						{
-							text: "Cancel"
-						}
-					]) }
+					onPress = { () => Alert.alert("Are you sure you want to delete this event?",
+						{ title: "Confirmation", type: "confirmation", submit: { onPress: () => this.confirmDelete() } }
+					) }
 				/>
 			</ButtonLayout>
 			;

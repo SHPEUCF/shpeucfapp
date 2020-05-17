@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image, SafeAreaView, Dimensions } from "r
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Button, Input } from "../../components/general";
+import { Button, Input } from "../../components";
 import { registrationFormData } from "../../data/FormData";
 import {
 	createUser,

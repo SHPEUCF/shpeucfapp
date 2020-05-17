@@ -3,7 +3,7 @@ import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import { FlatList, SafeAreaView } from "react-native";
 import { ListItem } from "react-native-elements";
-import { NavBar } from "../../components/general";
+import { NavBar } from "../../components";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 const menuItems = [

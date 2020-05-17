@@ -60,7 +60,7 @@ class TimePicker extends Component {
 	update({ hour, minute, period }) {
 		if (hour !== "" && minute !== "" && period !== "") {
 			this.props.onSelect(
-				convertStandardToMilitaryTime(`${prependZero(hour)}:${prependZero(minute)} ${period}`)
+				convertStandardToMilitaryTime(`${prepend0(hour)}:${prepend0(minute)} ${period}`)
 			);
 		}
 	}

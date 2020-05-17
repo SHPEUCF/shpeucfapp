@@ -2,7 +2,7 @@ import { Dimensions } from "react-native";
 import React from "react";
 import { Modal, SafeAreaView, TouchableOpacity, View, Text, TextInput } from "react-native";
 import Flag from "react-native-flags";
-import { Button } from "../components/general/";
+import { Button } from "../components";
 
 const dimension = Dimensions.get("window");
 

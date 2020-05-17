@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Avatar } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import { ListItem } from "react-native-elements";
-import { NavBar } from "../../components/general";
+import { NavBar } from "../../components";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { View, Text, SafeAreaView, FlatList, Dimensions, Linking, TouchableOpacity } from "react-native";
 import { menuItems, developers } from "../../data/AboutItems.js";

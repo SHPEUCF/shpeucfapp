@@ -2,6 +2,7 @@ import firebase from "firebase";
 import _ from "lodash";
 import { createActionTypes } from "../utils/actions";
 import { convertMilitaryToStandardTime } from "../utils/events";
+import { Alert } from "../components";
 
 // handle all things related to Elections
 const ACTIONS = createActionTypes([
@@ -109,8 +110,8 @@ export const createEvent = (event) => {
 			if (event.committee)
 				firebase.database().ref(`/committees/${event.committee}/events/`).update({ [snapshot.key]: true });
 		})
-		.then(() => alert("Event created", "Successful"))
-		.catch(() => alert("Event creation failed", "Failure"));
+		.then(() => Alert.alert("Event created", { type: "success", title: "Successful" }))
+		.catch(() => Alert.alert("Event creation failed", { type: "error", title: "Failure" }));
 };
 
 /**
@@ -148,8 +149,8 @@ export const editEvent = (event) => {
 			if (event.committee)
 				firebase.database().ref(`/committees/${event.committee}/events/`).update({ [event.id]: true });
 	 })
-		.then(() => alert("Event edited!", "Successful"))
-		.catch(() => alert("Event edit failed!", "Failure"));
+		.then(() => Alert.alert("Event edited!", { type: "success", title: "Successful" }))
+		.catch(() => Alert.alert("Event edit failed!", { type: "error", title: "Failure" }));
 };
 
 /**
@@ -163,8 +164,8 @@ export const deleteEvent = (event) => {
 		.then(() => {
 			firebase.database().ref(`committees/${event.committee}/events/`).update({ [event.id]: null });
 		})
-		.then(() => alert("Event deleted", "Successful"))
-		.catch(() => alert("Event deletion failed", "Failure"));
+		.then(() => Alert.alert("Event deleted", { type: "success", title: "Successful" }))
+		.catch(() => Alert.alert("Event deletion failed", { type: "error", title: "Failure" }));
 };
 
 /**
@@ -175,7 +176,7 @@ export const deleteEvent = (event) => {
  */
 export const checkIn = (event, user, showAlert = true) => {
 	if (event.attendance && user.id in event.attendance) {
-		alert("You have already attended this event!", "Failure");
+		Alert.alert("You have already attended this event!", { type: "error", title: "Failure" });
 		return;
 	}
 	const rsvpBonus = event.rsvp && user.id in event.rsvp ? 1 : 0;
@@ -195,8 +196,8 @@ export const checkIn = (event, user, showAlert = true) => {
 					rsvp: rsvpBonus === 1
 				});
 		})
-		.then(() => showAlert && alert("You have successfully checked in!", "Success"))
-		.catch(() => alert("You were not able to check in, Please contact the Tech Director for assistance", "Failure"));
+		.then(() => showAlert && Alert.alert("You have successfully checked in!", { type: "success", title: "Successful" }))
+		.catch(() => Alert.alert("You were not able to check in, Please contact the Tech Director for assistance", { type: "error", title: "Failure" }));
 };
 
 /**
@@ -208,6 +209,6 @@ export const rsvp = (event) => {
 	const { currentUser } = firebase.auth();
 
 	firebase.database().ref(`events/${event.id}/rsvp`).update({ [currentUser.uid]: !(currentUser.uid in event.rsvp) })
-		.then(() => alert("You have successfully rsvped!", "Success"))
-		.catch(() => alert("You were not able to rsvp, Please contact the Tech Director for assistance", "Failure"));
+		.then(() => Alert.alert("You have successfully rsvped!", { type: "success", title: "Successful" }))
+		.catch(() => Alert.alert("You were not able to rsvp, Please contact the Tech Director for assistance", { type: "error", title: "Failure" }));
 };
