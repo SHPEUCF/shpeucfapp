@@ -2,24 +2,28 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
 import { ScrollView, SafeAreaView, Modal, View } from "react-native";
-import { Alert, Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicker, FilterList } from "..";
+import { Alert, Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicker, FilterList } from "../";
 import { MultiElement } from "./MultiElement";
 import { copyStateAndSetValuesToNull } from "../../utils/general";
 
 /**
  * Types
  * @typedef {Object} Element:
- *		@property {String}                   placeholder           PlaceHolder that will be shown inside of each element.
- *		@property {String}                   camelCaseName         Unique name in camelCase format.
- *		@property {String}                   type                  Type of element.
- *		@property {boolean=}                 isRequired            Optional field to determine if element should be required.
- *		@property {Options=}                 options               Optional fields for element-specific functionality.
- *		@property {ConditionalValue=}        conditionalValues     An object containing ConditionalValue target objects.
+ *		@property {String}                          placeHolder           Placeholder that will be shown inside of each element.
+ *		@property {String}                          camelCaseName         Unique name in camelCase format.
+ *		@property {("DatePicker"|"FilterList"
+ 					|"Input"|"PickerInput"
+					|"TimePicker"|"MultiElement")}  type                  Type of element.
+ *		@property {boolean=}                        isRequired            Optional field to determine if element should be required.
+ *		@property {Options=}                        options               Optional fields for element-specific functionality.
+ *		@property {ConditionalValue=}               conditionalValues     Object that contains the names of other elements along with a function
+                                                                          that determines each element's new value based off the parent value
  * @typedef {Object} ConditionalValue:
- * 		@property {Function}                 getValue              Function that is used to obtain the new value for the [camelCaseName] element
+ *      @property {Function}                        name                  (camelCaseName) of the element whose value is going to be modified
+ * 		@property {Function}                        value                 Function is used to obtain the new value for the (camelCaseName) element
  * @typedef {Object} CustomVerification:
- * 		@property {String[]}                 camelCaseNames        Desired data to be verified.
- * 		@property {Function}                 verification          Function that gets all the desired data and performs some check on it.
+ * 		@property {String[]}                        camelCaseNames        Desired data to be verified.
+ * 		@property {Function}                        verification          Function gets all the desired data and performs some check on it.
  */
 
 /**
@@ -27,8 +31,7 @@ import { copyStateAndSetValuesToNull } from "../../utils/general";
  * ________________________________________________________________
  * 	Props:
  *		@param {Element[]}             elements             An array of the names of Elements.
- *		@param {Object=}               initialValues        An array of initial Values.
- *		@param {String=}               title                Displayed at the top of the form.
+ *		@param {Object=}               values               Object to control the values of the form where each value is under the corresponding camelCaseName
  *		@param {Boolean}               visible              Used to determine whether the form is visible.
  *		@param {Function=}             changeVisibility     Used to change the visibility of the form.
  *		@param {Function=}             onSubmit             Called to pass all the form values into when submitting.
@@ -126,12 +129,12 @@ import { copyStateAndSetValuesToNull } from "../../utils/general";
  * 		}
  *
  * 		<Form
- * 			elements= { elements }
- * 			initialValue = { initialValues }
+ * 			elements = { elements }
+ * 			values = { values }
  * 			title = "The Title"
  * 			visible = { this.state.formVisibility }
- * 			changeVisibility = { (visible) => this.setState({ formVisibility: visible }) }
- * 			onSubmit = { (value) => console.log(`this is the value: ${value}`) }
+ * 			changeVisibility = { visible => this.setState({ formVisibility: visible }) }
+ * 			onSubmit = { value => console.log(`this is the value: ${value}`) }
  * 			submitButtonName = "Confirm Coolness Level"
  * 		/>
  *
@@ -150,7 +153,7 @@ import { copyStateAndSetValuesToNull } from "../../utils/general";
 class Form extends Component {
 	constructor(props) {
 		super(props);
-		this.state = this.props.initialValues || {};
+		this.state = this.props.values || {};
 	}
 
 	static propTypes = {
@@ -165,7 +168,7 @@ class Form extends Component {
 				}
 			)
 		).isRequired,
-		initialValues: PropTypes.object,
+		values: PropTypes.object,
 		title: PropTypes.string,
 		onSubmit: PropTypes.func,
 		onChange: PropTypes.func,
@@ -175,7 +178,7 @@ class Form extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if (!_.isEqual(prevProps.initialValues, this.props.initialValues)) this.setState(this.props.initialValues);
+		if (!_.isEqual(prevProps.values, this.props.values)) this.setState(this.props.values);
 	}
 
 	changeState(element, newValue) {
@@ -267,15 +270,15 @@ class Form extends Component {
 				return <MultiElement
 					key = { camelCaseName }
 					elements = { options.elements }
-					// immediately invoked function finds any state values that are specific to the elements in the MultiElement
-					value = { (valueObj => {
+					// value function is used to scan through the current state of the form and find the state values that correspond to the MultiElement
+					value = { (multiElementValues => {
 						options.elements.forEach(({ camelCaseName }) => {
-							Object.assign(valueObj, { [camelCaseName]: this.state[camelCaseName] });
+							Object.assign(multiElementValues, { [camelCaseName]: this.state[camelCaseName] });
 						});
-						return valueObj;
+						return multiElementValues;
 					})({}) }
 					formatValue = { options.formatValue }
-					onSelect = { (elementsAndValues) => {
+					onSelect = { elementsAndValues => {
 						elementsAndValues.forEach(({ element, value }) => this.changeState(element, value));
 					} }
 				/>;
@@ -306,7 +309,7 @@ class Form extends Component {
 		);
 	}
 
-	submit = () => {
+	submit () {
 		let formIsValid = true;
 		let submitState = Object.assign({}, this.state);
 
@@ -354,23 +357,17 @@ class Form extends Component {
 
 	resetState() {
 		let initialState = copyStateAndSetValuesToNull(this.state);
-		Object.assign(initialState, this.props.initialValues);
+		Object.assign(initialState, this.props.values);
 		this.setState(initialState);
 	}
 
 	render() {
-		const { elements, title, changeVisibility, visible, justElements } = this.props;
+		const { elements, title, changeVisibility, visible, onlyRenderElements } = this.props;
 		const { container, elementsStyle } = styles;
 
 		const elementsHTML = elements.map(item => this.buildElement(item));
 
-		if (justElements) {
-			return (
-				<View style = { elementsStyle }>
-					{ elementsHTML }
-				</View>
-			);
-		}
+		if (onlyRenderElements) return <View style = { elementsStyle }>{ elementsHTML }</View>;
 
 		return (
 			<Modal
@@ -381,9 +378,7 @@ class Form extends Component {
 			>
 				<SafeAreaView style = { container }>
 					<NavBar title = { title || "Pass in a title please" } />
-					<ScrollView style = { elementsStyle }>
-						{ elementsHTML }
-					</ScrollView>
+					<ScrollView style = { elementsStyle }>{ elementsHTML }</ScrollView>
 					{ this.renderButtons() }
 				</SafeAreaView>
 			</Modal>

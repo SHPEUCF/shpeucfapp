@@ -30,7 +30,7 @@ class TimePicker extends Component {
 
 	componentDidUpdate(prevProps) {
 		if (prevProps.value !== this.props.value) {
-			let [time, isInitialized] = this.initializeTimePicker();
+			const [time, isInitialized] = this.initializeTimePicker();
 
 			this.setState({
 				hour: isInitialized ? time[0] : "",
@@ -45,10 +45,10 @@ class TimePicker extends Component {
 		let time = [];
 
 		if (this.props.value) {
-			time = this.props.value.split(":");
-			if (time[1].length === 2) time = convertMilitaryToStandardTime(`${time[0]}:${time[1]}`).split(":");
+			let [hour, mintueAndTimePeriod] = this.props.value.split(":");
+			if (mintueAndTimePeriod.length === 2) [hour, mintueAndTimePeriod] = convertMilitaryToStandardTime(`${hour}:${mintueAndTimePeriod}`).split(":");
 
-			time = [prepend0(time[0]), ...time[1].split(" ")];
+			time = [prepend0(hour), ...mintueAndTimePeriod.split(" ")];
 		}
 
 		const isInitialized = time.length === 3;

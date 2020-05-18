@@ -72,25 +72,24 @@ class FilterList extends Component {
 			multiple
 		} = this.props;
 
-		let valArray;
-		let selectedObj = {};
+		let selected = {};
 
 		if (value) {
 			// process initial values and store them into the selected state property
 
 			if (!multiple && Object.values(value).length !== 0) {
 				this.setState({ val: regexFunc(value) });
-				selectedObj[selectBy(value)] = value;
+				selected[selectBy(value)] = value;
 			}
 			// multiple values get processed individually and stored into the state property
 			// compatible with both array and object values
 			else {
-				valArray = Array.isArray(value) ? value : Object.values(value);
-				valArray.forEach(function (item) {
-					selectedObj[selectBy(item)] = item;
+				let newValues = Array.isArray(value) ? value : Object.values(value);
+				newValues.forEach(function (item) {
+					selected[selectBy(item)] = item;
 				});
 			}
-			return { selected: selectedObj };
+			return { selected };
 		}
 	}
 

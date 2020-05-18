@@ -5,24 +5,27 @@ import _ from "lodash";
 import { copyStateAndSetValuesToNull } from "../../utils/general";
 
 /**
- *Types
+ * Types
  * @typedef {Object} Element:
- *		@property {String}                   placeholder               PlaceHolder that will be shown inside of each element.
- *		@property {String}                   camelCaseName             Unique name in camelCase format.
- *		@property {String}                   type                      Type of element.
- *		@property {boolean=}                 isRequired                Optional field to determine if element should be required.
- *		@property {Options=}                 options                   Optional fields for element-specific functionality.
- *		@property {ConditionalValue=}        conditionalValues         An object containing ConditionalValue target objects.
+ *		@property {String}                          placeHolder               Placeholder that will be shown inside of each element.
+ *		@property {String}                          camelCaseName             Unique name in camelCase format.
+ *		@property {("DatePicker"|"FilterList"
+                    |"Input"|"PickerInput"
+                    |"TimePicker"|"MultiElement")}  type                      Type of element.
+ *		@property {boolean=}                        isRequired                Optional field to determine if element should be required.
+ *		@property {Options=}                        options                   Optional fields for element-specific functionality.
+ *		@property {ConditionalValue=}               conditionalValues         Object that contains the names of other elements along with a function
+                                                                              that determines each element's new value based off the parent value
  * @typedef {Object} ConditionalValue:
- *		@property {String}                   name                      camelCaseName of the element that is being affected.
- *		@property {Function}                 value                     Function that returns the value that the affected element will be set to.
+ *      @property {Function}                        name                      (camelCaseName) of the element whose value is going to be modified
+ * 		@property {Function}                        value                     Function is used to obtain the new value for the (camelCaseName) element
  * @typedef {Object} Options:
- *	 	@property {Function}                 showIfParentValueEquals   Function that checks the parent value and returns whether the element should be shown.
- *	 	@property {String}                   parent                    camelCaseName of the parent element.
- *		@property {Function=}                childData                 Optional function that checks the parent value and returns the data of the child.
+ *	 	@property {Function}                        showIfParentValueEquals   Function checks the parent value and returns whether the element should be shown.
+ *	 	@property {String}                          parent                    (camelCaseName) of the parent element.
+ *		@property {Function=}                       childData                 Optional function checks the parent value and returns the data of the child.
  * @typedef {Object} FormatValue:
- *	 	@property {Function}                 format                    Function that formats the main value of the multielement before being passed up to parent
- *	 	@property {Function}                 revert                    Function that reverts the main value of the multielement when passed down from parent
+ *	 	@property {Function}                        format                    Function formats the main multielement before being passed up to parent
+ *	 	@property {Function}                        revert                    Function reverts the main multielement when passed down from parent
  */
 
 /**
@@ -43,29 +46,11 @@ import { copyStateAndSetValuesToNull } from "../../utils/general";
  *			nameN<string>: value<any>
  * ________________________________________________________________
  * @description Form element that wraps several other form elements
- * together into a form of their own and mangaes their data in a
+ * together into a form of their own and manages their data in a
  * consecutive manner
  * ________________________________________________________________
  */
 
-/**
- *
- *
- * ideas
- *
- * initial values should be an object. This multiElement might require a format and unformat in the options
- *
- * Maybe Make a state that handles the visibility This needs to be configurable as to when to make what visible
- *
- * Make a state that determines the value of the next componenent, this needs to be configurable
- *
- * return only when all inputs are valid
- *
- *
- * format is how you combine the values of the multiElement to return them.
- * revert is how you divide the values that were formatted to set the initial values if necessary.
- *
- */
 class MultiElement extends PureComponent {
 	constructor(props) {
 		super(props);
@@ -143,9 +128,8 @@ class MultiElement extends PureComponent {
 	 */
 
 	formatElementsToSubmit = state => {
-		const { formatValue } = this.props;
-
-		if (state[this.mainCamelCaseName] && formatValue) state[this.mainCamelCaseName] = formatValue.format(state);
+		if (state[this.mainCamelCaseName] && this.props.formatValue)
+			state[this.mainCamelCaseName] = this.props.formatValue.format(state);
 
 		return this.props.elements.map(element => {
 			return { element, value: state[element.camelCaseName] };
@@ -178,15 +162,15 @@ class MultiElement extends PureComponent {
 	}
 
 	/**
-	 * @description Adds data prop to any element that needs it
+	 * @description Adds data prop to elements whose selectable data is derived from the parent value using the childData prop
 	 *
-	 * @param {Element[]} subsequentVisibleElements An array of all visible elements excluding the primary element
+	 * @param {Element[]} visibleChildElements An array of all visible elements excluding the primary element
 	 *
 	 * @return {Element[]} Array of formatted visible elements
 	 */
 
-	findAnyChildData(subsequentVisibleElements) {
-		return subsequentVisibleElements.map(element => {
+	appendDataToChildren(visibleChildElements) {
+		return visibleChildElements.map(element => {
 			const parentElement = this.props.elements.find(({ camelCaseName }) =>
 				camelCaseName === element.options.parent);
 
@@ -214,10 +198,9 @@ class MultiElement extends PureComponent {
 	 */
 
 	findVisibleElements() {
-		const { elements } = this.props;
-
-		let subsequentVisibleElements = elements.slice(1).filter(element => {
+		let visibleChildElements = this.props.elements.slice(1).filter(element => {
 			const { options, isRequired, camelCaseName } = element;
+
 			let visible = options && options.showIfParentValueEquals(this.state.value[options.parent]);
 
 			if (visible && (isRequired || this.requiredIfVisible[camelCaseName])) {
@@ -231,18 +214,18 @@ class MultiElement extends PureComponent {
 			return visible;
 		});
 
-		subsequentVisibleElements = this.findAnyChildData(subsequentVisibleElements);
+		visibleChildElements = this.appendDataToChildren(visibleChildElements);
 
-		return [elements[0]].concat(subsequentVisibleElements);
+		return [this.props.elements[0]].concat(visibleChildElements);
 	}
 
 	render() {
 		return <Form
 			visible = { true }
 			elements = { this.state.visibleElements }
-			initialValues = { Object.assign({}, this.state.value) }
-			onChange = { (state) => this.updateState(state) }
-			justElements
+			values = { Object.assign({}, this.state.value) }
+			onChange = { state => this.updateState(state) }
+			onlyRenderElements
 		/>;
 	}
 }

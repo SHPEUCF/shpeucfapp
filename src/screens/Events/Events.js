@@ -45,7 +45,7 @@ class Events extends Component {
 					<View style = { [fullFlex] }>
 						<EventForm
 							title = "Create Event"
-							initialValues = {{ date: this.state.currentDay }}
+							values = {{ date: this.state.currentDay }}
 							visible = { this.state.eventFormVisibility }
 							onSubmit = { event => createEvent(event) }
 							changeVisibility = { (visible) => this.setState({ eventFormVisibility: visible }) }
