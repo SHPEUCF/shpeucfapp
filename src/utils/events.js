@@ -8,14 +8,14 @@
  */
 
 export function convertStandardToMilitaryTime(standardTime) {
-	let time = standardTime.split(":");
-	time = [parseInt(time[0]), ...time[1].split(" ")];
+	let [hour, minute] = standardTime.split(":");
+	let [newHour, newMinute, period] = [parseInt(hour), ...minute.split(" ")];
 
-	time[0] = time[0] === 12 ? 0 : time[0];
-	time[0] += time[2] === "AM" ? 0 : 12;
-	time[0] = time[0] < 10 ? "0" + time[0] : String(time[0]);
+	newHour = newHour === 12 ? 0 : newHour;
+	newHour += period === "AM" ? 0 : 12;
+	newHour = newHour < 10 ? "0" + newHour : String(newHour);
 
-	return `${time[0]}:${time[1]}`;
+	return `${newHour}:${newMinute}`;
 }
 
 /**
@@ -28,12 +28,12 @@ export function convertStandardToMilitaryTime(standardTime) {
  */
 
 export function convertMilitaryToStandardTime(militaryTime) {
-	let time = militaryTime.split(":");
-	const period = time[0] >= 12 ? "PM" : "AM";
-	time[0] -= time[0] > 12 ? 12 : 0;
-	time[0] = time[0] === 0 ? 12 : time[0];
+	let [hour, minute] = militaryTime.split(":");
+	const period = hour >= 12 ? "PM" : "AM";
+	hour -= hour > 12 ? 12 : 0;
+	hour = hour === 0 ? 12 : hour;
 
-	return `${time[0]}:${time[1]} ${period}`;
+	return `${hour}:${minute} ${period}`;
 }
 
 /**
@@ -92,7 +92,9 @@ export function timeVerification(startTime, endTime) {
 export function changeHourBy(time, amount) {
 	const [hour, minute] = time.split(":");
 	let newHour = parseInt(hour) + amount;
+
 	newHour = prepend0(newHour % 24);
+
 	return `${newHour}:${minute}`;
 }
 

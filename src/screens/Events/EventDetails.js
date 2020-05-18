@@ -256,7 +256,7 @@ class EventDetails extends Component {
 	}
 
 	confirmDelete() {
-		this.props.deleteEvent(this.props.activeEvent);
+		deleteEvent(this.props.activeEvent);
 		Actions.pop();
 	}
 
@@ -439,10 +439,10 @@ class EventDetails extends Component {
 					<NavBar title = { viewName } back onBack = { () => Actions.pop() } />
 					<EventForm
 						title = "Edit Event"
-						initialValues = { this.props.activeEvent }
+						values = { this.props.activeEvent }
 						visible = { this.state.eventFormVisibility }
 						onSubmit = { event => editEvent(event) }
-						changeVisibility = { (visible) => this.setState({ eventFormVisibility: visible }) }
+						changeVisibility = { visible => this.setState({ eventFormVisibility: visible }) }
 					/>
 					<View style = { container }>
 						<View style = { iconContainer }>
@@ -627,15 +627,14 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ events, user, members, committees }) => {
+const mapStateToProps = ({ events, user, members }) => {
 	const { activeEvent } = events;
 	const { activeUser } = user;
 	const { userList } = members;
-	const { committeesList } = committees;
 
-	return { activeEvent, userList, activeUser, committeesList };
+	return { activeEvent, userList, activeUser };
 };
 
-const mapDispatchToProps = { deleteEvent, checkIn, rsvp, pageLoad, fetchAllUsers };
+const mapDispatchToProps = { checkIn, rsvp, pageLoad, fetchAllUsers };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventDetails);

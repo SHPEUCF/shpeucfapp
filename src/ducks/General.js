@@ -46,6 +46,8 @@ export const filterChanged = (text) => {
 	};
 };
 
+/* FireBase Functions that don't use Redux */
+
 export const storeImageUrl = (url, filePath) => {
 	firebase.database().ref(`${filePath}/`).update({
 		picture: url

@@ -5,6 +5,8 @@
  */
 export function copyStateAndSetValuesToNull(state) {
 	let newStateValue = {};
+
 	for (let name in state) newStateValue[name] = null;
+
 	return newStateValue;
 }

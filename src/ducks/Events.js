@@ -8,8 +8,7 @@ import { Alert } from "../components";
 const ACTIONS = createActionTypes([
 	"STORE_SORTED_EVENTS",
 	"LOAD_EVENT",
-	"PAGE_LOAD",
-	"DELETE_EVENT"
+	"PAGE_LOAD"
 ]);
 
 const INITIAL_STATE = {
@@ -27,8 +26,6 @@ export default (state = INITIAL_STATE, action) => {
 			return { ...state, sortedEvents: payload };
 		case ACTIONS.LOAD_EVENT:
 			return { ...state, activeEvent: payload };
-		case ACTIONS.DELETE_EVENT:
-			return { ...state, activeEvent: {} };
 		default:
 			return state;
 	}
@@ -90,16 +87,9 @@ export const getEvents = () => {
  * @param {Event}   event The event you want to load into the redux.
  */
 
-export const loadEvent = (id) => {
+export const loadEvent = (event) => {
 	return (dispatch) => {
-		firebase.database().ref(`/events/${id}`).on("value", snapshot => {
-			let event = snapshot.val();
-
-			event.startTime = convertMilitaryToStandardTime(event.startTime);
-			event.endTime = convertMilitaryToStandardTime(event.endTime);
-
-			dispatch({ type: ACTIONS.LOAD_EVENT, payload: event });
-		});
+		dispatch({ type: ACTIONS.LOAD_EVENT, payload: event });
 	};
 };
 
@@ -171,21 +161,12 @@ export const editEvent = (event) => {
  */
 
 export const deleteEvent = (event) => {
-	let eventRef = firebase.database().ref(`events/${event.id}`);
-
-	return (dispatch) => {
-		// takes off the event listener at the location of the active event before deletion
-		eventRef.off("value");
-
-		eventRef.set(null)
-			.then(() => {
-				firebase.database().ref(`committees/${event.committee}/events/`).update({ [event.id]: null });
-			})
-			.then(() => Alert.alert("Event deleted", { type: "success", title: "Successful" }))
-			.catch(() => Alert.alert("Event deletion failed", { type: "error", title: "Failure" }));
-
-		dispatch({ type: ACTIONS.DELETE_EVENT });
-	};
+	firebase.database().ref(`events/${event.id}`).set(null)
+		.then(() => {
+			firebase.database().ref(`committees/${event.committee}/events/`).update({ [event.id]: null });
+		})
+		.then(() => Alert.alert("Event deleted", { type: "success", title: "Successful" }))
+		.catch(() => Alert.alert("Event deletion failed", { type: "error", title: "Failure" }));
 };
 
 /**
