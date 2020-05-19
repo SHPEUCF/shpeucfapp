@@ -10,12 +10,12 @@ import { copyStateAndSetValuesToNull } from "../../utils/general";
  *		@property {String}                          placeHolder               Placeholder that will be shown inside of each element.
  *		@property {String}                          camelCaseName             Unique name in camelCase format.
  *		@property {("DatePicker"|"FilterList"
-                    |"Input"|"PickerInput"
-                    |"TimePicker"|"MultiElement")}  type                      Type of element.
+ *                  |"Input"|"PickerInput"
+ *                  |"TimePicker"|"MultiElement")}  type                      Type of element.
  *		@property {boolean=}                        isRequired                Optional field to determine if element should be required.
  *		@property {Options=}                        options                   Optional fields for element-specific functionality.
  *		@property {ConditionalValue=}               conditionalValues         Object that contains the names of other elements along with a function
-                                                                              that determines each element's new value based off the parent value
+ *                                                                            that determines each element's new value based off the parent value
  * @typedef {Object} ConditionalValue:
  *      @property {Function}                        name                      (camelCaseName) of the element whose value is going to be modified
  * 		@property {Function}                        value                     Function is used to obtain the new value for the (camelCaseName) element
@@ -56,7 +56,7 @@ class MultiElement extends PureComponent {
 		super(props);
 		this.mainCamelCaseName = this.props.elements[0].camelCaseName;
 
-		// keeps track of any elements that who's isRequired property needs to be maintained when visible
+		// keeps track of any elements that are required when visible to the user
 		this.requiredIfVisible = {};
 
 		const { formatValue, value, elements } = this.props;
@@ -113,8 +113,8 @@ class MultiElement extends PureComponent {
 				}
 			}
 			else {
-				// callback insures that state values are properly updated before further processing
-				this.setState({ value: value }, () => this.updateState(value));
+				// Ensures that state values are properly updated before continuing
+				this.setState({ value }, () => this.updateState(value));
 			}
 		}
 	}
@@ -122,7 +122,7 @@ class MultiElement extends PureComponent {
 	/**
 	 * @description Creates a formatted array based off the elements passed in and the state.
 	 *
-	 * @param {Object} state the updated state.
+	 * @param {Object} state The updated state.
 	 *
 	 * @returns {Object[]} Shape is: [{ element, value }, ..., { element, value }].
 	 */
@@ -139,7 +139,7 @@ class MultiElement extends PureComponent {
 	/**
 	 * @description Updates state of multiElement and the form
 	 *
-	 * Initializes a state with all null values to ensure children values get reset and finds the next visible elements
+     * Initializes state with null values (so children values are reset) and finds next visible elements
 	 *
 	 * @param {Object} elementValuesFromForm Object with all the values from Form. Is of shape { camelCaseName: value }
 	 */
@@ -147,8 +147,8 @@ class MultiElement extends PureComponent {
 	updateState(elementValuesFromForm) {
 		const newStateValue = copyStateAndSetValuesToNull(this.state.value);
 		const newVisibleElements = this.findVisibleElements(elementValuesFromForm);
-
 		let parentElementHasChanged = false;
+
 		if (Object.keys(elementValuesFromForm).length === 0) return;
 
 		newVisibleElements.forEach(({ camelCaseName }) => {

@@ -1,3 +1,5 @@
+import { Alert } from "../components";
+
 /**
  * @description Pass in Standard time and the function returns that in Military Time
  *
@@ -30,6 +32,7 @@ export function convertStandardToMilitaryTime(standardTime) {
 export function convertMilitaryToStandardTime(militaryTime) {
 	let [hour, minute] = militaryTime.split(":");
 	const period = hour >= 12 ? "PM" : "AM";
+
 	hour -= hour > 12 ? 12 : 0;
 	hour = hour === 0 ? 12 : hour;
 
@@ -73,10 +76,11 @@ export function formatEventListForCalendar(events) {
  */
 
 export function timeVerification(startTime, endTime) {
-	let start = startTime.split(":");
-	let end = endTime.split(":");
-	if (end[0] < start[0] || (end[0] === start[0] && end[1] <= start[1])) {
-		alert("Ending time must be after start time");
+	let [startHour, startMinute] = startTime.split(":");
+	let [endHour, endMinute] = endTime.split(":");
+
+	if (endHour < startHour || (endHour === startHour && endMinute <= startMinute)) {
+		Alert.alert("Ending time must be after start time");
 		return false;
 	}
 	else { return true }
@@ -91,9 +95,7 @@ export function timeVerification(startTime, endTime) {
 
 export function changeHourBy(time, amount) {
 	const [hour, minute] = time.split(":");
-	let newHour = parseInt(hour) + amount;
-
-	newHour = prepend0(newHour % 24);
+	let newHour = prepend0((parseInt(hour) + amount) % 24);
 
 	return `${newHour}:${minute}`;
 }
@@ -110,7 +112,7 @@ export const filterPastEvents = sortedEvents => sortedEvents.filter(event => {
 	const [year, month, date] = event.date.split("-");
 
 	return !(year < today.getFullYear() || month < 	today.getMonth() + 1 ||
-	(month == today.getMonth() + 1 && date < today.getDate()));
+		(month == today.getMonth() + 1 && date < today.getDate()));
 });
 
 /**

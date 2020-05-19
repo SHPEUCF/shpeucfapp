@@ -11,7 +11,7 @@ const dimension = Dimensions.get("window");
 	@class
 
 	@param {(String[] | Object[])}  data        An array of the data that will be displayed.
-	@param {(String | Object)=}      value	    The initial value of the FilterList component.
+	@param {(String | Object)=}     value	    The initial value of the FilterList component.
 	@param {String}                 placeholder The placeholder in the searchbar.
 	@param {Function}               onSelect    Used to pass the selected Value to the parent.
 	@param {Function=}              regexFunc   {Optional} Specifies what props to show when rendering.

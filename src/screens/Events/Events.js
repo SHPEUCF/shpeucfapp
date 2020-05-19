@@ -42,7 +42,7 @@ class Events extends Component {
 		return (
 			<SafeAreaView style = { [fullFlex, mainBackgroundColor] }>
 				<View style = { [fullFlex, secondaryBackgroundColor] }>
-					<View style = { [fullFlex] }>
+					<View style = { fullFlex }>
 						<EventForm
 							title = "Create Event"
 							values = {{ date: this.state.currentDay }}

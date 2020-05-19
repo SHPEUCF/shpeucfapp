@@ -12,12 +12,12 @@ import { copyStateAndSetValuesToNull } from "../../utils/general";
  *		@property {String}                          placeHolder           Placeholder that will be shown inside of each element.
  *		@property {String}                          camelCaseName         Unique name in camelCase format.
  *		@property {("DatePicker"|"FilterList"
- 					|"Input"|"PickerInput"
-					|"TimePicker"|"MultiElement")}  type                  Type of element.
+ *                  |"Input"|"PickerInput"
+ *                  |"TimePicker"|"MultiElement")}  type                  Type of element.
  *		@property {boolean=}                        isRequired            Optional field to determine if element should be required.
  *		@property {Options=}                        options               Optional fields for element-specific functionality.
  *		@property {ConditionalValue=}               conditionalValues     Object that contains the names of other elements along with a function
-                                                                          that determines each element's new value based off the parent value
+ *                                                                        that determines each element's new value based off the parent value
  * @typedef {Object} ConditionalValue:
  *      @property {Function}                        name                  (camelCaseName) of the element whose value is going to be modified
  * 		@property {Function}                        value                 Function is used to obtain the new value for the (camelCaseName) element
@@ -270,7 +270,7 @@ class Form extends Component {
 				return <MultiElement
 					key = { camelCaseName }
 					elements = { options.elements }
-					// value function is used to scan through the current state of the form and find the state values that correspond to the MultiElement
+					// Scans through form state and finds values corresponding to the MultiElement
 					value = { (multiElementValues => {
 						options.elements.forEach(({ camelCaseName }) => {
 							Object.assign(multiElementValues, { [camelCaseName]: this.state[camelCaseName] });
@@ -322,7 +322,9 @@ class Form extends Component {
 				const values = camelCaseNames.map(name => submitState[name]);
 				formIsValid = verification(values);
 			}
-			else { formIsValid = verification(submitState[camelCaseNames]) }
+			else {
+				formIsValid = verification(submitState[camelCaseNames]);
+			}
 		}
 
 		if (!formIsValid) return;
@@ -335,14 +337,14 @@ class Form extends Component {
 	validateElements(elements, values) {
 		let formIsValid = elements.length > 0;
 
-		// contains all elements including nested elements that may be present in element.options
+		// contains all elements (including nested elements) that may be present in element.options
 		const iterableElements = elements.flatMap(element => (element.options && element.options.elements) || element);
 
 		iterableElements.forEach(element => {
 			const elementFromState = values[element.camelCaseName];
 
 			if (formIsValid && element.isRequired && elementFromState !== 0 && !elementFromState) {
-				Alert.alert(`Please input a value into the ${element.placeholder} field.`);
+				Alert.alert(`Please input a value into the ${element.placeholder} field`);
 				formIsValid = false;
 			}
 
