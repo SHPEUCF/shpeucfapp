@@ -25,6 +25,7 @@ const dimension = Dimensions.get("screen");
 class EventDetails extends Component {
 	constructor(props) {
 		super(props);
+
 		this.state = {
 			modalVisible: false,
 			eventFormVisibility: false
@@ -186,6 +187,7 @@ class EventDetails extends Component {
 
 		let users = [];
 		const email = userList[activeUser.id].email;
+
 		attendants.map(attendant => { users.push(userList[attendant]) });
 
 		let csv = this.convertArrayOfObjectsToCSV({
@@ -201,6 +203,7 @@ class EventDetails extends Component {
 			4. Open the file in Excel\n\
 			------------------\n\n" + csv;
 		let link = `mailto:${email}?subject=event: ${activeEvent.name}&body=` + data;
+
 		if (!Linking.canOpenURL(link)) {
 			Alert.alert("Email could not be sent", { type: "error", title: "Failure" });
 		}
@@ -275,6 +278,7 @@ class EventDetails extends Component {
 			title = "Manual Check In"
 			onPress = { props.onPress }
 		/>;
+
 		if (!excludeDataProp) excludeDataProp = { [activeUser.id]: true };
 		else Object.assign(excludeDataProp, { [activeUser.id]: true });
 

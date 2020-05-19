@@ -39,6 +39,7 @@ class Events extends Component {
 
 	render() {
 		const { mainBackgroundColor, secondaryBackgroundColor, fullFlex } = styles;
+
 		return (
 			<SafeAreaView style = { [fullFlex, mainBackgroundColor] }>
 				<View style = { [fullFlex, secondaryBackgroundColor] }>
