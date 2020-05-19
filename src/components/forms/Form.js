@@ -9,48 +9,48 @@ import { copyStateAndSetValuesToNull } from "../../utils/general";
 /**
  * Types
  * @typedef {Object} Element:
- *	    @property {String}                          placeHolder           Placeholder that will be shown inside of each element.
- *	    @property {String}                          camelCaseName         Unique name in camelCase format.
- *	    @property {("DatePicker"|"FilterList"
- *                  |"Input"|"PickerInput"
- *                  |"TimePicker"|"MultiElement")}  type                  Type of element.
- *	    @property {boolean=}                        isRequired            Optional field to determine if element should be required.
- *      @property {Options=}                        options               Optional fields for element-specific functionality.
- *	    @property {ConditionalValue=}               conditionalValues     Object that contains the names of other elements along with a function
- *                                                                        that determines each element's new value based off the parent value
+ *		@property {String}                         placeHolder        Placeholder that will be shown inside of each element.
+ *		@property {String}                         camelCaseName      Unique name in camelCase format.
+ *		@property {("DatePicker"|"FilterList"
+ *		           |"Input"|"PickerInput"
+ *		           |"TimePicker"|"MultiElement")}  type               Type of element.
+ *		@property {boolean=}                       isRequired         Optional field to determine if element should be required.
+ *		@property {Options=}                       options            Optional fields for element-specific functionality.
+ *		@property {ConditionalValue=}              conditionalValues  Object that contains the names of other elements along with a function
+ *		                                                              that determines each element's new value based off the parent value.
  * @typedef {Object} ConditionalValue:
- *      @property {Function}                        name                  (camelCaseName) of the element whose value is going to be modified
- * 	    @property {Function}                        value                 Function is used to obtain the new value for the (camelCaseName) element
+ *		@property {Function}                       name               (camelCaseName) of the element whose value is going to be modified.
+ *		@property {Function}                       value              Function is used to obtain the new value for the (camelCaseName) element.
  * @typedef {Object} CustomVerification:
- * 	    @property {String[]}                        camelCaseNames        Desired data to be verified.
- * 	    @property {Function}                        verification          Function gets all the desired data and performs some check on it.
+ *		@property {String[]}                       camelCaseNames     Desired data to be verified.
+ *		@property {Function}                       verification       Function gets all the desired data and performs some check on it.
  */
 
 /**
  * Form Component Info
- * ________________________________________________________________
+ * ---
  * 	Props:
- *	    @param {Element[]}             elements             An array of the names of Elements.
- *	    @param {Object=}               values               Object to control the values of the form where each value is under the corresponding camelCaseName
- *	    @param {Boolean}               visible              Used to determine whether the form is visible.
- *	    @param {Function=}             changeVisibility     Used to change the visibility of the form.
- *	    @param {Function=}             onSubmit             Called to pass all the form values into when submitting.
- *	    @param {Function=}             onChange             Called to pass all the form values into after any value change.
- *	    @param {String=}               submitButtonName     Displayed on the submit button
- *	    @param {CustomVerification=}   customVerification   Used for additional data verification
+ *		@param {Element[]}            elements            An array of the names of Elements.
+ *		@param {Object=}              values              Object to control the values of the form where each
+ *		                                                  value is under the corresponding camelCaseName
+ *		@param {Boolean}              visible             Used to determine whether the form is visible.
+ *		@param {Function=}            changeVisibility    Used to change the visibility of the form.
+ *		@param {Function=}            onSubmit            Called to pass all the form values into when submitting.
+ *		@param {Function=}            onChange            Called to pass all the form values into after any value change.
+ *		@param {String=}              submitButtonName    Displayed on the submit button
+ *		@param {CustomVerification=}  customVerification  Used for additional data verification
  *
+ * @example
  *	Output:
- *
- * 		<object>:
+ *		<object>:
  *			name1<string>: value<any>
  *			name2<string>: value<any>
  *			...
  *			nameN<string>: value<any>
- * ________________________________________________________________
- * @description Dynamic Form component allows you to quickly and easily make
- * 		different forms.
- * ________________________________________________________________
- * Using Component:
+ *
+ * @description Dynamic Form component allows you to quickly and easily make different forms.
+ * ___
+ * **Using the component**:
  *
  * 1. When making a new form, create a definition in FormData.json and pass it in through the elements prop.
  *
@@ -68,17 +68,16 @@ import { copyStateAndSetValuesToNull } from "../../utils/general";
  * 5. If you are using PickerInput you need to pass in data using the options property. **NOTE** You should only use
  *    data from the FormData.json file inside of the /data folder.
  *
- * ________________________________________________________________
- * Adding your own Component:
+ * **Adding your own Component**:
  *
- * 1. Make sure your component is modular and doesn't only work in some specific scenarios
- * 2. Add the component to the switch case
- * 3. Update the examples to show how to use your component
- * 4. (Optional) - If your component needs extra data besides a name/camelCaseName, pass in the data through the
+ * 1. Make sure your component is modular and doesn't only work in some specific scenarios.
+ * 2. Add the component to the switch case.
+ * 3. Update the examples to show how to use your component.
+ * 4. *Optional* - If your component needs extra data besides a name/camelCaseName, pass in the data through the.
  *    options property as individual properties.
- * 5. Any state management such as value of the component will be handled by the form.js's state
- * 6. Test Component
- * ________________________________________________________________
+ * 5. Any state management such as value of the component will be handled by the form.js's state.
+ * 6. Test Component.
+ * ___
  * @example
  * 	Input:
  * 		elements = [
@@ -148,11 +147,12 @@ import { copyStateAndSetValuesToNull } from "../../utils/general";
  * 		}
  * 		onSubmit(this.state)
  *
-**/
+ */
 
 class Form extends Component {
 	constructor(props) {
 		super(props);
+
 		this.state = this.props.values || {};
 	}
 
@@ -218,6 +218,7 @@ class Form extends Component {
 			case "FilterList":
 				if (!options || !options.data)
 					console.error("You must pass in data through the options property to use FilterList");
+
 				return <FilterList
 					key = { camelCaseName }
 					type = { options.type }
@@ -236,8 +237,7 @@ class Form extends Component {
 					key = { camelCaseName }
 					placeholder = { placeholder }
 					multiline = { false }
-					// Next line is checking for 0 to make sure it displays 0 correctly
-					value = { this.state[camelCaseName] === 0 ? 0 : this.state[camelCaseName] || "" }
+					value = { this.state[camelCaseName] === 0 ? 0 : this.state[camelCaseName] || "" } // Display 0 correctly
 					secureTextEntry = { options && options.secureTextEntry }
 					keyboardType = { options && options.keyboardType }
 					onChangeText = { value => {
@@ -246,12 +246,13 @@ class Form extends Component {
 						else if (value === "")
 							this.changeState(element, null);
 						else
-							 this.changeState(element, value);
+							this.changeState(element, value);
 					} }
 				/>;
 			case "PickerInput":
 				if (!options || !options.data)
 					console.error("You must pass in data through the options property to use PickerInput");
+
 				return <PickerInput
 					key = { camelCaseName }
 					placeholder = { placeholder }
@@ -270,11 +271,11 @@ class Form extends Component {
 				return <MultiElement
 					key = { camelCaseName }
 					elements = { options.elements }
-					// Scans through form state and finds values corresponding to the MultiElement
-					value = { (multiElementValues => {
+					value = { (multiElementValues => { // Find values corresponding to MultiElement
 						options.elements.forEach(({ camelCaseName }) => {
 							Object.assign(multiElementValues, { [camelCaseName]: this.state[camelCaseName] });
 						});
+
 						return multiElementValues;
 					})({}) }
 					formatValue = { options.formatValue }
@@ -285,6 +286,7 @@ class Form extends Component {
 			default:
 				console.error("Please Pick a Correct type",
 					"\nPossible types are [DatePicker, Input, PickerInput, TimePicker]");
+
 				return null;
 		}
 	}
@@ -320,6 +322,7 @@ class Form extends Component {
 
 			if (Array.isArray(camelCaseNames)) {
 				const values = camelCaseNames.map(name => submitState[name]);
+
 				formIsValid = verification(values);
 			}
 			else {
@@ -337,7 +340,7 @@ class Form extends Component {
 	validateElements(elements, values) {
 		let formIsValid = elements.length > 0;
 
-		// contains all elements (including nested elements) that may be present in element.options
+		// Contains all elements (including nested elements) that may be present in element.options
 		const iterableElements = elements.flatMap(element => (element.options && element.options.elements) || element);
 
 		iterableElements.forEach(element => {
@@ -359,6 +362,7 @@ class Form extends Component {
 
 	resetState() {
 		let initialState = copyStateAndSetValuesToNull(this.state);
+
 		Object.assign(initialState, this.props.values);
 		this.setState(initialState);
 	}

@@ -7,48 +7,46 @@ import { copyStateAndSetValuesToNull } from "../../utils/general";
 /**
  * Types
  * @typedef {Object} Element:
- *      @property {String}                          placeHolder               Placeholder that will be shown inside of each element.
- *      @property {String}                          camelCaseName             Unique name in camelCase format.
- *      @property {("DatePicker"|"FilterList"
- *                  |"Input"|"PickerInput"
- *                  |"TimePicker"|"MultiElement")}  type                      Type of element.
- *      @property {boolean=}                        isRequired                Optional field to determine if element should be required.
- *      @property {Options=}                        options                   Optional fields for element-specific functionality.
- *      @property {ConditionalValue=}               conditionalValues         Object that contains the names of other elements along with a function
- *                                                                            that determines each element's new value based off the parent value
+ *		@property {String}                         placeHolder              Placeholder that will be shown inside of each element.
+ *		@property {String}                         camelCaseName            Unique name in camelCase format.
+ *		@property {("DatePicker"|"FilterList"
+ *		           |"Input"|"PickerInput"
+ *		           |"TimePicker"|"MultiElement")}  type                     Type of element.
+ *		@property {boolean=}                       isRequired               Optional field to determine if element should be required.
+ *		@property {Options=}                       options                  Optional fields for element-specific functionality.
+ *		@property {ConditionalValue=}              conditionalValues        Object that contains the names of other elements along with a function
+ *		                                                                    that determines each element's new value based off the parent value.
  * @typedef {Object} ConditionalValue:
- *      @property {Function}                        name                      (camelCaseName) of the element whose value is going to be modified
- *      @property {Function}                        value                     Function is used to obtain the new value for the (camelCaseName) element
+ *		@property {Function}                       name                     (camelCaseName) of the element whose value is going to be modified.
+ *		@property {Function}                       value                    Function is used to obtain the new value for the (camelCaseName) element.
  * @typedef {Object} Options:
- *      @property {Function}                        showIfParentValueEquals   Function checks the parent value and returns whether the element should be shown.
- *      @property {String}                          parent                    (camelCaseName) of the parent element.
- *	    @property {Function=}                       childData                 Optional function checks the parent value and returns the data of the child.
+ *		@property {Function}                       showIfParentValueEquals  Function checks the parent value and returns whether the element should be shown.
+ *		@property {String}                         parent                   (camelCaseName) of the parent element.
+ *		@property {Function=}                      childData                Optional function checks the parent value and returns the data of the child.
  * @typedef {Object} FormatValue:
- *	    @property {Function}                        format                    Function formats the main multielement before being passed up to parent
- *	    @property {Function}                        revert                    Function reverts the main multielement when passed down from parent
+ *		@property {Function}                       format                   Function formats the main multielement before being passed up to parent.
+ *		@property {Function}                       revert                   Function reverts the main multielement when passed down from parent.
  */
 
 /**
  * Form Component Info
- * ________________________________________________________________
  *	Props:
- *	    @param {Element[]}         elements            An array of the names of Elements.
- *	    @param {any=}              value               An object of initial state values.
- *	    @param {FormatValue=}      formatValue         Optional object containing functions to process the main value of the multielement
- *	    @param {Function}          onSelect            Updates parent form whenever a value is changed.
+ *		@param {Element[]}     elements     An array of the names of Elements.
+ *		@param {any=}          value        An object of initial state values.
+ *		@param {FormatValue=}  formatValue  Optional object containing functions to process
+ *		                                    the main value of the multiElement
+ *		@param {Function}      onSelect     Updates parent form whenever a value is changed.
  *
+ * @example
  *	Output:
- *
- * 		<object>:
+ *		<object>:
  *			name1<string>: value<any>
  *			name2<string>: value<any>
  *			...
  *			nameN<string>: value<any>
- * ________________________________________________________________
- * @description Form element that wraps several other form elements
- * together into a form of their own and manages their data in a
- * consecutive manner
- * ________________________________________________________________
+ *
+ * @description Form element that wraps several other form elements together into
+ *              a form of their own and manages their data in a consecutive manner.
  */
 
 class MultiElement extends PureComponent {
@@ -56,7 +54,7 @@ class MultiElement extends PureComponent {
 		super(props);
 		this.mainCamelCaseName = this.props.elements[0].camelCaseName;
 
-		// keeps track of any elements that are required when visible to the user
+		// Keeps track of any elements that are required when visible to the user
 		this.requiredIfVisible = {};
 
 		const { formatValue, value, elements } = this.props;
@@ -108,12 +106,12 @@ class MultiElement extends PureComponent {
 
 				if (!_.isEqual(newValue, oldValue)) {
 					const formattedValue = Object.assign({}, value);
+
 					formattedValue[this.mainCamelCaseName] = newValue;
 					this.setState({ value: formattedValue }, () => this.updateState(formattedValue));
 				}
 			}
 			else {
-				// Ensures that state values are properly updated before continuing
 				this.setState({ value }, () => this.updateState(value));
 			}
 		}
@@ -139,7 +137,7 @@ class MultiElement extends PureComponent {
 	/**
 	 * @description Updates state of multiElement and the form
 	 *
-     * Initializes state with null values (so children values are reset) and finds next visible elements
+	 * Initializes state with null values (so children values are reset) and finds next visible elements
 	 *
 	 * @param {Object} elementValuesFromForm Object with all the values from Form. Is of shape { camelCaseName: value }
 	 */
@@ -207,7 +205,9 @@ class MultiElement extends PureComponent {
 				element.isRequired = true;
 			}
 			else {
-				if (isRequired) this.requiredIfVisible[camelCaseName] = true;
+				if (isRequired)
+					this.requiredIfVisible[camelCaseName] = true;
+
 				element.isRequired = false;
 			}
 
