@@ -9,35 +9,35 @@ import { copyStateAndSetValuesToNull } from "../../utils/general";
 /**
  * Types
  * @typedef {Object} Element:
- *		@property {String}                          placeHolder           Placeholder that will be shown inside of each element.
- *		@property {String}                          camelCaseName         Unique name in camelCase format.
- *		@property {("DatePicker"|"FilterList"
+ *	    @property {String}                          placeHolder           Placeholder that will be shown inside of each element.
+ *	    @property {String}                          camelCaseName         Unique name in camelCase format.
+ *	    @property {("DatePicker"|"FilterList"
  *                  |"Input"|"PickerInput"
  *                  |"TimePicker"|"MultiElement")}  type                  Type of element.
- *		@property {boolean=}                        isRequired            Optional field to determine if element should be required.
- *		@property {Options=}                        options               Optional fields for element-specific functionality.
- *		@property {ConditionalValue=}               conditionalValues     Object that contains the names of other elements along with a function
+ *	    @property {boolean=}                        isRequired            Optional field to determine if element should be required.
+ *      @property {Options=}                        options               Optional fields for element-specific functionality.
+ *	    @property {ConditionalValue=}               conditionalValues     Object that contains the names of other elements along with a function
  *                                                                        that determines each element's new value based off the parent value
  * @typedef {Object} ConditionalValue:
  *      @property {Function}                        name                  (camelCaseName) of the element whose value is going to be modified
- * 		@property {Function}                        value                 Function is used to obtain the new value for the (camelCaseName) element
+ * 	    @property {Function}                        value                 Function is used to obtain the new value for the (camelCaseName) element
  * @typedef {Object} CustomVerification:
- * 		@property {String[]}                        camelCaseNames        Desired data to be verified.
- * 		@property {Function}                        verification          Function gets all the desired data and performs some check on it.
+ * 	    @property {String[]}                        camelCaseNames        Desired data to be verified.
+ * 	    @property {Function}                        verification          Function gets all the desired data and performs some check on it.
  */
 
 /**
  * Form Component Info
  * ________________________________________________________________
  * 	Props:
- *		@param {Element[]}             elements             An array of the names of Elements.
- *		@param {Object=}               values               Object to control the values of the form where each value is under the corresponding camelCaseName
- *		@param {Boolean}               visible              Used to determine whether the form is visible.
- *		@param {Function=}             changeVisibility     Used to change the visibility of the form.
- *		@param {Function=}             onSubmit             Called to pass all the form values into when submitting.
- *		@param {Function=}             onChange             Called to pass all the form values into after any value change.
- *		@param {String=}               submitButtonName     Displayed on the submit button
- *		@param {CustomVerification=}   customVerification   Used for additional data verification
+ *	    @param {Element[]}             elements             An array of the names of Elements.
+ *	    @param {Object=}               values               Object to control the values of the form where each value is under the corresponding camelCaseName
+ *	    @param {Boolean}               visible              Used to determine whether the form is visible.
+ *	    @param {Function=}             changeVisibility     Used to change the visibility of the form.
+ *	    @param {Function=}             onSubmit             Called to pass all the form values into when submitting.
+ *	    @param {Function=}             onChange             Called to pass all the form values into after any value change.
+ *	    @param {String=}               submitButtonName     Displayed on the submit button
+ *	    @param {CustomVerification=}   customVerification   Used for additional data verification
  *
  *	Output:
  *
