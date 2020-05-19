@@ -25,7 +25,7 @@ class AlertComponent extends Component {
 		const buttonPress = this.state[button] && this.state[button].onPress;
 
 		Animate.animation({ relative: { ratio: 1.0 }, duration: 800, easing: "back", easeValue: 1 }, () => {
-			this.setState({ visible: false });
+			this.setState({ visible: false, submit: {}, cancel: {} });
 			buttonPress && buttonPress();
 		});
 	}
@@ -75,7 +75,7 @@ class AlertComponent extends Component {
 		let submitTitle = submit && submit.title;
 		let cancelTitle = cancel && cancel.title;
 
-		if (type == "confirmation") {
+		if (type === "confirmation") {
 			return (
 				<View style = { buttonContainer } >
 					<TouchableOpacity style = { [center, confirmButton] } onPress = { () => this.close("submit") }>
@@ -123,24 +123,27 @@ class AlertComponent extends Component {
 /**
  * @classdesc Utility class for the AlertComponent. Used to display the alert dialog with the static alert() function,
  *            similar to the native alert box.
-*/
+ *
+ * @typedef {Object} Alerted
+ *		@property {string=}                  title           Title of alert.
+ *		@property {("alert"|"confirmation"|
+ *		            "error"|"success")=}     type            Type of alert to display.
+ *		@property {Object}                   submit          Config or function to execute with submit button.
+ *		@property {string}                   submit.title    Title of confirm button.
+ *		@property {Function}                 submit.onPress  onPress of confirm button.
+ *		@property {Object}                   cancel          Config or function to execute with cancel button.
+ *		@property {string}                   cancel.title    Title of cancel button.
+ *		@property {Function}                 cancel.onPress  onPress of cancel button.
+ */
 
 export class Alert {
 	static AlertBox = () => <AlertComponent ref = { alert => (this.AlertComponent = alert) } />;
 
 	/**
-	 * @param {string}    message                Message for alert to display.
-	 * @param {Object}    config
-	 * @param {string=}   config.title           Title of alert.
-	 * @param {string=}   config.type            Type of alert to display.
-	 *                                           ["alert", "confirmation", "error", "success"]
-	 * @param {Object}    config.submit          Config or function to execute with submit button.
-	 * @param {string}    config.submit.title    Title of confirm button.
-	 * @param {Function}  config.submit.onPress  onPress of confirm button.
-	 * @param {Object}    config.cancel          Config or function to execute with cancel button.
-	 * @param {string}    config.cancel.title    Title of cancel button.
-	 * @param {Function}  config.cancel.onPress  onPress of cancel button.
- */
+	 * @param {string}    message  Message for alert to display.
+	 * @param {Alerted=}  config   (Optional) Additional configuration for alert.
+	 */
+
 	static alert(message, config = { title: "Alert", type: "alert" }) {
 		this.AlertComponent.changeAlert({ message, ...config });
 	}
