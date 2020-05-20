@@ -16,8 +16,9 @@ import { copyStateAndSetValuesToNull } from "../../utils/general";
  *		           |"TimePicker"|"MultiElement")}  type               Type of element.
  *		@property {boolean=}                       isRequired         Optional field to determine if element should be required.
  *		@property {Options=}                       options            Optional fields for element-specific functionality.
- *		@property {ConditionalValue=}              conditionalValues  Object that contains the names of other elements along with a function
- *		                                                              that determines each element's new value based off the parent value.
+ *		@property {ConditionalValue=}              conditionalValues  Optional object that contains element:value pairs that depend on the current element.
+ *		@property {Function=}                      isValid            Optional function that checks if the current element Value is valid.
+ *		@property {String=}                        validShape         Optional string that tells the user how the input should look.
  * @typedef {Object} ConditionalValue:
  *		@property {Function}                       name               (camelCaseName) of the element whose value is going to be modified.
  *		@property {Function}                       value              Function is used to obtain the new value for the (camelCaseName) element.
@@ -164,6 +165,8 @@ class Form extends Component {
 					camelCaseName: PropTypes.string.isRequired,
 					type: PropTypes.string.isRequired,
 					isRequired: PropTypes.bool,
+					isValid: PropTypes.func,
+					validShape: PropTypes.string,
 					options: PropTypes.any
 				}
 			)
@@ -181,6 +184,16 @@ class Form extends Component {
 		if (!_.isEqual(prevProps.values, this.props.values)) this.setState(this.props.values);
 	}
 
+	/**
+	 * @description Processes an element's new value and updates the state of the form.
+	 *
+	 * If the element's value affects another element, the conditional values are applied to the form state.
+	 * The onChange prop is called here and sent the updated state.
+	 *
+	 * @param {Element} element The element whose value is being modified.
+	 * @param {Any} newValue The new value that will update the state.
+	 */
+
 	changeState(element, newValue) {
 		const { conditionalValues, camelCaseName } = element;
 		const updatedElement = { [camelCaseName]: newValue };
@@ -191,11 +204,19 @@ class Form extends Component {
 		this.setState(updatedElement);
 	}
 
-	applyConditionalValues(conditionalValues, parentValue) {
-		const { elements } = this.props;
+	/**
+	 * @description Uses a parent element's value to change the values of other elements in the form.
+	 *
+	 * If an element has nest elements inside of options.elements they will be included.
+	 *
+	 * @param {ConditionalValue[]} conditionalValues The conditionalValues of the parent element whose value determines the values of other form elements.
+	 * @param {Any} parentValue The new value of the parent element.
+	 */
 
-		// contains all elements including nested elements that may be present in element.options
-		const iterableElements = elements.flatMap(element => (element.options && element.options.elements) || element);
+	applyConditionalValues(conditionalValues, parentValue) {
+		const iterableElements = this.props.elements.flatMap(element => {
+			return element.options && element.options.elements || element;
+		});
 
 		conditionalValues.map(newElement => {
 			const affectedElement = iterableElements.find(({ camelCaseName }) => camelCaseName === newElement.name);
@@ -203,6 +224,14 @@ class Form extends Component {
 			if (affectedElement) this.changeState(affectedElement, newElement.value(parentValue));
 		});
 	}
+
+	/**
+	 * @description Renders different types of elements and links their values to the form state.
+	 *
+	 * @param {Element} element Element that will be rendered.
+	 *
+	 * @return {Component} Appropriate component to be rendered.
+	 */
 
 	buildElement(element) {
 		const { placeholder, camelCaseName, type, options } = element;
@@ -311,11 +340,15 @@ class Form extends Component {
 		);
 	}
 
-	submit () {
+	/**
+	 * @description Validates elements and if elements are valid, the form state is passed to the onSubmit prop.
+	 */
+
+	submit() {
 		let formIsValid = true;
 		let submitState = Object.assign({}, this.state);
 
-		formIsValid = this.validateElements(this.props.elements, this.state);
+		formIsValid = this.validateElements();
 
 		if (formIsValid && this.props.customVerification) {
 			const { camelCaseNames, verification } = this.props.customVerification;
@@ -337,14 +370,19 @@ class Form extends Component {
 		this.props.changeVisibility(false);
 	}
 
-	validateElements(elements, values) {
-		let formIsValid = elements.length > 0;
+	/**
+	 * @return {Boolean} True if every element has passed validation. False otherwise.
+	 */
 
-		// Contains all elements (including nested elements) that may be present in element.options
-		const iterableElements = elements.flatMap(element => (element.options && element.options.elements) || element);
+	validateElements() {
+		let formIsValid = this.props.elements.length > 0;
+
+		const iterableElements = this.props.elements.flatMap(element => {
+			return (element.options && element.options.elements) || element;
+		});
 
 		iterableElements.forEach(element => {
-			const elementFromState = values[element.camelCaseName];
+			const elementFromState = this.state[element.camelCaseName];
 
 			if (formIsValid && element.isRequired && elementFromState !== 0 && !elementFromState) {
 				Alert.alert(`Please input a value into the ${element.placeholder} field`);
@@ -352,13 +390,17 @@ class Form extends Component {
 			}
 
 			if (formIsValid && element.isValid && element.isValid(elementFromState)) {
-				Alert.alert(`${element.placeholder} should be in the shape ${element.validForm}`);
+				Alert.alert(`${element.placeholder} should be in the shape ${element.validShape}`);
 				formIsValid = false;
 			}
 		});
 
 		return formIsValid;
 	}
+
+	/**
+	 * @description Sets every value in the form state to null.
+	 */
 
 	resetState() {
 		let initialState = copyStateAndSetValuesToNull(this.state);
