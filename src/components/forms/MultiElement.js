@@ -7,26 +7,26 @@ import { copyStateAndSetValuesToNull } from "../../utils/general";
 /**
  * Types
  * @typedef {Object} Element:
- *		@property {String}                         placeHolder             Placeholder that will be shown inside of each element.
- *		@property {String}                         camelCaseName           Unique name in camelCase format.
+ *		@property {String}                         placeHolder              Placeholder that will be shown inside of each element.
+ *		@property {String}                         camelCaseName            Unique name in camelCase format.
  *		@property {("DatePicker"|"FilterList"
  *		           |"Input"|"PickerInput"
- *		           |"TimePicker"|"MultiElement")}  type                    Type of element.
- *		@property {boolean=}                       isRequired              Optional field to determine if element should be required.
- *		@property {Options=}                       options                 Optional fields for element-specific functionality.
- *		@property {ConditionalValue=}              conditionalValues       Optional object that contains element:value pairs that depend on the current element.
- *		@property {Function=}                      isValid                 Optional function that checks if the current element Value is valid.
- *		@property {String=}                        validShape              Optional string that tells the user how the input should look.
+ *		           |"TimePicker"|"MultiElement")}  type                     Type of element.
+ *		@property {boolean=}                       isRequired               Optional field to determine if element should be required.
+ *		@property {Options=}                       options                  Optional fields for element-specific functionality.
+ *		@property {ConditionalValue=}              conditionalValues        Optional object contains element:value pairs that depend on the current element.
+ *		@property {Function=}                      isValid                  Optional function that checks if the current element Value is valid.
+ *		@property {String=}                        validShape               Optional string that tells the user how the input should look.
  * @typedef {Object} ConditionalValue:
- *		@property {Function}                       name                    (camelCaseName) of the element whose value is going to be modified.
- *		@property {Function}                       value                   Function is used to obtain the new value for the (camelCaseName) element.
+ *		@property {Function}                       name                     (camelCaseName) of the element whose value is going to be modified.
+ *		@property {Function}                       value                    Function is used to obtain the new value for the (camelCaseName) element.
  * @typedef {Object} Options:
- *		@property {Function}                       showIfParentValueEquals Function checks the parent value and returns whether the element should be shown.
- *		@property {String}                         parent                  (camelCaseName) of the parent element.
- *		@property {Function=}                      childData               Optional function checks the parent value and returns the data of the child.
+ *		@property {Function}                       showIfParentValueEquals  Function checks parent value and returns whether the element should be shown.
+ *		@property {String}                         parent                   (camelCaseName) of the parent element.
+ *		@property {Function=}                      childData                Optional function checks the parent value and returns the data of the child.
  * @typedef {Object} FormatValue:
- *		@property {Function}                       format                  Function formats the main multielement before being passed up to parent.
- *		@property {Function}                       revert                  Function reverts the main multielement when passed down from parent.
+ *		@property {Function}                       format                   Function formats the main multielement before being passed up to parent.
+ *		@property {Function}                       revert                   Function reverts the main multielement when passed down from parent.
  */
 
 /**
@@ -162,8 +162,8 @@ class MultiElement extends PureComponent {
 	/**
 	 * @description Adds data prop to elements whose selectable data is derived from the parent value.
 	 *
-	 * @param {Element[]} visibleChildElements An array of all visible elements excluding the primary element.
-	 * @param {Object} values The updated element Values.
+	 * @param {Element[]} visibleChildElements  An array of all visible elements excluding the primary element.
+	 * @param {Object}    values                The updated element Values.
 	 *
 	 * @return {Element[]} Array of formatted visible elements.
 	 */

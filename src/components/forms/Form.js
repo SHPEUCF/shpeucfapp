@@ -190,8 +190,8 @@ class Form extends Component {
 	 * If the element's value affects another element, the conditional values are applied to the form state.
 	 * The onChange prop is called here and sent the updated state.
 	 *
-	 * @param {Element} element The element whose value is being modified.
-	 * @param {Any} newValue The new value that will update the state.
+	 * @param {Element} element   The element whose value is being modified.
+	 * @param {Any}     newValue  The new value that will update the state.
 	 */
 
 	changeState(element, newValue) {
@@ -209,8 +209,8 @@ class Form extends Component {
 	 *
 	 * If an element has nest elements inside of options.elements they will be included.
 	 *
-	 * @param {ConditionalValue[]} conditionalValues The conditionalValues of the parent element whose value determines the values of other form elements.
-	 * @param {Any} parentValue The new value of the parent element.
+	 * @param {ConditionalValue[]} conditionalValues  The conditionalValues of the parent element whose value determines the values of other form elements.
+	 * @param {Any}                parentValue        The new value of the parent element.
 	 */
 
 	applyConditionalValues(conditionalValues, parentValue) {
