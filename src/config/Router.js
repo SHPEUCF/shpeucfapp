@@ -243,6 +243,7 @@ const RouterComponent = () => {
 							key = "eventDetails"
 							hideNavBar
 							title = "EventDetails"
+							hideTabBar
 						>
 							<Scene
 								key = "eventDetails"

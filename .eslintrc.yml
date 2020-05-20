@@ -24,6 +24,7 @@ rules:
   no-trailing-spaces: error                # disallow trailing whitespace
   no-floating-decimal: error               # require floating decimals to be complete
   space-before-blocks: error               # require space before curly brace for blocks
+  multiline-comment-style: error           # require block-style comments when longer than one line
   no-whitespace-before-property: error     # disallow whitespace before accessing properties
   one-var:                                 # require one variable declaration per let/const
     - error
@@ -79,6 +80,23 @@ rules:
       ignoreStrings: true
       ignoreTemplateLiterals: true
       ignoreTrailingComments: true
+  padding-line-between-statements:         # require empty line for statements
+    - error
+    - blankLine: always                    # require empty line after const/let
+      prev:
+        - const
+        - let
+      next: "*"
+    - blankLine: any                       # allow empty lines between const/let
+      prev:
+        - const
+        - let
+      next:
+        - const
+        - let
+    - blankLine: always                    # require empty line before return statement
+      prev: "*"
+      next: return
   # React-Native
   react-native/no-inline-styles: warn      # disallow inline styles
   # React

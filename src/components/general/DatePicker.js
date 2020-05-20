@@ -21,10 +21,8 @@ class DatePicker extends Component {
 		};
 	}
 
-	defaultProps = { placeholder: "Choose a Date" }
-
 	static propTypes = {
-		value: PropTypes.object,
+		value: PropTypes.string,
 		placeholder: PropTypes.string.isRequired,
 		onSelect: PropTypes.func.isRequired
 	}
@@ -135,6 +133,8 @@ class DatePicker extends Component {
 		}
 	};
 }
+
+DatePicker.defaultProps = { placeholder: "Choose a Date" };
 
 const styles = {
 	fieldContainer: {

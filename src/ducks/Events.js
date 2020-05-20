@@ -88,7 +88,9 @@ export const getEvents = () => {
  */
 
 export const loadEvent = (event) => {
-	return (dispatch) => dispatch({ type: ACTIONS.LOAD_EVENT, payload: event });
+	return (dispatch) => {
+		dispatch({ type: ACTIONS.LOAD_EVENT, payload: event });
+	};
 };
 
 /* FireBase Functions that don't use Redux */
@@ -159,7 +161,7 @@ export const editEvent = (event) => {
  */
 
 export const deleteEvent = (event) => {
-	firebase.database().ref("events").update({ [event.id]: null })
+	firebase.database().ref(`events/${event.id}`).set(null)
 		.then(() => {
 			firebase.database().ref(`committees/${event.committee}/events/`).update({ [event.id]: null });
 		})

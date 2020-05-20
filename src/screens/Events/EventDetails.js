@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Alert, Button, NavBar, FilterList, ButtonLayout, Form } from "../../components";
+import { Alert, Button, NavBar, FilterList, ButtonLayout } from "../../components";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Actions } from "react-native-router-flux";
 import QRCode from "react-native-qrcode-svg";
 import QRCodeScanner from "react-native-qrcode-scanner";
 import { MemberPanel } from "../../utils/render";
 import { months } from "../../data/DateItems";
-import { upsertEventFormData, convertObjectToInitialValues } from "../../data/FormData";
+import { EventForm } from "../../data/FormData";
 import { deleteEvent, editEvent, checkIn, rsvp, pageLoad, fetchAllUsers } from "../../ducks";
 import {
 	View,
@@ -25,6 +25,7 @@ const dimension = Dimensions.get("screen");
 class EventDetails extends Component {
 	constructor(props) {
 		super(props);
+
 		this.state = {
 			modalVisible: false,
 			eventFormVisibility: false
@@ -186,6 +187,7 @@ class EventDetails extends Component {
 
 		let users = [];
 		const email = userList[activeUser.id].email;
+
 		attendants.map(attendant => { users.push(userList[attendant]) });
 
 		let csv = this.convertArrayOfObjectsToCSV({
@@ -201,6 +203,7 @@ class EventDetails extends Component {
 			4. Open the file in Excel\n\
 			------------------\n\n" + csv;
 		let link = `mailto:${email}?subject=event: ${activeEvent.name}&body=` + data;
+
 		if (!Linking.canOpenURL(link)) {
 			Alert.alert("Email could not be sent", { type: "error", title: "Failure" });
 		}
@@ -275,6 +278,7 @@ class EventDetails extends Component {
 			title = "Manual Check In"
 			onPress = { props.onPress }
 		/>;
+
 		if (!excludeDataProp) excludeDataProp = { [activeUser.id]: true };
 		else Object.assign(excludeDataProp, { [activeUser.id]: true });
 
@@ -436,13 +440,12 @@ class EventDetails extends Component {
 			return (
 				<SafeAreaView style = { page }>
 					<NavBar title = { viewName } back onBack = { () => Actions.pop() } />
-					<Form
-						elements = { upsertEventFormData }
+					<EventForm
 						title = "Edit Event"
-						initialValues = { convertObjectToInitialValues(this.props.activeEvent) }
+						values = { this.props.activeEvent }
 						visible = { this.state.eventFormVisibility }
-						changeVisibility = { (visible) => this.setState({ eventFormVisibility: visible }) }
-						onSubmit = { (value) => editEvent(value) }
+						onSubmit = { event => editEvent(event) }
+						changeVisibility = { visible => this.setState({ eventFormVisibility: visible }) }
 					/>
 					<View style = { container }>
 						<View style = { iconContainer }>
@@ -635,6 +638,6 @@ const mapStateToProps = ({ events, user, members }) => {
 	return { activeEvent, userList, activeUser };
 };
 
-const mapDispatchToProps = { deleteEvent, checkIn, rsvp, pageLoad, fetchAllUsers };
+const mapDispatchToProps = { checkIn, rsvp, pageLoad, fetchAllUsers };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventDetails);

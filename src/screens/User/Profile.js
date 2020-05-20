@@ -1,59 +1,44 @@
 import React, { Component } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { connect } from "react-redux";
-import { Alert, Button, ButtonLayout } from "../../components";
+import { Alert, Button, ButtonLayout, Form } from "../../components";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
 import { Avatar } from "react-native-elements";
 import Flag from "react-native-flags";
-import { openGallery } from "../../utils/render";
-import { verifiedCheckMark } from "../../utils/render";
+import { openGallery, verifiedCheckMark } from "../../utils/render";
 import { loadUser, logoutUser, pageLoad, editUser } from "../../ducks";
 import {
 	editProfileFormDataPrivileged,
 	editProfileFormDataRegular,
 	convertObjectToInitialValues
 } from "../../data/FormData";
-import { Form } from "../../components";
 
-const dimension = Dimensions.get("window");
+const { height, width } = Dimensions.get("window");
+
 class Profile extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			editProfileFormVisibility: false
-		};
+		this.state = { editProfileFormVisibility: false };
 	}
+
 	shouldComponentUpdate(nextProps) {
 		return nextProps.firstName || nextProps.lastName || nextProps.firstName !== "";
 	}
 
 	render() {
-		return (
-			this.renderContent()
-		);
+		return this.renderContent();
 	}
 
 	renderContent() {
-		const {
-			email,
-			major,
-			points,
-			privilege
-		} = this.props.activeUser;
-		const {
-			bioContainer,
-			fieldContainerStyle,
-			itemLabelText,
-			itemValueText,
-			textColor
-		} = styles;
+		const { email, major, points, privilege } = this.props.activeUser;
+		const { bioContainer, fieldContainerStyle, itemLabelText, itemValueText, textColor } = styles;
 
 		return (
 			<SafeAreaView style = {{ flex: 1, backgroundColor: "#0c0b0b" }}>
 				<Form
 					elements = { privilege.eboard ? editProfileFormDataPrivileged : editProfileFormDataRegular }
-					initialValues = { convertObjectToInitialValues(this.props.activeUser) }
+					values = { convertObjectToInitialValues(this.props.activeUser) }
 					title = "Edit Profile"
 					visible = { this.state.editProfileFormVisibility }
 					changeVisibility = { (visible) => this.setState({ editProfileFormVisibility: visible }) }
@@ -100,29 +85,15 @@ class Profile extends Component {
 	}
 
 	renderPicture() {
-		const {
-			headerInfoContainer,
-			taglineContainer,
-			nameLabelText,
-			textColor,
-			row
-		} = styles;
-
-		const {
-			firstName,
-			lastName,
-			picture,
-			privilege,
-			color,
-			id
-		} = this.props.activeUser;
+		const { headerInfoContainer, taglineContainer, nameLabelText, textColor, row } = styles;
+		const { firstName, lastName, picture, privilege, color, id } = this.props.activeUser;
 
 		return (
 			<View style = { [headerInfoContainer] }>
 				<View style = {{ flex: 1, paddingTop: "8%", marginBottom: "30%" }}>
 					{ picture === ""
 					&& <Avatar
-						size = { dimension.height * 0.32 }
+						size = { height * 0.32 }
 						rounded
 						titleStyle = {{ backgroundColor: color }}
 						overlayContainerStyle = {{ backgroundColor: color }}
@@ -131,7 +102,7 @@ class Profile extends Component {
 					/>	}
 					{ picture !== ""
 					&& <Avatar
-						size = { dimension.height * 0.32 }
+						size = { height * 0.32 }
 						rounded
 						source = {{ uri: picture }}
 						onPress = { () => openGallery(`users/${id}`, id) }
@@ -148,9 +119,7 @@ class Profile extends Component {
 	}
 
 	renderButtons() {
-		const {
-			flag
-		} = this.props.activeUser;
+		const { flag } = this.props.activeUser;
 
 		let icon = flag !== "" && flag ? {
 			data: <Flag
@@ -162,46 +131,36 @@ class Profile extends Component {
 		} : null;
 
 		return (
-			<View>
-				<ButtonLayout
-					icon = { icon }
-				>
-					<Button
-						title = "Edit profile"
-						onPress = { () => this.setState({ editProfileFormVisibility: true }) }
-					/>
-					<Button
-						title = "Logout"
-						onPress = { () => logoutUser() }
-					/>
-				</ButtonLayout>
-			</View>
+			<ButtonLayout icon = { icon }>
+				<Button
+					title = "Edit profile"
+					onPress = { () => this.setState({ editProfileFormVisibility: true }) }
+				/>
+				<Button
+					title = "Logout"
+					onPress = { () => logoutUser() }
+				/>
+			</ButtonLayout>
 		);
 	}
 
 	renderSocialMedia() {
-		const {
-			logoContainer,
-			socialmediarow
-		} = styles;
-
-		const {
-			color
-		} = this.props.activeUser;
+		const { logoContainer, socialMediaRow } = styles;
+		const { color } = this.props.activeUser;
 
 		return (
 			<View style = {{ flex: 0.2 }}>
-				<View style = {{ flex: 0.03 }}></View>
-				<View style = { socialmediarow }>
+				<View style = {{ flex: 0.03 }} />
+				<View style = { socialMediaRow }>
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
 						<TouchableOpacity onPress = { () => Alert.alert("Coming Soon") }>
-							<Ionicons name = "logo-linkedin" size = { dimension.height * 0.045 } color = "white" />
+							<Ionicons name = "logo-linkedin" size = { height * 0.045 } color = "white" />
 						</TouchableOpacity>
 					</View>
-					<View style = {{ flex: 0.01 }}></View>
+					<View style = {{ flex: 0.01 }} />
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
 						<TouchableOpacity onPress = { () => Alert.alert("Coming Soon") }>
-							<Ionicons name = "ios-mail" size = { dimension.height * 0.045 } color = "white" />
+							<Ionicons name = "ios-mail" size = { height * 0.045 } color = "white" />
 						</TouchableOpacity>
 					</View>
 				</View>
@@ -239,35 +198,28 @@ const styles = {
 		flex: 1
 	},
 	nameLabelText: {
-		fontSize: dimension.height * 0.03,
+		fontSize: height * 0.03,
 		fontWeight: "bold",
 		color: "#fff",
-		lineHeight: dimension.height * 0.03
+		lineHeight: height * 0.03
 	},
 	itemLabelText: {
-		fontSize: dimension.width * 0.04,
+		fontSize: width * 0.04,
 		fontWeight: "bold",
 		color: "#fff",
-		lineHeight: dimension.height * 0.03
-	},
-	itemValueContainerStyle: {
-		flexDirection: "row",
-		justifyContent: "center"
+		lineHeight: height * 0.03
 	},
 	itemValueText: {
-		fontSize: dimension.height * 0.02,
+		fontSize: height * 0.02,
 		fontWeight: "500",
 		color: "#fff"
-	},
-	buttonsContainerStyle: {
-		flex: 0.4
 	},
 	logoContainer: {
 		flex: 1,
 		alignItems: "center",
 		justifyContent: "center"
 	},
-	socialmediarow: {
+	socialMediaRow: {
 		flex: 1,
 		flexDirection: "row",
 		backgroundColor: "black"
@@ -275,10 +227,6 @@ const styles = {
 	bioContainer: {
 		flex: 0.7,
 		backgroundColor: "#21252b"
-	},
-	socialmediatext: {
-		flex: 1,
-		alignSelf: "center"
 	}
 };
 
@@ -286,10 +234,7 @@ const mapStateToProps = ({ user, general }) => {
 	const { activeUser } = user;
 	const { loading } = general;
 
-	return {
-		activeUser,
-		loading
-	 };
+	return { activeUser, loading };
 };
 
 const mapDispatchToProps = {

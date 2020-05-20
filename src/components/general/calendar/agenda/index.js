@@ -96,11 +96,10 @@ export default class AgendaView extends Component {
 
 	constructor(props) {
 		super(props);
-
 		this.styles = styleConstructor(props.theme);
 
 		const windowSize = Dimensions.get("window");
-		this.viewHeight = windowSize.height;
+		this.viewHeight = 0;
 		this.viewWidth = windowSize.width;
 		this.scrollTimeout = undefined;
 		this.headerState = "idle";
@@ -125,6 +124,10 @@ export default class AgendaView extends Component {
 		this.generateMarkings = this.generateMarkings.bind(this);
 		this.knobTracker = new VelocityTracker();
 		this.state.scrollY.addListener(({ value }) => this.knobTracker.add(value));
+	}
+
+	componentDidUpdate(prevProps) {
+		if (this.props !== prevProps) this.setState({ opened: false, calendarScrollable: false });
 	}
 
 	calendarOffset() {
@@ -419,7 +422,7 @@ export default class AgendaView extends Component {
 
 		let knob = <View style = { this.styles.knobContainer } />;
 
-		if (!this.props.hideKnob) {
+		if (!this.hideKnob) {
 			const knobView = this.props.renderKnob ? this.props.renderKnob() : <View style = { this.styles.knob } />;
 			knob = this.state.calendarScrollable ? null
 				: <View style = { this.styles.knobContainer }>
@@ -526,7 +529,7 @@ AgendaView.defaultProps = {
 	renderItem: (reservation) => <DefaultItem item = { reservation } />,
 	renderEmptyData: () => <DefaultEmptyData />,
 	renderEmptyDate: () => <View></View>,
-	rowHasChanged: (r1, r2) => r1.name !== r2.name,
+	rowHasChanged: (r1, r2) => r1 !== r2,
 	pastScrollRange: 24,
 	futureScrollRange: 24,
 	theme: {

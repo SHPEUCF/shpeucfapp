@@ -12,6 +12,10 @@ class PickerInput extends Component {
 		this.state = { text: this.props.value, modalVisible: false };
 	}
 
+	componentDidUpdate(prevProps) {
+		if (prevProps.value !== this.props.value) this.setState({ text: this.props.value });
+	}
+
 	static propTypes = {
 		title: PropTypes.string.isRequired,
 		value: PropTypes.oneOfType([

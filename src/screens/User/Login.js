@@ -10,7 +10,7 @@ import {
 	loginUser,
 	registrationError
 } from "../../ducks";
-import { Form } from "../../components";
+import { Form } from "../../components/";
 
 const dimension = Dimensions.get("window");
 

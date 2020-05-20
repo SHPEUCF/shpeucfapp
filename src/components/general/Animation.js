@@ -39,15 +39,15 @@ class Animation extends Component {
  * @classdesc Utility class for Animation component. Used to start a transition with the Animation class and
  *            static sliding() function.
  *
- * @typedef    {Object}                Anim
- * 	@property  {number}                toValue          Maximum value the animated value will reach.
- * 	@property  {number=}               duration         Duration of animation.
- * 	@property  {number=}               delay            Delay for animation to start.
- * 	@property  {(string | string[])=}  easing           Easing function for animation.
- * 	@property  {(number | Object)=}    easeValue        Value for easing function.
- * 	@property  {Object}                relative         toValue with respect to device screen.
- * 	@property  {number}                relative.ratio   Ratio to scale.
- * 	@property  {string}                relative.screen  Screen dimension to scale ratio with. ["height", "width"]
+ * @typedef {Object} Anim
+ *		@property {number}                toValue          Maximum value the animated value will reach.
+ *		@property {number=}               duration         Duration of animation.
+ *		@property {number=}               delay            Delay for animation to start.
+ *		@property {(string | string[])=}  easing           Easing function for animation.
+ *		@property {(number | Object)=}    easeValue        Value for easing function.
+ *		@property {Object}                relative         toValue with respect to device screen.
+ *		@property {number}                relative.ratio   Ratio to scale.
+ *		@property {string}                relative.screen  Screen dimension to scale ratio with. ["height", "width"]
  */
 
 export class Animate {
@@ -61,6 +61,7 @@ export class Animate {
 	 * @param {number}           initial.ratio   Ratio to scale with respect to device screen.
 	 * @param {string}           initial.screen  Screen dimension to scale ratio with. ["height", "width"]
 	 */
+
 	static Animate = props => (
 		<Animation { ...props } ref = { animated => (this.Animation = animated) }>
 			{ props.children }
@@ -73,7 +74,7 @@ export class Animate {
 		let easingFunction = new Set(["poly", "elastic", "back", "bezier", "in", "out", "inOut"]);
 		let ease;
 
-		if (typeof easing == "string")
+		if (typeof easing === "string")
 			easing = [easing];
 
 		while (easing.length > 0) {
@@ -91,14 +92,14 @@ export class Animate {
 	/**
 	 * @description Static function to execute an animation with the timing Animated function.
 	 *
-	 * @param  {Anim}       animation  Animated object for timing function.
-	 * @param  {Function=}  callback   Function to execute after animation is done.
+	 * @param {Anim}       animation  Animated object for timing function.
+	 * @param {Function=}  callback   (Optional) Function to execute after animation is done.
 	 */
 
 	static animation({ toValue, relative: { ratio = 0.5, screen = "height" }, duration, delay, easing, easeValue }, callback) {
 		this.Animation.timing({
 			toValue: toValue || dimension[screen] * ratio,
-			easing: Animate.resolveEasing(easing, easeValue),
+			easing: this.resolveEasing(easing, easeValue),
 			duration,
 			delay
 		}, callback);

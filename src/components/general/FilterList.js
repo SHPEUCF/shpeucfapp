@@ -7,85 +7,85 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 const dimension = Dimensions.get("window");
 
 /**
-	FilterList
-	@class
-
-	@param {(String[] | Object[])}  data        An array of the data that will be displayed.
-	@param {(String | Object)}      value	      The initial value of the FilterList component.
-	@param {String}                 placeholder The placeholder in the searchbar.
-	@param {Function}               onSelect    Used to pass the selected Value to the parent.
-	@param {Function=}              regexFunc   {Optional} Specifies what props to show when rendering.
-	@param {Function=}              selectBy    {Optional} Specifies how to store value in the case of duplicate strings.
-	@param {Function=}              itemJSX     {Optional} Determines how each item will be rendered.
-	@param {Boolean=}               multiple    {Optional} Allows user to select multiple items.
-	@param {Boolean=}               search      {Optional} Determines the visibility of the searchbar.
-
-	@example
-		Single
-		<FilterList
-			data = { userList }
-			value = { userList[chair.id] }
-			placeholder = { "Director/Chairperson" }
-			regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
-			selectBy = { (data) => { return data.id } }
-			onSelect = { (data) => { this.props.chairChanged(data) } }
-			itemJSX = { (data) => this.renderMemberComponent(data) }
-		/>
-		Multiple
-		<FilterList
-			multiple = true
-			CustomForm = { Wrapper }
-			data = { list }
-			regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
-			selectBy = { (data) => { return data.id } }
-			itemJSX = { (data) => this.renderCheckInComponent(data) }
-			onSelect = { (selectedUsers) => {
-				this.checkInMembers(selectedUsers);
-			} }
-		/>
-		SearchBar
-		<FilterList
-			data = { sortedMembers }
-			search = { this.state.search }
-			placeholder = "Find user"
-			regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
-			onSelect = { (data) => this.callUser(data.id) }
-			itemJSX = { (data) => this.renderComponent(data, sortedMembers) }
-		/>
-**/
+ * @param {(String[] | Object[])}  data         An array of the data that will be displayed.
+ * @param {(String | Object)=}     value	      The initial value of the FilterList component.
+ * @param {String}                 placeholder  The placeholder in the searchbar.
+ * @param {Function}               onSelect     Used to pass the selected Value to the parent.
+ * @param {Function=}              regexFunc    (Optional) Specifies what props to show when rendering.
+ * @param {Function=}              selectBy     (Optional) Specifies how to store value in the case of duplicate strings.
+ * @param {Function=}              itemJSX      (Optional) Determines how each item will be rendered.
+ * @param {Boolean=}               multiple     (Optional) Allows user to select multiple items.
+ * @param {Boolean=}               search       (Optional) Determines the visibility of the searchbar.
+ *
+ * @example
+ * Single
+ * 	<FilterList
+ * 		data = { userList }
+ * 		value = { userList[chair.id] }
+ * 		placeholder = { "Director/Chairperson" }
+ * 		regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
+ * 		selectBy = { (data) => { return data.id } }
+ * 		onSelect = { (data) => { this.props.chairChanged(data) } }
+ * 		itemJSX = { (data) => this.renderMemberComponent(data) }
+ * 	/>
+ * Multiple
+ * 	<FilterList
+ * 		multiple = true
+ * 		CustomForm = { Wrapper }
+ * 		data = { list }
+ * 		regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
+ * 		selectBy = { (data) => { return data.id } }
+ * 		itemJSX = { (data) => this.renderCheckInComponent(data) }
+ * 		onSelect = { (selectedUsers) => {
+ * 			this.checkInMembers(selectedUsers);
+ * 		} }
+ * 	/>
+ * SearchBar
+ * 	<FilterList
+ * 		data = { sortedMembers }
+ * 		search = { this.state.search }
+ * 		placeholder = "Find user"
+ * 		regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
+ * 		onSelect = { (data) => this.callUser(data.id) }
+ * 		itemJSX = { (data) => this.renderComponent(data, sortedMembers) }
+ * 	/>
+ */
 
 class FilterList extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { val: "", modalVisible: false, filter: "", selected: {} };
+		this.state = { val: "", modalVisible: false, filter: "", selected: this.processInitialValues() };
 	}
 
-	componentDidMount() {
-		const {
-			value,
-			regexFunc,
-			selectBy,
-			multiple
-		} = this.props;
+	componentDidUpdate(prevProps) {
+		if (prevProps.value !== this.props.value) this.setState(this.processInitialValues());
+	}
 
-		let valArray;
-		let selectedObj = {};
+	processInitialValues() {
+		const { value, regexFunc, selectBy, multiple } = this.props;
+
+		let selected = {};
+
 		if (value) {
 			// process initial values and store them into the selected state property
 
 			if (!multiple && Object.values(value).length !== 0) {
 				this.setState({ val: regexFunc(value) });
-				selectedObj[selectBy(value)] = value;
+				selected[selectBy(value)] = value;
 			}
-			// multiple values get processed individually and stored into the state property
-			// compatible with both array and object values
+			/*
+			 * multiple values get processed individually and stored into the state property
+			 * compatible with both array and object values
+			 */
 			else {
-				valArray = Array.isArray(value) ? value : Object.values(value);
-				valArray.forEach(function (item) {
-					selectedObj[selectBy(item)] = item;
+				let newValues = Array.isArray(value) ? value : Object.values(value);
+
+				newValues.forEach(function (item) {
+					selected[selectBy(item)] = item;
 				});
 			}
-			this.setState({ selected: selectedObj });
+
+			return { selected };
 		}
 	}
 
@@ -94,7 +94,7 @@ class FilterList extends Component {
 			PropTypes.string,
 			PropTypes.array,
 			PropTypes.shape({})
-		]).isRequired,
+		]),
 		data: PropTypes.oneOfType([
 			PropTypes.array,
 			PropTypes.shape({})
@@ -112,27 +112,13 @@ class FilterList extends Component {
 	}
 
 	render = () => {
-		const {
-			placeholder,
-			CustomForm,
-			search,
-			selectionBoxStyle,
-			iconColor,
-			iconSize
-		} = this.props;
-		const {
-			val,
-			modalVisible
-		} = this.state;
-		const {
-			iconStyle,
-			dropDownArrowStyle,
-			selectionStyle
-		} = styles;
+		const { placeholder, CustomForm, search, selectionBoxStyle, iconColor, iconSize } = this.props;
+		const { val, modalVisible } = this.state;
+		const { iconStyle, dropDownArrowStyle, selectionStyle } = styles;
 
 		let picker = null;
 
-		if (search != null || search != undefined) {
+		if (search != null) {
 			picker = <View style = {{ height: "100%" }}>
 				{ search
 				&& <View>
@@ -141,7 +127,6 @@ class FilterList extends Component {
 				{ this.renderFlatList() }
 			</View>;
 		}
-
 		else {
 			// renders selectively based on whether a CustomForm was supplied
 			picker = <SafeAreaView>
@@ -163,10 +148,7 @@ class FilterList extends Component {
 				{ CustomForm && <CustomForm
 					onPress = { () => this.setState({ modalVisible: true }) }
 				/> }
-				<Modal
-					transparent = { true }
-					visible = { modalVisible }
-				>
+				<Modal transparent = { true } visible = { modalVisible }>
 					{ this.renderModalContent() }
 				</Modal>
 			</SafeAreaView>;
@@ -180,12 +162,8 @@ class FilterList extends Component {
 	};
 
 	renderModalContent() {
-		const {
-			modalBackground
-		} = styles;
-		const {
-			modalBackgroundStyle
-		} = this.props;
+		const { modalBackground } = styles;
+		const { modalBackgroundStyle } = this.props;
 
 		return (
 			<SafeAreaView style = { [modalBackground, modalBackgroundStyle] }>
@@ -198,14 +176,8 @@ class FilterList extends Component {
 	}
 
 	renderSearchBox() {
-		const {
-			searchStyle,
-			searchBoxContainer
-		} = styles;
-		const {
-			searchBoxStyle,
-			placeholder
-		} = this.props;
+		const { searchStyle, searchBoxContainer } = styles;
+		const { searchBoxStyle, placeholder } = this.props;
 
 		return (
 			<View style = { searchBoxContainer }>
@@ -220,9 +192,7 @@ class FilterList extends Component {
 	}
 
 	renderFlatList() {
-		const {
-			data
-		} = this.props;
+		const { data } = this.props;
 
 		let newData = Array.isArray(data) ? data : Object.values(data);
 
@@ -237,22 +207,12 @@ class FilterList extends Component {
 	}
 
 	renderComponent(data) {
-		const {
-			onSelect,
-			regexFunc,
-			selectBy,
-			search
-		} = this.props;
+		const { onSelect, regexFunc, selectBy, search } = this.props;
+		const { filter, selected } = this.state;
 
-		const {
-			filter,
-			selected
-		} = this.state;
-
-		let re = new RegExp("^" + filter, "i");
+		let re = new RegExp((filter || " ") + "+", "i");
 		let backgroundColor = {};
 		let pressAction = (data) => onSelect(data);
-
 		let regexVal = regexFunc(data);
 		let desiredVal = selectBy(data);
 
@@ -263,8 +223,7 @@ class FilterList extends Component {
 
 		if (re.test(regexVal)) {
 			return (
-				<TouchableOpacity
-					onPress = { () => pressAction(data) }>
+				<TouchableOpacity onPress = { () => pressAction(data) }>
 					<View style = { backgroundColor }>
 						{ this.props.itemJSX(data, this.props.regexFunc) }
 					</View>
@@ -276,12 +235,8 @@ class FilterList extends Component {
 	_keyExtractor = (item, index) => index;
 
 	select(data, desiredVal) {
-		const {
-			multiple
-		} = this.props;
-		const {
-			selected
-		} = this.state;
+		const { multiple } = this.props;
+		const { selected } = this.state;
 
 		let selectedData = Object.assign({}, selected);
 
@@ -294,24 +249,20 @@ class FilterList extends Component {
 	}
 
 	renderButtons() {
-		const {
-			selected
-		} = this.state;
-		const {
-			multiple,
-			regexFunc
-		} = this.props;
-
-		let output = Object.values(selected);
-		let value = "";
+		const { selected } = this.state;
+		const { multiple, regexFunc } = this.props;
 
 		return (
 			<ButtonLayout>
 				<Button
 					title = "Done"
 					onPress = { () => {
+						let output = Object.values(selected);
+						let value = "";
+
 						if (output.length === 0) {
 							Alert.alert("You never selected anything!");
+
 							return;
 						}
 						if (!multiple) {
@@ -333,17 +284,13 @@ class FilterList extends Component {
 		);
 	}
 
-	// auxiliary function that allows parent to control modalvisibility
 	changeVisible(change) {
 		this.setState({ modalVisible: change });
 	}
 }
 
 const defaultJSX = (data, regexFunc) => {
-	const {
-		contentContainerStyle,
-		textStyle
-	} = styles;
+	const { contentContainerStyle, textStyle } = styles;
 
 	return (
 		<View style = { contentContainerStyle }>
@@ -352,7 +299,7 @@ const defaultJSX = (data, regexFunc) => {
 	);
 };
 
-// handles default values for regexFunc and selectBy props
+// Handles default values for regexFunc and selectBy props
 const defaultValues = (data) => {
 	return data;
 };

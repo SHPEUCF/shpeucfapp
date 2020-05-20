@@ -1,34 +1,34 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Alert, Button, ButtonLayout, Form, Agenda } from "../../components";
-import { formatEventListForCalendar } from "../../utils/events";
+import { Alert, Button, ButtonLayout, Agenda } from "../../components/";
+import { formatEventListForCalendar, prepend0 } from "../../utils/events";
 import { loadEvent, createEvent } from "../../ducks";
-import { upsertEventFormData } from "../../data/FormData";
+import { EventForm } from "../../data/FormData";
 import { View, Dimensions, SafeAreaView } from "react-native";
 
 const dimension = Dimensions.get("window");
-let dateStr = "";
 
 class Events extends Component {
 	constructor(props) {
 		super(props);
+
 		this.state = {
 			status: "closed",
-			day: new Date(),
-			eventFormVisibility: false
+			currentDay: this.getTodaysDate(),
+			eventFormVisibility: false,
+			agendaRefresh: false
 	 };
-	 dateStr = this.getTodaysDate();
 	}
 
-	componentDidMount() {
-		dateStr = this.getTodaysDate();
-	}
+	didBlurSubscription = this.props.navigation.addListener("didBlur",
+		() => this.setState({ agendaRefresh: !this.state.agendaRefresh })
+	);
 
 	getTodaysDate() {
 		let date = new Date();
-		let month = this.prepend0((date.getMonth() + 1).toString());
+		let month = prepend0((date.getMonth() + 1).toString());
 		let year = date.getFullYear();
-		let day = this.prepend0(date.getDate().toString());
+		let day = prepend0(date.getDate().toString());
 
 		return `${year}-${month}-${day}`;
 	}
@@ -37,27 +37,25 @@ class Events extends Component {
 		Alert.alert(new Date());
 	}
 
-	prepend0(item) {
-		return item < 10 ? "0" + item : item;
-	}
-
 	render() {
+		const { mainBackgroundColor, secondaryBackgroundColor, fullFlex } = styles;
+
 		return (
-			<SafeAreaView style = {{ flex: 1, backgroundColor: "#0c0b0b" }}>
-				<View style = {{ backgroundColor: "black", flex: 1 }}>
-					<View style = {{ flex: 1 }}>
-						<Form
-							elements = { upsertEventFormData }
+			<SafeAreaView style = { [fullFlex, mainBackgroundColor] }>
+				<View style = { [fullFlex, secondaryBackgroundColor] }>
+					<View style = { fullFlex }>
+						<EventForm
 							title = "Create Event"
-							initialValues = { [{ camelCaseName: "date", value: dateStr }] }
+							values = {{ date: this.state.currentDay }}
 							visible = { this.state.eventFormVisibility }
+							onSubmit = { event => createEvent(event) }
 							changeVisibility = { (visible) => this.setState({ eventFormVisibility: visible }) }
-							onSubmit = { (value) => createEvent(value) }
 						/>
 						<Agenda
-							passDate = { (item) => dateStr = item.dateString }
+							passDate = { date => this.setState({ currentDay: date.dateString }) }
 							items = { formatEventListForCalendar(this.props.sortedEvents) }
 							style = {{ height: dimension.height * 0.73 }}
+							refresh = { this.state.agendaRefresh }
 						/>
 					</View>
 					{ this.renderButton() }
@@ -79,6 +77,18 @@ class Events extends Component {
 		);
 	}
 }
+
+const styles = {
+	mainBackgroundColor: {
+		backgroundColor: "#0c0b0b"
+	},
+	secondaryBackgroundColor: {
+		backgroundColor: "black"
+	},
+	fullFlex: {
+		flex: 1
+	}
+};
 
 const mapStateToProps = ({ events, user }) => {
 	const { sortedEvents } = events;
