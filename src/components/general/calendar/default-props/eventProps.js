@@ -24,7 +24,8 @@ export const DefaultItem = ({ item }) => {
 	useEffect(() => { itemRef.current = item });
 
 	// reloads the active event if the item prop data changed upon rerender
-	if (!_.isEqual(previousItemData, item) && state.events.activeEvent.id === id) dispatch(loadEvent(item));
+	if (!_.isEqual(previousItemData, item) && state.events.activeEvent.id === id
+		&& !_.isEqual(state.events.activeEvent, item)) dispatch(loadEvent(item));
 
 	return (
 		<TouchableOpacity onPress = { () => viewEvent(item, dispatch) }>

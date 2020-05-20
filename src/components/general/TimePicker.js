@@ -49,7 +49,9 @@ class TimePicker extends Component {
 			if (minuteAndTimePeriod.length === 2)
 				[hour, minuteAndTimePeriod] = convertMilitaryToStandardTime(`${hour}:${minuteAndTimePeriod}`).split(":");
 
-			time = [prepend0(hour), ...minuteAndTimePeriod.split(" ")];
+			let [minute, period] = minuteAndTimePeriod.split(" ");
+
+			time = [hour, parseInt(minute), period];
 		}
 		const isInitialized = time.length === 3;
 
@@ -119,7 +121,7 @@ class TimePicker extends Component {
 							title = { "Enter an hour" }
 							value = { hour }
 							onSelect = { (text) => this.clickActionHour(text) }
-							placeholder = { "HH" }
+							placeholder = { "12" }
 							{ ...defaultPickerStyle }
 						/>
 					</View>
@@ -128,9 +130,9 @@ class TimePicker extends Component {
 							data = { minuteArr }
 							style = { style }
 							title = { "Enter minute" }
-							value = { minute }
+							value = { minute !== "" ? prepend0(minute) : "" }
 							onSelect = { (text) => this.clickActionMinute(text) }
-							placeholder = { "MM" }
+							placeholder = { "00" }
 							{ ...defaultPickerStyle }
 						/>
 					</View>
@@ -140,7 +142,7 @@ class TimePicker extends Component {
 							title = { "Enter AM/PM" }
 							value = { period }
 							onSelect = { (text) => this.clickActionPeriod(text) }
-							placeholder = { "AM/PM" }
+							placeholder = { "PM" }
 							{ ...defaultPickerStyle }
 						/>
 					</View>
