@@ -6,7 +6,7 @@ import { Alert, ButtonLayout, NavBar } from "../../components";
 import { Avatar } from "react-native-elements";
 import Flag from "react-native-flags";
 import { verifiedCheckMark } from "../../utils/render";
-import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
+import { Text, View, TouchableOpacity, Dimensions, SafeAreaView, Linking } from "react-native";
 
 const dimension = Dimensions.get("window");
 
@@ -122,8 +122,8 @@ class OtherProfile extends Component {
 	}
 
 	renderFlag() {
-
 		let flag = null;
+
 		if (this.props.flag !== "" && this.props.flag) {
 			flag = <Flag
 				type = "flat"
@@ -147,6 +147,12 @@ class OtherProfile extends Component {
 			socialmediarow
 		} = styles;
 
+		const {
+			firstName,
+			email,
+			linkedin
+		} = this.props;
+
 		return (
 			<View style = {{ flex: 0.2 }}>
 				<View style = {{ flex: 0.03 }}></View>
@@ -154,8 +160,7 @@ class OtherProfile extends Component {
 					<View style = { [LogoContainer, { backgroundColor: this.props.color, flex: 1 }] }>
 						<TouchableOpacity
 							onPress = { () => {
-								Alert.alert("Coming Soon");
-								// Actions.PostShow({ title: 'Linkedin', uri: 'https://www.linkedin.com/'})
+								this.openApp(linkedin, firstName);
 							} }>
 							<Ionicons name = "logo-linkedin" size = { dimension.height * 0.045 } color = 'white' />
 						</TouchableOpacity>
@@ -164,8 +169,7 @@ class OtherProfile extends Component {
 					<View style = { [LogoContainer, { backgroundColor: this.props.color, flex: 1 }] }>
 						<TouchableOpacity
 							onPress = { () => {
-								Alert.alert("Coming Soon");
-								// Actions.PostShow({ title: 'Github', uri: 'https://www.github.com/'})
+								this.openEmail(email, firstName);
 							} } >
 							<Ionicons name = "ios-mail" size = { dimension.height * 0.045 } color = 'white' />
 						</TouchableOpacity>
@@ -173,6 +177,42 @@ class OtherProfile extends Component {
 				</View>
 			</View>
 		);
+	}
+
+	async openApp(profile, name) {
+		if (!profile) {
+			Alert.alert(`${ name } has not added his LinkedIn profile yet.`);
+		}
+		else {
+			let url = `linkedin://in/${ profile }`;
+
+			console.log(`URL: ${ profile }`);
+			// then have to check if the link can be handle
+			const canOpenLink = await Linking.canOpenURL(url);
+
+			if (canOpenLink)
+				await Linking.openURL(url);
+			else
+				await Linking.openURL(`https://linkedin.com/in/${ profile }`);
+		}
+	}
+
+	async openEmail(to, name) {
+		if (!to) {
+			Alert.alert(`No email for ${ name } has been found.`);
+		}
+		else {
+			let url = `mailto:${ to }`;
+			const canOpenEmail = await Linking.canOpenURL(url);
+
+			if (canOpenEmail) {
+				await Linking.openURL(url);
+			}
+			else {
+				Alert.alert(`Oops! Somenthing went wrong.\\n
+							If problem persists contact support.`);
+			}
+		}
 	}
 }
 
@@ -259,7 +299,8 @@ const mapStateToProps = ({ members, general, user }) => {
 		quote,
 		color,
 		flag,
-		paidMember
+		paidMember,
+		linkedin
 	} = members;
 	const {
 		loading
@@ -280,7 +321,8 @@ const mapStateToProps = ({ members, general, user }) => {
 		activeUser,
 		color,
 		flag,
-		paidMember
+		paidMember,
+		linkedin
 	};
 };
 

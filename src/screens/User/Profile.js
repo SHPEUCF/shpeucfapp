@@ -29,7 +29,10 @@ class Profile extends Component {
 	render() {
 		return this.renderContent();
 	}
-
+	/*
+	 * using convertObjectToInitialValues() to pass the value back to values break the app due to parameter
+	 * miss match. Form expected an object but receives an array.
+	 */
 	renderContent() {
 		const { email, major, points, privilege } = this.props.activeUser;
 		const { bioContainer, fieldContainerStyle, itemLabelText, itemValueText, textColor } = styles;
@@ -38,12 +41,12 @@ class Profile extends Component {
 			<SafeAreaView style = {{ flex: 1, backgroundColor: "#0c0b0b" }}>
 				<Form
 					elements = { privilege.eboard ? editProfileFormDataPrivileged : editProfileFormDataRegular }
-					values = { convertObjectToInitialValues(this.props.activeUser) }
+					values = { this.props.activeUser }
 					title = "Edit Profile"
 					visible = { this.state.editProfileFormVisibility }
 					changeVisibility = { (visible) => this.setState({ editProfileFormVisibility: visible }) }
-					onSubmit = { ({ gender, major, country, birthday }) =>
-						editUser({ gender, major, country, birthday }) }
+					onSubmit = { ({ gender, major, country, birthday, linkedin }) =>
+						editUser({ gender, major, country, birthday, linkedin }) }
 				/>
 				<View style = {{ flex: 1, backgroundColor: "black" }}>
 					{ this.renderPicture() }
@@ -159,7 +162,7 @@ class Profile extends Component {
 					</View>
 					<View style = {{ flex: 0.01 }} />
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
-						<TouchableOpacity onPress = { () => Linking.openURL(`mailto:${email}`) }>
+						<TouchableOpacity onPress = { () => this.openEmail(email) }>
 							<Ionicons name = "ios-mail" size = { height * 0.045 } color = "white" />
 						</TouchableOpacity>
 					</View>
@@ -168,23 +171,39 @@ class Profile extends Component {
 		);
 	}
 
-	async openApp(profile){
-		if(profile === "")
-		{
-			Alert.alert("No profile have been added.");
+	async openApp(profile) {
+		if (!profile) {
+			Alert.alert(`No profile have been added.\nTo add your profile click on Edit Profile.`);
 		}
-		let url = `linkedin://in/${profile}`;
+		else {
+			let url = `linkedin://in/${profile}`;
 
-		// then have to check if the link can be handle
-		const canOpenLink = await Linking.canOpenURL(url);
+			console.log(`URL: ${profile}`);
+			// then have to check if the link can be handle
+			const canOpenLink = await Linking.canOpenURL(url);
 
-		if(canOpenLink)
-		{
-			await Linking.openURL(url);
+			if (canOpenLink)
+				await Linking.openURL(url);
+			else
+				await Linking.openURL(`https://linkedin.com/in/${profile}`);
 		}
-		else
-		{
-			await Linking.openURL(`https://linkedin.com/in/${profile}`);
+	}
+
+	async openEmail(to) {
+		if (!to) {
+			Alert.alert("No email was found.\nTry again again.");
+		}
+		else {
+			let url = `mailto:${to}`;
+			const canOpenEmail = await Linking.canOpenURL(url);
+
+			if (canOpenEmail) {
+				await Linking.openURL(url);
+			}
+			else {
+				Alert.alert(`Oops! Somenthing went wrong.\n
+							If problem persists contact support.`);
+			}
 		}
 	}
 }
