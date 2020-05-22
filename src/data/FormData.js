@@ -161,11 +161,10 @@ const editProfileFormDataRegular = [
 		}
 	},
 	{
-		placeholder: "LinkedIn Profile",
+		placeholder: "LinkedIn Profile (after the in/)",
 		camelCaseName: "linkedin",
 		type: "Input",
 		isRequired: false
-
 	}
 ];
 
