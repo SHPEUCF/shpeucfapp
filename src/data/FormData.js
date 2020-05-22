@@ -159,6 +159,13 @@ const editProfileFormDataRegular = [
 		options: {
 			data: Countries
 		}
+	},
+	{
+		placeholder: "LinkedIn Profile",
+		camelCaseName: "linkedin",
+		type: "Input",
+		isRequired: false
+
 	}
 ];
 
