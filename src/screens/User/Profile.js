@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { connect } from "react-redux";
 import { Alert, Button, ButtonLayout, Form } from "../../components";
-import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
+import { Text, View, TouchableOpacity, Dimensions, SafeAreaView, Linking } from "react-native";
 import { Avatar } from "react-native-elements";
 import Flag from "react-native-flags";
 import { openGallery, verifiedCheckMark } from "../../utils/render";
@@ -146,26 +146,46 @@ class Profile extends Component {
 
 	renderSocialMedia() {
 		const { logoContainer, socialMediaRow } = styles;
-		const { color } = this.props.activeUser;
+		const { color, email, linkedin } = this.props.activeUser;
 
 		return (
 			<View style = {{ flex: 0.2 }}>
 				<View style = {{ flex: 0.03 }} />
 				<View style = { socialMediaRow }>
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
-						<TouchableOpacity onPress = { () => Alert.alert("Coming Soon") }>
+						<TouchableOpacity onPress = { () => this.openApp(linkedin) }>
 							<Ionicons name = "logo-linkedin" size = { height * 0.045 } color = "white" />
 						</TouchableOpacity>
 					</View>
 					<View style = {{ flex: 0.01 }} />
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
-						<TouchableOpacity onPress = { () => Alert.alert("Coming Soon") }>
+						<TouchableOpacity onPress = { () => Linking.openURL(`mailto:${email}`) }>
 							<Ionicons name = "ios-mail" size = { height * 0.045 } color = "white" />
 						</TouchableOpacity>
 					</View>
 				</View>
 			</View>
 		);
+	}
+
+	async openApp(profile){
+		if(profile === "")
+		{
+			Alert.alert("No profile have been added.");
+		}
+		let url = `linkedin://in/${profile}`;
+
+		// then have to check if the link can be handle
+		const canOpenLink = await Linking.canOpenURL(url);
+
+		if(canOpenLink)
+		{
+			await Linking.openURL(url);
+		}
+		else
+		{
+			await Linking.openURL(`https://linkedin.com/in/${profile}`);
+		}
 	}
 }
 
