@@ -12,6 +12,7 @@ import { rankMembersAndReturnsCurrentUser } from "../../utils/render";
 import { goToViewEvent } from "../../utils/router";
 import { months } from "../../data/DateItems";
 import { filterPastEvents } from "../../utils/events";
+import { appLinkingHandler, slackInfo } from "../../utils/appLinking";
 import {
 	Text,
 	View,
@@ -349,10 +350,10 @@ class Dashboard extends Component {
 		} = styles;
 
 		let buttonLinks = [
-			["https://shpeucf2018-2019.slack.com/", "slack"],
-			["https://www.facebook.com/shpeucfchapter/", "facebook"],
+			[`https://www.slack.com/channel?team=${slackInfo.team}&id=${slackInfo.channel.general}`, "slack"],
+			["https://www.facebook.com/groups/shpeucf", "facebook"],
 			["https://www.shpeucf.com/", "globe"],
-			["https://www.instagram.com/shpeucf/?hl=en", "instagram"]
+			["https://www.instagram.com/shpeucf", "instagram"]
 		];
 
 		return (
@@ -362,7 +363,7 @@ class Dashboard extends Component {
 						<TouchableOpacity
 							key = { index }
 							style = { socialMediaButton }
-							onPress = { () => Linking.openURL(data[0]) }
+							onPress = { () => appLinkingHandler(data[0]) }
 						>
 							<FontAwesomeIcon
 								style = { black }

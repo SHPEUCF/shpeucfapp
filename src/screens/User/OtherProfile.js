@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { connect } from "react-redux";
-import { Alert, ButtonLayout, NavBar } from "../../components";
+import { ButtonLayout, NavBar } from "../../components";
 import { Avatar } from "react-native-elements";
 import Flag from "react-native-flags";
 import { verifiedCheckMark } from "../../utils/render";
-import { Text, View, TouchableOpacity, Dimensions, SafeAreaView, Linking } from "react-native";
+import { appLinkingHandler } from "../../utils/appLinking";
+import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
 
 const dimension = Dimensions.get("window");
 
@@ -160,7 +161,8 @@ class OtherProfile extends Component {
 					<View style = { [LogoContainer, { backgroundColor: this.props.color, flex: 1 }] }>
 						<TouchableOpacity
 							onPress = { () => {
-								this.openApp(linkedin, firstName);
+								appLinkingHandler(`https://www.linkedin.com/in/${linkedin}`,
+									`${firstName} has not added their Linkedin profile yet.`);
 							} }>
 							<Ionicons name = "logo-linkedin" size = { dimension.height * 0.045 } color = 'white' />
 						</TouchableOpacity>
@@ -169,7 +171,7 @@ class OtherProfile extends Component {
 					<View style = { [LogoContainer, { backgroundColor: this.props.color, flex: 1 }] }>
 						<TouchableOpacity
 							onPress = { () => {
-								this.openEmail(email, firstName);
+								appLinkingHandler(`mailto:${email}`, `${firstName}'s email is not set.`);
 							} } >
 							<Ionicons name = "ios-mail" size = { dimension.height * 0.045 } color = 'white' />
 						</TouchableOpacity>
@@ -177,42 +179,6 @@ class OtherProfile extends Component {
 				</View>
 			</View>
 		);
-	}
-
-	async openApp(profile, name) {
-		if (!profile) {
-			Alert.alert(`${ name } has not added his LinkedIn profile yet.`);
-		}
-		else {
-			let url = `linkedin://in/${ profile }`;
-
-			console.log(`URL: ${ profile }`);
-			// then have to check if the link can be handle
-			const canOpenLink = await Linking.canOpenURL(url);
-
-			if (canOpenLink)
-				await Linking.openURL(url);
-			else
-				await Linking.openURL(`https://linkedin.com/in/${ profile }`);
-		}
-	}
-
-	async openEmail(to, name) {
-		if (!to) {
-			Alert.alert(`No email for ${ name } has been found.`);
-		}
-		else {
-			let url = `mailto:${ to }`;
-			const canOpenEmail = await Linking.canOpenURL(url);
-
-			if (canOpenEmail) {
-				await Linking.openURL(url);
-			}
-			else {
-				Alert.alert(`Oops! Somenthing went wrong.\\n
-							If problem persists contact support.`);
-			}
-		}
 	}
 }
 

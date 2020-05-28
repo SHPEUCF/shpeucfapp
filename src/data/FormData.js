@@ -1,12 +1,13 @@
 /*
-The order you put in the data reflects the order that the
-fields are displayed
-*/
+ * The order you put in the data reflects the order that the
+ * fields are displayed
+ */
 
 import React from "react";
 import Countries from "./Countries.json";
 import Majors from "./Majors.json";
 import { changeHourBy, timeVerification } from "../utils/events";
+import { editUser } from "../ducks";
 import { useSelector } from "react-redux";
 import { Form } from "../components";
 
@@ -35,6 +36,7 @@ export const EventForm = (props) => {
 					format: ({ type, committee }) => committee ? `${type}: ${committee}` : type.trim(),
 					revert: ({ type }) => {
 						const [eventType, , ] = type.split(": ");
+
 						return eventType;
 					}
 				},
@@ -132,77 +134,59 @@ export const EventForm = (props) => {
 	);
 };
 
-const editProfileFormDataRegular = [
-	{
-		placeholder: "Gender",
-		camelCaseName: "gender",
-		type: "PickerInput",
-		isRequired: false,
-		options: {
-			data: genderOptions
+export const ProfileForm = (props) => {
+	const memberFields = [
+		{
+			placeholder: "Gender",
+			camelCaseName: "gender",
+			type: "PickerInput",
+			isRequired: false,
+			options: { data: genderOptions }
+		},
+		{
+			placeholder: "Major",
+			camelCaseName: "major",
+			type: "FilterList",
+			isRequired: false,
+			options: { data: Majors }
+		},
+		{
+			placeholder: "Country of Origin",
+			camelCaseName: "country",
+			type: "FilterList",
+			isRequired: false,
+			options: { data: Countries }
+		},
+		{
+			placeholder: "LinkedIn Profile name",
+			camelCaseName: "linkedin",
+			type: "Input",
+			isRequired: false
 		}
-	},
-	{
-		placeholder: "Major",
-		camelCaseName: "major",
-		type: "FilterList",
-		isRequired: false,
-		options: {
-			data: Majors
-		}
-	},
-	{
-		placeholder: "Country of Origin",
-		camelCaseName: "country",
-		type: "FilterList",
-		isRequired: false,
-		options: {
-			data: Countries
-		}
-	},
-	{
-		placeholder: "LinkedIn Profile (after the in/)",
-		camelCaseName: "linkedin",
-		type: "Input",
-		isRequired: false
-	}
-];
+	];
 
-const editProfileFormDataPrivileged = [
-	{
-		placeholder: "Gender",
-		camelCaseName: "gender",
-		type: "PickerInput",
-		isRequired: false,
-		options: {
-			data: genderOptions
+	const privilegedFields = [
+		{
+			placeholder: "Birthday",
+			camelCaseName: "birthday",
+			type: "DatePicker",
+			isRequired: false
 		}
-	},
-	{
-		placeholder: "Major",
-		camelCaseName: "major",
-		type: "FilterList",
-		isRequired: false,
-		options: {
-			data: Majors
-		}
-	},
-	{
-		placeholder: "Country of Origin",
-		camelCaseName: "country",
-		type: "FilterList",
-		isRequired: false,
-		options: {
-			data: Countries
-		}
-	},
-	{
-		placeholder: "Birthday",
-		camelCaseName: "birthday",
-		type: "DatePicker",
-		isRequired: false
-	}
-];
+	];
+
+	const activeUser = useSelector(state => state.user.activeUser);
+
+	let elements = (activeUser.privilege.eboard) ? [...memberFields, ...privilegedFields] : memberFields;
+
+	return (
+		<Form
+			elements = { elements }
+			values = { activeUser }
+			onSubmit = { editUser }
+			{ ...props }
+		/>
+	);
+};
 
 const registrationFormData = [
 	{
@@ -299,8 +283,6 @@ const upsertCommittee = [
 ];
 
 export {
-	editProfileFormDataPrivileged,
-	editProfileFormDataRegular,
 	registrationFormData,
 	upsertCommittee
 };
