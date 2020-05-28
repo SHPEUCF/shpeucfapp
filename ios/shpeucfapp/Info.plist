@@ -26,8 +26,8 @@
 	<array>
 		<string>instagram</string>
 		<string>slack</string>
-		<string>facebook</string>
 		<string>fb</string>
+    <string>facebook</string>
 		<string>linkedin</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>

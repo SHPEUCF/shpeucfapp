@@ -1,17 +1,14 @@
 import React, { Component } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { connect } from "react-redux";
-import { Alert, Button, ButtonLayout, Form } from "../../components";
-import { Text, View, TouchableOpacity, Dimensions, SafeAreaView, Linking } from "react-native";
+import { Button, ButtonLayout } from "../../components";
+import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
 import { Avatar } from "react-native-elements";
 import Flag from "react-native-flags";
 import { openGallery, verifiedCheckMark } from "../../utils/render";
-import { loadUser, logoutUser, pageLoad, editUser } from "../../ducks";
-import {
-	editProfileFormDataPrivileged,
-	editProfileFormDataRegular,
-	convertObjectToInitialValues
-} from "../../data/FormData";
+import { appLinkingHandler } from "../../utils/appLinking";
+import { loadUser, logoutUser } from "../../ducks";
+import { ProfileForm } from "../../data/FormData";
 
 const { height, width } = Dimensions.get("window");
 
@@ -34,19 +31,15 @@ class Profile extends Component {
 	 * miss match. Form expected an object but receives an array.
 	 */
 	renderContent() {
-		const { email, major, points, privilege } = this.props.activeUser;
+		const { email, major, points } = this.props.activeUser;
 		const { bioContainer, fieldContainerStyle, itemLabelText, itemValueText, textColor } = styles;
 
 		return (
 			<SafeAreaView style = {{ flex: 1, backgroundColor: "#0c0b0b" }}>
-				<Form
-					elements = { privilege.eboard ? editProfileFormDataPrivileged : editProfileFormDataRegular }
-					values = { this.props.activeUser }
+				<ProfileForm
 					title = "Edit Profile"
-					visible = { this.state.editProfileFormVisibility }
 					changeVisibility = { (visible) => this.setState({ editProfileFormVisibility: visible }) }
-					onSubmit = { ({ gender, major, country, birthday, linkedin }) =>
-						editUser({ gender, major, country, birthday, linkedin }) }
+					visible = { this.state.editProfileFormVisibility }
 				/>
 				<View style = {{ flex: 1, backgroundColor: "black" }}>
 					{ this.renderPicture() }
@@ -156,55 +149,24 @@ class Profile extends Component {
 				<View style = {{ flex: 0.03 }} />
 				<View style = { socialMediaRow }>
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
-						<TouchableOpacity onPress = { () => this.openApp(linkedin) }>
+						<TouchableOpacity onPress = { () => {
+							appLinkingHandler(`https://www.linkedin.com/in/${linkedin}`,
+								"No profile has been added. To add one, tap on Edit Profile.");
+						} }>
 							<Ionicons name = "logo-linkedin" size = { height * 0.045 } color = "white" />
 						</TouchableOpacity>
 					</View>
 					<View style = {{ flex: 0.01 }} />
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
-						<TouchableOpacity onPress = { () => this.openEmail(email) }>
+						<TouchableOpacity onPress = { () => {
+							appLinkingHandler(`mailto:${email}`);
+						} }>
 							<Ionicons name = "ios-mail" size = { height * 0.045 } color = "white" />
 						</TouchableOpacity>
 					</View>
 				</View>
 			</View>
 		);
-	}
-
-	async openApp(profile) {
-		if (!profile) {
-			Alert.alert(`No profile have been added.\nTo add your profile click on Edit Profile.`);
-		}
-		else {
-			let url = `linkedin://in/${profile}`;
-
-			console.log(`URL: ${profile}`);
-			// then have to check if the link can be handle
-			const canOpenLink = await Linking.canOpenURL(url);
-
-			if (canOpenLink)
-				await Linking.openURL(url);
-			else
-				await Linking.openURL(`https://linkedin.com/in/${profile}`);
-		}
-	}
-
-	async openEmail(to) {
-		if (!to) {
-			Alert.alert("No email was found.\nTry again again.");
-		}
-		else {
-			let url = `mailto:${to}`;
-			const canOpenEmail = await Linking.canOpenURL(url);
-
-			if (canOpenEmail) {
-				await Linking.openURL(url);
-			}
-			else {
-				Alert.alert(`Oops! Somenthing went wrong.\n
-							If problem persists contact support.`);
-			}
-		}
 	}
 }
 
@@ -269,16 +231,12 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ user, general }) => {
+const mapStateToProps = ({ user }) => {
 	const { activeUser } = user;
-	const { loading } = general;
 
-	return { activeUser, loading };
+	return { activeUser };
 };
 
-const mapDispatchToProps = {
-	loadUser,
-	pageLoad
-};
+const mapDispatchToProps = { loadUser };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
