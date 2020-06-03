@@ -6,7 +6,7 @@ import { ButtonLayout, NavBar } from "../../components";
 import { Avatar } from "react-native-elements";
 import Flag from "react-native-flags";
 import { verifiedCheckMark } from "../../utils/render";
-import { appLinkingHandler } from "../../utils/appLinking";
+import { openAppOrWebsite } from "../../utils/appLinking";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
 
 const dimension = Dimensions.get("window");
@@ -161,7 +161,7 @@ class OtherProfile extends Component {
 					<View style = { [LogoContainer, { backgroundColor: this.props.color, flex: 1 }] }>
 						<TouchableOpacity
 							onPress = { () => {
-								appLinkingHandler(`https://www.linkedin.com/in/${linkedin}`,
+								openAppOrWebsite("linkedin", "profile", linkedin,
 									`${firstName} has not added their Linkedin profile yet.`);
 							} }>
 							<Ionicons name = "logo-linkedin" size = { dimension.height * 0.045 } color = 'white' />
@@ -171,7 +171,7 @@ class OtherProfile extends Component {
 					<View style = { [LogoContainer, { backgroundColor: this.props.color, flex: 1 }] }>
 						<TouchableOpacity
 							onPress = { () => {
-								appLinkingHandler(`mailto:${email}`, `${firstName}'s email is not set.`);
+								openAppOrWebsite("email", "open", email, `${firstName}'s email is not set.`);
 							} } >
 							<Ionicons name = "ios-mail" size = { dimension.height * 0.045 } color = 'white' />
 						</TouchableOpacity>
