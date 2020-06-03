@@ -81,7 +81,7 @@ const formatUrl = {
  *
  *              to send the user directly to a channel, let's say general
  *              openAppOrWebsite({"slack"}, {"channel"}, {"general" | slackInfo.channel.general}, "Optional error  msg");
- *      linked (profile or comapny):
+ *      linkedin (profile or comapny):
  *              To open a profile page.
  * 			    openAppOrWebsite({"linkedin"}, {"profile"}, {activeUser.linkedin | "companyProfile"}, " something ...")
  *
