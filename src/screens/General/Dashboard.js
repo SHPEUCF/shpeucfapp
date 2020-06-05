@@ -349,7 +349,7 @@ class Dashboard extends Component {
 			black
 		} = styles;
 
-		let buttonLinks = [
+		let socialMediaLinks = [
 			[["slack", "channel", "announcements"], "slack"],
 			[["facebook", "groups", "shpeucf"], "facebook"],
 			[["web", "open", "https://www.shpeucf.com/"], "globe"],
@@ -359,15 +359,15 @@ class Dashboard extends Component {
 		return (
 			<View style = { socialMediaContainer }>
 				<View style = { buttonRowContainer }>
-					{ buttonLinks.map((data, index) =>
+					{ socialMediaLinks.map((links, index) =>
 						<TouchableOpacity
 							key = { index }
 							style = { socialMediaButton }
-							onPress = { () => openAppOrWebsite(...data[0]) }
+							onPress = { () => openAppOrWebsite(...links[0]) }
 						>
 							<FontAwesomeIcon
 								style = { black }
-								name = { data[1] }
+								name = { links[1] }
 								size = { dimension.height * 0.04 }
 							/>
 						</TouchableOpacity>
