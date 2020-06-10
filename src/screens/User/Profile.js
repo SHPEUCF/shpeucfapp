@@ -6,7 +6,7 @@ import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-na
 import { Avatar } from "react-native-elements";
 import Flag from "react-native-flags";
 import { openGallery, verifiedCheckMark } from "../../utils/render";
-import { openAppOrWebsite, slackInfo } from "../../utils/appLinking";
+import { openAppOrWebsite } from "../../utils/appLinking";
 import { loadUser, logoutUser } from "../../ducks";
 import { ProfileForm } from "../../data/FormData";
 
@@ -26,10 +26,7 @@ class Profile extends Component {
 	render() {
 		return this.renderContent();
 	}
-	/*
-	 * using convertObjectToInitialValues() to pass the value back to values break the app due to parameter
-	 * miss match. Form expected an object but receives an array.
-	 */
+
 	renderContent() {
 		const { email, major, points } = this.props.activeUser;
 		const { bioContainer, fieldContainerStyle, itemLabelText, itemValueText, textColor } = styles;
@@ -151,7 +148,7 @@ class Profile extends Component {
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
 						<TouchableOpacity onPress = { () => {
 							openAppOrWebsite("linkedin", "profile", linkedin,
-								"No profile has been added. To add one, tap on Edit Profile.");
+								"No profile has been added. To add one, go to Edit Profile.");
 						} }>
 							<Ionicons name = "logo-linkedin" size = { height * 0.045 } color = "white" />
 						</TouchableOpacity>

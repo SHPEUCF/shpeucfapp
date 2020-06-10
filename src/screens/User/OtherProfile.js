@@ -143,16 +143,8 @@ class OtherProfile extends Component {
 	}
 
 	renderSocialMedia() {
-		const {
-			LogoContainer,
-			socialmediarow
-		} = styles;
-
-		const {
-			firstName,
-			email,
-			linkedin
-		} = this.props;
+		const { LogoContainer, socialmediarow } = styles;
+		const { firstName, email, linkedin } = this.props;
 
 		return (
 			<View style = {{ flex: 0.2 }}>
@@ -162,7 +154,7 @@ class OtherProfile extends Component {
 						<TouchableOpacity
 							onPress = { () => {
 								openAppOrWebsite("linkedin", "profile", linkedin,
-									`${firstName} has not added their Linkedin profile yet.`);
+									`${firstName} has not added their LinkedIn profile yet.`);
 							} }>
 							<Ionicons name = "logo-linkedin" size = { dimension.height * 0.045 } color = 'white' />
 						</TouchableOpacity>
