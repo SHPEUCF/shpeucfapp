@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { connect } from "react-redux";
-import { ButtonLayout, NavBar, CollapsibleView } from "../../components";
+import { ButtonLayout, NavBar } from "../../components";
 import { Avatar } from "react-native-elements";
 import Flag from "react-native-flags";
 import { verifiedCheckMark } from "../../utils/render";
 import { openAppOrWebsite } from "../../utils/appLinking";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
-import { Conference } from "../General/Conference";
+
 const dimension = Dimensions.get("window");
 
 class OtherProfile extends Component {
@@ -20,7 +20,7 @@ class OtherProfile extends Component {
 
 	renderContent() {
 		const {
-			email, major, points, picture
+			email, major, points
 		} = this.props;
 		const {
 			bioContainer,
@@ -33,14 +33,7 @@ class OtherProfile extends Component {
 		return (
 			<SafeAreaView style = {{ flex: 1, backgroundColor: "#0c0b0b" }}>
 				<NavBar back onBack = { () => Actions.pop() } />
-
-				<CollapsibleView
-							showHRSubText1 = {true}
-							showHRImage = {true}
-							extraBodyContent = { <TouchableOpacity onPress = { () => openAppOrWebsite("web", "open", "https://www.google.com") }><Text style={{color: "white", fontSize: 16, textDecorationLine: "underline"}}>I'm Link!</Text></TouchableOpacity> }
-							 />
-
-				{/*<View style = {{ backgroundColor: "black", flex: 1 }}>
+				<View style = {{ backgroundColor: "black", flex: 1 }}>
 					{ this.renderPicture() }
 					<View style = { [bioContainer] }>
 						<View style = {{ flex: 0.2 }}></View>
@@ -74,7 +67,7 @@ class OtherProfile extends Component {
 					</View>
 					{ this.renderSocialMedia() }
 					{ this.renderFlag() }
-		</View>*/}
+				</View>
 			</SafeAreaView>
 		);
 	}
