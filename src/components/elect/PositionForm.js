@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { View, Text, ScrollView } from "react-native";
-import { Input, Button } from "../general";
+import { View, Text, ScrollView, SafeAreaView } from "react-native";
+import { Input, Button, ButtonLayout } from "../general";
 import { Actions } from "react-native-router-flux";
 import {
 	addPosition,
@@ -65,7 +65,7 @@ class PositionForm extends Component {
 
 	render() {
 		return (
-			<View style = { styles.formContainerStyle }>
+			<SafeAreaView style = { styles.formContainerStyle }>
 				<View style = { styles.headerStyle }>
 					<Text style = { styles.headerTextStyle }>{ this.props.title + " POSITION" }</Text>
 					{ /* <Text style={styles.headerSubtitleStyle}>Registration</Text> */ }
@@ -88,15 +88,17 @@ class PositionForm extends Component {
 					</View>
 					{ this.renderError() }
 				</ScrollView>
-				<Button
-					title = { this.props.title + " POSITION" }
-					onPress = { this.onButtonPress.bind(this) }
-				/>
-				<Button
-					title = "CANCEL"
-					onPress = { Actions.ElectionPositions.bind(this) }
-				/>
-			</View>
+				<ButtonLayout>
+					<Button
+						title = "Submit"
+						onPress = { this.onButtonPress.bind(this) }
+					/>
+					<Button
+						title = "Cancel"
+						onPress = { Actions.ElectionPositions.bind(this) }
+					/>
+				</ButtonLayout>
+			</SafeAreaView>
 		);
 	}
 }
@@ -109,16 +111,13 @@ const styles = {
 	},
 	formContainerStyle: {
 		flex: 1,
-		paddingTop: 30,
-		padding: 10,
-		paddingBottom: 10,
-		backgroundColor: "#2C3239"
+		backgroundColor: "#0c0b0b"
 	},
 	headerStyle: {
 		flexDirection: "column",
 		alignItems: "center",
 		justifyContent: "center",
-		padding: 5,
+		paddingTop: 40,
 		marginBottom: 10
 	},
 	headerTextStyle: {
@@ -140,11 +139,13 @@ const styles = {
 		alignItems: "center"
 	},
 	scrollView: {
-		flex: 0,
+		backgroundColor: "black",
+		height: "50%",
 		paddingTop: 0,
 		paddingBottom: 0,
-		paddingRight: 10
-	}
+		paddingLeft: "5%",
+		paddingRight: "5%"
+	},
 };
 
 const mapStateToProps = ({ elect }) => {

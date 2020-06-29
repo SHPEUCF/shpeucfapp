@@ -1,7 +1,7 @@
-import { createActiontypes } from "../utils/actions";
-
+import { createActionTypes } from "../utils/actions";
+import firebase from "firebase";
 // handle all things related to Elections
-const ACTIONS = createActiontypes([
+const ACTIONS = createActionTypes([
 	"PAGE_LOAD",
 	"FILTER_CHANGED"
 ]);
@@ -44,4 +44,12 @@ export const filterChanged = (text) => {
 		type: ACTIONS.FILTER_CHANGED,
 		payload: text
 	};
+};
+
+/* FireBase Functions that don't use Redux */
+
+export const storeImageUrl = (url, filePath) => {
+	firebase.database().ref(`${filePath}/`).update({
+		picture: url
+	});
 };

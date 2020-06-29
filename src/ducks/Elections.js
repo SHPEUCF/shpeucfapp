@@ -1,8 +1,10 @@
 import firebase from "firebase";
 import { Actions } from "react-native-router-flux";
-import { createActiontypes } from "../utils/actions";
-// handle all things related to Elections
-const ACTIONS = createActiontypes([
+import { createActionTypes } from "../utils/actions";
+import { Alert } from "../components";
+
+// Handle all things related to Elections
+const ACTIONS = createActionTypes([
 	"OPEN_ELECTION",
 	"CLOSE_ELECTION",
 	"OPEN_APPLICATIONS",
@@ -172,19 +174,15 @@ export default (state = INITIAL_STATE, action) => {
 };
 
 export const openElection = () => {
-	return (dispatch) => {
-		firebase.database().ref("/election/").update({
-			votes: 0,
-			election: true
-		})
-			.then(() => {
-				dispatch({
-					type: ACTIONS.OPEN_ELECTION,
-					payload: true
-				});
+	return () => {
+		firebase.database().ref("/election/votes/").once("value", snapshot => {
+			firebase.database().ref("/election/").update({
+				votes: snapshot.val() ? snapshot.val() : 0,
+				election: true
 			})
-			.then(() => alert("Election Started!", "Successful"))
-			.catch(() => alert("Election could not be Started!", "Failure"));
+				.then(() => Alert.alert("Election Started!", { type: "success", title: "Successful" }))
+				.catch(() => Alert.alert("Election could not be Started!", { type: "error", title: "Failure" }));
+		});
 	};
 };
 
@@ -199,8 +197,8 @@ export const closeElection = () => {
 					payload: false
 				});
 			})
-			.then(() => alert("Election Closed!", "Successful"))
-			.catch(() => alert("Election could not be Closed!", "Failure"));
+			.then(() => Alert.alert("Election Closed!", { type: "success", title: "Successful" }))
+			.catch(() => Alert.alert("Election could not be Closed!", { type: "error", title: "Failure" }));
 	};
 };
 
@@ -215,8 +213,8 @@ export const openApplications = () => {
 					payload: true
 				});
 			})
-			.then(() => alert("Applications Started!", "Successful"))
-			.catch(() => alert("Applications could not be Started!", "Failure"));
+			.then(() => Alert.alert("Applications Started!", { type: "success", title: "Successful" }))
+			.catch(() => Alert.alert("Applications could not be Started!", { type: "error", title: "Failure" }));
 	};
 };
 
@@ -231,8 +229,8 @@ export const closeApplications = () => {
 					payload: false
 				});
 			})
-			.then(() => alert("Applications Closed!", "Successful"))
-			.catch(() => alert("Applications could not be Closed!", "Failure"));
+			.then(() => Alert.alert("Applications Closed!", { type: "success", title: "Successful" }))
+			.catch(() => Alert.alert("Applications could not be Closed!", { type: "error", title: "Failure" }));
 	};
 };
 
@@ -243,8 +241,8 @@ export const addPosition = (title, description, length) => {
 			description: description,
 			level: length
 		})
-			.then(() => alert("Position Added!", "Successful"))
-			.catch(() => alert("Position could not be Added!", "Failure"));
+			.then(() => Alert.alert("Position Added!", { type: "success", title: "Successful" }))
+			.catch(() => Alert.alert("Position could not be Added!", { type: "error", title: "Failure" }));
 	};
 };
 
@@ -272,8 +270,8 @@ export const deletePosition = (text) => {
 					type: ACTIONS.DELETE_POSITION
 				});
 			})
-			.then(() => alert("Position Deleted!", "Successful"))
-			.catch(() => alert("Position could not be deleted!", "Failure"));
+			.then(() => Alert.alert("Position Deleted!", { type: "success", title: "Successful" }))
+			.catch(() => Alert.alert("Position could not be deleted!", { type: "error", title: "Failure" }));
 	};
 };
 
@@ -297,8 +295,8 @@ export const editPosition = (title, description, oldTitle) => {
 					description: description,
 					level: level
 				}))
-				.then(() => alert("Position Edited!", "Successful"))
-				.catch(() => alert("Position could not be Edited!", "Failure"));
+				.then(() => Alert.alert("Position edited!", { type: "success", title: "Successful" }))
+				.catch(() => Alert.alert("Position could not be edited!", { type: "error", title: "Failure" }));
 		};
 	}
 	else {
@@ -312,8 +310,8 @@ export const editPosition = (title, description, oldTitle) => {
 						type: ACTIONS.EDIT_POSITION
 					});
 				})
-				.then(() => alert("Position Edited!", "Successful"))
-				.catch(() => alert("Position could not be Edited!", "Failure"));
+				.then(() => Alert.alert("Position edited!", { type: "success", title: "Successful" }))
+				.catch(() => Alert.alert("Position could not be edited!", { type: "error", title: "Failure" }));
 		};
 	}
 };
@@ -323,37 +321,35 @@ export const addApplication = (fName, lName, plans, position, picture) => {
 		uid
 	} = firebase.auth().currentUser;
 
-	return (dispatch) => {
-		firebase.database().ref(`/election/positions/${position}/candidates/${uid}`).set({
-			firstName: fName,
-			lastName: lName,
-			plan: plans,
-			id: uid,
-			position: position,
-			picture: picture,
-			approved: false
-		})
-			.then(() => firebase.database().ref(`/users/${uid}/applied/`).set(true))
-			.then(() => {
-				dispatch({
-					type: ACTIONS.ADD_APPLICATION
-				});
-			})
-			.then(() => alert("Application Added!", "Successful"))
-			.catch(() => alert("Application could not be Added!", "Failure"));
-	};
+	firebase.database().ref(`/election/positions/${position}/candidates/${uid}`).set({
+		firstName: fName,
+		lastName: lName,
+		plan: plans,
+		id: uid,
+		position: position,
+		picture: picture,
+		approved: false
+	})
+		.then(() => firebase.database().ref(`/users/${uid}/applied/`).set(true))
+		.then(() => Alert.alert("Application added!", { type: "success", title: "Successful" }))
+		.catch(() => Alert.alert("Application could not be added!", { type: "error", title: "Failure" }));
 };
 
-export const editApplication = (plans, position) => {
+export const editApplication = ({ plan, position, picture, firstName, lastName }) => {
 	const {
 		uid
 	} = firebase.auth().currentUser;
 
-	firebase.database().ref(`/election/positions/${position}/candidates/${uid}/plan`).set(plans)
-		.then(() => alert("Candidate Edited!", "Successful"))
+	firebase.database().ref(`/election/positions/${position}/candidates/${uid}`).update({
+		 plan,
+		 picture,
+		 firstName,
+		 lastName
+	})
+		.then(() => Alert.alert("Candidate edited!", { type: "success", title: "Successful" }))
 		.catch((error) => {
 			console.error(error);
-			alert("Candidate could not be Edited!", "Failure");
+			Alert.alert("Candidate could not be edited!", { type: "error", title: "Failure" });
 		});
 };
 
@@ -378,8 +374,8 @@ export const approveApplication = (position, candidateId, fName, lName) => {
 					type: ACTIONS.APPROVE_APPLICATION
 				});
 			})
-			.then(() => alert("Candidate Approved!", "Successful"))
-			.catch(() => alert("Candidate could not be Approved!", "Failure"));
+			.then(() => Alert.alert("Candidate Approved!", { type: "success", title: "Successful" }))
+			.catch(() => Alert.alert("Candidate could not be Approved!", { type: "error", title: "Failure" }));
 	};
 };
 
@@ -398,8 +394,8 @@ export const deleteApplication = (position, candidateId) => {
 				applied: false
 			}))
 			.then(() => firebase.database().ref(`/voting/${position}/${candidateId}`).remove())
-			.then(() => alert("Candidate Removed!", "Successful"))
-			.catch(() => alert("Candidate could not be removed!", "Failure"));
+			.then(() => Alert.alert("Candidate Removed!", { type: "success", title: "Successful" }))
+			.catch(() => Alert.alert("Candidate could not be removed!", { type: "error", title: "Failure" }));
 	};
 };
 
@@ -482,16 +478,21 @@ export const goToPositionForm = (text) => {
 	};
 };
 
-export const vote = (userId, dict) => {
+export const vote = (candidateObj) => {
+	const {
+		uid
+	} = firebase.auth().currentUser;
+
 	let votes;
+	let candidateList = Object.entries(candidateObj);
 
 	return () => {
 		firebase.database().ref("/voting/").once("value", snapshot => {
 			let obj = snapshot.val();
 
-			dict.forEach(function (item) {
-				obj[item.key][item.value][userId] = true;
-				obj[item.key][item.value].votes = snapshot.val()[item.key][item.value].votes + 1;
+			candidateList.forEach(([position, candidateID]) => {
+				obj[position][candidateID][uid] = true;
+				obj[position][candidateID].votes = snapshot.val()[position][candidateID].votes + 1;
 			});
 
 			firebase.database().ref("/voting/").update(obj);
@@ -500,9 +501,9 @@ export const vote = (userId, dict) => {
 				votes = parseInt(snapshot.val()) + 1;
 				firebase.database().ref("/election/votes").set(votes);
 			}))
-			.then(() => firebase.database().ref(`/users/${userId}/voted/`).set(true))
-			.then(() => alert("Vote Cast!", "Successful"))
-			.catch(() => alert("Vote could not be cast!", "Failure"));
+			.then(() => firebase.database().ref(`/users/${uid}/voted/`).set(true))
+			.then(() => Alert.alert("Vote cast!", { type: "success", title: "Successful" }))
+			.catch(() => Alert.alert("Vote could not be cast!", { type: "error", title: "Failure" }));
 	};
 };
 
@@ -529,8 +530,8 @@ export const changeLevels = (positions) => {
 			});
 			firebase.database().ref("/election/").update(obj);
 		})
-			.then(() => alert("Order Set!", "Successful"))
-			.catch(() => alert("Order could not be set!", "Failure"));
+			.then(() => Alert.alert("Order Set!", { type: "success", title: "Successful" }))
+			.catch(() => Alert.alert("Order could not be set!", { type: "error", title: "Failure" }));
 	};
 };
 

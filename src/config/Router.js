@@ -3,12 +3,6 @@ import React from "react";
 import { Router, Scene, Stack, ActionConst } from "react-native-router-flux";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Spinner } from "../components/general";
-import RegistrationForm from "../components/auth/RegistrationForm";
-import EditProfileForm from "../components/auth/EditProfileForm";
-import LoginForm from "../components/auth/LoginForm";
-import CreateEvent from "../components/event/CreateEvent";
-import EventDetailsForm from "../components/event/EventDetails";
-import ResetPasswordForm from "../components/auth/ResetPasswordForm";
 import CandidateForm from "../components/elect/CandidateForm";
 import PositionForm from "../components/elect/PositionForm";
 import CommitteeForm from "../components/general/CommitteeForm";
@@ -19,7 +13,8 @@ import CommitteeForm from "../components/general/CommitteeForm";
 import {
 	AdminHub,
 	CommitteesAdmin,
-	ElectionAdmin
+	ElectionAdmin,
+	MemberAdmin
 } from "../screens";
 
 /** Import Committees **/
@@ -30,7 +25,6 @@ import {
 
 /** Import Election **/
 import {
-	Election,
 	ElectionApplication,
 	ElectionBallot,
 	ElectionCandidates,
@@ -39,7 +33,8 @@ import {
 
 /** Import Events **/
 import {
-	Events
+	Events,
+	EventDetails
 } from "../screens";
 
 /** Import General  **/
@@ -52,9 +47,11 @@ import {
 
 /** Import User **/
 import {
+	Login,
 	OtherProfile,
 	PointsBreakDown,
-	Profile
+	Profile,
+	ResetPassword
 } from "../screens";
 
 import { Dimensions } from "react-native";
@@ -74,21 +71,14 @@ const RouterComponent = () => {
 					/>
 					<Scene
 						key = "login"
-						component = { LoginForm }
+						component = { Login }
 						title = "Login"
 						type = { ActionConst.REPLACE }
 						hideNavBar
 					/>
 					<Scene
-						key = "registration"
-						component = { RegistrationForm }
-						title = "Create Account"
-						type = { ActionConst.REPLACE }
-						hideNavBar
-					/>
-					<Scene
 						key = "resetPassword"
-						component = { ResetPasswordForm }
+						component = { ResetPassword }
 						title = "Reset Password"
 						type = { ActionConst.REPLACE }
 						hideNavBar
@@ -168,11 +158,6 @@ const RouterComponent = () => {
 								title = "CommitteePage"
 								hideTabBar
 							/>
-							<Scene
-								key = "createEventCPD"
-								component = { CreateEvent }
-								title = "Event Creation"
-							/>
 							<Stack
 								key = "eventDetailsCPD"
 								title = "EventDetails"
@@ -181,7 +166,7 @@ const RouterComponent = () => {
 							>
 								<Scene
 									key = "eventDetailsCPD"
-									component = { EventDetailsForm }
+									component = { EventDetails }
 									title = "Event Details"
 								/>
 								<Scene
@@ -228,17 +213,12 @@ const RouterComponent = () => {
 						>
 							<Scene
 								key = "eventDetailsD"
-								component = { EventDetailsForm }
+								component = { EventDetails }
 								title = "Event Details"
 							/>
 							<Scene
 								key = "OtherProfileD"
 								component = { OtherProfile }
-							/>
-							<Scene
-								key = "createEventD"
-								component = { CreateEvent }
-								title = "Event Creation"
 							/>
 						</Stack>
 					</Stack>
@@ -259,21 +239,15 @@ const RouterComponent = () => {
 							title = "Profile"
 							leftTitle = "Back"
 						/>
-						<Scene
-							key = "createEventE"
-							component = { CreateEvent }
-							title = "Event Creation"
-							hideNavBar
-							hideTabBar
-						/>
 						<Stack
 							key = "eventDetails"
 							hideNavBar
 							title = "EventDetails"
+							hideTabBar
 						>
 							<Scene
 								key = "eventDetails"
-								component = { EventDetailsForm }
+								component = { EventDetails }
 								title = "Event Details"
 							/>
 							<Scene
@@ -300,12 +274,6 @@ const RouterComponent = () => {
 							component = { Profile }
 							title = "Profile"
 							leftTitle = "Back"
-						/>
-						<Scene
-							key = "EditProfileForm"
-							component = { EditProfileForm }
-							hideNavBar
-							hideTabBar
 						/>
 						<Scene
 							key = "pointsBreakDown"
@@ -377,6 +345,12 @@ const RouterComponent = () => {
 								title = "Committees"
 								hideTabBar
 							/>
+							<Scene
+								key = "MemberAdmin"
+								component = { MemberAdmin }
+								title = "Members"
+								hideTabBar
+							/>
 						</Stack>
 						<Scene
 							key = "ElectionApplication"
@@ -390,12 +364,6 @@ const RouterComponent = () => {
 							title = "Ballot"
 							hideTabBar
 							hideNavBar
-						/>
-						<Scene
-							key = "Election"
-							component = { Election }
-							title = "Election"
-							hideTabBar
 						/>
 						<Stack
 							hideNavBar
@@ -419,11 +387,6 @@ const RouterComponent = () => {
 									title = "CommitteePage"
 									hideTabBar
 								/>
-								<Scene
-									key = "createEventC"
-									component = { CreateEvent }
-									title = "Event Creation"
-								/>
 								<Stack
 									key = "eventDetailsC"
 									title = "EventDetails"
@@ -432,7 +395,7 @@ const RouterComponent = () => {
 								>
 									<Scene
 										key = "eventDetailsC"
-										component = { EventDetailsForm }
+										component = { EventDetails }
 										title = "Event Details"
 									/>
 									<Scene

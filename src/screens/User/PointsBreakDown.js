@@ -2,11 +2,10 @@ import React, { Component } from "react";
 import firebase from "firebase";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { NavBar } from "../../components/general";
+import { NavBar } from "../../components";
 import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from "react-native";
 import { fetchMembersPoints, loadUser, fetchEvents, goToViewEvent } from "../../ducks";
 
-console.disableYellowBox = true;
 const dimension = Dimensions.get("window");
 
 class PointsBreakDown extends Component {
@@ -223,21 +222,12 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ user, members, events, general }) => {
-	const {
-		membersPoints
-	} = members;
-	const {
-		id
-	} = user;
-	const {
-		eventList
-	} = events;
-	const {
-		loading
-	} = general;
+const mapStateToProps = ({ user, members, general }) => {
+	const { membersPoints } = members;
+	const { id } = user;
+	const { loading } = general;
 
-	return { membersPoints, id, eventList, loading };
+	return { membersPoints, id, loading };
 };
 
 const mapDispatchToProps = {

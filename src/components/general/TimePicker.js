@@ -1,178 +1,158 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {	View } from "react-native";
-import { Input } from "./Input";
-import { PickerInput } from "./PickerInput";
+import { View } from "react-native";
+import { Input, PickerInput } from "./";
+import { convertStandardToMilitaryTime, convertMilitaryToStandardTime, prepend0 } from "../../utils/events";
 
 class TimePicker extends Component {
-	constructor(props) {
-		super(props);
-
-		let time = [];
-
-		if (this.props.value)
-			time = this.props.value.split(":");
-
-		this.state = {
-			hour: time.length === 3 ? time[0] : "",
-			minute: time.length === 3 ? time[1] : "",
-			period: time.length === 3 ? time[2] : "",
-			hourArr: Array.from({ length: 12 }, (v, k) => k + 1),
-			minuteArr: [0, 15, 30, 45],
-			periodArr: ["AM", "PM"],
-			focused: time.length === 3
-		};
-	}
-
 	static propTypes = {
-		value: PropTypes.object,
+		value: PropTypes.string,
 		placeholder: PropTypes.string.isRequired,
 		onSelect: PropTypes.func.isRequired
 	}
 
-	prepend0(item) {
-		if (item < 10)
-			return "0" + item;
+	constructor(props) {
+		super(props);
 
-		return item;
+		let [time, isInitialized] = this.initializeTimePicker();
+
+		this.state = {
+			hour: isInitialized ? time[0] : "",
+			minute: isInitialized ? time[1] : "",
+			period: isInitialized ? time[2] : "",
+			hourArr: Array.from({ length: 12 }, (v, k) => k + 1),
+			minuteArr: [0, 15, 30, 45],
+			periodArr: ["AM", "PM"],
+			focused: isInitialized
+		};
 	}
 
-	update(item) {
-		this.props.onSelect(item);
+	componentDidUpdate(prevProps) {
+		if (prevProps.value !== this.props.value) {
+			const [time, isInitialized] = this.initializeTimePicker();
+
+			this.setState({
+				hour: isInitialized ? time[0] : "",
+				minute: isInitialized ? time[1] : "",
+				period: isInitialized ? time[2] : "",
+				focused: isInitialized
+			});
+		}
 	}
 
-	//
-	clickActionHour(item) {
-		item = this.prepend0(item);
-		const {
-			minute,
-			period
-		} = this.state;
-		this.setState({ hour: item });
+	initializeTimePicker() {
+		let time = [];
 
-		if (minute !== "" && period !== "")
-			this.update({ hour: item, minute: minute, period: period });
+		if (this.props.value) {
+			let [hour, minuteAndTimePeriod] = this.props.value.split(":");
+
+			if (minuteAndTimePeriod.length === 2)
+				[hour, minuteAndTimePeriod] = convertMilitaryToStandardTime(`${hour}:${minuteAndTimePeriod}`).split(":");
+
+			let [minute, period] = minuteAndTimePeriod.split(" ");
+
+			time = [hour, parseInt(minute), period];
+		}
+		const isInitialized = time.length === 3;
+
+		if (isInitialized) this.update({ hour: time[0], minute: time[1], period: time[2] });
+
+		return [time, isInitialized];
 	}
 
-	clickActionMinute(item) {
-		const {
-			hour,
-			period
-		} = this.state;
-
-		item = this.prepend0(item);
-		this.setState({ minute: item });
-		if (hour !== "" && period !== "")
-			this.update({ hour: hour, minute: item, period: period });
+	update({ hour, minute, period }) {
+		if (hour !== "" && minute !== "" && period !== "") {
+			this.props.onSelect(
+				convertStandardToMilitaryTime(`${prepend0(hour)}:${prepend0(minute)} ${period}`)
+			);
+		}
 	}
 
-	clickActionPeriod(item) {
-		const {
-			hour,
-			minute
-		} = this.state;
+	clickActionHour(hour) {
+		const { minute, period } = this.state;
 
-		this.setState({ period: item });
-
-		if (hour !== "" && minute !== "")
-			this.update({ hour: hour, minute: minute, period: item });
+		this.setState({ hour });
+		this.update({ hour, minute, period });
 	}
 
-	_keyExtractor = (item, index) => index;
+	clickActionMinute(minute) {
+		const { hour, period } = this.state;
+
+		this.setState({ minute });
+		this.update({ hour, minute, period });
+	}
+
+	clickActionPeriod(period) {
+		const { hour, minute } = this.state;
+
+		this.setState({ period });
+		this.update({ hour, minute, period });
+	}
 
 	render = () => {
-		const {
+		const { style, timePickerStyle, fieldContainer, inputBoxStyle, dropDownArrowStyle } = styles;
+		const { hour, minute, period, hourArr, minuteArr, periodArr, focused } = this.state;
+		const { placeholder } = this.props;
+
+		const defaultPickerStyle = {
 			style,
-			timePickerStyle,
-			fieldContainer,
 			inputBoxStyle,
+			iconSize: 32,
+			iconColor: "black",
 			dropDownArrowStyle
-		} = styles;
-		const {
-			placeholder
-		} = this.props;
-		const {
-			hour,
-			minute,
-			period,
-			hourArr,
-			minuteArr,
-			periodArr,
-			focused
-		} = this.state;
+		};
 
-		let iconSize = 32;
-
-		if (!focused)
+		if (!focused) {
 			return (
-				<View>
-					<Input
-						placeholder = { placeholder }
-						onFocus = { () => this.setState({ focused: true }) } />
-				</View>
+				<Input
+					placeholder = { placeholder }
+					value = ""
+					onFocus = { () => this.setState({ focused: true }) }
+				/>
 			);
-		else
+		}
+		else {
 			return (
-				<View>
-					<View style = { timePickerStyle }>
-						<View style = { fieldContainer }>
-							<PickerInput
-								data = { hourArr }
-								style = { style }
-								title = { "Enter an hour" }
-								inputBoxStyle = { inputBoxStyle }
-								dropDownArrowStyle = { dropDownArrowStyle }
-								iconSize = { iconSize }
-								iconColor = 'black'
-								value = { hour }
-								onSelect = { (text) => this.clickActionHour(text) }
-								placeholder = { "HH" }
-							/>
-						</View>
-						<View style = { fieldContainer }>
-							<PickerInput
-								data = { minuteArr }
-								style = { style }
-								title = { "Enter minute" }
-								inputBoxStyle = { inputBoxStyle }
-								dropDownArrowStyle = { dropDownArrowStyle }
-								iconSize = { iconSize }
-								iconColor = 'black'
-								value = { minute }
-								onSelect = { (text) => this.clickActionMinute(text) }
-								placeholder = { "MM" }
-							/>
-						</View>
-						<View style = { fieldContainer }>
-							<PickerInput
-								data = { periodArr }
-								style = { style }
-								title = { "Enter AM/PM" }
-								inputBoxStyle = { inputBoxStyle }
-								iconSize = { iconSize }
-								iconColor = 'black'
-								dropDownArrowStyle = { dropDownArrowStyle }
-								value = { period }
-								onSelect = { (text) => this.clickActionPeriod(text) }
-								placeholder = { "AM/PM" }
-							/>
-						</View>
+				<View style = { timePickerStyle }>
+					<View style = { fieldContainer }>
+						<PickerInput
+							data = { hourArr }
+							style = { style }
+							title = { "Enter an hour" }
+							value = { hour }
+							onSelect = { (text) => this.clickActionHour(text) }
+							placeholder = { "12" }
+							{ ...defaultPickerStyle }
+						/>
+					</View>
+					<View style = { fieldContainer }>
+						<PickerInput
+							data = { minuteArr }
+							style = { style }
+							title = { "Enter minute" }
+							value = { minute !== "" ? prepend0(minute) : "" }
+							onSelect = { (text) => this.clickActionMinute(text) }
+							placeholder = { "00" }
+							{ ...defaultPickerStyle }
+						/>
+					</View>
+					<View style = { fieldContainer }>
+						<PickerInput
+							data = { periodArr }
+							title = { "Enter AM/PM" }
+							value = { period }
+							onSelect = { (text) => this.clickActionPeriod(text) }
+							placeholder = { "PM" }
+							{ ...defaultPickerStyle }
+						/>
 					</View>
 				</View>
 			);
+		}
 	};
 }
 
 const styles = {
-	titleStyle: {
-		flex: 0.13,
-		alignSelf: "center",
-		fontSize: 20
-	},
-	buttonStyle: {
-		flex: 1,
-		alignSelf: "center"
-	},
 	fieldContainer: {
 		flex: 1,
 		flexDirection: "row",

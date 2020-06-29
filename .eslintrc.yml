@@ -1,0 +1,117 @@
+---
+parser: babel-eslint
+extends: eslint:recommended
+plugins:
+  - react
+  - react-native
+env:
+  react-native/react-native: true
+parserOptions:
+  ecmaFeatures:
+    jsx: true
+rules:
+  # ESLint
+  no-var: error                            # disallow use of var for variables
+  camelcase: error                         # require camelCase for naming
+  key-spacing: error                       # require consistent spacing between key-value pairs
+  comma-dangle: error                      # disallow lonely commas in last line
+  block-spacing: error                     # require spacing in between curly braces for blocks
+  spaced-comment: error                    # require space after comments
+  space-in-parens: error                   # disallow spaces around parenthesis
+  no-multi-spaces: error                   # disallow whitespace around expressions and declarations
+  space-infix-ops: error                   # require spaces around operators
+  func-call-spacing: error                 # disallow spaces between a function call
+  no-trailing-spaces: error                # disallow trailing whitespace
+  no-floating-decimal: error               # require floating decimals to be complete
+  space-before-blocks: error               # require space before curly brace for blocks
+  multiline-comment-style: error           # require block-style comments when longer than one line
+  no-whitespace-before-property: error     # disallow whitespace before accessing properties
+  one-var:                                 # require one variable declaration per let/const
+    - error
+    - never
+  no-mixed-spaces-and-tabs:                # disallow tabs + spaces for indentation except for smart-tabs
+    - error
+    - smart-tabs
+  no-multiple-empty-lines:                 # disallow more than one empty line
+    - error
+    - max: 1
+  object-curly-spacing:                    # require space around curly braces for objects
+    - error
+    - always
+  eol-last:                                # disallow new line after end of file
+    - error
+    - never
+  padded-blocks:                           # disallow empty line in between blocks         
+    - error
+    - never
+  indent:                                  # require tab for indentations
+    - error
+    - tab
+    - SwitchCase: 1
+  keyword-spacing:                         # require spaces before/after a keyword 
+    - error
+    - before: true
+      after: true
+  comma-spacing:                           # require space after a comma that is not the end of the line
+    - error
+    - before: false
+      after: true
+  curly:                                   # require curly braces for large blocks and consistent in branches
+    - error
+    - multi-or-nest
+    - consistent
+  quotes:                                  # require double-quotes instead of single
+    - error
+    - double
+    - avoidEscape: true
+  brace-style:                             # require opening brace on same line, ending brace on a new line
+    - error
+    - stroustrup
+    - allowSingleLine: true
+  semi:                                    # require semicolons for JS statements
+    - error
+    - always
+    - omitLastInOneLineBlock: true
+  max-len:                                 # require lines to be less than X characters
+    - error
+    - tabWidth: 3
+    - code: 120
+      comments: 160
+      ignoreStrings: true
+      ignoreTemplateLiterals: true
+      ignoreTrailingComments: true
+  padding-line-between-statements:         # require empty line for statements
+    - error
+    - blankLine: always                    # require empty line after const/let
+      prev:
+        - const
+        - let
+      next: "*"
+    - blankLine: any                       # allow empty lines between const/let
+      prev:
+        - const
+        - let
+      next:
+        - const
+        - let
+    - blankLine: always                    # require empty line before return statement
+      prev: "*"
+      next: return
+  # React-Native
+  react-native/no-inline-styles: warn      # disallow inline styles
+  # React
+  react/jsx-uses-vars: error               # fix no-unused-vars for JSX expressions
+  react/jsx-uses-react: error              # fix no-unused vars for React
+  react/jsx-tag-spacing: error             # require consistent spaces before JSX tags
+  react/jsx-no-duplicate-props: error      # disallow duplicate props
+  react/jsx-equals-spacing:                # require spaces around equal signs for JSX
+    - error
+    - always
+  react/jsx-curly-spacing:                 # object-curly-spacing for JSX expressions
+    - error
+    - when: always
+      children: true
+      attributes:
+        allowMultiline: false
+      spacing:
+        objectLiterals: never

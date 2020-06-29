@@ -1,10 +1,10 @@
 import firebase from "firebase";
 import { Actions } from "react-native-router-flux";
-import { Alert } from "react-native";
-import { createActiontypes } from "../utils/actions";
+import { Alert } from "../components";
+import { createActionTypes } from "../utils/actions";
 
 // Handle all things related to Events
-const ACTIONS = createActiontypes([
+const ACTIONS = createActionTypes([
 	"FIRST_NAME_CHANGED_MEMBER",
 	"LAST_NAME_CHANGED_MEMBER",
 	"EMAIL_CHANGED_MEMBER",
@@ -40,6 +40,7 @@ const INITIAL_STATE = {
 	quote: "",
 	// Using URL below to avoid RN warning of empty source.uri as there's a delay fetching.
 	// Will improve fetching later, just need to get rid of the warning for now.
+	// eslint-disable-next-line max-len
 	picture: "https://cdn0.iconfinder.com/data/icons/superuser-web-kit/512/686909-user_people_man_human_head_person-512.png",
 	points: 0,
 	privilege: {},
@@ -47,6 +48,7 @@ const INITIAL_STATE = {
 	confirmPassword: "",
 	nationality: "",
 	dateOfBirth: "",
+	paidMember: false,
 	user: null,
 	loggedIn: null,
 	loading: false,
@@ -124,6 +126,7 @@ export default (state = INITIAL_STATE, action) => {
 				picture: payload.picture,
 				nationality: payload.nationality,
 				dateOfBirth: payload.dateOfBirth,
+				paidMember: payload.paidMember,
 				flag: payload.flag,
 				userCommittees: payload.committees,
 				dashColor: payload.color,
@@ -261,7 +264,7 @@ export const fetchMemberProfile = (userID) => {
 	let id = typeof userID === "undefined" ? currentUser.uid : userID;
 
 	return (dispatch) => {
-		if (currentUser)
+		if (currentUser) {
 			firebase.database().ref(`/users/${id}/`).on("value", snapshot => {
 				dispatch({
 					type: ACTIONS.FETCH_MEMBER_PROFILE,
@@ -272,30 +275,31 @@ export const fetchMemberProfile = (userID) => {
 					payload: false
 				});
 			});
+		}
 	};
 };
 
-export const editMember = (firstNameU, lastNameU, emailU, collegeU, majorU, pointsU, quoteU, idU, nationalityU, dateBirthU) => {
+export const editMember = (firstName, lastName, email, college, major, points, quote, id, nationality, dateOfBirth) => {
 	return (dispatch) => {
-		firebase.database().ref(`/users/${idU}/`).update({
-			firstName: firstNameU,
-			lastName: lastNameU,
-			email: emailU,
-			college: collegeU,
-			major: majorU,
-			points: pointsU,
-			quote: quoteU,
-			nationality: nationalityU,
-			dateOfBirth: dateBirthU
+		firebase.database().ref(`/users/${id}/`).update({
+			firstName,
+			lastName,
+			email,
+			college,
+			major,
+			points,
+			quote,
+			nationality,
+			dateOfBirth
 		})
-			.then(() => firebase.database().ref(`/points/${idU}/`).update({
-				firstName: firstNameU,
-				lastName: lastNameU,
-				points: pointsU
+			.then(() => firebase.database().ref(`/points/${id}/`).update({
+				firstName,
+				lastName,
+				points
 			}))
-			.then(() => firebase.database().ref(`/privileges/${idU}/`).update({
-				firstName: firstNameU,
-				lastName: lastNameU,
+			.then(() => firebase.database().ref(`/privileges/${id}/`).update({
+				firstName,
+				lastName,
 				user: true,
 				board: false,
 				eboard: false,
@@ -310,11 +314,12 @@ export const editMember = (firstNameU, lastNameU, emailU, collegeU, majorU, poin
 
 export const assignPosition = (title, types, id, oldChair) => {
 	return (dispatch) => {
-		if (oldChair)
+		if (oldChair) {
 			firebase.database().ref(`/users/${oldChair.id}/${types}`).remove()
 				.then(() => firebase.database().ref(`/privileges/${oldChair.id}/`).update({
 					[types]: false
 				}));
+		}
 		firebase.database().ref(`/users/${id}/`).update({ [types]: title })
 			.then(() => firebase.database().ref(`/privileges/${id}/`).update({
 				[types]: true
@@ -344,6 +349,38 @@ export const goToOtherProfile = () => {
 		Actions.OtherProfileD();
 		Actions.OtherProfileM();
 	};
+};
+
+/*
+ members: should have list of IDs -> Array<String>
+ privilegeChanged: should have the privilege type that should be changed -> string
+ value: Value that privilege should be changed to -> boolean
+*/
+export const changePrivilegeOfMembers = (members, privilegeChanged, value) => {
+	firebase.database().ref("/privileges/").once("value", snapshot => {
+		let updates = snapshot.val();
+		members.forEach(memberId => {
+			if (!updates[memberId]) updates[memberId] = {};
+			updates[memberId][privilegeChanged] = value;
+		});
+
+		firebase.database().ref("/privileges/").update(updates)
+			.then(() =>Alert.alert("Changes successful", { type: "success" }))
+			.catch(() =>Alert.alert("Changes were not successful", { type: "error" }));
+	});
+
+	if (privilegeChanged === "paidMember") {
+		firebase.database().ref("/users/").once("value", snapshot => {
+			let updates = snapshot.val();
+
+			members.forEach(memberId => {
+				updates[memberId][privilegeChanged] = value;
+			});
+
+			firebase.database().ref("/users/").update(updates)
+				.catch(() =>Alert.alert("Changes were not successful", { type: "error" }));
+		});
+	}
 };
 
 export const goToEditOtherProfileForm = () => {

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { Button, NavBar, SortableFlatList } from "../../components/general";
+import { Button, NavBar, SortableFlatList, ButtonLayout } from "../../components";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import _ from "lodash";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
@@ -12,7 +12,7 @@ import {
 	editCommittee,
 	fetchAllUsers,
 	addCommittee,
-	chairChanged,
+	chairPersonChanged,
 	committeeDescriptionChanged,
 	committeeTitleChanged,
 	changeLevelsCom
@@ -65,25 +65,23 @@ class CommitteesAdmin extends Component {
 		return (
 			<SafeAreaView style = { page }>
 				<NavBar title = "Committees" back onBack = { () => Actions.pop() } />
-				{ this.renderFlatlist(committeesArray) }
-				<View style = {{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", position: "absolute", bottom: dimension.height * 0.1, width: "100%" }}>
-					<View style = {{ flex: 0.45 }}>
+				{ this.renderFlatList(committeesArray) }
+				<View>
+					<ButtonLayout>
 						<Button
 							onPress = { () => this.setLevels() }
 							title = { "Set Order" }
 						/>
-					</View>
-					<View style = {{ flex: 0.45 }}>
 						<Button
 							onPress = { () => {
 								this.props.committeeTitleChanged("");
 								this.props.committeeDescriptionChanged("");
-								this.props.chairChanged();
+								this.props.chairPersonChanged({});
 								this.props.goToCommitteeForm("ADD");
 							} }
 							title = { "Add Committees" }
 						/>
-					</View>
+					</ButtonLayout>
 				</View>
 			</SafeAreaView>
 		);
@@ -91,7 +89,7 @@ class CommitteesAdmin extends Component {
 
 	_keyExtractor = (item, index) => index;
 
-	renderFlatlist() {
+	renderFlatList() {
 		return (
 			<View style = {{ flex: 1 }}>
 				<SortableFlatList
@@ -100,9 +98,7 @@ class CommitteesAdmin extends Component {
 					keyExtractor = { (item) => `draggable-item-${item.key}` }
 					renderItem = { this.renderCommittees }
 					scrollPercent = { 5 }
-					onMoveEnd = { ({
-						data
-					}) => this.setState({ data }) }
+					onMoveEnd = { ({ data }) => this.setState({ data }) }
 				/>
 			</View>
 		);
@@ -152,7 +148,7 @@ class CommitteesAdmin extends Component {
 	viewCommittee(item) {
 		this.props.committeeTitleChanged(item.title);
 		this.props.committeeDescriptionChanged(item.description);
-		this.props.chairChanged(item.chair);
+		this.props.chairPersonChanged(item.chair);
 		this.props.goToCommitteeForm("EDIT");
 	}
 
@@ -219,7 +215,7 @@ const mapDispatchToProps = {
 	deleteCommittee,
 	addCommittee,
 	editCommittee,
-	chairChanged,
+	chairPersonChanged,
 	committeeDescriptionChanged,
 	committeeTitleChanged,
 	changeLevelsCom,

@@ -3,8 +3,8 @@ import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import _ from "lodash";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { Text, View, TouchableOpacity, Dimensions } from "react-native";
-import { Button, SortableFlatList, NavBar } from "../../components/general";
+import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
+import { Button, SortableFlatList, NavBar, ButtonLayout } from "../../components";
 import {
 	openElection,
 	closeElection,
@@ -41,7 +41,6 @@ class ElectionPosition extends Component {
 
 	render() {
 		const {
-			buttonContainerStyling,
 			page
 		} = styles;
 		const {
@@ -51,28 +50,24 @@ class ElectionPosition extends Component {
 		const positionsArray = _.toArray(positions);
 
 		return (
-			<View style = { page }>
+			<SafeAreaView style = { page }>
 				<NavBar title = "Positions" back onBack = { () => Actions.pop() } />
 				{ this.renderFlatlist(positionsArray) }
-				<View style = { buttonContainerStyling }>
+				<ButtonLayout>
 					<Button
 						onPress = { () => {
 							this.props.positionTitleChanged("");
 							this.props.positionDescriptionChanged("");
 							this.props.goToPositionForm("ADD");
 						} }
-						title = { "ADD POSITIONS" }
-					>
-					</Button>
-				</View>
-				<View style = { buttonContainerStyling }>
+						title = { "Add Positions" }
+					/>
 					<Button
 						onPress = { () => this.setLevels() }
-						title = { "SET ORDER" }
-					>
-					</Button>
-				</View>
-			</View>
+						title = { "Set Order" }
+					/>
+				</ButtonLayout>
+			</SafeAreaView>
 		);
 	}
 
@@ -93,7 +88,7 @@ class ElectionPosition extends Component {
 			textColor
 		} = styles;
 
-		const color = isActive ? { backgroundColor: "#ffd70066" } : { backgroundColor: "#2C3239" };
+		const color = isActive ? { backgroundColor: "#ffd70066" } : { backgroundColor: "black" };
 
 		return (
 			<TouchableOpacity

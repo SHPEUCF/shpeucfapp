@@ -19,8 +19,7 @@ const Button = ({
 	} = styles;
 
 	return (
-		<TouchableOpacity
-			onPress = { onPress }>
+		<TouchableOpacity onPress = { onPress }>
 			<View style = { [bStyle, buttonStyle, { height }, { width }] }>
 				<Text
 					style = { [tStyle, textStyle] }
@@ -28,6 +27,7 @@ const Button = ({
 					numberOfLines = { numberOfLines }
 					disabled = { disabled }
 					testID = { testID }
+					adjustsFontSizeToFit
 				>
 					{ title }
 				</Text>
@@ -45,7 +45,6 @@ const styles = {
 	},
 	bStyle: {
 		flexDirection: "row",
-		alignSelf: "center",
 		backgroundColor: "#FECB00",
 		borderRadius: 15,
 		borderColor: "#000",

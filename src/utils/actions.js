@@ -1,5 +1,3 @@
-export const createActiontypes = actionTypes => actionTypes
+export const createActionTypes = actionTypes => actionTypes
 	.map(type => ({ [type]: `module/${type}`	}))
-	.reduce((types, type) => ({ ...types, ...type }),
-		{}
-	);
+	.reduce((types, type) => ({ ...types, ...type }), {});

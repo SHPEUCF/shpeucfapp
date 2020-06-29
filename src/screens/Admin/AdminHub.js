@@ -3,7 +3,8 @@ import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import { FlatList, SafeAreaView } from "react-native";
 import { ListItem } from "react-native-elements";
-import { NavBar } from "../../components/general";
+import { NavBar } from "../../components";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const menuItems = [
 	{
@@ -16,6 +17,12 @@ const menuItems = [
 		title: "Committees",
 		icon: "assignment-ind",
 		screen: "CommitteesAdmin",
+		privilege: "eboard"
+	},
+	{
+		title: "Members",
+		icon: "people",
+		screen: "MemberAdmin",
 		privilege: "eboard"
 	}
 ];
@@ -35,7 +42,7 @@ class AdminHub extends Component {
 				<NavBar title = "Back End" back onBack = { () => Actions.pop() } />
 				<FlatList
 					keyExtractor = { this.keyExtractor }
-					extraData = { this.state }
+					extraData = { this.props }
 					data = { menuItems }
 					renderItem = { this.renderItem }
 				/>
@@ -47,18 +54,24 @@ class AdminHub extends Component {
 
 	renderItem = ({ item }) => {
 		const {
-			privilege
+			activeUser
 		} = this.props;
 
-		if (privilege && item && privilege[item.privilege] && (!("privilege" in item) || privilege[item.privilege]))
+		if (activeUser.privilege && item
+			&& activeUser.privilege[item.privilege] && (!("privilege" in item)
+			|| activeUser.privilege[item.privilege]))
 			return (
 				<ListItem
 					containerStyle = {{ backgroundColor: "black", borderBottomColor: "white" }}
 					removeClippedSubviews = { false }
 					title = { item.title }
-					chevron
 					titleStyle = {{ color: "white" }}
 					leftIcon = {{ name: item.icon, color: "white" }}
+					rightIcon = { <Ionicons
+						name = "ios-arrow-dropright"
+						size = { 22 }
+						color = "#FECB00"
+					/> }
 					onPress = { () => Actions[item.screen]() }
 				/>
 			);
@@ -74,12 +87,12 @@ const styles = {
 
 const mapStateToProps = ({ user }) => {
 	const {
-		privilege
+		activeUser
 	} = user;
 
-	return { privilege };
+	return { activeUser };
 };
 
 const mapDispatchToProps = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminHub)
+export default connect(mapStateToProps, mapDispatchToProps)(AdminHub);

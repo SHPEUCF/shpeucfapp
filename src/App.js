@@ -6,22 +6,42 @@ import Router from "./config/Router";
 import AppInfo from "../app.json";
 import { View } from "react-native";
 import { goToLogIn, registrationError } from "./ducks";
+import { Alert } from "./components";
+import {
+	apiKey,
+	authDomain,
+	databaseURL,
+	projectId,
+	storageBucket,
+	messagingSenderId,
+	appId
+} from "react-native-dotenv";
+
+console.ignoredYellowBox = ["Setting a timer"];
 
 class App extends Component {
 	componentDidMount() {
-		// Initialize firebase
 		const config = {
-			apiKey: "AIzaSyCeX5lUZUmQxXsWNO8gNXVHqfJs-kQmSaY",
-				authDomain: "shpe-ucf.firebaseapp.com",
-				databaseURL: "https://shpe-ucf.firebaseio.com",
-				projectId: "shpe-ucf",
-				storageBucket: "shpe-ucf.appspot.com",
-				messagingSenderId: "974032317047",
-				appId: "1:974032317047:web:0a4a2ad01ac705b90ff472"
-			};
-		firebase.initializeApp(config);
+			apiKey: apiKey,
+			authDomain: authDomain,
+			databaseURL: databaseURL,
+			projectId: projectId,
+			storageBucket: storageBucket,
+			messagingSenderId: messagingSenderId,
+			appId: appId
+		};
 
-		// firebase.auth().signOut();
+		if (!firebase.apps.length)
+			firebase.initializeApp(config);
+		else if (!this.props.loggedIn)
+			Actions.login();
+		else
+			Actions.main();
+
+		this.verifyLogIn();
+	}
+
+	verifyLogIn() {
 		firebase.auth().onAuthStateChanged((user) => {
 			let correctVersion = false;
 
@@ -35,7 +55,7 @@ class App extends Component {
 					}
 					else {
 						if (!correctVersion && firebase.auth().currentUser.emailVerified)
-							alert("Please update your app");
+							Alert.alert("Please update your app");
 						firebase.auth().signOut();
 						this.props.loggedIn = false;
 						// Actions.login();
@@ -53,6 +73,7 @@ class App extends Component {
 		return (
 			<View style = {{ flex: 1 }}>
 				<Router />
+				<Alert.AlertBox />
 			</View>
 		);
 	}

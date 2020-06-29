@@ -1,351 +1,346 @@
 import React, { Component } from "react";
+import _ from "lodash";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { Button, NavBar } from "../../components/general";
 import { Avatar } from "react-native-elements";
-import _ from "lodash";
-import { FlatList, Text, View, TouchableOpacity, Dimensions } from "react-native";
-import {
-	getPositions,
-	goToOtherProfile,
-	pageLoad,
-	getPrivilege,
-	addApplication,
-	candidateFNameChanged,
-	candidateLNameChanged,
-	candidatePlanChanged,
-	candidatePositionChanged,
-	goToCandidateForm,
-	vote,
-	editApplication
-} from "../../ducks";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { Text, View, SafeAreaView, FlatList, TouchableOpacity, Modal } from "react-native";
+import { Alert, Button, NavBar, ButtonLayout } from "../../components";
+import { getPositions, vote, getVotes } from "../../ducks";
+import { stockImg, truncateNames } from "../../utils/render";
+import FastImage from "react-native-fast-image";
 
-const dimension = Dimensions.get("window");
 const iterateesPos = ["level"];
 const orderPos = ["asc"];
-const iterateesCan = ["lastName", "firstName"];
-const orderCan = ["asc", "asc"];
-let dict = [];
+const iterateesCandidate = ["lastName", "firstName"];
+const orderCandidate = ["asc", "asc"];
 
 class ElectionBallot extends Component {
 	constructor(props) {
 		super(props);
-		this.renderCand = this.renderCand.bind(this);
+
+		this.state = {
+			selectedCandidates: {},
+			visibleCandidate: {},
+			visible: false,
+			isLoaded: false
+		};
 	}
 
-	state = {
-		index: null,
-		isBallotShow: true,
-		isCand: false,
-		applyPos: null,
-		listCandidates: null,
-		application: "Submit"
-	};
-
-	componentWillMount() {
+	componentDidMount() {
 		this.props.getPositions();
+		this.props.getVotes();
+	}
+
+	// Refills selectedCandidates object with data from firebase.
+	componentWillReceiveProps(nextProps) {
+		const {
+			votes,
+			voted,
+			id
+		} = nextProps;
+
+		if (votes && voted && !this.state.isLoaded) {
+			let selectedCandidates = {};
+
+			Object.entries(votes).forEach(([position, candidates]) => {
+				Object.entries(candidates).forEach(([candidate, candidateData]) => {
+					if (candidateData[id])
+						selectedCandidates[position] = candidate;
+				});
+			});
+
+			const isLoaded = !_.isEmpty(selectedCandidates);
+
+			this.setState({ selectedCandidates, isLoaded });
+		}
 	}
 
 	render() {
 		const {
-			page,
-			contentStyle
+			flex,
+			mainBackground,
+			secondaryBackground
 		} = styles;
+
 		const {
-			positions
+			positions,
+			activeUser
 		} = this.props;
 
 		const positionsArray = _.orderBy(positions, iterateesPos, orderPos);
 
 		return (
-			<View style = { page }>
-				{ this.renderNavBar() }
-				<View style = { contentStyle }>
-					{ this.showBallot(positionsArray) }
-					{ this.renderCand() }
-				</View>
-				{ this.renderButtons() }
-			</View>
-		);
-	}
-
-	_keyExtractor = (item, index) => index;
-
-	showBallot(positionsArray) {
-		if (!this.state.isBallotShow) return null;
-
-		return (
-			<View>
-				<FlatList
-					data = { positionsArray }
-					extraData = { this.state }
-					keyExtractor = { this._keyExtractor }
-					renderItem = { ({
-						item, index
-					}) =>
-						this.renderCandidatesList(item, index) }
-				/>
-			</View>
-		);
-	}
-
-	renderCandidatesComponent(item) {
-		const {
-			containerStyle,
-			contentContainerStyle,
-			textStyle,
-			textColor,
-			candidateContainer
-		} = styles;
-
-		if (item.approved)
-			return (
-				<TouchableOpacity
-					style = { candidateContainer }
-					onPress = { () => {
-						dict[this.state.index] = {
-							key: item.position,
-							value: item.id,
-							first: item.firstName,
-							last: item.lastName
-						};
-						this.setState({ isCand: false });
-						this.setState({ isBallotShow: true });
-					} }>
-					<Text style = { [{ fontWeight: "bold", fontSize: 20, alignSelf: "center" }, textColor] }>{ item.firstName + " " + item.lastName }</Text>
-					<View style = {{ flex: 1 }}>
-						{ this.renderPicture(item) }
-						<View style = { contentContainerStyle }>
-							<View style = { containerStyle }>
-								<Text style = { [textStyle, textColor] }>Plan: { item.plan }</Text>
-							</View>
-						</View>
-					</View>
-				</TouchableOpacity>
-			);
-	}
-
-	renderPicture(item) {
-		const {
-			headerInfoContainer
-		} = styles;
-
-		return (
-			<View style = { headerInfoContainer }>
-				<Avatar
-					xlarge
-					rounded
-					source = {{ uri: item.picture }}
-					activeOpacity = { 0.7 }
-				/>
-			</View>
-		);
-	}
-
-	renderCand() {
-		const {
-			tab,
-			textStyle,
-			textColor
-		} = styles;
-
-		if (!this.state.isCand)	return null;
-
-		return (
-			<View style = {{ flex: 1 }}>
-				<View style = { [tab, { flex: 0.05, backgroundColor: "#2C3239" }] }>
-					<Text style = { [textStyle, textColor, { alignSelf: "center" }] }>{ this.state.applyPos }</Text>
-				</View>
-				<FlatList
-					data = { this.state.listCandidates }
-					extraData = { this.state }
-					keyExtractor = { this._keyExtractor }
-					renderItem = { ({
-						item
-					}) =>
-						this.renderCandidatesComponent(item) }
-				/>
-				{ this.renderPositionVote() }
-			</View>
-		);
-	}
-
-	renderPositionVote() {
-		const {
-			tab,
-			textStyle,
-			textColor
-		} = styles;
-		let vote = dict[this.state.index];
-
-		if (vote)
-			return (
-				<View style = { tab }>
-					<View style = {{ flex: 2, alignItems: "center", justifyContent: "center" }}>
-						<Text style = { [textStyle, textColor] }>You are voting for: { vote.first } { vote.last }</Text>
-					</View>
-				</View>
-			);
-	}
-
-	renderCandidatesList(item, index) {
-		const {
-			container,
-			textStyle,
-			textColor
-		} = styles;
-
-		return (
-			<View>
-				<TouchableOpacity onPress = { () => {
-					this.setState({
-						isBallotShow: false,
-						isCand: true,
-						listCandidates: _.orderBy(item.candidates, iterateesCan, orderCan),
-						applyPos: item.title,
-						index: index
-					});
-					this.renderCand();
-				} }>
-					<View style = { [container, { flexDirection: "row" }] }>
-						<Text style = { [textStyle, textColor, { flex: 6 }] }>{ `${item.title}` }</Text>
-						{ this.renderAllVotes(index) }
-					</View>
-				</TouchableOpacity>
-			</View>
-		);
-	}
-
-	renderAllVotes(index) {
-		const {
-			textStyle,
-			textColor
-		} = styles;
-
-		let vote = dict[index];
-
-		if (!vote)
-			return (
-				<Text style = { [textStyle, textColor] }> -> { vote.first } { vote.last }</Text>
-			);
-		else
-			<Text style = { [textStyle, textColor, { flex: 0.2 }] }>></Text>;
-	}
-
-	renderButtons() {
-		const {
-			buttonContainer
-		} = styles;
-		const {
-			vote,
-			id
-		} = this.props;
-		const {
-			isBallotShow
-		} = this.state;
-
-		if (!isBallotShow)
-			return (
-				<Button title = "Ballot" onPress = { () => {
-					this.setState({ isCand: false, isBallotShow: true });
-				} } />
-			);
-		else
-			return (
-				<View style = { buttonContainer }>
-					<Button
-						title = "Submit" onPress = { () => {
-							vote(id, dict);
-							dict = [];
-							Actions.popTo("Election");
-						} } />
-					<Button
-						title = "Cancel"
-						onPress = { () => { Actions.pop() } }
+			<SafeAreaView style = { [flex, mainBackground] }>
+				<NavBar title = "Positions" back onBack = { () => Actions.pop() } />
+				<View style = { [flex, secondaryBackground] }>
+					<FlatList
+						data = { positionsArray }
+						extraData = { this.state }
+						keyExtractor = { this.keyExtractor }
+						renderItem = { ({ item }) => this.renderCandidatesList(item) }
+						ListHeaderComponent = { () => this.renderSeparator() }
+						ListFooterComponent = { () => this.renderSeparator() }
+						ItemSeparatorComponent = { () => this.renderSeparator() }
 					/>
 				</View>
+				{ !activeUser.voted && <ButtonLayout>
+					<Button title = "Submit" onPress = { () => this.submitVote() } />
+					<Button title = "Cancel" onPress = { () => { Actions.pop() } } />
+				</ButtonLayout> }
+				{ this.renderModal() }
+			</SafeAreaView>
+		);
+	}
+
+	renderSeparator() {
+		return (
+			<View style = { styles.spacing } />
+		);
+	}
+
+	keyExtractor = (item, index) => index;
+
+	renderCandidatesList(item) {
+		const {
+			mainBackground,
+			goldBackground,
+			titleStyle,
+			spacing,
+			positionContent,
+			center
+		} = styles;
+
+		const candidateList = _.orderBy(item.candidates, iterateesCandidate, orderCandidate);
+
+		if (candidateList.length > 0 && candidateList.some((candidate) => candidate.approved))
+			return (
+				<View style = { [positionContent, center] }>
+					<View style = { [spacing, goldBackground] }>
+						<Text style = { titleStyle }>{ item.title }</Text>
+					</View>
+					<View style = { [spacing, mainBackground] }>
+						{ candidateList.map(candidate => <View>
+							{ this.renderCandidate(candidate) }
+						</View>) }
+					</View>
+				</View>
 			);
 	}
 
-	renderNavBar() {
+	renderCandidate(candidate) {
 		const {
-			isBallotShow
-		} = this.state;
+			center,
+			candidateStyle,
+			textColor,
+			titleStyle,
+			flex,
+			centerItems
+		} = styles;
+
+		truncateNames(candidate);
+
+		const {
+			approved,
+			firstName,
+			lastName,
+			picture
+		} = candidate;
+
+		if (approved)
+			return (
+				<View style = { [candidateStyle, flex] }>
+					{ this.renderCheck(candidate) }
+					<TouchableOpacity
+						style = { [candidateStyle, flex] }
+						onPress = { () => this.setState({ visibleCandidate: candidate, visible: true }) }
+					>
+						<View style = { [flex, centerItems] }>
+							{ this.renderPicture(picture) }
+						</View>
+						<Text style = { [center, textColor, titleStyle, { flex: 1.5 }] }>
+							{ firstName } { lastName }
+						</Text>
+						<View style = { [centerItems, { flex: 0.3 }] }>
+							<Ionicons
+								name = "ios-arrow-dropright"
+								size = { 22 }
+								color = { "#FECB00" }
+							/>
+						</View>
+					</TouchableOpacity>
+				</View>
+			);
+	}
+
+	renderPicture(picture, size = 50) {
+		let pic = picture !== "" ? { uri: picture } : stockImg;
 
 		return (
-			<NavBar
-				title = "Positions"
-				back
-				onBack = { () => {
-					if (isBallotShow)
-						Actions.pop();
-					else
-						this.setState({ isCand: false, isBallotShow: true });
-				} }
+			<Avatar
+				size = { size }
+				rounded
+				source = { pic }
+				ImageComponent = { FastImage }
 			/>
 		);
+	}
+
+	renderCheck(candidate) {
+		const {
+			center
+		} = styles;
+
+		const isChecked = candidate.id === this.state.selectedCandidates[candidate.position];
+
+		return (
+			<TouchableOpacity style = { center } onPress = { () => this.updateSelection(isChecked, candidate) }>
+				<FontAwesome
+					name = { isChecked ? "check-circle-o" : "circle-o" }
+					color = { isChecked ? "#FECB00" : "#FFF" }
+					size = { 30 }
+				/>
+			</TouchableOpacity>
+		);
+	}
+
+	updateSelection(isChecked, { position, id }) {
+		if (this.props.activeUser.voted) {
+			Alert.alert("You have already voted!");
+		}
+		else {
+			let selectedCandidates = Object.assign({}, this.state.selectedCandidates);
+
+			if (isChecked)
+				selectedCandidates = _.omit(selectedCandidates, position);
+			else
+				selectedCandidates[position] = id;
+
+			this.setState({ selectedCandidates });
+		}
+	}
+
+	renderModal() {
+		const {
+			firstName,
+			lastName,
+			picture,
+			plan
+		} = this.state.visibleCandidate;
+
+		const {
+			modalBackground,
+			modalContent,
+			textColor,
+			planStyle,
+			titleStyle,
+			closeModalBar
+		} = styles;
+
+		return (
+			<Modal transparent = { true } visible = { this.state.visible } animationType = "slide">
+				<View style = { modalBackground }>
+					<TouchableOpacity
+						style = { closeModalBar }
+						onPress = { () => this.setState({ visible: false, visibleCandidate: {} }) }
+					>
+						<Ionicons
+							name = "ios-close-circle"
+							size = { 40 }
+							color = "white"
+						/>
+					</TouchableOpacity>
+					<View style = { modalContent }>
+						{ this.renderPicture(picture, 200) }
+						<Text style = { [textColor, titleStyle, { paddingVertical: "8%" }] }>
+							{ firstName } { lastName }
+						</Text>
+						<Text style = { [textColor, planStyle] }>{ plan }</Text>
+					</View>
+				</View>
+			</Modal>
+		);
+	}
+
+	submitVote() {
+		const {
+			vote
+		} = this.props.activeUser;
+
+		if (_.isEmpty(this.state.selectedCandidates)) {
+			Alert.alert("Please vote for at least one candidate!");
+		}
+		else {
+			vote(this.state.selectedCandidates);
+			Actions.pop();
+		}
 	}
 }
 
 const styles = {
 	textColor: {
-		color: "#e0e6ed"
+		color: "white"
 	},
-	textStyle: {
+	titleStyle: {
 		fontWeight: "bold",
 		fontSize: 18
 	},
-	page: {
-		backgroundColor: "#0c0b0b",
+	flex: {
 		flex: 1
 	},
-	tab: {
+	mainBackground: {
+		backgroundColor: "black"
+	},
+	goldBackground: {
+		backgroundColor: "#FECB00"
+	},
+	secondaryBackground: {
+		backgroundColor: "#0c0b0b"
+	},
+	center: {
+		alignSelf: "center"
+	},
+	candidateStyle: {
 		flexDirection: "row",
-		paddingTop: 24,
-		paddingBottom: 12,
-		borderBottomWidth: 2,
-		borderColor: "lightgrey",
-		width: dimension.width * 1,
+		padding: 7
+	},
+	spacing: {
+		padding: "5%"
+	},
+	positionContent: {
+		width: "90%",
+		borderRadius: 5,
+		overflow: "hidden"
+	},
+	modalContent: {
+		width: "95%",
+		backgroundColor: "rgba(33, 37, 43, 0.98)",
 		alignItems: "center",
-		justifyContent: "center"
+		borderBottomLeftRadius: 5,
+		borderBottomRightRadius: 5,
+		padding: "6%"
 	},
-	contentStyle: {
-		flex: 0.98
+	modalBackground: {
+		alignItems: "center",
+		height: "100%",
+		justifyContent: "center",
+		backgroundColor: "#000a"
 	},
-	button: {
-		paddingTop: dimension.height * 0.015,
-		paddingBottom: dimension.height * 0.015,
-		marginBottom: 8
-	},
-	buttonContainer: {
-		flex: 0.2
-	},
-	candidateContainer: {
-		flex: 1,
-		backgroundColor: "#2C3239",
-		padding: 20,
-		borderBottomWidth: 1,
-		borderColor: "#e0e6ed22"
-	},
-	container: {
-		flex: 1,
-		backgroundColor: "#2C3239",
-		borderBottomWidth: 1,
-		borderColor: "#e0e6ed",
-		padding: 10,
-		paddingTop: 20,
-		paddingBottom: 20
-	},
-	headerInfoContainer: {
-		paddingTop: 15,
-		paddingBottom: 15,
-		flex: 0.6,
-		backgroundColor: "#2C3239",
+	closeModalBar: {
+		backgroundColor: "#FECB00",
+		width: "95%",
 		alignItems: "center",
 		justifyContent: "center",
-		borderBottomColor: "#e0e6ed22",
-		borderBottomWidth: 1,
-		padding: 1
+		borderTopRightRadius: 5,
+		borderTopLeftRadius: 5
+	},
+	planStyle: {
+		fontSize: 18
+	},
+	centerItems: {
+		justifyContent: "center",
+		alignItems: "center"
 	}
 };
 
@@ -354,32 +349,24 @@ const mapStateToProps = ({ elect, user }) => {
 		election,
 		positions,
 		candidatePlan,
-		apply
+		votes
 	} = elect;
-	const {
-		firstName,
-		lastName,
-		id,
-		voted,
-		applied
-	} = user;
 
-	return { election, positions, candidatePlan, firstName, lastName, id, voted, apply, applied };
+	const { activeUser } = user;
+
+	return {
+		election,
+		positions,
+		candidatePlan,
+		votes,
+		activeUser
+	};
 };
 
 const mapDispatchToProps = {
 	getPositions,
-	goToOtherProfile,
-	pageLoad,
-	getPrivilege,
-	addApplication,
-	goToCandidateForm,
-	candidateFNameChanged,
-	candidateLNameChanged,
-	candidatePlanChanged,
-	candidatePositionChanged,
 	vote,
-	editApplication
+	getVotes
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ElectionBallot);

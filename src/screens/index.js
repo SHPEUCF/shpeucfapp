@@ -8,10 +8,12 @@ All Screen Exports here grouped by folder
 import AdminHub from "./Admin/AdminHub";
 import CommitteesAdmin from "./Admin/CommitteesAdmin";
 import ElectionAdmin from "./Admin/ElectionAdmin";
+import MemberAdmin from "./Admin/MemberAdmin";
 export {
 	AdminHub,
 	CommitteesAdmin,
-	ElectionAdmin
+	ElectionAdmin,
+	MemberAdmin
 };
 
 /** Export Committees **/
@@ -23,13 +25,11 @@ export {
 };
 
 /** Export Election **/
-import Election from "./Election/Election";
 import ElectionApplication from "./Election/ElectionApplication";
 import ElectionBallot from "./Election/ElectionBallot";
 import ElectionCandidates from "./Election/ElectionCandidates";
 import ElectionPositions from "./Election/ElectionPositions";
 export {
-	Election,
 	ElectionApplication,
 	ElectionBallot,
 	ElectionCandidates,
@@ -38,8 +38,10 @@ export {
 
 /** Export Events **/
 import Events from "./Events/Events";
+import EventDetails from "./Events/EventDetails";
 export {
-	Events
+	Events,
+	EventDetails
 };
 
 /** Export General **/
@@ -54,11 +56,15 @@ export {
 };
 
 /** Export User **/
+import Login from "./User/Login";
 import OtherProfile from "./User/OtherProfile";
 import PointsBreakDown from "./User/PointsBreakDown";
 import Profile from "./User/Profile";
+import ResetPassword from "./User/ResetPassword";
 export {
+	Login,
 	OtherProfile,
 	PointsBreakDown,
-	Profile
+	Profile,
+	ResetPassword
 };

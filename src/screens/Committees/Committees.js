@@ -1,25 +1,13 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { NavBar } from "../../components/general";
+import { NavBar } from "../../components";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import _ from "lodash";
 import { FlatList, Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
-import {
-	getCommittees,
-	changeUserCommittees,
-	getUserCommittees,
-	typeChanged,
-	nameChanged,
-	descriptionChanged,
-	dateChanged,
-	timeChanged,
-	locationChanged,
-	epointsChanged,
-	eventIDChanged,
-	goToViewEvent,
-	loadCommittee
-} from "../../ducks";
+import { goToViewEvent } from "../../utils/router";
+import { filterEvents } from "../../utils/events";
+import { editUser, loadEvent, getCommittees, loadCommittee } from "../../ducks";
 
 const dimension = Dimensions.get("window");
 const iteratees = ["level"];
@@ -84,24 +72,10 @@ class Committees extends Component {
 					data = { committees }
 					extraData = { this.props }
 					keyExtractor = { this._keyExtractor }
-					renderItem = { ({
-						item
-					}) =>
-						this.renderCommittees(item) }
+					renderItem = { ({ item }) => this.renderCommittees(item) }
 				/>
 			</View>
 		);
-	}
-
-	sortEvents(eventIds, eventList) {
-		let events = {};
-		eventIds.forEach(function(element) {
-			Object.assign(events, { [element]: eventList[element] });
-		});
-
-		let sortedEvents = _.orderBy(events, ["date", "startTime", "endTime"], ["asc", "asc", "asc"]);
-
-		return sortedEvents;
 	}
 
 	viewCommittee(item) {
@@ -116,6 +90,11 @@ class Committees extends Component {
 			textColor
 		} = styles;
 
+		const {
+			activeUser,
+			sortedEvents
+		} = this.props;
+
 		if (this.props.screen === "dashboard")
 			return (
 				<View >
@@ -124,18 +103,24 @@ class Committees extends Component {
 						<View style = { containerStyle }>
 							<Text style = { [textColor, { fontSize: 16 }] }>{ item.title }</Text>
 						</View>
-						{ this.props.userCommittees && this.props.userCommittees[item.title]
+						{ activeUser.userCommittees && activeUser.userCommittees[item.title]
 							&& <View
 								style = {{ backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end" }}
 							>
 								<Ionicons
 									name = "ios-star"
 									size = { dimension.height * 0.03 }
-									onPress = { () => this.props.changeUserCommittees({ [item.title]: null }) }
+									onPress = { () => {
+										editUser({ userCommittees: {
+											...activeUser.userCommittees,
+											...{ [item.title]: null }
+										} });
+										this.setState({});
+									} }
 									style = {{ color: "#FECB00" }}
 								/>
 							</View> }
-						{ (!this.props.userCommittees || !this.props.userCommittees[item.title])
+						{ (!activeUser.userCommittees || !activeUser.userCommittees[item.title])
 						&& <View
 							style = {{ backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end" }}
 						>
@@ -143,8 +128,11 @@ class Committees extends Component {
 								name = "ios-star-outline"
 								size = { dimension.height * 0.03 }
 								onPress = { () => {
-									if (!this.props.userCommittees || Object.entries(this.props.userCommittees).length <= 4)
-										this.props.changeUserCommittees({ [item.title]: true });
+									if (!activeUser.userCommittees || Object.entries(activeUser.userCommittees).length <= 4)
+										editUser({ userCommittees: {
+											...activeUser.userCommittees,
+											...{ [item.title]: true }
+										} });
 								} }
 								style = {{ color: "#FECB00" }}
 							/>
@@ -200,7 +188,7 @@ class Committees extends Component {
 				{ this.state.opened[item.title] && item.events
 				&& <View style = {{}}>
 					<FlatList
-						data = { this.sortEvents(Object.keys(item.events), this.props.eventList) }
+						data = { filterEvents(Object.keys(item.events), sortedEvents) }
 						extraData = { this.props }
 						keyExtractor = { this._keyExtractor }
 						renderItem = { ({
@@ -214,15 +202,8 @@ class Committees extends Component {
 	}
 
 	viewEvent(item) {
-		this.props.typeChanged(item.type);
-		this.props.nameChanged(item.name);
-		this.props.descriptionChanged(item.description);
-		this.props.dateChanged(item.date);
-		this.props.timeChanged(item.time);
-		this.props.locationChanged(item.location);
-		this.props.epointsChanged(item.points);
-		this.props.eventIDChanged(item.eventID);
-		this.props.goToViewEvent();
+		loadEvent(item);
+		goToViewEvent();
 	}
 
 	renderEvents(event) {
@@ -361,8 +342,7 @@ const styles = {
 		flexDirection: "row"
 	},
 	content: {
-		flex: 0.98,
-		backgroundColor: "black"
+		flex: 0.98
 	},
 	buttonContainerStyle: {
 		flex: 0.5,
@@ -382,33 +362,13 @@ const styles = {
 };
 
 const mapStateToProps = ({ committees, user, events }) => {
-	const {
-		committeesList
-	} = committees;
-	const {
-		userCommittees
-	} = user;
-	const {
-		eventList
-	} = events;
+	const { committeesList } = committees;
+	const { activeUser } = user;
+	const { sortedEvents } = events;
 
-	return { committeesList, Committees, userCommittees, eventList };
+	return { committeesList, activeUser, sortedEvents };
 };
 
-const mapDispatchToProps = {
-	getCommittees,
-	changeUserCommittees,
-	getUserCommittees,
-	typeChanged,
-	nameChanged,
-	descriptionChanged,
-	dateChanged,
-	timeChanged,
-	locationChanged,
-	epointsChanged,
-	eventIDChanged,
-	goToViewEvent,
-	loadCommittee
-};
+const mapDispatchToProps = { getCommittees, loadCommittee };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Committees);

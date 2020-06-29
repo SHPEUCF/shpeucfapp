@@ -3,8 +3,8 @@ import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import _ from "lodash";
-import { FlatList, Text, View, TouchableOpacity, Dimensions } from "react-native";
-import { NavBar } from "../../components/general";
+import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from "react-native";
+import { NavBar } from "../../components";
 import {
 	openElection,
 	closeElection,
@@ -44,12 +44,12 @@ class ElectionCandidates extends Component {
 		// alert(positions.title);
 
 		return (
-			<View style = { page }>
+			<SafeAreaView style = { page }>
 				<NavBar title = "Candidates" back onBack = { () => Actions.pop() } />
 				<View style = { content }>
 					{ this.renderFlatlist(positionsArray) }
 				</View>
-			</View>
+			</SafeAreaView>
 		);
 	}
 
@@ -178,7 +178,7 @@ const styles = {
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "flex-start",
-		backgroundColor: "#2C3239",
+		backgroundColor: "black",
 		paddingVertical: 10,
 		paddingHorizontal: 15
 	},

@@ -29,6 +29,11 @@ build/
 local.properties
 *.iml
 
+# Environment
+# Firebase API
+.env
+.env.production
+
 # node.js
 #
 node_modules/
