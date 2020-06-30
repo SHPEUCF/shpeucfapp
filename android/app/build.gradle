@@ -95,7 +95,7 @@ def enableSeparateBuildPerCPUArchitecture = false
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
  */
-def enableProguardInReleaseBuilds = true
+def enableProguardInReleaseBuilds = false
 
 /**
  * The preferred build flavor of JavaScriptCore.
@@ -135,7 +135,6 @@ android {
         versionName "1.12"
         vectorDrawables.useSupportLibrary = true
         missingDimensionStrategy 'react-native-camera', 'general'
-        //multiDexEnabled true
     }
     splits {
         abi {
@@ -172,7 +171,7 @@ android {
             // see https://facebook.github.io/react-native/docs/signed-apk-android.
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
-            shrinkResources true
+            shrinkResources enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),'proguard-rules.pro'
         }
     }
@@ -198,7 +197,6 @@ dependencies {
     implementation project(':react-native-fast-image')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    //implementation 'com.android.support:multidex:1.0.3'
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
