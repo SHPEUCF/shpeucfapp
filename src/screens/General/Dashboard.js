@@ -358,15 +358,15 @@ class Dashboard extends Component {
 		return (
 			<View style = { socialMediaContainer }>
 				<View style = { buttonRowContainer }>
-					{ socialMediaLinks.map((linksArray, index) =>
+					{ socialMediaLinks.map((socialMediaLinks, index) =>
 						<TouchableOpacity
 							key = { index }
 							style = { socialMediaButton }
-							onPress = { () => openAppOrWebsite(...linksArray.appLink) }
+							onPress = { () => openAppOrWebsite(...socialMediaLinks.appLink) }
 						>
 							<FontAwesomeIcon
 								style = { black }
-								name = { linksArray.appImage }
+								name = { socialMediaLinks.appImage }
 								size = { dimension.height * 0.04 }
 							/>
 						</TouchableOpacity>

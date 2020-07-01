@@ -70,8 +70,10 @@ class Profile extends Component {
 						</View>
 						<View style = {{ flex: 0.2 }}></View>
 					</View>
+
 					{ this.renderSocialMedia() }
 					{ this.renderButtons() }
+
 				</View>
 			</SafeAreaView>
 		);

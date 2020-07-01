@@ -19,16 +19,8 @@ class OtherProfile extends Component {
 	}
 
 	renderContent() {
-		const {
-			email, major, points, picture
-		} = this.props;
-		const {
-			bioContainer,
-			fieldContainerStyle,
-			itemLabelText,
-			itemValueText,
-			textColor
-		} = styles;
+		const { email, major, points } = this.props;
+		const { bioContainer, fieldContainerStyle, itemLabelText, itemValueText, textColor } = styles;
 
 		return (
 			<SafeAreaView style = {{ flex: 1, backgroundColor: "#0c0b0b" }}>

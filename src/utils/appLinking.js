@@ -80,7 +80,7 @@ const formatUrl = {
  * 		   |"projects"|"shpejr")}   inquiry   	    The value for the query search. Slack channels are shown here for easiness.
  * @param {String=} 				warningMessage  Optional value for the alert. It use to populate the alert dialog box.
  *
- *  *  -- How to use the function --
+ *  -- How to use the function --
  *  Calling the function passing 4 params, the name of the app, the action, what you are looking and the
  *  alert message.(appName, intent, inquiry, Warningmessage)
  *
