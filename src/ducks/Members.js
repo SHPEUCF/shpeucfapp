@@ -55,7 +55,7 @@ const INITIAL_STATE = {
 	error: "",
 	id: "",
 	flag: "",
-	dashColor: "",
+	color: "",
 	filters: {},
 	userCommittees: {},
 	userList: {}
@@ -129,7 +129,7 @@ export default (state = INITIAL_STATE, action) => {
 				paidMember: payload.paidMember,
 				flag: payload.flag,
 				userCommittees: payload.committees,
-				dashColor: payload.color,
+				color: payload.color,
 				privilege: payload.privilege };
 		case ACTIONS.FETCH_ALL_USERS:
 			return { ...state,

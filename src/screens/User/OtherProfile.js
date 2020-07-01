@@ -8,7 +8,6 @@ import Flag from "react-native-flags";
 import { verifiedCheckMark } from "../../utils/render";
 import { openAppOrWebsite } from "../../utils/appLinking";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
-
 const dimension = Dimensions.get("window");
 
 class OtherProfile extends Component {
@@ -20,8 +19,8 @@ class OtherProfile extends Component {
 
 	renderContent() {
 		const {
-			email, major, points, picture
-		} = this.props;
+			email, major, points, picture, color
+		} = this.props.members;
 		const {
 			bioContainer,
 			fieldContainerStyle,
@@ -29,7 +28,7 @@ class OtherProfile extends Component {
 			itemValueText,
 			textColor
 		} = styles;
-
+console.log("MAIN RENDER ", color);
 		return (
 			<SafeAreaView style = {{ flex: 1, backgroundColor: "#0c0b0b" }}>
 				<NavBar back onBack = { () => Actions.pop() } />
@@ -43,7 +42,7 @@ class OtherProfile extends Component {
 								<View style = {{ flex: 1, justifyContent: "center" }}>
 									<Text style = { [itemLabelText, textColor] }>Email:</Text>
 								</View>
-								{ this.props.major !== "" && <View style = {{ flex: 1, justifyContent: "center" }}>
+								{ this.props.members.major !== "" && <View style = {{ flex: 1, justifyContent: "center" }}>
 									<Text style = { [itemLabelText, textColor] }>Major:</Text>
 								</View> }
 								<View style = {{ flex: 1, justifyContent: "center" }}>
@@ -54,7 +53,7 @@ class OtherProfile extends Component {
 								<View style = {{ flex: 1, justifyContent: "center" }}>
 									<Text style = { [itemValueText, textColor] }>{ email }</Text>
 								</View>
-								{ this.props.major !== "" && <View style = {{ flex: 1, justifyContent: "center" }}>
+								{ this.props.members.major !== "" && <View style = {{ flex: 1, justifyContent: "center" }}>
 									<Text style = { [itemValueText, textColor] }>{ major }</Text>
 								</View> }
 								<View style = {{ flex: 1, justifyContent: "center" }}>
@@ -85,8 +84,9 @@ class OtherProfile extends Component {
 			firstName,
 			lastName,
 			picture,
-			paidMember
-		} = this.props;
+			paidMember,
+			color
+		} = this.props.members;
 
 		return (
 			<View style = { headerInfoContainer }>
@@ -95,7 +95,7 @@ class OtherProfile extends Component {
 					&& <Avatar
 						size = { dimension.height * 0.32 }
 						rounded
-						titleStyle = {{ backgroundColor: this.props.color, height: "100%", width: "100%", justifyContent: "center", paddingTop: "20%" }}
+						titleStyle = {{ backgroundColor: color, height: "100%", width: "100%", justifyContent: "center", paddingTop: "20%" }}
 						title = { firstName[0].concat(lastName[0]) }
 					/> }
 					{ picture !== ""
@@ -125,10 +125,10 @@ class OtherProfile extends Component {
 	renderFlag() {
 		let flag = null;
 
-		if (this.props.flag !== "" && this.props.flag) {
+		if (this.props.members.flag !== "" && this.props.members.flag) {
 			flag = <Flag
 				type = "flat"
-				code = { this.props.flag }
+				code = { this.props.members.flag }
 				size = { 32 }
 			/>;
 		}
@@ -150,21 +150,22 @@ class OtherProfile extends Component {
 		const {
 			firstName,
 			email,
+			color,
 			linkedin
-		} = this.props;
-
+		} = this.props.members;
+console.log("COLOR ", color);
 		return (
 			<View style = {{ flex: 0.2 }}>
 				<View style = {{ flex: 0.03 }}></View>
 				<View style = { socialmediarow }>
-					<View style = { [LogoContainer, { backgroundColor: this.props.color, flex: 1 }] }>
+					<View style = { [LogoContainer, { backgroundColor: color, flex: 1 }] }>
 						<TouchableOpacity
 							onPress = { () => { openAppOrWebsite("linkedin", "profile", linkedin, `${firstName} has not added their Linkedin profile yet.`) } }>
 							<Ionicons name = "logo-linkedin" size = { dimension.height * 0.045 } color = 'white' />
 						</TouchableOpacity>
 					</View>
 					<View style = {{ flex: 0.01 }}></View>
-					<View style = { [LogoContainer, { backgroundColor: this.props.color, flex: 1 }] }>
+					<View style = { [LogoContainer, { backgroundColor: color, flex: 1 }] }>
 						<TouchableOpacity
 							onPress = { () => { openAppOrWebsite("email", "", email, `${firstName}'s email is not set.`) } } >
 							<Ionicons name = "ios-mail" size = { dimension.height * 0.045 } color = 'white' />
@@ -270,19 +271,9 @@ const mapStateToProps = ({ members, general, user }) => {
 	} = user;
 
 	return {
-		firstName,
-		lastName,
-		email,
-		major,
-		points,
-		picture,
-		quote,
-		loading,
-		activeUser,
-		color,
-		flag,
-		paidMember,
-		linkedin
+		members,
+		general,
+		user
 	};
 };
 
