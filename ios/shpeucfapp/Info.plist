@@ -24,6 +24,7 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>mailto</string>
 		<string>instagram</string>
 		<string>slack</string>
 		<string>fb</string>

@@ -20,7 +20,7 @@ class OtherProfile extends Component {
 
 	renderContent() {
 		const {
-			email, major, points
+			email, major, points, picture
 		} = this.props;
 		const {
 			bioContainer,
@@ -143,8 +143,15 @@ class OtherProfile extends Component {
 	}
 
 	renderSocialMedia() {
-		const { LogoContainer, socialmediarow } = styles;
-		const { firstName, email, linkedin } = this.props;
+		const {
+			LogoContainer,
+			socialmediarow
+		} = styles;
+		const {
+			firstName,
+			email,
+			linkedin
+		} = this.props;
 
 		return (
 			<View style = {{ flex: 0.2 }}>
@@ -152,19 +159,14 @@ class OtherProfile extends Component {
 				<View style = { socialmediarow }>
 					<View style = { [LogoContainer, { backgroundColor: this.props.color, flex: 1 }] }>
 						<TouchableOpacity
-							onPress = { () => {
-								openAppOrWebsite("linkedin", "profile", linkedin,
-									`${firstName} has not added their LinkedIn profile yet.`);
-							} }>
+							onPress = { () => { openAppOrWebsite("linkedin", "profile", linkedin, `${firstName} has not added their Linkedin profile yet.`) } }>
 							<Ionicons name = "logo-linkedin" size = { dimension.height * 0.045 } color = 'white' />
 						</TouchableOpacity>
 					</View>
 					<View style = {{ flex: 0.01 }}></View>
 					<View style = { [LogoContainer, { backgroundColor: this.props.color, flex: 1 }] }>
 						<TouchableOpacity
-							onPress = { () => {
-								openAppOrWebsite("email", "open", email, `${firstName}'s email is not set.`);
-							} } >
+							onPress = { () => { openAppOrWebsite("email", "", email, `${firstName}'s email is not set.`) } } >
 							<Ionicons name = "ios-mail" size = { dimension.height * 0.045 } color = 'white' />
 						</TouchableOpacity>
 					</View>
