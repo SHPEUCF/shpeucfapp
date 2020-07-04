@@ -27,7 +27,8 @@ const ACTIONS = createActionTypes([
 	"NATIONALITY_CHANGED_MEMBER",
 	"DATE_BIRTH_CHANGED_MEMBER",
 	"ASSIGN_POSITION",
-	"PAGE_LOAD"
+	"PAGE_LOAD",
+	"LINKEDIN_CHANGED_MEMBER"
 ]);
 
 const INITIAL_STATE = {
@@ -56,6 +57,7 @@ const INITIAL_STATE = {
 	id: "",
 	flag: "",
 	color: "",
+	linkedin: "",
 	filters: {},
 	userCommittees: {},
 	userList: {}
@@ -112,6 +114,9 @@ export default (state = INITIAL_STATE, action) => {
 		case ACTIONS.FETCH_FILTERS:
 			return { ...state,
 				filters: payload };
+		case ACTIONS.LINKEDIN_CHANGED_MEMEBER:
+			return { ...state,
+				linkedin: payload };
 		default:
 			return state;
 		case ACTIONS.FETCH_MEMBER_PROFILE:
@@ -130,6 +135,7 @@ export default (state = INITIAL_STATE, action) => {
 				flag: payload.flag,
 				userCommittees: payload.committees,
 				color: payload.color,
+				linkedin: payload.linkedin,
 				privilege: payload.privilege };
 		case ACTIONS.FETCH_ALL_USERS:
 			return { ...state,
@@ -279,7 +285,7 @@ export const fetchMemberProfile = (userID) => {
 	};
 };
 
-export const editMember = (firstName, lastName, email, college, major, points, quote, id, nationality, dateOfBirth) => {
+export const editMember = (firstName, lastName, email, college, major, points, quote, id, nationality, dateOfBirth, linkedin) => {
 	return (dispatch) => {
 		firebase.database().ref(`/users/${id}/`).update({
 			firstName,
@@ -290,7 +296,8 @@ export const editMember = (firstName, lastName, email, college, major, points, q
 			points,
 			quote,
 			nationality,
-			dateOfBirth
+			dateOfBirth,
+			linkedin
 		})
 			.then(() => firebase.database().ref(`/points/${id}/`).update({
 				firstName,

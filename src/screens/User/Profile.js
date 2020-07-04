@@ -70,10 +70,8 @@ class Profile extends Component {
 						</View>
 						<View style = {{ flex: 0.2 }}></View>
 					</View>
-
 					{ this.renderSocialMedia() }
 					{ this.renderButtons() }
-
 				</View>
 			</SafeAreaView>
 		);
@@ -148,16 +146,18 @@ class Profile extends Component {
 				<View style = {{ flex: 0.03 }} />
 				<View style = { socialMediaRow }>
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
-						<TouchableOpacity onPress = { () => {
-							openAppOrWebsite("linkedin", "profile", linkedin,
-								"No profile has been added. To add one, go to Edit Profile.");
-						} }>
+						<TouchableOpacity
+							onPress = { () => {
+								openAppOrWebsite("linkedin", linkedin,
+									{ warning: "No LinkedIn profile has been added. Edit your profile to add one." });
+							} }
+						>
 							<Ionicons name = "logo-linkedin" size = { height * 0.045 } color = "white" />
 						</TouchableOpacity>
 					</View>
 					<View style = {{ flex: 0.01 }} />
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
-						<TouchableOpacity onPress = { () => { openAppOrWebsite("email", "open", email) } }>
+						<TouchableOpacity onPress = { () => { openAppOrWebsite("email", email) } }>
 							<Ionicons name = "ios-mail" size = { height * 0.045 } color = "white" />
 						</TouchableOpacity>
 					</View>

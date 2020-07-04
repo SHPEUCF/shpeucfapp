@@ -349,24 +349,25 @@ class Dashboard extends Component {
 		} = styles;
 
 		let socialMediaLinks = [
-			{ appLink: ["slack", "channel", "announcements"], appImage: "slack" },
-			{ appLink: ["facebook", "groups", "shpeucf"], appImage: "facebook" },
-			{ appLink: ["web", "open", "https://www.shpeucf.com/"], appImage: "globe" },
-			{ appLink: ["instagram", "open", "shpeucf"], appImage: "instagram" }
+			{ appLink: ["slack", "announcements", "channel"], appImage: "slack" },
+			{ appLink: ["facebook", "shpeucf", "groups"], appImage: "facebook" },
+			{ appLink: ["web", "https://www.shpeucf.com/"], appImage: "globe" },
+			{ appLink: ["instagram", "shpeucf"], appImage: "instagram" },
+			{ appLink: ["linkedin", "shpeucf", "company"], appImage: "linkedin" }
 		];
 
 		return (
 			<View style = { socialMediaContainer }>
 				<View style = { buttonRowContainer }>
-					{ socialMediaLinks.map((socialMediaLinks, index) =>
+					{ socialMediaLinks.map(({ appLink, appImage }, index) =>
 						<TouchableOpacity
 							key = { index }
 							style = { socialMediaButton }
-							onPress = { () => openAppOrWebsite(...socialMediaLinks.appLink) }
+							onPress = { () => openAppOrWebsite(...appLink) }
 						>
 							<FontAwesomeIcon
 								style = { black }
-								name = { socialMediaLinks.appImage }
+								name = { appImage }
 								size = { dimension.height * 0.04 }
 							/>
 						</TouchableOpacity>

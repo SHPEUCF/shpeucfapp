@@ -86,7 +86,7 @@ class FilterList extends Component {
 			}
 		}
 
-		return selected ;
+		return selected;
 	}
 
 	static propTypes = {
