@@ -1,6 +1,10 @@
 import { Linking } from "react-native";
 import { Alert } from "../components";
+import { slackInfo } from "react-native-dotenv";
 
+const slackLinks = {
+	slackInfo: JSON.parse(slackInfo)
+};
 /**
  * @description Object that holds the slack team id and several channel ids.
  *              The information in here is the most current as of May 28th, 2020.
@@ -9,7 +13,7 @@ import { Alert } from "../components";
  * @typedef {{team: String, channel: String, fbGroupshpeucf: String}} slackInfo
  */
 
-export const slackInfo = {
+/* export const slackInfo = {
 	team: "TC61JSPUZ",
 	channel: {
 		general: "CPRDXHHD4",
@@ -17,10 +21,13 @@ export const slackInfo = {
 		fundraisingCommittee: "CCUUWRU1Y",
 		motorshpe: "CP5HC76TD",
 		projects: "CNATZRD9C",
-		shpejr: "GCWFE5630"
+		shpejr: "GCWFE5630",
+		mentorshpe: "C016KGD2WHH",
+		computereng: "GN4U8FPDK",
+		projectleads: "GNBH9T4UC"
 	},
 	fbGroupshpeucf: "120691161371846"
-};
+}; */
 
 /**
  * @description Function that returns the URI scheme and universal link for opening
@@ -59,20 +66,16 @@ const formatUrl = {
 				: { uri: "linkedin://", url: "https://www.linkedin.com" }
 	),
 	slack: (inquiry, intent) => (
-		(intent === "channel" && (inquiry = (inquiry in slackInfo.channel) ? slackInfo.channel[inquiry] : inquiry))
-			? { uri: `slack://channel?team=${slackInfo.team}&id=${inquiry}` }
-			: { uri: `slack://open?team=${slackInfo.team}` }
+		(intent === "channel" && (inquiry = (inquiry in slackLinks.slackInfo.channel) ? slackLinks.slackInfo.channel[inquiry] : inquiry))
+			? { uri: `slack://channel?team=${slackLinks.slackInfo.team}&id=${inquiry}` }
+			: { uri: `slack://open?team=${slackLinks.slackInfo.team}` }
 	)
 };
 
-const defIntentVal = (appName, intent) => {
-	if (!intent) {
-		const names = ["facebook", "instagram", "linkedin"];
+const defIntentVal = (appName) => {
+	const names = ["facebook", "instagram", "linkedin"];
 
-		intent = (names.includes(appName)) ? "profile" : "open";
-	}
-
-	return intent;
+	return (names.includes(appName)) ? "profile" : "open";
 };
 
 /**
@@ -117,15 +120,14 @@ const defIntentVal = (appName, intent) => {
  * openAppOrWebsite("web", "https://www.example.com/", { warning: "Oops" })
  */
 
-export function openAppOrWebsite(appName, inquiry, { intent, warning }) {
+export const openAppOrWebsite = (appName = "web", inquiry, { intent = defIntentVal(appName),
+	warning = "Oops! Something went wrong. Contact the Tech Directors if problem persists." }) => {
 	if (!inquiry) {
 		const name = appName[0].toUpperCase() + appName.slice(1);
 
 		Alert.alert(warning, { title: `Missing ${name} information.`, submit: { title: "Close" } });
 	}
 	else {
-		intent = intent || defIntentVal(appName, intent);
-		warning = warning || "Oops! Something went wrong. Contact the Tech Directors if problem persists.";
 		const { uri, url } = formatUrl[appName](inquiry, intent);
 
 		if (Linking.canOpenURL(uri))
@@ -135,4 +137,4 @@ export function openAppOrWebsite(appName, inquiry, { intent, warning }) {
 		else
 			Alert.alert(warning, { title: "Warning", type: "error", submit: { title: "Close" } });
 	}
-}
+};

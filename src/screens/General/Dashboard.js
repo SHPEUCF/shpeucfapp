@@ -349,11 +349,11 @@ class Dashboard extends Component {
 		} = styles;
 
 		let socialMediaLinks = [
-			{ appLink: ["slack", "announcements", "channel"], appImage: "slack" },
-			{ appLink: ["facebook", "shpeucf", "groups"], appImage: "facebook" },
+			{ appLink: ["slack", "announcements", { intent: "channel" }], appImage: "slack" },
+			{ appLink: ["facebook", "shpeucf", { intent: "groups" }], appImage: "facebook" },
 			{ appLink: ["web", "https://www.shpeucf.com/"], appImage: "globe" },
 			{ appLink: ["instagram", "shpeucf"], appImage: "instagram" },
-			{ appLink: ["linkedin", "shpeucf", "company"], appImage: "linkedin" }
+			{ appLink: ["linkedin", "shpeucf", { intent: "company" }], appImage: "linkedin" }
 		];
 
 		return (
