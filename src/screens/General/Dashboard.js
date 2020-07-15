@@ -351,8 +351,8 @@ class Dashboard extends Component {
 		let socialMediaLinks = [
 			{ appLink: ["slack", "announcements", { intent: "channel" }], appImage: "slack" },
 			{ appLink: ["facebook", "shpeucf", { intent: "groups" }], appImage: "facebook" },
-			{ appLink: ["web", "https://www.shpeucf.com/"], appImage: "globe" },
-			{ appLink: ["instagram", "shpeucf"], appImage: "instagram" },
+			{ appLink: ["web", "https://www.shpeucf.com/", {}], appImage: "globe" },
+			{ appLink: ["instagram", "shpeucf", {}], appImage: "instagram" },
 			{ appLink: ["linkedin", "shpeucf", { intent: "company" }], appImage: "linkedin" }
 		];
 

@@ -1,33 +1,40 @@
 import { Linking } from "react-native";
 import { Alert } from "../components";
-import { slackInfo } from "react-native-dotenv";
-
-const slackLinks = {
-	slackInfo: JSON.parse(slackInfo)
-};
+import {
+	team,
+	general,
+	announcements,
+	fundraisingCommittee,
+	motorshpe,
+	projects20_21,
+	shpejr,
+	mentorshpe20_21,
+	computereng,
+	projectleads,
+	internationalStudents,
+	linkedinDrop
+} from "react-native-dotenv";
 /**
  * @description Object that holds the slack team id and several channel ids.
  *              The information in here is the most current as of May 28th, 2020.
  *              To find the team id or channel id login in slack on a computer.
  *
- * @typedef {{team: String, channel: String, fbGroupshpeucf: String}} slackInfo
+ *  slackInfo
  */
 
-/* export const slackInfo = {
-	team: "TC61JSPUZ",
-	channel: {
-		general: "CPRDXHHD4",
-		announcements: "CC5S86GHE",
-		fundraisingCommittee: "CCUUWRU1Y",
-		motorshpe: "CP5HC76TD",
-		projects: "CNATZRD9C",
-		shpejr: "GCWFE5630",
-		mentorshpe: "C016KGD2WHH",
-		computereng: "GN4U8FPDK",
-		projectleads: "GNBH9T4UC"
-	},
-	fbGroupshpeucf: "120691161371846"
-}; */
+export const slackInfo = {
+	general: general,
+	announcements: announcements,
+	fundraisingCommittee: fundraisingCommittee,
+	motorshpe: motorshpe,
+	projects20_21: projects20_21,
+	shpejr: shpejr,
+	mentorshpe20_21: mentorshpe20_21,
+	computereng: computereng,
+	projectleads: projectleads,
+	internationalStudents: internationalStudents,
+	linkedinDrop: linkedinDrop
+};
 
 /**
  * @description Function that returns the URI scheme and universal link for opening
@@ -66,13 +73,13 @@ const formatUrl = {
 				: { uri: "linkedin://", url: "https://www.linkedin.com" }
 	),
 	slack: (inquiry, intent) => (
-		(intent === "channel" && (inquiry = (inquiry in slackLinks.slackInfo.channel) ? slackLinks.slackInfo.channel[inquiry] : inquiry))
-			? { uri: `slack://channel?team=${slackLinks.slackInfo.team}&id=${inquiry}` }
-			: { uri: `slack://open?team=${slackLinks.slackInfo.team}` }
+		(intent === "channel" && (inquiry = (inquiry in slackInfo) ? slackInfo[inquiry] : inquiry))
+			? { uri: `slack://channel?team=${team}&id=${inquiry}` }
+			: { uri: `slack://open?team=${team}` }
 	)
 };
 
-const defIntentVal = (appName) => {
+const defaultIntentValue = (appName) => {
 	const names = ["facebook", "instagram", "linkedin"];
 
 	return (names.includes(appName)) ? "profile" : "open";
@@ -120,7 +127,7 @@ const defIntentVal = (appName) => {
  * openAppOrWebsite("web", "https://www.example.com/", { warning: "Oops" })
  */
 
-export const openAppOrWebsite = (appName = "web", inquiry, { intent = defIntentVal(appName),
+export const openAppOrWebsite = (appName, inquiry, { intent = defaultIntentValue(appName),
 	warning = "Oops! Something went wrong. Contact the Tech Directors if problem persists." }) => {
 	if (!inquiry) {
 		const name = appName[0].toUpperCase() + appName.slice(1);
@@ -128,13 +135,13 @@ export const openAppOrWebsite = (appName = "web", inquiry, { intent = defIntentV
 		Alert.alert(warning, { title: `Missing ${name} information.`, submit: { title: "Close" } });
 	}
 	else {
-		const { uri, url } = formatUrl[appName](inquiry, intent);
+		  const { uri, url } = formatUrl[appName](inquiry, intent);
 
-		if (Linking.canOpenURL(uri))
-			Linking.openURL(uri);
-		else if (Linking.canOpenURL(url))
-			Linking.openURL(url);
-		else
-			Alert.alert(warning, { title: "Warning", type: "error", submit: { title: "Close" } });
+	 if (Linking.canOpenURL(uri))
+		  Linking.openURL(uri);
+	 else if (Linking.canOpenURL(url))
+		 Linking.openURL(url);
+	 else
+		 Alert.alert(warning, { title: "Warning", type: "error", submit: { title: "Close" } });
 	}
 };
