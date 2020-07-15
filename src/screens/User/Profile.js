@@ -157,7 +157,7 @@ class Profile extends Component {
 					</View>
 					<View style = {{ flex: 0.01 }} />
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
-						<TouchableOpacity onPress = { () => { openAppOrWebsite("email", email) } }>
+						<TouchableOpacity onPress = { () => { openAppOrWebsite("email", email, {}) } }>
 							<Ionicons name = "ios-mail" size = { height * 0.045 } color = "white" />
 						</TouchableOpacity>
 					</View>
