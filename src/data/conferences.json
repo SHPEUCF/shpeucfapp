@@ -1,0 +1,48 @@
+[
+    {
+        "title": "Upcoming",
+        "info": {
+            "shpe":{
+                "header": "SHPE Nationals 2020",
+                "start": "10-30-20",
+                "end": "11-02-20",
+                "location": "Denver, CO",
+                "summary": "",
+                "picture": ""
+            },
+            "shpe2":{
+                "header": "SHPE Nationals 2021",
+                "start": "11-01-21",
+                "end": "11-04-21",
+                "location": "Orlando, FL",
+                "summary": "",
+                "picture": ""
+            }
+
+        }
+    },
+    {
+        "title": "Happening Now",
+        "info": {
+            "nila": {
+            "header": "NILA 2021",
+            "start": "07-15-20",
+            "end": "08-04-20",
+            "location": "Houston, TX",
+            "summary": "",
+            "picture": ""
+            }
+        }
+    },
+    {
+        "title": "Past",
+        "info": {
+            "header": "Great Minds in STEM",
+            "start": "02-01-20",
+            "end": "02-04-20",
+            "location": "Kissimmee, FL",
+            "summary": "",
+            "picture": ""
+        }
+    }
+]

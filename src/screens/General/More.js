@@ -44,6 +44,12 @@ const menuItems = [
 		icon: "settings",
 		screen: "AdminHub",
 		privilege: "eboard"
+	},
+	{
+		title: "Conferences",
+		icon: "info",
+		screen: "Conference",
+		privilege: "user"
 	}
 ];
 

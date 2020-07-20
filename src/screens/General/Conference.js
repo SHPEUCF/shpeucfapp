@@ -2,23 +2,36 @@ import React, { Component } from "react";
 import { Avatar, Icon, colors } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import { ListItem } from "react-native-elements";
-import { NavBar } from "../../components";
-import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Animated, Platform, UIManager, LayoutAnimation } from "react-native";
+import { NavBar, CollapsibleView } from "../../components";
+import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Animated, Platform, UIManager, LayoutAnimation, SectionList } from "react-native";
 import { menuItems, developers } from "../../data/AboutItems.js";
+const data = "../../data/conferences.json";
 
 export class Conference extends Component {
 	constructor(props) {
 		super(props);
-
 	}
 
 	render() {
 		const { container } = styles;
 
 		return (
-			<View style = { [container] }>
-				
-			</View>
+			<SafeAreaView>
+				<SectionList
+					sections = { data }
+					keyExtractor = { (item, index) => item + index }
+					renderItem = { ({ item }) =>
+						<CollapsibleView headerTitle = { item.header }
+							headerSubTitle1 = { item.location }
+							headerSubTitle2 = { `${item.start} - ${item.end}` }
+							bodyText = { item.summary }
+							headerImage = { item.picture }
+						/> }
+					renderSectionHeader = { ({ section: { title } }) => (
+						<Text>{ title }</Text>
+					) }
+				/>
+			</SafeAreaView>
 		);
 	}
 }

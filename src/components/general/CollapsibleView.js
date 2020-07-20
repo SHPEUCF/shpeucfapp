@@ -34,18 +34,19 @@ class CollapsibleView extends Component {
 	}
 
 	headerPicture(img) {
-        const { pictureStyle } = styles;
-        const imgSource = this.props.headerImage;
-        const showImg = this.props.showHRImage === false ? false : true;
+		const { pictureStyle } = styles;
+		const imgSource = this.props.headerImage;
+		const showImg = this.props.showHRImage === false ? false : true;
+
 		console.log("IMG FUNC", this.props.headerImage);
 
 		return (
 			showImg && <Avatar
 				size = "large"
 				overlayContainerStyle = { pictureStyle }
-                source = {{ uri: imgSource }}
-                icon = {{ name: "photo", type: "font-awesome", iconStyle: { opacity: imgSource ? 1 : 0 } }}
-				
+				source = {{ uri: imgSource }}
+				icon = {{ name: "photo", type: "font-awesome", iconStyle: { opacity: imgSource ? 1 : 0 } }}
+
 			/>
 		);
 	}
@@ -88,7 +89,7 @@ class CollapsibleView extends Component {
 
   	return (
     		this.state.isExpand && <View style = { styles.bodyCollapseStyle } >
-                { this.props.extraBodyContentTop }
+    			{ this.props.extraBodyContentTop }
     			<Text style = { [textStyle, bodyTextStyle] }>{ text }</Text>
     			{ this.props.extraBodyContentBottom }
     		</View>
@@ -132,8 +133,8 @@ const RotateCollapseButton = ({ onPress, iconToggle }) => {
 
 const styles = {
 	container: {
-        marginHorizontal: 8,
-        marginVertical: 8,
+		marginHorizontal: 8,
+		marginVertical: 8,
 		backgroundColor: "#21252b",
 		borderTopLeftRadius: 20,
 		borderTopRightRadius: 20,
@@ -157,8 +158,8 @@ const styles = {
 		color: "#e0e6ed"
 	},
 	hrTitleText: {
-        fontSize: 20,
-        fontWeight: "bold"
+		fontSize: 20,
+		fontWeight: "bold"
 	},
 	hrSubTxt1: {
 		fontSize: 16,
