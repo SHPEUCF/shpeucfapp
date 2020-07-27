@@ -1,11 +1,8 @@
 import React, { Component } from "react";
-import { Avatar, Icon, colors } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
-import { ListItem } from "react-native-elements";
 import { NavBar, CollapsibleView } from "../../components";
-import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Animated, Platform, UIManager, LayoutAnimation, SectionList } from "react-native";
-import { menuItems, developers } from "../../data/AboutItems.js";
-const data = "../../data/conferences.json";
+import { Text, SafeAreaView, SectionList, View } from "react-native";
+const data = require("../../data/conferences.json");
 
 class Conference extends Component {
 	constructor(props) {
@@ -13,22 +10,28 @@ class Conference extends Component {
 	}
 
 	render() {
-		const { container } = styles;
+		const { viewBackgroud, sectionContainer, sectionText } = styles;
 
 		return (
-			<SafeAreaView>
+			<SafeAreaView style = { viewBackgroud }>
+				<NavBar title = "Conferences" back onBack = { () => Actions.pop() } />
+
 				<SectionList
 					sections = { data }
-					keyExtractor = { (item, index) => item + index }
-					renderItem = { ({ item }) =>
+					keyExtractor = { (item, index) => index }
+					renderItem = { ({ item }) => (
 						<CollapsibleView headerTitle = { item.header }
 							headerSubTitle1 = { item.location }
-							headerSubTitle2 = { `${item.start} - ${item.end}` }
+							headerSubTitle2 = { `${new Date(item.start).toDateString()} to ${new Date(item.end).toDateString()}` }
 							bodyText = { item.summary }
+							showHRImage = { true }
 							headerImage = { item.picture }
-						/> }
+							 />
+					) }
 					renderSectionHeader = { ({ section: { title } }) => (
-						<Text>{ title }</Text>
+						<View style = { sectionContainer }>
+							<Text style = { sectionText }>{ title }</Text>
+						</View>
 					) }
 				/>
 			</SafeAreaView>
@@ -37,54 +40,27 @@ class Conference extends Component {
 }
 
 const styles = {
-	container: {
-		marginHorizontal: 8,
-		backgroundColor: "#21252b",
-		borderTopLeftRadius: 20,
-		borderTopRightRadius: 20,
-		borderBottomLeftRadius: 20,
-		borderBottomRightRadius: 20,
-		overflow: "hidden"
+	viewBackgroud: {
+		backgroundColor: "black",
+		flex: 1
 	},
-	headerContainer: {
-		flexDirection: "row",
-		paddingVertical: 20,
-		paddingHorizontal: 10,
-		alignSelf: "baseline"
+	sectionContainer: {
+		backgroundColor: "#21252b",
+		padding: 10,
+		marginHorizontal: 8,
+		marginVertical: 10,
+		borderTopLeftRadius: 10,
+		borderTopRightRadius: 10,
+		borderBottomLeftRadius: 10,
+		borderBottomRightRadius: 10,
+		overflow: "hidden"
 
 	},
-	hrTextContainer: {
-		flex: 1,
-		marginHorizontal: 8
-	},
-	textStyle: {
-		textAlign: "left",
-		color: "#e0e6ed"
-	},
-	hrTitleText: {
-		fontSize: 25
-	},
-	hrSubTxt1: {
-		fontSize: 16,
-		paddingTop: 8
-	},
-	hrSubTxt2: {
-		fontSize: 12,
-		paddingTop: 5
-	},
-	pictureStyle: {
-		borderBottomLeftRadius: 15,
-		borderBottomRightRadius: 15,
-		borderTopRightRadius: 15,
-		borderTopLeftRadius: 15,
-		overflow: "hidden"
-	},
-	bodyCollapseStyle: {
-		paddingHorizontal: 10,
-		paddingBottom: 20
-	},
-	bodyTextStyle: {
-		fontSize: 16
+	sectionText: {
+		textAlign: "center",
+		color: "#e0e6ed",
+		fontSize: 35,
+		fontWeight: "bold"
 	}
 };
 
