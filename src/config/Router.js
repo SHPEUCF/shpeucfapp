@@ -40,6 +40,7 @@ import {
 /** Import General  **/
 import {
 	About,
+	Conference,
 	Dashboard,
 	Leaderboard,
 	More
@@ -410,6 +411,12 @@ const RouterComponent = () => {
 							key = "About"
 							component = { About }
 							title = "About"
+						/>
+						<Scene
+							hideTabBar
+							key = "Conferences"
+							component = { Conference }
+							title = "Conferences"
 						/>
 					</Stack>
 				</Stack>

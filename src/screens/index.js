@@ -49,6 +49,7 @@ import Dashboard from "./General/Dashboard";
 import Leaderboard from "./General/Leaderboard";
 import More from "./General/More";
 export * from "./General/About";
+export * from "./General/Conference";
 export {
 	Dashboard,
 	Leaderboard,

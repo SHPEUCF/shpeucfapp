@@ -7,7 +7,7 @@ import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Animated, Platfor
 import { menuItems, developers } from "../../data/AboutItems.js";
 const data = "../../data/conferences.json";
 
-export class Conference extends Component {
+class Conference extends Component {
 	constructor(props) {
 		super(props);
 	}
@@ -87,3 +87,5 @@ const styles = {
 		fontSize: 16
 	}
 };
+
+export { Conference };

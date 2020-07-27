@@ -48,7 +48,7 @@ const menuItems = [
 	{
 		title: "Conferences",
 		icon: "info",
-		screen: "Conference",
+		screen: "Conferences",
 		privilege: "user"
 	}
 ];
