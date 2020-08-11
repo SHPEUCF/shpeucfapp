@@ -21,22 +21,23 @@ class Login extends Component {
 		this.state = {
 			email: "",
 			password: "",
-			registrationFormVisibility: false
+			registrationFormVisibility: false,
+			error: ""
 		};
 	}
 
-	onButtonPress() {
+	loginSubmit() {
 		const {
 			email,
 			password
 		} = this.state;
 
-		if (!email || email === "")
+		if (!email)
 			this.props.registrationError("Please enter your knights email");
-		else if (!password || password === "")
+		else if (!password)
 			this.props.registrationError("Please enter your password");
 		else
-			this.props.loginUser(email, password);
+			this.props.loginUser(email, password).then(() => Actions.main());
 	}
 
 	renderError() {
@@ -64,17 +65,13 @@ class Login extends Component {
 		);
 	}
 	renderSignUpButton() {
-		const {
-			signUpText,
-			bottomContainer
-		} = styles;
+		const { signUpText, bottomContainer } = styles;
 
 		return (
 			<View style = { bottomContainer }>
-				<Text style = {{ color: "#bbb", fontWeight: "bold" }}>Don't have an account? </Text>
-				<TouchableOpacity
-					onPress = { () => this.setState({ registrationFormVisibility: true }) }>
-					<Text style = { signUpText }> Register</Text>
+				<Text style = {{ color: "#BBB", fontWeight: "bold" }}>Don't have an account?</Text>
+				<TouchableOpacity onPress = { () => this.setState({ registrationFormVisibility: true }) }>
+					<Text style = { signUpText }>Register</Text>
 				</TouchableOpacity>
 			</View>
 		);
@@ -87,10 +84,7 @@ class Login extends Component {
 					<View style = {{ flex: 0.3 }}></View>
 					<View style = {{ flex: 1 }}>
 						<View style = {{ flex: 0.5, justifyContent: "center" }}>
-							<Button
-								title = "Log in"
-								onPress = { this.onButtonPress.bind(this) }
-							/>
+							<Button title = "Log in" onPress = { () => this.loginSubmit() } />
 						</View>
 						{ this.renderResetPassword() }
 					</View>
