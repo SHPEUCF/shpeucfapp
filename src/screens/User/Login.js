@@ -3,34 +3,22 @@ import { View, Text, TouchableOpacity, Image, SafeAreaView, Dimensions } from "r
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Button, Input } from "../../components";
-import { registrationFormData } from "../../data/FormData";
-import {
-	createUser,
-	loginUser,
-	registrationError
-} from "../../ducks";
+import { Button } from "../../components";
+import { registrationFormData, loginFormData } from "../../data/FormData";
+import { createUser, loginUser, registrationError } from "../../ducks";
 import { Form } from "../../components/";
 
-const dimension = Dimensions.get("window");
+const { height } = Dimensions.get("window");
 
 class Login extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			email: "",
-			password: "",
-			registrationFormVisibility: false,
-			error: ""
-		};
+		this.state = { email: "", password: "", registrationFormVisibility: false, error: "" };
 	}
 
 	loginSubmit() {
-		const {
-			email,
-			password
-		} = this.state;
+		const { email, password } = this.state;
 
 		if (!email)
 			this.props.registrationError("Please enter your knights email");
@@ -41,122 +29,79 @@ class Login extends Component {
 	}
 
 	renderError() {
-		if (this.props.error)
+		if (this.props.error) {
 			return (
 				<Text style = { styles.errorTextStyle }>
 					{ this.props.error }
 				</Text>
 			);
-	}
-
-	renderResetPassword() {
-		const {
-			resetPasswordText,
-			bottomContainer
-		} = styles;
-
-		return (
-			<TouchableOpacity
-				style = { [bottomContainer, { flex: 0.4, alignItems: "flex-start" }] }
-				onPress = { () => Actions.resetPassword() }
-			>
-				<Text style = { resetPasswordText }>Forgot Password?</Text>
-			</TouchableOpacity>
-		);
-	}
-	renderSignUpButton() {
-		const { signUpText, bottomContainer } = styles;
-
-		return (
-			<View style = { bottomContainer }>
-				<Text style = {{ color: "#BBB", fontWeight: "bold" }}>Don't have an account?</Text>
-				<TouchableOpacity onPress = { () => this.setState({ registrationFormVisibility: true }) }>
-					<Text style = { signUpText }>Register</Text>
-				</TouchableOpacity>
-			</View>
-		);
+		}
 	}
 
 	renderButtons() {
+		const { resetPasswordText, bottomContainer, signUpText, buttonContainer } = styles;
+
 		return (
-			<View style = { styles.buttonContainer }>
-				<View style = {{ flexDirection: "row", flex: 1, alignItems: "center" }}>
-					<View style = {{ flex: 0.3 }}></View>
-					<View style = {{ flex: 1 }}>
-						<View style = {{ flex: 0.5, justifyContent: "center" }}>
-							<Button title = "Log in" onPress = { () => this.loginSubmit() } />
-						</View>
-						{ this.renderResetPassword() }
-					</View>
-					<View style = {{ flex: 0.3 }}></View>
+			<View style = { buttonContainer }>
+				<View style = {{ flex: 0.5, justifyContent: "center", paddingHorizontal: "20%" }}>
+					<Button title = "Log in" onPress = { () => this.loginSubmit() } />
 				</View>
-				{ this.renderSignUpButton() }
+				<TouchableOpacity
+					style = { [bottomContainer, { flex: 0.4 }] }
+					onPress = { () => Actions.resetPassword() }
+				>
+					<Text style = { resetPasswordText }>Forgot Password?</Text>
+				</TouchableOpacity>
+				<View style = { bottomContainer }>
+					<Text style = {{ color: "#BBB", fontWeight: "bold" }}>Don't have an account? </Text>
+					<TouchableOpacity onPress = { () => this.setState({ registrationFormVisibility: true }) }>
+						<Text style = { signUpText }>Register</Text>
+					</TouchableOpacity>
+				</View>
 			</View>
 		);
 	}
 
-	renderContent() {
-		const {
-			formContainerStyle,
-			headerContainer,
-			headerTitle,
-			headerTextStyle,
-			headerSubtitleStyle
-		} = styles;
+	render() {
+		const { formContainer, headerContainer, headerTitle, headerText, headerSubtitleStyle } = styles;
 
 		return (
 			<KeyboardAwareScrollView
-				style = {{ backgroundColor: "#0c0b0b" }}
+				style = {{ backgroundColor: "#0C0B0B" }}
 				resetScrollToCoords = {{ x: 0, y: 0 }}
 				contentContainerStyle = {{ flexGrow: 1 }}
 				scrollEnabled = { true }
 				enableOnAndroid = { true }
 			>
-				<SafeAreaView style = { formContainerStyle }>
+				<SafeAreaView style = { formContainer }>
 					<Form
 						elements = { registrationFormData }
 						title = "Registration"
 						visible = { this.state.registrationFormVisibility }
-						changeVisibility = { (visible) => this.setState({ registrationFormVisibility: visible }) }
-						onSubmit = { (value) => {
-							const user = Object.assign({}, value);
-							delete user.password;
-							this.props.createUser(user, value.email, value.password);
-						 } }
+						changeVisibility = { visible => this.setState({ registrationFormVisibility: visible }) }
+						onSubmit = { user => this.props.createUser({ ...user }) }
 					/>
-					<View style = {{ flex: 1, backgroundColor: "#FECB00" }}>
-						<View style = {{ flex: 0.1 }}></View>
-						<View style = {{ alignItems: "center", flex: 1, justifyContent: "center" }}>
-							<Image
-								source = { require("../../assets/images/SHPE_UCF_Logo.png") }
-								style = {{ alignSelf: "center" }}
-								height = { dimension.height * 0.5 }
-								resizeMode = "contain"
-							/>
-						</View>
+					<View style = {{ flex: 1, backgroundColor: "#FECB00", alignItems: "center" }}>
+						<Image
+							source = { require("../../assets/images/SHPE_UCF_Logo.png") }
+							style = {{ flex: 1 }}
+							height = { height * 0.5 }
+							resizeMode = "contain"
+						/>
 						<View style = { headerContainer }>
 							<View style = { headerTitle }>
-								<Text style = { headerTextStyle }>S H P E  </Text>
-								<Text style = { [headerTextStyle, { color: "white" }] }>U C F</Text>
+								<Text style = { headerText }>S H P E  </Text>
+								<Text style = { [headerText, { color: "white" }] }>U C F</Text>
 							</View>
 							<Text style = { headerSubtitleStyle }>Society of Hispanic Professional Engineers</Text>
 						</View>
 					</View>
-					<View style = {{ flex: 0.18 }}></View>
-					<View style = {{ flex: 0.5, paddingLeft: "5%", paddingRight: "5%", justifyContent: "space-evenly" }}>
-						<Input
-							placeholder = "Knights Email"
-							value = { this.state.email }
-							autoCapitalize = "none"
-							keyboardType = "email-address"
-							onChangeText = { (email) => this.setState({ email }) }
-						/>
-						<Input
-							secureTextEntry = { true }
-							placeholder = "Password"
-							autoCapitalize = "none"
-							value = { this.state.password }
-							onChangeText = { (password) => this.setState({ password }) }
+					<View style = {{ flex: 0.5, paddingHorizontal: "5%", justifyContent: "space-evenly" }}>
+						<Form
+							elements = { loginFormData }
+							title = "Login"
+							onlyRenderElements
+							onChange = { state => this.setState(state) }
 						/>
 					</View>
 					{ this.renderError() }
@@ -165,16 +110,12 @@ class Login extends Component {
 			</KeyboardAwareScrollView>
 		);
 	}
-
-	render() {
-		return this.renderContent();
-	}
 }
 
 const styles = {
-	formContainerStyle: {
+	formContainer: {
 		backgroundColor: "#0c0b0b",
-		height: dimension.height
+		height: height
 	},
 	headerContainer: {
 		flex: 0.6,
@@ -182,7 +123,7 @@ const styles = {
 		justifyContent: "space-evenly",
 		paddingBottom: "5%"
 	},
-	headerTextStyle: {
+	headerText: {
 		color: "black",
 		fontSize: 40,
 		alignSelf: "center"
@@ -200,9 +141,6 @@ const styles = {
 		alignSelf: "center",
 		color: "red",
 		fontWeight: "bold"
-	},
-	formButton: {
-		flex: 1
 	},
 	buttonContainer: {
 		flex: 0.7
@@ -223,22 +161,9 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ user }) => {
-	const {
-		email,
-		password,
-		error,
-		loading,
-		loggedIn
-	} = user;
-
-	return { email, password, error, loading, loggedIn };
-};
-
-const mapDispatchToProps = {
-	createUser,
-	loginUser,
-	registrationError
-};
+const mapDispatchToProps = { createUser, loginUser, registrationError };
+const mapStateToProps = ({ user: { email, password, error, loading, loggedIn } }) => (
+	{ email, password, error, loading, loggedIn }
+);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
