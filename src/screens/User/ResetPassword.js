@@ -122,14 +122,7 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ user }) => {
-	const { error } = user;
-
-	return { error };
-};
-
-const mapDispatchToProps = {
-	resetPassword
-};
+const mapStateToProps = ({ user: { error } }) => ({ error });
+const mapDispatchToProps = { resetPassword };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResetPassword);

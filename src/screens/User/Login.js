@@ -161,9 +161,9 @@ const styles = {
 	}
 };
 
-const mapDispatchToProps = { createUser, loginUser, registrationError };
 const mapStateToProps = ({ user: { email, password, error, loading, loggedIn } }) => (
 	{ email, password, error, loading, loggedIn }
 );
+const mapDispatchToProps = { createUser, loginUser, registrationError };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
