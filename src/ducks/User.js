@@ -2,6 +2,7 @@ import firebase from "firebase";
 import { Actions } from "react-native-router-flux";
 import { createActionTypes } from "../utils/actions";
 import { Alert } from "../components";
+import Lodash from "lodash";
 
 const ACTIONS = createActionTypes([
 	"SHOW_FIREBASE_ERROR",
@@ -109,10 +110,10 @@ const showFirebaseError = (dispatch, error) => {
  * @param {String}   password a password that meets the requirements
  */
 
-export const createUser = (user, email, password) => {
+export const createUser = user => {
 	return (dispatch) => {
-		firebase.auth().createUserWithEmailAndPassword(email, password)
-			.then(() => createUserSuccess(user))
+		firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
+			.then(({ user: { uid } }) => createUserSuccess({ ...Lodash.omit(user, "password"), uid }))
 			.catch((error) => showFirebaseError(dispatch, error));
 	};
 };

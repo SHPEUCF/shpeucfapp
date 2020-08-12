@@ -40,6 +40,7 @@ import { copyStateAndSetValuesToNull } from "../../utils/general";
  *		@param {Function=}            onChange            Called to pass all the form values into after any value change.
  *		@param {String=}              submitButtonName    Displayed on the submit button
  *		@param {CustomVerification=}  customVerification  Used for additional data verification
+ *		@param {Boolean=}             onlyRenderElements  Controls whether elements get rendered in a seperate modal
  *
  * @example
  *	Output:
@@ -266,6 +267,7 @@ class Form extends Component {
 					key = { camelCaseName }
 					placeholder = { placeholder }
 					multiline = { false }
+					autoCapitalize = { options && options.autoCapitalize }
 					value = { this.state[camelCaseName] === 0 ? 0 : this.state[camelCaseName] || "" } // Display 0 correctly
 					secureTextEntry = { options && options.secureTextEntry }
 					keyboardType = { options && options.keyboardType }

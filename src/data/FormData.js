@@ -198,6 +198,28 @@ const editProfileFormDataPrivileged = [
 	}
 ];
 
+const loginFormData = [
+	{
+		placeholder: "Knights Email",
+		camelCaseName: "email",
+		type: "Input",
+		isRequired: true,
+		options: {
+			autoCapitalize: "none"
+		}
+	},
+	{
+		placeholder: "Password",
+		camelCaseName: "password",
+		type: "Input",
+		isRequired: true,
+		options: {
+			secureTextEntry: true,
+			autoCapitalize: "none"
+		}
+	}
+];
+
 const registrationFormData = [
 	{
 		placeholder: "First Name",
@@ -296,7 +318,8 @@ export {
 	editProfileFormDataPrivileged,
 	editProfileFormDataRegular,
 	registrationFormData,
-	upsertCommittee
+	upsertCommittee,
+	loginFormData
 };
 
 // functions

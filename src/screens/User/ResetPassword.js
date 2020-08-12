@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View, Text, TouchableOpacity, Dimensions } from "react-native";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { Button, Spinner, Input } from "../../components";
+import { Button, Input } from "../../components";
 import { resetPassword } from "../../ducks";
 
 const dimension = Dimensions.get("window");
@@ -11,99 +11,60 @@ class ResetPassword extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			email: ""
-		};
+		this.state = { email: "" };
 	}
 
 	renderError() {
-		if (this.props.error)
+		if (this.props.error) {
 			return (
 				<Text style = { styles.errorTextStyle }>
 					{ this.props.error }
 				</Text>
 			);
-	}
-
-	ResetPasswordButton() {
-		return (
-			<Button
-				title = "RESET"
-				onPress = { ()=> this.props.resetPassword(this.state.email) }
-			/>
-		);
-	}
-
-	LogInButton() {
-		const {
-			resetPasswordContainer,
-			loginButton,
-			insteadButton
-		} = styles;
-		return (
-			<View style = { resetPasswordContainer }>
-				<TouchableOpacity
-					onPress = { Actions.login() }>
-					<Text style = { loginButton }>Log In </Text>
-				</TouchableOpacity>
-				<Text style = { insteadButton }> instead?</Text>
-			</View>
-		);
+		}
 	}
 
 	renderButtons() {
-		if (this.props.loading)
-			return (
-				<View style = {{ marginTop: 40, marginBottom: 20 }}>
-					<Spinner size = "large" />
-				</View>
-			);
+		const { resetPasswordContainer, loginButton, insteadButton } = styles;
 
 		return (
 			<View>
-				{ this.ResetPasswordButton() }
-				{ this.LogInButton() }
+				<Button title = "RESET" onPress = { () => this.props.resetPassword(this.state.email) } />
+				<View style = { resetPasswordContainer }>
+					<TouchableOpacity onPress = { () => Actions.login() }>
+						<Text style = { loginButton }>Log In</Text>
+					</TouchableOpacity>
+					<Text style = { insteadButton }> instead?</Text>
+				</View>
 			</View>
 		);
 	}
 
-	renderContent() {
-		const {
-			container,
-			formContainerStyle,
-			headerStyle,
-			headerTextStyle,
-			headerSubtitleStyle
-		} = styles;
-		if (this.props.loggedIn)
-			return <Spinner />;
-		else
-			return (
-				<View style = { container }>
-					<View style = { formContainerStyle }>
-						<View style = { headerStyle }>
-							<Text style = { headerTextStyle }>Reset Password</Text>
-							<Text style = { headerSubtitleStyle }>Enter your email below</Text>
-						</View>
-						<View style = {{ height: dimension.height * 0.12 }}>
-							<Input
-								placeholder = "Email"
-								value = { this.state.email }
-								autoCapitalize = "none"
-								maxLength = { 45 }
-								onChangeText = { (email) => this.setState({ email }) }
-							/>
-							<View style = {{ height: dimension.height * 0.02 }}></View>
-						</View>
-						{ this.renderError() }
-						{ this.renderButtons() }
-					</View>
-				</View>
-			);
-	}
-
 	render() {
-		return this.renderContent();
+		const { container, formContainer, header, headerText, headerSubtitle } = styles;
+
+		return (
+			<View style = { container }>
+				<View style = { formContainer }>
+					<View style = { header }>
+						<Text style = { headerText }>Reset Password</Text>
+						<Text style = { headerSubtitle }>Enter your email below</Text>
+					</View>
+					<View style = {{ height: dimension.height * 0.12 }}>
+						<Input
+							placeholder = "Email"
+							value = { this.state.email }
+							autoCapitalize = "none"
+							maxLength = { 45 }
+							onChangeText = { (email) => this.setState({ email }) }
+						/>
+						<View style = {{ height: dimension.height * 0.02 }}></View>
+					</View>
+					{ this.renderError() }
+					{ this.renderButtons() }
+				</View>
+			</View>
+		);
 	}
 }
 
@@ -113,22 +74,22 @@ const styles = {
 		backgroundColor: "#0c0b0b",
 		justifyContent: "center"
 	},
-	formContainerStyle: {
+	formContainer: {
 		marginLeft: 20,
 		marginRight: 20
 	},
-	headerStyle: {
+	header: {
 		flexDirection: "column",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 5,
 		marginBottom: 30
 	},
-	headerTextStyle: {
+	headerText: {
 		color: "white",
 		fontSize: 22
 	},
-	headerSubtitleStyle: {
+	headerSubtitle: {
 		color: "gray",
 		marginTop: 10,
 		marginBottom: 10
@@ -161,14 +122,7 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ user }) => {
-	const { error } = user;
-
-	return { error };
-};
-
-const mapDispatchToProps = {
-	resetPassword
-};
+const mapStateToProps = ({ user: { error } }) => ({ error });
+const mapDispatchToProps = { resetPassword };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResetPassword);
