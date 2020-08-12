@@ -29,10 +29,10 @@ import {
 	loadEvent,
 	editUser,
 	pageLoad,
-	fetchMembersPoints,
+	getAllMemberPoints,
 	getEvents,
 	getCommittees,
-	fetchAllUsers,
+	getAllMemberAccounts,
 	loadCommittee,
 	updateElection
 } from "../../ducks";
@@ -59,10 +59,10 @@ class Dashboard extends Component {
 	componentDidMount() {
 		this.props.updateElection();
 		this.props.getCommittees();
-		this.props.fetchMembersPoints();
+		this.props.getAllMemberAccounts();
+		this.props.getAllMemberPoints();
 		this.props.getEvents();
 		this.props.loadUser();
-		this.props.fetchAllUsers();
 	}
 
 	render() {
@@ -282,6 +282,7 @@ class Dashboard extends Component {
 
 		let content = null;
 		let committeesArray = null;
+
 		if (!activeUser.userCommittees || !committeesList) {
 			content = <View style = { committeesPlaceHolder }>
 				<View>
@@ -296,6 +297,7 @@ class Dashboard extends Component {
 			committeesArray.forEach(function(element) {
 				if (!committeesList[element[0]]) {
 					let committee = element[0];
+
 					editUser({ userCommittees: { ...activeUser.userCommittees, [committee]: null } });
 				}
 			});
@@ -396,8 +398,9 @@ class Dashboard extends Component {
 	}
 
 	calculateRankings() {
-		let sortedMembers = _.orderBy(this.props.membersPoints, iteratees, order);
+		let sortedMembers = _.orderBy(this.props.allMemberPoints, iteratees, order);
 		let currentMember = rankMembersAndReturnsCurrentUser(sortedMembers, this.props.activeUser.id);
+
 		sortedMembers.splice(2);
 
 		if (this.isDefined(currentMember)
@@ -731,14 +734,14 @@ const styles = {
 
 const mapStateToProps = ({ user, members, events, elect, committees }) => {
 	const { activeUser } = user;
-	const { membersPoints } = members;
+	const { allMemberPoints } = members;
 	const { sortedEvents } = events;
 	const { election } = elect;
 	const { committeesList } = committees;
 
 	return {
 		activeUser,
-		membersPoints,
+		allMemberPoints,
 		sortedEvents,
 		election,
 		committeesList
@@ -749,11 +752,11 @@ const mapDispatchToProps = {
 	loadUser,
 	loadEvent,
 	pageLoad,
-	fetchMembersPoints,
+	getAllMemberPoints,
 	getEvents,
 	goToViewEvent,
 	getCommittees,
-	fetchAllUsers,
+	getAllMemberAccounts,
 	loadCommittee,
 	updateElection
 };

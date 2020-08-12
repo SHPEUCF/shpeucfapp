@@ -10,8 +10,7 @@ import {
 	getVotes,
 	getPositions,
 	closeApplications,
-	openApplications,
-	fetchMemberProfile
+	openApplications
 } from "../../ducks";
 
 const dimension = Dimensions.get("window");
@@ -45,6 +44,7 @@ class ElectionAdmin extends Component {
 
 		if (positions && votes) {
 			const votesArray = Object.entries(votes);
+
 			votesArray.forEach(function(item) {
 				let posTitle = item[0];
 
@@ -102,37 +102,41 @@ class ElectionAdmin extends Component {
 	}
 
 	openOrClose() {
-		if (this.props.election)
+		if (this.props.election) {
 			return (
 				<Button
 					onPress = { () => this.props.closeElection() }
 					title = { "Close Election" }
 				/>
 			);
-		else
+		}
+		else {
 			return (
 				<Button
 					onPress = { () => this.props.openElection() }
 					title = { "Open Election" }
 				/>
 			);
+		}
 	}
 
 	applyOpenOrClose() {
-		if (this.props.apply)
+		if (this.props.apply) {
 			return (
 				<Button
 					onPress = { () => this.props.closeApplications() }
 					title = { "Close Applications" }
 				/>
 			);
-		else
+		}
+		else {
 			return (
 				<Button
 					onPress = { () => this.props.openApplications() }
 					title = { "Open Applications" }
 				/>
 			);
+		}
 	}
 
 	renderVotes(item, index) {
@@ -227,7 +231,7 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ elect, members }) => {
+const mapStateToProps = ({ elect }) => {
 	const {
 		election,
 		votes,
@@ -235,12 +239,8 @@ const mapStateToProps = ({ elect, members }) => {
 		numOfVotes,
 		positions
 	} = elect;
-	const {
-		firstName,
-		lastName
-	} = members;
 
-	return { election, votes, apply, numOfVotes, firstName, lastName, positions };
+	return { election, votes, apply, numOfVotes, positions };
 };
 
 const mapDispatchToProps = {
@@ -249,8 +249,7 @@ const mapDispatchToProps = {
 	getVotes,
 	getPositions,
 	closeApplications,
-	openApplications,
-	fetchMemberProfile
+	openApplications
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ElectionAdmin);
