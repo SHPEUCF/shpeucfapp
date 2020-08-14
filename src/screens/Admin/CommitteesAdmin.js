@@ -10,7 +10,7 @@ import {
 	deleteCommittee,
 	goToCommitteeForm,
 	editCommittee,
-	fetchAllUsers,
+	getAllMemberAccounts,
 	addCommittee,
 	chairPersonChanged,
 	committeeDescriptionChanged,
@@ -30,7 +30,7 @@ class CommitteesAdmin extends Component {
 
 	componentDidMount() {
 		this.props.getCommittees();
-		this.props.fetchAllUsers();
+		this.props.getAllMemberAccounts();
 	}
 
 	componentDidUpdate(prevProps) {
@@ -198,15 +198,12 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ committees, members }) => {
+const mapStateToProps = ({ committees }) => {
 	const {
 		committeesList
 	} = committees;
-	const {
-		userList
-	} = members;
 
-	return { committeesList, userList };
+	return { committeesList };
 };
 
 const mapDispatchToProps = {
@@ -219,7 +216,7 @@ const mapDispatchToProps = {
 	committeeDescriptionChanged,
 	committeeTitleChanged,
 	changeLevelsCom,
-	fetchAllUsers
+	getAllMemberAccounts
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CommitteesAdmin);

@@ -1,6 +1,6 @@
 /*
 
-All Screen Exports here grouped by folder
+All Screen Exports here groupred by folderr
 
 */
 
@@ -45,7 +45,7 @@ export {
 };
 
 /** Export General **/
-import Dashboard from "./General/Dashboard";
+import { Dashboard } from "./General/Dashboard";
 import Leaderboard from "./General/Leaderboard";
 import More from "./General/More";
 export * from "./General/About";

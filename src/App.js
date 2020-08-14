@@ -1,15 +1,24 @@
 import React, { Component } from "react";
 import firebase from "firebase";
+import { connect } from "react-redux";
 import { Actions } from "react-native-router-flux";
 import Router from "./config/Router";
 import AppInfo from "../app.json";
 import { View } from "react-native";
 import { Alert } from "./components";
 import { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId } from "react-native-dotenv";
+import {
+	loadUser,
+	fetchMembersPoints,
+	getEvents,
+	getCommittees,
+	fetchAllUsers,
+	updateElection
+} from "./ducks";
 
 console.ignoredYellowBox = ["Setting a timer"];
 
-export default class App extends Component {
+class App extends Component {
 	componentDidMount() {
 		const config = { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId };
 
@@ -20,6 +29,15 @@ export default class App extends Component {
 	}
 
 	verifyLogIn() {
+		const {
+			getCommittees,
+			fetchMembersPoints,
+			getEvents,
+			loadUser,
+			fetchAllUsers,
+			updateElection
+		} = this.props;
+
 		firebase.auth().onAuthStateChanged(user => {
 			let correctVersion = false;
 
@@ -28,6 +46,12 @@ export default class App extends Component {
 
 				if (correctVersion && user) {
 					Actions.main();
+					getCommittees();
+					fetchMembersPoints();
+					getEvents();
+					loadUser();
+					fetchAllUsers();
+					updateElection();
 				}
 				else {
 					Actions.login();
@@ -47,3 +71,16 @@ export default class App extends Component {
 		);
 	}
 }
+
+const mapStateToProps = () => { return {} };
+
+const mapDispatchToProps = {
+	loadUser,
+	fetchMembersPoints,
+	getEvents,
+	getCommittees,
+	fetchAllUsers,
+	updateElection
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -4,7 +4,7 @@ import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import { NavBar } from "../../components";
 import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from "react-native";
-import { fetchMembersPoints, loadUser, fetchEvents, goToViewEvent } from "../../ducks";
+import { getAllMemberPoints, loadUser, fetchEvents, goToViewEvent } from "../../ducks";
 
 const dimension = Dimensions.get("window");
 
@@ -39,20 +39,20 @@ class PointsBreakDown extends Component {
 			textColor
 		} = styles;
 		const {
-			membersPoints
+			allMemberPoints
 		} = this.props;
 
-		if (membersPoints
-			&& membersPoints[currentUser.uid]
-			&& membersPoints[currentUser.uid].breakdown
-			&& membersPoints[currentUser.uid].breakdown.length !== 0) {
-			let breakdown = Object.entries(membersPoints[currentUser.uid].breakdown);
+		if (allMemberPoints
+			&& allMemberPoints[currentUser.uid]
+			&& allMemberPoints[currentUser.uid].breakdown
+			&& allMemberPoints[currentUser.uid].breakdown.length !== 0) {
+			let breakdown = Object.entries(allMemberPoints[currentUser.uid].breakdown);
 
 			return (
 				<SafeAreaView style = {{ flex: 1 }}>
 					<View style = { [contentContainerStyle, containerStyle] }>
 						<Text style = { [title, topLevelText, textColor] }>Total Points</Text>
-						<Text style = { [points, topLevelText, textColor] }>{ this.props.membersPoints[currentUser.uid].points }</Text>
+						<Text style = { [points, topLevelText, textColor] }>{ this.props.allMemberPoints[currentUser.uid].points }</Text>
 					</View>
 					<FlatList
 						data = { breakdown }
@@ -92,6 +92,7 @@ class PointsBreakDown extends Component {
 
 		if (!section || section.length < 1 || !section[1])
 			arr = [];
+
 		// alert(Object.values(section[1])[1].name)
 		return (
 			<View>
@@ -134,7 +135,7 @@ class PointsBreakDown extends Component {
 			textColor
 		} = styles;
 
-		if (JSON.stringify(this.state.show) === JSON.stringify(section))
+		if (JSON.stringify(this.state.show) === JSON.stringify(section)) {
 			return (
 				<TouchableOpacity>
 					<View style = { innerContentContainerStyle }>
@@ -146,13 +147,14 @@ class PointsBreakDown extends Component {
 					</View>
 				</TouchableOpacity>
 			);
-		else
-			return null;
+		}
+		else { return null }
 	}
 
 	countPoints(item) {
 		let count = 0;
 		let values = Object.values(item[1]);
+
 		for (let i = 0; i < values.length; i++)
 			count += Number(values[i].points);
 
@@ -160,12 +162,12 @@ class PointsBreakDown extends Component {
 	}
 
 	toggleShow = function(text) {
-		if (JSON.stringify(this.state.show) === JSON.stringify(text))
-			this.setState({ show: "" });
-		else
+		if (JSON.stringify(this.state.show) === JSON.stringify(text)) { this.setState({ show: "" }) }
+		else {
 			this.setState({
 				show: text
 			});
+		}
 	}
 }
 
@@ -223,15 +225,15 @@ const styles = {
 };
 
 const mapStateToProps = ({ user, members, general }) => {
-	const { membersPoints } = members;
+	const { allMemberPoints } = members;
 	const { id } = user;
 	const { loading } = general;
 
-	return { membersPoints, id, loading };
+	return { allMemberPoints, id, loading };
 };
 
 const mapDispatchToProps = {
-	fetchMembersPoints,
+	getAllMemberPoints,
 	loadUser,
 	fetchEvents,
 	goToViewEvent
