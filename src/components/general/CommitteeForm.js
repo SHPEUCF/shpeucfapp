@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { View, Text, ScrollView, Dimensions, SafeAreaView } from "react-native";
 import { Input, Button, FilterList, ButtonLayout } from "../general";
 import { MemberPanel } from "../../utils/render";
+import MemberService from "../../services/members";
 import {
 	addCommittee,
 	editCommittee,
@@ -12,11 +13,10 @@ import {
 	committeeDescriptionChanged,
 	deleteCommittee,
 	chairPersonChanged,
-	fetchAllUsers,
-	filterChanged,
-	assignPosition
+	filterChanged
 } from "../../ducks";
 
+const memberService = new MemberService();
 const dimension = Dimensions.get("window");
 
 class CommitteeForm extends Component {
@@ -70,14 +70,14 @@ class CommitteeForm extends Component {
 				this.props.editCommittee(committeeTitle, committeeDescription, chairObj, this.state.oldTitle);
 			else
 				this.props.editCommittee(committeeTitle, committeeDescription, chairObj, null);
-			this.props.assignPosition(committeeTitle, "board", chair.id, this.state.oldChair);
+			memberService.assignPosition(committeeTitle, "board", chair.id, this.state.oldChair);
 			Actions.pop();
 		}
 	}
 
 	render() {
 		const {
-			userList,
+			allMemberAccounts,
 			chair
 		} = this.props;
 
@@ -102,8 +102,8 @@ class CommitteeForm extends Component {
 							onChangeText = { this.props.committeeDescriptionChanged.bind(this) }
 						/>
 						<FilterList
-							data = { userList }
-							value = { userList[chair.id] }
+							data = { allMemberAccounts }
+							value = { allMemberAccounts[chair.id] }
 							placeholder = { "Director/Chairperson" }
 							regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
 							selectBy = { (data) => { return data.id } }
@@ -209,7 +209,7 @@ const mapStateToProps = ({ committees, general, members }) => {
 		filter
 	} = general;
 	const {
-		userList
+		allMemberAccounts
 	} = members;
 	const {
 		committeeTitle,
@@ -219,7 +219,7 @@ const mapStateToProps = ({ committees, general, members }) => {
 		chair
 	} = committees;
 
-	return { committeeTitle, committeeDescription, title, committeesList, chair, filter, userList };
+	return { committeeTitle, committeeDescription, title, committeesList, chair, filter, allMemberAccounts };
 };
 
 const mapDispatchToProps = {
@@ -229,9 +229,7 @@ const mapDispatchToProps = {
 	committeeDescriptionChanged,
 	deleteCommittee,
 	chairPersonChanged,
-	fetchAllUsers,
-	filterChanged,
-	assignPosition
+	filterChanged
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CommitteeForm);

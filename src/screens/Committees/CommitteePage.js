@@ -138,7 +138,7 @@ class CommitteePage extends Component {
 	}
 
 	renderJoinedMembers(item) {
-		let user = this.props.userList[item];
+		let user = this.props.allMemberAccounts[item];
 
 		const {
 			firstName,
@@ -389,7 +389,7 @@ const styles = {
 const mapStateToProps = ({ user, general, members, events, elect, committees }) => {
 	const { activeUser } = user;
 	const { loading } = general;
-	const { membersPoints, userList } = members;
+	const { allMemberAccounts } = members;
 	const { sortedEvents } = events;
 	const { election } = elect;
 	const {
@@ -407,7 +407,7 @@ const mapStateToProps = ({ user, general, members, events, elect, committees }) 
 	return {
 		activeUser,
 		loading,
-		membersPoints,
+		allMemberAccounts,
 		sortedEvents,
 		election,
 		committeeEvents,
@@ -417,7 +417,6 @@ const mapStateToProps = ({ user, general, members, events, elect, committees }) 
 		pendingMembers,
 		joinedMembers,
 		links,
-		userList,
 		joinOpened,
 		committeesList };
 };
