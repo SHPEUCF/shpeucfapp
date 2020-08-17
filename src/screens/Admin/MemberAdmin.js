@@ -3,8 +3,10 @@ import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import { NavBar, Button, ButtonLayout, FilterList } from "../../components";
 import { SafeAreaView, View, Text } from "react-native";
-import { changePrivilegeOfMembers } from "../../ducks";
 import { MemberPanel } from "../../utils/render";
+import MemberService from "../../services/members";
+
+const memberService = new MemberService();
 
 class MemberAdmin extends Component {
 	constructor(props) {
@@ -33,7 +35,7 @@ class MemberAdmin extends Component {
 								selectBy = { (data) => { return data.id } }
 								itemJSX = { (data) => MemberPanel(data) }
 								onSelect = { (selectedUsers) =>
-									changePrivilegeOfMembers(
+									memberService.changePrivilegeOfMembers(
 										selectedUsers.map((user) => { return user.id }), "paidMember", value) }
 							/>
 						) }
@@ -46,7 +48,7 @@ class MemberAdmin extends Component {
 	makeUserList(value) {
 		let list = {};
 
-		Object.entries(this.props.userList).forEach(function([userId, userData]) {
+		Object.entries(this.props.allMemberAccounts).forEach(function([userId, userData]) {
 			if (!userData.paidMember == value) list[userId] = userData;
 		});
 
@@ -82,13 +84,10 @@ const styles = {
 
 const mapStateToProps = ({ members }) => {
 	const {
-		userList
+		allMemberAccounts
 	} = members;
 
-	return { userList };
+	return { allMemberAccounts };
 };
 
-const mapDispatchToProps = {
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(MemberAdmin);
+export default connect(mapStateToProps)(MemberAdmin);

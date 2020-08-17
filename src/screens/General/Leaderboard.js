@@ -10,9 +10,8 @@ import { Text, View, Dimensions, SafeAreaView } from "react-native";
 import { verifiedCheckMark, rankMembersAndReturnsCurrentUser, truncateNames } from "../../utils/render";
 import FastImage from "react-native-fast-image";
 import {
-	fetchMembersPoints,
-	fetchMemberProfile,
-	goToOtherProfile,
+	getAllMemberPoints,
+	getVisitedMember,
 	pageLoad,
 	getPrivilege,
 	loadUser,
@@ -32,7 +31,7 @@ class Leaderboard extends Component {
 	componentDidMount() {
 		this.props.filterChanged("");
 		this.props.loadUser();
-		this.props.fetchMembersPoints();
+		this.props.getAllMemberPoints();
 	}
 
 	keyExtractor = (item, index) => index;
@@ -42,11 +41,12 @@ class Leaderboard extends Component {
 			screenBackground
 		} = styles;
 		const {
-			userList,
+			allMemberAccounts,
 			activeUser
 		} = this.props;
 
-		const sortedMembers = _.orderBy(userList, iteratees, order);
+		const sortedMembers = _.orderBy(allMemberAccounts, iteratees, order);
+
 		rankMembersAndReturnsCurrentUser(sortedMembers, activeUser.id);
 
 		return (
@@ -85,6 +85,7 @@ class Leaderboard extends Component {
 		} = styles;
 
 		let currentUserTextStyle = item.id === this.props.activeUser.id ? userContainerColor : {};
+
 		truncateNames(item);
 
 		return (
@@ -154,8 +155,8 @@ class Leaderboard extends Component {
 
 	callUser(id) {
 		this.props.pageLoad();
-		this.props.fetchMemberProfile(id);
-		this.props.goToOtherProfile();
+		this.props.getVisitedMember(id);
+		Actions.OtherProfileM();
 	}
 }
 
@@ -223,17 +224,16 @@ const styles = {
 };
 
 const mapStateToProps = ({ user, members, general }) => {
-	const { membersPoints, userList } = members;
+	const { allMemberAccounts } = members;
 	const { activeUser } = user;
 	const { filter } = general;
 
-	return { membersPoints, activeUser, filter, userList };
+	return { activeUser, filter, allMemberAccounts };
 };
 
 const mapDispatchToProps = {
-	fetchMembersPoints,
-	fetchMemberProfile,
-	goToOtherProfile,
+	getAllMemberPoints,
+	getVisitedMember,
 	pageLoad,
 	getPrivilege,
 	loadUser,

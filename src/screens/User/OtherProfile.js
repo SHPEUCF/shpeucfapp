@@ -20,7 +20,7 @@ class OtherProfile extends Component {
 	renderContent() {
 		const {
 			email, major, points
-		} = this.props;
+		} = this.props.visitedMember;
 		const {
 			bioContainer,
 			fieldContainerStyle,
@@ -85,7 +85,7 @@ class OtherProfile extends Component {
 			lastName,
 			picture,
 			paidMember
-		} = this.props;
+		} = this.props.visitedMember;
 
 		return (
 			<View style = { headerInfoContainer }>
@@ -122,8 +122,8 @@ class OtherProfile extends Component {
 	}
 
 	renderFlag() {
-
 		let flag = null;
+
 		if (this.props.flag !== "" && this.props.flag) {
 			flag = <Flag
 				type = "flat"
@@ -248,42 +248,6 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ members, general, user }) => {
-	const {
-		firstName,
-		lastName,
-		email,
-		major,
-		points,
-		picture,
-		quote,
-		color,
-		flag,
-		paidMember
-	} = members;
-	const {
-		loading
-	} = general;
-	const {
-		activeUser
-	} = user;
+const mapStateToProps = ({ members: { visitedMember } }) => ({ visitedMember });
 
-	return {
-		firstName,
-		lastName,
-		email,
-		major,
-		points,
-		picture,
-		quote,
-		loading,
-		activeUser,
-		color,
-		flag,
-		paidMember
-	};
-};
-
-const mapDispatchToProps = {};
-
-export default connect(mapStateToProps, mapDispatchToProps)(OtherProfile);
+export default connect(mapStateToProps)(OtherProfile);

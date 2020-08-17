@@ -8,7 +8,7 @@ import QRCodeScanner from "react-native-qrcode-scanner";
 import { MemberPanel } from "../../utils/render";
 import { months } from "../../data/DateItems";
 import { EventForm } from "../../data/FormData";
-import { deleteEvent, editEvent, checkIn, rsvp, pageLoad, fetchAllUsers } from "../../ducks";
+import { deleteEvent, editEvent, checkIn, rsvp, pageLoad, getAllMemberAccounts } from "../../ducks";
 import {
 	View,
 	TouchableOpacity,
@@ -36,7 +36,7 @@ class EventDetails extends Component {
 		const { activeUser } = this.props;
 
 		if (activeUser.privilege && activeUser.privilege.board)
-			fetchAllUsers();
+			getAllMemberAccounts();
 	}
 
 	convertNumToDate(date) {
@@ -132,11 +132,11 @@ class EventDetails extends Component {
 			textColor
 		} = styles;
 
-		if (this.props.userList && this.props.userList[item]) {
+		if (this.props.allMemberAccounts && this.props.allMemberAccounts[item]) {
 			const {
 				firstName,
 				lastName
-			} = this.props.userList[item];
+			} = this.props.allMemberAccounts[item];
 
 			return (
 				<View style = {{ flex: 1 }}>
@@ -182,13 +182,13 @@ class EventDetails extends Component {
 		const {
 			activeUser,
 			activeEvent,
-			userList
+			allMemberAccounts
 		} = this.props;
 
 		let users = [];
-		const email = userList[activeUser.id].email;
+		const email = allMemberAccounts[activeUser.id].email;
 
-		attendants.map(attendant => { users.push(userList[attendant]) });
+		attendants.map(attendant => { users.push(allMemberAccounts[attendant]) });
 
 		let csv = this.convertArrayOfObjectsToCSV({
 			data: users
@@ -265,14 +265,14 @@ class EventDetails extends Component {
 
 	renderPickMembers() {
 		const {
-			userList,
+			allMemberAccounts,
 			activeEvent,
 			activeUser
 		} = this.props;
 
 		if (!activeEvent) return null;
 
-		let list = Object.assign({}, userList);
+		let list = Object.assign({}, allMemberAccounts);
 		let excludeDataProp = !activeEvent ? {} : Object.assign({}, activeEvent.attendance);
 		let Wrapper = (props) => <Button
 			title = "Manual Check In"
@@ -633,11 +633,11 @@ const styles = {
 const mapStateToProps = ({ events, user, members }) => {
 	const { activeEvent } = events;
 	const { activeUser } = user;
-	const { userList } = members;
+	const { allMemberAccounts } = members;
 
-	return { activeEvent, userList, activeUser };
+	return { activeEvent, allMemberAccounts, activeUser };
 };
 
-const mapDispatchToProps = { checkIn, rsvp, pageLoad, fetchAllUsers };
+const mapDispatchToProps = { checkIn, rsvp, pageLoad, getAllMemberAccounts };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventDetails);
