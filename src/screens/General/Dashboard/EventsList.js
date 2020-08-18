@@ -37,13 +37,10 @@ export default class EventsList extends PureComponent {
 		const { textColor, eventListContainerFull, eventEmptyText, eventsItem } = styles;
 		const { sortedEvents } = this.props;
 
-		let singleContainer = {};
 		const events = filterPastEvents(sortedEvents) || [];
 
-		if (events.length < 2) singleContainer.flex = 0.4;
-
 		return (
-			<View style = { [eventListContainerFull, singleContainer] }>
+			<View style = { eventListContainerFull }>
 				{ !events.length && <Text style = { [textColor, eventEmptyText ] }>No Upcoming Events</Text>
 				|| events.slice(0, 3).map(event =>
 					<TouchableOpacity
@@ -60,13 +57,13 @@ export default class EventsList extends PureComponent {
 
 const styles = {
 	eventListContainerFull: {
-		backgroundColor: "#21252b",
-		flex: 0.8
+		backgroundColor: "#21252b"
 	},
 	eventEmptyText: {
 		fontSize: 20,
 		textAlign: "center",
-		padding: 20
+		padding: 20,
+		height: 150
 	},
 	eventsItem: {
 		backgroundColor: "#21252b",
@@ -85,7 +82,7 @@ const styles = {
 	},
 	eventItemInnerContainer: {
 		flexDirection: "row",
-		flex: 1,
+		height: 150,
 		alignItems: "center",
 		paddingRight: 20
 	},

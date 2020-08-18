@@ -36,36 +36,34 @@ class Dashboard extends Component {
 	}
 
 	renderContent() {
-		const { page, title, textColor, dashCommittees, innerScroll, dashboardContent, upcomingEvents } = styles;
-		const { membersPoints, activeUser, sortedEvents, committeesList } = this.props;
+		const { page, title, textColor, dashCommittees, dashboardContent, upcomingEvents } = styles;
+		const { allMemberPoints, activeUser, sortedEvents, committeesList, loadEvent } = this.props;
 
 		return (
 			<SafeAreaView style = { page }>
 				<StatusBar backgroundColor = "#0c0b0b" barStyle = "light-content" />
 				<ScrollView>
-					<View style = { innerScroll }>
-						{ this.renderHeader() }
-						<View style = { dashboardContent }>
-							<View style = { upcomingEvents }>
-								<Text style = { [title, textColor] }>Upcoming Events</Text>
+					{ this.renderHeader() }
+					<View style = { dashboardContent }>
+						<View style = { upcomingEvents }>
+							<Text style = { [title, textColor] }>Upcoming Events</Text>
+						</View>
+						<EventsList sortedEvents = { sortedEvents } loadEvent = { event => loadEvent(event) } />
+						<View style = { dashCommittees }>
+							<View style = {{ flex: 1 }}>
+								<Leaderboard membersPoints = { allMemberPoints } activeUser = { activeUser } />
 							</View>
-							<EventsList sortedEvents = { sortedEvents } />
-							<View style = { dashCommittees }>
-								<View style = {{ flex: 1 }}>
-									<Leaderboard membersPoints = { membersPoints } activeUser = { activeUser } />
-								</View>
-								<View style = {{ flex: 1 }}>
-									<FavoriteCommittees
-										committeesList = { committeesList }
-										userCommittees = { activeUser.userCommittees }
-										loadCommittee = { this.props.loadCommittee }
-									/>
-								</View>
+							<View style = {{ flex: 1 }}>
+								<FavoriteCommittees
+									committeesList = { committeesList }
+									userCommittees = { activeUser.userCommittees }
+									loadCommittee = { this.props.loadCommittee }
+								/>
 							</View>
 						</View>
-						{ this.renderButtonLinks() }
-						{ this.renderFooter() }
 					</View>
+					{ this.renderButtonLinks() }
+					{ this.renderFooter() }
 				</ScrollView>
 				{ this.renderColorPicker() }
 			</SafeAreaView>
@@ -164,8 +162,8 @@ const styles = {
 	headerContainer: {
 		paddingLeft: "4%",
 		justifyContent: "center",
-		flex: 0.16,
-		flexDirection: "row"
+		flexDirection: "row",
+		height: 100
 	},
 	greetingContainer: {
 		flex: 1,
@@ -216,8 +214,9 @@ const styles = {
 		width: height * 0.05
 	},
 	socialMediaContainer: {
-		flex: 0.35,
-		alignItems: "center"
+		flex: 0.2,
+		alignItems: "center",
+		height: 150
 	},
 	buttonRowContainer: {
 		flexDirection: "row",
@@ -225,7 +224,7 @@ const styles = {
 		alignItems: "center"
 	},
 	footer: {
-		flex: 0.2,
+		height: 50,
 		justifyContent: "center",
 		backgroundColor: "#FECB00",
 		width: "100%"
@@ -237,14 +236,10 @@ const styles = {
 	dashCommittees: {
 		flexDirection: "row",
 		alignItems: "flex-start",
-		flex: 0.9,
-		paddingTop: 10
-	},
-	innerScroll: {
-		height: height * 1.3
+		paddingTop: 10,
+		height: 400
 	},
 	dashboardContent: {
-		flex: 1,
 		paddingLeft: "5%",
 		paddingRight: "5%"
 	},
@@ -259,7 +254,7 @@ const styles = {
 	},
 	upcomingEvents: {
 		alignItems: "center",
-		flex: 0.2,
+		height: 100,
 		justifyContent: "center",
 		padding: 20
 	}
@@ -267,7 +262,7 @@ const styles = {
 
 const mapStateToProps = ({ user, members, events, elect, committees, general }) => {
 	const { activeUser } = user;
-	const { membersPoints } = members;
+	const { allMemberPoints } = members;
 	const { sortedEvents } = events;
 	const { election } = elect;
 	const { committeesList } = committees;
@@ -275,7 +270,7 @@ const mapStateToProps = ({ user, members, events, elect, committees, general }) 
 
 	return {
 		activeUser,
-		membersPoints,
+		allMemberPoints,
 		sortedEvents,
 		election,
 		committeesList,
