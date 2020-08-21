@@ -6,7 +6,7 @@ import Router from "./config/Router";
 import AppInfo from "../app.json";
 import { View } from "react-native";
 import { Alert } from "./components";
-import { loadUser, fetchMembersPoints, getEvents, getCommittees, fetchAllUsers, updateElection } from "./ducks";
+import { loadUser, getAllMemberAccounts, getEvents, getCommittees, getAllMemberPoints, updateElection } from "./ducks";
 import { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId } from "react-native-dotenv";
 
 console.ignoredYellowBox = ["Setting a timer"];
@@ -22,7 +22,7 @@ class App extends Component {
 	}
 
 	verifyLogIn() {
-		const { getCommittees, fetchMembersPoints, getEvents, loadUser, fetchAllUsers, updateElection } = this.props;
+		const { getCommittees, getAllMemberAccounts, getEvents, loadUser, getAllMemberPoints, updateElection } = this.props;
 
 		firebase.auth().onAuthStateChanged(user => {
 			firebase.database().ref("/version").once("value", snapshot => {
@@ -33,9 +33,9 @@ class App extends Component {
 					loadUser();
 					getEvents();
 					getCommittees();
-					fetchAllUsers();
+					getAllMemberAccounts();
 					updateElection();
-					fetchMembersPoints();
+					getAllMemberPoints();
 				}
 				else {
 					Actions.login();
@@ -57,6 +57,13 @@ class App extends Component {
 	}
 }
 
-const mapDispatchToProps = { loadUser, fetchMembersPoints, getEvents, getCommittees, fetchAllUsers, updateElection };
+const mapDispatchToProps = {
+	loadUser,
+	getAllMemberPoints,
+	getEvents,
+	getCommittees,
+	getAllMemberAccounts,
+	updateElection
+};
 
 export default connect(() => ({}), mapDispatchToProps)(App);
