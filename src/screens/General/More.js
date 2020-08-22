@@ -1,91 +1,72 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
-import { FlatList, View, Dimensions, SafeAreaView, Image } from "react-native";
 import { connect } from "react-redux";
 import { ListItem } from "react-native-elements";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { pageLoad, updateElection } from "../../ducks";
+import { View, Dimensions, SafeAreaView, Image } from "react-native";
 
-const dimension = Dimensions.get("window");
+const { height } = Dimensions.get("screen");
 
 const menuItems = [
 	{
 		title: "Leaderboard",
 		icon: "format-align-left",
 		screen: "LeaderboardM",
-		privilege: "user"
+		userPrivilege: "user"
 	},
 	{
 		title: "Voting",
 		icon: "done",
 		screen: "ElectionBallot",
-		privilege: "paidMember"
+		userPrivilege: "paidMember"
 	},
 	{
 		title: "E-Board Application",
 		icon: "assignment",
 		screen: "ElectionApplication",
-		privilege: "paidMember"
+		userPrivilege: "paidMember"
 	},
 	{
 		title: "Committees",
 		icon: "assignment-ind",
 		screen: "Committees",
-		privilege: "user"
+		userPrivilege: "user"
 	},
 	{
 		title: "About",
 		icon: "info",
 		screen: "About",
-		privilege: "user"
+		userPrivilege: "user"
 	},
 	{
 		title: "BackEnd",
 		icon: "settings",
 		screen: "AdminHub",
-		privilege: "eboard"
+		userPrivilege: "eboard"
 	}
 ];
 
-const imageUrl = "../../assets/images/";
-
 class More extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			refreshing: false
-		};
-	}
-
 	render() {
-		const {
-			alignSelf,
-			header,
-			mainBackgroundColor,
-			secondaryBackgroundColor,
-			fullFlex
-		} = styles;
+		const { alignSelf, header, mainBackgroundColor, secondaryBackgroundColor, fullFlex } = styles;
+		const imageUrl = "../../assets/images/";
 
 		return (
 			<SafeAreaView style = { [mainBackgroundColor, fullFlex] }>
 				<View style = { [header, secondaryBackgroundColor] }>
 					<Image
-						source = { require(imageUrl + "SHPE_UCF_Logo.png") }
+						source = { require(`${imageUrl}SHPE_UCF_Logo.png`) }
 						style = { alignSelf }
-						height = { dimension.height * 0.06 }
+						height = { height * 0.06 }
 						resizeMode = "contain"
 					/>
 				</View>
-				<FlatList
-					removeClippedSubviews = { false }
-					extraData = { this.props }
-					keyExtractor = { this.keyExtractor }
-					data = { menuItems }
-					renderItem = { this.renderItem }
-				/>
+				<View style = { fullFlex }>
+					{ menuItems.map(tab => this.renderMenu(tab)) }
+				</View>
 				<View style = { [fullFlex, mainBackgroundColor] }>
 					<Image
-						source = { require(imageUrl + "SHPE_logo_FullColor-RGB-2x.png") }
+						source = { require(`${imageUrl}SHPE_logo_FullColor-RGB-2x.png`) }
 						style = { alignSelf }
 						height = { 80 }
 						resizeMode = "contain"
@@ -95,51 +76,23 @@ class More extends Component {
 		);
 	}
 
-	_onRefresh = () => {
-		this.setState({ refreshing: false });
-	}
+	renderMenu = ({	title, icon, screen, userPrivilege }) => {
+		const { election, activeUser: { privilege, apply } } = this.props;
+		const { mainBackgroundColor, bottomBorder, primaryTextColor, secondaryTextColor } = styles;
 
-	keyExtractor = (item, index) => index
+		if ((title === "Voting" && !election) || (title === "E-Board Application" && !apply)) return null;
 
-	renderItem = ({	item }) => {
-		const {
-			election,
-			activeUser
-		} = this.props;
-
-		const {
-			privilege,
-			apply
-		} = activeUser;
-
-		const {
-			mainBackgroundColor,
-			bottomBorder,
-			primaryTextColor,
-			secondaryTextColor
-		} = styles;
-
-		if (item.title === "Voting" && !election) return null;
-		if (item.title === "E-Board Application" && !apply) return null;
-
-		if (privilege && privilege[item.privilege])
-			return (
-				<View>
-					<ListItem
-						containerStyle = { [mainBackgroundColor, bottomBorder] }
-						removeClippedSubviews = { false }
-						title = { item.title }
-						titleStyle = { primaryTextColor }
-						leftIcon = {{ name: item.icon, color: "white" }}
-						rightIcon = { <Ionicons
-							name = "ios-arrow-dropright"
-							size = { 22 }
-							style = { secondaryTextColor }
-						/> }
-						onPress = { () => Actions[item.screen]() }
-					/>
-				</View>
-			);
+		if (privilege && privilege[userPrivilege]) {
+			return <ListItem
+				containerStyle = { [mainBackgroundColor, bottomBorder] }
+				removeClippedSubviews = { false }
+				title = { title }
+				titleStyle = { primaryTextColor }
+				leftIcon = {{ name: icon, color: "white" }}
+				rightIcon = { <Ionicons name = "ios-arrow-dropright" size = { 22 } style = { secondaryTextColor } /> }
+				onPress = { () => Actions[screen]() }
+			/>;
+		}
 	}
 }
 
@@ -172,20 +125,8 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ user, general, elect }) => {
-	const { activeUser } = user;
-	const { loading } = general;
-	const {
-		election,
-		apply
-	} = elect;
+const mapStateToProps = ({ user: { activeUser }, general: { loading }, elect: { election, apply } }) => (
+	{ loading, election, apply, activeUser }
+);
 
-	return { loading, election, apply, activeUser };
-};
-
-const mapDispatchToProps = {
-	pageLoad,
-	updateElection
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(More);
+export default connect(mapStateToProps)(More);

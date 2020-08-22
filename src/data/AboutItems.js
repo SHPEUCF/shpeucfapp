@@ -43,5 +43,10 @@ export const developers = [
 		"name": "Steven Perdomo",
 		"pic": "https://avatars3.githubusercontent.com/u/44217113?s=400&u=1a8087bd125d9c123b53248e33f56230e6ea70bb&v=4",
 		"github": "https://github.com/esteban737"
+	},
+	{
+		"name": "Idel Martinez",
+		"pic": "https://avatars2.githubusercontent.com/u/33189777?s=400&v=4",
+		"github": "https://github.com/idelmr"
 	}
 ];
