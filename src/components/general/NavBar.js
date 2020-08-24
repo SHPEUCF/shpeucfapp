@@ -1,72 +1,31 @@
-import PropTypes from "prop-types";
-import React, { Component } from "react";
+import React from "react";
+import { Actions } from "react-native-router-flux";
 import { View, Text, Dimensions } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { Actions } from "react-native-router-flux";
 
-const dimension = Dimensions.get("window");
+const { height } = Dimensions.get("screen");
 
-class NavBar extends Component {
-	constructor(props) {
-		super(props);
-	}
+export const NavBar = props => {
+	const { tabBar, tabBarText, rowFlex, backButtonStyle } = styles;
+	const { title, back, onBack, style, childComponent, childStyle } = props;
 
-	static propTypes = {
-		title: PropTypes.string,
-		back: PropTypes.bool,
-		onBack: PropTypes.func
-	}
+	return (
+		<View style = { [tabBar, style, rowFlex] }>
+			{ back && <View style = { backButtonStyle }>
+				<Ionicons name = "ios-arrow-dropleft" size = { height * 0.03 } color = "#FECB00" onPress = { onBack } />
+			</View> }
+			<Text style = { tabBarText }>{ title }</Text>
+			<View style = { childStyle }>
+				{ childComponent }
+			</View>
+		</View>
+	);
+};
 
-	render() {
-		const {
-			tabBar,
-			tabBarText,
-			rowFlex,
-			backButtonStyle
-		} = styles;
-		const {
-			title,
-			back,
-			onBack,
-			style,
-			childComponent,
-			childStyle
-		} = this.props;
-
-		if (back) {
-			return (
-				<View style = { [tabBar, style, rowFlex] }>
-					<View style = { backButtonStyle }>
-						<Ionicons
-							name = "ios-arrow-dropleft"
-							size = { dimension.height * 0.03 }
-							color = { "#FECB00" }
-							onPress = { onBack }
-						/>
-					</View>
-					<View>
-						<Text style = { tabBarText }>{ title }</Text>
-					</View>
-					<View style = { childStyle }>
-						{ childComponent }
-					</View>
-				</View>
-			);
-		}
-		else {
-			return (
-				<View style = { [tabBar, style, rowFlex] }>
-					<View>
-						<Text style = { tabBarText }>{ title }</Text>
-					</View>
-					<View style = { childStyle }>
-						{ childComponent }
-					</View>
-				</View>
-			);
-		}
-	}
-}
+NavBar.defaultProps = {
+	back: false,
+	onBack: () => Actions.pop()
+};
 
 const styles = {
 	tabBar: {
@@ -75,7 +34,7 @@ const styles = {
 		alignItems: "center",
 		borderBottomWidth: 1,
 		borderBottomColor: "black",
-		height: dimension.height * 0.1
+		height: height * 0.1
 	},
 	tabBarText: {
 		color: "white",
@@ -84,8 +43,8 @@ const styles = {
 		paddingLeft: "5%"
 	},
 	backButtonStyle: {
-		height: dimension.height * 0.04,
-		width: dimension.height * 0.04,
+		height: height * 0.04,
+		width: height * 0.04,
 		justifyContent: "center",
 		alignItems: "center",
 		marginLeft: "5%"
@@ -94,14 +53,3 @@ const styles = {
 		flexDirection: "row"
 	}
 };
-
-NavBar.defaultProps = {
-	back: false,
-	onBack: () => Actions.pop(),
-	childStyle: {
-		flex: 1,
-		padding: "3.5%"
-	}
-};
-
-export { NavBar };
