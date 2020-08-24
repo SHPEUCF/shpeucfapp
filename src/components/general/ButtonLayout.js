@@ -1,125 +1,72 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import { View, Dimensions } from "react-native";
 
-const dimension = Dimensions.get("window");
+const { height } = Dimensions.get("screen");
 
-class ButtonLayout extends Component {
-	constructor(props) {
-		super(props);
-	}
+export const ButtonLayout = props => {
+	const { buttonContainer, singleLayer, doubleLayer, layoutContainer } = styles;
+	const { icon, children, containerStyle } = props;
 
-	static propTypes = {
-		icon: PropTypes.shape({})
-	}
+	let buttonIndex = 0;
+	let realButtons = [];
+	let layers = [];
+	let length;
+	let iconVar;
 
-	render() {
-		const {
-			buttonContainer,
-			doubleLayer
-		} = styles;
-
-		const {
-			icon,
-			children,
-			containerStyle
-		} = this.props;
-
-		let buttonIndex = 0;
-		let realButtons = [];
-		let length;
-		let layers = [];
-		let iconVar;
-
-		if (!children) {
-			return null;
-		}
-		else if (!children.length) {
-			if (children) {
-				layers.push(
-					this.renderSingleButton(children)
-				);
-			}
-			// else return null;
-		}
-		else {
-			children.forEach(function(child) {
-				if (child) realButtons.push(child);
-			});
-		}
-
-		length = realButtons.length;
-
-		if (length % 2 === 1) {
-			layers.push(
-				this.renderSingleButton(realButtons[buttonIndex])
-			);
-			buttonIndex++;
-		}
-
-		for (; buttonIndex + 2 <= length; buttonIndex += 2) {
-			iconVar = null;
-
-			if (icon && Math.trunc(buttonIndex / 2) + 1 === icon.layer)
-				iconVar = icon.data;
-
-			layers.push(
-				<View style = { doubleLayer }>
-					<View style = { buttonContainer }>
-					    { realButtons[buttonIndex] }
-					</View>
-					{ iconVar }
-					<View style = { buttonContainer }>
-					    { realButtons[buttonIndex + 1] }
-					</View>
-				</View>
-			);
-		}
-
-		return (
-			<View style = { containerStyle }>
-				{ layers.map((item, index) =>
-					<View>
-						{ this.renderLayer(item, index) }
-					</View>
-				) }
-			</View>
-		);
-	}
-
-	renderLayer(item, index) {
-		let layerPadding = {};
-
-		if (index !== 0) layerPadding = { paddingTop: dimension.height * 0.02 };
-
-		return (
-			<View style = { layerPadding }>
+	const renderSingleButton = item => (
+		<View style = { singleLayer }>
+			<View style = { buttonContainer }>
 				{ item }
 			</View>
-		);
+		</View>
+	);
+
+	if (!children)
+		return null;
+	else if (children && !children.length)
+		layers.push(renderSingleButton(children));
+	else
+		children.forEach(child => child && realButtons.push(child));
+
+	if ((length = realButtons.length) % 2 === 1) {
+		layers.push(renderSingleButton(realButtons[buttonIndex]));
+		buttonIndex++;
 	}
 
-	renderSingleButton(item) {
-		const {
-			buttonContainer,
-			singleLayer
-		} = styles;
+	for (; buttonIndex + 2 <= length; buttonIndex += 2, iconVar = null) {
+		if (icon && Math.trunc(buttonIndex / 2) + 1 === icon.layer)
+			iconVar = icon.data;
 
-		return (
-			<View style = { singleLayer }>
+		layers.push(
+			<View style = { doubleLayer }>
 				<View style = { buttonContainer }>
-					{ item }
+					{ realButtons[buttonIndex] }
+				</View>
+				{ iconVar }
+				<View style = { buttonContainer }>
+					{ realButtons[buttonIndex + 1] }
 				</View>
 			</View>
 		);
 	}
-}
+
+	return (
+		<View style = { containerStyle || layoutContainer }>
+			{ layers.map((item, index) =>
+				<View>
+					<View style = { index && { paddingTop: height * 0.02 } }>
+						{ item }
+					</View>
+				</View>
+			) }
+		</View>
+	);
+};
 
 const styles = {
 	layoutContainer: {
 		justifyContent: "center",
-		paddingTop: dimension.height * 0.03,
-		paddingBottom: dimension.height * 0.03
+		paddingVertical: height * 0.03
 	},
 	buttonContainer: {
 		flex: 0.45
@@ -134,9 +81,3 @@ const styles = {
 		alignItems: "center"
 	}
 };
-
-ButtonLayout.defaultProps = {
-	containerStyle: styles.layoutContainer
-};
-
-export { ButtonLayout };
