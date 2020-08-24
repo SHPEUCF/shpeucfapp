@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { View, Dimensions } from "react-native";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { View, Dimensions } from 'react-native';
 
-const dimension = Dimensions.get("window");
+const dimension = Dimensions.get('window');
 
 class ButtonLayout extends Component {
 	constructor(props) {
@@ -117,7 +117,7 @@ class ButtonLayout extends Component {
 
 const styles = {
 	layoutContainer: {
-		justifyContent: "center",
+		justifyContent: 'center',
 		paddingTop: dimension.height * 0.03,
 		paddingBottom: dimension.height * 0.03
 	},
@@ -125,13 +125,13 @@ const styles = {
 		flex: 0.45
 	},
 	singleLayer: {
-		flexDirection: "row",
-		justifyContent: "space-evenly"
+		flexDirection: 'row',
+		justifyContent: 'space-evenly'
 	},
 	doubleLayer: {
-		flexDirection: "row",
-		justifyContent: "space-evenly",
-		alignItems: "center"
+		flexDirection: 'row',
+		justifyContent: 'space-evenly',
+		alignItems: 'center'
 	}
 };
 

@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { View,	Modal,	FlatList,	Dimensions,	TouchableOpacity,	Text,	SafeAreaView } from "react-native";
-import { Alert, Button, ButtonLayout, Input } from "./";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { View,	Modal,	FlatList,	Dimensions,	TouchableOpacity,	Text,	SafeAreaView } from 'react-native';
+import { Alert, Button, ButtonLayout, Input } from './';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const dimension = Dimensions.get("window");
+const dimension = Dimensions.get('window');
 
 /**
  * @param {(String[] | Object[])}  data         An array of the data that will be displayed.
@@ -54,7 +54,7 @@ const dimension = Dimensions.get("window");
 class FilterList extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { val: "", modalVisible: false, filter: "", selected: this.processInitialValues() };
+		this.state = { val: '', modalVisible: false, filter: '', selected: this.processInitialValues() };
 	}
 
 	componentDidUpdate(prevProps) {
@@ -119,7 +119,7 @@ class FilterList extends Component {
 		let picker = null;
 
 		if (search != null) {
-			picker = <View style = {{ height: "100%" }}>
+			picker = <View style = {{ height: '100%' }}>
 				{ search
 				&& <View>
 					{ this.renderSearchBox() }
@@ -130,7 +130,7 @@ class FilterList extends Component {
 		else {
 			// renders selectively based on whether a CustomForm was supplied
 			picker = <SafeAreaView>
-				{ !CustomForm && <View style = {{ flexDirection: "row" }}>
+				{ !CustomForm && <View style = {{ flexDirection: 'row' }}>
 					<Input
 						style = { [selectionStyle, selectionBoxStyle] }
 						value = { val }
@@ -140,7 +140,7 @@ class FilterList extends Component {
 					<Ionicons
 						onPress = { () => this.setState({ modalVisible: true }) }
 						style = { [iconStyle, dropDownArrowStyle] }
-						name = { "ios-arrow-dropdown" }
+						name = { 'ios-arrow-dropdown' }
 						size = { iconSize }
 						color = { iconColor }
 					/>
@@ -170,7 +170,7 @@ class FilterList extends Component {
 				{ this.renderSearchBox() }
 				{ this.renderFlatList() }
 				{ this.renderButtons() }
-				<View style = {{ height: dimension.height * 0.08, backgroundColor: "black" }} />
+				<View style = {{ height: dimension.height * 0.08, backgroundColor: 'black' }} />
 			</SafeAreaView>
 		);
 	}
@@ -210,14 +210,14 @@ class FilterList extends Component {
 		const { onSelect, regexFunc, selectBy, search } = this.props;
 		const { filter, selected } = this.state;
 
-		let re = new RegExp((filter || " ") + "+", "i");
+		let re = new RegExp((filter || ' ') + '+', 'i');
 		let backgroundColor = {};
 		let pressAction = (data) => onSelect(data);
 		let regexVal = regexFunc(data);
 		let desiredVal = selectBy(data);
 
 		if (search === undefined || search === null) {
-			backgroundColor = selected[`${desiredVal}`] ? { backgroundColor: "#f00" } : {};
+			backgroundColor = selected[`${desiredVal}`] ? { backgroundColor: '#f00' } : {};
 			pressAction = (data) => this.select(data, desiredVal);
 		}
 
@@ -255,13 +255,13 @@ class FilterList extends Component {
 		return (
 			<ButtonLayout>
 				<Button
-					title = "Done"
+					title = 'Done'
 					onPress = { () => {
 						let output = Object.values(selected);
-						let value = "";
+						let value = '';
 
 						if (output.length === 0) {
-							Alert.alert("You never selected anything!");
+							Alert.alert('You never selected anything!');
 
 							return;
 						}
@@ -271,13 +271,13 @@ class FilterList extends Component {
 							value = regexFunc(output);
 						}
 						this.props.onSelect(output);
-						this.setState({ modalVisible: false, selected: {}, val: value, filter: "" });
+						this.setState({ modalVisible: false, selected: {}, val: value, filter: '' });
 					} }
 				/>
 				<Button
-					title = "Cancel"
+					title = 'Cancel'
 					onPress = { () => {
-						this.setState({ modalVisible: false, selected: {}, filter: "" });
+						this.setState({ modalVisible: false, selected: {}, filter: '' });
 					} }
 				/>
 			</ButtonLayout>
@@ -306,19 +306,19 @@ const defaultValues = (data) => {
 
 const styles = {
 	modalBackground: {
-		backgroundColor: "black",
+		backgroundColor: 'black',
 		flex: 1
 	},
 	selectionStyle: {
 		flex: 1
 	},
 	searchStyle: {
-		color: "#000",
+		color: '#000',
 		fontSize: 16,
 		marginTop: 8,
 		marginBottom: 8,
 		padding: 15,
-		backgroundColor: "white",
+		backgroundColor: 'white',
 		borderRadius: 0,
 		flex: 1
 	},
@@ -328,24 +328,24 @@ const styles = {
 	iconStyle: {
 		flex: 0.2,
 		paddingLeft: 10,
-		alignSelf: "center"
+		alignSelf: 'center'
 	},
 	contentContainerStyle: {
 		height: dimension.height * 0.18,
-		alignItems: "flex-start",
+		alignItems: 'flex-start',
 		paddingLeft: 40,
-		justifyContent: "center"
+		justifyContent: 'center'
 	},
 	textStyle: {
-		color: "#e0e6ed",
+		color: '#e0e6ed',
 		fontSize: dimension.width * 0.05
 	}
 };
 
 FilterList.defaultProps = {
-	placeholder: "Choose an Option",
+	placeholder: 'Choose an Option',
 	iconSize: 50,
-	iconColor: "white",
+	iconColor: 'white',
 	itemJSX: defaultJSX,
 	regexFunc: defaultValues,
 	selectBy: defaultValues

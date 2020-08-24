@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { Actions } from "react-native-router-flux";
-import { connect } from "react-redux";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import _ from "lodash";
-import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from "react-native";
-import { NavBar } from "../../components";
+import React, { Component } from 'react';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import _ from 'lodash';
+import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
+import { NavBar } from '../../components';
 import {
 	openElection,
 	closeElection,
@@ -15,11 +15,11 @@ import {
 	deleteApplication,
 	candidatePlanChanged,
 	candidateIdChanged
-} from "../../ducks";
+} from '../../ducks';
 
-const dimension = Dimensions.get("window");
-const iteratees = ["level"];
-const order = ["asc"];
+const dimension = Dimensions.get('window');
+const iteratees = ['level'];
+const order = ['asc'];
 
 class ElectionCandidates extends Component {
 	constructor(props) {
@@ -45,7 +45,7 @@ class ElectionCandidates extends Component {
 
 		return (
 			<SafeAreaView style = { page }>
-				<NavBar title = "Candidates" back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Candidates' back onBack = { () => Actions.pop() } />
 				<View style = { content }>
 					{ this.renderFlatlist(positionsArray) }
 				</View>
@@ -88,12 +88,12 @@ class ElectionCandidates extends Component {
 			containerTextStyle
 		} = styles;
 
-		const color = item.approved ? { backgroundColor: "#ffd70088" } : { backgroundColor: "#2C323988" };
+		const color = item.approved ? { backgroundColor: '#ffd70088' } : { backgroundColor: '#2C323988' };
 
 		return (
 			<View style = { [styles.candidateContainer, color] }>
 				<View style = { containerTextStyle }>
-					<Text style = { textColor }>{ item.firstName + " " + item.lastName }</Text>
+					<Text style = { textColor }>{ item.firstName + ' ' + item.lastName }</Text>
 				</View>
 				{ this.renderbuttons(item) }
 			</View>
@@ -117,33 +117,33 @@ class ElectionCandidates extends Component {
 
 		if (!item.approved)
 			return (
-				<View style = { [{ flexDirection: "row", flex: 1 }] }>
+				<View style = { [{ flexDirection: 'row', flex: 1 }] }>
 					<View style = { buttonContainerStyle }>
 						<TouchableOpacity
 							onPress = { () => approveApplication(position, id, firstName, lastName) }>
-							<Ionicons name = "md-checkmark-circle" size = { 40 } color = '#e0e6ed' />
+							<Ionicons name = 'md-checkmark-circle' size = { 40 } color = '#e0e6ed' />
 						</TouchableOpacity>
 					</View>
 					<View style = { buttonContainerStyle }>
 						<TouchableOpacity
 							onPress = { () => deleteApplication(position, id) }>
-							<Ionicons name = "md-close-circle" size = { 40 } color = '#e0e6ed' />
+							<Ionicons name = 'md-close-circle' size = { 40 } color = '#e0e6ed' />
 						</TouchableOpacity>
 					</View>
 				</View>
 			);
 		else
 			return (
-				<View style = { [{ flexDirection: "row", flex: 1 }] }>
+				<View style = { [{ flexDirection: 'row', flex: 1 }] }>
 					<View style = { buttonContainerStyle }>
 						<TouchableOpacity onPress = { () => this.viewCandidate(item) }>
-							<Ionicons name = "md-create" size = { 40 } color = '#e0e6ed' />
+							<Ionicons name = 'md-create' size = { 40 } color = '#e0e6ed' />
 						</TouchableOpacity>
 					</View>
 					<View style = { buttonContainerStyle }>
 						<TouchableOpacity
 							onPress = { () => deleteApplication(position, id) }>
-							<Ionicons name = "md-remove-circle" size = { 40 } color = '#e0e6ed' />
+							<Ionicons name = 'md-remove-circle' size = { 40 } color = '#e0e6ed' />
 						</TouchableOpacity>
 					</View>
 				</View>
@@ -153,7 +153,7 @@ class ElectionCandidates extends Component {
 	viewCandidate(item) {
 		this.props.candidateIdChanged(item.id);
 		this.props.candidatePlanChanged(item.plan);
-		this.props.goToCandidateForm("EDIT", item.position);
+		this.props.goToCandidateForm('EDIT', item.position);
 	}
 
 	_keyExtractor = (item, index) => index;
@@ -176,26 +176,26 @@ class ElectionCandidates extends Component {
 const styles = {
 	containerStyle: {
 		flex: 1,
-		justifyContent: "center",
-		alignItems: "flex-start",
-		backgroundColor: "black",
+		justifyContent: 'center',
+		alignItems: 'flex-start',
+		backgroundColor: 'black',
 		paddingVertical: 10,
 		paddingHorizontal: 15
 	},
 
 	containerTextStyle: {
 		flex: 3,
-		justifyContent: "center",
-		alignItems: "flex-start",
+		justifyContent: 'center',
+		alignItems: 'flex-start',
 		paddingVertical: 10,
 		paddingHorizontal: 15
 	},
 	textColor: {
-		color: "#e0e6ed"
+		color: '#e0e6ed'
 	},
 	contentContainerStyle: {
 		margin: 1,
-		backgroundColor: "#abc",
+		backgroundColor: '#abc',
 		height: dimension.height * 0.09
 	},
 	content: {
@@ -203,17 +203,17 @@ const styles = {
 	},
 	buttonContainerStyle: {
 		flex: 0.5,
-		justifyContent: "center"
+		justifyContent: 'center'
 	},
 	page: {
 		flex: 1,
-		backgroundColor: "#0c0b0b"
+		backgroundColor: '#0c0b0b'
 	},
 	candidateContainer: {
 		flex: 0.5,
 		marginTop: dimension.height * 0.002,
-		flexDirection: "row",
-		justifyContent: "center",
+		flexDirection: 'row',
+		justifyContent: 'center',
 		height: dimension.height * 0.09
 	}
 };

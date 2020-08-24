@@ -1,14 +1,14 @@
-import _ from "lodash";
-import React, { Component } from "react";
-import { View, Text } from "react-native";
-import { xdateToData } from "../../interface";
-import XDate from "xdate";
-import dateutils from "../../dateutils";
-import styleConstructor from "./style";
-import { RESERVATION_DATE } from "../../testIDs";
+import _ from 'lodash';
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
+import { xdateToData } from '../../interface';
+import XDate from 'xdate';
+import dateutils from '../../dateutils';
+import styleConstructor from './style';
+import { RESERVATION_DATE } from '../../testIDs';
 
 class Reservation extends Component {
-	static displayName = "IGNORE";
+	static displayName = 'IGNORE';
 
 	constructor(props) {
 		super(props);

@@ -1,5 +1,5 @@
-import React from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import React from 'react';
+import { Text, View, TouchableOpacity } from 'react-native';
 
 const Button = ({
 	onPress,
@@ -39,15 +39,15 @@ const Button = ({
 const styles = {
 	tStyle: {
 		flex: 1,
-		color: "#000",
-		textAlign: "center",
+		color: '#000',
+		textAlign: 'center',
 		fontSize: 18
 	},
 	bStyle: {
-		flexDirection: "row",
-		backgroundColor: "#FECB00",
+		flexDirection: 'row',
+		backgroundColor: '#FECB00',
 		borderRadius: 15,
-		borderColor: "#000",
+		borderColor: '#000',
 		borderWidth: 1,
 		padding: 5
 	}
@@ -57,7 +57,7 @@ Button.defaultProps = {
 	buttonStyle: styles.bStyle,
 	textStyle: styles.tStyle,
 	numberOfLines: 1,
-	title: "Put a Title!"
+	title: 'Put a Title!'
 };
 
 export { Button };

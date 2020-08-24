@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { Actions } from "react-native-router-flux";
-import { connect } from "react-redux";
-import { NavBar, Button, ButtonLayout, FilterList } from "../../components";
-import { SafeAreaView, View, Text } from "react-native";
-import { MemberPanel } from "../../utils/render";
-import MemberService from "../../services/members";
+import React, { Component } from 'react';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { NavBar, Button, ButtonLayout, FilterList } from '../../components';
+import { SafeAreaView, View, Text } from 'react-native';
+import { MemberPanel } from '../../utils/render';
+import MemberService from '../../services/members';
 
 const memberService = new MemberService();
 
@@ -22,7 +22,7 @@ class MemberAdmin extends Component {
 
 		return (
 			<SafeAreaView style = { screenBackground }>
-				<NavBar title = "Members" back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Members' back onBack = { () => Actions.pop() } />
 				<View style = { contentContainer }>
 					<Text style = { textStyle }>Paid Members</Text>
 					<ButtonLayout>
@@ -36,7 +36,7 @@ class MemberAdmin extends Component {
 								itemJSX = { (data) => MemberPanel(data) }
 								onSelect = { (selectedUsers) =>
 									memberService.changePrivilegeOfMembers(
-										selectedUsers.map((user) => { return user.id }), "paidMember", value) }
+										selectedUsers.map((user) => { return user.id }), 'paidMember', value) }
 							/>
 						) }
 					</ButtonLayout>
@@ -56,7 +56,7 @@ class MemberAdmin extends Component {
 	}
 
 	createButton(value) {
-		let title = value ? "Add" : "Remove";
+		let title = value ? 'Add' : 'Remove';
 		let ButtonWrapper = (props) => <Button
 			title = { title }
 			onPress = { props.onPress }
@@ -69,15 +69,15 @@ class MemberAdmin extends Component {
 const styles = {
 	screenBackground: {
 		flex: 1,
-		backgroundColor: "#0c0b0b"
+		backgroundColor: '#0c0b0b'
 	},
 	contentContainer: {
 		flex: 1,
-		justifyContent: "center"
+		justifyContent: 'center'
 	},
 	textStyle: {
-		alignSelf: "center",
-		color: "white",
+		alignSelf: 'center',
+		color: 'white',
 		fontSize: 18
 	}
 };

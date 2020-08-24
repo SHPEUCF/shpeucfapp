@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { FlatList, ActivityIndicator, View } from "react-native";
-import Reservation from "./reservation";
-import PropTypes from "prop-types";
-import XDate from "xdate";
-import dateutils from "../../dateutils";
-import styleConstructor from "./style";
-import _ from "lodash";
+import React, { Component } from 'react';
+import { FlatList, ActivityIndicator, View } from 'react-native';
+import Reservation from './reservation';
+import PropTypes from 'prop-types';
+import XDate from 'xdate';
+import dateutils from '../../dateutils';
+import styleConstructor from './style';
+import _ from 'lodash';
 
 class ReservationList extends Component {
-	static displayName = "IGNORE";
+	static displayName = 'IGNORE';
 
 	static propTypes = {
 		// specify your item comparison function for increased performance
@@ -129,7 +129,7 @@ class ReservationList extends Component {
 
 	getReservationsForDay(iterator, props) {
 		const day = iterator.clone();
-		const res = props.reservations[day.toString("yyyy-MM-dd")];
+		const res = props.reservations[day.toString('yyyy-MM-dd')];
 		if (res && res.length) {
 			return res.map((reservation, i) => {
 				return {
@@ -171,7 +171,7 @@ class ReservationList extends Component {
 	}
 
 	render() {
-		if (!this.props.reservations || !this.props.reservations[this.props.selectedDay.toString("yyyy-MM-dd")]) {
+		if (!this.props.reservations || !this.props.reservations[this.props.selectedDay.toString('yyyy-MM-dd')]) {
 			if (this.props.renderEmptyData)
 				return this.props.renderEmptyData();
 

@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { View } from "react-native";
-import { Input, PickerInput } from "./";
-import { convertStandardToMilitaryTime, convertMilitaryToStandardTime, prepend0 } from "../../utils/events";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { View } from 'react-native';
+import { Input, PickerInput } from './';
+import { convertStandardToMilitaryTime, convertMilitaryToStandardTime, prepend0 } from '../../utils/events';
 
 class TimePicker extends Component {
 	static propTypes = {
@@ -17,12 +17,12 @@ class TimePicker extends Component {
 		let [time, isInitialized] = this.initializeTimePicker();
 
 		this.state = {
-			hour: isInitialized ? time[0] : "",
-			minute: isInitialized ? time[1] : "",
-			period: isInitialized ? time[2] : "",
+			hour: isInitialized ? time[0] : '',
+			minute: isInitialized ? time[1] : '',
+			period: isInitialized ? time[2] : '',
 			hourArr: Array.from({ length: 12 }, (v, k) => k + 1),
 			minuteArr: [0, 15, 30, 45],
-			periodArr: ["AM", "PM"],
+			periodArr: ['AM', 'PM'],
 			focused: isInitialized
 		};
 	}
@@ -32,9 +32,9 @@ class TimePicker extends Component {
 			const [time, isInitialized] = this.initializeTimePicker();
 
 			this.setState({
-				hour: isInitialized ? time[0] : "",
-				minute: isInitialized ? time[1] : "",
-				period: isInitialized ? time[2] : "",
+				hour: isInitialized ? time[0] : '',
+				minute: isInitialized ? time[1] : '',
+				period: isInitialized ? time[2] : '',
 				focused: isInitialized
 			});
 		}
@@ -44,12 +44,12 @@ class TimePicker extends Component {
 		let time = [];
 
 		if (this.props.value) {
-			let [hour, minuteAndTimePeriod] = this.props.value.split(":");
+			let [hour, minuteAndTimePeriod] = this.props.value.split(':');
 
 			if (minuteAndTimePeriod.length === 2)
-				[hour, minuteAndTimePeriod] = convertMilitaryToStandardTime(`${hour}:${minuteAndTimePeriod}`).split(":");
+				[hour, minuteAndTimePeriod] = convertMilitaryToStandardTime(`${hour}:${minuteAndTimePeriod}`).split(':');
 
-			let [minute, period] = minuteAndTimePeriod.split(" ");
+			let [minute, period] = minuteAndTimePeriod.split(' ');
 
 			time = [hour, parseInt(minute), period];
 		}
@@ -61,7 +61,7 @@ class TimePicker extends Component {
 	}
 
 	update({ hour, minute, period }) {
-		if (hour !== "" && minute !== "" && period !== "") {
+		if (hour !== '' && minute !== '' && period !== '') {
 			this.props.onSelect(
 				convertStandardToMilitaryTime(`${prepend0(hour)}:${prepend0(minute)} ${period}`)
 			);
@@ -98,7 +98,7 @@ class TimePicker extends Component {
 			style,
 			inputBoxStyle,
 			iconSize: 32,
-			iconColor: "black",
+			iconColor: 'black',
 			dropDownArrowStyle
 		};
 
@@ -106,7 +106,7 @@ class TimePicker extends Component {
 			return (
 				<Input
 					placeholder = { placeholder }
-					value = ""
+					value = ''
 					onFocus = { () => this.setState({ focused: true }) }
 				/>
 			);
@@ -118,10 +118,10 @@ class TimePicker extends Component {
 						<PickerInput
 							data = { hourArr }
 							style = { style }
-							title = { "Enter an hour" }
+							title = { 'Enter an hour' }
 							value = { hour }
 							onSelect = { (text) => this.clickActionHour(text) }
-							placeholder = { "12" }
+							placeholder = { '12' }
 							{ ...defaultPickerStyle }
 						/>
 					</View>
@@ -129,20 +129,20 @@ class TimePicker extends Component {
 						<PickerInput
 							data = { minuteArr }
 							style = { style }
-							title = { "Enter minute" }
-							value = { minute !== "" ? prepend0(minute) : "" }
+							title = { 'Enter minute' }
+							value = { minute !== '' ? prepend0(minute) : '' }
 							onSelect = { (text) => this.clickActionMinute(text) }
-							placeholder = { "00" }
+							placeholder = { '00' }
 							{ ...defaultPickerStyle }
 						/>
 					</View>
 					<View style = { fieldContainer }>
 						<PickerInput
 							data = { periodArr }
-							title = { "Enter AM/PM" }
+							title = { 'Enter AM/PM' }
 							value = { period }
 							onSelect = { (text) => this.clickActionPeriod(text) }
-							placeholder = { "PM" }
+							placeholder = { 'PM' }
 							{ ...defaultPickerStyle }
 						/>
 					</View>
@@ -155,8 +155,8 @@ class TimePicker extends Component {
 const styles = {
 	fieldContainer: {
 		flex: 1,
-		flexDirection: "row",
-		alignItems: "center"
+		flexDirection: 'row',
+		alignItems: 'center'
 	},
 	style: {
 		flex: 1,
@@ -174,18 +174,18 @@ const styles = {
 	},
 	timePickerStyle: {
 		flex: 1,
-		color: "#000",
+		color: '#000',
 		fontSize: 16,
-		backgroundColor: "white",
+		backgroundColor: 'white',
 		borderRadius: 25,
-		flexDirection: "row",
+		flexDirection: 'row',
 		marginTop: 8,
 		marginBottom: 8
 	}
 };
 
 TimePicker.defaultProps = {
-	placeholder: "Choose a Time"
+	placeholder: 'Choose a Time'
 };
 
 export { TimePicker };

@@ -1,8 +1,8 @@
-import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
-import { Form } from "./Form";
-import _ from "lodash";
-import { copyStateAndSetValuesToNull } from "../../utils/general";
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { Form } from './Form';
+import _ from 'lodash';
+import { copyStateAndSetValuesToNull } from '../../utils/general';
 
 /**
  * Types

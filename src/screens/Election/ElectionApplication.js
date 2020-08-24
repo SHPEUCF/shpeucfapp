@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import { Actions } from "react-native-router-flux";
-import { connect } from "react-redux";
-import { Button, Input, NavBar, ButtonLayout } from "../../components";
-import _ from "lodash";
-import { FlatList, Text, SafeAreaView, View, TouchableOpacity } from "react-native";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Avatar } from "react-native-elements";
-import { openGallery } from "../../utils/render";
-import FastImage from "react-native-fast-image";
-import { getPositions, addApplication, editApplication } from "../../ducks";
+import React, { Component } from 'react';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { Button, Input, NavBar, ButtonLayout } from '../../components';
+import _ from 'lodash';
+import { FlatList, Text, SafeAreaView, View, TouchableOpacity } from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Avatar } from 'react-native-elements';
+import { openGallery } from '../../utils/render';
+import FastImage from 'react-native-fast-image';
+import { getPositions, addApplication, editApplication } from '../../ducks';
 
-const iterateesPos = ["level"];
-const orderPos = ["asc"];
+const iterateesPos = ['level'];
+const orderPos = ['asc'];
 
 class ElectionApplication extends Component {
 	constructor(props) {
@@ -23,12 +23,12 @@ class ElectionApplication extends Component {
 		currentlyApplying: false,
 		candidate: {
 			approved: false,
-			firstName: "",
-			lastName: "",
-			picture: "",
-			position: "",
-			plan: "",
-			id: ""
+			firstName: '',
+			lastName: '',
+			picture: '',
+			position: '',
+			plan: '',
+			id: ''
 		},
 		index: null,
 		positions: {}
@@ -83,15 +83,15 @@ class ElectionApplication extends Component {
 
 		return (
 			<KeyboardAwareScrollView
-				style = {{ backgroundColor: "#0c0b0b" }}
+				style = {{ backgroundColor: '#0c0b0b' }}
 				resetScrollToCoords = {{ x: 0, y: 0 }}
-				contentContainerStyle = {{ height: "100%" }}
+				contentContainerStyle = {{ height: '100%' }}
 				scrollEnabled = { false }
 				enableOnAndroid = { false }
 			>
 				<SafeAreaView style = { [page, fullFlex] }>
 					<NavBar
-						title = "Positions"
+						title = 'Positions'
 						back
 						onBack = { () => {
 							return !shouldShowApplication || applied
@@ -136,7 +136,7 @@ class ElectionApplication extends Component {
 					rounded
 					onPress = { () => this.callOpenGallery(candidate) }
 					ImageComponent = { FastImage }
-					title = "Add Image"
+					title = 'Add Image'
 					titleStyle = { fontLarge }
 					source = { candidate.picture && { uri: candidate.picture } }
 				/>
@@ -146,11 +146,11 @@ class ElectionApplication extends Component {
 				<Input
 					numberOfLines = { 10 }
 					style = { inputContainer }
-					textAlignVertical = "top"
+					textAlignVertical = 'top'
 					maxLength = { 250 }
 					blurOnSubmit = { true }
 					multiline = { true }
-					placeholder = "Please write your plan for members to read."
+					placeholder = 'Please write your plan for members to read.'
 					value = { candidate.plan }
 					onChangeText = { (plan) => {
 						let tempCandidate = Object.assign(candidate);
@@ -165,7 +165,7 @@ class ElectionApplication extends Component {
 	callOpenGallery(candidate) {
 		openGallery(
 			// eslint-disable-next-line max-len
-			`/election/positions/${candidate.position || this.state.positionSelected}/candidates/${this.props.activeUser.id}`, "",
+			`/election/positions/${candidate.position || this.state.positionSelected}/candidates/${this.props.activeUser.id}`, '',
 			(url) => {
 				let candidate = Object.assign({}, this.state.candidate);
 				candidate.picture = url;
@@ -211,8 +211,8 @@ class ElectionApplication extends Component {
 					<Text style = { [fontSmall, textColor] }>{ item.description }</Text>
 				</View>
 				<MaterialIcons
-					name = "assignment"
-					color = "#FECB00"
+					name = 'assignment'
+					color = '#FECB00'
 					size = { 35 }
 					style = { iconContainer }
 				/>
@@ -238,7 +238,7 @@ class ElectionApplication extends Component {
 
 		if (currentlyApplying || applied)
 			submitButton = <Button
-				title = { "Submit " + (applied && "Changes" || "Application") }
+				title = { 'Submit ' + (applied && 'Changes' || 'Application') }
 				onPress = { () => {
 					if (!applied) {
 						addApplication(firstName, lastName, candidate.plan,
@@ -258,7 +258,7 @@ class ElectionApplication extends Component {
 			<ButtonLayout>
 				{ submitButton }
 				<Button
-					title = "Cancel"
+					title = 'Cancel'
 					onPress = { () => this.stopApplication() }
 				/>
 			</ButtonLayout>
@@ -268,12 +268,12 @@ class ElectionApplication extends Component {
 	stopApplication() {
 		this.setState({ candidate: {
 			approved: false,
-			firstName: "",
-			lastName: "",
+			firstName: '',
+			lastName: '',
 			picture: this.state.candidate.picture,
-			position: "",
-			plan: "",
-			id: ""
+			position: '',
+			plan: '',
+			id: ''
 		} });
 		if (!this.props.activeUser.applied && this.state.currentlyApplying)
 			this.setState({ currentlyApplying: false });
@@ -290,17 +290,17 @@ const styles = {
 		fontSize: 13
 	},
 	fontBold: {
-		fontWeight: "bold"
+		fontWeight: 'bold'
 	},
 	column: {
-		justifyContent: "space-between",
-		alignItems: "center"
+		justifyContent: 'space-between',
+		alignItems: 'center'
 	},
 	textColor: {
-		color: "#e0e6ed"
+		color: '#e0e6ed'
 	},
 	page: {
-		backgroundColor: "black",
+		backgroundColor: 'black',
 		paddingLeft: 10,
 		paddingRight: 10
 	},
@@ -309,19 +309,19 @@ const styles = {
 	},
 	inputContainer: {
 		maxHeight: 250,
-		width: "80%"
+		width: '80%'
 	},
 	positionContainer: {
-		paddingTop: "8%",
-		paddingBottom: "5%",
-		borderBottomColor: "#FFFA",
+		paddingTop: '8%',
+		paddingBottom: '5%',
+		borderBottomColor: '#FFFA',
 		borderBottomWidth: 1,
-		flexDirection: "row",
-		justifyContent: "space-between",
+		flexDirection: 'row',
+		justifyContent: 'space-between',
 		paddingHorizontal: 30
 	},
 	titleStyle: {
-		fontWeight: "bold",
+		fontWeight: 'bold',
 		fontSize: 30
 	},
 	iconContainer: {

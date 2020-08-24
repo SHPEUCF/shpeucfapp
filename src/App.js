@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import firebase from "firebase";
-import { Actions } from "react-native-router-flux";
-import Router from "./config/Router";
-import AppInfo from "../app.json";
-import { View } from "react-native";
-import { Alert } from "./components";
-import { loadUser, getAllMemberAccounts, getEvents, getCommittees, getAllMemberPoints, updateElection } from "./ducks";
-import { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId } from "react-native-dotenv";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import firebase from 'firebase';
+import { Actions } from 'react-native-router-flux';
+import Router from './config/Router';
+import AppInfo from '../app.json';
+import { View } from 'react-native';
+import { Alert } from './components';
+import { loadUser, getAllMemberAccounts, getEvents, getCommittees, getAllMemberPoints, updateElection } from './ducks';
+import { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId } from 'react-native-dotenv';
 
-console.ignoredYellowBox = ["Setting a timer"];
+console.ignoredYellowBox = ['Setting a timer'];
 
 class App extends Component {
 	componentDidMount() {
@@ -25,7 +25,7 @@ class App extends Component {
 		const { getCommittees, getAllMemberAccounts, getEvents, loadUser, getAllMemberPoints, updateElection } = this.props;
 
 		firebase.auth().onAuthStateChanged(user => {
-			firebase.database().ref("/version").once("value", snapshot => {
+			firebase.database().ref('/version').once('value', snapshot => {
 				let correctVersion = snapshot.val() === AppInfo.version;
 
 				if (correctVersion && user) {
@@ -39,7 +39,7 @@ class App extends Component {
 				}
 				else {
 					Actions.login();
-					if (!correctVersion) Alert.alert("Please update your app");
+					if (!correctVersion) Alert.alert('Please update your app');
 					if (user) firebase.auth().signOut();
 				}
 				// Actions.splash({ correctVersion, user, signOut: () => firebase.auth.signOut() });

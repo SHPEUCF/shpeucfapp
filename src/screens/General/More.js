@@ -1,53 +1,53 @@
-import React, { Component } from "react";
-import { Actions } from "react-native-router-flux";
-import { FlatList, View, Dimensions, SafeAreaView, Image } from "react-native";
-import { connect } from "react-redux";
-import { ListItem } from "react-native-elements";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { pageLoad, updateElection } from "../../ducks";
+import React, { Component } from 'react';
+import { Actions } from 'react-native-router-flux';
+import { FlatList, View, Dimensions, SafeAreaView, Image } from 'react-native';
+import { connect } from 'react-redux';
+import { ListItem } from 'react-native-elements';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { pageLoad, updateElection } from '../../ducks';
 
-const dimension = Dimensions.get("window");
+const dimension = Dimensions.get('window');
 
 const menuItems = [
 	{
-		title: "Leaderboard",
-		icon: "format-align-left",
-		screen: "LeaderboardM",
-		privilege: "user"
+		title: 'Leaderboard',
+		icon: 'format-align-left',
+		screen: 'LeaderboardM',
+		privilege: 'user'
 	},
 	{
-		title: "Voting",
-		icon: "done",
-		screen: "ElectionBallot",
-		privilege: "paidMember"
+		title: 'Voting',
+		icon: 'done',
+		screen: 'ElectionBallot',
+		privilege: 'paidMember'
 	},
 	{
-		title: "E-Board Application",
-		icon: "assignment",
-		screen: "ElectionApplication",
-		privilege: "paidMember"
+		title: 'E-Board Application',
+		icon: 'assignment',
+		screen: 'ElectionApplication',
+		privilege: 'paidMember'
 	},
 	{
-		title: "Committees",
-		icon: "assignment-ind",
-		screen: "Committees",
-		privilege: "user"
+		title: 'Committees',
+		icon: 'assignment-ind',
+		screen: 'Committees',
+		privilege: 'user'
 	},
 	{
-		title: "About",
-		icon: "info",
-		screen: "About",
-		privilege: "user"
+		title: 'About',
+		icon: 'info',
+		screen: 'About',
+		privilege: 'user'
 	},
 	{
-		title: "BackEnd",
-		icon: "settings",
-		screen: "AdminHub",
-		privilege: "eboard"
+		title: 'BackEnd',
+		icon: 'settings',
+		screen: 'AdminHub',
+		privilege: 'eboard'
 	}
 ];
 
-const imageUrl = "../../assets/images/";
+const imageUrl = '../../assets/images/';
 
 class More extends Component {
 	constructor(props) {
@@ -70,10 +70,10 @@ class More extends Component {
 			<SafeAreaView style = { [mainBackgroundColor, fullFlex] }>
 				<View style = { [header, secondaryBackgroundColor] }>
 					<Image
-						source = { require(imageUrl + "SHPE_UCF_Logo.png") }
+						source = { require(imageUrl + 'SHPE_UCF_Logo.png') }
 						style = { alignSelf }
 						height = { dimension.height * 0.06 }
-						resizeMode = "contain"
+						resizeMode = 'contain'
 					/>
 				</View>
 				<FlatList
@@ -85,10 +85,10 @@ class More extends Component {
 				/>
 				<View style = { [fullFlex, mainBackgroundColor] }>
 					<Image
-						source = { require(imageUrl + "SHPE_logo_FullColor-RGB-2x.png") }
+						source = { require(imageUrl + 'SHPE_logo_FullColor-RGB-2x.png') }
 						style = { alignSelf }
 						height = { 80 }
-						resizeMode = "contain"
+						resizeMode = 'contain'
 					/>
 				</View>
 			</SafeAreaView>
@@ -119,8 +119,8 @@ class More extends Component {
 			secondaryTextColor
 		} = styles;
 
-		if (item.title === "Voting" && !election) return null;
-		if (item.title === "E-Board Application" && !apply) return null;
+		if (item.title === 'Voting' && !election) return null;
+		if (item.title === 'E-Board Application' && !apply) return null;
 
 		if (privilege && privilege[item.privilege])
 			return (
@@ -130,9 +130,9 @@ class More extends Component {
 						removeClippedSubviews = { false }
 						title = { item.title }
 						titleStyle = { primaryTextColor }
-						leftIcon = {{ name: item.icon, color: "white" }}
+						leftIcon = {{ name: item.icon, color: 'white' }}
 						rightIcon = { <Ionicons
-							name = "ios-arrow-dropright"
+							name = 'ios-arrow-dropright'
 							size = { 22 }
 							style = { secondaryTextColor }
 						/> }
@@ -145,30 +145,30 @@ class More extends Component {
 
 const styles = {
 	header: {
-		height: "10%",
-		justifyContent: "center"
+		height: '10%',
+		justifyContent: 'center'
 	},
 	mainBackgroundColor: {
-		backgroundColor: "black"
+		backgroundColor: 'black'
 	},
 	secondaryBackgroundColor: {
-		backgroundColor: "#FECB00"
+		backgroundColor: '#FECB00'
 	},
 	bottomBorder: {
 		borderBottomWidth: 1,
-		borderColor: "black"
+		borderColor: 'black'
 	},
 	fullFlex: {
 		flex: 1
 	},
 	primaryTextColor: {
-		color: "white"
+		color: 'white'
 	},
 	secondaryTextColor: {
-		color: "#FECB00"
+		color: '#FECB00'
 	},
 	alignSelf: {
-		alignSelf: "center"
+		alignSelf: 'center'
 	}
 };
 

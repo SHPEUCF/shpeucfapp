@@ -1,5 +1,5 @@
-import _ from "lodash";
-import React, { Component } from "react";
+import _ from 'lodash';
+import React, { Component } from 'react';
 import {
 	AccessibilityInfo,
 	PanResponder,
@@ -7,25 +7,25 @@ import {
 	View,
 	Text,
 	Image
-} from "react-native";
-import PropTypes from "prop-types";
-import XDate from "xdate";
-import { CALENDAR_KNOB } from "../testIDs";
+} from 'react-native';
+import PropTypes from 'prop-types';
+import XDate from 'xdate';
+import { CALENDAR_KNOB } from '../testIDs';
 
-import dateutils from "../dateutils";
-import { parseDate } from "../interface";
-import styleConstructor from "./style";
-import CalendarList from "../calendar-list";
-import Calendar from "../calendar";
-import asCalendarConsumer from "./asCalendarConsumer";
-import WeekCalendar from "./weekCalendar";
-import Week from "./week";
+import dateutils from '../dateutils';
+import { parseDate } from '../interface';
+import styleConstructor from './style';
+import CalendarList from '../calendar-list';
+import Calendar from '../calendar';
+import asCalendarConsumer from './asCalendarConsumer';
+import WeekCalendar from './weekCalendar';
+import Week from './week';
 
-const commons = require("./commons");
+const commons = require('./commons');
 const UPDATE_SOURCES = commons.UPDATE_SOURCES;
 const POSITIONS = {
-	CLOSED: "closed",
-	OPEN: "open"
+	CLOSED: 'closed',
+	OPEN: 'open'
 };
 const SPEED = 20;
 const BOUNCINESS = 6;
@@ -42,7 +42,7 @@ const DAY_NAMES_PADDING = 24;
  * @example: https://github.com/wix/react-native-calendars/blob/master/example/src/screens/expandableCalendar.js
  */
 class ExpandableCalendar extends Component {
-	static displayName = "ExpandableCalendar";
+	static displayName = 'ExpandableCalendar';
 
 	static propTypes = {
 		...CalendarList.propTypes,
@@ -66,8 +66,8 @@ class ExpandableCalendar extends Component {
 		horizontal: true,
 		initialPosition: POSITIONS.CLOSED,
 		firstDay: 0,
-		leftArrowImageSource: require("../calendar/img/previous.png"),
-		rightArrowImageSource: require("../calendar/img/next.png"),
+		leftArrowImageSource: require('../calendar/img/previous.png'),
+		rightArrowImageSource: require('../calendar/img/next.png'),
 		allowShadow: true
 	}
 
@@ -91,12 +91,12 @@ class ExpandableCalendar extends Component {
 		this.visibleMonth = this.getMonth(this.props.context.date);
 		this.initialDate = props.context.date; // should be set only once!!!
 		this.headerStyleOverride = {
-			"stylesheet.calendar.header": {
+			'stylesheet.calendar.header': {
 				week: {
 					marginTop: 7,
 					marginBottom: -4, // reduce space between dayNames and first line of dates
-					flexDirection: "row",
-					justifyContent: "space-around"
+					flexDirection: 'row',
+					justifyContent: 'space-around'
 				}
 			}
 		};
@@ -170,7 +170,7 @@ class ExpandableCalendar extends Component {
 				const firstDayOfWeek = (next ? 7 : -7) - dayOfTheWeek + firstDay;
 				d.addDays(firstDayOfWeek);
 			}
-			_.invoke(this.props.context, "setDate", this.getDateString(d), UPDATE_SOURCES.PAGE_SCROLL);
+			_.invoke(this.props.context, 'setDate', this.getDateString(d), UPDATE_SOURCES.PAGE_SCROLL);
 		}
 	}
 
@@ -185,7 +185,7 @@ class ExpandableCalendar extends Component {
 	}
 
 	getDateString(date) {
-		return date.toString("yyyy-MM-dd");
+		return date.toString('yyyy-MM-dd');
 	}
 
 	getYear(date) {
@@ -342,7 +342,7 @@ class ExpandableCalendar extends Component {
 	}
 
 	onDayPress = (value) => { // {year: 2019, month: 4, day: 22, timestamp: 1555977600000, dateString: "2019-04-23"}
-		_.invoke(this.props.context, "setDate", value.dateString, UPDATE_SOURCES.DAY_PRESS);
+		_.invoke(this.props.context, 'setDate', value.dateString, UPDATE_SOURCES.DAY_PRESS);
 
 		setTimeout(() => { // to allows setDate to be completed
 			if (this.state.position === POSITIONS.OPEN)
@@ -385,8 +385,8 @@ class ExpandableCalendar extends Component {
 				style = { [
 					this.style.weekDayNames,
 					{
-						paddingLeft: _.get(this.props, "calendarStyle.paddingLeft") + 6 || DAY_NAMES_PADDING,
-						paddingRight: _.get(this.props, "calendarStyle.paddingRight") + 6 || DAY_NAMES_PADDING
+						paddingLeft: _.get(this.props, 'calendarStyle.paddingLeft') + 6 || DAY_NAMES_PADDING,
+						paddingRight: _.get(this.props, 'calendarStyle.paddingRight') + 6 || DAY_NAMES_PADDING
 					}
 				] }
 			>
@@ -404,13 +404,13 @@ class ExpandableCalendar extends Component {
 	}
 
 	renderHeader() {
-		const monthYear = XDate(this.props.context.date).toString("MMMM yyyy");
+		const monthYear = XDate(this.props.context.date).toString('MMMM yyyy');
 
 		return (
 			<Animated.View
 				ref = { e => this.header = e }
 				style = { [this.style.header, { height: HEADER_HEIGHT, top: this.state.headerDeltaY }] }
-				pointerEvents = { "none" }
+				pointerEvents = { 'none' }
 			>
 				<Text allowFontScaling = { false } style = { this.style.headerTitle }>{ monthYear }</Text>
 				{ this.renderWeekDaysNames() }
@@ -427,13 +427,13 @@ class ExpandableCalendar extends Component {
 			<Animated.View
 				ref = { e => this.weekCalendar = e }
 				style = {{
-					position: "absolute",
+					position: 'absolute',
 					left: 0,
 					right: 0,
 					top: HEADER_HEIGHT + (commons.isAndroid ? 8 : 4), // align row on top of calendar's first row
 					opacity: position === POSITIONS.OPEN ? 0 : 1
 				}}
-				pointerEvents = { position === POSITIONS.CLOSED ? "auto" : "none" }
+				pointerEvents = { position === POSITIONS.CLOSED ? 'auto' : 'none' }
 			>
 				<WeekComponent
 					{ ...this.props }
@@ -444,7 +444,7 @@ class ExpandableCalendar extends Component {
 					allowShadow = { false }
 					hideDayNames = { true }
 					accessibilityElementsHidden // iOS
-					importantForAccessibility = { "no-hide-descendants" } // Android
+					importantForAccessibility = { 'no-hide-descendants' } // Android
 				/>
 			</Animated.View>
 		);
@@ -453,7 +453,7 @@ class ExpandableCalendar extends Component {
 	renderKnob() {
 		// TODO: turn to TouchableOpacity with onPress that closes it
 		return (
-			<View style = { this.style.knobContainer } pointerEvents = { "none" }>
+			<View style = { this.style.knobContainer } pointerEvents = { 'none' }>
 				<View style = { this.style.knob } testID = { CALENDAR_KNOB } />
 			</View>
 		);
@@ -465,7 +465,7 @@ class ExpandableCalendar extends Component {
 
 		return (
 			<Image
-				source = { direction === "right" ? this.props.rightArrowImageSource : this.props.leftArrowImageSource }
+				source = { direction === 'right' ? this.props.rightArrowImageSource : this.props.leftArrowImageSource }
 				style = { this.style.arrowImage }
 			/>
 		);
@@ -481,7 +481,7 @@ class ExpandableCalendar extends Component {
 			<View testID = { this.props.testID } style = { [allowShadow && this.style.containerShadow, style] }>
 				{ screenReaderEnabled
 					? <Calendar
-						testID = "calendar"
+						testID = 'calendar'
 						{ ...others }
 						theme = { themeObject }
 						onDayPress = { this.onDayPress }
@@ -495,7 +495,7 @@ class ExpandableCalendar extends Component {
 						{ ...this.panResponder.panHandlers }
 					>
 						<CalendarList
-							testID = "calendar"
+							testID = 'calendar'
 							horizontal = { horizontal }
 							{ ...others }
 							theme = { themeObject }

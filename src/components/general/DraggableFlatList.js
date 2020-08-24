@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
 	LayoutAnimation,
 	Animated,
@@ -8,7 +8,7 @@ import {
 	Platform,
 	UIManager,
 	StatusBar
-} from "react-native";
+} from 'react-native';
 
 // Measure function triggers false positives
 console.ignoredYellowBox = true;
@@ -69,13 +69,13 @@ class SortableFlatList extends Component {
 				const tappedPixel = horizontal ? pageX : pageY;
 				const tappedRow = this._pixels[Math.floor(this._scrollOffset + tappedPixel)];
 				if (!tappedRow) return false;
-				this._additionalOffset = tappedPixel + this._scrollOffset - this._measurements[tappedRow][horizontal ? "x" : "y"];
+				this._additionalOffset = tappedPixel + this._scrollOffset - this._measurements[tappedRow][horizontal ? 'x' : 'y'];
 				if (this._releaseAnim) return false;
 				this._moveAnim.setValue(tappedPixel);
 				this._move = tappedPixel;
 
 				// compensate for translucent or hidden StatusBar on android
-				if (Platform.OS === "android" && !horizontal) {
+				if (Platform.OS === 'android' && !horizontal) {
 					const isTranslucent = StatusBar._propsStack.reduce((acc, cur) => {
 						return !cur.translucent ? acc : cur.translucent;
 					}, false);
@@ -111,7 +111,7 @@ class SortableFlatList extends Component {
 
 				return shouldSet;
 			},
-			onPanResponderMove: Animated.event([null, { [props.horizontal ? "moveX" : "moveY"]: this._moveAnim }], {
+			onPanResponderMove: Animated.event([null, { [props.horizontal ? 'moveX' : 'moveY']: this._moveAnim }], {
 				listener: (evt, gestureState) => {
 					const {
 						moveX, moveY
@@ -250,7 +250,7 @@ class SortableFlatList extends Component {
 		const isLastItem = activeRow === data.length - 1 || nextSpacerIndex === data.length;
 		const isFirstItem = activeRow === 0;
 		if (this._measurements[activeRow]) {
-			const rowSize = this._measurements[activeRow][horizontal ? "width" : "height"];
+			const rowSize = this._measurements[activeRow][horizontal ? 'width' : 'height'];
 			const hoverItemTopPosition = Math.max(0, this._move - (this._additionalOffset + this._containerOffset));
 			const hoverItemBottomPosition = Math.min(this._containerSize, hoverItemTopPosition + rowSize);
 			const fingerPosition = Math.max(0, this._move - this._containerOffset);
@@ -280,7 +280,7 @@ class SortableFlatList extends Component {
 
 		if (activeRow === -1 || !this._measurements[activeRow]) return -1;
 		// Find the row that contains the midpoint of the hovering item
-		const hoverItemSize = this._measurements[activeRow][horizontal ? "width" : "height"];
+		const hoverItemSize = this._measurements[activeRow][horizontal ? 'width' : 'height'];
 		const hoverItemMidpoint = move - this._additionalOffset + hoverItemSize / 2;
 		const hoverPoint = Math.floor(hoverItemMidpoint + this._scrollOffset);
 		let spacerIndex = this._pixels[hoverPoint];
@@ -323,7 +323,7 @@ class SortableFlatList extends Component {
 				});
 			}
 			catch (e) {
-				console.log("## measure error -- index: ", index, activeRow, this._refs[index], e);
+				console.log('## measure error -- index: ', index, activeRow, this._refs[index], e);
 			}
 		}, 100);
 	}
@@ -373,16 +373,16 @@ class SortableFlatList extends Component {
 
 		const isSpacerRow = spacerIndex === index;
 		const spacerSize = isSpacerRow && this._measurements[activeRow]
-			? this._measurements[activeRow][horizontal ? "width" : "height"]
+			? this._measurements[activeRow][horizontal ? 'width' : 'height']
 			: 0;
 		const endPadding = index === data.length - 1
 			&& spacerIndex === data.length
-			&& this._measurements[activeRow][horizontal ? "width" : "height"];
+			&& this._measurements[activeRow][horizontal ? 'width' : 'height'];
 		const isActiveRow = activeRow === index;
 
 		return (
-			<View style = { [styles.fullOpacity, { flexDirection: horizontal ? "row" : "column" }] } >
-				{ !!spacerSize && <View style = {{ [horizontal ? "width" : "height"]: spacerSize }} /> }
+			<View style = { [styles.fullOpacity, { flexDirection: horizontal ? 'row' : 'column' }] } >
+				{ !!spacerSize && <View style = {{ [horizontal ? 'width' : 'height']: spacerSize }} /> }
 				<RowItem
 					horizontal = { horizontal }
 					index = { index }
@@ -460,7 +460,7 @@ class SortableFlatList extends Component {
 					keyExtractor = { keyExtractor || this.keyExtractor }
 					onScroll = { ({
 						nativeEvent }) =>
-						this._scrollOffset = nativeEvent.contentOffset[horizontal ? "x" : "y"] }
+						this._scrollOffset = nativeEvent.contentOffset[horizontal ? 'x' : 'y'] }
 					scrollEventThrottle = { 16 }
 				/>
 				{ this.renderHoverComponent() }
@@ -520,7 +520,7 @@ render() {
 
 	// Rendering the final row requires padding to be applied at the bottom
 	return (
-		<View ref = { setRef(index) } collapsable = { false } style = {{ opacity: 1, flexDirection: horizontal ? "row" : "column" }}>
+		<View ref = { setRef(index) } collapsable = { false } style = {{ opacity: 1, flexDirection: horizontal ? 'row' : 'column' }}>
 			<View style = { wrapperStyle }>
 				{ component }
 			</View>
@@ -532,12 +532,12 @@ render() {
 
 const styles = {
 	hoverComponentVertical: {
-		position: "absolute",
+		position: 'absolute',
 		left: 0,
 		right: 0
 	},
 	hoverComponentHorizontal: {
-		position: "absolute",
+		position: 'absolute',
 		bottom: 0,
 		top: 0
 	},

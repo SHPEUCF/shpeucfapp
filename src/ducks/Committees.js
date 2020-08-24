@@ -1,26 +1,26 @@
-import { createActionTypes } from "../utils/actions";
-import { Actions } from "react-native-router-flux";
-import firebase from "firebase";
-import { Alert } from "../components";
+import { createActionTypes } from '../utils/actions';
+import { Actions } from 'react-native-router-flux';
+import firebase from 'firebase';
+import { Alert } from '../components';
 
 // handle all things related to Elections
 const ACTIONS = createActionTypes([
-	"GET_COMMITTEES",
-	"GO_TO_COMMITTEE_FORM",
-	"EDIT_COMMITTEE",
-	"DELETE_COMMITTEE",
-	"COMMITTEE_DESCRIPTION_CHANGED",
-	"COMMITTEE_TITLE_CHANGED",
-	"CHAIR_PERSON_CHANGED",
-	"LOAD_COMMITTEE"
+	'GET_COMMITTEES',
+	'GO_TO_COMMITTEE_FORM',
+	'EDIT_COMMITTEE',
+	'DELETE_COMMITTEE',
+	'COMMITTEE_DESCRIPTION_CHANGED',
+	'COMMITTEE_TITLE_CHANGED',
+	'CHAIR_PERSON_CHANGED',
+	'LOAD_COMMITTEE'
 ]);
 
 const INITIAL_STATE = {
 	committeesList: [],
 	committeeEvents: {},
-	title: "ADD",
-	committeeTitle: "",
-	committeeDescription: "",
+	title: 'ADD',
+	committeeTitle: '',
+	committeeDescription: '',
 	joinOpened: false,
 	chair: {},
 	pendingMembers: {},
@@ -47,9 +47,9 @@ export default (state = INITIAL_STATE, action) => {
 		case ACTIONS.DELETE_COMMITTEE:
 			return {
 				...state,
-				chair: "",
-				committeeTitle: "",
-				committeeDescription: ""
+				chair: '',
+				committeeTitle: '',
+				committeeDescription: ''
 			};
 		case ACTIONS.COMMITTEE_TITLE_CHANGED:
 			return {
@@ -86,8 +86,8 @@ export default (state = INITIAL_STATE, action) => {
 
 export const getCommittees = () => {
 	return (dispatch) => {
-		firebase.database().ref("/committees/")
-			.on("value", snapshot => {
+		firebase.database().ref('/committees/')
+			.on('value', snapshot => {
 				const committtees = snapshot.val();
 
 				dispatch({
@@ -116,8 +116,8 @@ export const addCommittee = (title, description, chair, length) => {
 			level: length,
 			joinOpened: false
 		})
-			.then(() => Alert.alert("Committee Added!", { type: "success", title: "Successful" }))
-			.catch(() => Alert.alert("Committee could not be Added!", { type: "error", title: "Failure" }));
+			.then(() => Alert.alert('Committee Added!', { type: 'success', title: 'Successful' }))
+			.catch(() => Alert.alert('Committee could not be Added!', { type: 'error', title: 'Failure' }));
 	};
 };
 
@@ -126,7 +126,7 @@ export const editCommittee = (title, description, chair, oldTitle) => {
 		return (dispatch) => {
 			let level;
 
-			firebase.database().ref(`/committees/${oldTitle}/level`).once("value", snapshot => {
+			firebase.database().ref(`/committees/${oldTitle}/level`).once('value', snapshot => {
 				level = snapshot.val();
 				firebase.database().ref(`/committees/${oldTitle}`).remove()
 					.then(() => {
@@ -140,8 +140,8 @@ export const editCommittee = (title, description, chair, oldTitle) => {
 						chair: chair,
 						level: level
 					}))
-					.then(() => Alert.alert("Committee edited!", { type: "success", title: "Successful" }))
-					.catch(() => Alert.alert("Committee could not be edited!", { type: "error", title: "Failure" }));
+					.then(() => Alert.alert('Committee edited!', { type: 'success', title: 'Successful' }))
+					.catch(() => Alert.alert('Committee could not be edited!', { type: 'error', title: 'Failure' }));
 			});
 		};
 	else
@@ -156,8 +156,8 @@ export const editCommittee = (title, description, chair, oldTitle) => {
 						type: ACTIONS.EDIT_COMMITTEE
 					});
 				})
-				.then(() => Alert.alert("Committee edited!", { type: "success", title: "Successful" }))
-				.catch(() => Alert.alert("Committee could not be edited!", { type: "error", title: "Failure" }));
+				.then(() => Alert.alert('Committee edited!', { type: 'success', title: 'Successful' }))
+				.catch(() => Alert.alert('Committee could not be edited!', { type: 'error', title: 'Failure' }));
 		};
 };
 
@@ -183,8 +183,8 @@ export const deleteCommittee = (text, chair) => {
 					type: ACTIONS.DELETE_COMMITTEE
 				});
 			})
-			.then(() => Alert.alert("Committee Deleted!", { type: "success", title: "Successful" }))
-			.catch(() => Alert.alert("Committee could not be deleted!", { type: "error", title: "Failure" }));
+			.then(() => Alert.alert('Committee Deleted!', { type: 'success', title: 'Successful' }))
+			.catch(() => Alert.alert('Committee could not be deleted!', { type: 'error', title: 'Failure' }));
 	};
 };
 
@@ -211,16 +211,16 @@ export const chairPersonChanged = (person) => {
 
 export const changeLevelsCom = (committees) => {
 	return () => {
-		firebase.database().ref("/committees/").once("value", snapshot => {
+		firebase.database().ref('/committees/').once('value', snapshot => {
 			let obj = snapshot.val();
 
 			committees.forEach(function(item, index) {
 				obj[item.committee.title].level = index;
 			});
-			firebase.database().ref("/committees/").update(obj);
+			firebase.database().ref('/committees/').update(obj);
 		})
-			.then(() => Alert.alert("Order Set!", { type: "success", title: "Successful" }))
-			.catch(() => Alert.alert("Order could not be set!", { type: "error", title: "Failure" }));
+			.then(() => Alert.alert('Order Set!', { type: 'success', title: 'Successful' }))
+			.catch(() => Alert.alert('Order could not be set!', { type: 'error', title: 'Failure' }));
 	};
 };
 

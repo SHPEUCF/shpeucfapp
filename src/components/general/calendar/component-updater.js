@@ -1,4 +1,4 @@
-const _ = require("lodash");
+const _ = require('lodash');
 
 function shouldUpdate(a, b, paths) {
 	for (let i = 0; i < paths.length; i++) {

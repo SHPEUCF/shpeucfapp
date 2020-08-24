@@ -1,18 +1,18 @@
-import { Dimensions } from "react-native";
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Modal, SafeAreaView, TouchableOpacity, View, Text, TextInput } from "react-native";
-import Flag from "react-native-flags";
-import { Button } from "./";
-import { editUser } from "../../ducks";
+import { Dimensions } from 'react-native';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Modal, SafeAreaView, TouchableOpacity, View, Text, TextInput } from 'react-native';
+import Flag from 'react-native-flags';
+import { Button } from './';
+import { editUser } from '../../ducks';
 
-const { height, width } = Dimensions.get("window");
+const { height, width } = Dimensions.get('window');
 
 class CountryFlag extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = { flagsVisible: false, customFlagVisible: false, customFlagText: "" };
+		this.state = { flagsVisible: false, customFlagVisible: false, customFlagText: '' };
 	}
 
 	render() {
@@ -21,7 +21,7 @@ class CountryFlag extends Component {
 		return (
 			<View>
 				<TouchableOpacity onPress = { () => this.setState({ flagsVisible: !this.state.flagsVisible }) }>
-					<Flag type = "flat" code = { this.props.activeUser.flag } size = { 32 } />
+					<Flag type = 'flat' code = { this.props.activeUser.flag } size = { 32 } />
 				</TouchableOpacity>
 				<RenderFlags
 					flagsVisible = { flagsVisible }
@@ -48,8 +48,8 @@ const RenderFlags = (props) => {
 	const { changeVisibility, flagPicked, flagsVisible } = props;
 
 	const flagHeight = { height: height - 0.3 * height };
-	const countriesL = ["AR", "BO", "BR", "CL", "CO", "CR", "CU", "DO", "EC", "SV", "GQ", "GT", "HN"];
-	const countriesR = ["MX", "NI", "PA", "PY", "PE", "PR", "RO", "ES", "TT", "US", "UY", "VE", ""];
+	const countriesL = ['AR', 'BO', 'BR', 'CL', 'CO', 'CR', 'CU', 'DO', 'EC', 'SV', 'GQ', 'GT', 'HN'];
+	const countriesR = ['MX', 'NI', 'PA', 'PY', 'PE', 'PR', 'RO', 'ES', 'TT', 'US', 'UY', 'VE', ''];
 
 	return (
 		<Modal visible = { flagsVisible } transparent>
@@ -59,7 +59,7 @@ const RenderFlags = (props) => {
 						<View style = { flagColumn }>
 							{ countries.map(item =>
 								<TouchableOpacity onPress = { () => flagPicked(item) }>
-									<Flag type = "flat" code = { item } size = { 32 } />
+									<Flag type = 'flat' code = { item } size = { 32 } />
 								</TouchableOpacity>
 							) }
 						</View>
@@ -85,16 +85,16 @@ const CustomFlag = props => {
 						style = { styles.modalTextInput }
 						onChangeText = { (text) => changeText(text) }
 						value = { customFlagText }
-						autoCapitalize = { "characters" }
+						autoCapitalize = { 'characters' }
 						autoCorrect = { false }
 						maxLength = { 2 }
 					/>
 					<View style = { modalButtonContainer }>
 						<View style = { modalButton }>
-							<Button title = "Done" onPress = { () => { flagPicked(customFlagText); changeVisibility(false) } } />
+							<Button title = 'Done' onPress = { () => { flagPicked(customFlagText); changeVisibility(false) } } />
 						</View>
 						<View style = { modalButton }>
-							<Button title = "Cancel" onPress = { () => changeVisibility(false) } />
+							<Button title = 'Cancel' onPress = { () => changeVisibility(false) } />
 						</View>
 					</View>
 				</View>
@@ -105,59 +105,59 @@ const CustomFlag = props => {
 
 const styles = {
 	textColor: {
-		color: "#e0e6ed"
+		color: '#e0e6ed'
 	},
 	modalContent: {
 		height: height * 0.5,
 		width: width * 0.8,
 		padding: height * 0.008,
-		backgroundColor: "#21252b",
-		alignItems: "center",
-		justifyContent: "space-around"
+		backgroundColor: '#21252b',
+		alignItems: 'center',
+		justifyContent: 'space-around'
 	},
 	modalBackground: {
-		justifyContent: "center",
-		alignItems: "center",
+		justifyContent: 'center',
+		alignItems: 'center',
 		margin: 0,
 		height: height,
 		width: width,
-		backgroundColor: "#000a"
+		backgroundColor: '#000a'
 	},
 	modalButtonContainer: {
-		flexDirection: "row",
-		 justifyContent: "space-evenly",
-		 width: "100%"
+		flexDirection: 'row',
+		 justifyContent: 'space-evenly',
+		 width: '100%'
 	},
 	modalButton: {
 		flex: 0.45
 	},
-	flagModal: { position: "absolute",
-	 flexDirection: "row",
+	flagModal: { position: 'absolute',
+	 flexDirection: 'row',
 	 width: width,
-	 justifyContent: "space-between",
+	 justifyContent: 'space-between',
 	 top: height * 0.15,
-	 paddingLeft: "2%",
-	 paddingRight: "2%"
+	 paddingLeft: '2%',
+	 paddingRight: '2%'
 	},
 	flagColumn: {
-		justifyContent: "space-evenly"
+		justifyContent: 'space-evenly'
 	},
 	modalText: {
-		textAlign: "center",
+		textAlign: 'center',
 		fontSize: 16
 	},
 	modalTextInput: {
 		height: 80,
-		textAlign: "center",
+		textAlign: 'center',
 		width: width * 0.6,
-		backgroundColor: "#e0e6ed22",
-		borderColor: "#e0e6ed",
+		backgroundColor: '#e0e6ed22',
+		borderColor: '#e0e6ed',
 		borderRadius: 16,
 		borderWidth: 3,
-		borderStyle: "solid",
-		fontWeight: "bold",
+		borderStyle: 'solid',
+		fontWeight: 'bold',
 		fontSize: 60,
-		color: "#E0E6ED"
+		color: '#E0E6ED'
 	}
 };
 

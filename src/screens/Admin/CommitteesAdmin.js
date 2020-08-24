@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { Actions } from "react-native-router-flux";
-import { connect } from "react-redux";
-import { Button, NavBar, SortableFlatList, ButtonLayout } from "../../components";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import _ from "lodash";
-import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
+import React, { Component } from 'react';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { Button, NavBar, SortableFlatList, ButtonLayout } from '../../components';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import _ from 'lodash';
+import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
 import {
 	getCommittees,
 	deleteCommittee,
@@ -16,11 +16,11 @@ import {
 	committeeDescriptionChanged,
 	committeeTitleChanged,
 	changeLevelsCom
-} from "../../ducks";
+} from '../../ducks';
 
-const dimension = Dimensions.get("window");
-const iteratees = ["level"];
-const order = ["asc"];
+const dimension = Dimensions.get('window');
+const iteratees = ['level'];
+const order = ['asc'];
 
 class CommitteesAdmin extends Component {
 	constructor(props) {
@@ -39,7 +39,7 @@ class CommitteesAdmin extends Component {
 				committee: d,
 				key: `item-${index}`,
 				label: index,
-				backgroundColor: "#fff"
+				backgroundColor: '#fff'
 			})) });
 	}
 
@@ -48,7 +48,7 @@ class CommitteesAdmin extends Component {
 			committee: d,
 			key: `item-${index}`,
 			label: index,
-			backgroundColor: "#fff"
+			backgroundColor: '#fff'
 		}))
 	}
 
@@ -64,22 +64,22 @@ class CommitteesAdmin extends Component {
 
 		return (
 			<SafeAreaView style = { page }>
-				<NavBar title = "Committees" back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Committees' back onBack = { () => Actions.pop() } />
 				{ this.renderFlatList(committeesArray) }
 				<View>
 					<ButtonLayout>
 						<Button
 							onPress = { () => this.setLevels() }
-							title = { "Set Order" }
+							title = { 'Set Order' }
 						/>
 						<Button
 							onPress = { () => {
-								this.props.committeeTitleChanged("");
-								this.props.committeeDescriptionChanged("");
+								this.props.committeeTitleChanged('');
+								this.props.committeeDescriptionChanged('');
 								this.props.chairPersonChanged({});
-								this.props.goToCommitteeForm("ADD");
+								this.props.goToCommitteeForm('ADD');
 							} }
-							title = { "Add Committees" }
+							title = { 'Add Committees' }
 						/>
 					</ButtonLayout>
 				</View>
@@ -113,7 +113,7 @@ class CommitteesAdmin extends Component {
 			textColor
 		} = styles;
 
-		const color = isActive ? { backgroundColor: "#ffd70066" } : { backgroundColor: "black" };
+		const color = isActive ? { backgroundColor: '#ffd70066' } : { backgroundColor: 'black' };
 
 		return (
 			<TouchableOpacity
@@ -125,12 +125,12 @@ class CommitteesAdmin extends Component {
 				</View>
 				<View style = { styles.buttonContainerStyle }>
 					<TouchableOpacity onPress = { () => this.viewCommittee(item.committee) }>
-						<Ionicons style = { textColor } name = "md-create" size = { 40 } />
+						<Ionicons style = { textColor } name = 'md-create' size = { 40 } />
 					</TouchableOpacity>
 				</View>
 				<View style = { styles.buttonContainerStyle }>
 					<TouchableOpacity onPress = { () => this.delete(item.committee) }>
-						<Ionicons style = { textColor } name = "md-trash" size = { 40 } />
+						<Ionicons style = { textColor } name = 'md-trash' size = { 40 } />
 					</TouchableOpacity>
 				</View>
 			</TouchableOpacity>
@@ -149,7 +149,7 @@ class CommitteesAdmin extends Component {
 		this.props.committeeTitleChanged(item.title);
 		this.props.committeeDescriptionChanged(item.description);
 		this.props.chairPersonChanged(item.chair);
-		this.props.goToCommitteeForm("EDIT");
+		this.props.goToCommitteeForm('EDIT');
 	}
 
 	setLevels() {
@@ -164,16 +164,16 @@ class CommitteesAdmin extends Component {
 const styles = {
 	containerStyle: {
 		flex: 25,
-		justifyContent: "center",
-		alignItems: "flex-start",
+		justifyContent: 'center',
+		alignItems: 'flex-start',
 		paddingVertical: 10,
 		paddingHorizontal: 15
 	},
 	containerTextStyle: {
 		flex: 1,
-		justifyContent: "center",
-		alignItems: "flex-start",
-		backgroundColor: "#2C3239",
+		justifyContent: 'center',
+		alignItems: 'flex-start',
+		backgroundColor: '#2C3239',
 		paddingVertical: 10,
 		paddingHorizontal: 15
 	},
@@ -181,20 +181,20 @@ const styles = {
 		margin: 1,
 		height: dimension.height * 0.09,
 		flex: 1,
-		flexDirection: "row",
-		justifyContent: "center"
+		flexDirection: 'row',
+		justifyContent: 'center'
 	},
 	textColor: {
-		color: "#e0e6ed"
+		color: '#e0e6ed'
 	},
 	buttonContainerStyle: {
 		flex: 5,
 		margin: 5,
-		justifyContent: "center"
+		justifyContent: 'center'
 	},
 	page: {
 		flex: 1,
-		backgroundColor: "#0c0b0b"
+		backgroundColor: '#0c0b0b'
 	}
 };
 

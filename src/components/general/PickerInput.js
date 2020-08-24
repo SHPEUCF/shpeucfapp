@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { View, Modal, FlatList, Dimensions, TouchableOpacity, Text } from "react-native";
-import { Input } from "./Input";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { View, Modal, FlatList, Dimensions, TouchableOpacity, Text } from 'react-native';
+import { Input } from './Input';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const dimension = Dimensions.get("window");
+const dimension = Dimensions.get('window');
 
 class PickerInput extends Component {
 	constructor(props) {
@@ -88,7 +88,7 @@ class PickerInput extends Component {
 
 		return (
 			<View>
-				<View style = { [{ flexDirection: "row" }, style] }>
+				<View style = { [{ flexDirection: 'row' }, style] }>
 					<Input
 						style = { [inputStyle, inputBoxStyle] }
 						value = { this.state.text }
@@ -98,7 +98,7 @@ class PickerInput extends Component {
 					<Ionicons
 						onPress = { () => this.setState({ modalVisible: true }) }
 						style = { [iconStyle, dropDownArrowStyle] }
-						name = { "ios-arrow-dropdown" }
+						name = { 'ios-arrow-dropdown' }
 						size = { iconSize }
 						color = { iconColor }
 					/>
@@ -139,10 +139,10 @@ class PickerInput extends Component {
 const styles = {
 	itemStyle: {
 		flex: 1,
-		alignItems: "center",
-		justifyContent: "center",
-		flexDirection: "column",
-		borderBottomColor: "#0002",
+		alignItems: 'center',
+		justifyContent: 'center',
+		flexDirection: 'column',
+		borderBottomColor: '#0002',
 		borderBottomWidth: 1
 	},
 	itemTextStyle: {
@@ -150,37 +150,37 @@ const styles = {
 		paddingBottom: dimension.height * 0.03,
 		flex: 1,
 		fontSize: 16,
-		alignSelf: "center"
+		alignSelf: 'center'
 
 	},
 	titleStyle: {
 		flex: 0.13,
-		alignSelf: "center",
+		alignSelf: 'center',
 		fontSize: 20
 	},
 	buttonStyle: {
 		flex: 1,
-		alignSelf: "center"
+		alignSelf: 'center'
 	},
 	flatlistStyle: {
 		flex: 0.8
 	},
 	buttonContainer: {
 		flex: 0.2,
-		flexDirection: "row",
-		borderTopColor: "#0001",
+		flexDirection: 'row',
+		borderTopColor: '#0001',
 		borderTopWidth: 1
 	},
 	textStyle: {
 		flex: 1,
-		alignSelf: "center",
+		alignSelf: 'center',
 		fontSize: 18,
 		paddingTop: 5
 	},
 	modalBackground: {
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "#0003",
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: '#0003',
 		margin: 0,
 		height: dimension.height,
 		width: dimension.width
@@ -188,7 +188,7 @@ const styles = {
 	modalStyle: {
 		height: dimension.height * 0.4,
 		width: dimension.width * 0.8,
-		backgroundColor: "#fff",
+		backgroundColor: '#fff',
 		padding: 12,
 		borderRadius: 12
 	},
@@ -198,15 +198,15 @@ const styles = {
 	iconStyle: {
 		flex: 0.2,
 		paddingLeft: 10,
-		alignSelf: "center"
+		alignSelf: 'center'
 	}
 };
 
 PickerInput.defaultProps = {
-	title: "Give me a title!",
-	placeholder: "Choose an Option",
+	title: 'Give me a title!',
+	placeholder: 'Choose an Option',
 	iconSize: 50,
-	iconColor: "white"
+	iconColor: 'white'
 };
 
 export { PickerInput };

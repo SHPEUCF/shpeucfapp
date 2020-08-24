@@ -1,13 +1,13 @@
-import React, { PureComponent } from "react";
-import { Actions } from "react-native-router-flux";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import _ from "lodash";
-import { Text, View, Dimensions, TouchableOpacity } from "react-native";
-import { rankMembersAndReturnsCurrentUser } from "../../../utils/render";
+import React, { PureComponent } from 'react';
+import { Actions } from 'react-native-router-flux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import _ from 'lodash';
+import { Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import { rankMembersAndReturnsCurrentUser } from '../../../utils/render';
 
-const { width, height } = Dimensions.get("window");
-const iteratees = ["points", "lastName", "firstName"];
-const order = ["desc", "asc", "asc"];
+const { width, height } = Dimensions.get('window');
+const iteratees = ['points', 'lastName', 'firstName'];
+const order = ['desc', 'asc', 'asc'];
 
 export default class Leaderboard extends PureComponent {
 	render() {
@@ -37,7 +37,7 @@ export default class Leaderboard extends PureComponent {
 					<View style = { leaderboardContentDivider }>
 						<View style = { leaderboardDividerLine } />
 						<View style = { leaderboardArrow }>
-							<Ionicons name = "ios-arrow-dropright" size = { height * 0.025 } style = { gold } />
+							<Ionicons name = 'ios-arrow-dropright' size = { height * 0.025 } style = { gold } />
 						</View>
 						<View style = { leaderboardDividerLine } />
 					</View>
@@ -56,57 +56,57 @@ export default class Leaderboard extends PureComponent {
 const styles = {
 	title: {
 		fontSize: 18,
-		fontWeight: "500"
+		fontWeight: '500'
 	},
 	textColor: {
-		color: "#e0e6ed"
+		color: '#e0e6ed'
 	},
 	leaderboardContainer: {
-		backgroundColor: "#21252b",
+		backgroundColor: '#21252b',
 		marginRight: 5,
-		width: "100%",
-		height: "100%"
+		width: '100%',
+		height: '100%'
 	},
 	leaderboardContent: {
 		flex: 1,
-		alignItems: "center",
-		justifyContent: "space-evenly"
+		alignItems: 'center',
+		justifyContent: 'space-evenly'
 	},
 	leaderboardContentDivider: {
 		flex: 0.3,
-		alignSelf: "center",
-		width: "80%",
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "space-around"
+		alignSelf: 'center',
+		width: '80%',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-around'
 	 },
 	leaderboardDividerLine: {
 		flex: 0.45,
 		height: height * 0.003,
-		backgroundColor: "black"
+		backgroundColor: 'black'
 	},
 	leaderboardArrow: {
-		color: "#FECB00",
+		color: '#FECB00',
 		width: width * 0.06,
-		alignItems: "center"
+		alignItems: 'center'
 	},
 	index: {
-		color: "#000",
-		borderColor: "#FECB00",
-		backgroundColor: "#FECB00",
-		borderStyle: "solid",
+		color: '#000',
+		borderColor: '#FECB00',
+		backgroundColor: '#FECB00',
+		borderStyle: 'solid',
 		borderRadius: height * 0.05 * 0.5,
-		justifyContent: "center",
-		alignItems: "center",
+		justifyContent: 'center',
+		alignItems: 'center',
 		height: height * 0.05,
 		width: height * 0.05
 	},
 	indexText: {
-		fontWeight: "700",
+		fontWeight: '700',
 		fontSize: 20,
-		color: "black"
+		color: 'black'
 	},
 	gold: {
-		color: "#FECB00"
+		color: '#FECB00'
 	}
 };

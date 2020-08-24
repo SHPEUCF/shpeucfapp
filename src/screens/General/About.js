@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { Avatar } from "react-native-elements";
-import { Actions } from "react-native-router-flux";
-import { ListItem } from "react-native-elements";
-import { NavBar } from "../../components";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { View, Text, SafeAreaView, FlatList, Dimensions, Linking, TouchableOpacity } from "react-native";
-import { menuItems, developers } from "../../data/AboutItems.js";
+import React, { Component } from 'react';
+import { Avatar } from 'react-native-elements';
+import { Actions } from 'react-native-router-flux';
+import { ListItem } from 'react-native-elements';
+import { NavBar } from '../../components';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { View, Text, SafeAreaView, FlatList, Dimensions, Linking, TouchableOpacity } from 'react-native';
+import { menuItems, developers } from '../../data/AboutItems.js';
 
-const dimension = Dimensions.get("window");
+const dimension = Dimensions.get('window');
 
 class About extends Component {
 	render() {
@@ -24,7 +24,7 @@ class About extends Component {
 
 		return (
 			<SafeAreaView style = { [subBackground, containerFlex] }>
-				<NavBar title = "About" back onBack = { () => Actions.pop() } childComponent = { this.version() } />
+				<NavBar title = 'About' back onBack = { () => Actions.pop() } childComponent = { this.version() } />
 				<View style = { mainBackground }>
 					<FlatList
 						keyExtractor = { this.keyExtractor }
@@ -37,14 +37,14 @@ class About extends Component {
 					<View>
 						<FlatList
 							numColumns = { 3 }
-							columnWrapperStyle = {{ justifyContent: "space-around" }}
+							columnWrapperStyle = {{ justifyContent: 'space-around' }}
 							data = { developers }
 							renderItem = { this.renderDev }
 							keyExtractor = { this.keyExtractor }
 						/>
 					</View>
 					<TouchableOpacity onPress = { () =>
-						Linking.openURL("https://github.com/SHPEUCF/shpeucfapp/graphs/contributors") }
+						Linking.openURL('https://github.com/SHPEUCF/shpeucfapp/graphs/contributors') }
 					>
 						<Text style = { [textStyle, contributorStyle] }>
 							...and our amazing contributors.
@@ -66,7 +66,7 @@ class About extends Component {
 		} = styles;
 
 		return (
-			<View style = {{ alignItems: "flex-end" }}>
+			<View style = {{ alignItems: 'flex-end' }}>
 				<Text style = { [textStyle, { fontSize: 16 }] }>
 					v1.1
 				</Text>
@@ -93,12 +93,12 @@ class About extends Component {
 					leftIcon = { <Ionicons
 						name = { item.icon }
 						size = { 26 }
-						color = { "#FFF" }
+						color = { '#FFF' }
 					/> }
 					rightIcon = { <Ionicons
-						name = "ios-arrow-dropright"
+						name = 'ios-arrow-dropright'
 						size = { dimension.height * 0.025 }
-						color = { "#FECB00" }
+						color = { '#FECB00' }
 					/> }
 				/>
 			</View>
@@ -111,7 +111,7 @@ class About extends Component {
 			textStyle
 		} = styles;
 
-		let idx = item.name.indexOf(" ");
+		let idx = item.name.indexOf(' ');
 		let firstName = item.name.substring(0, idx);
 		let lastName = item.name.substring(idx + 1);
 
@@ -135,35 +135,35 @@ class About extends Component {
 
 const styles = {
 	mainBackground: {
-		backgroundColor: "#000"
+		backgroundColor: '#000'
 	},
 	subBackground: {
-		backgroundColor: "#0c0b0b"
+		backgroundColor: '#0c0b0b'
 	},
 	textStyle: {
-		color: "#FFF",
+		color: '#FFF',
 		fontSize: 14
 	},
 	center: {
-		alignItems: "center"
+		alignItems: 'center'
 	},
 	titleStyle: {
-		fontWeight: "bold",
-		padding: "4%",
+		fontWeight: 'bold',
+		padding: '4%',
 		fontSize: 16
 	},
 	containerFlex: {
 		flex: 1
 	},
 	contributorStyle: {
-		alignSelf: "center",
+		alignSelf: 'center',
 		fontSize: 18,
-		fontWeight: "bold",
-		marginTop: "3%"
+		fontWeight: 'bold',
+		marginTop: '3%'
 	},
 	footer: {
 		flex: 0.95,
-		justifyContent: "flex-end"
+		justifyContent: 'flex-end'
 	}
 };
 

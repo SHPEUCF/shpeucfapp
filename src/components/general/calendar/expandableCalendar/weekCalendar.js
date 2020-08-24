@@ -1,14 +1,14 @@
-import _ from "lodash";
-import React, { Component } from "react";
-import { FlatList } from "react-native";
-import PropTypes from "prop-types";
-import XDate from "xdate";
+import _ from 'lodash';
+import React, { Component } from 'react';
+import { FlatList } from 'react-native';
+import PropTypes from 'prop-types';
+import XDate from 'xdate';
 
-import styleConstructor from "./style";
-import CalendarList from "../calendar-list";
-import Week from "../expandableCalendar/week";
+import styleConstructor from './style';
+import CalendarList from '../calendar-list';
+import Week from '../expandableCalendar/week';
 
-const commons = require("./commons");
+const commons = require('./commons');
 const UPDATE_SOURCES = commons.UPDATE_SOURCES;
 const NUMBER_OF_PAGES = 2; // must be a positive number
 
@@ -60,7 +60,7 @@ class WeekCalendar extends Component {
 		// leave the current date in the visible week as is
 		const dd = weekIndex === 0 ? d : d.addDays(firstDay - dayOfTheWeek);
 		const newDate = dd.addWeeks(weekIndex);
-		const dateString = newDate.toString("yyyy-MM-dd");
+		const dateString = newDate.toString('yyyy-MM-dd');
 
 		return dateString;
 	}
@@ -72,7 +72,7 @@ class WeekCalendar extends Component {
 			const { items } = this.state;
 			this.page = newPage;
 
-			_.invoke(this.props.context, "setDate", items[this.page], UPDATE_SOURCES.WEEK_SCROLL);
+			_.invoke(this.props.context, 'setDate', items[this.page], UPDATE_SOURCES.WEEK_SCROLL);
 
 			if (this.page === items.length - 1) {
 				for (let i = 0; i <= NUMBER_OF_PAGES; i++)
@@ -152,7 +152,7 @@ class WeekCalendar extends Component {
 								key = { idx }
 								style = { this.style.dayHeader }
 								numberOfLines = { 1 }
-								accessibilityLabel = { "" }
+								accessibilityLabel = { '' }
 								// accessible={false} // not working
 								// importantForAccessibility='no'
 							>

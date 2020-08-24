@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import { View, ViewPropTypes } from "react-native";
-import PropTypes from "prop-types";
-import XDate from "xdate";
+import React, { Component } from 'react';
+import { View, ViewPropTypes } from 'react-native';
+import PropTypes from 'prop-types';
+import XDate from 'xdate';
 
-import dateutils from "../dateutils";
-import { xdateToData, parseDate } from "../interface";
-import styleConstructor from "./style";
-import Day from "./day/basic";
-import UnitDay from "./day/period";
-import MultiDotDay from "./day/multi-dot";
-import MultiPeriodDay from "./day/multi-period";
-import SingleDay from "./day/custom";
-import CalendarHeader from "./header";
-import shouldComponentUpdate from "./updater";
-import { SELECT_DATE_SLOT } from "../testIDs";
+import dateutils from '../dateutils';
+import { xdateToData, parseDate } from '../interface';
+import styleConstructor from './style';
+import Day from './day/basic';
+import UnitDay from './day/period';
+import MultiDotDay from './day/multi-dot';
+import MultiPeriodDay from './day/multi-period';
+import SingleDay from './day/custom';
+import CalendarHeader from './header';
+import shouldComponentUpdate from './updater';
+import { SELECT_DATE_SLOT } from '../testIDs';
 
 // Fallback when RN version is < 0.44
 const viewPropTypes = ViewPropTypes || View.propTypes;
@@ -25,7 +25,7 @@ const EmptyArray = [];
  * @gif: https://github.com/wix/react-native-calendars/blob/master/demo/calendar.gif
  */
 class Calendar extends Component {
-	static displayName = "Calendar";
+	static displayName = 'Calendar';
 
 	static propTypes = {
 		/** Specify theme properties to override specific styles for calendar parts. Default = {} */
@@ -104,7 +104,7 @@ class Calendar extends Component {
 
 	componentWillReceiveProps(nextProps) {
 		const current = parseDate(nextProps.current);
-		if (current && current.toString("yyyy MM") !== this.state.currentMonth.toString("yyyy MM")) {
+		if (current && current.toString('yyyy MM') !== this.state.currentMonth.toString('yyyy MM')) {
 			this.setState({
 				currentMonth: current.clone()
 			});
@@ -112,7 +112,7 @@ class Calendar extends Component {
 	}
 
 	updateMonth(day, doNotTriggerListeners) {
-		if (day.toString("yyyy MM") === this.state.currentMonth.toString("yyyy MM"))
+		if (day.toString('yyyy MM') === this.state.currentMonth.toString('yyyy MM'))
 			return;
 
 		this.setState({
@@ -162,23 +162,23 @@ class Calendar extends Component {
 	renderDay(day, id) {
 		const minDate = parseDate(this.props.minDate);
 		const maxDate = parseDate(this.props.maxDate);
-		let state = "";
+		let state = '';
 		if (this.props.disabledByDefault)
-			state = "disabled";
+			state = 'disabled';
 		else if (minDate && !dateutils.isGTE(day, minDate) || maxDate && !dateutils.isLTE(day, maxDate))
-			state = "disabled";
+			state = 'disabled';
 		else if (!dateutils.sameMonth(day, this.state.currentMonth))
-			state = "disabled";
+			state = 'disabled';
 		else if (dateutils.sameDate(day, XDate()))
-			state = "today";
+			state = 'today';
 
 		const DayComp = this.getDayComponent();
 		const date = day.getDate();
 		const dateAsObject = xdateToData(day);
-		const accessibilityLabel = `${state === "today" ? "today" : ""} ${day.toString("dddd MMMM d")} ${this.getMarkingLabel(day)}`;
+		const accessibilityLabel = `${state === 'today' ? 'today' : ''} ${day.toString('dddd MMMM d')} ${this.getMarkingLabel(day)}`;
 
 		if (!dateutils.sameMonth(day, this.state.currentMonth) && this.props.hideExtraDays) {
-			return <View style = {{ width: "8%" }} key = { id }>
+			return <View style = {{ width: '8%' }} key = { id }>
 				<DayComp
 					testID = { `${SELECT_DATE_SLOT}-${dateAsObject.dateString}` }
 					state = { state }
@@ -194,7 +194,7 @@ class Calendar extends Component {
 		}
 
 		return (
-			<View style = {{ width: "8%" }} key = { id }>
+			<View style = {{ width: '8%' }} key = { id }>
 				<DayComp
 					testID = { `${SELECT_DATE_SLOT}-${dateAsObject.dateString}` }
 					state = { state }
@@ -212,28 +212,28 @@ class Calendar extends Component {
 	}
 
 	getMarkingLabel(day) {
-		let label = "";
+		let label = '';
 		const marking = this.getDateMarking(day);
 
 		if (marking.accessibilityLabel)
 			return marking.accessibilityLabel;
 
 		if (marking.selected) {
-			label += "selected ";
+			label += 'selected ';
 			if (!marking.marked)
-				label += "You have no entries for this day ";
+				label += 'You have no entries for this day ';
 		}
 		if (marking.marked)
-			label += "You have entries for this day ";
+			label += 'You have entries for this day ';
 
 		if (marking.startingDay)
-			label += "period start ";
+			label += 'period start ';
 
 		if (marking.endingDay)
-			label += "period end ";
+			label += 'period end ';
 
 		if (marking.disabled || marking.disableTouchEvent)
-			label += "disabled ";
+			label += 'disabled ';
 
 		return label;
 	}
@@ -243,13 +243,13 @@ class Calendar extends Component {
 			return this.props.dayComponent;
 
 		switch (this.props.markingType) {
-			case "period":
+			case 'period':
 				return UnitDay;
-			case "multi-dot":
+			case 'multi-dot':
 				return MultiDotDay;
-			case "multi-period":
+			case 'multi-period':
 				return MultiPeriodDay;
-			case "custom":
+			case 'custom':
 				return SingleDay;
 			default:
 				return Day;
@@ -260,7 +260,7 @@ class Calendar extends Component {
 		if (!this.props.markedDates)
 			return false;
 
-		const dates = this.props.markedDates[day.toString("yyyy-MM-dd")] || EmptyArray;
+		const dates = this.props.markedDates[day.toString('yyyy-MM-dd')] || EmptyArray;
 		if (dates.length || dates)
 			return dates;
 		else
@@ -301,7 +301,7 @@ class Calendar extends Component {
 		let indicator;
 		const current = parseDate(this.props.current);
 		if (current) {
-			const lastMonthOfDay = current.clone().addMonths(1, true).setDate(1).addDays(-1).toString("yyyy-MM-dd");
+			const lastMonthOfDay = current.clone().addMonths(1, true).setDate(1).addDays(-1).toString('yyyy-MM-dd');
 			if (this.props.displayLoadingIndicator
 					&& !(this.props.markedDates && this.props.markedDates[lastMonthOfDay]))
 				indicator = true;

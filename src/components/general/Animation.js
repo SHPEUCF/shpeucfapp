@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { Animated, Easing, Dimensions } from "react-native";
+import React, { Component } from 'react';
+import { Animated, Easing, Dimensions } from 'react-native';
 
-const dimension = Dimensions.get("screen");
+const dimension = Dimensions.get('screen');
 
 /**
  * @classdesc Component to render different types of animations with the timing() function.
@@ -25,7 +25,7 @@ class Animation extends Component {
 		const { containerStyle, children, type, property } = this.props;
 
 		switch (type) {
-			case "View":
+			case 'View':
 				return (
 					<Animated.View style = { [containerStyle, { [property]: this.state.animated }] }>
 						{ children }
@@ -71,10 +71,10 @@ export class Animate {
 	static resolveEasing(easing, value) {
 		if (!easing) return;
 
-		let easingFunction = new Set(["poly", "elastic", "back", "bezier", "in", "out", "inOut"]);
+		let easingFunction = new Set(['poly', 'elastic', 'back', 'bezier', 'in', 'out', 'inOut']);
 		let ease;
 
-		if (typeof easing === "string")
+		if (typeof easing === 'string')
 			easing = [easing];
 
 		while (easing.length > 0) {
@@ -96,7 +96,7 @@ export class Animate {
 	 * @param {Function=}  callback   (Optional) Function to execute after animation is done.
 	 */
 
-	static animation({ toValue, relative: { ratio = 0.5, screen = "height" }, duration, delay, easing, easeValue }, callback) {
+	static animation({ toValue, relative: { ratio = 0.5, screen = 'height' }, duration, delay, easing, easeValue }, callback) {
 		this.Animation.timing({
 			toValue: toValue || dimension[screen] * ratio,
 			easing: this.resolveEasing(easing, easeValue),

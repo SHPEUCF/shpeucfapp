@@ -1,10 +1,10 @@
-import PropTypes from "prop-types";
-import React, { Component } from "react";
-import { View, Text, Dimensions } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { Actions } from "react-native-router-flux";
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { View, Text, Dimensions } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Actions } from 'react-native-router-flux';
 
-const dimension = Dimensions.get("window");
+const dimension = Dimensions.get('window');
 
 class NavBar extends Component {
 	constructor(props) {
@@ -38,9 +38,9 @@ class NavBar extends Component {
 				<View style = { [tabBar, style, rowFlex] }>
 					<View style = { backButtonStyle }>
 						<Ionicons
-							name = "ios-arrow-dropleft"
+							name = 'ios-arrow-dropleft'
 							size = { dimension.height * 0.03 }
-							color = { "#FECB00" }
+							color = { '#FECB00' }
 							onPress = { onBack }
 						/>
 					</View>
@@ -70,28 +70,28 @@ class NavBar extends Component {
 
 const styles = {
 	tabBar: {
-		justifyContent: "flex-start",
-		backgroundColor: "black",
-		alignItems: "center",
+		justifyContent: 'flex-start',
+		backgroundColor: 'black',
+		alignItems: 'center',
 		borderBottomWidth: 1,
-		borderBottomColor: "black",
+		borderBottomColor: 'black',
 		height: dimension.height * 0.1
 	},
 	tabBarText: {
-		color: "white",
+		color: 'white',
 		fontSize: 20,
-		fontWeight: "bold",
-		paddingLeft: "5%"
+		fontWeight: 'bold',
+		paddingLeft: '5%'
 	},
 	backButtonStyle: {
 		height: dimension.height * 0.04,
 		width: dimension.height * 0.04,
-		justifyContent: "center",
-		alignItems: "center",
-		marginLeft: "5%"
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginLeft: '5%'
 	},
 	rowFlex: {
-		flexDirection: "row"
+		flexDirection: 'row'
 	}
 };
 
@@ -100,7 +100,7 @@ NavBar.defaultProps = {
 	onBack: () => Actions.pop(),
 	childStyle: {
 		flex: 1,
-		padding: "3.5%"
+		padding: '3.5%'
 	}
 };
 

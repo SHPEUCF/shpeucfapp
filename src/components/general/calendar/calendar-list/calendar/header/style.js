@@ -1,16 +1,16 @@
-import { StyleSheet } from "react-native";
-import * as defaultStyle from "../../style";
+import { StyleSheet } from 'react-native';
+import * as defaultStyle from '../../style';
 
-const STYLESHEET_ID = "stylesheet.calendar.header";
+const STYLESHEET_ID = 'stylesheet.calendar.header';
 
 export default function(theme = {}) {
 	const appStyle = { ...defaultStyle, ...theme };
 	return StyleSheet.create({
 		header: {
-			flexDirection: "row",
-			justifyContent: "space-between",
+			flexDirection: 'row',
+			justifyContent: 'space-between',
 			marginTop: 6,
-			alignItems: "center"
+			alignItems: 'center'
 		},
 		monthText: {
 			fontSize: appStyle.textMonthFontSize,
@@ -31,14 +31,14 @@ export default function(theme = {}) {
 		},
 		week: {
 			marginTop: 7,
-			flexDirection: "row",
-			justifyContent: "space-evenly"
+			flexDirection: 'row',
+			justifyContent: 'space-evenly'
 		},
 		dayHeader: {
-			width: "8%",
+			width: '8%',
 			marginTop: 2,
 			marginBottom: 7,
-			textAlign: "center",
+			textAlign: 'center',
 			fontSize: appStyle.textDayHeaderFontSize,
 			fontFamily: appStyle.textDayHeaderFontFamily,
 			fontWeight: appStyle.textDayHeaderFontWeight,

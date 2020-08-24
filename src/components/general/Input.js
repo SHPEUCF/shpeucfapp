@@ -1,6 +1,6 @@
-import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
-import { TextInput } from "react-native";
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { TextInput } from 'react-native';
 
 class Input extends PureComponent {
 	constructor(props) {
@@ -56,11 +56,11 @@ class Input extends PureComponent {
 
 		return (
 			<TextInput
-				value = { "" + value }
+				value = { '' + value }
 				onChangeText = { onChangeText }
 				style = { [inputStyle, style] }
 				autoCorrect = { autoCorrect }
-				placeholderTextColor = "#dadfe1"
+				placeholderTextColor = '#dadfe1'
 				autoCapitalize = { autoCapitalize }
 				blurOnSubmit = { blurOnSubmit }
 				placeholder = { placeholder }
@@ -83,21 +83,21 @@ class Input extends PureComponent {
 const styles = {
 	inputStyle: {
 		flex: 1,
-		color: "#000",
+		color: '#000',
 		fontSize: 16,
 		marginTop: 8,
 		marginBottom: 8,
 		padding: 15,
-		backgroundColor: "white",
+		backgroundColor: 'white',
 		borderRadius: 25
 	}
 };
 
 Input.defaultProps = {
 	maxLength: 45,
-	autoCapitalize: "sentences",
+	autoCapitalize: 'sentences',
 	autoCorrect: false,
-	placeholder: "Enter text here"
+	placeholder: 'Enter text here'
 };
 
 export { Input };

@@ -1,18 +1,18 @@
-import _ from "lodash";
-import React, { Component } from "react";
-import { Animated, TouchableOpacity, View } from "react-native";
-import PropTypes from "prop-types";
-import XDate from "xdate";
+import _ from 'lodash';
+import React, { Component } from 'react';
+import { Animated, TouchableOpacity, View } from 'react-native';
+import PropTypes from 'prop-types';
+import XDate from 'xdate';
 
-import dateutils from "../dateutils";
-import { xdateToData } from "../interface";
-import styleConstructor from "./style";
-import CalendarContext from "./calendarContext";
+import dateutils from '../dateutils';
+import { xdateToData } from '../interface';
+import styleConstructor from './style';
+import CalendarContext from './calendarContext';
 
-const commons = require("./commons");
+const commons = require('./commons');
 const UPDATE_SOURCES = commons.UPDATE_SOURCES;
-const iconDown = require("../img/down.png");
-const iconUp = require("../img/up.png");
+const iconDown = require('../img/down.png');
+const iconUp = require('../img/up.png');
 const TOP_POSITION = 65;
 
 /**
@@ -20,7 +20,7 @@ const TOP_POSITION = 65;
  * @example: https://github.com/wix/react-native-calendars/blob/master/example/src/screens/expandableCalendar.js
  */
 class CalendarProvider extends Component {
-	static displayName = "CalendarProvider";
+	static displayName = 'CalendarProvider';
 
 	static propTypes = {
 		/** Initial date in 'yyyy-MM-dd' format. Default = Date() */
@@ -44,7 +44,7 @@ class CalendarProvider extends Component {
 		this.style = styleConstructor(props.theme);
 
 		this.state = {
-			date: this.props.date || XDate().toString("yyyy-MM-dd"),
+			date: this.props.date || XDate().toString('yyyy-MM-dd'),
 			updateSource: UPDATE_SOURCES.CALENDAR_INIT,
 			buttonY: new Animated.Value(-props.todayBottomMargin || -TOP_POSITION),
 			buttonIcon: this.getButtonIcon(props.date),
@@ -74,10 +74,10 @@ class CalendarProvider extends Component {
 			this.animateTodayButton(date);
 		});
 
-		_.invoke(this.props, "onDateChanged", date, updateSource);
+		_.invoke(this.props, 'onDateChanged', date, updateSource);
 
 		if (!sameMonth)
-			_.invoke(this.props, "onMonthChange", xdateToData(XDate(date)), updateSource);
+			_.invoke(this.props, 'onMonthChange', xdateToData(XDate(date)), updateSource);
 	}
 
 	setDisabled = (disabled) => {
@@ -116,7 +116,7 @@ class CalendarProvider extends Component {
 
 	animateTodayButton(date) {
 		if (this.props.showTodayButton) {
-			const today = XDate().toString("yyyy-MM-dd");
+			const today = XDate().toString('yyyy-MM-dd');
 			const isToday = today === date;
 
 			Animated.spring(this.state.buttonY, {
@@ -139,7 +139,7 @@ class CalendarProvider extends Component {
 	}
 
 	onTodayPress = () => {
-		const today = XDate().toString("yyyy-MM-dd");
+		const today = XDate().toString('yyyy-MM-dd');
 		this.setDate(today, UPDATE_SOURCES.TODAY_PRESS);
 	}
 

@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import _ from "lodash";
-import { ScrollView, SafeAreaView, Modal, View } from "react-native";
-import { Alert, Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicker, FilterList } from "../";
-import { MultiElement } from "./MultiElement";
-import { copyStateAndSetValuesToNull } from "../../utils/general";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import _ from 'lodash';
+import { ScrollView, SafeAreaView, Modal, View } from 'react-native';
+import { Alert, Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicker, FilterList } from '../';
+import { MultiElement } from './MultiElement';
+import { copyStateAndSetValuesToNull } from '../../utils/general';
 
 /**
  * Types
@@ -238,23 +238,23 @@ class Form extends Component {
 		const { placeholder, camelCaseName, type, options } = element;
 
 		switch (type) {
-			case "DatePicker":
+			case 'DatePicker':
 				return <DatePicker
 					key = { camelCaseName }
 					placeholder = { placeholder }
-					value = { this.state[camelCaseName] || "" }
+					value = { this.state[camelCaseName] || '' }
 					onSelect = { value => this.changeState(element, value) }
 				/>;
-			case "FilterList":
+			case 'FilterList':
 				if (!options || !options.data)
-					console.error("You must pass in data through the options property to use FilterList");
+					console.error('You must pass in data through the options property to use FilterList');
 
 				return <FilterList
 					key = { camelCaseName }
 					type = { options.type }
 					placeholder = { placeholder }
 					data = { options.data }
-					value = { this.state[camelCaseName] || "" }
+					value = { this.state[camelCaseName] || '' }
 					regexFunc = { options.regexFunc }
 					selectBy = { options.selectBy }
 					itemJSX = { options.itemJSX }
@@ -262,43 +262,43 @@ class Form extends Component {
 					search = { options.search }
 					onSelect = { value => this.changeState(element, value) }
 				/>;
-			case "Input":
+			case 'Input':
 				return <Input
 					key = { camelCaseName }
 					placeholder = { placeholder }
 					multiline = { false }
 					autoCapitalize = { options && options.autoCapitalize }
-					value = { this.state[camelCaseName] === 0 ? 0 : this.state[camelCaseName] || "" } // Display 0 correctly
+					value = { this.state[camelCaseName] === 0 ? 0 : this.state[camelCaseName] || '' } // Display 0 correctly
 					secureTextEntry = { options && options.secureTextEntry }
 					keyboardType = { options && options.keyboardType }
 					onChangeText = { value => {
-						if (options && options.keyboardType === "numeric")
+						if (options && options.keyboardType === 'numeric')
 							this.changeState(element, parseInt(value));
-						else if (value === "")
+						else if (value === '')
 							this.changeState(element, null);
 						else
 							this.changeState(element, value);
 					} }
 				/>;
-			case "PickerInput":
+			case 'PickerInput':
 				if (!options || !options.data)
-					console.error("You must pass in data through the options property to use PickerInput");
+					console.error('You must pass in data through the options property to use PickerInput');
 
 				return <PickerInput
 					key = { camelCaseName }
 					placeholder = { placeholder }
-					value = { this.state[camelCaseName] || "" }
+					value = { this.state[camelCaseName] || '' }
 					data = { options.data }
 					onSelect = { value => this.changeState(element, value) }
 				/>;
-			case "TimePicker":
+			case 'TimePicker':
 				return 	<TimePicker
 					key = { camelCaseName }
 					placeholder = { placeholder }
-					value = { this.state[camelCaseName] || "" }
+					value = { this.state[camelCaseName] || '' }
 					onSelect = { value => this.changeState(element, value) }
 				/>;
-			case "MultiElement":
+			case 'MultiElement':
 				return <MultiElement
 					key = { camelCaseName }
 					elements = { options.elements }
@@ -315,8 +315,8 @@ class Form extends Component {
 					} }
 				/>;
 			default:
-				console.error("Please Pick a Correct type",
-					"\nPossible types are [DatePicker, Input, PickerInput, TimePicker]");
+				console.error('Please Pick a Correct type',
+					'\nPossible types are [DatePicker, Input, PickerInput, TimePicker]');
 
 				return null;
 		}
@@ -328,11 +328,11 @@ class Form extends Component {
 		return (
 			<ButtonLayout>
 				<Button
-					title = { submitButtonName || "Confirm" }
+					title = { submitButtonName || 'Confirm' }
 					onPress = { () => this.submit() }
 				/>
 				<Button
-					title = "Cancel"
+					title = 'Cancel'
 					onPress = { () => {
 						this.resetState();
 						changeVisibility(false);
@@ -427,7 +427,7 @@ class Form extends Component {
 				onRequestClose = { () => changeVisibility(false) }
 			>
 				<SafeAreaView style = { container }>
-					<NavBar title = { title || "Pass in a title please" } />
+					<NavBar title = { title || 'Pass in a title please' } />
 					<ScrollView style = { elementsStyle }>{ elementsHTML }</ScrollView>
 					{ this.renderButtons() }
 				</SafeAreaView>
@@ -439,10 +439,10 @@ class Form extends Component {
 const styles = {
 	container: {
 		flex: 1,
-		width: "100%",
-		height: "100%",
-		paddingHorizontal: "3%",
-		backgroundColor: "black"
+		width: '100%',
+		height: '100%',
+		paddingHorizontal: '3%',
+		backgroundColor: 'black'
 	},
 	elementsStyle: {
 		flex: 0.8

@@ -1,20 +1,20 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { View } from "react-native";
-import { Input, PickerInput } from "./";
-import { prepend0 } from "../../utils/events";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { View } from 'react-native';
+import { Input, PickerInput } from './';
+import { prepend0 } from '../../utils/events';
 
 class DatePicker extends Component {
 	constructor(props) {
 		super(props);
 
 		let date = [];
-		if (this.props.value) date = this.props.value.split("-");
+		if (this.props.value) date = this.props.value.split('-');
 
 		this.state = {
-			month: date.length === 3 ? date[1] : "",
-			day: date.length === 3 ? date[2] : "",
-			year: date.length === 3 ? date[0] : "",
+			month: date.length === 3 ? date[1] : '',
+			day: date.length === 3 ? date[2] : '',
+			year: date.length === 3 ? date[0] : '',
 			monthArray: Array.from({ length: 12 }, (v, k) => k + 1),
 			yearArray: Array.from({ length: 20 }, (v, k) => new Date().getFullYear() + k),
 			focused: date.length === 3
@@ -67,13 +67,13 @@ class DatePicker extends Component {
 		};
 
 		switch (type) {
-			case "month":
+			case 'month':
 				this.setState({ month: prepend0(item) }, callback);
 				break;
-			case "day":
+			case 'day':
 				this.setState({ day: prepend0(item) }, callback);
 				break;
-			case "year":
+			case 'year':
 				this.setState({ year: item }, callback);
 				break;
 		}
@@ -88,12 +88,12 @@ class DatePicker extends Component {
 			style,
 			inputBoxStyle,
 			iconSize: 32,
-			iconColor: "black",
+			iconColor: 'black',
 			dropDownArrowStyle
 		};
 
 		if (!focused) {
-			return <Input placeholder = { placeholder } value = "" onFocus = { () => this.setState({ focused: true }) } />;
+			return <Input placeholder = { placeholder } value = '' onFocus = { () => this.setState({ focused: true }) } />;
 		}
 		else {
 			return (
@@ -101,30 +101,30 @@ class DatePicker extends Component {
 					<View style = { fieldContainer }>
 						<PickerInput
 							data = { monthArray }
-							title = { "Enter a Month" }
+							title = { 'Enter a Month' }
 							value = { month }
-							onSelect = { (text) => this.changeStateOfType(text, "month") }
-							placeholder = { "MM" }
+							onSelect = { (text) => this.changeStateOfType(text, 'month') }
+							placeholder = { 'MM' }
 							{ ...defaultPickerStyle }
 						/>
 					</View>
 					<View style = { fieldContainer }>
 						<PickerInput
 							data = { this.getDayArray() }
-							title = { "Enter a Day" }
+							title = { 'Enter a Day' }
 							value = { day }
-							onSelect = { (text) => this.changeStateOfType(text, "day") }
-							placeholder = { "DD" }
+							onSelect = { (text) => this.changeStateOfType(text, 'day') }
+							placeholder = { 'DD' }
 							{ ...defaultPickerStyle }
 						/>
 					</View>
 					<View style = { fieldContainer }>
 						<PickerInput
 							data = { yearArray }
-							title = { "Enter a Year" }
+							title = { 'Enter a Year' }
 							value = { year }
-							onSelect = { (text) => this.changeStateOfType(text, "year") }
-							placeholder = { "YYYY" }
+							onSelect = { (text) => this.changeStateOfType(text, 'year') }
+							placeholder = { 'YYYY' }
 							{ ...defaultPickerStyle }
 						/>
 					</View>
@@ -134,13 +134,13 @@ class DatePicker extends Component {
 	};
 }
 
-DatePicker.defaultProps = { placeholder: "Choose a Date" };
+DatePicker.defaultProps = { placeholder: 'Choose a Date' };
 
 const styles = {
 	fieldContainer: {
 		flex: 1,
-		flexDirection: "row",
-		alignItems: "center"
+		flexDirection: 'row',
+		alignItems: 'center'
 	},
 	style: {
 		flex: 1,
@@ -158,11 +158,11 @@ const styles = {
 	},
 	datePickerStyle: {
 		flex: 1,
-		color: "#000",
+		color: '#000',
 		fontSize: 16,
-		backgroundColor: "white",
+		backgroundColor: 'white',
 		borderRadius: 25,
-		flexDirection: "row",
+		flexDirection: 'row',
 		marginTop: 8,
 		marginBottom: 8
 	}

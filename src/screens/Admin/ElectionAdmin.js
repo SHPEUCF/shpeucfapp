@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { Actions } from "react-native-router-flux";
-import { connect } from "react-redux";
-import { NavBar, Button, ButtonLayout } from "../../components";
-import _ from "lodash";
-import { FlatList,	Text,	SafeAreaView,	Dimensions, View } from "react-native";
+import React, { Component } from 'react';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { NavBar, Button, ButtonLayout } from '../../components';
+import _ from 'lodash';
+import { FlatList,	Text,	SafeAreaView,	Dimensions, View } from 'react-native';
 import {
 	openElection,
 	closeElection,
@@ -11,11 +11,11 @@ import {
 	getPositions,
 	closeApplications,
 	openApplications
-} from "../../ducks";
+} from '../../ducks';
 
-const dimension = Dimensions.get("window");
-const iterateesCan = ["votes"];
-const orderCan = ["desc"];
+const dimension = Dimensions.get('window');
+const iterateesCan = ['votes'];
+const orderCan = ['desc'];
 let winners = [];
 
 class ElectionAdmin extends Component {
@@ -55,7 +55,7 @@ class ElectionAdmin extends Component {
 
 		return (
 			<SafeAreaView style = { page }>
-				<NavBar title = "Election" back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Election' back onBack = { () => Actions.pop() } />
 				<View style = { content }>
 					<Text style = { textColor }>Total Votes: { this.props.numOfVotes }</Text>
 				</View>
@@ -72,14 +72,14 @@ class ElectionAdmin extends Component {
 					<View style = { buttonContainerStyling }>
 						<Button
 							onPress = { () => Actions.ElectionPositions() }
-							title = { "Manage Positions" }
+							title = { 'Manage Positions' }
 						>
 						</Button>
 					</View>
 					<View style = { buttonContainerStyling }>
 						<Button
 							onPress = { () => Actions.ElectionCandidates() }
-							title = { "Manage Candidates" }
+							title = { 'Manage Candidates' }
 						>
 						</Button>
 					</View>
@@ -106,7 +106,7 @@ class ElectionAdmin extends Component {
 			return (
 				<Button
 					onPress = { () => this.props.closeElection() }
-					title = { "Close Election" }
+					title = { 'Close Election' }
 				/>
 			);
 		}
@@ -114,7 +114,7 @@ class ElectionAdmin extends Component {
 			return (
 				<Button
 					onPress = { () => this.props.openElection() }
-					title = { "Open Election" }
+					title = { 'Open Election' }
 				/>
 			);
 		}
@@ -125,7 +125,7 @@ class ElectionAdmin extends Component {
 			return (
 				<Button
 					onPress = { () => this.props.closeApplications() }
-					title = { "Close Applications" }
+					title = { 'Close Applications' }
 				/>
 			);
 		}
@@ -133,7 +133,7 @@ class ElectionAdmin extends Component {
 			return (
 				<Button
 					onPress = { () => this.props.openApplications() }
-					title = { "Open Applications" }
+					title = { 'Open Applications' }
 				/>
 			);
 		}
@@ -167,7 +167,7 @@ class ElectionAdmin extends Component {
 			<View>
 				<View style = { contentContainerStyle }>
 					<View style = { containerStyle }>
-						<Text style = { [{ fontWeight: "bold" }, textColor] }>{ item[1] }: { winners[index].String }</Text>
+						<Text style = { [{ fontWeight: 'bold' }, textColor] }>{ item[1] }: { winners[index].String }</Text>
 					</View>
 				</View>
 			</View>
@@ -178,16 +178,16 @@ class ElectionAdmin extends Component {
 const styles = {
 	tabBar: {
 		height: dimension.height * 0.1,
-		backgroundColor: "#fff",
+		backgroundColor: '#fff',
 		borderWidth: 1,
-		borderStyle: "solid",
-		borderColor: "#0005"
+		borderStyle: 'solid',
+		borderColor: '#0005'
 	},
 	tabBarText: {
-		color: "#000",
+		color: '#000',
 		fontSize: 20,
 		margin: 20,
-		alignSelf: "center"
+		alignSelf: 'center'
 	},
 	content: {
 		flex: 1,
@@ -195,17 +195,17 @@ const styles = {
 	},
 	containerStyle: {
 		flex: 25,
-		justifyContent: "center",
-		alignItems: "flex-start",
+		justifyContent: 'center',
+		alignItems: 'flex-start',
 
 		paddingVertical: 10,
 		paddingHorizontal: 15
 	},
 	containerTextStyle: {
 		flex: 1,
-		justifyContent: "center",
-		alignItems: "flex-start",
-		backgroundColor: "#ffd700",
+		justifyContent: 'center',
+		alignItems: 'flex-start',
+		backgroundColor: '#ffd700',
 
 		paddingVertical: 10,
 		paddingHorizontal: 15
@@ -214,12 +214,12 @@ const styles = {
 		margin: 1,
 		height: dimension.height * 0.09,
 		flex: 1,
-		flexDirection: "row",
-		justifyContent: "center"
+		flexDirection: 'row',
+		justifyContent: 'center'
 
 	},
 	textColor: {
-		color: "#e0e6ed"
+		color: '#e0e6ed'
 	},
 	buttonContainerStyle: {
 		flex: 5,
@@ -227,7 +227,7 @@ const styles = {
 	},
 	page: {
 		flex: 1,
-		backgroundColor: "black"
+		backgroundColor: 'black'
 	}
 };
 
