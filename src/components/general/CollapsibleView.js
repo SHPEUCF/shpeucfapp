@@ -33,7 +33,7 @@ class CollapsibleView extends Component {
 		);
 	}
 
-	headerPicture(img) {
+	headerPicture() {
 		const { pictureStyle } = styles;
 		const imgSource = this.props.headerImage;
 		const showImg = this.props.showHRImage === false ? false : true;
@@ -45,7 +45,7 @@ class CollapsibleView extends Component {
 				size = "large"
 				overlayContainerStyle = { pictureStyle }
 				source = {{ uri: imgSource }}
-				icon = {{ name: "photo", type: "font-awesome", iconStyle: { opacity: imgSource ? 1 : 0 } }}
+				icon = {{ name: "photo", type: "font-awesome", iconStyle: { opacity: imgSource == "" ? 1 : 0 } }}
 
 			/>
 		);
@@ -181,7 +181,8 @@ const styles = {
 		paddingBottom: 20
 	},
 	bodyTextStyle: {
-		fontSize: 16
+		fontSize: 16,
+		textAlign: "justify"
 	}
 };
 

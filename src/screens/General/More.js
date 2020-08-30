@@ -34,6 +34,12 @@ const menuItems = [
 		privilege: "user"
 	},
 	{
+		title: "Conferences",
+		icon: "calendar-outline",
+		screen: "Conferences",
+		privilege: "user"
+	},
+	{
 		title: "About",
 		icon: "info",
 		screen: "About",
@@ -44,12 +50,6 @@ const menuItems = [
 		icon: "settings",
 		screen: "AdminHub",
 		privilege: "eboard"
-	},
-	{
-		title: "Conferences",
-		icon: "info",
-		screen: "Conferences",
-		privilege: "user"
 	}
 ];
 
