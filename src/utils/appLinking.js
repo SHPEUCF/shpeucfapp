@@ -14,12 +14,11 @@ import {
 	internationalStudents,
 	linkedinDrop
 } from "react-native-dotenv";
+
 /**
  * @description Object that holds the slack team id and several channel ids.
  *              The information in here is the most current as of May 28th, 2020.
  *              To find the team id or channel id login in slack on a computer.
- *
- *  slackInfo
  */
 
 export const slackInfo = {
@@ -46,7 +45,7 @@ export const slackInfo = {
  *
  * @example
  * // How to call the function
- * formatUrl[name_of_the_app](inquiry, intent);
+ * formatUrl[nameOfTheApp](inquiry, intent);
  */
 
 const formatUrl = {
