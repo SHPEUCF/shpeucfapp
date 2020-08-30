@@ -23,17 +23,17 @@ import {
  */
 
 export const slackInfo = {
-	general: general,
-	announcements: announcements,
-	fundraisingCommittee: fundraisingCommittee,
-	motorshpe: motorshpe,
-	projects20_21: projects20_21,
-	shpejr: shpejr,
-	mentorshpe20_21: mentorshpe20_21,
-	computereng: computereng,
-	projectleads: projectleads,
-	internationalStudents: internationalStudents,
-	linkedinDrop: linkedinDrop
+	general,
+	announcements,
+	fundraisingCommittee,
+	motorshpe,
+	projects20_21,
+	shpejr,
+	mentorshpe20_21,
+	computereng,
+	projectleads,
+	internationalStudents,
+	linkedinDrop
 };
 
 /**
