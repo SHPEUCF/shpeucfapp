@@ -12,14 +12,13 @@ import { rankMembersAndReturnsCurrentUser } from "../../utils/render";
 import { goToViewEvent } from "../../utils/router";
 import { months } from "../../data/DateItems";
 import { filterPastEvents } from "../../utils/events";
-import { openAppOrWebsite, slackInfo } from "../../utils/appLinking";
+import { openAppOrWebsite } from "../../utils/appLinking";
 import {
 	Text,
 	View,
 	ScrollView,
 	Dimensions,
 	TouchableOpacity,
-	Linking,
 	Modal,
 	SafeAreaView,
 	StatusBar
@@ -350,24 +349,25 @@ class Dashboard extends Component {
 		} = styles;
 
 		let socialMediaLinks = [
-			[["slack", "channel", "announcements"], "slack"],
-			[["facebook", "groups", "shpeucf"], "facebook"],
-			[["web", "open", "https://www.shpeucf.com/"], "globe"],
-			[["instagram", "open", "shpeucf"], "instagram"]
+			{ appLink: ["slack", "announcements", { intent: "channel" }], appImage: "slack" },
+			{ appLink: ["facebook", "shpeucf", { intent: "groups" }], appImage: "facebook" },
+			{ appLink: ["web", "https://www.shpeucf.com/", {}], appImage: "globe" },
+			{ appLink: ["instagram", "shpeucf", {}], appImage: "instagram" },
+			{ appLink: ["linkedin", "shpeucf", { intent: "company" }], appImage: "linkedin" }
 		];
 
 		return (
 			<View style = { socialMediaContainer }>
 				<View style = { buttonRowContainer }>
-					{ socialMediaLinks.map((links, index) =>
+					{ socialMediaLinks.map(({ appLink, appImage }, index) =>
 						<TouchableOpacity
 							key = { index }
 							style = { socialMediaButton }
-							onPress = { () => openAppOrWebsite(...links[0]) }
+							onPress = { () => openAppOrWebsite(...appLink) }
 						>
 							<FontAwesomeIcon
 								style = { black }
-								name = { links[1] }
+								name = { appImage }
 								size = { dimension.height * 0.04 }
 							/>
 						</TouchableOpacity>

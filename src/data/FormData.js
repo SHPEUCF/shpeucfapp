@@ -175,7 +175,6 @@ export const ProfileForm = (props) => {
 	];
 
 	const activeUser = useSelector(state => state.user.activeUser);
-
 	let elements = (activeUser.privilege.eboard) ? [...memberFields, ...privilegedFields] : memberFields;
 
 	return (
@@ -188,7 +187,7 @@ export const ProfileForm = (props) => {
 	);
 };
 
-const registrationFormData = [
+export const registrationFormData = [
 	{
 		placeholder: "First Name",
 		camelCaseName: "firstName",
@@ -254,7 +253,7 @@ const registrationFormData = [
 	}
 ];
 
-const upsertCommittee = [
+export const upsertCommittee = [
 	{
 		placeholder: "Committee Name",
 		camelCaseName: "title",
@@ -282,18 +281,13 @@ const upsertCommittee = [
 	}
 ];
 
-export {
-	registrationFormData,
-	upsertCommittee
-};
-
 // functions
 
 /**
  * @param {Object} obj and object with the props that match the camelcaseNames of the data
  * @returns {Array} an Array of initialValues made from the user props
  */
-const convertObjectToInitialValues = (obj) => {
+export const convertObjectToInitialValues = (obj) => {
 	let initialValues = [];
 
 	Object.entries(obj).forEach(([key, value]) => {
@@ -301,8 +295,4 @@ const convertObjectToInitialValues = (obj) => {
 	});
 
 	return initialValues;
-};
-
-export {
-	convertObjectToInitialValues
 };

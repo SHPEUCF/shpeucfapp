@@ -6,7 +6,7 @@ import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-na
 import { Avatar } from "react-native-elements";
 import Flag from "react-native-flags";
 import { openGallery, verifiedCheckMark } from "../../utils/render";
-import { openAppOrWebsite, slackInfo } from "../../utils/appLinking";
+import { openAppOrWebsite } from "../../utils/appLinking";
 import { loadUser, logoutUser } from "../../ducks";
 import { ProfileForm } from "../../data/FormData";
 
@@ -149,16 +149,20 @@ class Profile extends Component {
 				<View style = {{ flex: 0.03 }} />
 				<View style = { socialMediaRow }>
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
-						<TouchableOpacity onPress = { () => {
-							openAppOrWebsite("linkedin", "profile", linkedin,
-								"No profile has been added. To add one, tap on Edit Profile.");
-						} }>
+						<TouchableOpacity
+							onPress = { () => {
+								openAppOrWebsite("linkedin", linkedin,
+									{ warning: "No LinkedIn profile has been added. Edit your profile to add one." });
+							} }
+						>
 							<Ionicons name = "logo-linkedin" size = { height * 0.045 } color = "white" />
 						</TouchableOpacity>
 					</View>
 					<View style = {{ flex: 0.01 }} />
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
-						<TouchableOpacity onPress = { () => { openAppOrWebsite("email", "open", email) } }>
+
+						<TouchableOpacity onPress = { () => { openAppOrWebsite("email", email, {}) } }>
+
 							<Ionicons name = "ios-mail" size = { height * 0.045 } color = "white" />
 						</TouchableOpacity>
 					</View>

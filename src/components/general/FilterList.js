@@ -58,7 +58,7 @@ class FilterList extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if (prevProps.value !== this.props.value) this.setState(this.processInitialValues());
+		if (prevProps.value !== this.props.value) this.setState({ selected: this.processInitialValues() });
 	}
 
 	processInitialValues() {
@@ -84,9 +84,9 @@ class FilterList extends Component {
 					selected[selectBy(item)] = item;
 				});
 			}
-
-			return { selected };
 		}
+
+		return selected;
 	}
 
 	static propTypes = {
