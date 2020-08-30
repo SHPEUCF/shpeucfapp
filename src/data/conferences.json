@@ -1,0 +1,49 @@
+[
+    {
+       "title":"Upcoming",
+       "data":[
+          {
+             "header":"SHPE Nationals 2020",
+             "start":"2020-10-30",
+             "end":"2020-11-02",
+             "location":"Virtual Event",
+             "summary":"PLEASE NOTE: The 2020 SHPE National Convention will be a virtual event. The SHPE National Convention serves as the country’s largest gathering of Hispanic STEM students and professionals, offering a unique opportunity to engage, support, educate and advance the careers of Hispanic students and professionals. We encourage all who are invested in Hispanics in STEM -students, professionals, academics, hiring managers, and recruiters – to join us for an inspirational and transformational five days on October 26 – 31st.",
+             "picture":"https://www.shpe.org/uploads/images/events/NC-2020-Logos/NEWER-LOGOS-W-EDTS/_eventLogo/NC2020_4C.png"
+          },
+          {
+             "header":"SHPE Nationals 2021",
+             "start":"2021-11-01",
+             "end":"2021-11-04",
+             "location":"Orlando, FL",
+             "summary":"",
+             "picture":""
+          }
+       ]
+    },
+    {
+       "title":"Happening Now",
+       "data":[
+          {
+             "header":"NILA 2021",
+             "start":"2020-07-15",
+             "end":"2020-08-04",
+             "location":"Houston, TX",
+             "summary":"",
+             "picture":""
+          }
+       ]
+    },
+    {
+       "title":"Past Conferences",
+       "data":[
+          {
+             "header":"Great Minds in STEM",
+             "start":"202-02-01",
+             "end":"2020-02-04",
+             "location":"Kissimmee, FL",
+             "summary":"",
+             "picture":""
+          }
+       ]
+    }
+ ]
