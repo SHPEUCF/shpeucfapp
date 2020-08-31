@@ -26,10 +26,7 @@ class Profile extends Component {
 	render() {
 		return this.renderContent();
 	}
-	/*
-	 * using convertObjectToInitialValues() to pass the value back to values break the app due to parameter
-	 * miss match. Form expected an object but receives an array.
-	 */
+
 	renderContent() {
 		const { email, major, points } = this.props.activeUser;
 		const { bioContainer, fieldContainerStyle, itemLabelText, itemValueText, textColor } = styles;
@@ -160,9 +157,7 @@ class Profile extends Component {
 					</View>
 					<View style = {{ flex: 0.01 }} />
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
-
 						<TouchableOpacity onPress = { () => { openAppOrWebsite("email", email, {}) } }>
-
 							<Ionicons name = "ios-mail" size = { height * 0.045 } color = "white" />
 						</TouchableOpacity>
 					</View>
