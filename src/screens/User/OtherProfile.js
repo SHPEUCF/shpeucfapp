@@ -8,6 +8,7 @@ import Flag from "react-native-flags";
 import { verifiedCheckMark } from "../../utils/render";
 import { openAppOrWebsite } from "../../utils/appLinking";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
+
 const dimension = Dimensions.get("window");
 
 class OtherProfile extends Component {
@@ -18,10 +19,9 @@ class OtherProfile extends Component {
 	}
 
 	renderContent() {
-
 		const { email, major, points } = this.props;
 		const { bioContainer, fieldContainerStyle, itemLabelText, itemValueText, textColor } = styles;
-    
+
 		return (
 			<SafeAreaView style = {{ flex: 1, backgroundColor: "#0c0b0b" }}>
 				<NavBar back onBack = { () => Actions.pop() } />
@@ -35,7 +35,7 @@ class OtherProfile extends Component {
 								<View style = {{ flex: 1, justifyContent: "center" }}>
 									<Text style = { [itemLabelText, textColor] }>Email:</Text>
 								</View>
-								{ this.props.members.major !== "" && <View style = {{ flex: 1, justifyContent: "center" }}>
+								{ this.props.major !== "" && <View style = {{ flex: 1, justifyContent: "center" }}>
 									<Text style = { [itemLabelText, textColor] }>Major:</Text>
 								</View> }
 								<View style = {{ flex: 1, justifyContent: "center" }}>
@@ -46,7 +46,7 @@ class OtherProfile extends Component {
 								<View style = {{ flex: 1, justifyContent: "center" }}>
 									<Text style = { [itemValueText, textColor] }>{ email }</Text>
 								</View>
-								{ this.props.members.major !== "" && <View style = {{ flex: 1, justifyContent: "center" }}>
+								{ this.props.major !== "" && <View style = {{ flex: 1, justifyContent: "center" }}>
 									<Text style = { [itemValueText, textColor] }>{ major }</Text>
 								</View> }
 								<View style = {{ flex: 1, justifyContent: "center" }}>
@@ -77,9 +77,8 @@ class OtherProfile extends Component {
 			firstName,
 			lastName,
 			picture,
-			paidMember,
-			color
-		} = this.props.members;
+			paidMember
+		} = this.props;
 
 		return (
 			<View style = { headerInfoContainer }>
@@ -88,7 +87,7 @@ class OtherProfile extends Component {
 					&& <Avatar
 						size = { dimension.height * 0.32 }
 						rounded
-						titleStyle = {{ backgroundColor: color, height: "100%", width: "100%", justifyContent: "center", paddingTop: "20%" }}
+						titleStyle = {{ backgroundColor: this.props.color, height: "100%", width: "100%", justifyContent: "center", paddingTop: "20%" }}
 						title = { firstName[0].concat(lastName[0]) }
 					/> }
 					{ picture !== ""
@@ -121,7 +120,7 @@ class OtherProfile extends Component {
 		if (this.props.flag !== "" && this.props.flag) {
 			flag = <Flag
 				type = "flat"
-				code = { this.props.members.flag }
+				code = { this.props.flag }
 				size = { 32 }
 			/>;
 		}
@@ -136,7 +135,6 @@ class OtherProfile extends Component {
 	}
 
 	renderSocialMedia() {
-
 		const { LogoContainer, socialmediarow } = styles;
 		const { firstName, email, linkedin, color } = this.props;
 
@@ -146,7 +144,6 @@ class OtherProfile extends Component {
 				<View style = { socialmediarow }>
 					<View style = { [LogoContainer, { backgroundColor: color, flex: 1 }] }>
 						<TouchableOpacity
-
 							onPress = { () => {
 								openAppOrWebsite("linkedin", linkedin,
 									{ warning: `${firstName} has not added their LinkedIn profile yet.` });

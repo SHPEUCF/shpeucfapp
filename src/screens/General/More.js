@@ -34,12 +34,6 @@ const menuItems = [
 		privilege: "user"
 	},
 	{
-		title: "Conferences",
-		icon: "calendar-outline",
-		screen: "Conferences",
-		privilege: "user"
-	},
-	{
 		title: "About",
 		icon: "info",
 		screen: "About",

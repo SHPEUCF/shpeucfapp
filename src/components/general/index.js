@@ -11,4 +11,3 @@ export * from "./NavBar";
 export * from "./PickerInput";
 export * from "./Spinner";
 export * from "./TimePicker";
-export * from "./CollapsibleView";
