@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import firebase from "firebase";
 import { Actions } from "react-native-router-flux";
 import Router from "./config/Router";
-import AppInfo from "../app.json";
+import { appVersion } from "../package.json";
 import { View } from "react-native";
 import { Alert } from "./components";
 import { loadUser, getAllMemberAccounts, getEvents, getCommittees, getAllMemberPoints, updateElection } from "./ducks";
@@ -26,7 +26,7 @@ class App extends Component {
 
 		firebase.auth().onAuthStateChanged(user => {
 			firebase.database().ref("/version").once("value", snapshot => {
-				let correctVersion = snapshot.val() === AppInfo.version;
+				let correctVersion = snapshot.val() === appVersion;
 
 				if (correctVersion && user) {
 					Actions.main();
