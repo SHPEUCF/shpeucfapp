@@ -1,19 +1,32 @@
 import React from "react";
 import { Actions } from "react-native-router-flux";
-import { View, Text, Dimensions } from "react-native";
+import { View, Text, TouchableOpacity, Dimensions } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 const { height } = Dimensions.get("screen");
 
-export const NavBar = props => {
+/**
+ * @description Adds a navigation bar to the current screen.
+ *
+ * @typedef {Object} Props
+ * @prop {String}       title           Text to display in navigation bar.
+ * @prop {Boolean}      back            Display a back button to left of the title.
+ * @prop {Function}     onBack          Called when back button is pressed.
+ * @prop {Object}       style           Style of navigation bar.
+ * @prop {JSX.Element}  childComponent  Component to display to right of title.
+ * @prop {Object}       childStyle      Style of child component.
+ *
+ * @param {...Props}
+ */
+
+export const NavBar = ({ title, back, onBack, style, childComponent, childStyle }) => {
 	const { tabBar, tabBarText, rowFlex, backButtonStyle } = styles;
-	const { title, back, onBack, style, childComponent, childStyle } = props;
 
 	return (
 		<View style = { [tabBar, style, rowFlex] }>
-			{ back && <View style = { backButtonStyle }>
-				<Ionicons name = "ios-arrow-dropleft" size = { height * 0.03 } color = "#FECB00" onPress = { onBack } />
-			</View> }
+			{ back && <TouchableOpacity style = { backButtonStyle } onPress = { () => onBack() }>
+				<Ionicons name = "ios-arrow-dropleft" size = { height * 0.03 } color = "#FECB00" />
+			</TouchableOpacity> }
 			<Text style = { tabBarText }>{ title }</Text>
 			<View style = { childStyle }>
 				{ childComponent }
@@ -23,18 +36,19 @@ export const NavBar = props => {
 };
 
 NavBar.defaultProps = {
-	back: false,
-	onBack: () => Actions.pop()
+	onBack: () => Actions.pop(),
+	childStyle: { flex: 1, alignItems: "flex-end" }
 };
 
 const styles = {
 	tabBar: {
-		justifyContent: "flex-start",
+		flexDirection: "row",
 		backgroundColor: "black",
 		alignItems: "center",
 		borderBottomWidth: 1,
 		borderBottomColor: "black",
-		height: height * 0.1
+		height: height * 0.1,
+		paddingHorizontal: "5%"
 	},
 	tabBarText: {
 		color: "white",
@@ -46,10 +60,6 @@ const styles = {
 		height: height * 0.04,
 		width: height * 0.04,
 		justifyContent: "center",
-		alignItems: "center",
-		marginLeft: "5%"
-	},
-	rowFlex: {
-		flexDirection: "row"
+		alignItems: "center"
 	}
 };
