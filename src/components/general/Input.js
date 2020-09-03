@@ -2,6 +2,8 @@ import React, { PureComponent } from "react";
 import { TextInput } from "react-native";
 
 /**
+ * @description Input component with custom default props. *Accepts all `TextInput` props.*
+ *
  * @extends TextInput
  */
 
