@@ -1,162 +1,118 @@
 import React, { Component } from "react";
-import { Actions } from "react-native-router-flux";
-import { Avatar } from "react-native-elements";
-import { connect } from "react-redux";
-import { NavBar, FilterList } from "../../components";
 import _ from "lodash";
+import { connect } from "react-redux";
+import { Avatar } from "react-native-elements";
+import FastImage from "react-native-fast-image";
 import * as Progress from "react-native-progress";
+import { Actions } from "react-native-router-flux";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Text, View, Dimensions, SafeAreaView } from "react-native";
+import { NavBar, FilterList } from "../../components";
+import { getVisitedMember, filterChanged } from "../../ducks";
 import { verifiedCheckMark, rankMembersAndReturnsCurrentUser, truncateNames } from "../../utils/render";
-import FastImage from "react-native-fast-image";
-import {
-	getAllMemberPoints,
-	getVisitedMember,
-	pageLoad,
-	getPrivilege,
-	loadUser,
-	filterChanged
-} from "../../ducks";
 
-const dimension = Dimensions.get("window");
+const { height, width } = Dimensions.get("window");
 const iteratees = ["points", "lastName", "firstName"];
 const order = ["desc", "asc", "asc"];
 
 class Leaderboard extends Component {
 	constructor(props) {
 		super(props);
+
 		this.state = { search: false };
 	}
 
 	componentDidMount() {
 		this.props.filterChanged("");
-		this.props.loadUser();
-		this.props.getAllMemberPoints();
 	}
 
-	keyExtractor = (item, index) => index;
-
 	render() {
-		const {
-			screenBackground
-		} = styles;
-		const {
-			allMemberAccounts,
-			activeUser
-		} = this.props;
+		const { screenBackground } = styles;
+		const { allMemberAccounts, activeUser } = this.props;
 
 		const sortedMembers = _.orderBy(allMemberAccounts, iteratees, order);
+		const search = <Ionicons
+			onPress = { () => { this.props.filterChanged(""); this.setState({ search: !this.state.search }) } }
+			name = "ios-search"
+			size = { height * 0.04 }
+			color = "#FECB00"
+		/>;
 
 		rankMembersAndReturnsCurrentUser(sortedMembers, activeUser.id);
 
 		return (
-			<SafeAreaView style = { screenBackground }>
-				<NavBar
-					title = "Leaderboard"
-					back
-					onBack = { () => Actions.pop() }
-					childComponent = { this.searchButton() }
-					childStyle = {{ flex: 1, paddingRight: "10%" }}
-				/>
+			<SafeAreaView style = {{ screenBackground }}>
+				<NavBar back title = "Leaderboard" childComponent = { search } />
 				<FilterList
 					data = { sortedMembers }
 					search = { this.state.search }
 					placeholder = "Find user"
-					regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
-					onSelect = { (data) => this.callUser(data.id) }
-					itemJSX = { (data) => this.renderComponent(data, sortedMembers) }
+					regexFunc = { ({ firstName, lastName }) => `${firstName} ${lastName}` }
+					onSelect = { ({ id }) => { this.props.getVisitedMember(id); Actions.OtherProfileM() } }
+					itemJSX = { data => this.renderComponent(data, sortedMembers) }
 				/>
 			</SafeAreaView>
 		);
 	}
 
-	renderComponent(item, sortedMembers) {
+	renderComponent({ id, index, picture, color, points, paidMember, ...user }, sortedMembers) {
 		const {
-			contentContainerStyle,
+			row,
+			position,
 			progress,
 			textStyle,
-			index,
 			indexText,
-			userContainerColor,
-			itemContentContainer,
 			userInfoContainer,
 			userTextContainer,
-			row
+			userContainerColor,
+			itemContentContainer,
+			contentContainerStyle
 		} = styles;
 
-		let currentUserTextStyle = item.id === this.props.activeUser.id ? userContainerColor : {};
+		let currentUserTextStyle = (id === this.props.activeUser.id) ? userContainerColor : {};
 
-		truncateNames(item);
+		truncateNames(user);
 
 		return (
 			<View style = { contentContainerStyle }>
 				<View style = { itemContentContainer }>
-					<View style = { index }>
-						<Text style = { indexText }>{ item.index }</Text>
+					<View style = { position }>
+						<Text style = { indexText }>{ index }</Text>
 					</View>
-					<View >
+					<View>
 						<View style = { userInfoContainer }>
 							<View style = { userTextContainer }>
 								<View style = { row }>
 									<Text style = { [textStyle, { fontWeight: "bold" }, currentUserTextStyle] }>
-										{ `${item.firstName} ${item.lastName}` }
+										{ `${user.firstName} ${user.lastName}` }
 									</Text>
-									{ verifiedCheckMark(item) }
+									{ verifiedCheckMark({ paidMember }) }
 								</View>
-								<Text style = { [textStyle, { fontSize: 15 }, currentUserTextStyle] }>
-									Points: { item.points }
-								</Text>
+								<Text style = { [textStyle, { fontSize: 15 }, currentUserTextStyle] }>{ `Points: ${points}` }</Text>
 							</View>
-							{ item.picture === ""
-							&& <Avatar
-								size = { dimension.height * 0.08 }
-								rounded
-								titleStyle = {{ backgroundColor: item.color }}
-								overlayContainerStyle = {{ backgroundColor: item.color }}
-								title = { item.firstName[0].concat(item.lastName[0]) }
-							/> }
-							{ item.picture !== ""
-							&& <Avatar
-								size = "large"
-								rounded
-								source = {{ uri: item.picture }}
-								ImageComponent = { FastImage }
-							/> }
+							{ !picture
+								? <Avatar
+									size = { height * 0.08 }
+									rounded
+									titleStyle = {{ backgroundColor: color }}
+									overlayContainerStyle = {{ backgroundColor: color }}
+									title = { `${user.firstName[0]}${user.lastName[0]}` }
+								/>
+								: <Avatar size = "large" rounded source = {{ uri: picture }} ImageComponent = { FastImage } />
+							}
 						</View>
 						<Progress.Bar
 							style = { progress }
-							progress = { item.points / Math.max(sortedMembers[0].points, 1) }
+							progress = { points / Math.max(sortedMembers[0].points, 1) }
 							indeterminate = { false }
-							height = { dimension.width * 0.03 }
-							width = { dimension.width * 0.75 }
-							color = { "#ffd700" }
+							height = { width * 0.03 }
+							width = { width * 0.75 }
+							color = "#ffd700"
 						/>
 					</View>
 				</View>
 			</View>
 		);
-	}
-
-	searchButton() {
-		return (
-			<View style = {{ alignItems: "flex-end" }}>
-				<Ionicons
-					onPress = { () => {
-						this.props.filterChanged("");
-						this.setState({ search: !this.state.search });
-					} }
-					name = { "ios-search" }
-					size = { dimension.height * 0.04 }
-					color = { "#FECB00" }
-				/>
-			</View>
-		);
-	}
-
-	callUser(id) {
-		this.props.pageLoad();
-		this.props.getVisitedMember(id);
-		Actions.OtherProfileM();
 	}
 }
 
@@ -171,10 +127,10 @@ const styles = {
 	},
 	textStyle: {
 		color: "#e0e6ed",
-		fontSize: dimension.width * 0.05
+		fontSize: width * 0.05
 	},
 	contentContainerStyle: {
-		height: dimension.height * 0.18,
+		height: height * 0.18,
 		backgroundColor: "black",
 		alignItems: "flex-start",
 		paddingHorizontal: 15
@@ -192,30 +148,30 @@ const styles = {
 	indexText: {
 		alignSelf: "center",
 		fontWeight: "700",
-		fontSize: dimension.width * 0.05,
+		fontSize: width * 0.05,
 		color: "black"
 	},
-	index: {
+	position: {
 		borderColor: "#FECB00",
 		backgroundColor: "#FECB00",
-		borderRadius: dimension.height * 0.06 * 0.5,
+		borderRadius: height * 0.06 * 0.5,
 		marginRight: "4%",
 		justifyContent: "center",
-		height: dimension.height * 0.06,
-		width: dimension.height * 0.06,
+		height: height * 0.06,
+		width: height * 0.06,
 		elevation: 1,
 		alignItems: "center"
 	},
 	itemContentContainer: {
 		flexDirection: "row",
-		 flex: 1,
-		 alignItems: "center"
+		flex: 1,
+		alignItems: "center"
 	},
 	userInfoContainer: {
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "flex-start",
-		paddingBottom: 20
+		paddingBottom: 10
 	},
 	userTextContainer: {
 		paddingTop: 5,
@@ -223,21 +179,9 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ user, members, general }) => {
-	const { allMemberAccounts } = members;
-	const { activeUser } = user;
-	const { filter } = general;
-
-	return { activeUser, filter, allMemberAccounts };
-};
-
-const mapDispatchToProps = {
-	getAllMemberPoints,
-	getVisitedMember,
-	pageLoad,
-	getPrivilege,
-	loadUser,
-	filterChanged
-};
+const mapStateToProps = ({ user: { activeUser }, members: { allMemberAccounts }, general: { filter } }) => (
+	{ activeUser, filter, allMemberAccounts }
+);
+const mapDispatchToProps = { getVisitedMember, filterChanged };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Leaderboard);
