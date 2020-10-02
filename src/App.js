@@ -1,16 +1,20 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable max-len */
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import firebase from "firebase";
 import { Actions } from "react-native-router-flux";
 import Router from "./config/Router";
-import AppInfo from "../app.json";
+import { appVersion } from "../package.json";
 import { View } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 import { Alert } from "./components";
+import { loadUser, getAllMemberAccounts, getEvents, getCommittees, getAllMemberPoints, updateElection } from "./ducks";
 import { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId } from "react-native-dotenv";
 
 console.ignoredYellowBox = ["Setting a timer"];
 
-export default class App extends Component {
+class App extends Component {
 	componentDidMount() {
 		const config = { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId };
 
@@ -25,25 +29,27 @@ export default class App extends Component {
 		});
 	}
 
-	verifyLogIn(alreadyLaunched) {
+	verifyLogIn() {
+		const { getCommittees, getAllMemberAccounts, getEvents, loadUser, getAllMemberPoints, updateElection } = this.props;
+
 		firebase.auth().onAuthStateChanged(user => {
-			let correctVersion = false;
-
 			firebase.database().ref("/version").once("value", snapshot => {
-				correctVersion = snapshot.val() === AppInfo.version;
+				let correctVersion = snapshot.val() === appVersion;
 
-				if (!correctVersion) {
+				if (correctVersion && user) {
+					Actions.main();
+					loadUser();
+					getEvents();
+					getCommittees();
+					getAllMemberAccounts();
+					updateElection();
+					getAllMemberPoints();
+				}
+				else {
 					Actions.login();
 					if (!correctVersion) Alert.alert("Please update your app");
 					if (user) firebase.auth().signOut();
 				}
-				else if (!alreadyLaunched) {
-					Actions.welcome();
-				}
-				else if (correctVersion && user) {
-					Actions.main();
-				}
-				else { Actions.login({ onBack: () => console.log("custom back callback") }) }
 			});
 		});
 	}
@@ -57,3 +63,14 @@ export default class App extends Component {
 		);
 	}
 }
+
+const mapDispatchToProps = {
+	loadUser,
+	getAllMemberPoints,
+	getEvents,
+	getCommittees,
+	getAllMemberAccounts,
+	updateElection
+};
+
+export default connect(() => ({}), mapDispatchToProps)(App);
