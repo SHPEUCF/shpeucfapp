@@ -1,14 +1,5 @@
 import React, { Component } from "react";
-import {
-	View,
-	Image,
-	Text,
-	StyleSheet,
-	Animated,
-	StatusBar
-} from "react-native";
-
-/* Logo */
+import { View, Image, Text, StyleSheet, Animated, StatusBar } from "react-native";
 import Logo from "../../assets/images/SHPE_UCF_Logo.png";
 
 export class Splash extends Component {
@@ -35,12 +26,8 @@ export class Splash extends Component {
 				useNativeDriver: true
 			})
 		]).start(() => {
-			setTimeout(this.switchScreen, 1500);
+			setTimeout(() => this.props.verify(), 1500);
 		});
-	}
-
-	switchScreen = () => {
-		this.props.verify();
 	}
 
 	render() {
@@ -54,10 +41,7 @@ export class Splash extends Component {
 							outputRange: [100, 0]
 						})
 					}}>
-					<Image
-						style = { styles.logoStyle }
-						source = { Logo }
-					/>
+					<Image style = { styles.logoStyle } source = { Logo }/>
 				</Animated.View>
 				<Animated.View style = {{ opacity: this.state.LogoText }}>
 					<Text style = { styles.logoText }> Bienvenidos </Text>
@@ -74,7 +58,6 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center"
 	},
-
 	logoText: {
 		color: "#FFFFFF",
 		fontFamily: "Poppins-Light",
@@ -82,7 +65,6 @@ const styles = StyleSheet.create({
 		marginTop: 5,
 		fontWeight: "300"
 	},
-
 	logoStyle: {
 		height: 300,
 		width: 300

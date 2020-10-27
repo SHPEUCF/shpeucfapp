@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button } from "../../components";
 import { registrationFormData, loginFormData } from "../../data/FormData";
-import { createUser, loginUser, registrationError } from "../../ducks";
+import { createUser, loginUser} from "../../ducks";
 import { Form } from "../../components/";
 
 const { height } = Dimensions.get("window");
@@ -21,9 +21,9 @@ class Login extends Component {
 		const { email, password } = this.state;
 
 		if (!email)
-			this.props.registrationError("Please enter your knights email");
+			this.setState({error: "Please enter your knights email"});
 		else if (!password)
-			this.props.registrationError("Please enter your password");
+			this.setState({error: "Please enter your password"});
 		else
 			this.props.loginUser(email, password).then(() => Actions.main());
 	}
@@ -164,6 +164,6 @@ const styles = {
 const mapStateToProps = ({ user: { email, password, error, loading, loggedIn } }) => (
 	{ email, password, error, loading, loggedIn }
 );
-const mapDispatchToProps = { createUser, loginUser, registrationError };
+const mapDispatchToProps = { createUser, loginUser };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

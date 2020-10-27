@@ -2,12 +2,17 @@
 	"name": "shpeucfapp",
 	"appVersion": 1.12,
 	"private": true,
-	"eslintIgnore": ["*.test.js"],
+	"eslintIgnore": [
+		"*.test.js"
+	],
 	"jest": {
 		"preset": "react-native"
 	},
 	"babel": {
-		"presets": ["module:metro-react-native-babel-preset", "module:react-native-dotenv"]
+		"presets": [
+			"module:metro-react-native-babel-preset",
+			"module:react-native-dotenv"
+		]
 	},
 	"scripts": {
 		"start": "react-native start",

@@ -24,18 +24,18 @@ class App extends Component {
 		AsyncStorage.getItem("alreadyLaunched").then(alreadyLaunched => {
 			Actions.splash({ verify: () => this.verifyLogIn(alreadyLaunched) });
 
-			if (alreadyLaunched == null)
+			if (!alreadyLaunched)
 				AsyncStorage.setItem("alreadyLaunched", "true");
 		});
 	}
 
-	verifyLogIn() {
+	verifyLogIn(alreadyLaunched) {
 		const { getCommittees, getAllMemberAccounts, getEvents, loadUser, getAllMemberPoints, updateElection } = this.props;
 
 		firebase.auth().onAuthStateChanged(user => {
 			firebase.database().ref("/version").once("value", snapshot => {
 				let correctVersion = snapshot.val() === appVersion;
-
+				
 				if (correctVersion && user) {
 					Actions.main();
 					loadUser();
@@ -46,7 +46,13 @@ class App extends Component {
 					getAllMemberPoints();
 				}
 				else {
-					Actions.login();
+					if (!alreadyLaunched) {
+						Actions.welcome();
+						alreadyLaunched = AsyncStorage.getItem("alreadyLaunched");
+					} 
+					
+					else Actions.login();
+
 					if (!correctVersion) Alert.alert("Please update your app");
 					if (user) firebase.auth().signOut();
 				}
