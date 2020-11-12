@@ -16,11 +16,11 @@ import { Text, TouchableOpacity } from "react-native";
  */
 
 export const Button = ({ onPress, title, style, titleStyle, height, width, ...extraProps }) => {
-	const { bStyle, tStyle } = styles;
+	const { buttonStyle, textStyle } = styles;
 
 	return (
-		<TouchableOpacity style = { [bStyle, style, { height, width }] } onPress = { onPress }>
-			<Text style = { [tStyle, titleStyle] } adjustsFontSizeToFit { ...extraProps }>{ title }</Text>
+		<TouchableOpacity style = { [buttonStyle, style, { height, width }] } onPress = { onPress }>
+			<Text style = { [textStyle, titleStyle] } adjustsFontSizeToFit { ...extraProps }>{ title }</Text>
 		</TouchableOpacity>
 	);
 };
