@@ -2,15 +2,26 @@
 	"name": "shpeucfapp",
 	"appVersion": 1.12,
 	"private": true,
-	"eslintIgnore": ["*.test.js"],
+	"eslintIgnore": [
+		"*.test.js"
+	],
 	"jest": {
 		"preset": "react-native"
 	},
 	"babel": {
-		"presets": ["module:metro-react-native-babel-preset", "module:react-native-dotenv"]
+		"presets": [
+			"module:metro-react-native-babel-preset",
+			"module:react-native-dotenv"
+		],
+		"plugins": [
+			["module-resolver", {
+				"root": ["./src"],
+				"alias": { "@": "./src" },
+				"extensions": [".ios.js", ".android.js", ".js", ".json"]
+			}]
+		]
 	},
 	"scripts": {
-		"start": "react-native start",
 		"reinstall": "rm -rf node_modules; npm cache clean; npm install",
 		"reset": "watchman watch-del-all; npm run reinstall; npm start -- --reset-cache",
 		"ios": "react-native run-ios",
@@ -60,6 +71,7 @@
 		"@babel/runtime": "7.7.7",
 		"@react-native-community/eslint-config": "0.0.6",
 		"babel-jest": "24.9.0",
+		"babel-plugin-module-resolver": "^4.0.0",
 		"eslint": "^6.8.0",
 		"eslint-plugin-react": "^7.18.0",
 		"eslint-plugin-react-native": "^3.8.1",

@@ -1,7 +1,7 @@
-import { createActionTypes } from "../utils/actions";
+import { createActionTypes } from "@/utils/actions";
 import { Actions } from "react-native-router-flux";
 import firebase from "firebase";
-import { Alert } from "../components";
+import { Alert } from "@/components";
 
 // handle all things related to Elections
 const ACTIONS = createActionTypes([

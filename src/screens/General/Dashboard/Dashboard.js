@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Spinner } from "../../../components";
+import { Spinner } from "@/components";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import { ColorPicker } from "react-native-color-picker";
-import CountryFlag from "../../../components/general/CountryFlag";
-import { months } from "../../../data/DateItems";
-import { loadEvent, editUser, loadCommittee } from "../../../ducks";
+import CountryFlag from "@/components/general/CountryFlag";
+import { months } from "@/data/DateItems";
+import { loadEvent, editUser, loadCommittee } from "@/ducks";
 import { Leaderboard, EventsList, FavoriteCommittees } from "./";
 import {
 	Text,

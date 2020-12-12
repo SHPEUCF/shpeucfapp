@@ -4,7 +4,7 @@ import { FlatList, View, Dimensions, SafeAreaView, Image } from "react-native";
 import { connect } from "react-redux";
 import { ListItem } from "react-native-elements";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { pageLoad, updateElection } from "../../ducks";
+import { pageLoad, updateElection } from "@/ducks";
 
 const dimension = Dimensions.get("window");
 

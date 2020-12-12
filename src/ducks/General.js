@@ -1,4 +1,4 @@
-import { createActionTypes } from "../utils/actions";
+import { createActionTypes } from "@/utils/actions";
 import firebase from "firebase";
 // handle all things related to Elections
 const ACTIONS = createActionTypes([

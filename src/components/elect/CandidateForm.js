@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { View, Text } from "react-native";
-import { Input, Button } from "../general";
+import { Input, Button } from "@/components/general";
 import { Actions } from "react-native-router-flux";
 import {
 	addApplication,
@@ -10,7 +10,7 @@ import {
 	candidateLNameChanged,
 	candidatePlanChanged,
 	candidatePositionChanged
-} from "../../ducks";
+} from "@/ducks";
 
 class CandidateForm extends Component {
 	// EventCreationError(text) {

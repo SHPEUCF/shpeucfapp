@@ -1,4 +1,4 @@
-import { Alert } from "../components";
+import { Alert } from "@/components";
 
 /**
  * @description Pass in Standard time and the function returns that in Military Time.

@@ -3,7 +3,7 @@ import { Actions } from "react-native-router-flux";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import _ from "lodash";
 import { Text, View, Dimensions, TouchableOpacity } from "react-native";
-import { rankMembersAndReturnsCurrentUser } from "../../../utils/render";
+import { rankMembersAndReturnsCurrentUser } from "@/utils/render";
 
 const { width, height } = Dimensions.get("window");
 const iteratees = ["points", "lastName", "firstName"];

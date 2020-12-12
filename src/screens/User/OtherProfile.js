@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { connect } from "react-redux";
-import { Alert, ButtonLayout, NavBar } from "../../components";
+import { Alert, ButtonLayout, NavBar } from "@/components";
 import { Avatar } from "react-native-elements";
 import Flag from "react-native-flags";
-import { verifiedCheckMark } from "../../utils/render";
+import { verifiedCheckMark } from "@/utils/render";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
 
 const dimension = Dimensions.get("window");

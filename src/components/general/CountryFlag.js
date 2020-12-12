@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { Modal, SafeAreaView, TouchableOpacity, View, Text, TextInput } from "react-native";
 import Flag from "react-native-flags";
 import { Button } from "./";
-import { editUser } from "../../ducks";
+import { editUser } from "@/ducks";
 
 const { height, width } = Dimensions.get("window");
 

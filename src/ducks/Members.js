@@ -1,5 +1,5 @@
 import firebase from "firebase";
-import { createActionTypes } from "../utils/actions";
+import { createActionTypes } from "@/utils/actions";
 
 // Handle all things related to Events
 const ACTIONS = createActionTypes([

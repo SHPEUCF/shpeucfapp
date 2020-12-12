@@ -1,5 +1,5 @@
 import firebase from "firebase";
-import { Alert } from "../components";
+import { Alert } from "@/components";
 
 export default class MemberService {
 	editMember = user => {
