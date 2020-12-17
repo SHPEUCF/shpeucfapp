@@ -1,86 +1,81 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import { Input, PickerInput } from "./";
 
-const monthArray = Array.from(Array(12), (_, month) => month + 1);
-const yearArray = Array.from(Array(20), (_, year) => new Date().getFullYear() + year);
+/**
+ * @desc Component to select day, month, and year.
+ *
+ * @typedef {Object} Props
+ * @prop {String}           value        Initial value of date.
+ * @prop {Function}         onSelect     Callback to use new date values picked.
+ * @prop {String=}          placeholder  Placeholder for date picker input.
+ *
+ * @param {...Props}
+ */
 
-export class DatePicker extends Component {
-	constructor(props) {
-		super(props);
-		let [year = "", month = "", day = ""] = this.props.value && this.props.value.split("-") || [];
+export const DatePicker = ({ value, onSelect, placeholder = "Choose a date" }) => {
+	const [initYear = "", initMonth = "", initDay = ""] = value && value.split("-") || [];
+	const [year, setYear] = useState(initYear);
+	const [month, setMonth] = useState(initMonth);
+	const [day, setDay] = useState(initDay);
+	const [focused, setFocus] = useState(!!value);
 
-		this.state = { month, day, year, focused: !!this.props.value };
-	}
+	const monthArray = Array.from(Array(12), (_, month) => month + 1);
+	const yearArray = Array.from(Array(20), (_, year) => new Date().getFullYear() + year);
 
-	getDayArray() {
-		const { month, day, year } = this.state;
+	useEffect(() => {
+		(month && day && year) && onSelect(`${year}-${month}-${day}`);
+	}, [year, month, day]);
 
+	const getDayArray = () => {
 		const isLeapYear = year => (year % 4 === 0) && (year % 100 !== 0) || (year % 400 === 0);
 		const daysInMonth = [31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-		const setMaxDay = maxDay => (day > maxDay) && this.setState({ day: maxDay });
 
-		setMaxDay(daysInMonth[month - 1]);
+		(maxDay => (day > maxDay) && setDay(maxDay))(daysInMonth[month - 1]); // Set max day for selected month
 
 		return Array.from(Array(daysInMonth[month - 1]), (_, day) => day + 1);
-	}
+	};
 
 	/**
-	 * @description Calls the setDate function and sets the month/day/year based on a given value and type.
+	 * @description Sets the month/day/year based on a given date and date type.
 	 *
 	 * @param {String}                   dateValue  Contains the value of month/day/year.
 	 * @param {'month' | 'day' | 'year'} type       Describes which value is being changed.
 	 */
 
-	changeStateOfType(dateValue, type) {
-		const { month, day, year } = this.state;
+	const changeStateOfType = (dateValue, type) => {
+		if (type === "month")
+			return setMonth(dateValue.padStart(2, "0"));
+		else if (type === "day")
+			return setDay(dateValue.padStart(2, "0"));
+		else if (type === "year")
+			return setYear(dateValue);
+	};
 
-		console.log(typeof dateValue, dateValue);
-		const setDate = () => (month && day && year) && this.props.onSelect(`${year}-${month}-${day}`);
+	const { style, datePickerStyle, fieldContainer, inputBoxStyle, dropDownArrowStyle } = styles;
+	const defaultPickerStyle = { style, inputBoxStyle, iconSize: 32, iconColor: "black", dropDownArrowStyle };
+	const pickers = [
+		{ data: monthArray, date: "month", value: month, placeholder: "MM" },
+		{ data: getDayArray(), date: "day", value: day, placeholder: "DD" },
+		{ data: yearArray, date: "year", value: year, placeholder: "YYYY" }
+	];
 
-		switch (type) {
-			case "month":
-				this.setState({ month: dateValue.padStart(2, "0") }, setDate);
-				break;
-			case "day":
-				this.setState({ day: dateValue.padStart(2, "0") }, setDate);
-				break;
-			case "year":
-				this.setState({ year: dateValue }, setDate);
-		}
-	}
-
-	render() {
-		const { style, datePickerStyle, fieldContainer, inputBoxStyle, dropDownArrowStyle } = styles;
-		const { month, day, year, focused } = this.state;
-		const { placeholder } = this.props;
-
-		const defaultPickerStyle = { style, inputBoxStyle, iconSize: 32, iconColor: "black", dropDownArrowStyle };
-		const pickers = [
-			{ data: monthArray, date: "month", value: month, placeholder: "MM" },
-			{ data: this.getDayArray(), date: "day", value: day, placeholder: "DD" },
-			{ data: yearArray, date: "year", value: year, placeholder: "YYYY" }
-		];
-
-		return (
-			!focused && <Input placeholder = { placeholder } value = "" onFocus = { () => this.setState({ focused: true }) } />
-			|| <View style = { datePickerStyle }>
-				{ pickers.map(({ date, ...dateProps }) =>
-					<View style = { fieldContainer }>
-						<PickerInput
-							title = { `Enter a ${date}` }
-							onSelect = { dateNum => this.changeStateOfType(dateNum.toString(), date) }
-							{ ...dateProps }
-							{ ...defaultPickerStyle }
-						/>
-					</View>
-				) }
-			</View>
-		);
-	}
-}
-
-DatePicker.defaultProps = { placeholder: "Choose a date" };
+	return (
+		!focused && <Input placeholder = { placeholder } value = "" onFocus = { () => setFocus(true) } />
+		|| <View style = { datePickerStyle }>
+			{ pickers.map(({ date, ...dateProps }) =>
+				<View style = { fieldContainer } key = { date }>
+					<PickerInput
+						title = { `Enter a ${date}` }
+						onSelect = { dateNum => changeStateOfType(dateNum.toString(), date) }
+						{ ...dateProps }
+						{ ...defaultPickerStyle }
+					/>
+				</View>
+			) }
+		</View>
+	);
+};
 
 const styles = {
 	fieldContainer: {
