@@ -6,15 +6,15 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 const { height } = Dimensions.get("screen");
 
 /**
- * @description Adds a navigation bar to the current screen.
+ * @desc Adds a navigation bar to the current screen.
  *
  * @typedef {Object} Props
  * @prop {String}       title           Text to display in navigation bar.
  * @prop {Boolean}      back            Display a back button to left of the title.
- * @prop {Function}     onBack          Called when back button is pressed.
- * @prop {Object}       style           Style of navigation bar.
+ * @prop {Function=}    onBack          Called when back button is pressed.
+ * @prop {StyleSheet}   style           Style of navigation bar.
  * @prop {JSX.Element}  childComponent  Component to display to right of title.
- * @prop {Object}       childStyle      Style of child component.
+ * @prop {StyleSheet=}  childStyle      Style of child component.
  *
  * @param {...Props}
  */
