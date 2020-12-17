@@ -3,9 +3,20 @@ import { View, Dimensions } from "react-native";
 
 const { height } = Dimensions.get("screen");
 
-export const ButtonLayout = props => {
+/**
+ * @desc Component to properly layout multiple buttons as its children.
+ *
+ * @typedef {Object} Props
+ * @prop {Object}      icon            Icon to be displayed for one child button.
+ * @prop {Number}      icon.layer      Position to display icon in between buttons.
+ * @prop {JSX.Element} icon.data       Icon element.
+ * @prop {StyleSheet}  containerStyle  Style for the button children container.
+ *
+ * @param {...Props}
+ */
+
+export const ButtonLayout = ({ icon, children, containerStyle }) => {
 	const { buttonContainer, singleLayer, doubleLayer, layoutContainer } = styles;
-	const { icon, children, containerStyle } = props;
 
 	let buttonIndex = 0;
 	let realButtons = [];
@@ -53,10 +64,8 @@ export const ButtonLayout = props => {
 	return (
 		<View style = { containerStyle || layoutContainer }>
 			{ layers.map((item, index) =>
-				<View>
-					<View style = { index && { paddingTop: height * 0.02 } }>
-						{ item }
-					</View>
+				<View style = { index && { paddingTop: height * 0.02 } } key = { index }>
+					{ item }
 				</View>
 			) }
 		</View>
