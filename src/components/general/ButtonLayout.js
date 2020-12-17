@@ -7,7 +7,7 @@ const { height } = Dimensions.get("screen");
  * @desc Component to properly layout multiple buttons as its children.
  *
  * @typedef {Object} Props
- * @prop {Object}      icon            Icon to be displayed for one child button.
+ * @prop {Object}      icon            Icon to be displayed.
  * @prop {Number}      icon.layer      Position to display icon in between buttons.
  * @prop {JSX.Element} icon.data       Icon element.
  * @prop {StyleSheet}  containerStyle  Style for the button children container.
