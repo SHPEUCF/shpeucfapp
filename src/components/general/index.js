@@ -7,6 +7,7 @@ export * from "./DatePicker";
 export * from "./DraggableFlatList";
 export * from "./FilterList";
 export * from "./Input";
+export * from "./ListItem";
 export * from "./NavBar";
 export * from "./PickerInput";
 export * from "./Spinner";
