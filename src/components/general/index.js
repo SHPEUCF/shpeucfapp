@@ -9,5 +9,6 @@ export * from "./FilterList";
 export * from "./Input";
 export * from "./NavBar";
 export * from "./PickerInput";
+export * from "./ProgressBar";
 export * from "./Spinner";
 export * from "./TimePicker";
