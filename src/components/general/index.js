@@ -5,6 +5,7 @@ export * from "./Button";
 export * from "./ButtonLayout";
 export * from "./DatePicker";
 export * from "./DraggableFlatList";
+export * from "./Icon";
 export * from "./FilterList";
 export * from "./Input";
 export * from "./NavBar";
