@@ -9,6 +9,7 @@ export * from "./DraggableFlatList";
 export * from "./Icon";
 export * from "./FilterList";
 export * from "./Input";
+export * from "./ListItem";
 export * from "./NavBar";
 export * from "./PickerInput";
 export * from "./ProgressBar";
