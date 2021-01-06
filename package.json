@@ -1,20 +1,23 @@
 {
 	"name": "shpeucfapp",
-	"version": "0.0.1",
+	"appVersion": 1.12,
 	"private": true,
+	"eslintIgnore": ["*.test.js"],
+	"jest": {
+		"preset": "react-native"
+	},
+	"babel": {
+		"presets": ["module:metro-react-native-babel-preset", "module:react-native-dotenv"]
+	},
 	"scripts": {
 		"start": "react-native start",
-		"test": "jest",
-		"lint": "eslint .",
-		"reinstall": "rm -rf node_modules; yarn cache clean; yarn install",
+		"reinstall": "rm -rf node_modules; npm cache clean; npm install",
+		"reset": "watchman watch-del-all; npm run reinstall; npm start -- --reset-cache",
 		"ios": "react-native run-ios",
+		"ios-device": "react-native run-ios --device",
 		"ios-min": "react-native run-ios --simulator 'iPhone 5s'",
 		"ios-mid": "react-native run-ios --simulator 'iPhone 8 Plus'",
-		"ios-max": "react-native run-ios --simulator 'iPhone 11'",
-		"ipad": "react-native run-ios --simulator 'iPad Air'",
-		"ios-device": "react-native run-ios --device",
-		"android-min": "react-native run-android",
-		"android-max": "react-native run-android",
+		"android": "react-native run-android",
 		"android-release": "react-native run-android --variant=release"
 	},
 	"dependencies": {
@@ -63,8 +66,5 @@
 		"jest": "24.9.0",
 		"metro-react-native-babel-preset": "0.57.0",
 		"react-test-renderer": "16.13.1"
-	},
-	"jest": {
-		"preset": "react-native"
 	}
 }

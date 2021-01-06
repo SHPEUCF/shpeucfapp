@@ -1,78 +1,23 @@
 import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
 import { TextInput } from "react-native";
 
-class Input extends PureComponent {
-	constructor(props) {
-		super(props);
-	}
+/**
+ * @description Input component with custom default props. *Accepts all `TextInput` props.*
+ *
+ * @extends TextInput
+ */
 
-	static propTypes = {
-		children: PropTypes.any,
-		value: PropTypes.oneOfType([
-			PropTypes.string,
-			PropTypes.number
-		]).isRequired,
-		onChangeText: PropTypes.func,
-		placeholder: PropTypes.string,
-		blurOnSubmit: PropTypes.bool,
-		autoCorrect: PropTypes.any,
-		autoCapitalize: PropTypes.any,
-		maxLength: PropTypes.number,
-		secureTextEntry: PropTypes.any,
-		numberOfLines: PropTypes.number,
-		multiline: PropTypes.any,
-		textAlignVertical: PropTypes.any,
-		keyboardType: PropTypes.any,
-		editable: PropTypes.bool,
-		style: PropTypes.oneOfType([
-			PropTypes.array,
-			PropTypes.shape({})
-		])
-	};
-
+export class Input extends PureComponent {
 	render() {
-		const {
-			inputStyle
-		} = styles;
-		const {
-			children,
-			value,
-			onChangeText,
-			placeholder,
-			autoCorrect,
-			autoCapitalize,
-			blurOnSubmit,
-			maxLength,
-			secureTextEntry,
-			numberOfLines,
-			multiline,
-			textAlignVertical,
-			keyboardType,
-			editable,
-			style,
-			onFocus
-		} = this.props;
+		const { inputStyle } = styles;
+		const { children, style, ...extraProps } = this.props;
 
 		return (
 			<TextInput
-				value = { "" + value }
-				onChangeText = { onChangeText }
 				style = { [inputStyle, style] }
-				autoCorrect = { autoCorrect }
-				placeholderTextColor = "#dadfe1"
-				autoCapitalize = { autoCapitalize }
-				blurOnSubmit = { blurOnSubmit }
-				placeholder = { placeholder }
-				secureTextEntry = { secureTextEntry }
-				maxLength = { maxLength }
-				numberOfLines = { numberOfLines }
-				multiline = { multiline }
-				textAlignVertical = { textAlignVertical }
-				keyboardType = { keyboardType }
-				editable = { editable }
-				onFocus = { onFocus }
-				underlineColorAndroid = 'transparent'
+				placeholderTextColor = "#DADFE1"
+				underlineColorAndroid = "transparent"
+				{ ...extraProps }
 			>
 				{ children }
 			</TextInput>
@@ -80,24 +25,21 @@ class Input extends PureComponent {
 	}
 }
 
+Input.defaultProps = {
+	maxLength: 45,
+	autoCorrect: false,
+	autoCapitalize: "sentences",
+	placeholder: "Enter text here"
+};
+
 const styles = {
 	inputStyle: {
 		flex: 1,
 		color: "#000",
 		fontSize: 16,
-		marginTop: 8,
-		marginBottom: 8,
+		marginVertical: 8,
 		padding: 15,
 		backgroundColor: "white",
 		borderRadius: 25
 	}
 };
-
-Input.defaultProps = {
-	maxLength: 45,
-	autoCapitalize: "sentences",
-	autoCorrect: false,
-	placeholder: "Enter text here"
-};
-
-export { Input };
