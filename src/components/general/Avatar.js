@@ -1,7 +1,6 @@
-/* eslint-disable no-unused-vars */
 import React from "react";
 import FastImage from "react-native-fast-image";
-import { TouchableOpacity, Text, Dimensions, TextStyle } from "react-native";
+import { TouchableOpacity, Text, Dimensions, TextStyle, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 const { height } = Dimensions.get("screen");
@@ -17,7 +16,7 @@ const { height } = Dimensions.get("screen");
  * @prop {TextStyle}                                 titleStyle  Style of text style.
  * @prop {Boolean}                                   showEdit    Show edit button for Avatar.
  * @prop {Function}                                  onPress     Called when the Avatar is pressed.
- * @prop {Object}                                    style       Additional style for Avatar.
+ * @prop {ViewStyle}                                 style       Additional style for Avatar.
  *
  * @param {...AvatarProps}
  */

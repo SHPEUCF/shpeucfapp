@@ -118,7 +118,6 @@ class PointsBreakDown extends Component {
 	}
 
 	convertNumToDate(date) {
-		// eslint-disable-next-line max-len
 		let months = ["Jan", "Feb", "Mar", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 		let tempDate = date.split("-");
 

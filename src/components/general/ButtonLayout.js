@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Dimensions } from "react-native";
+import { View, Dimensions, ViewStyle } from "react-native";
 
 const { height } = Dimensions.get("screen");
 
@@ -10,7 +10,7 @@ const { height } = Dimensions.get("screen");
  * @prop {Object}      icon            Icon to be displayed.
  * @prop {Number}      icon.layer      Position to display icon in between buttons.
  * @prop {JSX.Element} icon.data       Icon element.
- * @prop {StyleSheet}  containerStyle  Style for the button children container.
+ * @prop {ViewStyle}   containerStyle  Style for the button children container.
  *
  * @param {...Props}
  */
