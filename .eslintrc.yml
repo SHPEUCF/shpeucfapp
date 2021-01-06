@@ -32,6 +32,9 @@ rules:
   no-mixed-spaces-and-tabs:                # disallow tabs + spaces for indentation except for smart-tabs
     - error
     - smart-tabs
+  no-unused-vars:                          # disallow unused variables/imports
+    - error
+    - varsIgnorePattern: "Style|Props"
   no-multiple-empty-lines:                 # disallow more than one empty line
     - error
     - max: 1
@@ -97,6 +100,7 @@ rules:
     - blankLine: always                    # require empty line before return statement
       prev: "*"
       next: return
+  
   # React-Native
   react-native/no-inline-styles: warn      # disallow inline styles
   # React

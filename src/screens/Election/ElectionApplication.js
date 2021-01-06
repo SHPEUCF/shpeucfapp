@@ -164,7 +164,6 @@ class ElectionApplication extends Component {
 
 	callOpenGallery(candidate) {
 		openGallery(
-			// eslint-disable-next-line max-len
 			`/election/positions/${candidate.position || this.state.positionSelected}/candidates/${this.props.activeUser.id}`, "",
 			(url) => {
 				let candidate = Object.assign({}, this.state.candidate);
