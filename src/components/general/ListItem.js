@@ -1,6 +1,6 @@
 import React, { Children } from "react";
 import { View, Text, TouchableOpacity, TextProps, TouchableOpacityProps } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
+import { Icon } from "./";
 
 /**
  * @desc Main title for item.
@@ -8,7 +8,7 @@ import Icon from "react-native-vector-icons/Ionicons";
  */
 
 const Title = ({ style, children, ...props }) => (
-	<Text style = { [styles.titleStyle, style] } { ...props }>{ children }</Text>
+	children ? <Text style = { [styles.titleStyle, style] } { ...props }>{ children }</Text> : null
 );
 
 /**
@@ -17,7 +17,7 @@ const Title = ({ style, children, ...props }) => (
  */
 
 const Subtitle = ({ style, children, ...props }) => (
-	<Text style = { [styles.textStyle, style] } { ...props }>{ children }</Text>
+	children ? <Text style = { [styles.textStyle, style] } { ...props }>{ children }</Text> : null
 );
 
 /**
@@ -56,7 +56,12 @@ export const ListItem = ({ style, onPress, children, ...props }) => {
 		.reduce((children, child) => ({ ...children, [child.type.name]: child }), {});
 
 	return (
-		<TouchableOpacity style = { [style, containerStyle] } activeOpacity = { (!onPress) ? 1 : 0.2 } { ...props }>
+		<TouchableOpacity
+			style = { [style, containerStyle] }
+			activeOpacity = { (!onPress) ? 1 : 0.2 }
+			onPress = { onPress }
+			{ ...props }
+		>
 			{ childComponents.LeftIcon }
 			<View style = { styles.titleContainer }>
 				{ childComponents.Title }
