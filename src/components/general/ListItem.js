@@ -57,7 +57,7 @@ export const ListItem = ({ style, onPress, children, ...props }) => {
 
 	return (
 		<TouchableOpacity
-			style = { [style, containerStyle] }
+			style = { [containerStyle, style] }
 			activeOpacity = { (!onPress) ? 1 : 0.2 }
 			onPress = { onPress }
 			{ ...props }
@@ -81,9 +81,8 @@ const styles = {
 	containerStyle: {
 		flexDirection: "row",
 		backgroundColor: "black",
-		padding: "3.5%",
-		flex: 1,
-		alignItems: "center"
+		alignItems: "center",
+		padding: 16
 	},
 	titleContainer: {
 		flex: 1,
