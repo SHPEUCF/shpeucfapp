@@ -1,69 +1,30 @@
-import React, { Component } from "react";
-import { Avatar } from "react-native-elements";
-import { Actions } from "react-native-router-flux";
-import { ListItem } from "react-native-elements";
-import { NavBar } from "@/components";
-import { version } from "../../../app.json";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { View, Text, SafeAreaView, FlatList, Dimensions, Linking, TouchableOpacity } from "react-native";
+import React from "react";
+import { View, Text, SafeAreaView, Dimensions, Linking, TouchableOpacity } from "react-native";
+import { NavBar, Avatar, ListItem } from "@/components";
 import { menuItems, developers } from "@/data/AboutItems.js";
+import { appVersion } from "../../../package.json";
 
-const { height } = Dimensions.get("window");
+const { height } = Dimensions.get("screen");
 
-export class About extends Component {
-	render() {
-		const { textStyle, mainBackground, subBackground, center, titleStyle, contributorStyle, containerFlex, footer } = styles;
+export const About = () => {
+	const { textStyle, subBackground, center, titleStyle, contributorStyle, containerFlex, footer } = styles;
 
-		return (
-			<SafeAreaView style = { [subBackground, containerFlex] }>
-				<NavBar
-					back
-					title = "About"
-					childComponent = { <Text style = { [textStyle, { fontSize: 16, textAlign: "right" }] }>{ version }</Text> }
-				/>
-				<View style = { mainBackground }>
-					{ menuItems.map(tab => this.renderTabs(tab)) }
-				</View>
-				<View style = { containerFlex }>
-					<Text style = { [textStyle, titleStyle, { fontSize: 20 }] }>Developed by:</Text>
-					<View style = {{ flexDirection: "row", justifyContent: "space-around" }}>
-						{ developers.map(dev => this.renderDev(dev)) }
-					</View>
-					<TouchableOpacity onPress = { () => Linking.openURL("https://github.com/SHPEUCF/shpeucfapp/graphs/contributors") }>
-						<Text style = { [textStyle, contributorStyle] }>...and our amazing contributors.</Text>
-					</TouchableOpacity>
-					<View style = { [center, footer] }>
-						<Text style = { textStyle }>Copyright © 2018 SHPE UCF</Text>
-					</View>
-				</View>
-			</SafeAreaView>
-		);
-	}
+	const renderTabs = ({ url, title, content, icon }) => (
+		<ListItem onPress = { () => Linking.openURL(url) } key = { title }>
+			<ListItem.Title>{ title }</ListItem.Title>
+			<ListItem.Subtitle>{ content }</ListItem.Subtitle>
+			<ListItem.LeftIcon name = { icon } size = { 26 } color = "white" />
+			<ListItem.RightIcon name = "ios-arrow-dropright" size = { height * 0.025 } color = "#FECB00" />
+		</ListItem>
+	);
 
-	renderTabs = ({	url, title, content, icon }) => {
-		const { mainBackground, textStyle, titleStyle } = styles;
-
-		return <ListItem
-			containerStyle = { mainBackground }
-			onPress = { () => Linking.openURL(url) }
-			title = { title }
-			titleStyle = { [textStyle, titleStyle, { padding: 0 }] }
-			subtitle = { content }
-			subtitleStyle = { textStyle }
-			leftIcon = { <Ionicons name = { icon } size = { 26 } color = "white" /> }
-			rightIcon = { <Ionicons name = "ios-arrow-dropright" size = { height * 0.025 } color = "#FECB00" /> }
-		/>;
-	}
-
-	renderDev = ({ name, pic, github }) => {
-		const { center, textStyle } = styles;
-
+	const renderDev = ({ name, pic, github }) => {
 		const [firstName, lastName] = name.split(" ");
 
 		return (
-			<TouchableOpacity onPress = { () => Linking.openURL(github) }>
+			<TouchableOpacity onPress = { () => Linking.openURL(github) } key = { name }>
 				<View style = { center }>
-					<Avatar size = { height * 0.09 } rounded source = {{ uri: pic }} />
+					<Avatar source = { pic } />
 				</View>
 				<View style = { center }>
 					<Text style = { [textStyle, { fontSize: 16 }] }>{ firstName }</Text>
@@ -71,13 +32,33 @@ export class About extends Component {
 				</View>
 			</TouchableOpacity>
 		);
-	}
-}
+	};
+
+	let version = <Text style = { [textStyle, { fontSize: 16, textAlign: "right" }] }>{ appVersion }</Text>;
+
+	return (
+		<SafeAreaView style = { [subBackground, containerFlex] }>
+			<NavBar title = "About" childComponent = { version } back />
+			<View style = { [{ color: "black" }, containerFlex] }>
+				{ menuItems.map(tab => renderTabs(tab)) }
+			</View>
+			<View style = { containerFlex }>
+				<Text style = { [textStyle, titleStyle, { fontSize: 20 }] }>Developed by:</Text>
+				<View style = {{ flexDirection: "row", justifyContent: "space-around" }}>
+					{ developers.map(dev => renderDev(dev)) }
+				</View>
+				<TouchableOpacity onPress = { () => Linking.openURL("https://github.com/SHPEUCF/shpeucfapp/graphs/contributors") }>
+					<Text style = { [textStyle, contributorStyle] }>...and our amazing contributors.</Text>
+				</TouchableOpacity>
+				<View style = { [center, footer] }>
+					<Text style = { textStyle }>Copyright © 2018 SHPE UCF</Text>
+				</View>
+			</View>
+		</SafeAreaView>
+	);
+};
 
 const styles = {
-	mainBackground: {
-		backgroundColor: "#000"
-	},
 	subBackground: {
 		backgroundColor: "#0c0b0b"
 	},

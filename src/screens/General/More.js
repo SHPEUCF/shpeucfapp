@@ -1,9 +1,8 @@
-import React, { Component } from "react";
-import { Actions } from "react-native-router-flux";
-import { connect } from "react-redux";
-import { ListItem } from "react-native-elements";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import React from "react";
 import { View, Dimensions, SafeAreaView, Image } from "react-native";
+import { useSelector } from "react-redux";
+import { Actions } from "react-native-router-flux";
+import { ListItem } from "@/components";
 
 const { height } = Dimensions.get("screen");
 
@@ -46,55 +45,51 @@ const menuItems = [
 	}
 ];
 
-class More extends Component {
-	render() {
-		const { alignSelf, header, mainBackgroundColor, secondaryBackgroundColor, fullFlex } = styles;
-		const imageUrl = "../../assets/images/";
+export default () => {
+	const { alignSelf, header, mainBackgroundColor, secondaryBackgroundColor, fullFlex } = styles;
+	const imageUrl = "../../assets/images/";
 
-		return (
-			<SafeAreaView style = { [mainBackgroundColor, fullFlex] }>
-				<View style = { [header, secondaryBackgroundColor] }>
-					<Image
-						source = { require(`${imageUrl}SHPE_UCF_Logo.png`) }
-						style = { alignSelf }
-						height = { height * 0.06 }
-						resizeMode = "contain"
-					/>
-				</View>
-				<View style = { fullFlex }>
-					{ menuItems.map(tab => this.renderMenu(tab)) }
-				</View>
-				<View style = { [fullFlex, mainBackgroundColor] }>
-					<Image
-						source = { require(`${imageUrl}SHPE_logo_FullColor-RGB-2x.png`) }
-						style = { alignSelf }
-						height = { 80 }
-						resizeMode = "contain"
-					/>
-				</View>
-			</SafeAreaView>
-		);
-	}
+	const { user: { activeUser: { privilege, apply } }, elect: { election } } = useSelector(state => state);
 
-	renderMenu = ({	title, icon, screen, userPrivilege }) => {
-		const { election, activeUser: { privilege, apply } } = this.props;
-		const { mainBackgroundColor, bottomBorder, primaryTextColor, secondaryTextColor } = styles;
-
-		if ((title === "Voting" && !election) || (title === "E-Board Application" && !apply)) return null;
+	const renderMenu = ({	title, icon, screen, userPrivilege }) => {
+		if ((title === "Voting" && !election) || (title === "E-Board Application" && !apply))
+			return null;
 
 		if (privilege && privilege[userPrivilege]) {
-			return <ListItem
-				containerStyle = { [mainBackgroundColor, bottomBorder] }
-				removeClippedSubviews = { false }
-				title = { title }
-				titleStyle = { primaryTextColor }
-				leftIcon = {{ name: icon, color: "white" }}
-				rightIcon = { <Ionicons name = "ios-arrow-dropright" size = { 22 } style = { secondaryTextColor } /> }
-				onPress = { () => Actions[screen]() }
-			/>;
+			return (
+				<ListItem onPress = { Actions[screen] } key = { title }>
+					<ListItem.Title>{ title }</ListItem.Title>
+					<ListItem.LeftIcon type = "MaterialIcons" name = { icon } color = "white" />
+					<ListItem.RightIcon name = "ios-arrow-dropright" size = { 22 } color = "#FECB00" />
+				</ListItem>
+			);
 		}
-	}
-}
+	};
+
+	return (
+		<SafeAreaView style = { [mainBackgroundColor, fullFlex] }>
+			<View style = { [header, secondaryBackgroundColor] }>
+				<Image
+					source = { require(`${imageUrl}SHPE_UCF_Logo.png`) }
+					style = { alignSelf }
+					height = { height * 0.06 }
+					resizeMode = "contain"
+				/>
+			</View>
+			<View style = { fullFlex }>
+				{ menuItems.map(tab => renderMenu(tab)) }
+			</View>
+			<View style = { [fullFlex, mainBackgroundColor] }>
+				<Image
+					source = { require(`${imageUrl}SHPE_logo_FullColor-RGB-2x.png`) }
+					style = { alignSelf }
+					height = { 80 }
+					resizeMode = "contain"
+				/>
+			</View>
+		</SafeAreaView>
+	);
+};
 
 const styles = {
 	header: {
@@ -107,26 +102,10 @@ const styles = {
 	secondaryBackgroundColor: {
 		backgroundColor: "#FECB00"
 	},
-	bottomBorder: {
-		borderBottomWidth: 1,
-		borderColor: "black"
-	},
 	fullFlex: {
 		flex: 1
-	},
-	primaryTextColor: {
-		color: "white"
-	},
-	secondaryTextColor: {
-		color: "#FECB00"
 	},
 	alignSelf: {
 		alignSelf: "center"
 	}
 };
-
-const mapStateToProps = ({ user: { activeUser }, general: { loading }, elect: { election, apply } }) => (
-	{ loading, election, apply, activeUser }
-);
-
-export default connect(mapStateToProps)(More);
