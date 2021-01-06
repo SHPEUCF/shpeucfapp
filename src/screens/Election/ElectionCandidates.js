@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import _ from "lodash";
 import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from "react-native";
-import { NavBar } from "../../components";
+import { NavBar } from "@/components";
 import {
 	openElection,
 	closeElection,
@@ -15,7 +15,7 @@ import {
 	deleteApplication,
 	candidatePlanChanged,
 	candidateIdChanged
-} from "../../ducks";
+} from "@/ducks";
 
 const dimension = Dimensions.get("window");
 const iteratees = ["level"];

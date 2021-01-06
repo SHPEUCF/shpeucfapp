@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import firebase from "firebase";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { NavBar } from "../../components";
+import { NavBar } from "@/components";
 import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from "react-native";
-import { getAllMemberPoints, loadUser, fetchEvents, goToViewEvent } from "../../ducks";
+import { getAllMemberPoints, loadUser, fetchEvents, goToViewEvent } from "@/ducks";
 
 const dimension = Dimensions.get("window");
 
@@ -118,7 +118,6 @@ class PointsBreakDown extends Component {
 	}
 
 	convertNumToDate(date) {
-		// eslint-disable-next-line max-len
 		let months = ["Jan", "Feb", "Mar", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 		let tempDate = date.split("-");
 

@@ -1,8 +1,8 @@
 import firebase from "firebase";
 import _ from "lodash";
-import { createActionTypes } from "../utils/actions";
-import { convertMilitaryToStandardTime } from "../utils/events";
-import { Alert } from "../components";
+import { createActionTypes } from "@/utils/actions";
+import { convertMilitaryToStandardTime } from "@/utils/events";
+import { Alert } from "@/components";
 
 // handle all things related to Elections
 const ACTIONS = createActionTypes([

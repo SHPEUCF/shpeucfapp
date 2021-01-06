@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { View, Text, ScrollView, SafeAreaView } from "react-native";
-import { Input, Button, ButtonLayout } from "../general";
+import { Input, Button, ButtonLayout } from "@/components/general";
 import { Actions } from "react-native-router-flux";
 import {
 	addPosition,
@@ -9,7 +9,7 @@ import {
 	positionTitleChanged,
 	positionDescriptionChanged,
 	deletePosition
-} from "../../ducks";
+} from "@/ducks";
 
 class PositionForm extends Component {
 	// EventCreationError(text) {

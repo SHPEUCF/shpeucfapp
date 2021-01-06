@@ -1,11 +1,10 @@
-/* eslint-disable no-unused-vars */
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import { View, Text, ScrollView, Dimensions, SafeAreaView } from "react-native";
-import { Input, Button, FilterList, ButtonLayout } from "../general";
-import { MemberPanel } from "../../utils/render";
-import MemberService from "../../services/members";
+import { Input, Button, FilterList, ButtonLayout } from "@/components/general";
+import { MemberPanel } from "@/utils/render";
+import MemberService from "@/services/members";
 import {
 	addCommittee,
 	editCommittee,
@@ -14,7 +13,7 @@ import {
 	deleteCommittee,
 	chairPersonChanged,
 	filterChanged
-} from "../../ducks";
+} from "@/ducks";
 
 const memberService = new MemberService();
 const dimension = Dimensions.get("window");

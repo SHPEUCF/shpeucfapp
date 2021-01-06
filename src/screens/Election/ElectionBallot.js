@@ -6,9 +6,9 @@ import { Avatar } from "react-native-elements";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Text, View, SafeAreaView, FlatList, TouchableOpacity, Modal } from "react-native";
-import { Alert, Button, NavBar, ButtonLayout } from "../../components";
-import { getPositions, vote, getVotes } from "../../ducks";
-import { stockImg, truncateNames } from "../../utils/render";
+import { Alert, Button, NavBar, ButtonLayout } from "@/components";
+import { getPositions, vote, getVotes } from "@/ducks";
+import { stockImg, truncateNames } from "@/utils/render";
 import FastImage from "react-native-fast-image";
 
 const iterateesPos = ["level"];

@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { View, Text, TouchableOpacity, Dimensions } from "react-native";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { Button, Input } from "../../components";
-import { resetPassword } from "../../ducks";
+import { Button, Input } from "@/components";
+import { resetPassword } from "@/ducks";
 
 const dimension = Dimensions.get("window");
 

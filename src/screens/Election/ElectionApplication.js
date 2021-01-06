@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { Button, Input, NavBar, ButtonLayout } from "../../components";
+import { Button, Input, NavBar, ButtonLayout } from "@/components";
 import _ from "lodash";
 import { FlatList, Text, SafeAreaView, View, TouchableOpacity } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Avatar } from "react-native-elements";
-import { openGallery } from "../../utils/render";
+import { openGallery } from "@/utils/render";
 import FastImage from "react-native-fast-image";
-import { getPositions, addApplication, editApplication } from "../../ducks";
+import { getPositions, addApplication, editApplication } from "@/ducks";
 
 const iterateesPos = ["level"];
 const orderPos = ["asc"];
@@ -164,7 +164,6 @@ class ElectionApplication extends Component {
 
 	callOpenGallery(candidate) {
 		openGallery(
-			// eslint-disable-next-line max-len
 			`/election/positions/${candidate.position || this.state.positionSelected}/candidates/${this.props.activeUser.id}`, "",
 			(url) => {
 				let candidate = Object.assign({}, this.state.candidate);
