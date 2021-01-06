@@ -104,8 +104,8 @@ rules:
   # React-Native
   react-native/no-inline-styles: warn      # disallow inline styles
   # React
-  react/jsx-uses-vars: warn                # fix no-unused-vars for JSX expressions
-  react/jsx-uses-react: warn               # fix no-unused vars for React
+  react/jsx-uses-vars: error               # fix no-unused-vars for JSX expressions
+  react/jsx-uses-react: error              # fix no-unused vars for React
   react/jsx-tag-spacing: error             # require consistent spaces before JSX tags
   react/jsx-no-duplicate-props: error      # disallow duplicate props
   react/jsx-equals-spacing:                # require spaces around equal signs for JSX

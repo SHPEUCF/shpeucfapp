@@ -4,7 +4,8 @@ import { View, Dimensions, ViewStyle } from "react-native";
 const { height } = Dimensions.get("screen");
 
 /**
- * @desc Component to properly layout multiple buttons as its children.
+ * @desc Component to properly layout multiple button children,
+ *       displaying them in rows with a max of two buttons per row.
  *
  * @typedef {Object} Props
  * @prop {Object}      icon            Icon to be displayed.
