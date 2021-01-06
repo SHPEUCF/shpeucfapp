@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
 import { ScrollView, SafeAreaView, Modal, View } from "react-native";
-import { Alert, Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicker, FilterList } from "../";
+import { Alert, Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicker, FilterList } from "@/components";
 import { MultiElement } from "./MultiElement";
-import { copyStateAndSetValuesToNull } from "../../utils/general";
+import { copyStateAndSetValuesToNull } from "@/utils/general";
 
 /**
  * Types

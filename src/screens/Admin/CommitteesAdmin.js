@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { Button, NavBar, SortableFlatList, ButtonLayout } from "../../components";
+import { Button, NavBar, SortableFlatList, ButtonLayout } from "@/components";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import _ from "lodash";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
@@ -16,7 +16,7 @@ import {
 	committeeDescriptionChanged,
 	committeeTitleChanged,
 	changeLevelsCom
-} from "../../ducks";
+} from "@/ducks";
 
 const dimension = Dimensions.get("window");
 const iteratees = ["level"];

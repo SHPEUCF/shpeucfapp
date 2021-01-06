@@ -1,17 +1,17 @@
 import React, { Component } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { connect } from "react-redux";
-import { Alert, Button, ButtonLayout, Form } from "../../components";
+import { Alert, Button, ButtonLayout, Form } from "@/components";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
 import { Avatar } from "react-native-elements";
 import Flag from "react-native-flags";
-import { openGallery, verifiedCheckMark } from "../../utils/render";
-import { loadUser, logoutUser, pageLoad, editUser } from "../../ducks";
+import { openGallery, verifiedCheckMark } from "@/utils/render";
+import { loadUser, logoutUser, pageLoad, editUser } from "@/ducks";
 import {
 	editProfileFormDataPrivileged,
 	editProfileFormDataRegular,
 	convertObjectToInitialValues
-} from "../../data/FormData";
+} from "@/data/FormData";
 
 const { height, width } = Dimensions.get("window");
 

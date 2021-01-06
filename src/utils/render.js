@@ -8,7 +8,7 @@ import RNFetchBlob from "rn-fetch-blob";
 import FastImage from "react-native-fast-image";
 import {
 	storeImageUrl
-} from "../ducks";
+} from "@/ducks";
 
 export const stockImg = {
 	uri: "https://cdn0.iconfinder.com/data/icons/superuser-web-kit/512/686909-user_people_man_human_head_person-512.png"

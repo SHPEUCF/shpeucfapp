@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { NavBar, Button, ButtonLayout } from "../../components";
+import { NavBar, Button, ButtonLayout } from "@/components";
 import _ from "lodash";
 import { FlatList,	Text,	SafeAreaView,	Dimensions, View } from "react-native";
 import {
@@ -11,7 +11,7 @@ import {
 	getPositions,
 	closeApplications,
 	openApplications
-} from "../../ducks";
+} from "@/ducks";
 
 const dimension = Dimensions.get("window");
 const iterateesCan = ["votes"];

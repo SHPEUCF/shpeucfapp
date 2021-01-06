@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { Avatar } from "react-native-elements";
 import { connect } from "react-redux";
-import { NavBar, FilterList } from "../../components";
+import { NavBar, FilterList } from "@/components";
 import _ from "lodash";
 import * as Progress from "react-native-progress";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Text, View, Dimensions, SafeAreaView } from "react-native";
-import { verifiedCheckMark, rankMembersAndReturnsCurrentUser, truncateNames } from "../../utils/render";
+import { verifiedCheckMark, rankMembersAndReturnsCurrentUser, truncateNames } from "@/utils/render";
 import FastImage from "react-native-fast-image";
 import {
 	getAllMemberPoints,
@@ -16,7 +16,7 @@ import {
 	getPrivilege,
 	loadUser,
 	filterChanged
-} from "../../ducks";
+} from "@/ducks";
 
 const dimension = Dimensions.get("window");
 const iteratees = ["points", "lastName", "firstName"];

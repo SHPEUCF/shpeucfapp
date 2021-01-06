@@ -2,10 +2,10 @@
 import React from "react";
 import { Router, Scene, Stack, ActionConst } from "react-native-router-flux";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { Spinner } from "../components/general";
-import CandidateForm from "../components/elect/CandidateForm";
-import PositionForm from "../components/elect/PositionForm";
-import CommitteeForm from "../components/general/CommitteeForm";
+import { Spinner } from "@/components/general";
+import CandidateForm from "@/components/elect/CandidateForm";
+import PositionForm from "@/components/elect/PositionForm";
+import CommitteeForm from "@/components/general/CommitteeForm";
 
 /** All Screen Imports grouped by folder **/
 
@@ -15,13 +15,13 @@ import {
 	CommitteesAdmin,
 	ElectionAdmin,
 	MemberAdmin
-} from "../screens";
+} from "@/screens";
 
 /** Import Committees **/
 import {
 	CommitteePage,
 	Committees
-} from "../screens";
+} from "@/screens";
 
 /** Import Election **/
 import {
@@ -29,13 +29,13 @@ import {
 	ElectionBallot,
 	ElectionCandidates,
 	ElectionPositions
-} from "../screens";
+} from "@/screens";
 
 /** Import Events **/
 import {
 	Events,
 	EventDetails
-} from "../screens";
+} from "@/screens";
 
 /** Import General  **/
 import {
@@ -43,7 +43,7 @@ import {
 	Dashboard,
 	Leaderboard,
 	More
-} from "../screens";
+} from "@/screens";
 
 /** Import User **/
 import {
@@ -52,7 +52,7 @@ import {
 	PointsBreakDown,
 	Profile,
 	ResetPassword
-} from "../screens";
+} from "@/screens";
 
 import { Dimensions } from "react-native";
 

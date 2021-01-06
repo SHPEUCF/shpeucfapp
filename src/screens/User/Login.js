@@ -3,10 +3,10 @@ import { View, Text, TouchableOpacity, Image, SafeAreaView, Dimensions } from "r
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Button } from "../../components";
-import { registrationFormData, loginFormData } from "../../data/FormData";
-import { createUser, loginUser, registrationError } from "../../ducks";
-import { Form } from "../../components/";
+import { Button } from "@/components";
+import { registrationFormData, loginFormData } from "@/data/FormData";
+import { createUser, loginUser, registrationError } from "@/ducks";
+import { Form } from "@/components/";
 
 const { height } = Dimensions.get("window");
 

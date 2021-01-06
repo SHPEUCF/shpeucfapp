@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Text, View, Dimensions, TouchableOpacity, SafeAreaView } from "react-native";
-import { Alert, Spinner, NavBar, Button } from "../../components";
+import { Alert, Spinner, NavBar, Button } from "@/components";
 import { Actions } from "react-native-router-flux";
-import { Agenda } from "../../components/general/calendar";
-import { goToViewEvent } from "../../utils/router";
-import { formatEventListForCalendar, filterEvents } from "../../utils/events";
-import { loadCommittee, loadEvent } from "../../ducks";
+import { Agenda } from "@/components/general/calendar";
+import { goToViewEvent } from "@/utils/router";
+import { formatEventListForCalendar, filterEvents } from "@/utils/events";
+import { loadCommittee, loadEvent } from "@/ducks";
 
 const dimension = Dimensions.get("window");
 let dateStr = "";
