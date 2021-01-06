@@ -35,10 +35,10 @@ export const ButtonLayout = ({ icon, children, containerStyle }) => {
 
 	if (!children)
 		return null;
-	else if (children && !children.length)
+	else if (React.Children.count(children) === 1)
 		layers.push(renderSingleButton(children));
 	else
-		children.forEach(child => child && realButtons.push(child));
+		React.Children.forEach(children, child => child && realButtons.push(child));
 
 	if ((length = realButtons.length) % 2 === 1) {
 		layers.push(renderSingleButton(realButtons[buttonIndex]));
