@@ -1,12 +1,10 @@
 import React, { Component } from "react";
+import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
 import { Actions } from "react-native-router-flux";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { connect } from "react-redux";
-import { Alert, ButtonLayout, NavBar } from "@/components";
-import { Avatar } from "react-native-elements";
+import { Alert, ButtonLayout, NavBar, Avatar, Icon } from "@/components";
 import Flag from "react-native-flags";
 import { verifiedCheckMark } from "@/utils/render";
-import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
 
 const dimension = Dimensions.get("window");
 
@@ -90,19 +88,13 @@ class OtherProfile extends Component {
 		return (
 			<View style = { headerInfoContainer }>
 				<View style = {{ flex: 1, paddingTop: "8%", marginBottom: "30%" }}>
-					{ picture === ""
-					&& <Avatar
-						size = { dimension.height * 0.32 }
-						rounded
-						titleStyle = {{ backgroundColor: this.props.color, height: "100%", width: "100%", justifyContent: "center", paddingTop: "20%" }}
-						title = { firstName[0].concat(lastName[0]) }
-					/> }
-					{ picture !== ""
-					&& <Avatar
-						size = { dimension.height * 0.32 }
-						rounded
-						source = {{ uri: picture }}
-					/> }
+					{ picture
+						? <Avatar size = "xlarge" source = { picture } />
+						: <Avatar
+							size = "xlarge"
+							title = { firstName[0].concat(lastName[0]) }
+							titleStyle = {{ backgroundColor: this.props.color }}
+						/> }
 				</View>
 				<View style = { [taglineContainer] }>
 					<View style = { row }>
@@ -157,7 +149,7 @@ class OtherProfile extends Component {
 								Alert.alert("Coming Soon");
 								// Actions.PostShow({ title: 'Linkedin', uri: 'https://www.linkedin.com/'})
 							} }>
-							<Ionicons name = "logo-linkedin" size = { dimension.height * 0.045 } color = 'white' />
+							<Icon name = "logo-linkedin" size = { dimension.height * 0.045 } color = 'white' />
 						</TouchableOpacity>
 					</View>
 					<View style = {{ flex: 0.01 }}></View>
@@ -167,7 +159,7 @@ class OtherProfile extends Component {
 								Alert.alert("Coming Soon");
 								// Actions.PostShow({ title: 'Github', uri: 'https://www.github.com/'})
 							} } >
-							<Ionicons name = "ios-mail" size = { dimension.height * 0.045 } color = 'white' />
+							<Icon name = "ios-mail" size = { dimension.height * 0.045 } color = 'white' />
 						</TouchableOpacity>
 					</View>
 				</View>

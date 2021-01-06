@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, Modal, ScrollView, TouchableOpacity } from "react-native";
-import Icon from "react-native-vector-icons/AntDesign";
-import { Animate } from "./";
+import { Animate, Icon } from "./";
 
 /**
  * @classdesc Component that renders the alert box component using the Animation component. It is only
@@ -36,13 +35,13 @@ class AlertComponent extends Component {
 		const icon = () => {
 			switch (this.state.type || "alert") {
 				case "confirmation":
-					return <Icon name = "questioncircleo" color = "white" size = { 24 } />;
+					return <Icon type = "AntDesign" name = "questioncircleo" color = "white" size = { 24 } />;
 				case "success":
-					return <Icon name = "checkcircleo" color = "green" size = { 24 } />;
+					return <Icon type = "AntDesign" name = "checkcircleo" color = "green" size = { 24 } />;
 				case "error":
-					return <Icon name = "closecircleo" color = "red" size = { 24 } />;
+					return <Icon type = "AntDesign" name = "closecircleo" color = "red" size = { 24 } />;
 				case "alert":
-					return <Icon name = "warning" color = "orange" size = { 24 } />;
+					return <Icon type = "AntDesign" name = "warning" color = "orange" size = { 24 } />;
 			}
 		};
 

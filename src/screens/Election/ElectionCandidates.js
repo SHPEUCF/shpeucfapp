@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import _ from "lodash";
 import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from "react-native";
-import { NavBar } from "@/components";
+import { NavBar, Icon } from "@/components";
 import {
 	openElection,
 	closeElection,
@@ -121,13 +120,13 @@ class ElectionCandidates extends Component {
 					<View style = { buttonContainerStyle }>
 						<TouchableOpacity
 							onPress = { () => approveApplication(position, id, firstName, lastName) }>
-							<Ionicons name = "md-checkmark-circle" size = { 40 } color = '#e0e6ed' />
+							<Icon name = "md-checkmark-circle" size = { 40 } color = '#e0e6ed' />
 						</TouchableOpacity>
 					</View>
 					<View style = { buttonContainerStyle }>
 						<TouchableOpacity
 							onPress = { () => deleteApplication(position, id) }>
-							<Ionicons name = "md-close-circle" size = { 40 } color = '#e0e6ed' />
+							<Icon name = "md-close-circle" size = { 40 } color = '#e0e6ed' />
 						</TouchableOpacity>
 					</View>
 				</View>
@@ -137,13 +136,13 @@ class ElectionCandidates extends Component {
 				<View style = { [{ flexDirection: "row", flex: 1 }] }>
 					<View style = { buttonContainerStyle }>
 						<TouchableOpacity onPress = { () => this.viewCandidate(item) }>
-							<Ionicons name = "md-create" size = { 40 } color = '#e0e6ed' />
+							<Icon name = "md-create" size = { 40 } color = '#e0e6ed' />
 						</TouchableOpacity>
 					</View>
 					<View style = { buttonContainerStyle }>
 						<TouchableOpacity
 							onPress = { () => deleteApplication(position, id) }>
-							<Ionicons name = "md-remove-circle" size = { 40 } color = '#e0e6ed' />
+							<Icon name = "md-remove-circle" size = { 40 } color = '#e0e6ed' />
 						</TouchableOpacity>
 					</View>
 				</View>

@@ -2,14 +2,10 @@ import React, { Component } from "react";
 import _ from "lodash";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { Avatar } from "react-native-elements";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { Text, View, SafeAreaView, FlatList, TouchableOpacity, Modal } from "react-native";
-import { Alert, Button, NavBar, ButtonLayout } from "@/components";
+import { Alert, Button, NavBar, ButtonLayout, Avatar, Icon } from "@/components";
 import { getPositions, vote, getVotes } from "@/ducks";
 import { stockImg, truncateNames } from "@/utils/render";
-import FastImage from "react-native-fast-image";
 
 const iterateesPos = ["level"];
 const orderPos = ["asc"];
@@ -157,34 +153,17 @@ class ElectionBallot extends Component {
 						onPress = { () => this.setState({ visibleCandidate: candidate, visible: true }) }
 					>
 						<View style = { [flex, centerItems] }>
-							{ this.renderPicture(picture) }
+							<Avatar size = { 50 } source = { picture || stockImg } />
 						</View>
 						<Text style = { [center, textColor, titleStyle, { flex: 1.5 }] }>
 							{ firstName } { lastName }
 						</Text>
 						<View style = { [centerItems, { flex: 0.3 }] }>
-							<Ionicons
-								name = "ios-arrow-dropright"
-								size = { 22 }
-								color = { "#FECB00" }
-							/>
+							<Icon name = "ios-arrow-dropright" size = { 22 } color = "#FECB00" />
 						</View>
 					</TouchableOpacity>
 				</View>
 			);
-	}
-
-	renderPicture(picture, size = 50) {
-		let pic = picture !== "" ? { uri: picture } : stockImg;
-
-		return (
-			<Avatar
-				size = { size }
-				rounded
-				source = { pic }
-				ImageComponent = { FastImage }
-			/>
-		);
 	}
 
 	renderCheck(candidate) {
@@ -196,7 +175,8 @@ class ElectionBallot extends Component {
 
 		return (
 			<TouchableOpacity style = { center } onPress = { () => this.updateSelection(isChecked, candidate) }>
-				<FontAwesome
+				<Icon
+					type = "FontAwesome"
 					name = { isChecked ? "check-circle-o" : "circle-o" }
 					color = { isChecked ? "#FECB00" : "#FFF" }
 					size = { 30 }
@@ -245,14 +225,10 @@ class ElectionBallot extends Component {
 						style = { closeModalBar }
 						onPress = { () => this.setState({ visible: false, visibleCandidate: {} }) }
 					>
-						<Ionicons
-							name = "ios-close-circle"
-							size = { 40 }
-							color = "white"
-						/>
+						<Icon name = "ios-close-circle" size = { 40 } color = "white" />
 					</TouchableOpacity>
 					<View style = { modalContent }>
-						{ this.renderPicture(picture, 200) }
+						<Avatar size = { 200 } source = { picture || stockImg } />
 						<Text style = { [textColor, titleStyle, { paddingVertical: "8%" }] }>
 							{ firstName } { lastName }
 						</Text>

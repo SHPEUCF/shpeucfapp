@@ -1,7 +1,7 @@
 import React from "react";
 import { Actions } from "react-native-router-flux";
 import { View, Text, TouchableOpacity, Dimensions } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { Icon } from "./";
 
 const { height } = Dimensions.get("screen");
 
@@ -25,7 +25,7 @@ export const NavBar = ({ title, back, onBack, style, childComponent, childStyle 
 	return (
 		<View style = { [tabBar, style, rowFlex] }>
 			{ back && <TouchableOpacity style = { backButtonStyle } onPress = { () => onBack() }>
-				<Ionicons name = "ios-arrow-dropleft" size = { height * 0.03 } color = "#FECB00" />
+				<Icon name = "ios-arrow-dropleft" size = { height * 0.03 } color = "#FECB00" />
 			</TouchableOpacity> }
 			<Text style = { tabBarText }>{ title }</Text>
 			<View style = { childStyle }>

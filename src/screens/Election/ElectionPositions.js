@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import _ from "lodash";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
-import { Button, SortableFlatList, NavBar, ButtonLayout } from "@/components";
+import { Button, SortableFlatList, NavBar, ButtonLayout, Icon } from "@/components";
 import {
 	openElection,
 	closeElection,
@@ -100,12 +99,12 @@ class ElectionPosition extends Component {
 				</View>
 				<View style = { styles.buttonContainerStyle }>
 					<TouchableOpacity onPress = { () => this.viewPosition(item.position) }>
-						<Ionicons style = { textColor } name = "md-create" size = { 40 } />
+						<Icon style = { textColor } name = "md-create" size = { 40 } />
 					</TouchableOpacity>
 				</View>
 				<View style = { styles.buttonContainerStyle }>
 					<TouchableOpacity onPress = { () => this.delete(item.position) }>
-						<Ionicons style = { textColor } name = "md-trash" size = { 40 } />
+						<Icon style = { textColor } name = "md-trash" size = { 40 } />
 					</TouchableOpacity>
 				</View>
 			</TouchableOpacity>
