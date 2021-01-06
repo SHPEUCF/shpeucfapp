@@ -46,7 +46,7 @@ export const developers = [
 	},
 	{
 		"name": "Idel Martinez",
-		"pic": "https://avatars2.githubusercontent.com/u/33189777?s=400&v=4",
+		"pic": "https://avatars1.githubusercontent.com/u/33189777?s=460&u=c16e6848b71477bbc5c98ee6dec60cee25ba139e&v=4",
 		"github": "https://github.com/idelmr"
 	}
 ];
