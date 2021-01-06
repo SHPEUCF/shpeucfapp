@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useRef, useEffect } from "react";
 import { Animated, View, ViewStyle } from "react-native";
 
