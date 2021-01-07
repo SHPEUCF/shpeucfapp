@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { NavBar, Button, ButtonLayout, FilterList } from "../../components";
+import { NavBar, Button, ButtonLayout, FilterList } from "@/components";
 import { SafeAreaView, View, Text } from "react-native";
-import { MemberPanel } from "../../utils/render";
-import MemberService from "../../services/members";
+import { MemberPanel } from "@/utils/render";
+import MemberService from "@/services/members";
 
 const memberService = new MemberService();
 

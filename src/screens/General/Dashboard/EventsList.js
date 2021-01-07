@@ -1,8 +1,8 @@
 import React, { PureComponent } from "react";
 import { View, Text, TouchableOpacity, Dimensions } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { goToViewEvent } from "../../../utils/router";
-import { filterPastEvents } from "../../../utils/events";
+import { goToViewEvent } from "@/utils/router";
+import { filterPastEvents } from "@/utils/events";
+import { Icon } from "@/components";
 
 const { width, height } = Dimensions.get("window");
 
@@ -27,7 +27,7 @@ export default class EventsList extends PureComponent {
 					</Text>
 				</View>
 				<View style = { leaderboardArrow }>
-					<Ionicons name = "ios-arrow-dropright" size = { height * 0.025 } style = { gold } />
+					<Icon name = "ios-arrow-dropright" size = { height * 0.025 } style = { gold } />
 				</View>
 			</View>
 		);

@@ -6,9 +6,9 @@ fields are displayed
 import React from "react";
 import Countries from "./Countries.json";
 import Majors from "./Majors.json";
-import { changeHourBy, timeVerification } from "../utils/events";
+import { changeHourBy, timeVerification } from "@/utils/events";
 import { useSelector } from "react-redux";
-import { Form } from "../components";
+import { Form } from "@/components";
 
 // data
 const genderOptions = ["Female", "Male", "Other", "Do not wish to disclose"];

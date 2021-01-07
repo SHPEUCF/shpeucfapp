@@ -1,9 +1,9 @@
 import React, { PureComponent } from "react";
-import { Actions } from "react-native-router-flux";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import _ from "lodash";
 import { Text, View, Dimensions, TouchableOpacity } from "react-native";
-import { rankMembersAndReturnsCurrentUser } from "../../../utils/render";
+import { Actions } from "react-native-router-flux";
+import _ from "lodash";
+import { rankMembersAndReturnsCurrentUser } from "@/utils/render";
+import { Icon } from "@/components";
 
 const { width, height } = Dimensions.get("window");
 const iteratees = ["points", "lastName", "firstName"];
@@ -37,7 +37,7 @@ export default class Leaderboard extends PureComponent {
 					<View style = { leaderboardContentDivider }>
 						<View style = { leaderboardDividerLine } />
 						<View style = { leaderboardArrow }>
-							<Ionicons name = "ios-arrow-dropright" size = { height * 0.025 } style = { gold } />
+							<Icon name = "ios-arrow-dropright" size = { height * 0.025 } style = { gold } />
 						</View>
 						<View style = { leaderboardDividerLine } />
 					</View>

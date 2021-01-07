@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { View, Text, TouchableOpacity, Dimensions } from "react-native";
 import { Actions } from "react-native-router-flux";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { Icon } from "@/components";
 
 const { height, width } = Dimensions.get("screen");
 
@@ -24,7 +24,7 @@ export default class FavoriteCommittees extends PureComponent {
 		return (
 			<View style = { committeesPanelContainer }>
 				<View style = { selectCommitteesIcon }>
-					<Ionicons
+					<Icon
 						name = "ios-information-circle"
 						size = { height * 0.028 }
 						onPress = { () => Actions["CommitteesD"]({ screen: "dashboard" }) } style = { gold }
@@ -47,7 +47,7 @@ export default class FavoriteCommittees extends PureComponent {
 									<Text style = { [textColor, { fontSize: width * 0.03 }] }>{ committeeName }</Text>
 								</View>
 								<View style = { leaderboardArrow }>
-									<Ionicons name = "ios-arrow-dropright" size = { height * 0.025 } style = { gold } />
+									<Icon name = "ios-arrow-dropright" size = { height * 0.025 } style = { gold } />
 								</View>
 							</TouchableOpacity>
 						) }

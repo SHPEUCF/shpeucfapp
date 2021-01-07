@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { NavBar } from "../../components";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { NavBar, Icon } from "@/components";
 import _ from "lodash";
 import { FlatList, Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
-import { goToViewEvent } from "../../utils/router";
-import { filterEvents } from "../../utils/events";
-import { editUser, loadEvent, getCommittees, loadCommittee } from "../../ducks";
+import { goToViewEvent } from "@/utils/router";
+import { filterEvents } from "@/utils/events";
+import { editUser, loadEvent, getCommittees, loadCommittee } from "@/ducks";
 
 const dimension = Dimensions.get("window");
 const iteratees = ["level"];
@@ -107,7 +106,7 @@ class Committees extends Component {
 							&& <View
 								style = {{ backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end" }}
 							>
-								<Ionicons
+								<Icon
 									name = "ios-star"
 									size = { dimension.height * 0.03 }
 									onPress = { () => {
@@ -124,7 +123,7 @@ class Committees extends Component {
 						&& <View
 							style = {{ backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end" }}
 						>
-							<Ionicons
+							<Icon
 								name = "ios-star-outline"
 								size = { dimension.height * 0.03 }
 								onPress = { () => {
@@ -153,7 +152,7 @@ class Committees extends Component {
 					&& <View
 						style = {{ backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end" }}
 					>
-						<Ionicons
+						<Icon
 							name = "ios-calendar"
 							size = { dimension.height * 0.03 }
 							onPress = { () => {
@@ -166,7 +165,7 @@ class Committees extends Component {
 					&& <View
 						style = {{ backgroundColor: "black", justifyContent: "center", flex: 2, alignItems: "flex-end" }}
 					>
-						<Ionicons
+						<Icon
 							name = "ios-calendar"
 							size = { dimension.height * 0.03 }
 							onPress = { () => {
@@ -177,7 +176,7 @@ class Committees extends Component {
 					</View>) }
 					<View style = {{ flex: 1 }}></View>
 					<View style = {{ flex: 0.6, justifyContent: "center" }}>
-						<Ionicons
+						<Icon
 							name = "ios-arrow-dropright"
 							size = { dimension.height * 0.025 }
 							style = {{ color: "#FECB00", backgroundColor: "transparent", alignSelf: "center" }}
@@ -288,13 +287,13 @@ class Committees extends Component {
 					<View style = { buttonContainerStyle }>
 						<TouchableOpacity
 							onPress = { () => approveApplication(position, id, firstName, lastName) }>
-							<Ionicons name = "md-checkmark-circle" size = { 40 } color = '#e0e6ed' />
+							<Icon name = "md-checkmark-circle" size = { 40 } color = '#e0e6ed' />
 						</TouchableOpacity>
 					</View>
 					<View style = { buttonContainerStyle }>
 						<TouchableOpacity
 							onPress = { () => deleteApplication(position, id) }>
-							<Ionicons name = "md-close-circle" size = { 40 } color = '#e0e6ed' />
+							<Icon name = "md-close-circle" size = { 40 } color = '#e0e6ed' />
 						</TouchableOpacity>
 					</View>
 				</View>
@@ -304,13 +303,13 @@ class Committees extends Component {
 				<View style = { [{ flexDirection: "row", flex: 1 }] }>
 					<View style = { buttonContainerStyle }>
 						<TouchableOpacity onPress = { () => this.viewCandidate(item) }>
-							<Ionicons name = "md-create" size = { 40 } color = '#e0e6ed' />
+							<Icon name = "md-create" size = { 40 } color = '#e0e6ed' />
 						</TouchableOpacity>
 					</View>
 					<View style = { buttonContainerStyle }>
 						<TouchableOpacity
 							onPress = { () => deleteApplication(position, id) }>
-							<Ionicons name = "md-remove-circle" size = { 40 } color = '#e0e6ed' />
+							<Icon name = "md-remove-circle" size = { 40 } color = '#e0e6ed' />
 						</TouchableOpacity>
 					</View>
 				</View>

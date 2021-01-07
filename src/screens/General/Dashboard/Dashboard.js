@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Spinner } from "../../../components";
-import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
+import { Spinner, Icon } from "@/components";
 import { ColorPicker } from "react-native-color-picker";
-import CountryFlag from "../../../components/general/CountryFlag";
-import { months } from "../../../data/DateItems";
-import { loadEvent, editUser, loadCommittee } from "../../../ducks";
+import CountryFlag from "@/components/general/CountryFlag";
+import { months } from "@/data/DateItems";
+import { loadEvent, editUser, loadCommittee } from "@/ducks";
 import { Leaderboard, EventsList, FavoriteCommittees } from "./";
 import {
 	Text,
@@ -84,7 +83,8 @@ class Dashboard extends Component {
 				</View>
 				<View style = { headerOptionsContainer }>
 					<CountryFlag />
-					<FontAwesomeIcon
+					<Icon
+						type = "FontAwesome"
 						style = {{ color: "white" }}
 						name = "chevron-down"
 						onPress = { () => this.setState({ colorPickerVisible: true }) }
@@ -132,7 +132,7 @@ class Dashboard extends Component {
 							style = { socialMediaButton }
 							onPress = { () => Linking.openURL(link) }
 						>
-							<FontAwesomeIcon style = { black } name = { icon } size = { height * 0.04 } />
+							<Icon type = "FontAwesome" style = { black } name = { icon } size = { height * 0.04 } />
 						</TouchableOpacity>
 					) }
 				</View>

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { View } from "react-native";
 import { Input, PickerInput } from "./";
-import { convertStandardToMilitaryTime, convertMilitaryToStandardTime, prepend0 } from "../../utils/events";
+import { convertStandardToMilitaryTime, convertMilitaryToStandardTime, prepend0 } from "@/utils/events";
 
 class TimePicker extends Component {
 	static propTypes = {

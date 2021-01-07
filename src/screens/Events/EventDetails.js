@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Alert, Button, NavBar, FilterList, ButtonLayout } from "../../components";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { Alert, Button, NavBar, FilterList, ButtonLayout, Icon } from "@/components";
 import { Actions } from "react-native-router-flux";
 import QRCode from "react-native-qrcode-svg";
 import QRCodeScanner from "react-native-qrcode-scanner";
-import { MemberPanel } from "../../utils/render";
-import { months } from "../../data/DateItems";
-import { EventForm } from "../../data/FormData";
-import { deleteEvent, editEvent, checkIn, rsvp, pageLoad, getAllMemberAccounts } from "../../ducks";
+import { MemberPanel } from "@/utils/render";
+import { months } from "@/data/DateItems";
+import { EventForm } from "@/data/FormData";
+import { deleteEvent, editEvent, checkIn, rsvp, pageLoad, getAllMemberAccounts } from "@/ducks";
 import {
 	View,
 	TouchableOpacity,
@@ -72,7 +71,7 @@ class EventDetails extends Component {
 					<View style = { modalBackground }>
 						<View style = { modalContent }>
 							<TouchableOpacity onPress = { () => this.setState({ modalVisible: false }) }>
-								<Ionicons
+								<Icon
 									name = "md-close-circle"
 									size = { dimension.height * 0.05 }
 									color = '#e0e6ed'
@@ -234,7 +233,7 @@ class EventDetails extends Component {
 					<View style = { attendanceContainer }>
 						<View style = { icon } />
 						<Text style = { [attendance, textColor] }>Attendance</Text>
-						<Ionicons
+						<Icon
 							style = { [icon, textColor] }
 							name = "md-mail"
 							size = { 35 }
@@ -326,11 +325,11 @@ class EventDetails extends Component {
 		if (activeUser.privilege && activeUser.privilege.board) {
 			return [
 				<View style = { iconContainer }>
-					<Ionicons style = { [icon, textColor] } name = "ios-people" size = { iconSize } color = '#000' />
+					<Icon style = { [icon, textColor] } name = "ios-people" size = { iconSize } color = '#000' />
 					<Text style = { [text, textColor] }>{ numRSVP } { numRSVP == 1 ? "person" : "people" } RSVP'd</Text>
 				</View>,
 				numAttendance && <View style = { iconContainer }>
-					<Ionicons style = { [icon, textColor] } name = "md-people" size = { iconSize } color = '#000' />
+					<Icon style = { [icon, textColor] } name = "md-people" size = { iconSize } color = '#000' />
 					<Text style = { [text, textColor] }>{ numAttendance } { numAttendance == 1 ? "person" : "people" } attended</Text>
 				</View>
 			];
@@ -449,7 +448,7 @@ class EventDetails extends Component {
 					/>
 					<View style = { container }>
 						<View style = { iconContainer }>
-							<Ionicons
+							<Icon
 								style = { [icon, textColor] }
 								name = "md-calendar"
 								size = { iconSize }
@@ -457,7 +456,7 @@ class EventDetails extends Component {
 							<Text style = { [text, textColor] }>{ this.convertNumToDate(date) }</Text>
 						</View>
 						<View style = { iconContainer }>
-							<Ionicons
+							<Icon
 								style = { [icon, textColor] }
 								name = "md-time"
 								size = { iconSize }
@@ -465,7 +464,7 @@ class EventDetails extends Component {
 							<Text style = { [text, textColor] }>{ startTime }-{ endTime }</Text>
 						</View>
 						<View style = { iconContainer }>
-							<Ionicons
+							<Icon
 								style = { [icon, textColor] }
 								name = "md-pin"
 								size = { iconSize }
@@ -474,7 +473,7 @@ class EventDetails extends Component {
 						</View>
 						{ description
 						&& <View style = { iconContainer }>
-							<Ionicons
+							<Icon
 								style = { [icon, textColor] }
 								name = "md-list"
 								size = { iconSize }

@@ -1,17 +1,15 @@
 import React, { Component } from "react";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { connect } from "react-redux";
-import { Alert, Button, ButtonLayout, Form } from "../../components";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
-import { Avatar } from "react-native-elements";
+import { connect } from "react-redux";
+import { Alert, Button, ButtonLayout, Form, Avatar, Icon } from "@/components";
 import Flag from "react-native-flags";
-import { openGallery, verifiedCheckMark } from "../../utils/render";
-import { loadUser, logoutUser, pageLoad, editUser } from "../../ducks";
+import { openGallery, verifiedCheckMark } from "@/utils/render";
+import { loadUser, logoutUser, pageLoad, editUser } from "@/ducks";
 import {
 	editProfileFormDataPrivileged,
 	editProfileFormDataRegular,
 	convertObjectToInitialValues
-} from "../../data/FormData";
+} from "@/data/FormData";
 
 const { height, width } = Dimensions.get("window");
 
@@ -91,22 +89,20 @@ class Profile extends Component {
 		return (
 			<View style = { [headerInfoContainer] }>
 				<View style = {{ flex: 1, paddingTop: "8%", marginBottom: "30%" }}>
-					{ picture === ""
-					&& <Avatar
-						size = { height * 0.32 }
-						rounded
-						titleStyle = {{ backgroundColor: color }}
-						overlayContainerStyle = {{ backgroundColor: color }}
-						title = { firstName[0].concat(lastName[0]) }
-						onPress = { () => openGallery(`users/${id}`, id) }
-					/>	}
-					{ picture !== ""
-					&& <Avatar
-						size = { height * 0.32 }
-						rounded
-						source = {{ uri: picture }}
-						onPress = { () => openGallery(`users/${id}`, id) }
-					/> }
+					{ picture
+						? <Avatar
+							size = "xlarge"
+							source = { picture }
+							onPress = { () => openGallery(`users/${id}`, id) }
+							showEdit
+						/>
+						: <Avatar
+							size = "xlarge"
+							titleStyle = {{ backgroundColor: color }}
+							title = { firstName[0].concat(lastName[0]) }
+							onPress = { () => openGallery(`users/${id}`, id) }
+							showEdit
+						/> }
 				</View>
 				<View style = { [taglineContainer] }>
 					<View style = { row }>
@@ -154,13 +150,13 @@ class Profile extends Component {
 				<View style = { socialMediaRow }>
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
 						<TouchableOpacity onPress = { () => Alert.alert("Coming Soon") }>
-							<Ionicons name = "logo-linkedin" size = { height * 0.045 } color = "white" />
+							<Icon name = "logo-linkedin" size = { height * 0.045 } color = "white" />
 						</TouchableOpacity>
 					</View>
 					<View style = {{ flex: 0.01 }} />
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
 						<TouchableOpacity onPress = { () => Alert.alert("Coming Soon") }>
-							<Ionicons name = "ios-mail" size = { height * 0.045 } color = "white" />
+							<Icon name = "ios-mail" size = { height * 0.045 } color = "white" />
 						</TouchableOpacity>
 					</View>
 				</View>

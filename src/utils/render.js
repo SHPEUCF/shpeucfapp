@@ -1,18 +1,12 @@
 import React from "react";
 import { View, Text } from "react-native";
 import firebase from "firebase";
-import { Avatar } from "react-native-elements";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { Avatar, Icon } from "@/components";
 import ImagePicker from "react-native-image-crop-picker";
 import RNFetchBlob from "rn-fetch-blob";
-import FastImage from "react-native-fast-image";
-import {
-	storeImageUrl
-} from "../ducks";
+import { storeImageUrl } from "@/ducks";
 
-export const stockImg = {
-	uri: "https://cdn0.iconfinder.com/data/icons/superuser-web-kit/512/686909-user_people_man_human_head_person-512.png"
-};
+export const stockImg = "https://cdn0.iconfinder.com/data/icons/superuser-web-kit/512/686909-user_people_man_human_head_person-512.png";
 
 // You pass in the privileges prop or user object
 export const verifiedCheckMark = ({ paidMember }) => {
@@ -20,14 +14,11 @@ export const verifiedCheckMark = ({ paidMember }) => {
 		verifiedCheckMark
 	} = styles;
 
-	if (paidMember)
+	if (paidMember) {
 		return (
-			<Ionicons
-				name = "ios-checkmark-circle"
-				size = { 25 }
-				style = { verifiedCheckMark }
-			/>
+			<Icon name = "ios-checkmark-circle" size = { 25 } style = { verifiedCheckMark } />
 		);
+	}
 };
 
 // MemberPanel needs should be made into its own component
@@ -47,21 +38,12 @@ export const MemberPanel = (user) => {
 			<View style = { userInfoContainer }>
 				<Text style = { [textStyle, fullFlex ] }>{ `${user.firstName} ${user.lastName}` }</Text>
 				<View style = { AvatarContainer }>
-					{ user.picture === ""
-					&& <Avatar
-						size = "large"
-						rounded
-						titleStyle = {{ backgroundColor: user.color }}
-						overlayContainerStyle = {{ backgroundColor: user.color }}
-						title = { user.firstName[0].concat(user.lastName[0]) }
-					/> }
-					{ user.picture !== ""
-					&& <Avatar
-						size = "large"
-						rounded
-						source = {{ uri: user.picture }}
-						ImageComponent = { FastImage }
-					/> }
+					{ user.picture
+						? <Avatar source = { user.picture } />
+						: <Avatar
+							title = { user.firstName[0].concat(user.lastName[0]) }
+							titleStyle = {{ backgroundColor: user.color }}
+						/> }
 				</View>
 			</View>
 		</View>
@@ -93,6 +75,7 @@ export const truncateNames = (item) => {
 export const openGallery = (filePath, fileName, onImageStoreFunction) => {
 	const Blob = RNFetchBlob.polyfill.Blob;
 	const fs = RNFetchBlob.fs;
+
 	window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
 	window.Blob = Blob;
 
@@ -109,8 +92,10 @@ export const openGallery = (filePath, fileName, onImageStoreFunction) => {
 		const imagePath = image.path;
 		let uploadBlob = null;
 		let mime = "image/jpg";
-		// Normally pictures are uploaded under a consistent filename so that pictures are automatically overwritten
-		// If there is no consistent filename passed in, this will allow for infite uploads to the same filepath
+		/*
+		 * Normally pictures are uploaded under a consistent filename so that pictures are automatically overwritten
+		 * If there is no consistent filename passed in, this will allow for infite uploads to the same filepath
+		 */
 		const imageRef = firebase.storage().ref(filePath).child(fileName || image.filename);
 
 		fs.readFile(imagePath, "base64")
@@ -125,6 +110,7 @@ export const openGallery = (filePath, fileName, onImageStoreFunction) => {
 			})
 			.then(() => {
 				uploadBlob.close();
+
 				return imageRef.getDownloadURL();
 			})
 			.then((url) => {

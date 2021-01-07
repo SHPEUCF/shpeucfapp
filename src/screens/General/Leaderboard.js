@@ -1,14 +1,10 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
-import { Avatar } from "react-native-elements";
 import { connect } from "react-redux";
-import { NavBar, FilterList } from "../../components";
+import { NavBar, FilterList, Avatar, ProgressBar, Icon } from "@/components";
 import _ from "lodash";
-import * as Progress from "react-native-progress";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { Text, View, Dimensions, SafeAreaView } from "react-native";
-import { verifiedCheckMark, rankMembersAndReturnsCurrentUser, truncateNames } from "../../utils/render";
-import FastImage from "react-native-fast-image";
+import { verifiedCheckMark, rankMembersAndReturnsCurrentUser, truncateNames } from "@/utils/render";
 import {
 	getAllMemberPoints,
 	getVisitedMember,
@@ -16,7 +12,7 @@ import {
 	getPrivilege,
 	loadUser,
 	filterChanged
-} from "../../ducks";
+} from "@/ducks";
 
 const dimension = Dimensions.get("window");
 const iteratees = ["points", "lastName", "firstName"];
@@ -107,29 +103,19 @@ class Leaderboard extends Component {
 									Points: { item.points }
 								</Text>
 							</View>
-							{ item.picture === ""
-							&& <Avatar
-								size = { dimension.height * 0.08 }
-								rounded
-								titleStyle = {{ backgroundColor: item.color }}
-								overlayContainerStyle = {{ backgroundColor: item.color }}
-								title = { item.firstName[0].concat(item.lastName[0]) }
-							/> }
-							{ item.picture !== ""
-							&& <Avatar
-								size = "large"
-								rounded
-								source = {{ uri: item.picture }}
-								ImageComponent = { FastImage }
-							/> }
+							{ item.picture
+								? <Avatar source = { item.picture } />
+								: <Avatar
+									title = { item.firstName[0].concat(item.lastName[0]) }
+									titleStyle = {{ backgroundColor: item.color }}
+								/> }
 						</View>
-						<Progress.Bar
+						<ProgressBar
 							style = { progress }
 							progress = { item.points / Math.max(sortedMembers[0].points, 1) }
-							indeterminate = { false }
 							height = { dimension.width * 0.03 }
 							width = { dimension.width * 0.75 }
-							color = { "#ffd700" }
+							color = "#ffd700"
 						/>
 					</View>
 				</View>
@@ -140,7 +126,7 @@ class Leaderboard extends Component {
 	searchButton() {
 		return (
 			<View style = {{ alignItems: "flex-end" }}>
-				<Ionicons
+				<Icon
 					onPress = { () => {
 						this.props.filterChanged("");
 						this.setState({ search: !this.state.search });

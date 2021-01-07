@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { View, Modal, FlatList, Dimensions, TouchableOpacity, Text } from "react-native";
-import { Input } from "./Input";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { Input, Icon } from "./";
 
 const dimension = Dimensions.get("window");
 
@@ -95,7 +94,7 @@ class PickerInput extends Component {
 						placeholder = { placeholder }
 						editable = { false }
 					/>
-					<Ionicons
+					<Icon
 						onPress = { () => this.setState({ modalVisible: true }) }
 						style = { [iconStyle, dropDownArrowStyle] }
 						name = { "ios-arrow-dropdown" }

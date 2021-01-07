@@ -1,10 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
 import { Actions } from "react-native-router-flux";
-import { connect } from "react-redux";
-import { FlatList, SafeAreaView } from "react-native";
-import { ListItem } from "react-native-elements";
-import { NavBar } from "../../components";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { useSelector } from "react-redux";
+import { SafeAreaView } from "react-native";
+import { NavBar, ListItem } from "@/components";
 
 const menuItems = [
 	{
@@ -27,56 +25,29 @@ const menuItems = [
 	}
 ];
 
-class AdminHub extends Component {
-	constructor(props) {
-		super(props);
-	}
+export default () => {
+	const { user: { activeUser } } = useSelector(state => state);
+	const { page } = styles;
 
-	render() {
-		const {
-			page
-		} = styles;
-
-		return (
-			<SafeAreaView style = { page }>
-				<NavBar title = "Back End" back onBack = { () => Actions.pop() } />
-				<FlatList
-					keyExtractor = { this.keyExtractor }
-					extraData = { this.props }
-					data = { menuItems }
-					renderItem = { this.renderItem }
-				/>
-			</SafeAreaView>
-		);
-	}
-
-	keyExtractor = (item, index) => index
-
-	renderItem = ({ item }) => {
-		const {
-			activeUser
-		} = this.props;
-
-		if (activeUser.privilege && item
-			&& activeUser.privilege[item.privilege] && (!("privilege" in item)
-			|| activeUser.privilege[item.privilege]))
+	const renderItem = ({ privilege, title, icon, screen }) => {
+		if (activeUser.privilege && activeUser.privilege[privilege]) {
 			return (
-				<ListItem
-					containerStyle = {{ backgroundColor: "black", borderBottomColor: "white" }}
-					removeClippedSubviews = { false }
-					title = { item.title }
-					titleStyle = {{ color: "white" }}
-					leftIcon = {{ name: item.icon, color: "white" }}
-					rightIcon = { <Ionicons
-						name = "ios-arrow-dropright"
-						size = { 22 }
-						color = "#FECB00"
-					/> }
-					onPress = { () => Actions[item.screen]() }
-				/>
+				<ListItem onPress = { Actions[screen] } key = { title }>
+					<ListItem.Title>{ title }</ListItem.Title>
+					<ListItem.LeftIcon type = "MaterialIcons" name = { icon } color = "white" />
+					<ListItem.RightIcon name = "ios-arrow-dropright" size = { 22 } color = "#FECB00" />
+				</ListItem>
 			);
-	}
-}
+		}
+	};
+
+	return (
+		<SafeAreaView style = { page }>
+			<NavBar title = "Back End" onBack = { () => Actions.pop() } back />
+			{ menuItems.map(tab => renderItem(tab)) }
+		</SafeAreaView>
+	);
+};
 
 const styles = {
 	page: {
@@ -84,15 +55,3 @@ const styles = {
 		backgroundColor: "#0c0b0b"
 	}
 };
-
-const mapStateToProps = ({ user }) => {
-	const {
-		activeUser
-	} = user;
-
-	return { activeUser };
-};
-
-const mapDispatchToProps = {};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AdminHub);

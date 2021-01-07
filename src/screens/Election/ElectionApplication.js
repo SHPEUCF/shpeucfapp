@@ -1,15 +1,12 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { Button, Input, NavBar, ButtonLayout } from "../../components";
+import { Button, Input, NavBar, ButtonLayout, Avatar, Icon } from "@/components";
 import _ from "lodash";
 import { FlatList, Text, SafeAreaView, View, TouchableOpacity } from "react-native";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Avatar } from "react-native-elements";
-import { openGallery } from "../../utils/render";
-import FastImage from "react-native-fast-image";
-import { getPositions, addApplication, editApplication } from "../../ducks";
+import { openGallery } from "@/utils/render";
+import { getPositions, addApplication, editApplication } from "@/ducks";
 
 const iterateesPos = ["level"];
 const orderPos = ["asc"];
@@ -128,17 +125,15 @@ class ElectionApplication extends Component {
 
 		return (
 			<View style = { [fullFlex, column ] }>
-				<Text style = { [fontLarge, textColor, titleStyle ] }>
+				<Text style = { [fontLarge, textColor, titleStyle] }>
 					{ candidate.position || positionSelected }
 				</Text>
 				<Avatar
 					size = { 200 }
-					rounded
-					onPress = { () => this.callOpenGallery(candidate) }
-					ImageComponent = { FastImage }
 					title = "Add Image"
 					titleStyle = { fontLarge }
-					source = { candidate.picture && { uri: candidate.picture } }
+					source = { candidate.picture }
+					onPress = { () => this.callOpenGallery(candidate) }
 				/>
 				<Text style = { [fontLarge, textColor] }>
 					{ firstName } { lastName }
@@ -164,7 +159,6 @@ class ElectionApplication extends Component {
 
 	callOpenGallery(candidate) {
 		openGallery(
-			// eslint-disable-next-line max-len
 			`/election/positions/${candidate.position || this.state.positionSelected}/candidates/${this.props.activeUser.id}`, "",
 			(url) => {
 				let candidate = Object.assign({}, this.state.candidate);
@@ -210,7 +204,8 @@ class ElectionApplication extends Component {
 					<Text style = { [fontLarge, textColor, fontBold] }>{ item.title }</Text>
 					<Text style = { [fontSmall, textColor] }>{ item.description }</Text>
 				</View>
-				<MaterialIcons
+				<Icon
+					type = "MaterialIcons"
 					name = "assignment"
 					color = "#FECB00"
 					size = { 35 }

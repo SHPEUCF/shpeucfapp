@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
-import { Button, NavBar, SortableFlatList, ButtonLayout } from "../../components";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { Button, NavBar, SortableFlatList, ButtonLayout, Icon } from "@/components";
 import _ from "lodash";
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
 import {
@@ -16,7 +15,7 @@ import {
 	committeeDescriptionChanged,
 	committeeTitleChanged,
 	changeLevelsCom
-} from "../../ducks";
+} from "@/ducks";
 
 const dimension = Dimensions.get("window");
 const iteratees = ["level"];
@@ -125,12 +124,12 @@ class CommitteesAdmin extends Component {
 				</View>
 				<View style = { styles.buttonContainerStyle }>
 					<TouchableOpacity onPress = { () => this.viewCommittee(item.committee) }>
-						<Ionicons style = { textColor } name = "md-create" size = { 40 } />
+						<Icon style = { textColor } name = "md-create" size = { 40 } />
 					</TouchableOpacity>
 				</View>
 				<View style = { styles.buttonContainerStyle }>
 					<TouchableOpacity onPress = { () => this.delete(item.committee) }>
-						<Ionicons style = { textColor } name = "md-trash" size = { 40 } />
+						<Icon style = { textColor } name = "md-trash" size = { 40 } />
 					</TouchableOpacity>
 				</View>
 			</TouchableOpacity>

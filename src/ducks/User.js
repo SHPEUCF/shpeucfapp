@@ -1,7 +1,7 @@
 import firebase from "firebase";
 import { Actions } from "react-native-router-flux";
-import { createActionTypes } from "../utils/actions";
-import { Alert } from "../components";
+import { createActionTypes } from "@/utils/actions";
+import { Alert } from "@/components";
 import Lodash from "lodash";
 
 const ACTIONS = createActionTypes([
