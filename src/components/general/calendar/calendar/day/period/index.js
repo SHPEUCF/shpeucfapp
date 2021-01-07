@@ -1,18 +1,18 @@
-import _ from "lodash";
-import PropTypes from "prop-types";
-import React, { Component } from "react";
-import { TouchableWithoutFeedback, Text, View } from "react-native";
-import { shouldUpdate } from "../../../component-updater";
+import _ from 'lodash';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { TouchableWithoutFeedback, Text, View } from 'react-native';
+import { shouldUpdate } from '../../../component-updater';
 
-import * as defaultStyle from "../../../style";
-import styleConstructor from "./style";
+import * as defaultStyle from '../../../style';
+import styleConstructor from './style';
 
 class Day extends Component {
-	static displayName = "IGNORE";
+	static displayName = 'IGNORE';
 
 	static propTypes = {
 		// TODO: selected + disabled props should be removed
-		state: PropTypes.oneOf(["selected", "disabled", "today", ""]),
+		state: PropTypes.oneOf(['selected', 'disabled', 'today', '']),
 		// Specify theme properties to override specific styles for calendar parts. Default = {}
 		theme: PropTypes.object,
 		marking: PropTypes.any,
@@ -46,14 +46,16 @@ class Day extends Component {
 
 		if (!_.isEqual(this.markingStyle, newMarkingStyle)) {
 			this.markingStyle = newMarkingStyle;
+
 			return true;
 		}
 
-		return shouldUpdate(this.props, nextProps, ["state", "children", "onPress", "onLongPress"]);
+		return shouldUpdate(this.props, nextProps, ['state', 'children', 'onPress', 'onLongPress']);
 	}
 
 	getDrawingStyle(marking) {
 		const defaultStyle = { textStyle: {} };
+
 		if (!marking)
 			return defaultStyle;
 
@@ -68,23 +70,25 @@ class Day extends Component {
 					prev.containerStyle = this.style.firstQuickAction;
 					prev.textStyle = this.style.firstQuickActionText;
 					if (next.endSelected && next.first && !next.last)
-						prev.rightFillerStyle = "#c1e4fe";
+						prev.rightFillerStyle = '#c1e4fe';
 					else if (next.endSelected && next.last && !next.first)
-						prev.leftFillerStyle = "#c1e4fe";
+						prev.leftFillerStyle = '#c1e4fe';
 				}
 				else if (!next.endSelected) {
 					prev.containerStyle = this.style.quickAction;
 					prev.textStyle = this.style.quickActionText;
 				}
 				else if (next.endSelected) {
-					prev.leftFillerStyle = "#c1e4fe";
-					prev.rightFillerStyle = "#c1e4fe";
+					prev.leftFillerStyle = '#c1e4fe';
+					prev.rightFillerStyle = '#c1e4fe';
 				}
+
 				return prev;
 			}
 
 			const color = next.color;
-			if (next.status === "NotAvailable")
+
+			if (next.status === 'NotAvailable')
 				prev.textStyle = this.style.naText;
 
 			if (next.startingDay) {
@@ -110,6 +114,7 @@ class Day extends Component {
 
 			return prev;
 		}, defaultStyle);
+
 		return resultStyle;
 	}
 
@@ -121,10 +126,10 @@ class Day extends Component {
 		let fillerStyle = {};
 		let fillers;
 
-		if (this.props.state === "disabled") {
+		if (this.props.state === 'disabled') {
 			textStyle.push(this.style.disabledText);
 		}
-		else if (this.props.state === "today") {
+		else if (this.props.state === 'today') {
 			containerStyle.push(this.style.today);
 			textStyle.push(this.style.todayText);
 		}
@@ -135,6 +140,7 @@ class Day extends Component {
 			});
 
 			const flags = this.markingStyle;
+
 			if (flags.textStyle)
 				textStyle.push(flags.textStyle);
 
@@ -202,7 +208,7 @@ class Day extends Component {
 				onLongPress = { this.onDayLongPress }
 				disabled = { this.props.marking.disableTouchEvent }
 				accessible
-				accessibilityRole = { this.props.marking.disableTouchEvent ? undefined : "button" }
+				accessibilityRole = { this.props.marking.disableTouchEvent ? undefined : 'button' }
 				accessibilityLabel = { this.props.accessibilityLabel }
 			>
 				<View style = { this.style.wrapper }>

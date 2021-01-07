@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { View, Text } from "react-native";
-import { Input, Button } from "@/components/general";
-import { Actions } from "react-native-router-flux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { View, Text } from 'react-native';
+import { Input, Button } from '@/components/general';
+import { Actions } from 'react-native-router-flux';
 import {
 	addApplication,
 	editApplication,
@@ -10,15 +10,17 @@ import {
 	candidateLNameChanged,
 	candidatePlanChanged,
 	candidatePositionChanged
-} from "@/ducks";
+} from '@/ducks';
 
 class CandidateForm extends Component {
-	// EventCreationError(text) {
-	// 	this.props.eventError(text);
-	// }
+	/*
+	 * EventCreationError(text) {
+	 * 	this.props.eventError(text);
+	 * }
+	 */
 
 	renderError() {
-		if (this.props.error)
+		if (this.props.error) {
 			return (
 				<View>
 					<Text style = { styles.errorTextStyle }>
@@ -26,6 +28,7 @@ class CandidateForm extends Component {
 					</Text>
 				</View>
 			);
+		}
 	}
 
 	onButtonPress() {
@@ -35,15 +38,17 @@ class CandidateForm extends Component {
 			candidatePlan,
 			applyPosition
 		} = this.props;
-		// alert("Still need to implement this action")
+		// alert('Still need to implement this action')
 
-		/* if (candidateName === '') {
-				this.EventCreationError('Please enter a Candidate Name');
-				}*/ if (candidatePlan === "") {
+		/*
+		 * if (candidateName === '') {
+		 * this.EventCreationError('Please enter a Candidate Name');
+		 * }
+		 */ if (candidatePlan === '') {
 			// this.EventCreationError('Please enter a Plan of action');
 		}
 		else {
-			if (this.props.title === "ADD")
+			if (this.props.title === 'ADD')
 				this.props.addApplication(firstName, lastName, candidatePlan, applyPosition);
 			else
 				this.props.editApplication(applyPosition, candidatePlan);
@@ -59,11 +64,11 @@ class CandidateForm extends Component {
 		return (
 			<View style = { buttonContainer }>
 				<Button
-					title = "EDIT"
+					title = 'EDIT'
 					onPress = { this.onButtonPress.bind(this) }
 				/>
 				<Button
-					title = "CANCEL"
+					title = 'CANCEL'
 					onPress = { Actions.ElectionCandidates.bind(this) }
 				/>
 			</View>
@@ -82,13 +87,13 @@ class CandidateForm extends Component {
 		return (
 			<View style = { formContainerStyle }>
 				<View style = { headerStyle }>
-					<Text style = { [headerTextStyle, textColor] }>{ "Candidate Plan" }</Text>
+					<Text style = { [headerTextStyle, textColor] }>{ 'Candidate Plan' }</Text>
 					{ /* <Text style={styles.headerSubtitleStyle}>Registration</Text> */ }
 				</View>
 				<View style = { content }>
 					<View style = {{ flex: 0.4 }}>
 						<Input
-							placeholder = "Candidate Plan"
+							placeholder = 'Candidate Plan'
 							multiline = { true }
 							blurOnSubmit = { true }
 							value = { this.props.candidatePlan }
@@ -106,7 +111,7 @@ class CandidateForm extends Component {
 const styles = {
 	container: {
 		flex: 1,
-		justifyContent: "flex-end"
+		justifyContent: 'flex-end'
 	},
 	content: {
 		flex: 1
@@ -117,35 +122,35 @@ const styles = {
 	formContainerStyle: {
 		flex: 1,
 		padding: 20,
-		backgroundColor: "#2C3239"
+		backgroundColor: '#2C3239'
 	},
 	headerStyle: {
 		flex: 0.1,
-		flexDirection: "column",
-		alignItems: "center",
-		justifyContent: "center",
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'center',
 		padding: 5,
 		marginBottom: 10
 	},
 	textColor: {
-		color: "#e0e6ed"
+		color: '#e0e6ed'
 	},
 	headerTextStyle: {
 		fontSize: 22,
-		fontWeight: "bold"
+		fontWeight: 'bold'
 	},
 	errorTextStyle: {
 		fontSize: 14,
-		alignSelf: "center",
-		color: "red",
-		fontWeight: "bold",
+		alignSelf: 'center',
+		color: 'red',
+		fontWeight: 'bold',
 		padding: 10
 	},
 	pickerTextInput: {
 		flex: 1,
-		flexDirection: "row",
-		justifyContent: "center",
-		alignItems: "center"
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center'
 	},
 	scrollView: {
 		flex: 0,

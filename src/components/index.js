@@ -1,2 +1,2 @@
-export * from "./general";
-export * from "./forms/Form";
+export * from './general';
+export * from './forms/Form';

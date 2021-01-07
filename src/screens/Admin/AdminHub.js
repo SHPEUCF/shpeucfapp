@@ -1,27 +1,27 @@
-import React from "react";
-import { Actions } from "react-native-router-flux";
-import { useSelector } from "react-redux";
-import { SafeAreaView } from "react-native";
-import { NavBar, ListItem } from "@/components";
+import React from 'react';
+import { Actions } from 'react-native-router-flux';
+import { useSelector } from 'react-redux';
+import { SafeAreaView } from 'react-native';
+import { NavBar, ListItem } from '@/components';
 
 const menuItems = [
 	{
-		title: "Election",
-		icon: "check",
-		screen: "ElectionAdmin",
-		privilege: "president"
+		title: 'Election',
+		icon: 'check',
+		screen: 'ElectionAdmin',
+		privilege: 'president'
 	},
 	{
-		title: "Committees",
-		icon: "assignment-ind",
-		screen: "CommitteesAdmin",
-		privilege: "eboard"
+		title: 'Committees',
+		icon: 'assignment-ind',
+		screen: 'CommitteesAdmin',
+		privilege: 'eboard'
 	},
 	{
-		title: "Members",
-		icon: "people",
-		screen: "MemberAdmin",
-		privilege: "eboard"
+		title: 'Members',
+		icon: 'people',
+		screen: 'MemberAdmin',
+		privilege: 'eboard'
 	}
 ];
 
@@ -34,8 +34,8 @@ export default () => {
 			return (
 				<ListItem onPress = { Actions[screen] } key = { title }>
 					<ListItem.Title>{ title }</ListItem.Title>
-					<ListItem.LeftIcon type = "MaterialIcons" name = { icon } color = "white" />
-					<ListItem.RightIcon name = "ios-arrow-dropright" size = { 22 } color = "#FECB00" />
+					<ListItem.LeftIcon type = 'MaterialIcons' name = { icon } color = 'white' />
+					<ListItem.RightIcon name = 'ios-arrow-dropright' size = { 22 } color = '#FECB00' />
 				</ListItem>
 			);
 		}
@@ -43,7 +43,7 @@ export default () => {
 
 	return (
 		<SafeAreaView style = { page }>
-			<NavBar title = "Back End" onBack = { () => Actions.pop() } back />
+			<NavBar title = 'Back End' onBack = { () => Actions.pop() } back />
 			{ menuItems.map(tab => renderItem(tab)) }
 		</SafeAreaView>
 	);
@@ -52,6 +52,6 @@ export default () => {
 const styles = {
 	page: {
 		flex: 1,
-		backgroundColor: "#0c0b0b"
+		backgroundColor: '#0c0b0b'
 	}
 };

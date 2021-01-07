@@ -1,17 +1,17 @@
-import React, { Component } from "react";
-import { FlatList, Platform, Dimensions, ActivityIndicator, View } from "react-native";
-import PropTypes from "prop-types";
-import XDate from "xdate";
+import React, { Component } from 'react';
+import { FlatList, Platform, Dimensions, ActivityIndicator, View } from 'react-native';
+import PropTypes from 'prop-types';
+import XDate from 'xdate';
 
-import { xdateToData, parseDate } from "../interface";
-import styleConstructor from "./style";
-import dateutils from "../dateutils";
-import Calendar from "../calendar";
-import CalendarListItem from "./item";
-import CalendarHeader from "../calendar/header/index";
-import { STATIC_HEADER } from "../testIDs";
+import { xdateToData, parseDate } from '../interface';
+import styleConstructor from './style';
+import dateutils from '../dateutils';
+import Calendar from '../calendar';
+import CalendarListItem from './item';
+import CalendarHeader from '../calendar/header/index';
+import { STATIC_HEADER } from '../testIDs';
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get('window');
 
 /**
  * @description: Calendar List component for both vertical and horizontal calendars
@@ -21,7 +21,7 @@ const { width } = Dimensions.get("window");
  * @gif: https://github.com/wix/react-native-calendars/blob/master/demo/calendar-list.gif
  */
 class CalendarList extends Component {
-	static displayName = "CalendarList";
+	static displayName = 'CalendarList';
 
 	static propTypes = {
 		...Calendar.propTypes,
@@ -44,7 +44,7 @@ class CalendarList extends Component {
 		/** Dynamic calendar height */
 		calendarHeight: PropTypes.number,
 		/** Should Keyboard persist taps */
-		keyboardShouldPersistTaps: PropTypes.oneOf(["never", "always", "handled"]),
+		keyboardShouldPersistTaps: PropTypes.oneOf(['never', 'always', 'handled']),
 		/** Style for the List item (the calendar) */
 		calendarStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number, PropTypes.array]),
 		/** Whether to use static header that will not scroll with the list (horizontal only) */
@@ -62,7 +62,7 @@ class CalendarList extends Component {
 		showScrollIndicator: false,
 		scrollEnabled: true,
 		scrollsToTop: false,
-		removeClippedSubviews: Platform.OS !== "android",
+		removeClippedSubviews: Platform.OS !== 'android',
 		keyExtractor: (item, index) => String(index)
 	}
 
@@ -81,7 +81,8 @@ class CalendarList extends Component {
 
 		for (let i = 0; i <= this.props.pastScrollRange + this.props.futureScrollRange; i++) {
 			const rangeDate = date.clone().addMonths(i - this.props.pastScrollRange, true);
-			const rangeDateStr = rangeDate.toString("MMM yyyy");
+			const rangeDateStr = rangeDate.toString('MMM yyyy');
+
 			texts.push(rangeDateStr);
 			/*
 			 * This selects range around current shown month [-0, +2] or [-1, +1] month for detail calendar rendering.
@@ -121,6 +122,7 @@ class CalendarList extends Component {
 		if (!this.props.horizontal) {
 			let week = 0;
 			const days = dateutils.page(day, this.props.firstDay);
+
 			for (let i = 0; i < days.length; i++) {
 				week = Math.floor(i / 7);
 				if (dateutils.sameDate(days[i], day)) {
@@ -154,6 +156,7 @@ class CalendarList extends Component {
 
 		for (let i = 0; i < rowclone.length; i++) {
 			let val = this.state.texts[i];
+
 			if (rowclone[i].getTime) {
 				val = rowclone[i].clone();
 				val.propbump = rowclone[i].propbump ? rowclone[i].propbump + 1 : 1;
@@ -230,6 +233,7 @@ class CalendarList extends Component {
 
 	getMonthIndex(month) {
 		let diffMonths = this.state.openDate.diffMonths(month) + this.props.pastScrollRange;
+
 		return diffMonths;
 	}
 
@@ -238,7 +242,7 @@ class CalendarList extends Component {
 	}
 
 	updateMonth(day, doNotTriggerListeners) {
-		if (day.toString("yyyy MM") === this.state.currentMonth.toString("yyyy MM"))
+		if (day.toString('yyyy MM') === this.state.currentMonth.toString('yyyy MM'))
 			return;
 
 		this.setState({
@@ -248,6 +252,7 @@ class CalendarList extends Component {
 
 			if (!doNotTriggerListeners) {
 				const currMont = this.state.currentMonth.clone();
+
 				if (this.props.onMonthChange)
 					this.props.onMonthChange(xdateToData(currMont));
 
@@ -263,6 +268,7 @@ class CalendarList extends Component {
 
 		if (useStaticHeader) {
 			let indicator;
+
 			if (this.props.showIndicator)
 				indicator = <ActivityIndicator color = { this.props.theme && this.props.theme.indicatorColor } />;
 
@@ -283,7 +289,7 @@ class CalendarList extends Component {
 					onPressArrowRight = { this.props.onPressArrowRight }
 					testID = { STATIC_HEADER }
 					accessibilityElementsHidden = { true } // iOS
-					importantForAccessibility = { "no-hide-descendants" } // Android
+					importantForAccessibility = { 'no-hide-descendants' } // Android
 				/>
 			);
 		}
@@ -300,8 +306,10 @@ class CalendarList extends Component {
 					style = { [this.style.container, this.props.style] }
 					initialListSize = { this.props.pastScrollRange + this.props.futureScrollRange + 1 } // ListView deprecated
 					data = { this.state.rows }
-					// snapToAlignment='start'
-					// snapToInterval={this.calendarHeight}
+					/*
+					 * snapToAlignment='start'
+					 * snapToInterval={this.calendarHeight}
+					 */
 					removeClippedSubviews = { this.props.removeClippedSubviews }
 					pageSize = { 1 } // ListView deprecated
 					horizontal = { this.props.horizontal }

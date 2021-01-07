@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { FlatList, ActivityIndicator, View } from "react-native";
-import Reservation from "./reservation";
-import PropTypes from "prop-types";
-import XDate from "xdate";
-import dateutils from "../../dateutils";
-import styleConstructor from "./style";
-import _ from "lodash";
+import React, { Component } from 'react';
+import { FlatList, ActivityIndicator, View } from 'react-native';
+import Reservation from './reservation';
+import PropTypes from 'prop-types';
+import XDate from 'xdate';
+import dateutils from '../../dateutils';
+import styleConstructor from './style';
+import _ from 'lodash';
 
 class ReservationList extends Component {
-	static displayName = "IGNORE";
+	static displayName = 'IGNORE';
 
 	static propTypes = {
 		// specify your item comparison function for increased performance
@@ -23,9 +23,11 @@ class ReservationList extends Component {
 		onDayChange: PropTypes.func,
 		// onScroll ListView event
 		onScroll: PropTypes.func,
-		// the list of items that have to be displayed in agenda. If you want to render item as empty date
-		// the value of date key kas to be an empty array []. If there exists no value for date key it is
-		// considered that the date in question is not yet loaded
+		/*
+		 * the list of items that have to be displayed in agenda. If you want to render item as empty date
+		 * the value of date key kas to be an empty array []. If there exists no value for date key it is
+		 * considered that the date in question is not yet loaded
+		 */
 		reservations: PropTypes.object,
 		selectedDay: PropTypes.instanceOf(XDate),
 		topDay: PropTypes.instanceOf(XDate),
@@ -64,8 +66,10 @@ class ReservationList extends Component {
 
 	updateReservations(props) {
 		const reservations = this.getReservations(props);
+
 		if (this.list && !dateutils.sameDate(props.selectedDay, this.selectedDay)) {
 			let scrollPosition = 0;
+
 			for (let i = 0; i < reservations.scrollPosition; i++)
 				scrollPosition += this.heights[i] || 0;
 
@@ -89,9 +93,11 @@ class ReservationList extends Component {
 
 	onScroll(event) {
 		const yOffset = event.nativeEvent.contentOffset.y;
+
 		this.props.onScroll(yOffset);
 		let topRowOffset = 0;
 		let topRow;
+
 		for (topRow = 0; topRow < this.heights.length; topRow++) {
 			if (topRowOffset + this.heights[topRow] / 2 >= yOffset)
 				break;
@@ -99,9 +105,11 @@ class ReservationList extends Component {
 			topRowOffset += this.heights[topRow];
 		}
 		const row = this.state.reservations[topRow];
+
 		if (!row) return;
 		const day = row.day;
 		const sameDate = dateutils.sameDate(day, this.selectedDay);
+
 		if (!sameDate && this.scrollOver) {
 			this.selectedDay = day.clone();
 			this.props.onDayChange(day.clone());
@@ -129,7 +137,8 @@ class ReservationList extends Component {
 
 	getReservationsForDay(iterator, props) {
 		const day = iterator.clone();
-		const res = props.reservations[day.toString("yyyy-MM-dd")];
+		const res = props.reservations[day.toString('yyyy-MM-dd')];
+
 		if (res && res.length) {
 			return res.map((reservation, i) => {
 				return {
@@ -159,8 +168,10 @@ class ReservationList extends Component {
 		let reservations = [];
 		const scrollPosition = reservations.length;
 		const iterator = props.selectedDay.clone();
+
 		for (let i = 0; i < 1; i++) {
 			const res = this.getReservationsForDay(iterator, props);
+
 			if (res)
 				reservations = reservations.concat(res);
 
@@ -171,7 +182,7 @@ class ReservationList extends Component {
 	}
 
 	render() {
-		if (!this.props.reservations || !this.props.reservations[this.props.selectedDay.toString("yyyy-MM-dd")]) {
+		if (!this.props.reservations || !this.props.reservations[this.props.selectedDay.toString('yyyy-MM-dd')]) {
 			if (this.props.renderEmptyData)
 				return this.props.renderEmptyData();
 
@@ -182,6 +193,7 @@ class ReservationList extends Component {
 				/>
 			);
 		}
+
 		return (
 			<FlatList
 				ref = { (c) => this.list = c }
@@ -192,7 +204,11 @@ class ReservationList extends Component {
 				onScroll = { this.onScroll.bind(this) }
 				showsVerticalScrollIndicator = { false }
 				scrollEventThrottle = { 200 }
-				onMoveShouldSetResponderCapture = { () => { this.onListTouch(); return false } }
+				onMoveShouldSetResponderCapture = { () => {
+					this.onListTouch();
+
+					return false;
+				} }
 				keyExtractor = { (item, index) => String(index) }
 				refreshControl = { this.props.refreshControl }
 				refreshing = { this.props.refreshing || false }

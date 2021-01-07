@@ -1,6 +1,6 @@
-import React, { Children } from "react";
-import { View, Text, TouchableOpacity, TextProps, TouchableOpacityProps } from "react-native";
-import { Icon } from "./";
+import React, { Children } from 'react';
+import { View, Text, TouchableOpacity, TextProps, TouchableOpacityProps } from 'react-native';
+import { Icon } from './';
 
 /**
  * @desc Main title for item.
@@ -79,21 +79,21 @@ ListItem.RightIcon = RightIcon;
 
 const styles = {
 	containerStyle: {
-		flexDirection: "row",
-		backgroundColor: "black",
-		alignItems: "center",
+		flexDirection: 'row',
+		backgroundColor: 'black',
+		alignItems: 'center',
 		padding: 16
 	},
 	titleContainer: {
 		flex: 1,
-		flexDirection: "column",
+		flexDirection: 'column',
 		paddingHorizontal: 20
 	},
 	textStyle: {
-		color: "white"
+		color: 'white'
 	},
 	titleStyle: {
-		color: "white",
+		color: 'white',
 		fontSize: 16
 	}
 };

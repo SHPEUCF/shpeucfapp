@@ -1,15 +1,16 @@
-import { StyleSheet, Platform } from "react-native";
-import * as defaultStyle from "../../../style";
+import { StyleSheet, Platform } from 'react-native';
+import * as defaultStyle from '../../../style';
 
-const STYLESHEET_ID = "stylesheet.day.multiDot";
+const STYLESHEET_ID = 'stylesheet.day.multiDot';
 
 export default function styleConstructor(theme = {}) {
 	const appStyle = { ...defaultStyle, ...theme };
+
 	return StyleSheet.create({
 		base: {
 			width: 32,
 			height: 32,
-			alignItems: "center"
+			alignItems: 'center'
 		},
 		text: {
 			marginTop: 4,
@@ -17,10 +18,10 @@ export default function styleConstructor(theme = {}) {
 			fontFamily: appStyle.textDayFontFamily,
 			fontWeight: appStyle.textDayFontWeight,
 			color: appStyle.dayTextColor,
-			backgroundColor: "rgba(255, 255, 255, 0)"
+			backgroundColor: 'rgba(255, 255, 255, 0)'
 		},
 		alignedText: {
-			marginTop: Platform.OS === "android" ? 4 : 6
+			marginTop: Platform.OS === 'android' ? 4 : 6
 		},
 		selected: {
 			backgroundColor: appStyle.selectedDayBackgroundColor,

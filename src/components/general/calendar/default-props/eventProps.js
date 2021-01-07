@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from "react";
-import _ from "lodash";
-import { TouchableOpacity, View, Text, Dimensions } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
-import { loadEvent } from "../../../../ducks";
-import { goToViewEvent } from "../../../../utils/router";
+import React, { useEffect, useRef } from 'react';
+import _ from 'lodash';
+import { TouchableOpacity, View, Text, Dimensions } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { loadEvent } from '../../../../ducks';
+import { goToViewEvent } from '../../../../utils/router';
 
-const dimension = Dimensions.get("window");
+const dimension = Dimensions.get('window');
 
 export const DefaultItem = ({ item }) => {
 	const { committee, type, name, id, location, startTime, endTime } = item;
@@ -18,7 +18,7 @@ export const DefaultItem = ({ item }) => {
 	const itemRef = useRef();
 	const previousItemData = itemRef.current;
 
-	let viewName = committee ? committee + ": " + name : type + ": " + name;
+	let viewName = committee ? committee + ': ' + name : type + ': ' + name;
 
 	// stores item props data so that it can be accessed after the component rerenders
 	useEffect(() => { itemRef.current = item });
@@ -30,7 +30,7 @@ export const DefaultItem = ({ item }) => {
 	return (
 		<TouchableOpacity onPress = { () => viewEvent(item, dispatch) }>
 			<View style = { [itemContainer, { backgroundColor: state.user.activeUser.color }] }>
-				<Text style = { [{ fontWeight: "bold" }, textColor] }>{ viewName }</Text>
+				<Text style = { [{ fontWeight: 'bold' }, textColor] }>{ viewName }</Text>
 				<Text style = { textColor }>Time: { startTime } - { endTime }</Text>
 				<Text style = { textColor }>Location: { location }</Text>
 			</View>
@@ -54,24 +54,24 @@ export const DefaultEmptyData = () => {
 
 const viewEvent = (item, dispatch) => {
 	dispatch(loadEvent(item));
-	goToViewEvent("events");
+	goToViewEvent('events');
 };
 
 const styles = {
 	textColor: {
-		color: "white"
+		color: 'white'
 	},
 	emptyData: {
 		height: dimension.height * 0.15,
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "#21252b",
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: '#21252b',
 		borderRadius: 5,
 		marginTop: dimension.height * 0.017
 	},
 	itemContainer: {
 		flex: 1,
-		backgroundColor: "#21252b",
+		backgroundColor: '#21252b',
 		borderRadius: 5,
 		padding: dimension.height * 0.020,
 		marginRight: dimension.height * 0.010,

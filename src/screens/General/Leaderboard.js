@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { Actions } from "react-native-router-flux";
-import { connect } from "react-redux";
-import { NavBar, FilterList, Avatar, ProgressBar, Icon } from "@/components";
-import _ from "lodash";
-import { Text, View, Dimensions, SafeAreaView } from "react-native";
-import { verifiedCheckMark, rankMembersAndReturnsCurrentUser, truncateNames } from "@/utils/render";
+import React, { Component } from 'react';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { NavBar, FilterList, Avatar, ProgressBar, Icon } from '@/components';
+import _ from 'lodash';
+import { Text, View, Dimensions, SafeAreaView } from 'react-native';
+import { verifiedCheckMark, rankMembersAndReturnsCurrentUser, truncateNames } from '@/utils/render';
 import {
 	getAllMemberPoints,
 	getVisitedMember,
@@ -12,11 +12,11 @@ import {
 	getPrivilege,
 	loadUser,
 	filterChanged
-} from "@/ducks";
+} from '@/ducks';
 
-const dimension = Dimensions.get("window");
-const iteratees = ["points", "lastName", "firstName"];
-const order = ["desc", "asc", "asc"];
+const dimension = Dimensions.get('window');
+const iteratees = ['points', 'lastName', 'firstName'];
+const order = ['desc', 'asc', 'asc'];
 
 class Leaderboard extends Component {
 	constructor(props) {
@@ -25,7 +25,7 @@ class Leaderboard extends Component {
 	}
 
 	componentDidMount() {
-		this.props.filterChanged("");
+		this.props.filterChanged('');
 		this.props.loadUser();
 		this.props.getAllMemberPoints();
 	}
@@ -48,16 +48,16 @@ class Leaderboard extends Component {
 		return (
 			<SafeAreaView style = { screenBackground }>
 				<NavBar
-					title = "Leaderboard"
+					title = 'Leaderboard'
 					back
 					onBack = { () => Actions.pop() }
 					childComponent = { this.searchButton() }
-					childStyle = {{ flex: 1, paddingRight: "10%" }}
+					childStyle = {{ flex: 1, paddingRight: '10%' }}
 				/>
 				<FilterList
 					data = { sortedMembers }
 					search = { this.state.search }
-					placeholder = "Find user"
+					placeholder = 'Find user'
 					regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
 					onSelect = { (data) => this.callUser(data.id) }
 					itemJSX = { (data) => this.renderComponent(data, sortedMembers) }
@@ -94,7 +94,7 @@ class Leaderboard extends Component {
 						<View style = { userInfoContainer }>
 							<View style = { userTextContainer }>
 								<View style = { row }>
-									<Text style = { [textStyle, { fontWeight: "bold" }, currentUserTextStyle] }>
+									<Text style = { [textStyle, { fontWeight: 'bold' }, currentUserTextStyle] }>
 										{ `${item.firstName} ${item.lastName}` }
 									</Text>
 									{ verifiedCheckMark(item) }
@@ -115,7 +115,7 @@ class Leaderboard extends Component {
 							progress = { item.points / Math.max(sortedMembers[0].points, 1) }
 							height = { dimension.width * 0.03 }
 							width = { dimension.width * 0.75 }
-							color = "#ffd700"
+							color = '#ffd700'
 						/>
 					</View>
 				</View>
@@ -125,15 +125,15 @@ class Leaderboard extends Component {
 
 	searchButton() {
 		return (
-			<View style = {{ alignItems: "flex-end" }}>
+			<View style = {{ alignItems: 'flex-end' }}>
 				<Icon
 					onPress = { () => {
-						this.props.filterChanged("");
+						this.props.filterChanged('');
 						this.setState({ search: !this.state.search });
 					} }
-					name = { "ios-search" }
+					name = { 'ios-search' }
 					size = { dimension.height * 0.04 }
-					color = { "#FECB00" }
+					color = { '#FECB00' }
 				/>
 			</View>
 		);
@@ -148,64 +148,64 @@ class Leaderboard extends Component {
 
 const styles = {
 	row: {
-		alignItems: "center",
-		flexDirection: "row"
+		alignItems: 'center',
+		flexDirection: 'row'
 	},
 	screenBackground: {
 		flex: 1,
-		backgroundColor: "#0c0b0b"
+		backgroundColor: '#0c0b0b'
 	},
 	textStyle: {
-		color: "#e0e6ed",
+		color: '#e0e6ed',
 		fontSize: dimension.width * 0.05
 	},
 	contentContainerStyle: {
 		height: dimension.height * 0.18,
-		backgroundColor: "black",
-		alignItems: "flex-start",
+		backgroundColor: 'black',
+		alignItems: 'flex-start',
 		paddingHorizontal: 15
 	},
 	userContainerColor: {
-		color: "#FECB00"
+		color: '#FECB00'
 	},
 	progress: {
 		marginTop: 10,
-		justifyContent: "center",
+		justifyContent: 'center',
 		height: 13,
-		borderColor: "#2C3239",
-		backgroundColor: "#2C3239"
+		borderColor: '#2C3239',
+		backgroundColor: '#2C3239'
 	},
 	indexText: {
-		alignSelf: "center",
-		fontWeight: "700",
+		alignSelf: 'center',
+		fontWeight: '700',
 		fontSize: dimension.width * 0.05,
-		color: "black"
+		color: 'black'
 	},
 	index: {
-		borderColor: "#FECB00",
-		backgroundColor: "#FECB00",
+		borderColor: '#FECB00',
+		backgroundColor: '#FECB00',
 		borderRadius: dimension.height * 0.06 * 0.5,
-		marginRight: "4%",
-		justifyContent: "center",
+		marginRight: '4%',
+		justifyContent: 'center',
 		height: dimension.height * 0.06,
 		width: dimension.height * 0.06,
 		elevation: 1,
-		alignItems: "center"
+		alignItems: 'center'
 	},
 	itemContentContainer: {
-		flexDirection: "row",
+		flexDirection: 'row',
 		 flex: 1,
-		 alignItems: "center"
+		 alignItems: 'center'
 	},
 	userInfoContainer: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "flex-start",
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'flex-start',
 		paddingBottom: 20
 	},
 	userTextContainer: {
 		paddingTop: 5,
-		width: "62%"
+		width: '62%'
 	}
 };
 

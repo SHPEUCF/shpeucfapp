@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import { View, TouchableOpacity, Text } from "react-native";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { View, TouchableOpacity, Text } from 'react-native';
+import PropTypes from 'prop-types';
 
-import { shouldUpdate } from "../../../component-updater";
-import styleConstructor from "./style";
+import { shouldUpdate } from '../../../component-updater';
+import styleConstructor from './style';
 
 class Day extends Component {
-	static displayName = "IGNORE";
+	static displayName = 'IGNORE';
 
 	static propTypes = {
 		// TODO: disabled props should be removed
-		state: PropTypes.oneOf(["disabled", "today", ""]),
+		state: PropTypes.oneOf(['disabled', 'today', '']),
 
 		// Specify theme properties to override specific styles for calendar parts. Default = {}
 		theme: PropTypes.object,
@@ -38,14 +38,16 @@ class Day extends Component {
 	}
 
 	shouldComponentUpdate(nextProps) {
-		return shouldUpdate(this.props, nextProps, ["state", "children", "marking", "onPress", "onLongPress"]);
+		return shouldUpdate(this.props, nextProps, ['state', 'children', 'marking', 'onPress', 'onLongPress']);
 	}
 
 	renderDots(marking) {
 		const baseDotStyle = [this.style.dot, this.style.visibleDot];
+
 		if (marking.dots && Array.isArray(marking.dots) && marking.dots.length > 0) {
 			// Filter out dots so that we we process only those items which have key and color property
 			const validDots = marking.dots.filter(d => d && d.color);
+
 			return validDots.map((dot, index) => {
 				return (
 					<View key = { dot.key ? dot.key : index } style = { [baseDotStyle,
@@ -56,6 +58,7 @@ class Day extends Component {
 				);
 			});
 		}
+
 		return;
 	}
 
@@ -64,7 +67,7 @@ class Day extends Component {
 		const textStyle = [this.style.text];
 		const marking = this.props.marking || {};
 		const dot = this.renderDots(marking);
-		const isDisabled = typeof marking.disabled !== "undefined" ? marking.disabled : this.props.state === "disabled";
+		const isDisabled = typeof marking.disabled !== 'undefined' ? marking.disabled : this.props.state === 'disabled';
 
 		if (marking.selected) {
 			containerStyle.push(this.style.selected);
@@ -75,7 +78,7 @@ class Day extends Component {
 		else if (isDisabled) {
 			textStyle.push(this.style.disabledText);
 		}
-		else if (this.props.state === "today") {
+		else if (this.props.state === 'today') {
 			containerStyle.push(this.style.today);
 			textStyle.push(this.style.todayText);
 		}
@@ -87,11 +90,11 @@ class Day extends Component {
 				onPress = { this.onDayPress }
 				onLongPress = { this.onDayLongPress }
 				disabled = { marking.disableTouchEvent }
-				accessibilityRole = { isDisabled ? undefined : "button" }
+				accessibilityRole = { isDisabled ? undefined : 'button' }
 				accessibilityLabel = { this.props.accessibilityLabel }
 			>
 				<Text allowFontScaling = { false } style = { textStyle }>{ String(this.props.children) }</Text>
-				<View style = {{ flexDirection: "row" }}>{ dot }</View>
+				<View style = {{ flexDirection: 'row' }}>{ dot }</View>
 			</TouchableOpacity>
 		);
 	}

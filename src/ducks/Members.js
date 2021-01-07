@@ -1,29 +1,29 @@
-import firebase from "firebase";
-import { createActionTypes } from "@/utils/actions";
+import firebase from 'firebase';
+import { createActionTypes } from '@/utils/actions';
 
 // Handle all things related to Events
 const ACTIONS = createActionTypes([
-	"GET_ALL_MEMBER_ACCOUNTS",
-	"GET_ALL_MEMBER_POINTS",
-	"GET_VISITED_MEMBER"
+	'GET_ALL_MEMBER_ACCOUNTS',
+	'GET_ALL_MEMBER_POINTS',
+	'GET_VISITED_MEMBER'
 ]);
 
 const INITIAL_STATE = {
 	visitedMember: {
-		firstName: "",
-		color: "#21252b",
-		flag: "",
-		lastName: "",
-		email: "",
-		major: "Do not wish to disclose",
-		picture: "",
+		firstName: '',
+		color: '#21252b',
+		flag: '',
+		lastName: '',
+		email: '',
+		major: 'Do not wish to disclose',
+		picture: '',
 		points: 0,
 		privilege: {},
-		country: "Do not wish to disclose",
-		gender: "Do not wish to disclose",
-		birthday: "0000-00-00",
+		country: 'Do not wish to disclose',
+		gender: 'Do not wish to disclose',
+		birthday: '0000-00-00',
 		paidMember: false,
-		id: "",
+		id: '',
 		voted: false,
 		applied: false,
 		userCommittees: {}
@@ -49,7 +49,7 @@ export default (state = INITIAL_STATE, action) => {
 
 export const getAllMemberAccounts = () => {
 	return dispatch => {
-		firebase.database().ref("/users/").on("value", snapshot => {
+		firebase.database().ref('/users/').on('value', snapshot => {
 			dispatch({
 				type: ACTIONS.GET_ALL_MEMBER_ACCOUNTS,
 				payload: snapshot.val()
@@ -60,8 +60,8 @@ export const getAllMemberAccounts = () => {
 
 export const getAllMemberPoints = () => {
 	return dispatch => {
-		firebase.database().ref("/points")
-			.on("value", snapshot => {
+		firebase.database().ref('/points')
+			.on('value', snapshot => {
 				dispatch({
 					type: ACTIONS.GET_ALL_MEMBER_POINTS,
 					payload: snapshot.val()
@@ -75,7 +75,7 @@ export const getVisitedMember = (id) => {
 
 	return dispatch => {
 		if (currentUser) {
-			firebase.database().ref(`/users/${id}/`).on("value", snapshot => {
+			firebase.database().ref(`/users/${id}/`).on('value', snapshot => {
 				dispatch({
 					type: ACTIONS.GET_VISITED_MEMBER,
 					payload: snapshot.val()

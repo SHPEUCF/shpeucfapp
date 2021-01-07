@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from "react";
-import { Animated, View, ViewStyle } from "react-native";
+import React, { useRef, useEffect } from 'react';
+import { Animated, View, ViewStyle } from 'react-native';
 
 /**
  * @desc Progress Bar component for leaderboard.

@@ -1,7 +1,7 @@
-import React from "react";
-import { View, Dimensions, ViewStyle } from "react-native";
+import React from 'react';
+import { View, Dimensions, ViewStyle } from 'react-native';
 
-const { height } = Dimensions.get("screen");
+const { height } = Dimensions.get('screen');
 
 /**
  * @desc Component to properly layout multiple button children,
@@ -75,19 +75,19 @@ export const ButtonLayout = ({ icon, children, containerStyle }) => {
 
 const styles = {
 	layoutContainer: {
-		justifyContent: "center",
+		justifyContent: 'center',
 		paddingVertical: height * 0.03
 	},
 	buttonContainer: {
 		flex: 0.45
 	},
 	singleLayer: {
-		flexDirection: "row",
-		justifyContent: "space-evenly"
+		flexDirection: 'row',
+		justifyContent: 'space-evenly'
 	},
 	doubleLayer: {
-		flexDirection: "row",
-		justifyContent: "space-evenly",
-		alignItems: "center"
+		flexDirection: 'row',
+		justifyContent: 'space-evenly',
+		alignItems: 'center'
 	}
 };

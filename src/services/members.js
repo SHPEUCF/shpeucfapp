@@ -1,5 +1,5 @@
-import firebase from "firebase";
-import { Alert } from "@/components";
+import firebase from 'firebase';
+import { Alert } from '@/components';
 
 export default class MemberService {
 	editMember = user => {
@@ -19,7 +19,7 @@ export default class MemberService {
 				eboard: false,
 				president: false
 			}))
-			.then(() => Alert.alert("Account Updated"));
+			.then(() => Alert.alert('Account Updated'));
 	};
 
 	assignPosition = (title, types, id, oldChair) => {
@@ -43,7 +43,7 @@ export default class MemberService {
 	 */
 
 	changePrivilegeOfMembers = (members, privilegeChanged, value) => {
-		firebase.database().ref("/privileges/").once("value", snapshot => {
+		firebase.database().ref('/privileges/').once('value', snapshot => {
 			let updates = snapshot.val();
 
 			members.forEach(memberId => {
@@ -51,21 +51,21 @@ export default class MemberService {
 				updates[memberId][privilegeChanged] = value;
 			});
 
-			firebase.database().ref("/privileges/").update(updates)
-				.then(() =>Alert.alert("Changes successful", { type: "success" }))
-				.catch(() =>Alert.alert("Changes were not successful", { type: "error" }));
+			firebase.database().ref('/privileges/').update(updates)
+				.then(() =>Alert.alert('Changes successful', { type: 'success' }))
+				.catch(() =>Alert.alert('Changes were not successful', { type: 'error' }));
 		});
 
-		if (privilegeChanged === "paidMember") {
-			firebase.database().ref("/users/").once("value", snapshot => {
+		if (privilegeChanged === 'paidMember') {
+			firebase.database().ref('/users/').once('value', snapshot => {
 				let updates = snapshot.val();
 
 				members.forEach(memberId => {
 					updates[memberId][privilegeChanged] = value;
 				});
 
-				firebase.database().ref("/users/").update(updates)
-					.catch(() =>Alert.alert("Changes were not successful", { type: "error" }));
+				firebase.database().ref('/users/').update(updates)
+					.catch(() =>Alert.alert('Changes were not successful', { type: 'error' }));
 			});
 		}
 	};

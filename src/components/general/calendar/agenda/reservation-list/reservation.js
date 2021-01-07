@@ -1,14 +1,14 @@
-import _ from "lodash";
-import React, { Component } from "react";
-import { View, Text } from "react-native";
-import { xdateToData } from "../../interface";
-import XDate from "xdate";
-import dateutils from "../../dateutils";
-import styleConstructor from "./style";
-import { RESERVATION_DATE } from "../../testIDs";
+import _ from 'lodash';
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
+import { xdateToData } from '../../interface';
+import XDate from 'xdate';
+import dateutils from '../../dateutils';
+import styleConstructor from './style';
+import { RESERVATION_DATE } from '../../testIDs';
 
 class Reservation extends Component {
-	static displayName = "IGNORE";
+	static displayName = 'IGNORE';
 
 	constructor(props) {
 		super(props);
@@ -20,6 +20,7 @@ class Reservation extends Component {
 		const r1 = this.props.item;
 		const r2 = nextProps.item;
 		let changed = true;
+
 		if (!r1 && !r2) { changed = false }
 		 else if (r1 && r2) {
 			if (r1.day.getTime() !== r2.day.getTime()) {
@@ -44,6 +45,7 @@ class Reservation extends Component {
 			return this.props.renderDay(date ? xdateToData(date) : undefined, item);
 
 		const today = dateutils.sameDate(date, XDate()) ? this.styles.today : undefined;
+
 		if (date) {
 			return (
 				<View style = { this.styles.day } testID = { RESERVATION_DATE }>
@@ -64,14 +66,17 @@ class Reservation extends Component {
 	render() {
 		const { reservation, date } = this.props.item;
 		let content;
+
 		if (reservation) {
 			const firstItem = !!date;
+
 			if (_.isFunction(this.props.renderItem))
 				content = this.props.renderItem(reservation, firstItem);
 		}
 		else if (_.isFunction(this.props.renderEmptyDate)) {
 			content = this.props.renderEmptyDate(date);
 		}
+
 		return (
 			<View style = { this.styles.container }>
 				{ this.renderDate(date, reservation) }
