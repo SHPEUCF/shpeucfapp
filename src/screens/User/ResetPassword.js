@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Button, Input } from '@/components';
 import { resetPassword } from '@/ducks';
 
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 
 class ResetPassword extends Component {
 	constructor(props) {

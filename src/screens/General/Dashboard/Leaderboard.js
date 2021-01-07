@@ -5,7 +5,7 @@ import _ from 'lodash';
 import { rankMembersAndReturnsCurrentUser } from '@/utils/render';
 import { Icon } from '@/components';
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('screen');
 const iteratees = ['points', 'lastName', 'firstName'];
 const order = ['desc', 'asc', 'asc'];
 

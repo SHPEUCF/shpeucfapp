@@ -6,7 +6,7 @@ import Flag from 'react-native-flags';
 import { Button } from './';
 import { editUser } from '@/ducks';
 
-const { height, width } = Dimensions.get('window');
+const { height, width } = Dimensions.get('screen');
 
 class CountryFlag extends Component {
 	constructor(props) {

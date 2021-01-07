@@ -18,7 +18,7 @@ import {
 	StatusBar
 } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('screen');
 
 class Dashboard extends Component {
 	constructor(props) {
@@ -260,21 +260,19 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ user, members, events, elect, committees, general }) => {
+const mapStateToProps = ({ user, members, events, elect, committees }) => {
 	const { activeUser } = user;
 	const { allMemberPoints } = members;
 	const { sortedEvents } = events;
 	const { election } = elect;
 	const { committeesList } = committees;
-	const { loading } = general;
 
 	return {
 		activeUser,
 		allMemberPoints,
 		sortedEvents,
 		election,
-		committeesList,
-		loading
+		committeesList
 	};
 };
 

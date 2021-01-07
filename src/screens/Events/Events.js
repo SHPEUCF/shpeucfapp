@@ -6,7 +6,7 @@ import { loadEvent, createEvent } from '@/ducks';
 import { EventForm } from '@/data/FormData';
 import { View, Dimensions, SafeAreaView } from 'react-native';
 
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 
 class Events extends Component {
 	constructor(props) {

@@ -55,7 +55,7 @@ import {
 
 import { Dimensions } from 'react-native';
 
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 
 const RouterComponent = () => {
 	return (

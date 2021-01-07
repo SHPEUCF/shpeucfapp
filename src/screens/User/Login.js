@@ -8,7 +8,7 @@ import { registrationFormData, loginFormData } from '@/data/FormData';
 import { createUser, loginUser, registrationError } from '@/ducks';
 import { Form } from '@/components/';
 
-const { height } = Dimensions.get('window');
+const { height } = Dimensions.get('screen');
 
 class Login extends Component {
 	constructor(props) {

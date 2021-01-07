@@ -6,7 +6,7 @@ import { NavBar } from '@/components';
 import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
 import { getAllMemberPoints, loadUser, fetchEvents, goToViewEvent } from '@/ducks';
 
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 
 class PointsBreakDown extends Component {
 	componentWillMount() {
@@ -223,12 +223,11 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ user, members, general }) => {
+const mapStateToProps = ({ user, members }) => {
 	const { allMemberPoints } = members;
 	const { id } = user;
-	const { loading } = general;
 
-	return { allMemberPoints, id, loading };
+	return { allMemberPoints, id };
 };
 
 const mapDispatchToProps = {

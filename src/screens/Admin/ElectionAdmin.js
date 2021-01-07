@@ -13,7 +13,7 @@ import {
 	openApplications
 } from '@/ducks';
 
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 const iterateesCan = ['votes'];
 const orderCan = ['desc'];
 let winners = [];
