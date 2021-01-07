@@ -7,13 +7,20 @@ import { appVersion } from '../package.json';
 import { View } from 'react-native';
 import { Alert } from './components';
 import { loadUser, getAllMemberAccounts, getEvents, getCommittees, getAllMemberPoints, updateElection } from './ducks';
-import { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId } from 'react-native-dotenv';
 
 console.ignoredYellowBox = ['Setting a timer'];
 
 class App extends Component {
 	componentDidMount() {
-		const config = { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId };
+		const config = {
+			apiKey: 'AIzaSyCeX5lUZUmQxXsWNO8gNXVHqfJs-kQmSaY',
+			authDomain: 'shpe-ucf.firebaseapp.com',
+			databaseURL: 'https://shpe-ucf.firebaseio.com',
+			projectId: 'shpe-ucf',
+			storageBucket: 'shpe-ucf.appspot.com',
+			messagingSenderId: '974032317047',
+			appId: '1:974032317047:web:0a4a2ad01ac705b90ff472'
+		};
 
 		if (!firebase.apps.length)
 			firebase.initializeApp(config);
