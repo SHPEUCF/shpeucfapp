@@ -1,4 +1,5 @@
 import { Alert } from "@/components";
+import { months } from "@/data/DateItems";
 
 /**
  * @description Pass in Standard time and the function returns that in Military Time.
@@ -122,3 +123,53 @@ export const filterPastEvents = sortedEvents => sortedEvents.filter(event => {
  */
 
 export const filterEvents = (eventIds, sortedEvents) => sortedEvents.filter((event) => event.id in eventIds);
+
+/**
+ * @description Converts an array of objects to csv format.
+ *
+ * @param {Object} data An array of objects.
+ */
+
+export const convertArrayOfObjectsToCSV = data => {
+	let result;
+	let ctr;
+	let keys;
+	let columnDelimiter;
+	let lineDelimiter;
+
+	if (!data || !data.length) return null;
+
+	columnDelimiter = ",";
+	lineDelimiter = "\n";
+
+	keys = Object.keys(data[0]);
+
+	result = "";
+	result += keys.join(columnDelimiter);
+	result += lineDelimiter;
+
+	data.forEach(function(item) {
+		ctr = 0;
+		keys.forEach(function(key) {
+			if (ctr > 0) result += columnDelimiter;
+			result += String(item[key]).replace("&", "and").replace("\n", " ");
+			ctr++;
+		});
+		result += lineDelimiter;
+	});
+
+	return result;
+};
+
+/**
+ * @description Takes in string representation of date and returns in `Month Year` format.
+ *
+ * @param {String} date JavaScript date format YYYY-MM-DD
+ */
+
+export const convertNumToDate = date => {
+	if (!date) return "";
+	let [, month, day] = date.split("-");
+
+	return `${months[Number(month) - 1]} ${day}`;
+};

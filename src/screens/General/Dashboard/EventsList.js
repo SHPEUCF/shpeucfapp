@@ -1,19 +1,12 @@
 import React, { PureComponent } from "react";
 import { View, Text, TouchableOpacity, Dimensions } from "react-native";
 import { goToViewEvent } from "@/utils/router";
-import { filterPastEvents } from "@/utils/events";
+import { filterPastEvents, convertNumToDate } from "@/utils/events";
 import { Icon } from "@/components";
 
 const { width, height } = Dimensions.get("window");
 
 export default class EventsList extends PureComponent {
-	convertNumToDate(date) {
-		let months = ["Jan", "Feb", "Mar", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-		let [, month, day] = date.split("-");
-
-		return `${months[Number(month) - 1]} ${day}`;
-	}
-
 	showEvents(event) {
 		const { leaderboardArrow, eventTextContainer, eventItemInnerContainer, eventTextStyle, gold } = styles;
 		const { name, date, committee, startTime, endTime, type } = event;
@@ -23,7 +16,7 @@ export default class EventsList extends PureComponent {
 				<View style = { eventTextContainer }>
 					<Text style = { eventTextStyle }>{ committee || type }: { name }</Text>
 					<Text style = { eventTextStyle }>
-						{ this.convertNumToDate(date) } - { startTime } - { endTime }
+						{ convertNumToDate(date) } - { startTime } - { endTime }
 					</Text>
 				</View>
 				<View style = { leaderboardArrow }>

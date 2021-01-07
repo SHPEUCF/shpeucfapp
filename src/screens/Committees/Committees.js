@@ -5,7 +5,7 @@ import { NavBar, Icon } from "@/components";
 import _ from "lodash";
 import { FlatList, Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
 import { goToViewEvent } from "@/utils/router";
-import { filterEvents } from "@/utils/events";
+import { filterEvents, convertNumToDate } from "@/utils/events";
 import { editUser, loadEvent, getCommittees, loadCommittee } from "@/ducks";
 
 const dimension = Dimensions.get("window");
@@ -230,7 +230,7 @@ class Committees extends Component {
 							<View style = {{ flex: 1, alignItems: "flex-start" }}>
 								<View style = {{ alignItems: "flex-start" }}>
 									<Text style = {{ color: "white", fontSize: dimension.width * 0.035 }}>{ name }</Text>
-									<Text style = {{ color: "white", fontSize: dimension.width * 0.035 }}>{ this.convertNumToDate(date) } - { realStart } - { realEnd } </Text>
+									<Text style = {{ color: "white", fontSize: dimension.width * 0.035 }}>{ convertNumToDate(date) } - { realStart } - { realEnd } </Text>
 								</View>
 							</View>
 							<View style = {{ flex: 0.08, height: "60%" }}></View>
@@ -256,14 +256,6 @@ class Committees extends Component {
 		if (hour === "0") hour = "12";
 
 		return hour + ":" + array[1] + ":" + array[2];
-	}
-
-	convertNumToDate(date) {
-		let months = ["Jan", "Feb", "Mar", "April", "May", "June",
-			"July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-		let tempDate = date.split("-");
-
-		return `${months[Number(tempDate[1]) - 1]} ${tempDate[2]}`;
 	}
 
 	renderbuttons(item) {

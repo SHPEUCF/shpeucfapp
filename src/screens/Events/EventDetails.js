@@ -1,207 +1,203 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Alert, Button, NavBar, FilterList, ButtonLayout, Icon } from "@/components";
+import React, { useState } from "react";
+import { View, TouchableOpacity, Modal, Text, Dimensions, FlatList, Linking, SafeAreaView } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import { Actions } from "react-native-router-flux";
-import QRCode from "react-native-qrcode-svg";
 import QRCodeScanner from "react-native-qrcode-scanner";
+import QRCode from "react-native-qrcode-svg";
 import { MemberPanel } from "@/utils/render";
-import { months } from "@/data/DateItems";
 import { EventForm } from "@/data/FormData";
-import { deleteEvent, editEvent, checkIn, rsvp, pageLoad, getAllMemberAccounts } from "@/ducks";
-import {
-	View,
-	TouchableOpacity,
-	Modal,
-	Text,
-	Dimensions,
-	FlatList,
-	Linking,
-	SafeAreaView
-} from "react-native";
+import { convertArrayOfObjectsToCSV, convertNumToDate } from "@/utils/events";
+import { Alert, Button, NavBar, FilterList, ButtonLayout, Icon } from "@/components";
+import { deleteEvent, editEvent, checkIn, rsvp } from "@/ducks";
 
-const dimension = Dimensions.get("screen");
+const { height, width } = Dimensions.get("screen");
 
-class EventDetails extends Component {
-	constructor(props) {
-		super(props);
+export const EventDetails = () => {
+	const [modalVisible, setModalVisibility] = useState(false);
+	const [formVisible, setFormVisibility] = useState(false);
+	const dispatch = useDispatch();
+	const {
+		events: { activeEvent },
+		user: { activeUser },
+		members: { allMemberAccounts }
+	} = useSelector(state => state);
 
-		this.state = {
-			modalVisible: false,
-			eventFormVisibility: false
-		 };
-	}
+	const {
+		name,
+		description,
+		date,
+		startTime,
+		endTime,
+		location,
+		type,
+		committee,
+		code,
+		attendance
+	} = activeEvent;
+	const {
+		lineOnTop,
+		attendanceTitle,
+		attendanceContainer,
+		icon,
+		textColor,
+		fullFlex,
+		iconContainer,
+		text,
+		page,
+		container
+	} = styles;
 
-	componentDidMount() {
-		const { activeUser } = this.props;
+	const renderQR = () => {
+		const { modalBackground, modalContent } = styles;
 
-		if (activeUser.privilege && activeUser.privilege.board)
-			getAllMemberAccounts();
-	}
-
-	convertNumToDate(date) {
-		if (!date) return "";
-		let tempDate = date.split("-");
-
-		return `${months[Number(tempDate[1]) - 1]} ${tempDate[2]}`;
-	}
-
-	onSuccess = (e) => {
-		if (this.props.activeEvent.code === e.data)
-			checkIn(this.props.activeEvent, this.props.activeUser);
-		else
-			Alert.alert("Incorrect Code");
-	}
-
-	renderCodeBox() {
-		const {
-			activeEvent,
-			activeUser
-		} = this.props;
-
-		const {
-			modalBackground,
-			modalContent
-		} = styles;
-
-		if (activeUser.privilege && activeUser.privilege.board) {
-			return (
-				<Modal
-					transparent = { true }
-					visible = { this.state.modalVisible }>
-					<View style = { modalBackground }>
-						<View style = { modalContent }>
-							<TouchableOpacity onPress = { () => this.setState({ modalVisible: false }) }>
-								<Icon
-									name = "md-close-circle"
-									size = { dimension.height * 0.05 }
-									color = '#e0e6ed'
-								/>
-							</TouchableOpacity>
-							<View style = {{ paddingTop: 20 }}></View>
-							<View style = {{ alignItems: "center", flex: 2, justifyContent: "center" }}>
-								<QRCode
-									value = { activeEvent.code }
-									size = { 300 }
-								/>
-							</View>
-							<View style = {{ paddingTop: 20 }}>
+		return (activeUser.privilege && activeUser.privilege.board)
+			? <Modal transparent visible = { modalVisible }>
+				<View style = { modalBackground }>
+					<View style = { modalContent }>
+						<TouchableOpacity onPress = { () => setModalVisibility(false) }>
+							<Icon name = "md-close-circle" size = { height * 0.05 } color = '#e0e6ed' />
+						</TouchableOpacity>
+						<View style = {{ alignItems: "center", flex: 2, justifyContent: "center", paddingVertical: 20 }}>
+							<QRCode value = { code } size = { 300 } />
+						</View>
+					</View>
+				</View>
+			</Modal>
+			: <Modal transparent visible = { modalVisible }>
+				<SafeAreaView>
+					<View style = {{ height: height, backgroundColor: "black" }}>
+						<View style = {{ flex: 1, justifyContent: "flex-start" }}>
+							<QRCodeScanner
+								fadeIn = { false }
+								containerStyle = {{ flex: 0.7 }}
+								onRead = { ({ data: qrcode }) => (code === qrcode)
+									? dispatch(checkIn(activeEvent, activeUser))
+									: Alert.alert("Incorrect code") }
+							/>
+						</View>
+						<View style = {{ flexDirection: "row", flex: 0.9, alignItems: "center", justifyContent: "center", width: "100%" }}>
+							<View style = {{ flex: 1 }}>
+								<Button title = "DONE" onPress = { () => setModalVisibility(false) } />
 							</View>
 						</View>
 					</View>
-				</Modal>
-			);
-		}
-		else {
+				</SafeAreaView>
+			</Modal>;
+	};
+
+	const renderAttendance = () => {
+		if (activeUser.privilege && activeUser.privilege.board && attendance) {
 			return (
-				<Modal
-					transparent = { true }
-					animationType = { "fade" }
-					onRequestClose = { () => { Alert.alert("Modal has been closed.") } }
-					visible = { this.state.modalVisible }
-				>
-					<SafeAreaView>
-						<View style = {{ height: dimension.height, backgroundColor: "black" }}>
-							<View style = {{ flex: 0.2 }}></View>
-							<View style = {{ flex: 1, justifyContent: "flex-start" }}>
-								<QRCodeScanner
-									onRead = { this.onSuccess }
-									fadeIn = { false }
-									containerStyle = {{ flex: 0.7 }}
-								/>
-							</View>
-							<View style = {{ flexDirection: "row", flex: 0.9, alignItems: "center", justifyContent: "center", width: "100%" }}>
-								<View style = {{ flex: 0.3 }}></View>
-								<View style = {{ flex: 1 }}>
-									<Button
-										title = "DONE"
-										onPress = { () => this.setState({ modalVisible: false }) }
-									/>
-								</View>
-								<View style = {{ flex: 0.3 }}></View>
-							</View>
-						</View>
-					</SafeAreaView>
-				</Modal>
-			);
-		}
-	}
-
-	renderComponent(item) {
-		const {
-			textColor
-		} = styles;
-
-		if (this.props.allMemberAccounts && this.props.allMemberAccounts[item]) {
-			const {
-				firstName,
-				lastName
-			} = this.props.allMemberAccounts[item];
-
-			return (
-				<View style = {{ flex: 1 }}>
-					<Text style = { [{ fontSize: 16, alignSelf: "center" }, textColor] }>{ firstName } { lastName }</Text>
+				<View style = { [fullFlex, lineOnTop] }>
+					<View style = { attendanceContainer }>
+						<Text style = { [attendanceTitle, textColor] }>Attendance</Text>
+						<Icon
+							style = { [icon, textColor] }
+							name = "md-mail"
+							size = { 35 }
+							color = "#e0e6ed"
+							onPress = { () => sendAttendanceToMail(Object.keys(attendance)) }
+						/>
+					</View>
+					<FlatList
+						data = { Object.keys(attendance) }
+						numColumns = { 2 }
+						renderItem = { ({ item }) => renderAttendant(item) }
+					/>
 				</View>
 			);
 		}
-	}
+	};
 
-	convertArrayOfObjectsToCSV(args) {
-		let result;
-		let ctr;
-		let keys;
-		let columnDelimiter;
-		let lineDelimiter;
-		let data = args.data || null;
+	const renderAttendant = (attendant) => {
+		const { firstName, lastName } = allMemberAccounts[attendant];
 
-		if (!data || !data.length) return null;
+		return <View style = {{ flex: 1 }}>
+			<Text style = { [{ fontSize: 16, alignSelf: "center" }, textColor] }>{ firstName } { lastName }</Text>
+		</View>;
+	};
 
-		columnDelimiter = args.columnDelimiter || ",";
-		lineDelimiter = args.lineDelimiter || "\n";
+	const renderPickMembers = () => {
+		let list = { ...allMemberAccounts };
+		let excludeDataProp = { ...attendance, [activeUser.id]: true };
+		let Wrapper = props => <Button title = "Manual Check In" onPress = { props.onPress } />;
 
-		keys = Object.keys(data[0]);
+		Object.keys(excludeDataProp).forEach(key => delete list[key]);
 
-		result = "";
-		result += keys.join(columnDelimiter);
-		result += lineDelimiter;
+		return <FilterList
+			multiple
+			CustomForm = { Wrapper }
+			data = { list }
+			regexFunc = { ({ firstName, lastName }) => `${firstName} ${lastName}` }
+			selectBy = { ({ id }) => id }
+			itemJSX = { data => MemberPanel(data) }
+			onSelect = { selectedUsers => selectedUsers.forEach(user => dispatch(checkIn(activeEvent, user, false))) }
+		/>;
+	};
 
-		data.forEach(function(item) {
-			ctr = 0;
-			keys.forEach(function(key) {
-				if (ctr > 0) result += columnDelimiter;
-				result += String(item[key]).replace("&", "and").replace("\n", " ");
-				ctr++;
-			});
-			result += lineDelimiter;
-		});
+	const renderEventStats = () => {
+		let numAttendance = attendance && Object.keys(attendance).length;
+		let numRSVP = activeEvent.rsvp && Object.keys(activeEvent.rsvp).length || 0;
 
-		return result;
-	}
+		if (activeUser.privilege && activeUser.privilege.board) {
+			return [
+				<View style = { iconContainer }>
+					<Icon style = { [icon, textColor] } name = "ios-people" size = { 25 } color = '#000' />
+					<Text style = { [text, textColor] }>{ numRSVP } { numRSVP === 1 ? "person" : "people" } RSVP'd</Text>
+				</View>,
+				numAttendance && <View style = { iconContainer }>
+					<Icon style = { [icon, textColor] } name = "md-people" size = { 25 } color = '#000' />
+					<Text style = { [text, textColor] }>{ numAttendance } { numAttendance === 1 ? "person" : "people" } attended</Text>
+				</View>
+			];
+		}
+	};
 
-	sendListToMail(attendants) {
-		const {
-			activeUser,
-			activeEvent,
-			allMemberAccounts
-		} = this.props;
+	const renderButtons = () => {
+		const confirmDelete = () => { deleteEvent(activeEvent); Actions.pop() };
 
+		return (
+			(activeUser.privilege && activeUser.privilege.board)
+				? <ButtonLayout>
+					<Button title = "Open check-in" onPress = { () => setModalVisibility(true) } />
+					{ renderPickMembers() }
+					<Button title = "Edit event" onPress = { () => setFormVisibility(true) } />
+					<Button
+						title = "Delete event"
+						onPress = { () => Alert.alert("Are you sure you want to delete this event?",
+							{ title: "Confirmation", type: "confirmation", submit: { onPress: confirmDelete } }) }
+					/>
+				</ButtonLayout>
+				: <ButtonLayout>
+					<Button title = "Check in" onPress = { () => setModalVisibility(true) } />
+					{ limitRSVP(date) && <Button title = "RSVP" onPress = { () => dispatch(rsvp(activeEvent)) } /> }
+				</ButtonLayout>
+		);
+	};
+
+	const limitRSVP = (eventDate) => {
+		let [year, month, day] = eventDate.split("-");
+		let date = new Date();
+
+		return (year >= date.getFullYear()) && (month >= date.getMonth() + 1) && (day > date.getDate());
+	};
+
+	const sendAttendanceToMail = attendants => {
 		let users = [];
 		const email = allMemberAccounts[activeUser.id].email;
 
-		attendants.map(attendant => { users.push(allMemberAccounts[attendant]) });
+		attendants.map(attendant => users.push(allMemberAccounts[attendant]));
 
-		let csv = this.convertArrayOfObjectsToCSV({
-			data: users
-		});
-
-		if (!csv) return;
-
-		let data = "Instructions:\n\
-			1. Open a plain text Editor(Not microsoft Word)\n\
-			2. Copy everything under the line and paste it into the text editor\n\
-			3. Save the file and change the extension to .csv\n\
-			4. Open the file in Excel\n\
-			------------------\n\n" + csv;
-		let link = `mailto:${email}?subject=event: ${activeEvent.name}&body=` + data;
+		let data = `
+			Instructions:
+				1. Open a plain text editor.
+				2. Copy everything under the line and paste it into the text editor.
+				3. Save the file and change the extension to .csv
+				4. Open the file in Excel.
+			------------------------------------------------------------------------
+			${convertArrayOfObjectsToCSV(users)}
+		`;
+		let link = `mailto:${email}?subject=event: ${name}&body=${data}`;
 
 		if (!Linking.canOpenURL(link)) {
 			Alert.alert("Email could not be sent", { type: "error", title: "Failure" });
@@ -210,289 +206,43 @@ class EventDetails extends Component {
 			Linking.openURL(link);
 			Alert.alert("Email app should be opened");
 		}
-	}
+	};
 
-	renderAttendance() {
-		const { activeEvent, activeUser } = this.props;
-		const {
-			lineOnTop,
-			attendance,
-			attendanceContainer,
-			icon,
-			textColor,
-			fullFlex
-		} = styles;
+	const menuItems = [
+		{ iconName: "md-calendar", info: convertNumToDate(date) },
+		{ iconName: "md-time", info: startTime - endTime },
+		{ iconName: "md-pin", info: location },
+		{ iconName: "md-list", info: description }
+	];
 
-		if (!activeEvent) return null;
-
-		if (activeUser.privilege && activeUser.privilege.board && activeEvent.attendance) {
-			let attendants = Object.keys(activeEvent.attendance);
-
-			return (
-				<View style = { [fullFlex, lineOnTop] }>
-					<View style = { attendanceContainer }>
-						<View style = { icon } />
-						<Text style = { [attendance, textColor] }>Attendance</Text>
-						<Icon
-							style = { [icon, textColor] }
-							name = "md-mail"
-							size = { 35 }
-							color = "#e0e6ed"
-							onPress = { () => this.sendListToMail(attendants) }
-						/>
+	return (
+		<SafeAreaView style = { page }>
+			<NavBar title = { `${committee || type}: ${name}` } back />
+			<EventForm
+				title = "Edit Event"
+				values = { activeEvent }
+				visible = { formVisible }
+				onSubmit = { event => editEvent(event) }
+				changeVisibility = { visible => setFormVisibility(visible) }
+			/>
+			<View style = { container }>
+				{ menuItems.map(({ iconName, info }) =>
+					info && <View style = { iconContainer }>
+						<Ionicons style = { [icon, textColor] } name = { iconName } size = { 25 } color = "black" />
+						<Text style = { [text, textColor] }>{ info }</Text>
 					</View>
-					<FlatList
-						data = { attendants }
-						extraData = { this.state }
-						numColumns = { 2 }
-						keyExtractor = { this._keyExtractor }
-						renderItem = { ({ item }) => this.renderComponent(item) }
-					/>
+						|| <View />
+				) }
+				{ renderEventStats() }
+				<View style = { [iconContainer, fullFlex] }>
+					{ renderAttendance() }
 				</View>
-			);
-		}
-	}
-
-	openCheckInButton() {
-		this.setState({ modalVisible: true });
-	}
-
-	confirmDelete() {
-		deleteEvent(this.props.activeEvent);
-		Actions.pop();
-	}
-
-	renderPickMembers() {
-		const {
-			allMemberAccounts,
-			activeEvent,
-			activeUser
-		} = this.props;
-
-		if (!activeEvent) return null;
-
-		let list = Object.assign({}, allMemberAccounts);
-		let excludeDataProp = !activeEvent ? {} : Object.assign({}, activeEvent.attendance);
-		let Wrapper = (props) => <Button
-			title = "Manual Check In"
-			onPress = { props.onPress }
-		/>;
-
-		if (!excludeDataProp) excludeDataProp = { [activeUser.id]: true };
-		else Object.assign(excludeDataProp, { [activeUser.id]: true });
-
-		Object.keys(excludeDataProp).forEach(function (key) {
-			delete list[key];
-		});
-
-		return (
-			<View>
-				<FilterList
-					multiple = { true }
-					CustomForm = { Wrapper }
-					data = { list }
-					regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
-					selectBy = { (data) => { return data.id } }
-					itemJSX = { (data) => MemberPanel(data) }
-					onSelect = { (selectedUsers) => selectedUsers.forEach(user => checkIn(activeEvent, user, false)) }
-				/>
 			</View>
-		);
-	}
-
-	renderEventListNum(iconSize) {
-		const {
-			activeEvent,
-			activeUser
-		} = this.props;
-		const {
-			icon,
-			iconContainer,
-			text,
-			textColor
-		} = styles;
-
-		let numRSVP = 0;
-		let numAttendance;
-
-		if (activeEvent) {
-			if (activeEvent.attendance)
-				numAttendance = Object.keys(activeEvent.attendance).length;
-			if (activeEvent.rsvp)
-				numRSVP = Object.keys(activeEvent.rsvp).length;
-		}
-
-		if (activeUser.privilege && activeUser.privilege.board) {
-			return [
-				<View style = { iconContainer }>
-					<Icon style = { [icon, textColor] } name = "ios-people" size = { iconSize } color = '#000' />
-					<Text style = { [text, textColor] }>{ numRSVP } { numRSVP == 1 ? "person" : "people" } RSVP'd</Text>
-				</View>,
-				numAttendance && <View style = { iconContainer }>
-					<Icon style = { [icon, textColor] } name = "md-people" size = { iconSize } color = '#000' />
-					<Text style = { [text, textColor] }>{ numAttendance } { numAttendance == 1 ? "person" : "people" } attended</Text>
-				</View>
-			];
-		}
-	}
-
-	limitRSVP(date) {
-		let tempDate = date.split("-");
-		let thisdate = new Date();
-		let month = thisdate.getMonth() + 1;
-		let year = thisdate.getFullYear();
-		let day = thisdate.getDate();
-
-		if (tempDate[0] >= parseInt(year) && tempDate[1] >= parseInt(month) && tempDate[2] > parseInt(day))
-			return true;
-	}
-
-	prepend0(item) {
-		let array = item.split(":");
-		let hour = array[0];
-
-		if (hour.length === 1)
-			hour = "0" + hour;
-
-		return hour + ":" + array[1] + ":" + array[2];
-	}
-
-	renderButtons() {
-		const {
-			activeUser,
-			activeEvent
-		} = this.props;
-
-		let buttons = [];
-
-		if (activeUser.privilege && activeUser.privilege.board) {
-			buttons = <ButtonLayout>
-				<Button
-					title = "Open check-in"
-					onPress = { () => this.openCheckInButton() }
-				/>
-				{ this.renderPickMembers() }
-				<Button
-					title = "Edit event"
-					onPress = { () => this.setState({ eventFormVisibility: true }) }
-				/>
-				<Button
-					title = "Delete event"
-					onPress = { () => Alert.alert("Are you sure you want to delete this event?",
-						{ title: "Confirmation", type: "confirmation", submit: { onPress: () => this.confirmDelete() } }
-					) }
-				/>
-			</ButtonLayout>
-			;
-		}
-		else {
-			buttons = <ButtonLayout>
-				<Button
-					title = "Check in"
-					onPress = { () => { this.setState({ modalVisible: true }) } }
-				/>
-				{ this.limitRSVP(activeEvent.date) && <Button
-					title = "RSVP"
-					onPress = { () => rsvp(activeEvent) }
-				/> }
-			</ButtonLayout>
-			;
-		}
-
-		return (
-			<View>
-				{ buttons }
-			</View>
-		);
-	}
-
-	render() {
-		if (this.props.loading) {
-			return <Spinner />;
-		}
-		else {
-			const {
-				name,
-				description,
-				date,
-				startTime,
-				endTime,
-				location,
-				type,
-				committee
-			} = this.props.activeEvent;
-			const {
-				page,
-				container,
-				iconContainer,
-				icon,
-				text,
-				textColor,
-				final
-			} = styles;
-
-			let viewName = type + ": " + name;
-			let iconSize = 25;
-
-			if (committee) viewName = committee + ": " + name;
-
-			return (
-				<SafeAreaView style = { page }>
-					<NavBar title = { viewName } back onBack = { () => Actions.pop() } />
-					<EventForm
-						title = "Edit Event"
-						values = { this.props.activeEvent }
-						visible = { this.state.eventFormVisibility }
-						onSubmit = { event => editEvent(event) }
-						changeVisibility = { visible => this.setState({ eventFormVisibility: visible }) }
-					/>
-					<View style = { container }>
-						<View style = { iconContainer }>
-							<Icon
-								style = { [icon, textColor] }
-								name = "md-calendar"
-								size = { iconSize }
-								color = "#000" />
-							<Text style = { [text, textColor] }>{ this.convertNumToDate(date) }</Text>
-						</View>
-						<View style = { iconContainer }>
-							<Icon
-								style = { [icon, textColor] }
-								name = "md-time"
-								size = { iconSize }
-								color = "#000" />
-							<Text style = { [text, textColor] }>{ startTime }-{ endTime }</Text>
-						</View>
-						<View style = { iconContainer }>
-							<Icon
-								style = { [icon, textColor] }
-								name = "md-pin"
-								size = { iconSize }
-								color = "#000" />
-							<Text style = { [text, textColor] }>{ location }</Text>
-						</View>
-						{ description
-						&& <View style = { iconContainer }>
-							<Icon
-								style = { [icon, textColor] }
-								name = "md-list"
-								size = { iconSize }
-								color = "#000" />
-							<Text style = { [text, textColor] }>{ description }</Text>
-						</View> }
-						{ this.renderEventListNum(iconSize) }
-						<View style = { [iconContainer, final] }>
-							{ this.renderAttendance() }
-						</View>
-					</View>
-					{ this.renderCodeBox() }
-					{ this.renderButtons() }
-					<View style = {{ height: dimension.height * 0.08, backgroundColor: "black" }}></View>
-				</SafeAreaView>
-			);
-		}
-	}
-}
+			{ renderQR() }
+			{ renderButtons() }
+		</SafeAreaView>
+	);
+};
 
 const styles = {
 	container: {
@@ -503,27 +253,9 @@ const styles = {
 		padding: 25,
 		backgroundColor: "black"
 	},
-	modalText: {
-		alignSelf: "center",
-		fontSize: 16
-	},
-	modalTextInput: {
-		marginTop: dimension.height * 0.05,
-		height: 80,
-		textAlign: "center",
-		width: dimension.width * 0.6,
-		backgroundColor: "#e0e6ed22",
-		borderColor: "#e0e6ed",
-		borderRadius: 16,
-		borderWidth: 3,
-		borderStyle: "solid",
-		fontWeight: "bold",
-		fontSize: 60,
-		color: "#E0E6ED"
-	},
 	modalContent: {
-		height: dimension.height * 0.6,
-		width: dimension.width * 0.9,
+		height: height * 0.6,
+		width: width * 0.9,
 		padding: 12,
 		backgroundColor: "white",
 		borderRadius: 12
@@ -532,12 +264,9 @@ const styles = {
 		justifyContent: "center",
 		alignItems: "center",
 		margin: 0,
-		height: dimension.height,
-		width: dimension.width,
+		height: height,
+		width: width,
 		backgroundColor: "#000a"
-	},
-	final: {
-		flex: 1
 	},
 	textColor: {
 		color: "#e0e6ed"
@@ -554,7 +283,7 @@ const styles = {
 		justifyContent: "center",
 		alignItems: "center"
 	},
-	attendance: {
+	attendanceTitle: {
 		flex: 0.8,
 		fontSize: 20,
 		textAlign: "center"
@@ -567,76 +296,11 @@ const styles = {
 		borderTopColor: "#e0e6ed",
 		borderTopWidth: 1
 	},
-	codeText: {
-		margin: 60,
-		color: "#FECB00",
-		alignSelf: "center",
-		fontWeight: "bold",
-		fontSize: 50
-	},
 	page: {
 		flex: 1,
 		backgroundColor: "black"
-	},
-	tabBar: {
-		height: dimension.height * 0.1,
-		backgroundColor: "#fff",
-		borderWidth: 1,
-		borderStyle: "solid",
-		borderColor: "#0005",
-		padding: 10
-	},
-	tabBarText: {
-		color: "#000",
-		fontSize: 20,
-		margin: 20,
-		alignSelf: "center"
-	},
-	headerStyle: {
-		flexDirection: "column",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 5,
-		marginBottom: 10
-	},
-	headerTextStyle: {
-		fontSize: 22,
-		fontWeight: "bold"
-	},
-	centerText: {
-		flex: 1,
-		fontSize: 18,
-		padding: 32,
-		color: "#777"
-	},
-	textBold: {
-		fontWeight: "500",
-		color: "#000"
-	},
-	buttonText: {
-		fontSize: 21,
-		color: "rgb(0,122,255)"
-	},
-	buttonTouchable: {
-		padding: 16
-	},
-	textStyle: {
-		color: "#e0e6ed",
-		fontSize: dimension.width * 0.05
 	},
 	fullFlex: {
 		flex: 1
 	}
 };
-
-const mapStateToProps = ({ events, user, members }) => {
-	const { activeEvent } = events;
-	const { activeUser } = user;
-	const { allMemberAccounts } = members;
-
-	return { activeEvent, allMemberAccounts, activeUser };
-};
-
-const mapDispatchToProps = { checkIn, rsvp, pageLoad, getAllMemberAccounts };
-
-export default connect(mapStateToProps, mapDispatchToProps)(EventDetails);
