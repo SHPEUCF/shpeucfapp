@@ -1,107 +1,65 @@
-import PropTypes from "prop-types";
-import React, { Component } from "react";
-import { View, Text, Dimensions } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { Actions } from "react-native-router-flux";
+import React from 'react';
+import { Actions } from 'react-native-router-flux';
+import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { Icon } from './';
 
-const dimension = Dimensions.get("window");
+const { height } = Dimensions.get('screen');
 
-class NavBar extends Component {
-	constructor(props) {
-		super(props);
-	}
+/**
+ * @desc Adds a navigation bar to the current screen.
+ *
+ * @typedef {Object} Props
+ * @prop {String}       title           Text to display in navigation bar.
+ * @prop {Boolean}      back            Display a back button to left of the title.
+ * @prop {Function=}    onBack          Called when back button is pressed.
+ * @prop {StyleSheet}   style           Style of navigation bar.
+ * @prop {JSX.Element}  childComponent  Component to display to right of title.
+ * @prop {StyleSheet=}  childStyle      Style of child component.
+ *
+ * @param {...Props}
+ */
 
-	static propTypes = {
-		title: PropTypes.string,
-		back: PropTypes.bool,
-		onBack: PropTypes.func
-	}
+export const NavBar = ({ title, back, onBack, style, childComponent, childStyle }) => {
+	const { tabBar, tabBarText, rowFlex, backButtonStyle } = styles;
 
-	render() {
-		const {
-			tabBar,
-			tabBarText,
-			rowFlex,
-			backButtonStyle
-		} = styles;
-		const {
-			title,
-			back,
-			onBack,
-			style,
-			childComponent,
-			childStyle
-		} = this.props;
-
-		if (back) {
-			return (
-				<View style = { [tabBar, style, rowFlex] }>
-					<View style = { backButtonStyle }>
-						<Ionicons
-							name = "ios-arrow-dropleft"
-							size = { dimension.height * 0.03 }
-							color = { "#FECB00" }
-							onPress = { onBack }
-						/>
-					</View>
-					<View>
-						<Text style = { tabBarText }>{ title }</Text>
-					</View>
-					<View style = { childStyle }>
-						{ childComponent }
-					</View>
-				</View>
-			);
-		}
-		else {
-			return (
-				<View style = { [tabBar, style, rowFlex] }>
-					<View>
-						<Text style = { tabBarText }>{ title }</Text>
-					</View>
-					<View style = { childStyle }>
-						{ childComponent }
-					</View>
-				</View>
-			);
-		}
-	}
-}
-
-const styles = {
-	tabBar: {
-		justifyContent: "flex-start",
-		backgroundColor: "black",
-		alignItems: "center",
-		borderBottomWidth: 1,
-		borderBottomColor: "black",
-		height: dimension.height * 0.1
-	},
-	tabBarText: {
-		color: "white",
-		fontSize: 20,
-		fontWeight: "bold",
-		paddingLeft: "5%"
-	},
-	backButtonStyle: {
-		height: dimension.height * 0.04,
-		width: dimension.height * 0.04,
-		justifyContent: "center",
-		alignItems: "center",
-		marginLeft: "5%"
-	},
-	rowFlex: {
-		flexDirection: "row"
-	}
+	return (
+		<View style = { [tabBar, style, rowFlex] }>
+			{ back && <TouchableOpacity style = { backButtonStyle } onPress = { () => onBack() }>
+				<Icon name = 'ios-arrow-dropleft' size = { height * 0.03 } color = '#FECB00' />
+			</TouchableOpacity> }
+			<Text style = { tabBarText }>{ title }</Text>
+			<View style = { childStyle }>
+				{ childComponent }
+			</View>
+		</View>
+	);
 };
 
 NavBar.defaultProps = {
-	back: false,
 	onBack: () => Actions.pop(),
-	childStyle: {
-		flex: 1,
-		padding: "3.5%"
-	}
+	childStyle: { flex: 1, alignItems: 'flex-end' }
 };
 
-export { NavBar };
+const styles = {
+	tabBar: {
+		flexDirection: 'row',
+		backgroundColor: 'black',
+		alignItems: 'center',
+		borderBottomWidth: 1,
+		borderBottomColor: 'black',
+		height: height * 0.1,
+		paddingHorizontal: '5%'
+	},
+	tabBarText: {
+		color: 'white',
+		fontSize: 20,
+		fontWeight: 'bold',
+		paddingLeft: '5%'
+	},
+	backButtonStyle: {
+		height: height * 0.04,
+		width: height * 0.04,
+		justifyContent: 'center',
+		alignItems: 'center'
+	}
+};

@@ -1,17 +1,17 @@
-import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
-import { Form } from "./Form";
-import _ from "lodash";
-import { copyStateAndSetValuesToNull } from "../../utils/general";
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { Form } from './Form';
+import _ from 'lodash';
+import { copyStateAndSetValuesToNull } from '@/utils/general';
 
 /**
  * Types
  * @typedef {Object} Element:
  *		@property {String}                         placeHolder              Placeholder that will be shown inside of each element.
  *		@property {String}                         camelCaseName            Unique name in camelCase format.
- *		@property {("DatePicker"|"FilterList"
- *		           |"Input"|"PickerInput"
- *		           |"TimePicker"|"MultiElement")}  type                     Type of element.
+ *		@property {('DatePicker'|'FilterList'
+ *		           |'Input'|'PickerInput'
+ *		           |'TimePicker'|'MultiElement')}  type                     Type of element.
  *		@property {boolean=}                       isRequired               Optional field to determine if element should be required.
  *		@property {Options=}                       options                  Optional fields for element-specific functionality.
  *		@property {ConditionalValue=}              conditionalValues        Optional object contains element:value pairs that depend on the current element.

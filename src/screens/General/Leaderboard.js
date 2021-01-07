@@ -1,19 +1,15 @@
-import React, { Component } from "react";
-import _ from "lodash";
-import { connect } from "react-redux";
-import { Avatar } from "react-native-elements";
-import FastImage from "react-native-fast-image";
-import * as Progress from "react-native-progress";
-import { Actions } from "react-native-router-flux";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { Text, View, Dimensions, SafeAreaView } from "react-native";
-import { NavBar, FilterList } from "../../components";
-import { getVisitedMember, filterChanged } from "../../ducks";
-import { verifiedCheckMark, rankMembersAndReturnsCurrentUser, truncateNames } from "../../utils/render";
+import React, { Component } from 'react';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { NavBar, FilterList, Avatar, ProgressBar, Icon } from '@/components';
+import _ from 'lodash';
+import { Text, View, Dimensions, SafeAreaView } from 'react-native';
+import { verifiedCheckMark, rankMembersAndReturnsCurrentUser, truncateNames } from '@/utils/render';
+import { getVisitedMember, filterChanged } from '@/ducks';
 
-const { height, width } = Dimensions.get("window");
-const iteratees = ["points", "lastName", "firstName"];
-const order = ["desc", "asc", "asc"];
+const dimension = Dimensions.get('screen');
+const iteratees = ['points', 'lastName', 'firstName'];
+const order = ['desc', 'asc', 'asc'];
 
 class Leaderboard extends Component {
 	constructor(props) {
@@ -23,7 +19,7 @@ class Leaderboard extends Component {
 	}
 
 	componentDidMount() {
-		this.props.filterChanged("");
+		this.props.filterChanged('');
 	}
 
 	render() {
@@ -83,31 +79,26 @@ class Leaderboard extends Component {
 						<View style = { userInfoContainer }>
 							<View style = { userTextContainer }>
 								<View style = { row }>
-									<Text style = { [textStyle, { fontWeight: "bold" }, currentUserTextStyle] }>
-										{ `${user.firstName} ${user.lastName}` }
+									<Text style = { [textStyle, { fontWeight: 'bold' }, currentUserTextStyle] }>
+										{ `${item.firstName} ${item.lastName}` }
 									</Text>
 									{ verifiedCheckMark({ paidMember }) }
 								</View>
 								<Text style = { [textStyle, { fontSize: 15 }, currentUserTextStyle] }>{ `Points: ${points}` }</Text>
 							</View>
-							{ !picture
-								? <Avatar
-									size = { height * 0.08 }
-									rounded
-									titleStyle = {{ backgroundColor: color }}
-									overlayContainerStyle = {{ backgroundColor: color }}
-									title = { `${user.firstName[0]}${user.lastName[0]}` }
-								/>
-								: <Avatar size = "large" rounded source = {{ uri: picture }} ImageComponent = { FastImage } />
-							}
+							{ picture
+								? <Avatar source = { item.picture } />
+								: <Avatar
+									title = { item.firstName[0].concat(item.lastName[0]) }
+									titleStyle = {{ backgroundColor: item.color }}
+								/> }
 						</View>
-						<Progress.Bar
+						<ProgressBar
 							style = { progress }
-							progress = { points / Math.max(sortedMembers[0].points, 1) }
-							indeterminate = { false }
-							height = { width * 0.03 }
-							width = { width * 0.75 }
-							color = "#ffd700"
+							progress = { item.points / Math.max(sortedMembers[0].points, 1) }
+							height = { dimension.width * 0.03 }
+							width = { dimension.width * 0.75 }
+							color = '#ffd700'
 						/>
 					</View>
 				</View>
@@ -118,64 +109,64 @@ class Leaderboard extends Component {
 
 const styles = {
 	row: {
-		alignItems: "center",
-		flexDirection: "row"
+		alignItems: 'center',
+		flexDirection: 'row'
 	},
 	screenBackground: {
 		flex: 1,
-		backgroundColor: "#0c0b0b"
+		backgroundColor: '#0c0b0b'
 	},
 	textStyle: {
-		color: "#e0e6ed",
-		fontSize: width * 0.05
+		color: '#e0e6ed',
+		fontSize: dimension.width * 0.05
 	},
 	contentContainerStyle: {
-		height: height * 0.18,
-		backgroundColor: "black",
-		alignItems: "flex-start",
+		height: dimension.height * 0.18,
+		backgroundColor: 'black',
+		alignItems: 'flex-start',
 		paddingHorizontal: 15
 	},
 	userContainerColor: {
-		color: "#FECB00"
+		color: '#FECB00'
 	},
 	progress: {
 		marginTop: 10,
-		justifyContent: "center",
+		justifyContent: 'center',
 		height: 13,
-		borderColor: "#2C3239",
-		backgroundColor: "#2C3239"
+		borderColor: '#2C3239',
+		backgroundColor: '#2C3239'
 	},
 	indexText: {
-		alignSelf: "center",
-		fontWeight: "700",
-		fontSize: width * 0.05,
-		color: "black"
+		alignSelf: 'center',
+		fontWeight: '700',
+		fontSize: dimension.width * 0.05,
+		color: 'black'
 	},
-	position: {
-		borderColor: "#FECB00",
-		backgroundColor: "#FECB00",
-		borderRadius: height * 0.06 * 0.5,
-		marginRight: "4%",
-		justifyContent: "center",
-		height: height * 0.06,
-		width: height * 0.06,
+	index: {
+		borderColor: '#FECB00',
+		backgroundColor: '#FECB00',
+		borderRadius: dimension.height * 0.06 * 0.5,
+		marginRight: '4%',
+		justifyContent: 'center',
+		height: dimension.height * 0.06,
+		width: dimension.height * 0.06,
 		elevation: 1,
-		alignItems: "center"
+		alignItems: 'center'
 	},
 	itemContentContainer: {
-		flexDirection: "row",
-		flex: 1,
-		alignItems: "center"
+		flexDirection: 'row',
+		 flex: 1,
+		 alignItems: 'center'
 	},
 	userInfoContainer: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "flex-start",
-		paddingBottom: 10
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'flex-start',
+		paddingBottom: 20
 	},
 	userTextContainer: {
 		paddingTop: 5,
-		width: "62%"
+		width: '62%'
 	}
 };
 

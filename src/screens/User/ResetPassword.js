@@ -1,17 +1,17 @@
-import React, { Component } from "react";
-import { View, Text, TouchableOpacity, Dimensions } from "react-native";
-import { Actions } from "react-native-router-flux";
-import { connect } from "react-redux";
-import { Button, Input } from "../../components";
-import { resetPassword } from "../../ducks";
+import React, { Component } from 'react';
+import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { Button, Input } from '@/components';
+import { resetPassword } from '@/ducks';
 
-const dimension = Dimensions.get("window");
+const dimension = Dimensions.get('window');
 
 class ResetPassword extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = { email: "" };
+		this.state = { email: '' };
 	}
 
 	renderError() {
@@ -29,7 +29,7 @@ class ResetPassword extends Component {
 
 		return (
 			<View>
-				<Button title = "RESET" onPress = { () => this.props.resetPassword(this.state.email) } />
+				<Button title = 'RESET' onPress = { () => this.props.resetPassword(this.state.email) } />
 				<View style = { resetPasswordContainer }>
 					<TouchableOpacity onPress = { () => Actions.login() }>
 						<Text style = { loginButton }>Log In</Text>
@@ -52,9 +52,9 @@ class ResetPassword extends Component {
 					</View>
 					<View style = {{ height: dimension.height * 0.12 }}>
 						<Input
-							placeholder = "Email"
+							placeholder = 'Email'
 							value = { this.state.email }
-							autoCapitalize = "none"
+							autoCapitalize = 'none'
 							maxLength = { 45 }
 							onChangeText = { (email) => this.setState({ email }) }
 						/>
@@ -71,34 +71,34 @@ class ResetPassword extends Component {
 const styles = {
 	container: {
 		flex: 1,
-		backgroundColor: "#0c0b0b",
-		justifyContent: "center"
+		backgroundColor: '#0c0b0b',
+		justifyContent: 'center'
 	},
 	formContainer: {
 		marginLeft: 20,
 		marginRight: 20
 	},
 	header: {
-		flexDirection: "column",
-		alignItems: "center",
-		justifyContent: "center",
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'center',
 		padding: 5,
 		marginBottom: 30
 	},
 	headerText: {
-		color: "white",
+		color: 'white',
 		fontSize: 22
 	},
 	headerSubtitle: {
-		color: "gray",
+		color: 'gray',
 		marginTop: 10,
 		marginBottom: 10
 	},
 	errorTextStyle: {
 		fontSize: 14,
-		alignSelf: "center",
-		color: "red",
-		fontWeight: "bold",
+		alignSelf: 'center',
+		color: 'red',
+		fontWeight: 'bold',
 		padding: 10
 	},
 	formButton: {
@@ -106,18 +106,18 @@ const styles = {
 		marginBottom: 10
 	},
 	resetPasswordContainer: {
-		flexDirection: "row",
-		justifyContent: "center",
+		flexDirection: 'row',
+		justifyContent: 'center',
 		marginTop: 10,
 		marginBottom: 10
 	},
 	loginButton: {
-		color: "white",
-		flexDirection: "row",
-		justifyContent: "center"
+		color: 'white',
+		flexDirection: 'row',
+		justifyContent: 'center'
 	},
 	insteadButton: {
-		color: "gray",
+		color: 'gray',
 		marginBottom: 20
 	}
 };

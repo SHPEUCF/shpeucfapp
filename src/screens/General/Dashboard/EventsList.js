@@ -1,15 +1,15 @@
-import React, { PureComponent } from "react";
-import { View, Text, TouchableOpacity, Dimensions } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { goToViewEvent } from "../../../utils/router";
-import { filterPastEvents } from "../../../utils/events";
+import React, { PureComponent } from 'react';
+import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { goToViewEvent } from '@/utils/router';
+import { filterPastEvents } from '@/utils/events';
+import { Icon } from '@/components';
 
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get('window');
 
 export default class EventsList extends PureComponent {
 	convertNumToDate(date) {
-		let months = ["Jan", "Feb", "Mar", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-		let [, month, day] = date.split("-");
+		let months = ['Jan', 'Feb', 'Mar', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+		let [, month, day] = date.split('-');
 
 		return `${months[Number(month) - 1]} ${day}`;
 	}
@@ -27,7 +27,7 @@ export default class EventsList extends PureComponent {
 					</Text>
 				</View>
 				<View style = { leaderboardArrow }>
-					<Ionicons name = "ios-arrow-dropright" size = { height * 0.025 } style = { gold } />
+					<Icon name = 'ios-arrow-dropright' size = { height * 0.025 } style = { gold } />
 				</View>
 			</View>
 		);
@@ -45,7 +45,7 @@ export default class EventsList extends PureComponent {
 				|| events.slice(0, 3).map(event =>
 					<TouchableOpacity
 						style = { eventsItem }
-						onPress = { () => { this.props.loadEvent(event); goToViewEvent("dashboard") } }
+						onPress = { () => { this.props.loadEvent(event); goToViewEvent('dashboard') } }
 					>
 						{ this.showEvents(event) }
 					</TouchableOpacity>
@@ -57,43 +57,43 @@ export default class EventsList extends PureComponent {
 
 const styles = {
 	eventListContainerFull: {
-		backgroundColor: "#21252b"
+		backgroundColor: '#21252b'
 	},
 	eventEmptyText: {
 		fontSize: 20,
-		textAlign: "center",
+		textAlign: 'center',
 		padding: 20,
 		height: 150
 	},
 	eventsItem: {
-		backgroundColor: "#21252b",
+		backgroundColor: '#21252b',
 		flex: 1,
 		borderBottomWidth: 5
 	},
 	leaderboardArrow: {
-		color: "#FECB00",
+		color: '#FECB00',
 		width: width * 0.06,
-		alignItems: "center"
+		alignItems: 'center'
 	},
 	eventTextContainer: {
 		flex: 1,
-		alignItems: "flex-start",
+		alignItems: 'flex-start',
 		paddingLeft: 20
 	},
 	eventItemInnerContainer: {
-		flexDirection: "row",
+		flexDirection: 'row',
 		height: 150,
-		alignItems: "center",
+		alignItems: 'center',
 		paddingRight: 20
 	},
 	eventTextStyle: {
-		color: "white",
+		color: 'white',
 		fontSize: width * 0.035
 	},
 	gold: {
-		color: "#FECB00"
+		color: '#FECB00'
 	},
 	textColor: {
-		color: "#e0e6ed"
+		color: '#e0e6ed'
 	}
 };
