@@ -1,57 +1,24 @@
-import React, { Component } from 'react';
-import { Actions } from 'react-native-router-flux';
-import { connect } from 'react-redux';
-import { NavBar, FilterList, Avatar, ProgressBar, Icon } from '@/components';
-import _ from 'lodash';
+import React, { useState } from 'react';
 import { Text, View, Dimensions, SafeAreaView } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import { useDispatch, useSelector } from 'react-redux';
+import _ from 'lodash';
 import { verifiedCheckMark, rankMembersAndReturnsCurrentUser, truncateNames } from '@/utils/render';
-import { getVisitedMember, filterChanged } from '@/ducks';
+import { NavBar, FilterList, Avatar, ProgressBar, Icon } from '@/components';
+import { getVisitedMember } from '@/ducks';
 
-const dimension = Dimensions.get('screen');
+const { height, width } = Dimensions.get('screen');
 const iteratees = ['points', 'lastName', 'firstName'];
 const order = ['desc', 'asc', 'asc'];
 
-class Leaderboard extends Component {
-	constructor(props) {
-		super(props);
+export const Leaderboard = () => {
+	const [search, setSearch] = useState(false);
+	const { user: { activeUser }, members: { allMemberAccounts } } = useSelector(state => state);
+	const dispatch = useDispatch();
 
-		this.state = { search: false };
-	}
+	const sortedMembers = _.orderBy(allMemberAccounts, iteratees, order);
 
-	componentDidMount() {
-		this.props.filterChanged('');
-	}
-
-	render() {
-		const { screenBackground } = styles;
-		const { allMemberAccounts, activeUser } = this.props;
-
-		const sortedMembers = _.orderBy(allMemberAccounts, iteratees, order);
-		const search = <Ionicons
-			onPress = { () => { this.props.filterChanged(""); this.setState({ search: !this.state.search }) } }
-			name = "ios-search"
-			size = { height * 0.04 }
-			color = "#FECB00"
-		/>;
-
-		rankMembersAndReturnsCurrentUser(sortedMembers, activeUser.id);
-
-		return (
-			<SafeAreaView style = {{ screenBackground }}>
-				<NavBar back title = "Leaderboard" childComponent = { search } />
-				<FilterList
-					data = { sortedMembers }
-					search = { this.state.search }
-					placeholder = "Find user"
-					regexFunc = { ({ firstName, lastName }) => `${firstName} ${lastName}` }
-					onSelect = { ({ id }) => { this.props.getVisitedMember(id); Actions.OtherProfileM() } }
-					itemJSX = { data => this.renderComponent(data, sortedMembers) }
-				/>
-			</SafeAreaView>
-		);
-	}
-
-	renderComponent({ id, index, picture, color, points, paidMember, ...user }, sortedMembers) {
+	const renderMembers = ({ id, index, picture, color, points, paidMember, ...user }, sortedMembers) => {
 		const {
 			row,
 			position,
@@ -64,8 +31,7 @@ class Leaderboard extends Component {
 			itemContentContainer,
 			contentContainerStyle
 		} = styles;
-
-		let currentUserTextStyle = (id === this.props.activeUser.id) ? userContainerColor : {};
+		let currentUserTextStyle = (id === activeUser.id) ? userContainerColor : {};
 
 		truncateNames(user);
 
@@ -80,32 +46,56 @@ class Leaderboard extends Component {
 							<View style = { userTextContainer }>
 								<View style = { row }>
 									<Text style = { [textStyle, { fontWeight: 'bold' }, currentUserTextStyle] }>
-										{ `${item.firstName} ${item.lastName}` }
+										{ `${user.firstName} ${user.lastName}` }
 									</Text>
 									{ verifiedCheckMark({ paidMember }) }
 								</View>
 								<Text style = { [textStyle, { fontSize: 15 }, currentUserTextStyle] }>{ `Points: ${points}` }</Text>
 							</View>
 							{ picture
-								? <Avatar source = { item.picture } />
+								? <Avatar source = { picture } />
 								: <Avatar
-									title = { item.firstName[0].concat(item.lastName[0]) }
-									titleStyle = {{ backgroundColor: item.color }}
+									title = { user.firstName[0].concat(user.lastName[0]) }
+									titleStyle = {{ backgroundColor: color }}
 								/> }
 						</View>
 						<ProgressBar
 							style = { progress }
-							progress = { item.points / Math.max(sortedMembers[0].points, 1) }
-							height = { dimension.width * 0.03 }
-							width = { dimension.width * 0.75 }
-							color = '#ffd700'
+							progress = { points / Math.max(sortedMembers[0].points, 1) }
+							height = { width * 0.03 }
+							width = { width * 0.75 }
+							color = '#FFD700'
 						/>
 					</View>
 				</View>
 			</View>
 		);
-	}
-}
+	};
+
+	const { screenBackground } = styles;
+	const searchIcon = <Icon
+		onPress = { () => setSearch(!search) }
+		name = 'ios-search'
+		size = { height * 0.04 }
+		color = '#FECB00'
+	/>;
+
+	rankMembersAndReturnsCurrentUser(sortedMembers, activeUser.id);
+
+	return (
+		<SafeAreaView style = {{ screenBackground }}>
+			<NavBar title = 'Leaderboard' childComponent = { searchIcon } back />
+			<FilterList
+				data = { sortedMembers }
+				search = { search }
+				placeholder = 'Find user'
+				itemJSX = { data => renderMembers(data, sortedMembers) }
+				regexFunc = { ({ firstName, lastName }) => `${firstName} ${lastName}` }
+				onSelect = { ({ id }) => { dispatch(getVisitedMember(id)); Actions.OtherProfileM() } }
+			/>
+		</SafeAreaView>
+	);
+};
 
 const styles = {
 	row: {
@@ -118,10 +108,10 @@ const styles = {
 	},
 	textStyle: {
 		color: '#e0e6ed',
-		fontSize: dimension.width * 0.05
+		fontSize: width * 0.05
 	},
 	contentContainerStyle: {
-		height: dimension.height * 0.18,
+		height: height * 0.18,
 		backgroundColor: 'black',
 		alignItems: 'flex-start',
 		paddingHorizontal: 15
@@ -139,17 +129,17 @@ const styles = {
 	indexText: {
 		alignSelf: 'center',
 		fontWeight: '700',
-		fontSize: dimension.width * 0.05,
+		fontSize: width * 0.05,
 		color: 'black'
 	},
-	index: {
+	position: {
 		borderColor: '#FECB00',
 		backgroundColor: '#FECB00',
-		borderRadius: dimension.height * 0.06 * 0.5,
 		marginRight: '4%',
+		borderRadius: height * 0.06 * 0.5,
 		justifyContent: 'center',
-		height: dimension.height * 0.06,
-		width: dimension.height * 0.06,
+		height: height * 0.06,
+		width: height * 0.06,
 		elevation: 1,
 		alignItems: 'center'
 	},
@@ -169,10 +159,3 @@ const styles = {
 		width: '62%'
 	}
 };
-
-const mapStateToProps = ({ user: { activeUser }, members: { allMemberAccounts }, general: { filter } }) => (
-	{ activeUser, filter, allMemberAccounts }
-);
-const mapDispatchToProps = { getVisitedMember, filterChanged };
-
-export default connect(mapStateToProps, mapDispatchToProps)(Leaderboard);

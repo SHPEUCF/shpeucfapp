@@ -19,7 +19,7 @@ export { default as Events } from './Events/Events';
 export { default as EventDetails } from './Events/EventDetails';
 
 // Export General
-export { default as Leaderboard } from './General/Leaderboard';
+export { Leaderboard } from './General/Leaderboard';
 export { default as More } from './General/More';
 export { About } from './General/About';
 export { Dashboard } from './General/Dashboard';
