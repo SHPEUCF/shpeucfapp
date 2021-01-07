@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import { TouchableOpacity, Text } from "react-native";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { TouchableOpacity, Text } from 'react-native';
+import PropTypes from 'prop-types';
 
-import styleConstructor from "./style";
-import { shouldUpdate } from "../../../component-updater";
+import styleConstructor from './style';
+import { shouldUpdate } from '../../../component-updater';
 
 class Day extends Component {
-	static displayName = "IGNORE";
+	static displayName = 'IGNORE';
 
 	static propTypes = {
 		// TODO: disabled props should be removed
-		state: PropTypes.oneOf(["selected", "disabled", "today", ""]),
+		state: PropTypes.oneOf(['selected', 'disabled', 'today', '']),
 		// Specify theme properties to override specific styles for calendar parts. Default = {}
 		theme: PropTypes.object,
 		marking: PropTypes.any,
@@ -36,7 +36,7 @@ class Day extends Component {
 	}
 
 	shouldComponentUpdate(nextProps) {
-		return shouldUpdate(this.props, nextProps, ["state", "children", "marking", "onPress", "onLongPress"]);
+		return shouldUpdate(this.props, nextProps, ['state', 'children', 'marking', 'onPress', 'onLongPress']);
 	}
 
 	render() {
@@ -44,13 +44,14 @@ class Day extends Component {
 		let textStyle = [this.style.text];
 
 		let marking = this.props.marking || {};
+
 		if (marking && marking.constructor === Array && marking.length) {
 			marking = {
 				marking: true
 			};
 		}
 
-		const isDisabled = typeof marking.disabled !== "undefined" ? marking.disabled : this.props.state === "disabled";
+		const isDisabled = typeof marking.disabled !== 'undefined' ? marking.disabled : this.props.state === 'disabled';
 
 		if (marking.selected) {
 			containerStyle.push(this.style.selected);
@@ -58,13 +59,14 @@ class Day extends Component {
 		else if (isDisabled) {
 			textStyle.push(this.style.disabledText);
 		}
-		else if (this.props.state === "today") {
+		else if (this.props.state === 'today') {
 			containerStyle.push(this.style.today);
 			textStyle.push(this.style.todayText);
 		}
 
-		if (marking.customStyles && typeof marking.customStyles === "object") {
+		if (marking.customStyles && typeof marking.customStyles === 'object') {
 			const styles = marking.customStyles;
+
 			if (styles.container) {
 				if (styles.container.borderRadius === undefined)
 					styles.container.borderRadius = 16;
@@ -83,7 +85,7 @@ class Day extends Component {
 				onLongPress = { this.onDayLongPress }
 				activeOpacity = { marking.activeOpacity }
 				disabled = { marking.disableTouchEvent }
-				accessibilityRole = { isDisabled ? undefined : "button" }
+				accessibilityRole = { isDisabled ? undefined : 'button' }
 				accessibilityLabel = { this.props.accessibilityLabel }
 			>
 				<Text allowFontScaling = { false } style = { textStyle }>{ String(this.props.children) }</Text>

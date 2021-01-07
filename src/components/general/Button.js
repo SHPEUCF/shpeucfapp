@@ -1,5 +1,5 @@
-import React from "react";
-import { Text, TouchableOpacity } from "react-native";
+import React from 'react';
+import { Text, TouchableOpacity } from 'react-native';
 
 /**
  * @description Creates a button with TouchableOpacity. *Accepts optional `Text` props*.
@@ -26,22 +26,22 @@ export const Button = ({ onPress, title, style, titleStyle, height, width, ...ex
 };
 
 Button.defaultProps = {
-	title: "Add a title!",
+	title: 'Add a title!',
 	numberOfLines: 1
 };
 
 const styles = {
 	textStyle: {
 		flex: 1,
-		color: "#000",
-		textAlign: "center",
+		color: '#000',
+		textAlign: 'center',
 		fontSize: 18
 	},
 	buttonStyle: {
-		flexDirection: "row",
-		backgroundColor: "#FECB00",
+		flexDirection: 'row',
+		backgroundColor: '#FECB00',
 		borderRadius: 15,
-		borderColor: "#000",
+		borderColor: '#000',
 		borderWidth: 1,
 		padding: 5
 	}

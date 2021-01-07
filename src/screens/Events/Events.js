@@ -1,26 +1,26 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Alert, Button, ButtonLayout, Agenda } from "../../components/";
-import { formatEventListForCalendar, prepend0 } from "../../utils/events";
-import { loadEvent, createEvent } from "../../ducks";
-import { EventForm } from "../../data/FormData";
-import { View, Dimensions, SafeAreaView } from "react-native";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Alert, Button, ButtonLayout, Agenda } from '@/components/';
+import { formatEventListForCalendar, prepend0 } from '@/utils/events';
+import { loadEvent, createEvent } from '@/ducks';
+import { EventForm } from '@/data/FormData';
+import { View, Dimensions, SafeAreaView } from 'react-native';
 
-const dimension = Dimensions.get("window");
+const dimension = Dimensions.get('window');
 
 class Events extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			status: "closed",
+			status: 'closed',
 			currentDay: this.getTodaysDate(),
 			eventFormVisibility: false,
 			agendaRefresh: false
 	 };
 	}
 
-	didBlurSubscription = this.props.navigation.addListener("didBlur",
+	didBlurSubscription = this.props.navigation.addListener('didBlur',
 		() => this.setState({ agendaRefresh: !this.state.agendaRefresh })
 	);
 
@@ -45,7 +45,7 @@ class Events extends Component {
 				<View style = { [fullFlex, secondaryBackgroundColor] }>
 					<View style = { fullFlex }>
 						<EventForm
-							title = "Create Event"
+							title = 'Create Event'
 							values = {{ date: this.state.currentDay }}
 							visible = { this.state.eventFormVisibility }
 							onSubmit = { event => createEvent(event) }
@@ -70,7 +70,7 @@ class Events extends Component {
 		return (
 			<ButtonLayout>
 				{ activeUser.privilege && activeUser.privilege.board && <Button
-					title = "Create Event"
+					title = 'Create Event'
 					onPress = { () => this.setState({ eventFormVisibility: true }) }
 				/> }
 			</ButtonLayout>
@@ -80,10 +80,10 @@ class Events extends Component {
 
 const styles = {
 	mainBackgroundColor: {
-		backgroundColor: "#0c0b0b"
+		backgroundColor: '#0c0b0b'
 	},
 	secondaryBackgroundColor: {
-		backgroundColor: "black"
+		backgroundColor: 'black'
 	},
 	fullFlex: {
 		flex: 1

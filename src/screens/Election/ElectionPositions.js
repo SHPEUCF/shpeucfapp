@@ -1,10 +1,9 @@
-import React, { Component } from "react";
-import { Actions } from "react-native-router-flux";
-import { connect } from "react-redux";
-import _ from "lodash";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from "react-native";
-import { Button, SortableFlatList, NavBar, ButtonLayout } from "../../components";
+import React, { Component } from 'react';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import _ from 'lodash';
+import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
+import { Button, SortableFlatList, NavBar, ButtonLayout, Icon } from '@/components';
 import {
 	openElection,
 	closeElection,
@@ -14,11 +13,11 @@ import {
 	positionDescriptionChanged,
 	positionTitleChanged,
 	changeLevels
-} from "../../ducks";
+} from '@/ducks';
 
-const dimension = Dimensions.get("window");
-const iteratees = ["level"];
-const order = ["asc"];
+const dimension = Dimensions.get('window');
+const iteratees = ['level'];
+const order = ['asc'];
 
 class ElectionPosition extends Component {
 	constructor(props) {
@@ -35,7 +34,7 @@ class ElectionPosition extends Component {
 			position: d,
 			key: `item-${index}`,
 			label: index,
-			backgroundColor: "#fff"
+			backgroundColor: '#fff'
 		}))
 	}
 
@@ -51,20 +50,20 @@ class ElectionPosition extends Component {
 
 		return (
 			<SafeAreaView style = { page }>
-				<NavBar title = "Positions" back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Positions' back onBack = { () => Actions.pop() } />
 				{ this.renderFlatlist(positionsArray) }
 				<ButtonLayout>
 					<Button
 						onPress = { () => {
-							this.props.positionTitleChanged("");
-							this.props.positionDescriptionChanged("");
-							this.props.goToPositionForm("ADD");
+							this.props.positionTitleChanged('');
+							this.props.positionDescriptionChanged('');
+							this.props.goToPositionForm('ADD');
 						} }
-						title = { "Add Positions" }
+						title = { 'Add Positions' }
 					/>
 					<Button
 						onPress = { () => this.setLevels() }
-						title = { "Set Order" }
+						title = { 'Set Order' }
 					/>
 				</ButtonLayout>
 			</SafeAreaView>
@@ -88,7 +87,7 @@ class ElectionPosition extends Component {
 			textColor
 		} = styles;
 
-		const color = isActive ? { backgroundColor: "#ffd70066" } : { backgroundColor: "black" };
+		const color = isActive ? { backgroundColor: '#ffd70066' } : { backgroundColor: 'black' };
 
 		return (
 			<TouchableOpacity
@@ -100,12 +99,12 @@ class ElectionPosition extends Component {
 				</View>
 				<View style = { styles.buttonContainerStyle }>
 					<TouchableOpacity onPress = { () => this.viewPosition(item.position) }>
-						<Ionicons style = { textColor } name = "md-create" size = { 40 } />
+						<Icon style = { textColor } name = 'md-create' size = { 40 } />
 					</TouchableOpacity>
 				</View>
 				<View style = { styles.buttonContainerStyle }>
 					<TouchableOpacity onPress = { () => this.delete(item.position) }>
-						<Ionicons style = { textColor } name = "md-trash" size = { 40 } />
+						<Icon style = { textColor } name = 'md-trash' size = { 40 } />
 					</TouchableOpacity>
 				</View>
 			</TouchableOpacity>
@@ -115,7 +114,7 @@ class ElectionPosition extends Component {
 	viewPosition(item) {
 		this.props.positionTitleChanged(item.title);
 		this.props.positionDescriptionChanged(item.description);
-		this.props.goToPositionForm("EDIT");
+		this.props.goToPositionForm('EDIT');
 	}
 
 	delete(position) {
@@ -147,17 +146,17 @@ class ElectionPosition extends Component {
 const styles = {
 	containerStyle: {
 		flex: 25,
-		justifyContent: "center",
-		alignItems: "flex-start",
+		justifyContent: 'center',
+		alignItems: 'flex-start',
 
 		paddingVertical: 10,
 		paddingHorizontal: 15
 	},
 	containerTextStyle: {
 		flex: 1,
-		justifyContent: "center",
-		alignItems: "flex-start",
-		backgroundColor: "#2C3239",
+		justifyContent: 'center',
+		alignItems: 'flex-start',
+		backgroundColor: '#2C3239',
 
 		paddingVertical: 10,
 		paddingHorizontal: 15
@@ -166,21 +165,21 @@ const styles = {
 		margin: 1,
 		height: dimension.height * 0.09,
 		flex: 1,
-		flexDirection: "row",
-		justifyContent: "center"
+		flexDirection: 'row',
+		justifyContent: 'center'
 
 	},
 	textColor: {
-		color: "#e0e6ed"
+		color: '#e0e6ed'
 	},
 	buttonContainerStyle: {
 		flex: 5,
 		margin: 5,
-		justifyContent: "center"
+		justifyContent: 'center'
 	},
 	page: {
 		flex: 1,
-		backgroundColor: "#0c0b0b"
+		backgroundColor: '#0c0b0b'
 	}
 };
 

@@ -1,14 +1,15 @@
-const XDate = require("xdate");
+const XDate = require('xdate');
 
 function padNumber(n) {
 	if (n < 10)
-		return "0" + n;
+		return '0' + n;
 
 	return n;
 }
 
 function xdateToData(xdate) {
-	const dateString = xdate.toString("yyyy-MM-dd");
+	const dateString = xdate.toString('yyyy-MM-dd');
+
 	return {
 		year: xdate.getFullYear(),
 		month: xdate.getMonth() + 1,
@@ -26,14 +27,16 @@ function parseDate(d) {
 		return XDate(d.timestamp, true);
 	}
 	else if (d instanceof XDate) { // xdate
-		return XDate(d.toString("yyyy-MM-dd"), true);
+		return XDate(d.toString('yyyy-MM-dd'), true);
 	}
 	else if (d.getTime) { // javascript date
-		const dateString = d.getFullYear() + "-" + padNumber(d.getMonth() + 1) + "-" + padNumber(d.getDate());
+		const dateString = d.getFullYear() + '-' + padNumber(d.getMonth() + 1) + '-' + padNumber(d.getDate());
+
 		return XDate(dateString, true);
 	}
 	else if (d.year) {
-		const dateString = d.year + "-" + padNumber(d.month) + "-" + padNumber(d.day);
+		const dateString = d.year + '-' + padNumber(d.month) + '-' + padNumber(d.day);
+
 		return XDate(dateString, true);
 	}
 	else if (d) { // timestamp number or date formatted as string

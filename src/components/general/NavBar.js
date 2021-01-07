@@ -1,9 +1,9 @@
-import React from "react";
-import { Actions } from "react-native-router-flux";
-import { View, Text, TouchableOpacity, Dimensions } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import React from 'react';
+import { Actions } from 'react-native-router-flux';
+import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { Icon } from './';
 
-const { height } = Dimensions.get("screen");
+const { height } = Dimensions.get('screen');
 
 /**
  * @desc Adds a navigation bar to the current screen.
@@ -25,7 +25,7 @@ export const NavBar = ({ title, back, onBack, style, childComponent, childStyle 
 	return (
 		<View style = { [tabBar, style, rowFlex] }>
 			{ back && <TouchableOpacity style = { backButtonStyle } onPress = { () => onBack() }>
-				<Ionicons name = "ios-arrow-dropleft" size = { height * 0.03 } color = "#FECB00" />
+				<Icon name = 'ios-arrow-dropleft' size = { height * 0.03 } color = '#FECB00' />
 			</TouchableOpacity> }
 			<Text style = { tabBarText }>{ title }</Text>
 			<View style = { childStyle }>
@@ -37,29 +37,29 @@ export const NavBar = ({ title, back, onBack, style, childComponent, childStyle 
 
 NavBar.defaultProps = {
 	onBack: () => Actions.pop(),
-	childStyle: { flex: 1, alignItems: "flex-end" }
+	childStyle: { flex: 1, alignItems: 'flex-end' }
 };
 
 const styles = {
 	tabBar: {
-		flexDirection: "row",
-		backgroundColor: "black",
-		alignItems: "center",
+		flexDirection: 'row',
+		backgroundColor: 'black',
+		alignItems: 'center',
 		borderBottomWidth: 1,
-		borderBottomColor: "black",
+		borderBottomColor: 'black',
 		height: height * 0.1,
-		paddingHorizontal: "5%"
+		paddingHorizontal: '5%'
 	},
 	tabBarText: {
-		color: "white",
+		color: 'white',
 		fontSize: 20,
-		fontWeight: "bold",
-		paddingLeft: "5%"
+		fontWeight: 'bold',
+		paddingLeft: '5%'
 	},
 	backButtonStyle: {
 		height: height * 0.04,
 		width: height * 0.04,
-		justifyContent: "center",
-		alignItems: "center"
+		justifyContent: 'center',
+		alignItems: 'center'
 	}
 };

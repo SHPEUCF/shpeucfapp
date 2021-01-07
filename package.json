@@ -2,15 +2,38 @@
 	"name": "shpeucfapp",
 	"appVersion": 1.12,
 	"private": true,
-	"eslintIgnore": ["*.test.js"],
+	"eslintIgnore": [
+		"*.test.js"
+	],
 	"jest": {
 		"preset": "react-native"
 	},
 	"babel": {
-		"presets": ["module:metro-react-native-babel-preset", "module:react-native-dotenv"]
+		"presets": [
+			"module:metro-react-native-babel-preset",
+			"module:react-native-dotenv"
+		],
+		"plugins": [
+			[
+				"module-resolver",
+				{
+					"root": [
+						"./src"
+					],
+					"alias": {
+						"@": "./src"
+					},
+					"extensions": [
+						".ios.js",
+						".android.js",
+						".js",
+						".json"
+					]
+				}
+			]
+		]
 	},
 	"scripts": {
-		"start": "react-native start",
 		"reinstall": "rm -rf node_modules; npm cache clean; npm install",
 		"reset": "watchman watch-del-all; npm run reinstall; npm start -- --reset-cache",
 		"ios": "react-native run-ios",
@@ -21,38 +44,28 @@
 		"android-release": "react-native run-android --variant=release"
 	},
 	"dependencies": {
-		"babel-preset-react-native": "^4.0.1",
-		"dev-tools": "^0.1.6",
 		"firebase": "^6.4.2",
-		"gapi-client": "0.0.3",
-		"install": "^0.13.0",
-		"logkitty": "^0.7.1",
-		"npm": "^6.13.6",
 		"qrcode": "^1.4.4",
 		"react": "^16.13.1",
 		"react-native": "0.61.5",
 		"react-native-camera": "^3.15.1",
 		"react-native-color-picker": "^0.5.2",
 		"react-native-dotenv": "^0.2.0",
-		"react-native-elements": "^1.2.7",
 		"react-native-fast-image": "^8.1.5",
 		"react-native-flags": "^1.0.0",
 		"react-native-image-crop-picker": "^0.26.2",
 		"react-native-keyboard-aware-scroll-view": "^0.9.1",
 		"react-native-permissions": "^2.0.9",
-		"react-native-progress": "^4.0.3",
 		"react-native-qrcode-scanner": "^1.3.1",
 		"react-native-qrcode-svg": "^6.0.1",
 		"react-native-router-flux": "^4.0.6",
 		"react-native-svg": "^10.0.0",
 		"react-native-svg-flagkit": "^0.9.5",
 		"react-native-vector-icons": "^6.6.0",
-		"react-native-webview": "^8.0.3",
 		"react-redux": "^7.1.3",
 		"redux": "^4.0.5",
 		"redux-thunk": "^2.3.0",
 		"rn-fetch-blob": "^0.12.0",
-		"websocket-extensions": "^0.1.4",
 		"xdate": "^0.8.2"
 	},
 	"devDependencies": {
@@ -60,6 +73,7 @@
 		"@babel/runtime": "7.7.7",
 		"@react-native-community/eslint-config": "0.0.6",
 		"babel-jest": "24.9.0",
+		"babel-plugin-module-resolver": "^4.0.0",
 		"eslint": "^6.8.0",
 		"eslint-plugin-react": "^7.18.0",
 		"eslint-plugin-react-native": "^3.8.1",

@@ -1,14 +1,14 @@
-import { createActionTypes } from "../utils/actions";
-import firebase from "firebase";
+import { createActionTypes } from '@/utils/actions';
+import firebase from 'firebase';
 // handle all things related to Elections
 const ACTIONS = createActionTypes([
-	"PAGE_LOAD",
-	"FILTER_CHANGED"
+	'PAGE_LOAD',
+	'FILTER_CHANGED'
 ]);
 
 const INITIAL_STATE = {
 	loading: false,
-	filter: ""
+	filter: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -32,11 +32,11 @@ export default (state = INITIAL_STATE, action) => {
 	}
 };
 
-export const pageLoad = () => {
-	return {
+export const pageLoad = isLoading => {
+	return async dispatch => await dispatch({
 		type: ACTIONS.PAGE_LOAD,
-		payload: true
-	};
+		payload: isLoading
+	});
 };
 
 export const filterChanged = (text) => {
