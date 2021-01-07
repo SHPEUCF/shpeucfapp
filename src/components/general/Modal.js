@@ -1,62 +1,61 @@
-import React, { PureComponent } from "react";
-import { TouchableWithoutFeedback, SafeAreaView, BackHandler, View, Dimensions } from "react-native";
+import React, { useRef, useEffect } from 'react';
+import { TouchableOpacity, SafeAreaView, BackHandler, Dimensions, Platform } from 'react-native';
 
-const { height, width } = Dimensions.get("screen");
+const { height, width } = Dimensions.get('screen');
 
 /**
  *
  */
 
-export default class Modal extends PureComponent {
-	componentDidUpdate() {
-		if (this.props.visible)
-			BackHandler.addEventListener("hardwareBackPress", () => this.hide());
-		else
-			BackHandler.removeEventListener("hardwareBackPress");
-	}
+export const Modal = ({ visible, onHide, priority, style, dismissBack, dismissButton, children }) => {
+	const mounted = useRef(false);
 
-	hide() {
-		if (this.props.onHide) this.props.onHide();
+	useEffect(() => {
+		if (mounted.current) {
+			if (visible && dismissButton && Platform.OS === 'android')
+				BackHandler.addEventListener('hardwareBackPress', () => hide());
+			else if (dismissButton && Platform.OS === 'android')
+				BackHandler.removeEventListener('hardwareBackPress');
+		}
+		else {
+			mounted.current = true;
+		}
+	});
+
+	const hide = () => {
+		if (onHide)
+			onHide();
 
 		return true;
-	}
+	};
 
-	render() {
-		const { style, priority, children } = this.props;
-		const { modal, childContainer, backdrop } = styles;
+	const { modal, backdrop } = styles;
 
-		return (
-			<SafeAreaView style = { [modal, { elevation: priority + 7, zIndex: priority + 99 }] }>
-				<TouchableOpacity activeOpacity = { 1 } style = { [{ height, width }, backdrop] } onPress = { () => this.hide() }>
-					<TouchableOpacity activeOpacity = { 1 } style = { [childContainer, style] }>
-						{ children }
-					</TouchableOpacity>
+	return (
+		<SafeAreaView style = { [modal, { elevation: priority + 7, zIndex: priority + 99 }] }>
+			<TouchableOpacity activeOpacity = { 0.6 } style = { [{ height, width }, backdrop] } onPress = { dismissBack && hide }>
+				<TouchableOpacity activeOpacity = { 1 } style = { style }>
+					{ children }
 				</TouchableOpacity>
-			</SafeAreaView>
-		);
-	}
-}
+			</TouchableOpacity>
+		</SafeAreaView>
+	);
+};
 
 Modal.defaultProps = {
-	priority: 1,
-	dismissible: true
+	priority: 1
 };
 
 const styles = {
 	modal: {
-		position: "absolute",
+		position: 'absolute',
 		top: 0,
 		left: 0,
 		right: 0,
 		bottom: 0
 	},
-	childContainer: {
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "#21252B"
-	},
 	backdrop: {
-		backgroundColor: "#000",
-		opacity: 0.6
+		backgroundColor: 'rgba(0, 0, 0, 0.6)',
+		justifyContent: 'center'
 	}
 };
