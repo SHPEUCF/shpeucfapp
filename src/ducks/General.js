@@ -32,11 +32,11 @@ export default (state = INITIAL_STATE, action) => {
 	}
 };
 
-export const pageLoad = () => {
-	return {
+export const pageLoad = isLoading => {
+	return async dispatch => await dispatch({
 		type: ACTIONS.PAGE_LOAD,
-		payload: true
-	};
+		payload: isLoading
+	});
 };
 
 export const filterChanged = (text) => {

@@ -1,8 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from "react";
 import { Router, Scene, Stack, ActionConst } from "react-native-router-flux";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { Spinner } from "@/components/general";
+import { Spinner, Icon } from "@/components/general";
 import CandidateForm from "@/components/elect/CandidateForm";
 import PositionForm from "@/components/elect/PositionForm";
 import CommitteeForm from "@/components/general/CommitteeForm";
@@ -135,7 +134,7 @@ const RouterComponent = () => {
 						key = "dashboard"
 						title = "Dashboard"
 						tabBarIcon = { ({	focused	}) =>
-							<Ionicons
+							<Icon
 								name = { "ios-paper" }
 								size = { 30 }
 								style = { focused ? { color: "#FFC107" } : { color: "white" } }
@@ -227,7 +226,7 @@ const RouterComponent = () => {
 						hideNavBar
 						title = "Events"
 						tabBarIcon = { ({ focused }) =>
-							<Ionicons
+							<Icon
 								name = { "ios-calendar" }
 								size = { 30 }
 								style = { focused ? { color: "#FFC107" } : { color: "white" } }
@@ -263,7 +262,7 @@ const RouterComponent = () => {
 						key = "profile"
 						title = "Profile"
 						tabBarIcon = { ({ focused	}) =>
-							<Ionicons
+							<Icon
 								name = { "ios-person" }
 								size = { 30 }
 								style = { focused ? { color: "#FFC107" } : { color: "white" } }
@@ -287,7 +286,7 @@ const RouterComponent = () => {
 						key = "more"
 						title = "More"
 						tabBarIcon = { ({ focused	}) =>
-							<Ionicons
+							<Icon
 								name = { "ios-menu" }
 								size = { 30 }
 								style = { focused ? { color: "#FFC107" } : { color: "white" } }
