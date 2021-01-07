@@ -1,9 +1,9 @@
-import React, { PureComponent } from "react";
-import { View, Text, TouchableOpacity, Dimensions } from "react-native";
-import { Actions } from "react-native-router-flux";
-import { Icon } from "@/components";
+import React, { PureComponent } from 'react';
+import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import { Icon } from '@/components';
 
-const { height, width } = Dimensions.get("screen");
+const { height, width } = Dimensions.get('screen');
 
 export default class FavoriteCommittees extends PureComponent {
 	render() {
@@ -25,9 +25,9 @@ export default class FavoriteCommittees extends PureComponent {
 			<View style = { committeesPanelContainer }>
 				<View style = { selectCommitteesIcon }>
 					<Icon
-						name = "ios-information-circle"
+						name = 'ios-information-circle'
 						size = { height * 0.028 }
-						onPress = { () => Actions["CommitteesD"]({ screen: "dashboard" }) } style = { gold }
+						onPress = { () => Actions['CommitteesD']({ screen: 'dashboard' }) } style = { gold }
 					/>
 				</View>
 				{ (!userCommittees || !committeesList)
@@ -40,14 +40,14 @@ export default class FavoriteCommittees extends PureComponent {
 								style = { committeeItemContainer }
 								onPress = { () => {
 									this.props.loadCommittee(committeesList[committeeName]);
-									Actions["CommitteePageD"]({ screen: "dashboard" });
+									Actions['CommitteePageD']({ screen: 'dashboard' });
 								} }
 							>
 								<View style = { committeeNameContainer }>
 									<Text style = { [textColor, { fontSize: width * 0.03 }] }>{ committeeName }</Text>
 								</View>
 								<View style = { leaderboardArrow }>
-									<Icon name = "ios-arrow-dropright" size = { height * 0.025 } style = { gold } />
+									<Icon name = 'ios-arrow-dropright' size = { height * 0.025 } style = { gold } />
 								</View>
 							</TouchableOpacity>
 						) }
@@ -60,48 +60,48 @@ export default class FavoriteCommittees extends PureComponent {
 
 const styles = {
 	committeesPanelContainer: {
-		flexDirection: "row",
+		flexDirection: 'row',
 		flex: 1,
-		height: "100%",
-		backgroundColor: "#21252b",
-		alignItems: "center",
+		height: '100%',
+		backgroundColor: '#21252b',
+		alignItems: 'center',
 		marginLeft: 5
 	},
 	committeesListContainer: {
 		flex: 1,
-		height: "80%"
+		height: '80%'
 	},
 	committeesPlaceHolder: {
 		flex: 1,
-		justifyContent: "space-evenly",
-		height: "80%"
+		justifyContent: 'space-evenly',
+		height: '80%'
 	},
 	selectCommitteesIcon: {
-		height: "100%",
-		alignItems: "center",
+		height: '100%',
+		alignItems: 'center',
 		flex: 0.25,
-		paddingTop: "5%"
+		paddingTop: '5%'
 	},
 	committeeItemContainer: {
-		flexDirection: "row",
-		alignItems: "center",
+		flexDirection: 'row',
+		alignItems: 'center',
 		flex: 1,
 		paddingRight: 20
 	},
 	committeeNameContainer: {
 		flex: 1,
-		alignItems: "flex-start",
-		justifyContent: "space-evenly"
+		alignItems: 'flex-start',
+		justifyContent: 'space-evenly'
 	},
 	gold: {
-		color: "#FECB00"
+		color: '#FECB00'
 	},
 	textColor: {
-		color: "#e0e6ed"
+		color: '#e0e6ed'
 	},
 	leaderboardArrow: {
-		color: "#FECB00",
+		color: '#FECB00',
 		width: width * 0.06,
-		alignItems: "center"
+		alignItems: 'center'
 	}
 };

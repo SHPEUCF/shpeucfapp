@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import firebase from "firebase";
-import { Actions } from "react-native-router-flux";
-import { connect } from "react-redux";
-import { NavBar } from "@/components";
-import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from "react-native";
-import { getAllMemberPoints, loadUser, fetchEvents, goToViewEvent } from "@/ducks";
+import React, { Component } from 'react';
+import firebase from 'firebase';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { NavBar } from '@/components';
+import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
+import { getAllMemberPoints, loadUser, fetchEvents, goToViewEvent } from '@/ducks';
 
-const dimension = Dimensions.get("window");
+const dimension = Dimensions.get('window');
 
 class PointsBreakDown extends Component {
 	componentWillMount() {
-		{ this.setState({ show: "" }) }
+		{ this.setState({ show: '' }) }
 	}
 
 	render() {
@@ -20,7 +20,7 @@ class PointsBreakDown extends Component {
 
 		return (
 			<SafeAreaView style = { page }>
-				<NavBar title = "Points" back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Points' back onBack = { () => Actions.pop() } />
 				{ this.renderContent() }
 			</SafeAreaView>
 		);
@@ -68,7 +68,7 @@ class PointsBreakDown extends Component {
 		}
 		else {
 			return (
-				<View style = {{ flex: 1, height: dimension.height, justifyContent: "center", padding: "10%" }}>
+				<View style = {{ flex: 1, height: dimension.height, justifyContent: 'center', padding: '10%' }}>
 					<Text style = { textColor }>You have no Points! Go out there and get some points!</Text>
 				</View>
 			);
@@ -118,8 +118,8 @@ class PointsBreakDown extends Component {
 	}
 
 	convertNumToDate(date) {
-		let months = ["Jan", "Feb", "Mar", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-		let tempDate = date.split("-");
+		let months = ['Jan', 'Feb', 'Mar', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+		let tempDate = date.split('-');
 
 		return `${months[Number(tempDate[1]) - 1]} ${tempDate[2]}`;
 	}
@@ -161,7 +161,7 @@ class PointsBreakDown extends Component {
 	}
 
 	toggleShow = function(text) {
-		if (JSON.stringify(this.state.show) === JSON.stringify(text)) { this.setState({ show: "" }) }
+		if (JSON.stringify(this.state.show) === JSON.stringify(text)) { this.setState({ show: '' }) }
 		else {
 			this.setState({
 				show: text
@@ -173,23 +173,23 @@ class PointsBreakDown extends Component {
 const styles = {
 	page: {
 		paddingBottom: 10,
-		flexDirection: "column",
+		flexDirection: 'column',
 		flex: 1,
-		backgroundColor: "#0c0b0b"
+		backgroundColor: '#0c0b0b'
 	},
 	containerStyle: {
-		flexDirection: "row",
+		flexDirection: 'row',
 		paddingVertical: 30,
 		paddingHorizontal: 15
 	},
 	textColor: {
-		color: "#e0e6ed",
-		textAlign: "center",
+		color: '#e0e6ed',
+		textAlign: 'center',
 		fontSize: 18
 	},
 	topLevelText: {
 		fontSize: 20,
-		fontWeight: "bold"
+		fontWeight: 'bold'
 	},
 	midLevelText: {
 		fontSize: 16
@@ -199,7 +199,7 @@ const styles = {
 	},
 	contentContainerStyle: {
 		marginTop: 1,
-		backgroundColor: "#2C3239"
+		backgroundColor: '#2C3239'
 	},
 	title: {
 		flex: 1
@@ -209,10 +209,10 @@ const styles = {
 	},
 	innerContainerStyle: {
 		flex: 1,
-		flexDirection: "row",
+		flexDirection: 'row',
 		height: dimension.height * 0.07,
-		backgroundColor: "#aaa2",
-		alignItems: "center",
+		backgroundColor: '#aaa2',
+		alignItems: 'center',
 		paddingHorizontal: 15
 	},
 	innerContentContainerStyle: {

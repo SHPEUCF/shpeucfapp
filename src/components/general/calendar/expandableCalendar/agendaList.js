@@ -1,13 +1,13 @@
-import _ from "lodash";
-import React, { Component } from "react";
-import { SectionList, Text } from "react-native";
-import PropTypes from "prop-types";
-import XDate from "xdate";
+import _ from 'lodash';
+import React, { Component } from 'react';
+import { SectionList, Text } from 'react-native';
+import PropTypes from 'prop-types';
+import XDate from 'xdate';
 
-import styleConstructor from "./style";
-import asCalendarConsumer from "./asCalendarConsumer";
+import styleConstructor from './style';
+import asCalendarConsumer from './asCalendarConsumer';
 
-const commons = require("./commons");
+const commons = require('./commons');
 const UPDATE_SOURCES = commons.UPDATE_SOURCES;
 
 /**
@@ -17,7 +17,7 @@ const UPDATE_SOURCES = commons.UPDATE_SOURCES;
  * @example: https://github.com/wix/react-native-calendars/blob/master/example/src/screens/expandableCalendar.js
  */
 class AgendaList extends Component {
-static displayName = "AgendaList";
+static displayName = 'AgendaList';
 
 static propTypes = {
 	...SectionList.propTypes,
@@ -28,14 +28,14 @@ static propTypes = {
 }
 
 static defaultProps = {
-	dayFormat: "dddd, MMM d"
+	dayFormat: 'dddd, MMM d'
 }
 
 constructor(props) {
 	super(props);
 	this.style = styleConstructor(props.theme);
 
-	this._topSection = _.get(props, "sections[0].title");
+	this._topSection = _.get(props, 'sections[0].title');
 	this.didScroll = false;
 	this.sectionScroll = false;
 
@@ -47,22 +47,27 @@ constructor(props) {
 
 getSectionIndex(date) {
 	let i;
+
 	_.map(this.props.sections, (section, index) => {
 		// NOTE: sections titles should match current date format!!!
 		if (section.title === date) {
 			i = index;
+
 			return;
 		}
 	});
+
 	return i;
 }
 
 componentDidUpdate(prevProps) {
 	const { updateSource, date } = this.props.context;
+
 	if (date !== prevProps.context.date) {
 	// NOTE: on first init data should set first section to the current date!!!
 		if (updateSource !== UPDATE_SOURCES.LIST_DRAG && updateSource !== UPDATE_SOURCES.CALENDAR_INIT) {
 			const sectionIndex = this.getSectionIndex(date);
+
 			this.scrollToSection(sectionIndex);
 		}
 	}
@@ -85,11 +90,12 @@ scrollToSection(sectionIndex) {
 
 onViewableItemsChanged = ({ viewableItems }) => {
 	if (viewableItems && !this.sectionScroll) {
-		const topSection = _.get(viewableItems[0], "section.title");
+		const topSection = _.get(viewableItems[0], 'section.title');
+
 		if (topSection && topSection !== this._topSection) {
 			this._topSection = topSection;
 			if (this.didScroll) // to avoid setDate() on first load (while setting the initial context.date value)
-				_.invoke(this.props.context, "setDate", this._topSection, UPDATE_SOURCES.LIST_DRAG);
+				_.invoke(this.props.context, 'setDate', this._topSection, UPDATE_SOURCES.LIST_DRAG);
 		}
 	}
 }
@@ -98,19 +104,19 @@ onScroll = (event) => {
 	if (!this.didScroll)
 		this.didScroll = true;
 
-	_.invoke(this.props, "onScroll", event);
+	_.invoke(this.props, 'onScroll', event);
 }
 
 onMomentumScrollBegin = (event) => {
-	_.invoke(this.props.context, "setDisabled", true);
-	_.invoke(this.props, "onMomentumScrollBegin", event);
+	_.invoke(this.props.context, 'setDisabled', true);
+	_.invoke(this.props, 'onMomentumScrollBegin', event);
 }
 
 onMomentumScrollEnd = (event) => {
 // when list momentum ends AND when scrollToSection scroll ends
 	this.sectionScroll = false;
-	_.invoke(this.props.context, "setDisabled", false);
-	_.invoke(this.props, "onMomentumScrollEnd", event);
+	_.invoke(this.props.context, 'setDisabled', false);
+	_.invoke(this.props, 'onMomentumScrollEnd', event);
 }
 
 onHeaderLayout = ({ nativeEvent }) => {
@@ -150,15 +156,19 @@ render() {
 			onScroll = { this.onScroll }
 			onMomentumScrollBegin = { this.onMomentumScrollBegin }
 			onMomentumScrollEnd = { this.onMomentumScrollEnd }
-			// onScrollToIndexFailed={(info) => { console.warn('onScrollToIndexFailed info: ', info); }}
-			// getItemLayout={this.getItemLayout} // onViewableItemsChanged is not updated when list scrolls!!!
+			/*
+			 * onScrollToIndexFailed={(info) => { console.warn('onScrollToIndexFailed info: ', info); }}
+			 * getItemLayout={this.getItemLayout} // onViewableItemsChanged is not updated when list scrolls!!!
+			 */
 		/>
 	);
 }
 
-// getItemLayout = (data, index) => {
-//	 return {length: commons.screenWidth, offset: commons.screenWidth	* index, index};
-// }
+/*
+ *  getItemLayout = (data, index) => {
+ * 	 return {length: commons.screenWidth, offset: commons.screenWidth	* index, index};
+ *  }
+ */
 }
 
 export default asCalendarConsumer(AgendaList);

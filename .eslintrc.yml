@@ -65,8 +65,11 @@ rules:
     - consistent
   quotes:                                  # require double-quotes instead of single
     - error
-    - double
+    - single
     - avoidEscape: true
+  jsx-quotes:                              # require single-quotes for JSX elements
+    - error
+    - prefer-single
   brace-style:                             # require opening brace on same line, ending brace on a new line
     - error
     - stroustrup

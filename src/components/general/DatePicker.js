@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { View } from "react-native";
-import { Input, PickerInput } from "./";
+import React, { useState, useEffect } from 'react';
+import { View } from 'react-native';
+import { Input, PickerInput } from './';
 
 /**
  * @desc Component to select day, month, and year.
@@ -13,8 +13,8 @@ import { Input, PickerInput } from "./";
  * @param {...Props}
  */
 
-export const DatePicker = ({ value, onSelect, placeholder = "Choose a date" }) => {
-	const [initYear = "", initMonth = "", initDay = ""] = value && value.split("-") || [];
+export const DatePicker = ({ value, onSelect, placeholder = 'Choose a date' }) => {
+	const [initYear = '', initMonth = '', initDay = ''] = value && value.split('-') || [];
 	const [year, setYear] = useState(initYear);
 	const [month, setMonth] = useState(initMonth);
 	const [day, setDay] = useState(initDay);
@@ -44,24 +44,24 @@ export const DatePicker = ({ value, onSelect, placeholder = "Choose a date" }) =
 	 */
 
 	const changeStateOfType = (dateValue, type) => {
-		if (type === "month")
-			return setMonth(dateValue.padStart(2, "0"));
-		else if (type === "day")
-			return setDay(dateValue.padStart(2, "0"));
-		else if (type === "year")
+		if (type === 'month')
+			return setMonth(dateValue.padStart(2, '0'));
+		else if (type === 'day')
+			return setDay(dateValue.padStart(2, '0'));
+		else if (type === 'year')
 			return setYear(dateValue);
 	};
 
 	const { style, datePickerStyle, fieldContainer, inputBoxStyle, dropDownArrowStyle } = styles;
-	const defaultPickerStyle = { style, inputBoxStyle, iconSize: 32, iconColor: "black", dropDownArrowStyle };
+	const defaultPickerStyle = { style, inputBoxStyle, iconSize: 32, iconColor: 'black', dropDownArrowStyle };
 	const pickers = [
-		{ data: monthArray, date: "month", value: month, placeholder: "MM" },
-		{ data: getDayArray(), date: "day", value: day, placeholder: "DD" },
-		{ data: yearArray, date: "year", value: year, placeholder: "YYYY" }
+		{ data: monthArray, date: 'month', value: month, placeholder: 'MM' },
+		{ data: getDayArray(), date: 'day', value: day, placeholder: 'DD' },
+		{ data: yearArray, date: 'year', value: year, placeholder: 'YYYY' }
 	];
 
 	return (
-		!focused && <Input placeholder = { placeholder } value = "" onFocus = { () => setFocus(true) } />
+		!focused && <Input placeholder = { placeholder } value = '' onFocus = { () => setFocus(true) } />
 		|| <View style = { datePickerStyle }>
 			{ pickers.map(({ date, ...dateProps }) =>
 				<View style = { fieldContainer } key = { date }>
@@ -80,8 +80,8 @@ export const DatePicker = ({ value, onSelect, placeholder = "Choose a date" }) =
 const styles = {
 	fieldContainer: {
 		flex: 1,
-		flexDirection: "row",
-		alignItems: "center"
+		flexDirection: 'row',
+		alignItems: 'center'
 	},
 	style: {
 		flex: 1,
@@ -99,11 +99,11 @@ const styles = {
 	},
 	datePickerStyle: {
 		flex: 1,
-		color: "#000",
+		color: '#000',
 		fontSize: 16,
-		backgroundColor: "white",
+		backgroundColor: 'white',
 		borderRadius: 25,
-		flexDirection: "row",
+		flexDirection: 'row',
 		marginVertical: 8
 	}
 };

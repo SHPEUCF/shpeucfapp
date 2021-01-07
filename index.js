@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { AppRegistry } from "react-native";
-import { Provider } from "react-redux";
-import { createStore, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
-import reducers from "./src/ducks";
-import App from "./src/App";
+import React, { Component } from 'react';
+import { AppRegistry } from 'react-native';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import reducers from './src/ducks';
+import App from './src/App';
 
 export default class Main extends Component {
 	render() {
@@ -18,4 +18,4 @@ export default class Main extends Component {
 	}
 }
 
-AppRegistry.registerComponent("shpeucfapp", () => Main);
+AppRegistry.registerComponent('shpeucfapp', () => Main);

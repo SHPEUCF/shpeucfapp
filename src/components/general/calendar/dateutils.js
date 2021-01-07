@@ -1,4 +1,4 @@
-const XDate = require("xdate");
+const XDate = require('xdate');
 
 function sameMonth(a, b) {
 	return a instanceof XDate && b instanceof XDate
@@ -24,6 +24,7 @@ function isLTE(a, b) {
 function fromTo(a, b) {
 	const days = [];
 	let from = +a; let to = +b;
+
 	for (; from <= to; from = new XDate(from, true).addDays(1).getTime())
 		days.push(new XDate(from, true));
 
@@ -43,6 +44,7 @@ function month(xd) {
 function weekDayNames(firstDayOfWeek = 0) {
 	let weekDaysNames = XDate.locales[XDate.defaultLocale].dayNamesShort;
 	const dayShift = firstDayOfWeek % 7;
+
 	if (dayShift)
 		weekDaysNames = weekDaysNames.slice(dayShift).concat(weekDaysNames.slice(0, dayShift));
 
@@ -59,11 +61,13 @@ function page(xd, firstDayOfWeek) {
 	firstDayOfWeek = firstDayOfWeek || 0;
 
 	const from = days[0].clone();
+
 	if (from.getDay() !== fdow)
 		from.addDays(-(from.getDay() + 7 - fdow) % 7);
 
 	const to = days[days.length - 1].clone();
 	const day = to.getDay();
+
 	if (day !== ldow)
 		to.addDays((ldow + 7 - day) % 7);
 

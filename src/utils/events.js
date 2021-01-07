@@ -1,20 +1,20 @@
-import { Alert } from "@/components";
+import { Alert } from '@/components';
 
 /**
  * @description Pass in Standard time and the function returns that in Military Time.
  *
- * @param {String} standardTime Format: "Hour:Minute (AM/PM)" (1 <= Hour <= 12); (0 <= Minute <= 59)
+ * @param {String} standardTime Format: 'Hour:Minute (AM/PM)' (1 <= Hour <= 12); (0 <= Minute <= 59)
  *
- * @returns {String} Format: "Hour:Minute" (1 <= Hour <= 24); (0 <= Minute <= 59)
+ * @returns {String} Format: 'Hour:Minute' (1 <= Hour <= 24); (0 <= Minute <= 59)
  */
 
 export function convertStandardToMilitaryTime(standardTime) {
-	let [hour, minute] = standardTime.split(":");
-	let [newHour, newMinute, period] = [parseInt(hour), ...minute.split(" ")];
+	let [hour, minute] = standardTime.split(':');
+	let [newHour, newMinute, period] = [parseInt(hour), ...minute.split(' ')];
 
 	newHour = newHour === 12 ? 0 : newHour;
-	newHour += period === "AM" ? 0 : 12;
-	newHour = newHour < 10 ? "0" + newHour : String(newHour);
+	newHour += period === 'AM' ? 0 : 12;
+	newHour = newHour < 10 ? '0' + newHour : String(newHour);
 
 	return `${newHour}:${newMinute}`;
 }
@@ -22,14 +22,14 @@ export function convertStandardToMilitaryTime(standardTime) {
 /**
  * @description Pass in Standard time and the function returns that in Military Time.
  *
- * @param {String} militaryTime Format: "Hour:Minute" (1 <= Hour <= 24); (0 <= Minute <= 59)
+ * @param {String} militaryTime Format: 'Hour:Minute' (1 <= Hour <= 24); (0 <= Minute <= 59)
  *
- * @returns {String} Format: "Hour:Minute (AM/PM)" (1 <= Hour <= 12); (0 <= Minute <= 59)
+ * @returns {String} Format: 'Hour:Minute (AM/PM)' (1 <= Hour <= 12); (0 <= Minute <= 59)
  */
 
 export function convertMilitaryToStandardTime(militaryTime) {
-	let [hour, minute] = militaryTime.split(":");
-	const period = hour >= 12 ? "PM" : "AM";
+	let [hour, minute] = militaryTime.split(':');
+	const period = hour >= 12 ? 'PM' : 'AM';
 
 	hour -= hour > 12 ? 12 : 0;
 	hour = hour === 0 ? 12 : hour;
@@ -45,7 +45,7 @@ export function convertMilitaryToStandardTime(militaryTime) {
  * @returns {String} The number as a string. It may have  a 0 prepended to it, if it was originally single digit.
  */
 
-export const prepend0 = (number) => number < 10 ? "0" + number : number;
+export const prepend0 = (number) => number < 10 ? '0' + number : number;
 
 /**
  * @description Formats event to work with the calendar component.
@@ -74,11 +74,11 @@ export function formatEventListForCalendar(events) {
  */
 
 export function timeVerification(startTime, endTime) {
-	let [startHour, startMinute] = startTime.split(":");
-	let [endHour, endMinute] = endTime.split(":");
+	let [startHour, startMinute] = startTime.split(':');
+	let [endHour, endMinute] = endTime.split(':');
 
 	if (endHour < startHour || (endHour === startHour && endMinute <= startMinute)) {
-		Alert.alert("Ending time must be after start time");
+		Alert.alert('Ending time must be after start time');
 
 		return false;
 	}
@@ -93,7 +93,7 @@ export function timeVerification(startTime, endTime) {
  */
 
 export function changeHourBy(time, amount) {
-	const [hour, minute] = time.split(":");
+	const [hour, minute] = time.split(':');
 	let newHour = prepend0((parseInt(hour) + amount) % 24);
 
 	return `${newHour}:${minute}`;
@@ -108,7 +108,7 @@ export function changeHourBy(time, amount) {
 
 export const filterPastEvents = sortedEvents => sortedEvents.filter(event => {
 	const today = new Date();
-	const [year, month, date] = event.date.split("-");
+	const [year, month, date] = event.date.split('-');
 
 	return !(year < today.getFullYear() || month < 	today.getMonth() + 1
 		|| (month == today.getMonth() + 1 && date < today.getDate()));

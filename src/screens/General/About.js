@@ -1,10 +1,10 @@
-import React from "react";
-import { View, Text, SafeAreaView, Dimensions, Linking, TouchableOpacity } from "react-native";
-import { NavBar, Avatar, ListItem } from "@/components";
-import { menuItems, developers } from "@/data/AboutItems.js";
-import { appVersion } from "../../../package.json";
+import React from 'react';
+import { View, Text, SafeAreaView, Dimensions, Linking, TouchableOpacity } from 'react-native';
+import { NavBar, Avatar, ListItem } from '@/components';
+import { menuItems, developers } from '@/data/AboutItems.js';
+import { appVersion } from '../../../package.json';
 
-const { height } = Dimensions.get("screen");
+const { height } = Dimensions.get('screen');
 
 export const About = () => {
 	const { textStyle, subBackground, center, titleStyle, contributorStyle, containerFlex, footer } = styles;
@@ -13,13 +13,13 @@ export const About = () => {
 		<ListItem onPress = { () => Linking.openURL(url) } key = { title }>
 			<ListItem.Title>{ title }</ListItem.Title>
 			<ListItem.Subtitle>{ content }</ListItem.Subtitle>
-			<ListItem.LeftIcon name = { icon } size = { 26 } color = "white" />
-			<ListItem.RightIcon name = "ios-arrow-dropright" size = { height * 0.025 } color = "#FECB00" />
+			<ListItem.LeftIcon name = { icon } size = { 26 } color = 'white' />
+			<ListItem.RightIcon name = 'ios-arrow-dropright' size = { height * 0.025 } color = '#FECB00' />
 		</ListItem>
 	);
 
 	const renderDev = ({ name, pic, github }) => {
-		const [firstName, lastName] = name.split(" ");
+		const [firstName, lastName] = name.split(' ');
 
 		return (
 			<TouchableOpacity onPress = { () => Linking.openURL(github) } key = { name }>
@@ -34,20 +34,20 @@ export const About = () => {
 		);
 	};
 
-	let version = <Text style = { [textStyle, { fontSize: 16, textAlign: "right" }] }>{ appVersion }</Text>;
+	let version = <Text style = { [textStyle, { fontSize: 16, textAlign: 'right' }] }>{ appVersion }</Text>;
 
 	return (
 		<SafeAreaView style = { [subBackground, containerFlex] }>
-			<NavBar title = "About" childComponent = { version } back />
-			<View style = { [{ color: "black" }, containerFlex] }>
+			<NavBar title = 'About' childComponent = { version } back />
+			<View style = { [{ color: 'black' }, containerFlex] }>
 				{ menuItems.map(tab => renderTabs(tab)) }
 			</View>
 			<View style = { containerFlex }>
 				<Text style = { [textStyle, titleStyle, { fontSize: 20 }] }>Developed by:</Text>
-				<View style = {{ flexDirection: "row", justifyContent: "space-around" }}>
+				<View style = {{ flexDirection: 'row', justifyContent: 'space-around' }}>
 					{ developers.map(dev => renderDev(dev)) }
 				</View>
-				<TouchableOpacity onPress = { () => Linking.openURL("https://github.com/SHPEUCF/shpeucfapp/graphs/contributors") }>
+				<TouchableOpacity onPress = { () => Linking.openURL('https://github.com/SHPEUCF/shpeucfapp/graphs/contributors') }>
 					<Text style = { [textStyle, contributorStyle] }>...and our amazing contributors.</Text>
 				</TouchableOpacity>
 				<View style = { [center, footer] }>
@@ -60,31 +60,31 @@ export const About = () => {
 
 const styles = {
 	subBackground: {
-		backgroundColor: "#0c0b0b"
+		backgroundColor: '#0c0b0b'
 	},
 	textStyle: {
-		color: "#FFF",
+		color: '#FFF',
 		fontSize: 14
 	},
 	center: {
-		alignItems: "center"
+		alignItems: 'center'
 	},
 	titleStyle: {
-		fontWeight: "bold",
-		padding: "4%",
+		fontWeight: 'bold',
+		padding: '4%',
 		fontSize: 16
 	},
 	containerFlex: {
 		flex: 1
 	},
 	contributorStyle: {
-		alignSelf: "center",
+		alignSelf: 'center',
 		fontSize: 18,
-		fontWeight: "bold",
-		marginTop: "3%"
+		fontWeight: 'bold',
+		marginTop: '3%'
 	},
 	footer: {
 		flex: 0.95,
-		justifyContent: "flex-end"
+		justifyContent: 'flex-end'
 	}
 };

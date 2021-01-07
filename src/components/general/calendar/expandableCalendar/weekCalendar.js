@@ -1,14 +1,14 @@
-import _ from "lodash";
-import React, { Component } from "react";
-import { FlatList } from "react-native";
-import PropTypes from "prop-types";
-import XDate from "xdate";
+import _ from 'lodash';
+import React, { Component } from 'react';
+import { FlatList } from 'react-native';
+import PropTypes from 'prop-types';
+import XDate from 'xdate';
 
-import styleConstructor from "./style";
-import CalendarList from "../calendar-list";
-import Week from "../expandableCalendar/week";
+import styleConstructor from './style';
+import CalendarList from '../calendar-list';
+import Week from '../expandableCalendar/week';
 
-const commons = require("./commons");
+const commons = require('./commons');
 const UPDATE_SOURCES = commons.UPDATE_SOURCES;
 const NUMBER_OF_PAGES = 2; // must be a positive number
 
@@ -34,6 +34,7 @@ class WeekCalendar extends Component {
 
 	componentDidUpdate(prevProps) {
 		const { updateSource, date } = this.props.context;
+
 		if (date !== prevProps.context.date && updateSource !== UPDATE_SOURCES.WEEK_SCROLL) {
 			this.setState({ items: this.getDatesArray() });
 			this.list.current.scrollToIndex({ animated: false, index: NUMBER_OF_PAGES });
@@ -42,10 +43,13 @@ class WeekCalendar extends Component {
 
 	getDatesArray() {
 		const array = [];
+
 		for (let index = -NUMBER_OF_PAGES; index <= NUMBER_OF_PAGES; index++) {
 			const d = this.getDate(index);
+
 			array.push(d);
 		}
+
 		return array;
 	}
 
@@ -54,13 +58,14 @@ class WeekCalendar extends Component {
 		const d = XDate(current);
 		// get the first day of the week as date (for the on scroll mark)
 		let dayOfTheWeek = d.getDay();
+
 		if (dayOfTheWeek < firstDay && firstDay > 0)
 			dayOfTheWeek = 7 + dayOfTheWeek;
 
 		// leave the current date in the visible week as is
 		const dd = weekIndex === 0 ? d : d.addDays(firstDay - dayOfTheWeek);
 		const newDate = dd.addWeeks(weekIndex);
-		const dateString = newDate.toString("yyyy-MM-dd");
+		const dateString = newDate.toString('yyyy-MM-dd');
 
 		return dateString;
 	}
@@ -70,9 +75,10 @@ class WeekCalendar extends Component {
 
 		if (this.page !== newPage) {
 			const { items } = this.state;
+
 			this.page = newPage;
 
-			_.invoke(this.props.context, "setDate", items[this.page], UPDATE_SOURCES.WEEK_SCROLL);
+			_.invoke(this.props.context, 'setDate', items[this.page], UPDATE_SOURCES.WEEK_SCROLL);
 
 			if (this.page === items.length - 1) {
 				for (let i = 0; i <= NUMBER_OF_PAGES; i++)
@@ -117,6 +123,7 @@ class WeekCalendar extends Component {
 
 	renderItem = ({ item }) => {
 		const { calendarWidth, style, ...others } = this.props;
+
 		return <Week
 			{ ...others }
 			current = { item }
@@ -152,9 +159,11 @@ class WeekCalendar extends Component {
 								key = { idx }
 								style = { this.style.dayHeader }
 								numberOfLines = { 1 }
-								accessibilityLabel = { "" }
-								// accessible={false} // not working
-								// importantForAccessibility='no'
+								accessibilityLabel = { '' }
+								/*
+								 * accessible={false} // not working
+								 * importantForAccessibility='no'
+								 */
 							>
 								{ day }
 							</Text>

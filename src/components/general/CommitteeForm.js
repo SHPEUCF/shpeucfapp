@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { Actions } from "react-native-router-flux";
-import { connect } from "react-redux";
-import { View, Text, ScrollView, Dimensions, SafeAreaView } from "react-native";
-import { Input, Button, FilterList, ButtonLayout } from "@/components/general";
-import { MemberPanel } from "@/utils/render";
-import MemberService from "@/services/members";
+import React, { Component } from 'react';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { View, Text, ScrollView, Dimensions, SafeAreaView } from 'react-native';
+import { Input, Button, FilterList, ButtonLayout } from '@/components/general';
+import { MemberPanel } from '@/utils/render';
+import MemberService from '@/services/members';
 import {
 	addCommittee,
 	editCommittee,
@@ -13,15 +13,17 @@ import {
 	deleteCommittee,
 	chairPersonChanged,
 	filterChanged
-} from "@/ducks";
+} from '@/ducks';
 
 const memberService = new MemberService();
-const dimension = Dimensions.get("window");
+const dimension = Dimensions.get('window');
 
 class CommitteeForm extends Component {
-	// EventCreationError(text) {
-	// 	this.props.eventError(text);
-	// }
+	/*
+	 * EventCreationError(text) {
+	 * 	this.props.eventError(text);
+	 * }
+	 */
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -31,11 +33,11 @@ class CommitteeForm extends Component {
 	}
 
 	componentWillMount() {
-		this.props.filterChanged("");
+		this.props.filterChanged('');
 	}
 
 	renderError() {
-		if (this.props.error)
+		if (this.props.error) {
 			return (
 				<View>
 					<Text style = { styles.errorTextStyle }>
@@ -43,6 +45,7 @@ class CommitteeForm extends Component {
 					</Text>
 				</View>
 			);
+		}
 	}
 
 	submitForm() {
@@ -56,20 +59,20 @@ class CommitteeForm extends Component {
 		let length = committeesList && committeesList ? Object.entries(committeesList).length : 0;
 		let chairObj = { name: `${chair.firstName} ${chair.lastName}`, id: chair.id };
 
-		if (committeeTitle === "") {
+		if (committeeTitle === '') {
 			// this.EventCreationError('Please enter a Candidate Name');
 		}
-		else if (committeeDescription === "") {
+		else if (committeeDescription === '') {
 			// this.EventCreationError('Please enter a committee');
 		}
 		else {
-			if (this.props.title === "ADD")
+			if (this.props.title === 'ADD')
 				this.props.addCommittee(committeeTitle, committeeDescription, chairObj, length);
 			else if (this.state.oldTitle !== committeeTitle)
 				this.props.editCommittee(committeeTitle, committeeDescription, chairObj, this.state.oldTitle);
 			else
 				this.props.editCommittee(committeeTitle, committeeDescription, chairObj, null);
-			memberService.assignPosition(committeeTitle, "board", chair.id, this.state.oldChair);
+			memberService.assignPosition(committeeTitle, 'board', chair.id, this.state.oldChair);
 			Actions.pop();
 		}
 	}
@@ -83,7 +86,7 @@ class CommitteeForm extends Component {
 		return (
 			<SafeAreaView style = { styles.formContainerStyle }>
 				<View style = { styles.headerStyle }>
-					<Text style = { styles.headerTextStyle }>{ this.props.title + " COMMITTEE" }</Text>
+					<Text style = { styles.headerTextStyle }>{ this.props.title + ' COMMITTEE' }</Text>
 				</View>
 				<ScrollView
 					ref = { (ref) => this.scrollView = ref }
@@ -91,19 +94,19 @@ class CommitteeForm extends Component {
 				>
 					<View>
 						<Input
-							placeholder = "Committee Title"
+							placeholder = 'Committee Title'
 							value = { this.props.committeeTitle }
 							onChangeText = { this.props.committeeTitleChanged.bind(this) }
 						/>
 						<Input
-							placeholder = "Committee Description"
+							placeholder = 'Committee Description'
 							value = { this.props.committeeDescription }
 							onChangeText = { this.props.committeeDescriptionChanged.bind(this) }
 						/>
 						<FilterList
 							data = { allMemberAccounts }
 							value = { allMemberAccounts[chair.id] }
-							placeholder = { "Director/Chairperson" }
+							placeholder = { 'Director/Chairperson' }
 							regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
 							selectBy = { (data) => { return data.id } }
 							onSelect = { (data) => { this.props.chairPersonChanged(data) } }
@@ -114,11 +117,11 @@ class CommitteeForm extends Component {
 				</ScrollView>
 				<ButtonLayout>
 					<Button
-						title = { "Done" }
+						title = { 'Done' }
 						onPress = { () => {	this.submitForm() } }
 					/>
 					<Button
-						title = "Cancel"
+						title = 'Cancel'
 						onPress = { () => Actions.pop() }
 					/>
 				</ButtonLayout>
@@ -130,62 +133,62 @@ class CommitteeForm extends Component {
 const styles = {
 	formContainerStyle: {
 		flex: 1,
-		backgroundColor: "#0c0b0b"
+		backgroundColor: '#0c0b0b'
 	},
 	headerStyle: {
-		flexDirection: "column",
-		alignItems: "center",
-		justifyContent: "center",
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'center',
 		flex: 0.5
 	},
 	headerTextStyle: {
 		fontSize: 22,
-		fontWeight: "bold",
-		color: "#e0e6ed"
+		fontWeight: 'bold',
+		color: '#e0e6ed'
 	},
 	errorTextStyle: {
 		fontSize: 14,
-		alignSelf: "center",
-		color: "red",
-		fontWeight: "bold",
+		alignSelf: 'center',
+		color: 'red',
+		fontWeight: 'bold',
 		padding: 10
 	},
 	pickerTextInput: {
 		flex: 1,
-		flexDirection: "row",
-		justifyContent: "center",
-		alignItems: "center"
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center'
 	},
 	scrollView: {
-		backgroundColor: "black",
-		height: "50%",
+		backgroundColor: 'black',
+		height: '50%',
 		paddingTop: 0,
 		paddingBottom: 0,
-		paddingLeft: "5%",
-		paddingRight: "5%"
+		paddingLeft: '5%',
+		paddingRight: '5%'
 	},
 	titleStyle: {
 		flex: 0.13,
-		alignSelf: "center",
+		alignSelf: 'center',
 		fontSize: 20
 	},
 	buttonStyle: {
 		flex: 1,
-		alignSelf: "center"
+		alignSelf: 'center'
 	},
 	flatlistStyle: {
 		flex: 0.8
 	},
 	buttonContainer: {
 		flex: 0.2,
-		flexDirection: "row",
-		borderTopColor: "#0001",
+		flexDirection: 'row',
+		borderTopColor: '#0001',
 		borderTopWidth: 1
 	},
 	modalBackground: {
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "#0003",
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: '#0003',
 		margin: 0,
 		height: dimension.height,
 		width: dimension.width
@@ -193,12 +196,12 @@ const styles = {
 	modalStyle: {
 		height: dimension.height * 0.4,
 		width: dimension.width * 0.8,
-		backgroundColor: "#fff",
+		backgroundColor: '#fff',
 		padding: 12,
 		borderRadius: 12
 	},
 	textStyle: {
-		color: "#e0e6ed",
+		color: '#e0e6ed',
 		fontSize: dimension.width * 0.05
 	}
 };

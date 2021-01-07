@@ -1,10 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from "react";
-import { Router, Scene, Stack, ActionConst } from "react-native-router-flux";
-import { Spinner, Icon } from "@/components/general";
-import CandidateForm from "@/components/elect/CandidateForm";
-import PositionForm from "@/components/elect/PositionForm";
-import CommitteeForm from "@/components/general/CommitteeForm";
+import React from 'react';
+import { Router, Scene, Stack, ActionConst } from 'react-native-router-flux';
+import { Spinner, Icon } from '@/components/general';
+import CandidateForm from '@/components/elect/CandidateForm';
+import PositionForm from '@/components/elect/PositionForm';
+import CommitteeForm from '@/components/general/CommitteeForm';
 
 /** All Screen Imports grouped by folder **/
 
@@ -14,13 +14,13 @@ import {
 	CommitteesAdmin,
 	ElectionAdmin,
 	MemberAdmin
-} from "@/screens";
+} from '@/screens';
 
 /** Import Committees **/
 import {
 	CommitteePage,
 	Committees
-} from "@/screens";
+} from '@/screens';
 
 /** Import Election **/
 import {
@@ -28,13 +28,13 @@ import {
 	ElectionBallot,
 	ElectionCandidates,
 	ElectionPositions
-} from "@/screens";
+} from '@/screens';
 
 /** Import Events **/
 import {
 	Events,
 	EventDetails
-} from "@/screens";
+} from '@/screens';
 
 /** Import General  **/
 import {
@@ -42,7 +42,7 @@ import {
 	Dashboard,
 	Leaderboard,
 	More
-} from "@/screens";
+} from '@/screens';
 
 /** Import User **/
 import {
@@ -51,206 +51,206 @@ import {
 	PointsBreakDown,
 	Profile,
 	ResetPassword
-} from "@/screens";
+} from '@/screens';
 
-import { Dimensions } from "react-native";
+import { Dimensions } from 'react-native';
 
-const dimension = Dimensions.get("window");
+const dimension = Dimensions.get('window');
 
 const RouterComponent = () => {
 	return (
 		<Router>
-			<Stack key = "root" hideNavBar>
-				<Stack key = "auth">
+			<Stack key = 'root' hideNavBar>
+				<Stack key = 'auth'>
 					<Scene
-						key = "loading"
+						key = 'loading'
 						component = { Spinner }
 						type = { ActionConst.REPLACE }
 						hideNavBar
 					/>
 					<Scene
-						key = "login"
+						key = 'login'
 						component = { Login }
-						title = "Login"
+						title = 'Login'
 						type = { ActionConst.REPLACE }
 						hideNavBar
 					/>
 					<Scene
-						key = "resetPassword"
+						key = 'resetPassword'
 						component = { ResetPassword }
-						title = "Reset Password"
+						title = 'Reset Password'
 						type = { ActionConst.REPLACE }
 						hideNavBar
 					/>
 				</Stack>
-				<Stack key = "election" hideNavBar>
+				<Stack key = 'election' hideNavBar>
 					<Scene
-						key = "ElectionCandidates"
+						key = 'ElectionCandidates'
 						component = { ElectionCandidates }
-						title = "Election Candidates"
+						title = 'Election Candidates'
 						type = { ActionConst.REPLACE }
 						hideNavBar
 					/>
 					<Scene
-						key = "CandidateForm"
+						key = 'CandidateForm'
 						component = { CandidateForm }
-						title = "Candidate Forms"
+						title = 'Candidate Forms'
 						type = { ActionConst.REPLACE }
 						hideNavBar
 					/>
 					<Scene
-						key = "ElectionPositions"
+						key = 'ElectionPositions'
 						component = { ElectionPositions }
-						title = "Election Positions"
+						title = 'Election Positions'
 						type = { ActionConst.REPLACE }
 						hideNavBar
 					/>
 					<Scene
-						key = "PositionForm"
+						key = 'PositionForm'
 						component = { PositionForm }
-						title = "Position Forms"
+						title = 'Position Forms'
 						type = { ActionConst.REPLACE }
 						hideNavBar
 					/>
 					<Scene
-						key = "CommitteeForm"
+						key = 'CommitteeForm'
 						component = { CommitteeForm }
-						title = "Committee Forms"
+						title = 'Committee Forms'
 						type = { ActionConst.REPLACE }
 						hideNavBar
 					/>
 				</Stack>
 				<Stack
-					key = "main"
+					key = 'main'
 					tabs
-					tabBarPosition = "bottom"
+					tabBarPosition = 'bottom'
 					type = { ActionConst.RESET }
-					activeTintColor = { "#E0E6ED" }
-					inactiveTintColor = { "#C0CCDA" }
-					tabBarStyle = {{ backgroundColor: "#21252b", height: dimension.height * 0.08 }}
+					activeTintColor = { '#E0E6ED' }
+					inactiveTintColor = { '#C0CCDA' }
+					tabBarStyle = {{ backgroundColor: '#21252b', height: dimension.height * 0.08 }}
 				>
 					<Stack
 						hideNavBar
-						key = "dashboard"
-						title = "Dashboard"
+						key = 'dashboard'
+						title = 'Dashboard'
 						tabBarIcon = { ({	focused	}) =>
 							<Icon
-								name = { "ios-paper" }
+								name = { 'ios-paper' }
 								size = { 30 }
-								style = { focused ? { color: "#FFC107" } : { color: "white" } }
+								style = { focused ? { color: '#FFC107' } : { color: 'white' } }
 							/> }
 					>
 						<Scene
-							key = "dashboard"
+							key = 'dashboard'
 							component = { Dashboard }
-							title = "dashboard"
-							leftTitle = "Back"
+							title = 'dashboard'
+							leftTitle = 'Back'
 						/>
 						<Stack
 							hideNavBar
-							key = "CommitteePageD"
-							title = "CommitteesPage"
+							key = 'CommitteePageD'
+							title = 'CommitteesPage'
 						>
 							<Scene
-								key = "CommitteePageD"
+								key = 'CommitteePageD'
 								component = { CommitteePage }
-								title = "CommitteePage"
+								title = 'CommitteePage'
 								hideTabBar
 							/>
 							<Stack
-								key = "eventDetailsCPD"
-								title = "EventDetails"
+								key = 'eventDetailsCPD'
+								title = 'EventDetails'
 								hideNavBar
 								hideTabBar = { true }
 							>
 								<Scene
-									key = "eventDetailsCPD"
+									key = 'eventDetailsCPD'
 									component = { EventDetails }
-									title = "Event Details"
+									title = 'Event Details'
 								/>
 								<Scene
-									key = "OtherProfileCPD"
+									key = 'OtherProfileCPD'
 									component = { OtherProfile }
 								/>
 							</Stack>
 						</Stack>
 						<Stack
 							hideNavBar
-							key = "LeaderboardD"
-							title = "Leaderboard"
+							key = 'LeaderboardD'
+							title = 'Leaderboard'
 						>
 							<Scene
-								key = "LeaderboardD"
+								key = 'LeaderboardD'
 								component = { Leaderboard }
-								title = "leaderboard"
+								title = 'leaderboard'
 								hideTabBar
 							/>
 							<Scene
-								key = "OtherProfileD"
+								key = 'OtherProfileD'
 								component = { OtherProfile }
 								hideTabBar
 								hideNavBar
 							/>
 						</Stack>
 						<Stack
-							key = "CommitteesD"
-							title = "Committees"
+							key = 'CommitteesD'
+							title = 'Committees'
 						>
 							<Scene
-								key = "CommitteesD"
+								key = 'CommitteesD'
 								component = { Committees }
-								title = "Committees"
+								title = 'Committees'
 								hideTabBar
 								hideNavBar
 							/>
 						</Stack>
 						<Stack
-							key = "eventDetailsD"
-							title = "EventDetails"
+							key = 'eventDetailsD'
+							title = 'EventDetails'
 							hideNavBar
 							hideTabBar = { true }
 						>
 							<Scene
-								key = "eventDetailsD"
+								key = 'eventDetailsD'
 								component = { EventDetails }
-								title = "Event Details"
+								title = 'Event Details'
 							/>
 							<Scene
-								key = "OtherProfileD"
+								key = 'OtherProfileD'
 								component = { OtherProfile }
 							/>
 						</Stack>
 					</Stack>
 					<Stack
-						key = "event"
+						key = 'event'
 						hideNavBar
-						title = "Events"
+						title = 'Events'
 						tabBarIcon = { ({ focused }) =>
 							<Icon
-								name = { "ios-calendar" }
+								name = { 'ios-calendar' }
 								size = { 30 }
-								style = { focused ? { color: "#FFC107" } : { color: "white" } }
+								style = { focused ? { color: '#FFC107' } : { color: 'white' } }
 							/> }
 					>
 						<Scene
-							key = "event"
+							key = 'event'
 							component = { Events }
-							title = "Profile"
-							leftTitle = "Back"
+							title = 'Profile'
+							leftTitle = 'Back'
 						/>
 						<Stack
-							key = "eventDetails"
+							key = 'eventDetails'
 							hideNavBar
-							title = "EventDetails"
+							title = 'EventDetails'
 							hideTabBar
 						>
 							<Scene
-								key = "eventDetails"
+								key = 'eventDetails'
 								component = { EventDetails }
-								title = "Event Details"
+								title = 'Event Details'
 							/>
 							<Scene
-								key = "OtherProfileE"
+								key = 'OtherProfileE'
 								component = { OtherProfile }
 								hideTabBar
 								hideNavBar
@@ -259,146 +259,146 @@ const RouterComponent = () => {
 					</Stack>
 					<Stack
 						hideNavBar
-						key = "profile"
-						title = "Profile"
+						key = 'profile'
+						title = 'Profile'
 						tabBarIcon = { ({ focused	}) =>
 							<Icon
-								name = { "ios-person" }
+								name = { 'ios-person' }
 								size = { 30 }
-								style = { focused ? { color: "#FFC107" } : { color: "white" } }
+								style = { focused ? { color: '#FFC107' } : { color: 'white' } }
 							/> }
 					>
 						<Scene
-							key = "profile"
+							key = 'profile'
 							component = { Profile }
-							title = "Profile"
-							leftTitle = "Back"
+							title = 'Profile'
+							leftTitle = 'Back'
 						/>
 						<Scene
-							key = "pointsBreakDown"
+							key = 'pointsBreakDown'
 							component = { PointsBreakDown }
-							title = "Points"
+							title = 'Points'
 							hideNavBar
 						/>
 					</Stack>
 					<Stack
 						hideNavBar
-						key = "more"
-						title = "More"
+						key = 'more'
+						title = 'More'
 						tabBarIcon = { ({ focused	}) =>
 							<Icon
-								name = { "ios-menu" }
+								name = { 'ios-menu' }
 								size = { 30 }
-								style = { focused ? { color: "#FFC107" } : { color: "white" } }
+								style = { focused ? { color: '#FFC107' } : { color: 'white' } }
 							/> }
 					>
 						<Scene
-							key = "more"
+							key = 'more'
 							component = { More }
-							title = "More"
-							leftTitle = "Back"
+							title = 'More'
+							leftTitle = 'Back'
 						/>
 						<Scene
-							key = "Leaderboard"
+							key = 'Leaderboard'
 							component = { Leaderboard }
-							title = "leaderboard"
+							title = 'leaderboard'
 							hideTabBar
 						/>
 						<Stack
 							hideNavBar
-							key = "LeaderboardM"
-							title = "Leaderboard"
+							key = 'LeaderboardM'
+							title = 'Leaderboard'
 						>
 							<Scene
-								key = "LeaderboardM"
+								key = 'LeaderboardM'
 								component = { Leaderboard }
-								title = "leaderboard"
+								title = 'leaderboard'
 								hideTabBar
 							/>
 							<Scene
-								key = "OtherProfileM"
+								key = 'OtherProfileM'
 								component = { OtherProfile }
 								hideTabBar
 								hideNavBar
 							/>
 						</Stack>
 						<Stack
-							key = "AdminHub"
-							title = "AdminHub"
+							key = 'AdminHub'
+							title = 'AdminHub'
 							hideNavBar
 							hideTabBar
 						>
 							<Scene
-								key = "AdminHub"
+								key = 'AdminHub'
 								component = { AdminHub }
 							/>
 							<Scene
-								key = "ElectionAdmin"
+								key = 'ElectionAdmin'
 								component = { ElectionAdmin }
-								title = "Election"
+								title = 'Election'
 								hideTabBar
 							/>
 							<Scene
-								key = "CommitteesAdmin"
+								key = 'CommitteesAdmin'
 								component = { CommitteesAdmin }
-								title = "Committees"
+								title = 'Committees'
 								hideTabBar
 							/>
 							<Scene
-								key = "MemberAdmin"
+								key = 'MemberAdmin'
 								component = { MemberAdmin }
-								title = "Members"
+								title = 'Members'
 								hideTabBar
 							/>
 						</Stack>
 						<Scene
-							key = "ElectionApplication"
+							key = 'ElectionApplication'
 							component = { ElectionApplication }
 							hideTabBar
 							hideNavBar
 						/>
 						<Scene
-							key = "ElectionBallot"
+							key = 'ElectionBallot'
 							component = { ElectionBallot }
-							title = "Ballot"
+							title = 'Ballot'
 							hideTabBar
 							hideNavBar
 						/>
 						<Stack
 							hideNavBar
-							key = "Committees"
-							title = "Committees"
+							key = 'Committees'
+							title = 'Committees'
 						>
 							<Scene
-								key = "Committees"
+								key = 'Committees'
 								component = { Committees }
-								title = "Committees"
+								title = 'Committees'
 								hideTabBar
 							/>
 							<Stack
 								hideNavBar
-								key = "CommitteePageC"
-								title = "CommitteesPage"
+								key = 'CommitteePageC'
+								title = 'CommitteesPage'
 							>
 								<Scene
-									key = "CommitteePageC"
+									key = 'CommitteePageC'
 									component = { CommitteePage }
-									title = "CommitteePage"
+									title = 'CommitteePage'
 									hideTabBar
 								/>
 								<Stack
-									key = "eventDetailsC"
-									title = "EventDetails"
+									key = 'eventDetailsC'
+									title = 'EventDetails'
 									hideNavBar
 									hideTabBar = { true }
 								>
 									<Scene
-										key = "eventDetailsC"
+										key = 'eventDetailsC'
 										component = { EventDetails }
-										title = "Event Details"
+										title = 'Event Details'
 									/>
 									<Scene
-										key = "OtherProfileC"
+										key = 'OtherProfileC'
 										component = { OtherProfile }
 									/>
 								</Stack>
@@ -406,9 +406,9 @@ const RouterComponent = () => {
 						</Stack>
 						<Scene
 							hideTabBar
-							key = "About"
+							key = 'About'
 							component = { About }
-							title = "About"
+							title = 'About'
 						/>
 					</Stack>
 				</Stack>

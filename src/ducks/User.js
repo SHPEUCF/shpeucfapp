@@ -1,38 +1,38 @@
-import firebase from "firebase";
-import { Actions } from "react-native-router-flux";
-import { createActionTypes } from "@/utils/actions";
-import { Alert } from "@/components";
-import Lodash from "lodash";
+import firebase from 'firebase';
+import { Actions } from 'react-native-router-flux';
+import { createActionTypes } from '@/utils/actions';
+import { Alert } from '@/components';
+import Lodash from 'lodash';
 
 const ACTIONS = createActionTypes([
-	"SHOW_FIREBASE_ERROR",
-	"VERIFIED_USER",
-	"LOGIN_USER",
-	"LOGOUT_USER",
-	"LOAD_USER_AND_PRIVILEGE"
+	'SHOW_FIREBASE_ERROR',
+	'VERIFIED_USER',
+	'LOGIN_USER',
+	'LOGOUT_USER',
+	'LOAD_USER_AND_PRIVILEGE'
 ]);
 
 const INITIAL_STATE = {
 	activeUser: {
-		firstName: "",
-		color: "#21252b",
-		flag: "",
-		lastName: "",
-		email: "",
-		major: "Do not wish to disclose",
-		picture: "",
+		firstName: '',
+		color: '#21252b',
+		flag: '',
+		lastName: '',
+		email: '',
+		major: 'Do not wish to disclose',
+		picture: '',
 		points: 0,
 		privilege: {},
-		country: "Do not wish to disclose",
-		gender: "Do not wish to disclose",
-		birthday: "0000-00-00",
+		country: 'Do not wish to disclose',
+		gender: 'Do not wish to disclose',
+		birthday: '0000-00-00',
 		paidMember: false,
-		id: "",
+		id: '',
 		voted: false,
 		applied: false,
 		userCommittees: {}
 	},
-	error: "",
+	error: '',
 	loading: false
 };
 
@@ -79,14 +79,14 @@ const showFirebaseError = (dispatch, error) => {
 	let errorMessage;
 
 	switch (error.code) {
-		case "auth/user-not-found":
-			errorMessage = "There is no user record corresponding to this identifier";
+		case 'auth/user-not-found':
+			errorMessage = 'There is no user record corresponding to this identifier';
 			break;
-		case "auth/invalid-email":
-			errorMessage = "Enter a valid email";
+		case 'auth/invalid-email':
+			errorMessage = 'Enter a valid email';
 			break;
-		case "auth/wrong-password":
-			errorMessage = "Incorrect credentials";
+		case 'auth/wrong-password':
+			errorMessage = 'Incorrect credentials';
 			break;
 		default:
 			errorMessage = error.message;
@@ -113,7 +113,7 @@ const showFirebaseError = (dispatch, error) => {
 export const createUser = user => {
 	return (dispatch) => {
 		firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
-			.then(({ user: { uid } }) => createUserSuccess({ ...Lodash.omit(user, "password"), uid }))
+			.then(({ user: { uid } }) => createUserSuccess({ ...Lodash.omit(user, 'password'), uid }))
 			.catch((error) => showFirebaseError(dispatch, error));
 	};
 };
@@ -156,13 +156,13 @@ const createUserSuccess = (user) => {
 		})
 		.then(() => {
 			currentUser.sendEmailVerification()
-				.catch(() => Alert.alert("We were not able to send an email."
-					+ " Please contact the Tech Director for assistance"))
+				.catch(() => Alert.alert('We were not able to send an email.'
+					+ ' Please contact the Tech Director for assistance'))
 				.then(() => Alert.alert(`We sent a verification to: ${user.email}.
 					Please open your email and verify your account`));
 		})
 		.then(() => firebase.auth().signOut())
-		.catch((error) => Alert.alert(error, { type: "error" }));
+		.catch((error) => Alert.alert(error, { type: 'error' }));
 };
 
 /**
@@ -202,7 +202,7 @@ export const loginUser = (email, password) => {
 			firebase.auth().signInWithEmailAndPassword(email, password)
 				.then(() => {
 					if (!firebase.auth().currentUser.emailVerified) {
-						Alert.alert("Account must be verified!\nPlease check your email for verification email");
+						Alert.alert('Account must be verified!\nPlease check your email for verification email');
 						reject();
 					}
 					else {
@@ -234,14 +234,14 @@ export const loadUser = (userID) => {
 		currentUser
 	} = firebase.auth();
 
-	const id = typeof userID === "undefined" ? currentUser.uid : userID;
+	const id = typeof userID === 'undefined' ? currentUser.uid : userID;
 
 	return (dispatch) => {
 		if (currentUser) {
-			firebase.database().ref(`/users/${id}/`).on("value", userSnapshot => {
+			firebase.database().ref(`/users/${id}/`).on('value', userSnapshot => {
 				const user = userSnapshot.val();
 
-				firebase.database().ref(`/privileges/${id}/`).on("value", privilegeSnapshot => {
+				firebase.database().ref(`/privileges/${id}/`).on('value', privilegeSnapshot => {
 					const userWithPrivilege = {
 						...user,
 						privilege: privilegeSnapshot.val()
@@ -271,15 +271,15 @@ export const loadUser = (userID) => {
  * @param {Object}   user        User is an object that can store any subset of props that you would want to edit.
  *
  * **Things you can not edit using this function:**
- * ["firstName", "lastName", "points", "voted", "privileges", "paidMember"]
+ * ['firstName', 'lastName', 'points', 'voted', 'privileges', 'paidMember']
  * @example
  * user = {
- * 	nationality: "Cuban",
- * 	gender: "Male"
+ * 	nationality: 'Cuban',
+ * 	gender: 'Male'
  * }
  *
  * user = {
- * 	picture: "someUrl.jpg"
+ * 	picture: 'someUrl.jpg'
  * }
  *
  */
@@ -289,14 +289,14 @@ export const editUser = (user) => {
 		currentUser
 	} = firebase.auth();
 
-	const invalidProperties = ["firstName", "lastName", "points", "voted", "privileges", "paidMember"];
+	const invalidProperties = ['firstName', 'lastName', 'points', 'voted', 'privileges', 'paidMember'];
 
 	invalidProperties.forEach(prop => {
 		if (prop in user) console.error(`Please do not try to edit ${prop}!`);
 	});
 
 	firebase.database().ref(`/users/${currentUser.uid}/`).update(user)
-		.catch(error => Alert.alert(error, { type: "error" }));
+		.catch(error => Alert.alert(error, { type: 'error' }));
 };
 
 /**
@@ -308,5 +308,5 @@ export const editUser = (user) => {
 export const logoutUser = () => {
 	firebase.auth().signOut()
 		.then(Actions.login())
-		.then(Alert.alert("Signed Out", { title: "Have a great day!", type: "success" }));
+		.then(Alert.alert('Signed Out', { title: 'Have a great day!', type: 'success' }));
 };
