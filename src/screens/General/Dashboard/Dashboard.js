@@ -18,7 +18,7 @@ import {
 	StatusBar
 } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('screen');
 
 class Dashboard extends Component {
 	constructor(props) {

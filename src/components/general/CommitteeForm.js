@@ -15,7 +15,7 @@ import {
 } from '@/ducks';
 
 const memberService = new MemberService();
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 
 class CommitteeForm extends Component {
 	/*

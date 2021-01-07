@@ -4,7 +4,7 @@ import { goToViewEvent } from '@/utils/router';
 import { filterPastEvents } from '@/utils/events';
 import { Icon } from '@/components';
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('screen');
 
 export default class EventsList extends PureComponent {
 	convertNumToDate(date) {

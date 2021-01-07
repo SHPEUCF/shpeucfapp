@@ -8,7 +8,7 @@ import { goToViewEvent } from '@/utils/router';
 import { formatEventListForCalendar, filterEvents } from '@/utils/events';
 import { loadCommittee, loadEvent } from '@/ducks';
 
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 let dateStr = '';
 let initDate = '';
 
