@@ -4,7 +4,6 @@ import firebase from 'firebase';
 import { Avatar, Icon } from '@/components';
 import ImagePicker from 'react-native-image-crop-picker';
 import RNFetchBlob from 'rn-fetch-blob';
-import { storeImageUrl } from '@/ducks';
 
 export const stockImg = 'https://cdn0.iconfinder.com/data/icons/superuser-web-kit/512/686909-user_people_man_human_head_person-512.png';
 
@@ -19,8 +18,11 @@ export const verifiedCheckMark = ({ paidMember }) => {
 	}
 };
 
-// MemberPanel needs should be made into its own component
-// **** May need to change because of Leaderboard
+/*
+ * MemberPanel needs should be made into its own component
+ * May need to change because of Leaderboard
+ */
+
 export const MemberPanel = user => {
 	const { textStyle, contentContainerStyle, userInfoContainer, fullFlex, AvatarContainer } = styles;
 
@@ -69,8 +71,8 @@ export const rankMembersAndReturnsCurrentUser = (sortedMembers, userId) => {
  */
 
 export const truncateNames = item => {
-	[item.firstName] = item.firstName.trim().split(" ");
-	[item.lastName] = item.lastName.trim().split(" ");
+	[item.firstName] = item.firstName.trim().split(' ');
+	[item.lastName] = item.lastName.trim().split(' ');
 
 	if (item.firstName.length + item.lastName.length >= 15)
 		item.lastName = `${item.lastName[0]}.`;
@@ -79,6 +81,11 @@ export const truncateNames = item => {
 export const openGallery = (filePath, fileName, onImageStoreFunction) => {
 	const Blob = RNFetchBlob.polyfill.Blob;
 	const fs = RNFetchBlob.fs;
+	const storeImageUrl = (url, filePath) => {
+		firebase.database().ref(`${filePath}/`).update({
+			picture: url
+		});
+	};
 
 	window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
 	window.Blob = Blob;

@@ -391,9 +391,8 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ user, general, members, events, elect, committees }) => {
+const mapStateToProps = ({ user, members, events, elect, committees }) => {
 	const { activeUser } = user;
-	const { loading } = general;
 	const { allMemberAccounts } = members;
 	const { sortedEvents } = events;
 	const { election } = elect;
@@ -411,7 +410,6 @@ const mapStateToProps = ({ user, general, members, events, elect, committees }) 
 
 	return {
 		activeUser,
-		loading,
 		allMemberAccounts,
 		sortedEvents,
 		election,

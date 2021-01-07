@@ -223,12 +223,11 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ user, members, general }) => {
+const mapStateToProps = ({ user, members }) => {
 	const { allMemberPoints } = members;
 	const { id } = user;
-	const { loading } = general;
 
-	return { allMemberPoints, id, loading };
+	return { allMemberPoints, id };
 };
 
 const mapDispatchToProps = {
