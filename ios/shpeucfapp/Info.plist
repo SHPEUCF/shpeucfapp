@@ -53,5 +53,17 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera access will only be used to scan and check-in to events, otherwise a board member can manually check you in</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Add optional pictures to your account so that you can customize your profile with images</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>AntDesign.ttf</string>
+		<string>EvilIcons.ttf</string>
+		<string>FontAwesome.ttf</string>
+		<string>Ionicons.ttf</string>
+		<string>MaterialIcons.ttf</string>
+	</array>
 </dict>
 </plist>

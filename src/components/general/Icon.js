@@ -32,8 +32,6 @@ export const Icon = ({ type, ...props }) => {
 		}
 	})();
 
-	IconComponent.loadFont();
-
 	return (
 		<IconComponent { ...props } />
 	);
