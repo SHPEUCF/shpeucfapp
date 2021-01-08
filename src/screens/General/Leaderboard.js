@@ -52,12 +52,11 @@ export const Leaderboard = () => {
 								</View>
 								<Text style = { [textStyle, { fontSize: 15 }, currentUserTextStyle] }>{ `Points: ${points}` }</Text>
 							</View>
-							{ picture
-								? <Avatar source = { picture } />
-								: <Avatar
-									title = { user.firstName[0].concat(user.lastName[0]) }
-									titleStyle = {{ backgroundColor: color }}
-								/> }
+							<Avatar
+								source = { picture }
+								title = { user.firstName[0].concat(user.lastName[0]) }
+								style = {{ backgroundColor: color }}
+							/>
 						</View>
 						<ProgressBar
 							style = { progress }

@@ -1,10 +1,8 @@
 import React from 'react';
-import { View, Dimensions, SafeAreaView, Image } from 'react-native';
+import { View, SafeAreaView, Image } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { ListItem } from '@/components';
-
-const { height } = Dimensions.get('screen');
 
 const menuItems = [
 	{
@@ -46,7 +44,16 @@ const menuItems = [
 ];
 
 export default () => {
-	const { alignSelf, header, mainBackgroundColor, secondaryBackgroundColor, fullFlex } = styles;
+	const {
+		flex25,
+		flex100,
+		mainBackgroundColor,
+		secondaryBackgroundColor,
+		centerContent,
+		shpeLogo,
+		knightLogo
+	} = styles;
+
 	const imageUrl = '../../assets/images/';
 
 	const { user: { activeUser: { privilege, apply } }, elect: { election } } = useSelector(state => state);
@@ -67,23 +74,21 @@ export default () => {
 	};
 
 	return (
-		<SafeAreaView style = { [mainBackgroundColor, fullFlex] }>
-			<View style = { [header, secondaryBackgroundColor] }>
+		<SafeAreaView style = { [mainBackgroundColor, flex100] }>
+			<View style = { [flex25, secondaryBackgroundColor, centerContent ] }>
 				<Image
 					source = { require(`${imageUrl}SHPE_UCF_Logo.png`) }
-					style = { alignSelf }
-					height = { height * 0.06 }
+					style = { knightLogo }
 					resizeMode = 'contain'
 				/>
 			</View>
-			<View style = { fullFlex }>
+			<View style = { flex100 }>
 				{ menuItems.map(tab => renderMenu(tab)) }
 			</View>
-			<View style = { [fullFlex, mainBackgroundColor] }>
+			<View style = { [flex100, mainBackgroundColor, centerContent] }>
 				<Image
 					source = { require(`${imageUrl}SHPE_logo_FullColor-RGB-2x.png`) }
-					style = { alignSelf }
-					height = { 80 }
+					style = { shpeLogo }
 					resizeMode = 'contain'
 				/>
 			</View>
@@ -92,9 +97,11 @@ export default () => {
 };
 
 const styles = {
-	header: {
-		height: '10%',
-		justifyContent: 'center'
+	flex25: {
+		flex: 0.25
+	},
+	flex100: {
+		flex: 1
 	},
 	mainBackgroundColor: {
 		backgroundColor: 'black'
@@ -102,10 +109,14 @@ const styles = {
 	secondaryBackgroundColor: {
 		backgroundColor: '#FECB00'
 	},
-	fullFlex: {
-		flex: 1
+	centerContent: {
+		alignItems: 'center',
+		justifyContent: 'center'
 	},
-	alignSelf: {
-		alignSelf: 'center'
+	knightLogo: {
+		height: '70%'
+	},
+	shpeLogo: {
+		width: '70%'
 	}
 };
