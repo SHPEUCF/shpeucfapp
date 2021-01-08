@@ -16,7 +16,7 @@ export const verifiedCheckMark = ({ paidMember }) => {
 
 	if (paidMember) {
 		return (
-			<Icon name = 'ios-checkmark-circle' size = { 25 } style = { verifiedCheckMark } />
+			<Icon name = 'checkmark-circle' size = { 25 } style = { verifiedCheckMark } />
 		);
 	}
 };

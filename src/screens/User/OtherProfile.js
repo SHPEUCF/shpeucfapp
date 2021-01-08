@@ -159,7 +159,7 @@ class OtherProfile extends Component {
 								Alert.alert('Coming Soon');
 								// Actions.PostShow({ title: 'Github', uri: 'https://www.github.com/'})
 							} } >
-							<Icon name = 'ios-mail' size = { dimension.height * 0.045 } color = 'white' />
+							<Icon name = 'mail' size = { dimension.height * 0.045 } color = 'white' />
 						</TouchableOpacity>
 					</View>
 				</View>

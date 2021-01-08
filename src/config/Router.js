@@ -135,7 +135,7 @@ const RouterComponent = () => {
 						title = 'Dashboard'
 						tabBarIcon = { ({	focused	}) =>
 							<Icon
-								name = { 'ios-paper' }
+								name = { 'newspaper' }
 								size = { 30 }
 								style = { focused ? { color: '#FFC107' } : { color: 'white' } }
 							/> }
@@ -227,7 +227,7 @@ const RouterComponent = () => {
 						title = 'Events'
 						tabBarIcon = { ({ focused }) =>
 							<Icon
-								name = { 'ios-calendar' }
+								name = { 'calendar' }
 								size = { 30 }
 								style = { focused ? { color: '#FFC107' } : { color: 'white' } }
 							/> }
@@ -263,7 +263,7 @@ const RouterComponent = () => {
 						title = 'Profile'
 						tabBarIcon = { ({ focused	}) =>
 							<Icon
-								name = { 'ios-person' }
+								name = { 'person' }
 								size = { 30 }
 								style = { focused ? { color: '#FFC107' } : { color: 'white' } }
 							/> }
@@ -287,7 +287,7 @@ const RouterComponent = () => {
 						title = 'More'
 						tabBarIcon = { ({ focused	}) =>
 							<Icon
-								name = { 'ios-menu' }
+								name = { 'menu' }
 								size = { 30 }
 								style = { focused ? { color: '#FFC107' } : { color: 'white' } }
 							/> }

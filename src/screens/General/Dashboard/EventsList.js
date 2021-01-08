@@ -27,7 +27,7 @@ export default class EventsList extends PureComponent {
 					</Text>
 				</View>
 				<View style = { leaderboardArrow }>
-					<Icon name = 'ios-arrow-dropright' size = { height * 0.025 } style = { gold } />
+					<Icon name = 'chevron-forward-circle-outline' size = { height * 0.025 } style = { gold } />
 				</View>
 			</View>
 		);

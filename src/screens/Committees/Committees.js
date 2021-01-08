@@ -107,7 +107,7 @@ class Committees extends Component {
 								style = {{ backgroundColor: 'black', justifyContent: 'center', flex: 2, alignItems: 'flex-end' }}
 							>
 								<Icon
-									name = 'ios-star'
+									name = 'star'
 									size = { dimension.height * 0.03 }
 									onPress = { () => {
 										editUser({ userCommittees: {
@@ -124,7 +124,7 @@ class Committees extends Component {
 							style = {{ backgroundColor: 'black', justifyContent: 'center', flex: 2, alignItems: 'flex-end' }}
 						>
 							<Icon
-								name = 'ios-star-outline'
+								name = 'star-outline'
 								size = { dimension.height * 0.03 }
 								onPress = { () => {
 									if (!activeUser.userCommittees || Object.entries(activeUser.userCommittees).length <= 4) {
@@ -155,7 +155,7 @@ class Committees extends Component {
 						style = {{ backgroundColor: 'black', justifyContent: 'center', flex: 2, alignItems: 'flex-end' }}
 					>
 						<Icon
-							name = 'ios-calendar'
+							name = 'calendar'
 							size = { dimension.height * 0.03 }
 							onPress = { () => {
 								this.setState({ opened: Object.assign(this.state.opened, { [item.title]: this.toggleEvents(item.title) }) });
@@ -168,7 +168,7 @@ class Committees extends Component {
 						style = {{ backgroundColor: 'black', justifyContent: 'center', flex: 2, alignItems: 'flex-end' }}
 					>
 						<Icon
-							name = 'ios-calendar'
+							name = 'calendar'
 							size = { dimension.height * 0.03 }
 							onPress = { () => {
 								this.setState({ opened: Object.assign(this.state.opened, { [item.title]: this.toggleEvents(item.title) }) });
@@ -179,7 +179,7 @@ class Committees extends Component {
 					<View style = {{ flex: 1 }}></View>
 					<View style = {{ flex: 0.6, justifyContent: 'center' }}>
 						<Icon
-							name = 'ios-arrow-dropright'
+							name = 'chevron-forward-circle-outline'
 							size = { dimension.height * 0.025 }
 							style = {{ color: '#FECB00', backgroundColor: 'transparent', alignSelf: 'center' }}
 						/>

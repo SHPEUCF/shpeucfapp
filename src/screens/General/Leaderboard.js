@@ -131,7 +131,7 @@ class Leaderboard extends Component {
 						this.props.filterChanged('');
 						this.setState({ search: !this.state.search });
 					} }
-					name = { 'ios-search' }
+					name = { 'search' }
 					size = { dimension.height * 0.04 }
 					color = { '#FECB00' }
 				/>
