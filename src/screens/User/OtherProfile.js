@@ -6,7 +6,7 @@ import { Alert, ButtonLayout, NavBar, Avatar, Icon } from '@/components';
 import Flag from 'react-native-flags';
 import { verifiedCheckMark } from '@/utils/render';
 
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 
 class OtherProfile extends Component {
 	render() {

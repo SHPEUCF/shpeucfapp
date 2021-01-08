@@ -8,7 +8,7 @@ import { goToViewEvent } from '@/utils/router';
 import { filterEvents } from '@/utils/events';
 import { editUser, loadEvent, getCommittees, loadCommittee } from '@/ducks';
 
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 const iteratees = ['level'];
 const order = ['asc'];
 

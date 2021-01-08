@@ -17,7 +17,7 @@ import {
 	changeLevelsCom
 } from '@/ducks';
 
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 const iteratees = ['level'];
 const order = ['asc'];
 

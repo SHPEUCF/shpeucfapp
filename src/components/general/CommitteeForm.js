@@ -11,12 +11,11 @@ import {
 	committeeTitleChanged,
 	committeeDescriptionChanged,
 	deleteCommittee,
-	chairPersonChanged,
-	filterChanged
+	chairPersonChanged
 } from '@/ducks';
 
 const memberService = new MemberService();
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 
 class CommitteeForm extends Component {
 	/*
@@ -30,10 +29,6 @@ class CommitteeForm extends Component {
 			oldTitle: this.props.committeeTitle,
 			oldChair: this.props.chair
 		};
-	}
-
-	componentWillMount() {
-		this.props.filterChanged('');
 	}
 
 	renderError() {
@@ -206,10 +201,7 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ committees, general, members }) => {
-	const {
-		filter
-	} = general;
+const mapStateToProps = ({ committees, members }) => {
 	const {
 		allMemberAccounts
 	} = members;
@@ -221,7 +213,7 @@ const mapStateToProps = ({ committees, general, members }) => {
 		chair
 	} = committees;
 
-	return { committeeTitle, committeeDescription, title, committeesList, chair, filter, allMemberAccounts };
+	return { committeeTitle, committeeDescription, title, committeesList, chair, allMemberAccounts };
 };
 
 const mapDispatchToProps = {
@@ -230,8 +222,7 @@ const mapDispatchToProps = {
 	committeeTitleChanged,
 	committeeDescriptionChanged,
 	deleteCommittee,
-	chairPersonChanged,
-	filterChanged
+	chairPersonChanged
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CommitteeForm);

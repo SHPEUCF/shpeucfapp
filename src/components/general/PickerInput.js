@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { View, Modal, FlatList, Dimensions, TouchableOpacity, Text } from 'react-native';
 import { Input, Icon } from './';
 
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 
 class PickerInput extends Component {
 	constructor(props) {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { View,	Modal,	FlatList,	Dimensions,	TouchableOpacity,	Text,	SafeAreaView } from 'react-native';
 import { Alert, Button, ButtonLayout, Input, Icon } from './';
 
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 
 /**
  * @param {(String[] | Object[])}  data         An array of the data that will be displayed.
