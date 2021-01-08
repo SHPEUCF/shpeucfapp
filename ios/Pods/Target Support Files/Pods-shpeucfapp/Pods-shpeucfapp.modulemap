@@ -1,0 +1,6 @@
+module Pods_shpeucfapp {
+  umbrella header "Pods-shpeucfapp-umbrella.h"
+
+  export *
+  module * { export * }
+}
