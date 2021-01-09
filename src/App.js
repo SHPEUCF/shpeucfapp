@@ -1,26 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { View } from 'react-native';
 import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import Router from './config/Router';
 import { appVersion } from '../package.json';
-import { View } from 'react-native';
 import { Alert } from './components';
+import { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId } from '@env';
 import { loadUser, getAllMemberAccounts, getEvents, getCommittees, getAllMemberPoints, updateElection } from './ducks';
 
 console.ignoredYellowBox = ['Setting a timer'];
 
 class App extends Component {
 	componentDidMount() {
-		const config = {
-			apiKey: 'AIzaSyCeX5lUZUmQxXsWNO8gNXVHqfJs-kQmSaY',
-			authDomain: 'shpe-ucf.firebaseapp.com',
-			databaseURL: 'https://shpe-ucf.firebaseio.com',
-			projectId: 'shpe-ucf',
-			storageBucket: 'shpe-ucf.appspot.com',
-			messagingSenderId: '974032317047',
-			appId: '1:974032317047:web:0a4a2ad01ac705b90ff472'
-		};
+		const config = { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId };
 
 		if (!firebase.apps.length)
 			firebase.initializeApp(config);
