@@ -1,8 +1,9 @@
+import 'react-native-gesture-handler';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import firebase from 'firebase';
+import Router from './config/NewRouter';
 import { Actions } from 'react-native-router-flux';
-import Router from './config/Router';
 import { appVersion } from '../package.json';
 import { View } from 'react-native';
 import { Alert } from './components';
@@ -29,7 +30,7 @@ class App extends Component {
 				let correctVersion = snapshot.val() === appVersion;
 
 				if (correctVersion && user) {
-					Actions.main();
+					// Actions.main();
 					loadUser();
 					getEvents();
 					getCommittees();
@@ -38,7 +39,7 @@ class App extends Component {
 					getAllMemberPoints();
 				}
 				else {
-					Actions.login();
+					// Actions.login();
 					if (!correctVersion) Alert.alert('Please update your app');
 					if (user) firebase.auth().signOut();
 				}
