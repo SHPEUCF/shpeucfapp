@@ -22,7 +22,9 @@ class App extends Component {
 			firebase.initializeApp(config);
 
 		AsyncStorage.getItem("alreadyLaunched").then(alreadyLaunched => {
-			Actions.splash({ verify: () => this.verifyLogIn(alreadyLaunched) });
+			let verify = () => this.verifyLogIn(alreadyLaunched);
+
+			Actions.splash({ verify });
 
 			if (!alreadyLaunched)
 				AsyncStorage.setItem("alreadyLaunched", "true");

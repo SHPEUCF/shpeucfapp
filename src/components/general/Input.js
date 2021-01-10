@@ -15,7 +15,7 @@ export class Input extends PureComponent {
 		return (
 			<TextInput
 				style = { [inputStyle, style] }
-				placeholderTextColor = "#DADFE1"
+				placeholderTextColor = "#5B6066"
 				underlineColorAndroid = "transparent"
 				{ ...extraProps }
 			>
@@ -35,11 +35,15 @@ Input.defaultProps = {
 const styles = {
 	inputStyle: {
 		flex: 1,
-		color: "#000",
+		color: 'white',
 		fontSize: 16,
-		marginVertical: 8,
-		padding: 15,
-		backgroundColor: "white",
-		borderRadius: 25
+		marginVertical: 10,
+		padding: 10,
+		paddingTop: 20,
+		backgroundColor: 'transparent',
+		borderStyle: 'solid',
+		borderColor: 'white',
+		borderBottomWidth: 0.5,
+		borderRadius: 1
 	}
 };
