@@ -97,7 +97,7 @@ class PickerInput extends Component {
 					<Icon
 						onPress = { () => this.setState({ modalVisible: true }) }
 						style = { [iconStyle, dropDownArrowStyle] }
-						name = { 'ios-arrow-dropdown' }
+						name = { 'chevron-down-circle-outline' }
 						size = { iconSize }
 						color = { iconColor }
 					/>

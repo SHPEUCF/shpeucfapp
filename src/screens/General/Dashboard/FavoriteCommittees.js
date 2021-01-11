@@ -24,7 +24,7 @@ export default class FavoriteCommittees extends PureComponent {
 			<View style = { committeesPanelContainer }>
 				<View style = { selectCommitteesIcon }>
 					<Icon
-						name = 'ios-information-circle'
+						name = 'information-circle'
 						size = { height * 0.028 }
 						onPress = { () => navigation.push('Committees', { prevRoute: 'Dashboard' }) } style = { gold }
 					/>
@@ -46,7 +46,7 @@ export default class FavoriteCommittees extends PureComponent {
 									<Text style = { [textColor, { fontSize: width * 0.03 }] }>{ committeeName }</Text>
 								</View>
 								<View style = { leaderboardArrow }>
-									<Icon name = 'ios-arrow-dropright' size = { height * 0.025 } style = { gold } />
+									<Icon name = 'chevron-forward-circle-outline' size = { height * 0.025 } style = { gold } />
 								</View>
 							</TouchableOpacity>
 						) }

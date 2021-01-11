@@ -324,11 +324,11 @@ class EventDetails extends Component {
 		if (activeUser.privilege && activeUser.privilege.board) {
 			return [
 				<View style = { iconContainer }>
-					<Icon style = { [icon, textColor] } name = 'ios-people' size = { iconSize } color = '#000' />
+					<Icon style = { [icon, textColor] } name = 'people' size = { iconSize } color = '#000' />
 					<Text style = { [text, textColor] }>{ numRSVP } { numRSVP == 1 ? 'person' : 'people' } RSVP'd</Text>
 				</View>,
 				numAttendance && <View style = { iconContainer }>
-					<Icon style = { [icon, textColor] } name = 'md-people' size = { iconSize } color = '#000' />
+					<Icon style = { [icon, textColor] } name = 'people' size = { iconSize } color = '#000' />
 					<Text style = { [text, textColor] }>{ numAttendance } { numAttendance == 1 ? 'person' : 'people' } attended</Text>
 				</View>
 			];

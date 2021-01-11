@@ -100,6 +100,7 @@ export class Animate {
 		this.Animation.timing({
 			toValue: toValue || dimension[screen] * ratio,
 			easing: this.resolveEasing(easing, easeValue),
+			useNativeDriver: false,
 			duration,
 			delay
 		}, callback);

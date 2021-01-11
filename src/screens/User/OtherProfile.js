@@ -81,19 +81,19 @@ class OtherProfile extends Component {
 			firstName,
 			lastName,
 			picture,
-			paidMember
+			paidMember,
+			color
 		} = this.props.visitedMember;
 
 		return (
 			<View style = { headerInfoContainer }>
 				<View style = {{ flex: 1, paddingTop: '8%', marginBottom: '30%' }}>
-					{ picture
-						? <Avatar size = 'xlarge' source = { picture } />
-						: <Avatar
-							size = 'xlarge'
-							title = { firstName[0].concat(lastName[0]) }
-							titleStyle = {{ backgroundColor: this.props.color }}
-						/> }
+					<Avatar
+						size = 'xlarge'
+						title = { firstName[0].concat(lastName[0]) }
+						source = { picture }
+						style = {{ backgroundColor: color }}
+					/>
 				</View>
 				<View style = { [taglineContainer] }>
 					<View style = { row }>
@@ -158,7 +158,7 @@ class OtherProfile extends Component {
 								Alert.alert('Coming Soon');
 								// Actions.PostShow({ title: 'Github', uri: 'https://www.github.com/'})
 							} } >
-							<Icon name = 'ios-mail' size = { dimension.height * 0.045 } color = 'white' />
+							<Icon name = 'mail' size = { dimension.height * 0.045 } color = 'white' />
 						</TouchableOpacity>
 					</View>
 				</View>

@@ -36,7 +36,7 @@ export default class Leaderboard extends PureComponent {
 					<View style = { leaderboardContentDivider }>
 						<View style = { leaderboardDividerLine } />
 						<View style = { leaderboardArrow }>
-							<Icon name = 'ios-arrow-dropright' size = { height * 0.025 } style = { gold } />
+							<Icon name = 'chevron-forward-circle-outline' size = { height * 0.025 } style = { gold } />
 						</View>
 						<View style = { leaderboardDividerLine } />
 					</View>

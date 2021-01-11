@@ -18,7 +18,7 @@ export const ProgressBar = ({ progress, width, height, color, style }) => {
 	const progressWidth = useRef(new Animated.Value(progress * width)).current;
 
 	useEffect(() => {
-		Animated.timing(progressWidth, { toValue: progress * width, duration: 1000 }).start();
+		Animated.timing(progressWidth, { toValue: progress * width, duration: 1000, useNativeDriver: false }).start();
 	}, [progress]);
 
 	let progressBorder = (progress === 1) ? styles.bar : styles.progress;

@@ -25,7 +25,7 @@ export const NavBar = ({ title, back, onBack, style, childComponent, childStyle 
 	return (
 		<View style = { [tabBar, style, rowFlex] }>
 			{ back && <TouchableOpacity style = { backButtonStyle } onPress = { () => onBack() }>
-				<Icon name = 'ios-arrow-dropleft' size = { height * 0.03 } color = '#FECB00' />
+				<Icon name = 'chevron-back-circle-outline' size = { height * 0.03 } color = '#FECB00' />
 			</TouchableOpacity> }
 			<Text style = { tabBarText }>{ title }</Text>
 			<View style = { childStyle }>

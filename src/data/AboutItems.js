@@ -7,13 +7,13 @@ export const menuItems = [
 	},
 	{
 		'title': 'Bugs',
-		'icon': 'ios-bug',
+		'icon': 'bug',
 		'content': 'Find any bugs? Submit them here',
 		'url': 'https://github.com/SHPEUCF/shpeucfapp/issues'
 	},
 	{
 		'title': 'Privacy Policy',
-		'icon': 'ios-document',
+		'icon': 'document',
 		'url': 'https://www.shpeucf.com/privacy-policy/'
 	},
 	{
@@ -23,7 +23,7 @@ export const menuItems = [
 	},
 	{
 		'title': 'MIT License',
-		'icon': 'ios-paper',
+		'icon': 'newspaper',
 		'url': 'https://github.com/SHPEUCF/shpeucfapp/blob/master/LICENSE'
 	}
 ];

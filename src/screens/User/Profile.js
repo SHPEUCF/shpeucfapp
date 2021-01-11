@@ -156,7 +156,7 @@ class Profile extends Component {
 					<View style = {{ flex: 0.01 }} />
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
 						<TouchableOpacity onPress = { () => Alert.alert('Coming Soon') }>
-							<Icon name = 'ios-mail' size = { height * 0.045 } color = 'white' />
+							<Icon name = 'mail' size = { height * 0.045 } color = 'white' />
 						</TouchableOpacity>
 					</View>
 				</View>

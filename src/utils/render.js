@@ -13,7 +13,7 @@ export const verifiedCheckMark = ({ paidMember }) => {
 
 	if (paidMember) {
 		return (
-			<Icon name = 'ios-checkmark-circle' size = { 25 } style = { verifiedCheckMark } />
+			<Icon name = 'checkmark-circle' size = { 25 } style = { verifiedCheckMark } />
 		);
 	}
 };
@@ -33,12 +33,11 @@ export const MemberPanel = user => {
 			<View style = { userInfoContainer }>
 				<Text style = { [textStyle, fullFlex] }>{ `${user.firstName} ${user.lastName}` }</Text>
 				<View style = { AvatarContainer }>
-					{ user.picture
-						? <Avatar source = { user.picture } />
-						: <Avatar
-							title = { user.firstName[0].concat(user.lastName[0]) }
-							titleStyle = {{ backgroundColor: user.color }}
-						/> }
+					<Avatar
+						source = { user.picture }
+						title = { user.firstName[0].concat(user.lastName[0]) }
+						style = {{ backgroundColor: user.color }}
+					/>
 				</View>
 			</View>
 		</View>
