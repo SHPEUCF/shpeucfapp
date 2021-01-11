@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { NavBar, Button, ButtonLayout, FilterList } from '@/components';
 import { SafeAreaView, View, Text } from 'react-native';
@@ -22,7 +21,7 @@ class MemberAdmin extends Component {
 
 		return (
 			<SafeAreaView style = { screenBackground }>
-				<NavBar title = 'Members' back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Members' back onBack = { () => this.props.navigation.pop() } />
 				<View style = { contentContainer }>
 					<Text style = { textStyle }>Paid Members</Text>
 					<ButtonLayout>

@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { Text, View, Dimensions, TouchableOpacity } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import _ from 'lodash';
 import { rankMembersAndReturnsCurrentUser } from '@/utils/render';
 import { Icon } from '@/components';
@@ -28,7 +27,7 @@ export default class Leaderboard extends PureComponent {
 		let currentMember = rankMembersAndReturnsCurrentUser(sortedMembers, this.props.activeUser.id);
 
 		return (
-			<TouchableOpacity style = { leaderboardContainer } onPress = { () => Actions.LeaderboardD() }>
+			<TouchableOpacity style = { leaderboardContainer } onPress = { () => this.props.navigation.push('Leaderboard') }>
 				{ currentMember && <View style = {{ flex: 1 }}>
 					<View style = { leaderboardContent }>
 						<Text style = { [title, textColor] }>Top Member</Text>

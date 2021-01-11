@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { Button, Input, NavBar, ButtonLayout, Avatar, Icon } from '@/components';
 import _ from 'lodash';
@@ -65,7 +64,8 @@ class ElectionApplication extends Component {
 
 		const {
 			positions,
-			applied
+			applied,
+			navigation
 		} = this.props;
 
 		const {
@@ -93,7 +93,7 @@ class ElectionApplication extends Component {
 						back
 						onBack = { () => {
 							return !shouldShowApplication || applied
-								? Actions.pop() : this.setState({ currentlyApplying: false });
+								? navigation.pop() : this.setState({ currentlyApplying: false });
 						} } />
 					<View style = { fullFlex }>
 						{ content }
@@ -241,13 +241,13 @@ class ElectionApplication extends Component {
 					if (!applied) {
 						addApplication(firstName, lastName, candidate.plan,
 									   positionSelected, candidate.picture || picture);
-						Actions.pop();
+						this.props.navigation.pop();
 					}
 					else {
 						candidate.firstName = firstName;
 						candidate.lastName = lastName;
 						editApplication(candidate);
-						Actions.pop();
+						this.props.navigation.pop();
 					}
 				} }
 			/>;
@@ -277,7 +277,7 @@ class ElectionApplication extends Component {
 		if (!this.props.activeUser.applied && this.state.currentlyApplying)
 			this.setState({ currentlyApplying: false });
 		else
-			Actions.pop();
+			this.props.navigation.pop();
 	}
 }
 

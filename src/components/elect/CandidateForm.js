@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text } from 'react-native';
 import { Input, Button } from '@/components/general';
-import { Actions } from 'react-native-router-flux';
 import {
 	addApplication,
 	editApplication,
@@ -52,7 +51,7 @@ class CandidateForm extends Component {
 				this.props.addApplication(firstName, lastName, candidatePlan, applyPosition);
 			else
 				this.props.editApplication(applyPosition, candidatePlan);
-			Actions.ElectionCandidates();
+			this.props.navigation.push('ElectionCandidates');
 		}
 	}
 
@@ -69,7 +68,7 @@ class CandidateForm extends Component {
 				/>
 				<Button
 					title = 'CANCEL'
-					onPress = { Actions.ElectionCandidates.bind(this) }
+					onPress = { () => this.props.navigation.push('ElectionCandidates') }
 				/>
 			</View>
 		);

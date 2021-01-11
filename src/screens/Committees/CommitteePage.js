@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Text, View, Dimensions, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Alert, Spinner, NavBar, Button } from '@/components';
-import { Actions } from 'react-native-router-flux';
 import { Agenda } from '@/components/general/calendar';
-import { goToViewEvent } from '@/utils/router';
 import { formatEventListForCalendar, filterEvents } from '@/utils/events';
 import { loadCommittee, loadEvent } from '@/ducks';
 
@@ -65,7 +63,7 @@ class CommitteePage extends Component {
 		return (
 			<SafeAreaView style = {{ flex: 1, backgroundColor: '#0c0b0b' }}>
 				<View style = {{ flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'black', paddingRight: '10%' }}>
-					<NavBar title = { this.props.committeeTitle } back onBack = { () => Actions.pop() } />
+					<NavBar title = { this.props.committeeTitle } back onBack = { () => this.props.navigation.pop() } />
 				</View>
 				<View style = {{ flex: 1, backgroundColor: '#535C68' }}>
 					<View style = {{ flex: 1, height: dimension.height * 1.1 }}>
@@ -211,7 +209,7 @@ class CommitteePage extends Component {
 
 	viewEvent(item) {
 		loadEvent(item);
-		goToViewEvent(this.props.screen + 'committeepage');
+		this.props.navigation('EventDetails');
 	}
 
 	renderItem(item) {

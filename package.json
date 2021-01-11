@@ -1,6 +1,5 @@
 {
 	"name": "shpeucfapp",
-	"appVersion": 1.12,
 	"private": true,
 	"eslintIgnore": [
 		"*.test.js"
@@ -47,6 +46,7 @@
 	"dependencies": {
 		"@react-native-community/masked-view": "^0.1.10",
 		"@react-native-community/toolbar-android": "0.1.0-rc.2",
+		"@react-navigation/bottom-tabs": "^5.11.2",
 		"@react-navigation/native": "^5.8.10",
 		"@react-navigation/stack": "^5.12.8",
 		"firebase": "^6.4.2",

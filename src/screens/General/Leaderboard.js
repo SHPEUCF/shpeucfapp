@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Text, View, Dimensions, SafeAreaView } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import { useDispatch, useSelector } from 'react-redux';
 import _ from 'lodash';
 import { verifiedCheckMark, rankMembersAndReturnsCurrentUser, truncateNames } from '@/utils/render';
@@ -11,7 +10,7 @@ const { height, width } = Dimensions.get('screen');
 const iteratees = ['points', 'lastName', 'firstName'];
 const order = ['desc', 'asc', 'asc'];
 
-export const Leaderboard = () => {
+export const Leaderboard = ({ navigation }) => {
 	const [search, setSearch] = useState(false);
 	const { user: { activeUser }, members: { allMemberAccounts } } = useSelector(state => state);
 	const dispatch = useDispatch();
@@ -91,7 +90,7 @@ export const Leaderboard = () => {
 				placeholder = 'Find user'
 				itemJSX = { data => renderMembers(data, sortedMembers) }
 				regexFunc = { ({ firstName, lastName }) => `${firstName} ${lastName}` }
-				onSelect = { ({ id }) => { dispatch(getVisitedMember(id)); Actions.OtherProfileM() } }
+				onSelect = { ({ id }) => { dispatch(getVisitedMember(id)); navigation.push('OtherProfile') } }
 			/>
 		</SafeAreaView>
 	);

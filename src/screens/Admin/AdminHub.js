@@ -1,5 +1,4 @@
 import React from 'react';
-import { Actions } from 'react-native-router-flux';
 import { useSelector } from 'react-redux';
 import { SafeAreaView } from 'react-native';
 import { NavBar, ListItem } from '@/components';
@@ -25,14 +24,14 @@ const menuItems = [
 	}
 ];
 
-export default () => {
+export default ({ navigation }) => {
 	const { user: { activeUser } } = useSelector(state => state);
 	const { page } = styles;
 
 	const renderItem = ({ privilege, title, icon, screen }) => {
 		if (activeUser.privilege && activeUser.privilege[privilege]) {
 			return (
-				<ListItem onPress = { Actions[screen] } key = { title }>
+				<ListItem onPress = { navigation.push(screen) } key = { title }>
 					<ListItem.Title>{ title }</ListItem.Title>
 					<ListItem.LeftIcon type = 'MaterialIcons' name = { icon } color = 'white' />
 					<ListItem.RightIcon name = 'ios-arrow-dropright' size = { 22 } color = '#FECB00' />

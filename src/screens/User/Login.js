@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, Image, SafeAreaView, Dimensions } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Button } from '@/components';
@@ -25,7 +24,7 @@ class Login extends Component {
 		else if (!password)
 			this.props.registrationError('Please enter your password');
 		else
-			this.props.loginUser(email, password).then(() => Actions.main());
+			this.props.loginUser(email, password);
 	}
 
 	renderError() {
@@ -48,7 +47,7 @@ class Login extends Component {
 				</View>
 				<TouchableOpacity
 					style = { [bottomContainer, { flex: 0.4 }] }
-					onPress = { () => Actions.resetPassword() }
+					onPress = { () => this.props.navigate.push('ResetPassword') }
 				>
 					<Text style = { resetPasswordText }>Forgot Password?</Text>
 				</TouchableOpacity>

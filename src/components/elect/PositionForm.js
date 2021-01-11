@@ -62,7 +62,7 @@ class PositionForm extends Component {
 			else
 				this.props.editPosition(positionTitle, positionDescription, null);
 
-			Actions.ElectionPositions();
+			this.props.navigation.push('ElectionPositions');
 		}
 	}
 
@@ -98,7 +98,7 @@ class PositionForm extends Component {
 					/>
 					<Button
 						title = 'Cancel'
-						onPress = { Actions.ElectionPositions.bind(this) }
+						onPress = { () => this.props.navigation.push('ElectionPositions') }
 					/>
 				</ButtonLayout>
 			</SafeAreaView>

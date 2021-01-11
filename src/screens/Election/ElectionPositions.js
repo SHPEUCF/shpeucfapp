@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
@@ -43,14 +42,15 @@ class ElectionPosition extends Component {
 			page
 		} = styles;
 		const {
-			positions
+			positions,
+			navigation
 		} = this.props;
 
 		const positionsArray = _.toArray(positions);
 
 		return (
 			<SafeAreaView style = { page }>
-				<NavBar title = 'Positions' back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Positions' back onBack = { () => navigation.pop() } />
 				{ this.renderFlatlist(positionsArray) }
 				<ButtonLayout>
 					<Button

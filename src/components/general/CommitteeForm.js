@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { View, Text, ScrollView, Dimensions, SafeAreaView } from 'react-native';
 import { Input, Button, FilterList, ButtonLayout } from '@/components/general';
@@ -68,7 +67,7 @@ class CommitteeForm extends Component {
 			else
 				this.props.editCommittee(committeeTitle, committeeDescription, chairObj, null);
 			memberService.assignPosition(committeeTitle, 'board', chair.id, this.state.oldChair);
-			Actions.pop();
+			this.props.navigation.pop();
 		}
 	}
 
@@ -117,7 +116,7 @@ class CommitteeForm extends Component {
 					/>
 					<Button
 						title = 'Cancel'
-						onPress = { () => Actions.pop() }
+						onPress = { () => this.props.navigation.pop() }
 					/>
 				</ButtonLayout>
 			</SafeAreaView>

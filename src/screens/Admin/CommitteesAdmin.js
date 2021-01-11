@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { Button, NavBar, SortableFlatList, ButtonLayout, Icon } from '@/components';
 import _ from 'lodash';
@@ -57,14 +56,15 @@ class CommitteesAdmin extends Component {
 			page
 		} = styles;
 		const {
-			committeesList
+			committeesList,
+			navigation
 		} = this.props;
 
 		const committeesArray = _.toArray(committeesList);
 
 		return (
 			<SafeAreaView style = { page }>
-				<NavBar title = 'Committees' back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Committees' back onBack = { () => navigation.pop() } />
 				{ this.renderFlatList(committeesArray) }
 				<View>
 					<ButtonLayout>

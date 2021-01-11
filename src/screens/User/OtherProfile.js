@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { Alert, ButtonLayout, NavBar, Avatar, Icon } from '@/components';
 import Flag from 'react-native-flags';
@@ -29,7 +28,7 @@ class OtherProfile extends Component {
 
 		return (
 			<SafeAreaView style = {{ flex: 1, backgroundColor: '#0c0b0b' }}>
-				<NavBar back onBack = { () => Actions.pop() } />
+				<NavBar back onBack = { () => this.props.navigation.pop() } />
 				<View style = {{ backgroundColor: 'black', flex: 1 }}>
 					{ this.renderPicture() }
 					<View style = { [bioContainer] }>

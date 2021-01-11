@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { NavBar, Icon } from '@/components';
 import _ from 'lodash';
@@ -28,14 +27,15 @@ class Committees extends Component {
 			page
 		} = styles;
 		const {
-			committeesList
+			committeesList,
+			navigation
 		} = this.props;
 
 		const committeesArray = _.orderBy(committeesList, iteratees, order);
 
 		return (
 			<SafeAreaView style = { page }>
-				<NavBar title = 'Committees' back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Committees' back onBack = { () => navigation.pop() } />
 				<View style = { content }>
 					{ this.renderFlatlist(committeesArray) }
 				</View>
@@ -79,7 +79,7 @@ class Committees extends Component {
 
 	viewCommittee(item) {
 		this.props.loadCommittee(item);
-		Actions['CommitteePageC']({ screen: 'committees' });
+		this.props.navigation.push('CommitteePage');
 	}
 
 	renderCommittees(item) {
@@ -94,7 +94,7 @@ class Committees extends Component {
 			sortedEvents
 		} = this.props;
 
-		if (this.props.screen === 'dashboard') {
+		if (this.props.route.params && this.props.route.params.prevRoute === 'Dashboard') {
 			return (
 				<View >
 					<View style = { contentContainerStyle }>

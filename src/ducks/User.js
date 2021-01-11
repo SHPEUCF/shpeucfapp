@@ -1,5 +1,4 @@
 import firebase from 'firebase';
-import { Actions } from 'react-native-router-flux';
 import { createActionTypes } from '@/utils/actions';
 import { Alert } from '@/components';
 import Lodash from 'lodash';
@@ -181,7 +180,6 @@ export const resetPassword = (email) => {
 			.then(() => Alert.alert(`Reset Started.\n\
 				If an account with email ${email} exists, a reset password email will be sent. \
 				Please check your email.`))
-			.then(() => Actions.login())
 			.catch(error => showFirebaseError(dispatch, error));
 	};
 };

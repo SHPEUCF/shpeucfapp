@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Dimensions, SafeAreaView, Image } from 'react-native';
 import { useSelector } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
 import { ListItem } from '@/components';
 
 const { height } = Dimensions.get('screen');
@@ -10,7 +9,7 @@ const menuItems = [
 	{
 		title: 'Leaderboard',
 		icon: 'format-align-left',
-		screen: 'LeaderboardM',
+		screen: 'Leaderboard',
 		userPrivilege: 'user'
 	},
 	{
@@ -45,7 +44,7 @@ const menuItems = [
 	}
 ];
 
-export default () => {
+export default ({ navigation }) => {
 	const { alignSelf, header, mainBackgroundColor, secondaryBackgroundColor, fullFlex } = styles;
 	const imageUrl = '../../assets/images/';
 
@@ -57,7 +56,7 @@ export default () => {
 
 		if (privilege && privilege[userPrivilege]) {
 			return (
-				<ListItem onPress = { Actions[screen] } key = { title }>
+				<ListItem onPress = { navigation.push(screen) } key = { title }>
 					<ListItem.Title>{ title }</ListItem.Title>
 					<ListItem.LeftIcon type = 'MaterialIcons' name = { icon } color = 'white' />
 					<ListItem.RightIcon name = 'ios-arrow-dropright' size = { 22 } color = '#FECB00' />

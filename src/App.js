@@ -1,70 +1,77 @@
 import 'react-native-gesture-handler';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import firebase from 'firebase';
 import Router from './config/NewRouter';
-import { Actions } from 'react-native-router-flux';
-import { appVersion } from '../package.json';
 import { View } from 'react-native';
 import { Alert } from './components';
-import { loadUser, getAllMemberAccounts, getEvents, getCommittees, getAllMemberPoints, updateElection } from './ducks';
-import { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId } from 'react-native-dotenv';
-
-console.ignoredYellowBox = ['Setting a timer'];
+import {
+	initializeFirebase,
+	logOutUser,
+	verifyAppVersion,
+	userStatus,
+	loadUser,
+	getAllMemberAccounts,
+	getEvents,
+	getCommittees,
+	getAllMemberPoints,
+	updateElection
+} from './ducks';
 
 class App extends Component {
 	componentDidMount() {
-		const config = { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId };
+		const { verifyAppVersion, userStatus } = this.props;
 
-		if (!firebase.apps.length)
-			firebase.initializeApp(config);
-
-		this.verifyLogIn();
+		initializeFirebase();
+		userStatus();
+		verifyAppVersion().then(() => this.verifyLogin());
 	}
 
-	verifyLogIn() {
-		const { getCommittees, getAllMemberAccounts, getEvents, loadUser, getAllMemberPoints, updateElection } = this.props;
+	verifyLogin() {
+		const {
+			isLoggedIn,
+			hasCorrectVersion,
+			loadUser,
+			getEvents,
+			getCommittees,
+			updateElection,
+			getAllMemberPoints,
+			getAllMemberAccounts
+		} = this.props;
 
-		firebase.auth().onAuthStateChanged(user => {
-			firebase.database().ref('/version').once('value', snapshot => {
-				let correctVersion = snapshot.val() === appVersion;
-
-				if (correctVersion && user) {
-					// Actions.main();
-					loadUser();
-					getEvents();
-					getCommittees();
-					getAllMemberAccounts();
-					updateElection();
-					getAllMemberPoints();
-				}
-				else {
-					// Actions.login();
-					if (!correctVersion) Alert.alert('Please update your app');
-					if (user) firebase.auth().signOut();
-				}
-				// Actions.splash({ correctVersion, user, signOut: () => firebase.auth.signOut() });
-			});
-		});
+		if (isLoggedIn && hasCorrectVersion) {
+			loadUser();
+			getEvents();
+			getCommittees();
+			updateElection();
+			getAllMemberPoints();
+			getAllMemberAccounts();
+		}
+		else {
+			if (!hasCorrectVersion) Alert.alert('Please update your app');
+			if (isLoggedIn) logOutUser();
+		}
 	}
 
 	render() {
 		return (
 			<View style = {{ flex: 1 }}>
-				<Router />
+				<Router isLoggedIn = { this.props.isLoggedIn } />
 				<Alert.AlertBox />
 			</View>
 		);
 	}
 }
 
+const mapStateToProps = ({ app: { hasCorrectVersion, isLoggedIn } }) => ({ hasCorrectVersion, isLoggedIn });
 const mapDispatchToProps = {
+	userStatus,
+	verifyAppVersion,
 	loadUser,
-	getAllMemberPoints,
+	getAllMemberAccounts,
 	getEvents,
 	getCommittees,
-	getAllMemberAccounts,
+	getAllMemberPoints,
 	updateElection
 };
 
-export default connect(() => ({}), mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

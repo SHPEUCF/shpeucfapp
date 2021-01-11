@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import { Icon } from '@/components';
 
 const { height, width } = Dimensions.get('screen');
@@ -19,7 +18,7 @@ export default class FavoriteCommittees extends PureComponent {
 			gold
 		} = styles;
 
-		const { committeesList, userCommittees } = this.props;
+		const { committeesList, userCommittees, navigation , loadCommittee} = this.props;
 
 		return (
 			<View style = { committeesPanelContainer }>
@@ -27,7 +26,7 @@ export default class FavoriteCommittees extends PureComponent {
 					<Icon
 						name = 'ios-information-circle'
 						size = { height * 0.028 }
-						onPress = { () => Actions['CommitteesD']({ screen: 'dashboard' }) } style = { gold }
+						onPress = { () => navigation.push('Committees', { prevRoute: 'Dashboard' }) } style = { gold }
 					/>
 				</View>
 				{ (!userCommittees || !committeesList)
@@ -39,8 +38,8 @@ export default class FavoriteCommittees extends PureComponent {
 							<TouchableOpacity
 								style = { committeeItemContainer }
 								onPress = { () => {
-									this.props.loadCommittee(committeesList[committeeName]);
-									Actions['CommitteePageD']({ screen: 'dashboard' });
+									loadCommittee(committeesList[committeeName]);
+									navigation.push('CommitteePage');
 								} }
 							>
 								<View style = { committeeNameContainer }>
