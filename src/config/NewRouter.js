@@ -64,36 +64,43 @@ const MoreStackNavigator = () => (
 	</MoreStack.Navigator>
 );
 
-const TabBar = ({ state, navigation, activeTintColor, inactiveTintColor, tabBarStyle }) => {
-	const Icons = ['ios-paper-plane-outline', 'ios-paper-plane-outline', 'ios-person', 'ios-menu'];
+const TabBar = ({ state, navigation }) => {
+	const Icons = ['newspaper', 'ios-calendar', 'ios-person', 'ios-menu'];
+
+	const Tab = ({ route, index }) => {
+		const isFocused = state.index === index;
+		const onPress = () => {
+			const event = navigation.emit({ type: 'tabPress', target: route.key, canPreventDefault: true });
+
+			if (!isFocused && !event.defaultPrevented)
+				navigation.navigate(route.name);
+		};
+
+		return (
+			<TouchableOpacity onPress = { onPress } style = {{ alignItems: 'center', flex: 1, justifyContent: 'space-around' }}>
+				<Icon name = { Icons[index] } size = { 30 } style = {{ color: isFocused ? '#FFC107' : 'white' }} />
+				<Text style = {{ color: isFocused ? '#E0E6ED' : '#C0CCDA' }}>
+					{ route.name }
+				</Text>
+			</TouchableOpacity>
+		);
+	};
 
 	return (
-		<View style = { [tabBarStyle, { flexDirection: 'row', justifyContent: 'space-around' }] }>
-			{ state.routes.map((route, index) =>
-				<TouchableOpacity onPress = { () => navigation.navigate(route.name) }>
-					<Icon name = 'ios-paper-plane-outline' size = { 30 } style = {{ color: state.index === index ? '#FFC107' : 'white' }} />
-					<Text style = {{ color: state.index === index ? activeTintColor : inactiveTintColor }}>
-						{ route.name }
-					</Text>
-				</TouchableOpacity>
-			) }
+		<View style = {{ flexDirection: 'row', justifyContent: 'space-around', backgroundColor: '#21252b', height: '8%' }}>
+			{ state.routes.map((route, index) => <Tab route = { route } index = { index } />) }
 		</View>
 	);
 };
 
-export default (isLoggedIn) => (
+export default ({ isLoggedIn }) => (
 	<NavigationContainer>
 		{ !isLoggedIn
 			? <AuthStack.Navigator screenOptions = {{ headerShown: false }}>
 				<AuthStack.Screen name = 'Login' component = { Login } />
 				<AuthStack.Screen name = 'ResetPassword' component = { ResetPassword } />
 			</AuthStack.Navigator>
-			: <MainTabs.Navigator
-				activeTintColor = '#E0E6ED'
-				inactiveTintColor = '#C0CCDA'
-				tabStyle = {{ backgroundColor: 'blue', height: 30 }}
-				tabBar = { props => <TabBar { ...props } /> }
-			>
+			: <MainTabs.Navigator tabBar = { props => <TabBar { ...props } /> }>
 				<MainTabs.Screen name = 'Dashboard' component = { DashboardStackNavigator } />
 				<MainTabs.Screen name = 'Events' component = { EventsStackNavigator } />
 				<MainTabs.Screen name = 'Profile' component = { ProfileStackNavigator } />
