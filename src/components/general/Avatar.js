@@ -57,7 +57,7 @@ export const Avatar = ({ shape = 'circle', size = 'medium', source, title, title
 		>
 			{ source // Show image or title text
 				? <FastImage style = { avatarSize } source = {{ uri: source }} />
-				: <Text style = { [center, avatarSize, { fontSize: size / 2, color: 'white' }, titleStyle] }>{ title }</Text>
+				: <Text style = { [{ fontSize: size / 2, color: 'white' }, titleStyle ] }>{ title }</Text>
 			}
 			{ showEdit && <TouchableOpacity
 				onPress = { onPress }

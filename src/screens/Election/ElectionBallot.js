@@ -160,7 +160,7 @@ class ElectionBallot extends Component {
 							{ firstName } { lastName }
 						</Text>
 						<View style = { [centerItems, { flex: 0.3 }] }>
-							<Icon name = 'ios-arrow-dropright' size = { 22 } color = '#FECB00' />
+							<Icon name = 'chevron-forward-circle-outline' size = { 22 } color = '#FECB00' />
 						</View>
 					</TouchableOpacity>
 				</View>
@@ -227,7 +227,7 @@ class ElectionBallot extends Component {
 						style = { closeModalBar }
 						onPress = { () => this.setState({ visible: false, visibleCandidate: {} }) }
 					>
-						<Icon name = 'ios-close-circle' size = { 40 } color = 'white' />
+						<Icon name = 'close-circle' size = { 40 } color = 'white' />
 					</TouchableOpacity>
 					<View style = { modalContent }>
 						<Avatar size = { 200 } source = { picture || stockImg } />

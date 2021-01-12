@@ -35,7 +35,7 @@ export default () => {
 				<ListItem onPress = { Actions[screen] } key = { title }>
 					<ListItem.Title>{ title }</ListItem.Title>
 					<ListItem.LeftIcon type = 'MaterialIcons' name = { icon } color = 'white' />
-					<ListItem.RightIcon name = 'ios-arrow-dropright' size = { 22 } color = '#FECB00' />
+					<ListItem.RightIcon name = 'chevron-forward-circle-outline' size = { 22 } color = '#FECB00' />
 				</ListItem>
 			);
 		}

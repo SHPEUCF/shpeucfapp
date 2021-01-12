@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { View } from 'react-native';
 import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import Router from './config/Router';
 import { appVersion } from '../package.json';
-import { View } from 'react-native';
 import { Alert } from './components';
+import { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId } from '@env';
 import { loadUser, getAllMemberAccounts, getEvents, getCommittees, getAllMemberPoints, updateElection } from './ducks';
-import { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId } from 'react-native-dotenv';
 
 console.ignoredYellowBox = ['Setting a timer'];
 
