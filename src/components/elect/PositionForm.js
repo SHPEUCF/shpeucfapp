@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, ScrollView, SafeAreaView } from 'react-native';
 import { Input, Button, ButtonLayout } from '@/components/general';
-import { Actions } from 'react-native-router-flux';
 import {
 	addPosition,
 	editPosition,

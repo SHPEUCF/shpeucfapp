@@ -83,7 +83,7 @@ class ElectionBallot extends Component {
 				</View>
 				{ !activeUser.voted && <ButtonLayout>
 					<Button title = 'Submit' onPress = { () => this.submitVote() } />
-					<Button title = 'Cancel' onPress = { () => { navigation.pop() } } />
+					<Button title = 'Cancel' onPress = { () => navigation.pop() } />
 				</ButtonLayout> }
 				{ this.renderModal() }
 			</SafeAreaView>
