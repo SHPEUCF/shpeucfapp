@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 import { createActionTypes } from '@/utils/actions';
-import { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId, version } from 'react-native-dotenv';
+import { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId, version } from '@env';
 
 const ACTIONS = createActionTypes([
 	'USER_STATUS',

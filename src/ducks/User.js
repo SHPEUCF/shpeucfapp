@@ -305,6 +305,5 @@ export const editUser = (user) => {
 
 export const logoutUser = () => {
 	firebase.auth().signOut()
-		.then(Actions.login())
 		.then(Alert.alert('Signed Out', { title: 'Have a great day!', type: 'success' }));
 };
