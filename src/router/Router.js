@@ -2,9 +2,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { Icon } from '@/components';
-
+import { RouterTabs } from './RouterTabs';
 import {
 	/* General   */ About, Dashboard, Leaderboard, More,
 	/* User      */ Login, OtherProfile, PointsBreakDown, Profile, ResetPassword,
@@ -64,35 +62,6 @@ const MoreStackNavigator = () => (
 	</MoreStack.Navigator>
 );
 
-const TabBar = ({ state, navigation }) => {
-	const Icons = ['newspaper', 'ios-calendar', 'ios-person', 'ios-menu'];
-
-	const Tab = ({ route, index }) => {
-		const isFocused = state.index === index;
-		const onPress = () => {
-			const event = navigation.emit({ type: 'tabPress', target: route.key, canPreventDefault: true });
-
-			if (!isFocused && !event.defaultPrevented)
-				navigation.navigate(route.name);
-		};
-
-		return (
-			<TouchableOpacity onPress = { onPress } style = {{ alignItems: 'center', flex: 1, justifyContent: 'space-around' }}>
-				<Icon name = { Icons[index] } size = { 30 } style = {{ color: isFocused ? '#FFC107' : 'white' }} />
-				<Text style = {{ color: isFocused ? '#E0E6ED' : '#C0CCDA' }}>
-					{ route.name }
-				</Text>
-			</TouchableOpacity>
-		);
-	};
-
-	return (
-		<View style = {{ flexDirection: 'row', justifyContent: 'space-around', backgroundColor: '#21252b', height: '8%' }}>
-			{ state.routes.map((route, index) => <Tab route = { route } index = { index } />) }
-		</View>
-	);
-};
-
 export default ({ isLoggedIn }) => (
 	<NavigationContainer>
 		{ !isLoggedIn
@@ -100,7 +69,7 @@ export default ({ isLoggedIn }) => (
 				<AuthStack.Screen name = 'Login' component = { Login } />
 				<AuthStack.Screen name = 'ResetPassword' component = { ResetPassword } />
 			</AuthStack.Navigator>
-			: <MainTabs.Navigator tabBar = { props => <TabBar { ...props } /> }>
+			: <MainTabs.Navigator tabBar = { props => <RouterTabs { ...props } /> }>
 				<MainTabs.Screen name = 'Dashboard' component = { DashboardStackNavigator } />
 				<MainTabs.Screen name = 'Events' component = { EventsStackNavigator } />
 				<MainTabs.Screen name = 'Profile' component = { ProfileStackNavigator } />
