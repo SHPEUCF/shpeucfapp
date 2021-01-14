@@ -1,20 +1,16 @@
-import React, { Component } from "react";
-import _ from "lodash";
-import { Actions } from "react-native-router-flux";
-import { connect } from "react-redux";
-import { Avatar } from "react-native-elements";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { Text, View, SafeAreaView, FlatList, TouchableOpacity, Modal } from "react-native";
-import { Alert, Button, NavBar, ButtonLayout } from "../../components";
-import { getPositions, vote, getVotes } from "../../ducks";
-import { stockImg, truncateNames } from "../../utils/render";
-import FastImage from "react-native-fast-image";
+import React, { Component } from 'react';
+import _ from 'lodash';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { Text, View, SafeAreaView, FlatList, TouchableOpacity, Modal } from 'react-native';
+import { Alert, Button, NavBar, ButtonLayout, Avatar, Icon } from '@/components';
+import { getPositions, vote, getVotes } from '@/ducks';
+import { stockImg, truncateNames } from '@/utils/render';
 
-const iterateesPos = ["level"];
-const orderPos = ["asc"];
-const iterateesCandidate = ["lastName", "firstName"];
-const orderCandidate = ["asc", "asc"];
+const iterateesPos = ['level'];
+const orderPos = ['asc'];
+const iterateesCandidate = ['lastName', 'firstName'];
+const orderCandidate = ['asc', 'asc'];
 
 class ElectionBallot extends Component {
 	constructor(props) {
@@ -73,7 +69,7 @@ class ElectionBallot extends Component {
 
 		return (
 			<SafeAreaView style = { [flex, mainBackground] }>
-				<NavBar title = "Positions" back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Positions' back onBack = { () => Actions.pop() } />
 				<View style = { [flex, secondaryBackground] }>
 					<FlatList
 						data = { positionsArray }
@@ -86,8 +82,8 @@ class ElectionBallot extends Component {
 					/>
 				</View>
 				{ !activeUser.voted && <ButtonLayout>
-					<Button title = "Submit" onPress = { () => this.submitVote() } />
-					<Button title = "Cancel" onPress = { () => { Actions.pop() } } />
+					<Button title = 'Submit' onPress = { () => this.submitVote() } />
+					<Button title = 'Cancel' onPress = { () => { Actions.pop() } } />
 				</ButtonLayout> }
 				{ this.renderModal() }
 			</SafeAreaView>
@@ -114,7 +110,7 @@ class ElectionBallot extends Component {
 
 		const candidateList = _.orderBy(item.candidates, iterateesCandidate, orderCandidate);
 
-		if (candidateList.length > 0 && candidateList.some((candidate) => candidate.approved))
+		if (candidateList.length > 0 && candidateList.some((candidate) => candidate.approved)) {
 			return (
 				<View style = { [positionContent, center] }>
 					<View style = { [spacing, goldBackground] }>
@@ -127,6 +123,7 @@ class ElectionBallot extends Component {
 					</View>
 				</View>
 			);
+		}
 	}
 
 	renderCandidate(candidate) {
@@ -148,7 +145,7 @@ class ElectionBallot extends Component {
 			picture
 		} = candidate;
 
-		if (approved)
+		if (approved) {
 			return (
 				<View style = { [candidateStyle, flex] }>
 					{ this.renderCheck(candidate) }
@@ -157,34 +154,18 @@ class ElectionBallot extends Component {
 						onPress = { () => this.setState({ visibleCandidate: candidate, visible: true }) }
 					>
 						<View style = { [flex, centerItems] }>
-							{ this.renderPicture(picture) }
+							<Avatar size = { 50 } source = { picture || stockImg } />
 						</View>
 						<Text style = { [center, textColor, titleStyle, { flex: 1.5 }] }>
 							{ firstName } { lastName }
 						</Text>
 						<View style = { [centerItems, { flex: 0.3 }] }>
-							<Ionicons
-								name = "ios-arrow-dropright"
-								size = { 22 }
-								color = { "#FECB00" }
-							/>
+							<Icon name = 'chevron-forward-circle-outline' size = { 22 } color = '#FECB00' />
 						</View>
 					</TouchableOpacity>
 				</View>
 			);
-	}
-
-	renderPicture(picture, size = 50) {
-		let pic = picture !== "" ? { uri: picture } : stockImg;
-
-		return (
-			<Avatar
-				size = { size }
-				rounded
-				source = { pic }
-				ImageComponent = { FastImage }
-			/>
-		);
+		}
 	}
 
 	renderCheck(candidate) {
@@ -196,9 +177,10 @@ class ElectionBallot extends Component {
 
 		return (
 			<TouchableOpacity style = { center } onPress = { () => this.updateSelection(isChecked, candidate) }>
-				<FontAwesome
-					name = { isChecked ? "check-circle-o" : "circle-o" }
-					color = { isChecked ? "#FECB00" : "#FFF" }
+				<Icon
+					type = 'FontAwesome'
+					name = { isChecked ? 'check-circle-o' : 'circle-o' }
+					color = { isChecked ? '#FECB00' : '#FFF' }
 					size = { 30 }
 				/>
 			</TouchableOpacity>
@@ -207,7 +189,7 @@ class ElectionBallot extends Component {
 
 	updateSelection(isChecked, { position, id }) {
 		if (this.props.activeUser.voted) {
-			Alert.alert("You have already voted!");
+			Alert.alert('You have already voted!');
 		}
 		else {
 			let selectedCandidates = Object.assign({}, this.state.selectedCandidates);
@@ -239,21 +221,17 @@ class ElectionBallot extends Component {
 		} = styles;
 
 		return (
-			<Modal transparent = { true } visible = { this.state.visible } animationType = "slide">
+			<Modal transparent = { true } visible = { this.state.visible } animationType = 'slide'>
 				<View style = { modalBackground }>
 					<TouchableOpacity
 						style = { closeModalBar }
 						onPress = { () => this.setState({ visible: false, visibleCandidate: {} }) }
 					>
-						<Ionicons
-							name = "ios-close-circle"
-							size = { 40 }
-							color = "white"
-						/>
+						<Icon name = 'close-circle' size = { 40 } color = 'white' />
 					</TouchableOpacity>
 					<View style = { modalContent }>
-						{ this.renderPicture(picture, 200) }
-						<Text style = { [textColor, titleStyle, { paddingVertical: "8%" }] }>
+						<Avatar size = { 200 } source = { picture || stockImg } />
+						<Text style = { [textColor, titleStyle, { paddingVertical: '8%' }] }>
 							{ firstName } { lastName }
 						</Text>
 						<Text style = { [textColor, planStyle] }>{ plan }</Text>
@@ -269,7 +247,7 @@ class ElectionBallot extends Component {
 		} = this.props.activeUser;
 
 		if (_.isEmpty(this.state.selectedCandidates)) {
-			Alert.alert("Please vote for at least one candidate!");
+			Alert.alert('Please vote for at least one candidate!');
 		}
 		else {
 			vote(this.state.selectedCandidates);
@@ -280,58 +258,58 @@ class ElectionBallot extends Component {
 
 const styles = {
 	textColor: {
-		color: "white"
+		color: 'white'
 	},
 	titleStyle: {
-		fontWeight: "bold",
+		fontWeight: 'bold',
 		fontSize: 18
 	},
 	flex: {
 		flex: 1
 	},
 	mainBackground: {
-		backgroundColor: "black"
+		backgroundColor: 'black'
 	},
 	goldBackground: {
-		backgroundColor: "#FECB00"
+		backgroundColor: '#FECB00'
 	},
 	secondaryBackground: {
-		backgroundColor: "#0c0b0b"
+		backgroundColor: '#0c0b0b'
 	},
 	center: {
-		alignSelf: "center"
+		alignSelf: 'center'
 	},
 	candidateStyle: {
-		flexDirection: "row",
+		flexDirection: 'row',
 		padding: 7
 	},
 	spacing: {
-		padding: "5%"
+		padding: '5%'
 	},
 	positionContent: {
-		width: "90%",
+		width: '90%',
 		borderRadius: 5,
-		overflow: "hidden"
+		overflow: 'hidden'
 	},
 	modalContent: {
-		width: "95%",
-		backgroundColor: "rgba(33, 37, 43, 0.98)",
-		alignItems: "center",
+		width: '95%',
+		backgroundColor: 'rgba(33, 37, 43, 0.98)',
+		alignItems: 'center',
 		borderBottomLeftRadius: 5,
 		borderBottomRightRadius: 5,
-		padding: "6%"
+		padding: '6%'
 	},
 	modalBackground: {
-		alignItems: "center",
-		height: "100%",
-		justifyContent: "center",
-		backgroundColor: "#000a"
+		alignItems: 'center',
+		height: '100%',
+		justifyContent: 'center',
+		backgroundColor: '#000a'
 	},
 	closeModalBar: {
-		backgroundColor: "#FECB00",
-		width: "95%",
-		alignItems: "center",
-		justifyContent: "center",
+		backgroundColor: '#FECB00',
+		width: '95%',
+		alignItems: 'center',
+		justifyContent: 'center',
 		borderTopRightRadius: 5,
 		borderTopLeftRadius: 5
 	},
@@ -339,8 +317,8 @@ const styles = {
 		fontSize: 18
 	},
 	centerItems: {
-		justifyContent: "center",
-		alignItems: "center"
+		justifyContent: 'center',
+		alignItems: 'center'
 	}
 };
 

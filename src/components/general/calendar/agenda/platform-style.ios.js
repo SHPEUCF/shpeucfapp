@@ -1,5 +1,5 @@
-import { Dimensions } from "react-native";
-const dimension = Dimensions.get("window");
+import { Dimensions } from 'react-native';
+const dimension = Dimensions.get('window');
 
 export default function platformStyles(appStyle) {
 	return {
@@ -10,14 +10,14 @@ export default function platformStyles(appStyle) {
 			backgroundColor: appStyle.agendaKnobColor
 		},
 		weekdays: {
-			position: "absolute",
-			alignItems: "center",
+			position: 'absolute',
+			alignItems: 'center',
 			bottom: dimension.height - dimension.height * 0.34,
 			left: 0,
 			right: 0,
 			top: 0,
-			flexDirection: "row",
-			justifyContent: "space-evenly",
+			flexDirection: 'row',
+			justifyContent: 'space-evenly',
 			paddingLeft: 16,
 			paddingRight: 16,
 			backgroundColor: appStyle.calendarBackground

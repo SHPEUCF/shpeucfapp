@@ -1,10 +1,9 @@
-/* eslint-disable no-unused-vars */
-import React from "react";
-import FastImage from "react-native-fast-image";
-import { TouchableOpacity, Text, Dimensions, TextStyle } from "react-native";
-import Icon from "react-native-vector-icons/MaterialIcons";
+import React from 'react';
+import FastImage from 'react-native-fast-image';
+import { TouchableOpacity, Text, Dimensions, TextStyle, ViewStyle } from 'react-native';
+import { Icon } from './';
 
-const { height } = Dimensions.get("screen");
+const { height } = Dimensions.get('screen');
 
 /**
  * @description Avatar component to be used with images or text.
@@ -17,33 +16,33 @@ const { height } = Dimensions.get("screen");
  * @prop {TextStyle}                                 titleStyle  Style of text style.
  * @prop {Boolean}                                   showEdit    Show edit button for Avatar.
  * @prop {Function}                                  onPress     Called when the Avatar is pressed.
- * @prop {Object}                                    style       Additional style for Avatar.
+ * @prop {ViewStyle}                                 style       Additional style for Avatar.
  *
  * @param {...AvatarProps}
  */
 
-export const Avatar = ({ shape = "circle", size = "medium", source, title, titleStyle, onPress, showEdit, style }) => {
+export const Avatar = ({ shape = 'circle', size = 'medium', source, title, titleStyle, onPress, showEdit, style }) => {
 	let borderRadius;
 
 	switch (size) {
-		case "small":
+		case 'small':
 			size = height * 0.05;
 			break;
-		case "medium":
+		case 'medium':
 			size = height * 0.09;
 			break;
-		case "large":
+		case 'large':
 			size = height * 0.15;
 			break;
-		case "xlarge":
+		case 'xlarge':
 			size = height * 0.3;
 	}
 
 	switch (shape) {
-		case "circle":
+		case 'circle':
 			borderRadius = size / 2;
 			break;
-		case "rounded":
+		case 'rounded':
 			borderRadius = 15;
 	}
 
@@ -58,13 +57,13 @@ export const Avatar = ({ shape = "circle", size = "medium", source, title, title
 		>
 			{ source // Show image or title text
 				? <FastImage style = { avatarSize } source = {{ uri: source }} />
-				: <Text style = { [center, avatarSize, { fontSize: size / 2, color: "white" }, titleStyle] }>{ title }</Text>
+				: <Text style = { [{ fontSize: size / 2, color: 'white' }, titleStyle ] }>{ title }</Text>
 			}
 			{ showEdit && <TouchableOpacity
 				onPress = { onPress }
 				style = { [editButton, center, { height: size / 4, width: size / 4, borderRadius: size / 8 }] }
 			>
-				<Icon type = "MaterialIcons" name = "edit" size = { size / 6 } color = "white" />
+				<Icon type = 'MaterialIcons' name = 'edit' size = { size / 6 } color = 'white' />
 			</TouchableOpacity>
 			}
 		</TouchableOpacity>
@@ -73,14 +72,14 @@ export const Avatar = ({ shape = "circle", size = "medium", source, title, title
 
 const styles = {
 	center: {
-		justifyContent: "center",
-		alignItems: "center",
-		textAlign: "center",
-		textAlignVertical: "center"
+		justifyContent: 'center',
+		alignItems: 'center',
+		textAlign: 'center',
+		textAlignVertical: 'center'
 	},
 	editButton: {
-		backgroundColor: "#21252B",
-		position: "absolute",
+		backgroundColor: '#21252B',
+		position: 'absolute',
 		elevation: 5,
 		bottom: 0,
 		right: 0

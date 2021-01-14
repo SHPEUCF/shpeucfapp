@@ -39,8 +39,8 @@ const Button = ({
 const styles = {
 	tStyle: {
 		flex: 1,
-		color: "#000",
-		textAlign: "center",
+		color: '#000',
+		textAlign: 'center',
 		fontSize: 18
 	},
 	bStyle: {

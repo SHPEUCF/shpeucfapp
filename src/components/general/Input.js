@@ -1,5 +1,5 @@
-import React, { PureComponent } from "react";
-import { TextInput } from "react-native";
+import React, { PureComponent } from 'react';
+import { TextInput } from 'react-native';
 
 /**
  * @description Input component with custom default props. *Accepts all `TextInput` props.*
@@ -15,8 +15,8 @@ export class Input extends PureComponent {
 		return (
 			<TextInput
 				style = { [inputStyle, style] }
-				placeholderTextColor = "#5B6066"
-				underlineColorAndroid = "transparent"
+				placeholderTextColor = '#5B6066'
+				underlineColorAndroid = 'transparent'
 				{ ...extraProps }
 			>
 				{ children }
@@ -28,8 +28,8 @@ export class Input extends PureComponent {
 Input.defaultProps = {
 	maxLength: 45,
 	autoCorrect: false,
-	autoCapitalize: "sentences",
-	placeholder: "Enter text here"
+	autoCapitalize: 'sentences',
+	placeholder: 'Enter text here'
 };
 
 const styles = {

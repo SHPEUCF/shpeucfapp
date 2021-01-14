@@ -1,13 +1,14 @@
-import React, { Component, useState } from "react";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { View, Text, TouchableOpacity, Image, SafeAreaView, Dimensions } from "react-native";
-import { Actions } from "react-native-router-flux";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Form } from "../../components";
-import { createUser, loginUser } from "../../ducks";
-import { registrationFormData, loginFormData } from "../../data/FormData";
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux'
+import { View, Text, TouchableOpacity, Image, SafeAreaView, Dimensions } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Button } from '@/components';
+import { registrationFormData, loginFormData } from '@/data/FormData';
+import { createUser, loginUser } from '@/ducks';
+import { Form } from '@/components/';
 
-const { height, width } = Dimensions.get("screen");
+const { height, width } = Dimensions.get('screen');
 
 export default () => {
 	const [email, setEmail] = useState("");
@@ -108,7 +109,7 @@ export default () => {
 
 const styles = {
 	formContainer: {
-		backgroundColor: "#0c0b0b",
+		backgroundColor: '#0c0b0b',
 		height: height
 	},
 	topContainer: {
@@ -123,7 +124,7 @@ const styles = {
 		paddingBottom: "10%"
 	},
 	headerText: {
-		color: "black",
+		color: 'black',
 		fontSize: 40,
 		alignSelf: "center",
 	},
@@ -139,9 +140,9 @@ const styles = {
 	},
 	errorTextStyle: {
 		fontSize: 14,
-		alignSelf: "center",
-		color: "red",
-		fontWeight: "bold"
+		alignSelf: 'center',
+		color: 'red',
+		fontWeight: 'bold'
 	},
 	loginForm: {
 		flex: 0.5, 

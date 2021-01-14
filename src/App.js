@@ -1,18 +1,16 @@
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable max-len */
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import firebase from "firebase";
-import { Actions } from "react-native-router-flux";
-import Router from "./config/Router";
-import { appVersion } from "../package.json";
-import { View } from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
-import { Alert } from "./components";
-import { loadUser, getAllMemberAccounts, getEvents, getCommittees, getAllMemberPoints, updateElection } from "./ducks";
-import { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId } from "react-native-dotenv";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { View } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import firebase from 'firebase';
+import { Actions } from 'react-native-router-flux';
+import Router from './config/Router';
+import { appVersion } from '../package.json';
+import { Alert } from './components';
+import { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId } from '@env';
+import { loadUser, getAllMemberAccounts, getEvents, getCommittees, getAllMemberPoints, updateElection } from './ducks';
 
-console.ignoredYellowBox = ["Setting a timer"];
+console.ignoredYellowBox = ['Setting a timer'];
 
 class App extends Component {
 	componentDidMount() {
@@ -35,7 +33,7 @@ class App extends Component {
 		const { getCommittees, getAllMemberAccounts, getEvents, loadUser, getAllMemberPoints, updateElection } = this.props;
 
 		firebase.auth().onAuthStateChanged(user => {
-			firebase.database().ref("/version").once("value", snapshot => {
+			firebase.database().ref('/version').once('value', snapshot => {
 				let correctVersion = snapshot.val() === appVersion;
 				
 				if (correctVersion && user) {

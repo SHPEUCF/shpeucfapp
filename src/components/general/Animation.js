@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { Animated, Easing, Dimensions } from "react-native";
+import React, { Component } from 'react';
+import { Animated, Easing, Dimensions } from 'react-native';
 
-const dimension = Dimensions.get("screen");
+const dimension = Dimensions.get('screen');
 
 /**
  * @classdesc Component to render different types of animations with the timing() function.
@@ -25,7 +25,7 @@ class Animation extends Component {
 		const { containerStyle, children, type, property } = this.props;
 
 		switch (type) {
-			case "View":
+			case 'View':
 				return (
 					<Animated.View style = { [containerStyle, { [property]: this.state.animated }] }>
 						{ children }
@@ -47,19 +47,19 @@ class Animation extends Component {
  *		@property {(number | Object)=}    easeValue        Value for easing function.
  *		@property {Object}                relative         toValue with respect to device screen.
  *		@property {number}                relative.ratio   Ratio to scale.
- *		@property {string}                relative.screen  Screen dimension to scale ratio with. ["height", "width"]
+ *		@property {string}                relative.screen  Screen dimension to scale ratio with. ['height', 'width']
  */
 
 export class Animate {
 	/**
 	 * @description Animation component that animates a View based on the static animation() function.
 	 *
-	 * @param {string}           type            Type of Animation. ["View"]
+	 * @param {string}           type            Type of Animation. ['View']
 	 * @param {Object}           containerStyle  Style of Animation component.
 	 * @param {string}           property        Property to modify with animation methods.
 	 * @param {number | Object}  initial         Initial value for property.
 	 * @param {number}           initial.ratio   Ratio to scale with respect to device screen.
-	 * @param {string}           initial.screen  Screen dimension to scale ratio with. ["height", "width"]
+	 * @param {string}           initial.screen  Screen dimension to scale ratio with. ['height', 'width']
 	 */
 
 	static Animate = props => (
@@ -71,10 +71,10 @@ export class Animate {
 	static resolveEasing(easing, value) {
 		if (!easing) return;
 
-		let easingFunction = new Set(["poly", "elastic", "back", "bezier", "in", "out", "inOut"]);
+		let easingFunction = new Set(['poly', 'elastic', 'back', 'bezier', 'in', 'out', 'inOut']);
 		let ease;
 
-		if (typeof easing === "string")
+		if (typeof easing === 'string')
 			easing = [easing];
 
 		while (easing.length > 0) {
@@ -96,10 +96,11 @@ export class Animate {
 	 * @param {Function=}  callback   (Optional) Function to execute after animation is done.
 	 */
 
-	static animation({ toValue, relative: { ratio = 0.5, screen = "height" }, duration, delay, easing, easeValue }, callback) {
+	static animation({ toValue, relative: { ratio = 0.5, screen = 'height' }, duration, delay, easing, easeValue }, callback) {
 		this.Animation.timing({
 			toValue: toValue || dimension[screen] * ratio,
 			easing: this.resolveEasing(easing, easeValue),
+			useNativeDriver: false,
 			duration,
 			delay
 		}, callback);

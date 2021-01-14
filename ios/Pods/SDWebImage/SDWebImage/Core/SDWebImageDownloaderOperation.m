@@ -12,13 +12,6 @@
 #import "SDWebImageDownloaderResponseModifier.h"
 #import "SDWebImageDownloaderDecryptor.h"
 
-// iOS 8 Foundation.framework extern these symbol but the define is in CFNetwork.framework. We just fix this without import CFNetwork.framework
-#if ((__IPHONE_OS_VERSION_MIN_REQUIRED && __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_9_0) || (__MAC_OS_X_VERSION_MIN_REQUIRED && __MAC_OS_X_VERSION_MIN_REQUIRED < __MAC_10_11))
-const float NSURLSessionTaskPriorityHigh = 0.75;
-const float NSURLSessionTaskPriorityDefault = 0.5;
-const float NSURLSessionTaskPriorityLow = 0.25;
-#endif
-
 static NSString *const kProgressCallbackKey = @"progress";
 static NSString *const kCompletedCallbackKey = @"completed";
 
@@ -41,7 +34,7 @@ typedef NSMutableDictionary<NSString *, id> SDCallbacksDictionary;
 @property (strong, nonatomic, nullable) NSError *responseError;
 @property (assign, nonatomic) double previousProgress; // previous progress percent
 
-@property (strong, nonatomic, nullable) id<SDWebImageDownloaderResponseModifier> responseModifier; // modifiy original URLResponse
+@property (strong, nonatomic, nullable) id<SDWebImageDownloaderResponseModifier> responseModifier; // modify original URLResponse
 @property (strong, nonatomic, nullable) id<SDWebImageDownloaderDecryptor> decryptor; // decrypt image data
 
 // This is weak because it is injected by whoever manages this session. If this gets nil-ed out, we won't be able to run
@@ -151,7 +144,7 @@ typedef NSMutableDictionary<NSString *, id> SDCallbacksDictionary;
 - (void)start {
     @synchronized (self) {
         if (self.isCancelled) {
-            self.finished = YES;
+            if (!self.isFinished) self.finished = YES;
             // Operation cancelled by user before sending the request
             [self callCompletionBlocksWithError:[NSError errorWithDomain:SDWebImageErrorDomain code:SDWebImageErrorCancelled userInfo:@{NSLocalizedDescriptionKey : @"Operation cancelled by user before sending the request"}]];
             [self reset];
@@ -225,8 +218,9 @@ typedef NSMutableDictionary<NSString *, id> SDCallbacksDictionary;
             [[NSNotificationCenter defaultCenter] postNotificationName:SDWebImageDownloadStartNotification object:strongSelf];
         });
     } else {
+        if (!self.isFinished) self.finished = YES;
         [self callCompletionBlocksWithError:[NSError errorWithDomain:SDWebImageErrorDomain code:SDWebImageErrorInvalidDownloadOperation userInfo:@{NSLocalizedDescriptionKey : @"Task can't be initialized"}]];
-        [self done];
+        [self reset];
     }
 }
 
@@ -239,22 +233,28 @@ typedef NSMutableDictionary<NSString *, id> SDCallbacksDictionary;
 - (void)cancelInternal {
     if (self.isFinished) return;
     [super cancel];
+    
+    __block typeof(self) strongSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:SDWebImageDownloadStopNotification object:strongSelf];
+    });
 
     if (self.dataTask) {
+        // Cancel the URLSession, `URLSession:task:didCompleteWithError:` delegate callback will be ignored
         [self.dataTask cancel];
-        __block typeof(self) strongSelf = self;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:SDWebImageDownloadStopNotification object:strongSelf];
-        });
-
-        // As we cancelled the task, its callback won't be called and thus won't
-        // maintain the isFinished and isExecuting flags.
+        self.dataTask = nil;
+    }
+    
+    // NSOperation disallow setFinished=YES **before** operation's start method been called
+    // We check for the initialized status, which is isExecuting == NO && isFinished = NO
+    // Ony update for non-intialized status, which is !(isExecuting == NO && isFinished = NO), or if (self.isExecuting || self.isFinished) {...}
+    if (self.isExecuting || self.isFinished) {
         if (self.isExecuting) self.executing = NO;
         if (!self.isFinished) self.finished = YES;
-    } else {
-        // Operation cancelled by user during sending the request
-        [self callCompletionBlocksWithError:[NSError errorWithDomain:SDWebImageErrorDomain code:SDWebImageErrorCancelled userInfo:@{NSLocalizedDescriptionKey : @"Operation cancelled by user during sending the request"}]];
     }
+    
+    // Operation cancelled by user during sending the request
+    [self callCompletionBlocksWithError:[NSError errorWithDomain:SDWebImageErrorDomain code:SDWebImageErrorCancelled userInfo:@{NSLocalizedDescriptionKey : @"Operation cancelled by user during sending the request"}]];
 
     [self reset];
 }
@@ -390,7 +390,7 @@ didReceiveResponse:(NSURLResponse *)response
         // Get the image data
         NSData *imageData = [self.imageData copy];
         
-        // keep maxmium one progressive decode process during download
+        // keep maximum one progressive decode process during download
         if (self.coderQueue.operationCount == 0) {
             // NSOperation have autoreleasepool, don't need to create extra one
             [self.coderQueue addOperationWithBlock:^{
@@ -474,7 +474,8 @@ didReceiveResponse:(NSURLResponse *)response
                         UIImage *image = SDImageLoaderDecodeImageData(imageData, self.request.URL, [[self class] imageOptionsFromDownloaderOptions:self.options], self.context);
                         CGSize imageSize = image.size;
                         if (imageSize.width == 0 || imageSize.height == 0) {
-                            [self callCompletionBlocksWithError:[NSError errorWithDomain:SDWebImageErrorDomain code:SDWebImageErrorBadImageData userInfo:@{NSLocalizedDescriptionKey : @"Downloaded image has 0 pixels"}]];
+                            NSString *description = image == nil ? @"Downloaded image decode failed" : @"Downloaded image has 0 pixels";
+                            [self callCompletionBlocksWithError:[NSError errorWithDomain:SDWebImageErrorDomain code:SDWebImageErrorBadImageData userInfo:@{NSLocalizedDescriptionKey : description}]];
                         } else {
                             [self callCompletionBlocksWithImage:image imageData:imageData error:nil finished:YES];
                         }

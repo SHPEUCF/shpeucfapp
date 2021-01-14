@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { Text, View } from "react-native";
-import Calendar from "../calendar";
-import styleConstructor from "./style";
+import React, { Component } from 'react';
+import { Text, View } from 'react-native';
+import Calendar from '../calendar';
+import styleConstructor from './style';
 
 let calendar = null;
 
 class CalendarListItem extends Component {
-	static displayName = "IGNORE";
+	static displayName = 'IGNORE';
 
 	static defaultProps = {
 		hideArrows: true,
@@ -26,7 +26,8 @@ class CalendarListItem extends Component {
 	shouldComponentUpdate(nextProps) {
 		const r1 = this.props.item;
 		const r2 = nextProps.item;
-		return r1.toString("yyyy MM") !== r2.toString("yyyy MM") || !!(r2.propbump && r2.propbump !== r1.propbump);
+
+		return r1.toString('yyyy MM') !== r2.toString('yyyy MM') || !!(r2.propbump && r2.propbump !== r1.propbump);
 	}
 
 	onPressArrowLeft = (_, month) => {
@@ -37,6 +38,7 @@ class CalendarListItem extends Component {
 		}
 		else if (this.props.scrollToMonth) {
 			const currentMonth = monthClone.getMonth();
+
 			monthClone.addMonths(-1);
 
 			// Make sure we actually get the previous month, not just 30 days before currentMonth.
