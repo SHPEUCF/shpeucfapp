@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import Router from './config/Router';
@@ -18,16 +19,23 @@ class App extends Component {
 		if (!firebase.apps.length)
 			firebase.initializeApp(config);
 
-		this.verifyLogIn();
+		AsyncStorage.getItem("alreadyLaunched").then(alreadyLaunched => {
+			let verify = () => this.verifyLogIn(alreadyLaunched);
+
+			Actions.splash({ verify });
+
+			if (!alreadyLaunched)
+				AsyncStorage.setItem("alreadyLaunched", "true");
+		});
 	}
 
-	verifyLogIn() {
+	verifyLogIn(alreadyLaunched) {
 		const { getCommittees, getAllMemberAccounts, getEvents, loadUser, getAllMemberPoints, updateElection } = this.props;
 
 		firebase.auth().onAuthStateChanged(user => {
 			firebase.database().ref('/version').once('value', snapshot => {
 				let correctVersion = snapshot.val() === appVersion;
-
+				
 				if (correctVersion && user) {
 					Actions.main();
 					loadUser();
@@ -38,11 +46,16 @@ class App extends Component {
 					getAllMemberPoints();
 				}
 				else {
-					Actions.login();
-					if (!correctVersion) Alert.alert('Please update your app');
+					if (!alreadyLaunched) {
+						Actions.welcome();
+						alreadyLaunched = AsyncStorage.getItem("alreadyLaunched");
+					} 
+					
+					else Actions.login();
+
+					if (!correctVersion) Alert.alert("Please update your app");
 					if (user) firebase.auth().signOut();
 				}
-				// Actions.splash({ correctVersion, user, signOut: () => firebase.auth.signOut() });
 			});
 		});
 	}

@@ -19,14 +19,16 @@ export { default as Events } from './Events/Events';
 export { default as EventDetails } from './Events/EventDetails';
 
 // Export General
-export { Leaderboard } from './General/Leaderboard';
-export { default as More } from './General/More';
-export { About } from './General/About';
-export { Dashboard } from './General/Dashboard';
+export { Leaderboard } from "./General/Leaderboard";
+export { default as More } from "./General/More";
+export { About } from "./General/About";
+export { Dashboard } from "./General/Dashboard";
+export { Splash } from "./General/Splash";
+export { Welcome } from "./General/Welcome";
 
 // Export User
-export { default as Login } from './User/Login';
-export { default as OtherProfile } from './User/OtherProfile';
-export { default as PointsBreakDown } from './User/PointsBreakDown';
-export { default as Profile } from './User/Profile';
-export { default as ResetPassword } from './User/ResetPassword';
+export { default as Login } from "./User/Login";
+export { default as OtherProfile } from "./User/OtherProfile";
+export { default as PointsBreakDown } from "./User/PointsBreakDown";
+export { default as Profile } from "./User/Profile";
+export { default as ResetPassword } from "./User/ResetPassword";

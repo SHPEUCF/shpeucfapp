@@ -47,11 +47,13 @@
 		"android-release": "react-native run-android --variant=release"
 	},
 	"dependencies": {
+		"@react-native-community/async-storage": "^1.12.1",
 		"@react-native-community/masked-view": "^0.1.10",
 		"firebase": "^8.2.1",
 		"qrcode": "^1.4.4",
 		"react": "^17.0.1",
 		"react-native": "0.63.4",
+		"react-native-app-intro-slider": "^4.0.4",
 		"react-native-camera": "^3.40.5",
 		"react-native-color-picker": "^0.6.0",
 		"react-native-dotenv": "^2.5.0",

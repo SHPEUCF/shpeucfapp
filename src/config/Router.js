@@ -41,7 +41,9 @@ import {
 	About,
 	Dashboard,
 	Leaderboard,
-	More
+	More,
+	Splash,
+	Welcome
 } from '@/screens';
 
 /** Import User **/
@@ -60,8 +62,22 @@ const dimension = Dimensions.get('screen');
 const RouterComponent = () => {
 	return (
 		<Router>
-			<Stack key = 'root' hideNavBar>
-				<Stack key = 'auth'>
+			<Stack key = "root" hideNavBar>
+				<Scene
+					key = "splash"
+					component = { Splash }
+					title = "Splash"
+					type = { ActionConst.REPLACE }
+					hideNavBar
+				/>
+				<Scene
+					key = "welcome"
+					component = { Welcome }
+					title = "Welcome"
+					type = { ActionConst.REPLACE }
+					hideNavBar
+				/>
+				<Stack key = "auth">
 					<Scene
 						key = 'loading'
 						component = { Spinner }
