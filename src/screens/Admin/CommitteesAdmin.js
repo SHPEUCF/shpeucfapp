@@ -6,7 +6,6 @@ import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-na
 import {
 	getCommittees,
 	deleteCommittee,
-	goToCommitteeForm,
 	editCommittee,
 	getAllMemberAccounts,
 	addCommittee,
@@ -77,7 +76,7 @@ class CommitteesAdmin extends Component {
 								this.props.committeeTitleChanged('');
 								this.props.committeeDescriptionChanged('');
 								this.props.chairPersonChanged({});
-								this.props.goToCommitteeForm('ADD');
+								navigation.push('CommitteeForm', { action: 'ADD' });
 							} }
 							title = { 'Add Committees' }
 						/>
@@ -149,7 +148,7 @@ class CommitteesAdmin extends Component {
 		this.props.committeeTitleChanged(item.title);
 		this.props.committeeDescriptionChanged(item.description);
 		this.props.chairPersonChanged(item.chair);
-		this.props.goToCommitteeForm('EDIT');
+		this.props.navigation.push('CommitteeForm', { action: 'EDIT' });
 	}
 
 	setLevels() {
@@ -208,7 +207,6 @@ const mapStateToProps = ({ committees }) => {
 
 const mapDispatchToProps = {
 	getCommittees,
-	goToCommitteeForm,
 	deleteCommittee,
 	addCommittee,
 	editCommittee,

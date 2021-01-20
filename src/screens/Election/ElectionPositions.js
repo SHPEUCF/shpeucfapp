@@ -7,7 +7,6 @@ import {
 	openElection,
 	closeElection,
 	deletePosition,
-	goToPositionForm,
 	getPositions,
 	positionDescriptionChanged,
 	positionTitleChanged,
@@ -57,7 +56,7 @@ class ElectionPosition extends Component {
 						onPress = { () => {
 							this.props.positionTitleChanged('');
 							this.props.positionDescriptionChanged('');
-							this.props.goToPositionForm('ADD');
+							navigation.push('PositionForm', { action: 'ADD' });
 						} }
 						title = { 'Add Positions' }
 					/>
@@ -114,7 +113,7 @@ class ElectionPosition extends Component {
 	viewPosition(item) {
 		this.props.positionTitleChanged(item.title);
 		this.props.positionDescriptionChanged(item.description);
-		this.props.goToPositionForm('EDIT');
+		this.props.navigation.push('PositionForm', { action: 'EDIT' });
 	}
 
 	delete(position) {
@@ -196,7 +195,6 @@ const mapDispatchToProps = {
 	openElection,
 	closeElection,
 	deletePosition,
-	goToPositionForm,
 	getPositions,
 	positionDescriptionChanged,
 	positionTitleChanged,

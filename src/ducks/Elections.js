@@ -1,5 +1,4 @@
 import firebase from 'firebase';
-import { Actions } from 'react-native-router-flux';
 import { createActionTypes } from '@/utils/actions';
 import { Alert } from '@/components';
 
@@ -24,8 +23,6 @@ const ACTIONS = createActionTypes([
 	'CANDIDATE_POSITION_CHANGED',
 	'POSITION_TITLE_CHANGED',
 	'POSITION_DESCRIPTION_CHANGED',
-	'GO_TO_CANDIDATE_FORM',
-	'GO_TO_POSITION_FORM',
 	'GET_POSITIONS',
 	'GET_VOTES',
 	'UPDATE_ELECTION',
@@ -135,21 +132,10 @@ export default (state = INITIAL_STATE, action) => {
 				...state,
 				positionDescription: payload
 			};
-		case ACTIONS.GO_TO_CANDIDATE_FORM:
-			return {
-				...state,
-				title: payload
-			};
-
 		case ACTIONS.CHANGE_POSITION:
 			return {
 				...state,
 				applyPosition: payload
-			};
-		case ACTIONS.GO_TO_POSITION_FORM:
-			return {
-				...state,
-				title: payload
 			};
 		case ACTIONS.GET_POSITIONS:
 			return {
@@ -450,30 +436,6 @@ export const positionTitleChanged = (text) => {
 export const positionDescriptionChanged = (text) => {
 	return {
 		type: ACTIONS.POSITION_DESCRIPTION_CHANGED,
-		payload: text
-	};
-};
-
-export const goToCandidateForm = (text, pos) => {
-	Actions.CandidateForm();
-
-	return (dispatch) => {
-		dispatch({
-			type: ACTIONS.GO_TO_CANDIDATE_FORM,
-			payload: text
-		});
-		dispatch({
-			type: ACTIONS.CHANGE_POSITION,
-			payload: pos
-		});
-	};
-};
-
-export const goToPositionForm = (text) => {
-	Actions.PositionForm();
-
-	return {
-		type: ACTIONS.GO_TO_POSITION_FORM,
 		payload: text
 	};
 };

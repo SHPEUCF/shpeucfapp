@@ -1,5 +1,4 @@
 import { createActionTypes } from '@/utils/actions';
-import { Actions } from 'react-native-router-flux';
 import firebase from 'firebase';
 import { Alert } from '@/components';
 
@@ -38,11 +37,6 @@ export default (state = INITIAL_STATE, action) => {
 			return {
 				...state,
 				committeesList: payload
-			};
-		case ACTIONS.GO_TO_COMMITTEE_FORM:
-			return {
-				...state,
-				title: payload
 			};
 		case ACTIONS.DELETE_COMMITTEE:
 			return {
@@ -95,15 +89,6 @@ export const getCommittees = () => {
 					payload: committtees
 				});
 			});
-	};
-};
-
-export const goToCommitteeForm = (text) => {
-	Actions.CommitteeForm();
-
-	return {
-		type: ACTIONS.GO_TO_COMMITTEE_FORM,
-		payload: text
 	};
 };
 

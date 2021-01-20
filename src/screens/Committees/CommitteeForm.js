@@ -47,7 +47,9 @@ class CommitteeForm extends Component {
 			committeeTitle,
 			committeeDescription,
 			committeesList,
-			chair
+			chair,
+			navigation,
+			route: { params: { action } }
 		} = this.props;
 
 		let length = committeesList && committeesList ? Object.entries(committeesList).length : 0;
@@ -60,27 +62,29 @@ class CommitteeForm extends Component {
 			// this.EventCreationError('Please enter a committee');
 		}
 		else {
-			if (this.props.title === 'ADD')
+			if (action === 'ADD')
 				this.props.addCommittee(committeeTitle, committeeDescription, chairObj, length);
 			else if (this.state.oldTitle !== committeeTitle)
 				this.props.editCommittee(committeeTitle, committeeDescription, chairObj, this.state.oldTitle);
 			else
 				this.props.editCommittee(committeeTitle, committeeDescription, chairObj, null);
 			memberService.assignPosition(committeeTitle, 'board', chair.id, this.state.oldChair);
-			this.props.navigation.pop();
+			navigation.pop();
 		}
 	}
 
 	render() {
 		const {
 			allMemberAccounts,
-			chair
+			chair,
+			navigation,
+			route: { params: { action } }
 		} = this.props;
 
 		return (
 			<SafeAreaView style = { styles.formContainerStyle }>
 				<View style = { styles.headerStyle }>
-					<Text style = { styles.headerTextStyle }>{ this.props.title + ' COMMITTEE' }</Text>
+					<Text style = { styles.headerTextStyle }>{ action + ' COMMITTEE' }</Text>
 				</View>
 				<ScrollView
 					ref = { (ref) => this.scrollView = ref }
@@ -116,7 +120,7 @@ class CommitteeForm extends Component {
 					/>
 					<Button
 						title = 'Cancel'
-						onPress = { () => this.props.navigation.pop() }
+						onPress = { () => navigation.pop() }
 					/>
 				</ButtonLayout>
 			</SafeAreaView>

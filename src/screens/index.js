@@ -7,12 +7,14 @@ export { default as MemberAdmin } from './Admin/MemberAdmin';
 // Export Committees
 export { default as CommitteePage } from './Committees/CommitteePage';
 export { default as Committees } from './Committees/Committees';
+export { default as CommitteeForm } from './Committees/CommitteeForm';
 
 // Export Election
 export { default as ElectionApplication } from './Election/ElectionApplication';
 export { default as ElectionBallot } from './Election/ElectionBallot';
 export { default as ElectionCandidates } from './Election/ElectionCandidates';
 export { default as ElectionPositions } from './Election/ElectionPositions';
+export { default as PositionForm } from './Election/PositionForm';
 
 // Export Events
 export { default as Events } from './Events/Events';

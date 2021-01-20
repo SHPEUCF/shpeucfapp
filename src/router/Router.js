@@ -9,7 +9,8 @@ import {
 	/* Admin     */ AdminHub, CommitteesAdmin, ElectionAdmin, MemberAdmin,
 	/* Election  */ ElectionApplication, ElectionBallot, ElectionCandidates, ElectionPositions,
 	/* Committee */ CommitteePage, Committees,
-	/* Events    */ Events, EventDetails
+	/* Events    */ Events, EventDetails,
+	/* Forms     */ CommitteeForm, PositionForm
 } from '@/screens';
 
 const MainTabs = createBottomTabNavigator();
@@ -52,6 +53,8 @@ const MoreStackNavigator = () => (
 		<MoreStack.Screen name = 'ElectionApplication' component = { ElectionApplication } />
 		<MoreStack.Screen name = 'ElectionBallot' component = { ElectionBallot } />
 		<MoreStack.Screen name = 'Committees' component = { Committees } />
+		<MoreStack.Screen name = 'CommitteeForm' component = { CommitteeForm } />
+		<MoreStack.Screen name = 'PositionForm' component = { PositionForm } />
 		<MoreStack.Screen name = 'About' component = { About } />
 		<MoreStack.Screen name = 'AdminHub' component = { AdminHub } />
 		<MoreStack.Screen name = 'CommitteesAdmin' component = { CommitteesAdmin } />
