@@ -90,10 +90,11 @@ class Committees extends Component {
 
 		const {
 			activeUser,
-			sortedEvents
+			sortedEvents,
+			route: { params }
 		} = this.props;
 
-		if (this.props.route.params && this.props.route.params.prevRoute === 'Dashboard') {
+		if (params && params.prevRoute === 'Dashboard') {
 			return (
 				<View >
 					<View style = { contentContainerStyle }>
