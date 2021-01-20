@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, Image, SafeAreaView, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Button } from '@/components';
+import { Button, Alert, Form } from '@/components';
 import { registrationFormData, loginFormData } from '@/data/FormData';
 import { createUser, loginUser, registrationError } from '@/ducks';
-import { Form } from '@/components/';
 
 const { height } = Dimensions.get('screen');
 
@@ -19,12 +18,12 @@ class Login extends Component {
 	loginSubmit() {
 		const { email, password } = this.state;
 
-		if (!email)
-			this.props.registrationError('Please enter your knights email');
-		else if (!password)
-			this.props.registrationError('Please enter your password');
-		else
-			this.props.loginUser(email, password);
+		if (!email) { this.props.registrationError('Please enter your knights email') }
+		else if (!password) { this.props.registrationError('Please enter your password') }
+		else {
+			if (this.props.hasCorrectVersion) this.props.loginUser(email, password);
+			else Alert.alert('Please update your app');
+		}
 	}
 
 	renderError() {
@@ -160,8 +159,8 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ user: { email, password, error, loading, loggedIn } }) => (
-	{ email, password, error, loading, loggedIn }
+const mapStateToProps = ({ app: { hasCorrectVersion }, user: { email, password, error, loading, loggedIn } }) => (
+	{ email, password, error, loading, loggedIn, hasCorrectVersion }
 );
 const mapDispatchToProps = { createUser, loginUser, registrationError };
 

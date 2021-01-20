@@ -19,44 +19,38 @@ import {
 
 LogBox.ignoreAllLogs(true);
 
-export default () => {
+console.error = () => null;
+console.warn = () => null;
+
+export const App = () => {
 	const { isLoggedIn, hasCorrectVersion } = useSelector(state => state.app);
 	const mounted = useRef();
-	const store = useStore();
 	const dispatch = useDispatch();
+	const store = useStore();
+	const initRoutine = [loadUser, getEvents, getCommittees, updateElection, getAllMemberAccounts, getAllMemberPoints];
 
 	useEffect(() => {
 		if (!mounted.current) {
 			initializeFirebase();
 			dispatch(userStatus());
-			dispatch(verifyAppVersion()).then(() => verifyLogin());
+			dispatch(verifyAppVersion()).then(() => {
+				const { isLoggedIn, hasCorrectVersion } = store.getState().app;
+
+				if (isLoggedIn && hasCorrectVersion) initRoutine.forEach(initFunction => dispatch(initFunction()));
+				else if (isLoggedIn && !hasCorrectVersion) logoutUser();
+
+				if (!hasCorrectVersion) Alert.alert('Please update your app');
+			});
 			mounted.current = true;
 		}
-		else {
-			verifyLogin();
+		else if (hasCorrectVersion && isLoggedIn) {
+			initRoutine.forEach(initFunction => dispatch(initFunction()));
 		}
-	}, [dispatch, isLoggedIn]);
-
-	const verifyLogin = () => {
-		const { isLoggedIn, hasCorrectVersion } = store.getState().app;
-
-		if (isLoggedIn && hasCorrectVersion) {
-			dispatch(loadUser());
-			dispatch(getEvents());
-			dispatch(getCommittees());
-			dispatch(updateElection());
-			dispatch(getAllMemberPoints());
-			dispatch(getAllMemberAccounts());
-		}
-		else {
-			if (isLoggedIn) logoutUser();
-			if (!hasCorrectVersion) Alert.alert('Please update your app');
-		}
-	};
+	}, [isLoggedIn, hasCorrectVersion]);
 
 	return (
 		<View style = {{ flex: 1 }}>
-			<Router isLoggedIn = { isLoggedIn && hasCorrectVersion } />
+			<Router isLoggedIn = { isLoggedIn } />
 			<Alert.AlertBox />
 		</View>
 	);
