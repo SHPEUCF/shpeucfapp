@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
@@ -8,7 +7,6 @@ import {
 	openElection,
 	closeElection,
 	deletePosition,
-	goToPositionForm,
 	getPositions,
 	positionDescriptionChanged,
 	positionTitleChanged,
@@ -43,21 +41,22 @@ class ElectionPosition extends Component {
 			page
 		} = styles;
 		const {
-			positions
+			positions,
+			navigation
 		} = this.props;
 
 		const positionsArray = _.toArray(positions);
 
 		return (
 			<SafeAreaView style = { page }>
-				<NavBar title = 'Positions' back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Positions' back onBack = { () => navigation.pop() } />
 				{ this.renderFlatlist(positionsArray) }
 				<ButtonLayout>
 					<Button
 						onPress = { () => {
 							this.props.positionTitleChanged('');
 							this.props.positionDescriptionChanged('');
-							this.props.goToPositionForm('ADD');
+							navigation.push('PositionForm', { action: 'ADD' });
 						} }
 						title = { 'Add Positions' }
 					/>
@@ -114,7 +113,7 @@ class ElectionPosition extends Component {
 	viewPosition(item) {
 		this.props.positionTitleChanged(item.title);
 		this.props.positionDescriptionChanged(item.description);
-		this.props.goToPositionForm('EDIT');
+		this.props.navigation.push('PositionForm', { action: 'EDIT' });
 	}
 
 	delete(position) {
@@ -196,7 +195,6 @@ const mapDispatchToProps = {
 	openElection,
 	closeElection,
 	deletePosition,
-	goToPositionForm,
 	getPositions,
 	positionDescriptionChanged,
 	positionTitleChanged,

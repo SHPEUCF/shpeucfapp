@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, ScrollView, SafeAreaView } from 'react-native';
 import { Input, Button, ButtonLayout } from '@/components/general';
-import { Actions } from 'react-native-router-flux';
 import {
 	addPosition,
 	editPosition,
@@ -39,7 +38,9 @@ class PositionForm extends Component {
 			positionTitle,
 			candidatePlan,
 			positionDescription,
-			positions
+			positions,
+			navigation,
+			route: { params: { action } }
 		} = this.props;
 
 		let length = positions && positions ? Object.entries(positions).length : 0;
@@ -54,7 +55,7 @@ class PositionForm extends Component {
 			// this.EventCreationError('Please enter a position');
 		}
 		else {
-			if (this.props.title === 'ADD')
+			if (action === 'ADD')
 				this.props.addPosition(positionTitle, positionDescription, length);
 			else
 			if (this.state.oldTitle !== positionTitle)
@@ -62,7 +63,7 @@ class PositionForm extends Component {
 			else
 				this.props.editPosition(positionTitle, positionDescription, null);
 
-			Actions.ElectionPositions();
+			navigation.pop();
 		}
 	}
 
@@ -70,7 +71,7 @@ class PositionForm extends Component {
 		return (
 			<SafeAreaView style = { styles.formContainerStyle }>
 				<View style = { styles.headerStyle }>
-					<Text style = { styles.headerTextStyle }>{ this.props.title + ' POSITION' }</Text>
+					<Text style = { styles.headerTextStyle }>{ this.props.route.params.action + ' POSITION' }</Text>
 					{ /* <Text style={styles.headerSubtitleStyle}>Registration</Text> */ }
 				</View>
 				<ScrollView
@@ -98,7 +99,7 @@ class PositionForm extends Component {
 					/>
 					<Button
 						title = 'Cancel'
-						onPress = { Actions.ElectionPositions.bind(this) }
+						onPress = { () => this.props.navigation.pop() }
 					/>
 				</ButtonLayout>
 			</SafeAreaView>

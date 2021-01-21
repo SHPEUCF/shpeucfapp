@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, Image, SafeAreaView, Dimensions } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Button } from '@/components';
+import { Button, Alert, Form } from '@/components';
 import { registrationFormData, loginFormData } from '@/data/FormData';
 import { createUser, loginUser, registrationError } from '@/ducks';
-import { Form } from '@/components/';
 
 const { height } = Dimensions.get('screen');
 
@@ -20,12 +18,12 @@ class Login extends Component {
 	loginSubmit() {
 		const { email, password } = this.state;
 
-		if (!email)
-			this.props.registrationError('Please enter your knights email');
-		else if (!password)
-			this.props.registrationError('Please enter your password');
-		else
-			this.props.loginUser(email, password).then(() => Actions.main());
+		if (!email) { this.props.registrationError('Please enter your knights email') }
+		else if (!password) { this.props.registrationError('Please enter your password') }
+		else {
+			if (this.props.hasCorrectVersion) this.props.loginUser(email, password);
+			else Alert.alert('Please update your app');
+		}
 	}
 
 	renderError() {
@@ -48,7 +46,7 @@ class Login extends Component {
 				</View>
 				<TouchableOpacity
 					style = { [bottomContainer, { flex: 0.4 }] }
-					onPress = { () => Actions.resetPassword() }
+					onPress = { () => this.props.navigate.push('ResetPassword') }
 				>
 					<Text style = { resetPasswordText }>Forgot Password?</Text>
 				</TouchableOpacity>
@@ -161,8 +159,8 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ user: { email, password, error, loading, loggedIn } }) => (
-	{ email, password, error, loading, loggedIn }
+const mapStateToProps = ({ app: { hasCorrectVersion }, user: { email, password, error, loading, loggedIn } }) => (
+	{ email, password, error, loading, loggedIn, hasCorrectVersion }
 );
 const mapDispatchToProps = { createUser, loginUser, registrationError };
 

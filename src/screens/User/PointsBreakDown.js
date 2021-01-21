@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { NavBar } from '@/components';
 import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
@@ -20,7 +19,7 @@ class PointsBreakDown extends Component {
 
 		return (
 			<SafeAreaView style = { page }>
-				<NavBar title = 'Points' back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Points' back onBack = { () => this.props.navigation.pop() } />
 				{ this.renderContent() }
 			</SafeAreaView>
 		);

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { NavBar, Button, ButtonLayout } from '@/components';
 import _ from 'lodash';
@@ -37,7 +36,8 @@ class ElectionAdmin extends Component {
 		} = styles;
 		const {
 			votes,
-			positions
+			positions,
+			navigation
 		} = this.props;
 
 		let positionOrder = [];
@@ -55,7 +55,7 @@ class ElectionAdmin extends Component {
 
 		return (
 			<SafeAreaView style = { page }>
-				<NavBar title = 'Election' back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Election' back onBack = { () => navigation.pop() } />
 				<View style = { content }>
 					<Text style = { textColor }>Total Votes: { this.props.numOfVotes }</Text>
 				</View>
@@ -71,14 +71,14 @@ class ElectionAdmin extends Component {
 					</View>
 					<View style = { buttonContainerStyling }>
 						<Button
-							onPress = { () => Actions.ElectionPositions() }
+							onPress = { () => navigation.push('ElectionPositions') }
 							title = { 'Manage Positions' }
 						>
 						</Button>
 					</View>
 					<View style = { buttonContainerStyling }>
 						<Button
-							onPress = { () => Actions.ElectionCandidates() }
+							onPress = { () => navigation.push('ElectionCandidates') }
 							title = { 'Manage Candidates' }
 						>
 						</Button>

@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
-import { goToViewEvent } from '@/utils/router';
 import { filterPastEvents } from '@/utils/events';
 import { Icon } from '@/components';
 
@@ -35,7 +34,7 @@ export default class EventsList extends PureComponent {
 
 	render() {
 		const { textColor, eventListContainerFull, eventEmptyText, eventsItem } = styles;
-		const { sortedEvents } = this.props;
+		const { sortedEvents, navigation } = this.props;
 
 		const events = filterPastEvents(sortedEvents) || [];
 
@@ -45,7 +44,7 @@ export default class EventsList extends PureComponent {
 				|| events.slice(0, 3).map(event =>
 					<TouchableOpacity
 						style = { eventsItem }
-						onPress = { () => { this.props.loadEvent(event); goToViewEvent('dashboard') } }
+						onPress = { () => { this.props.loadEvent(event); navigation.push('EventDetails') } }
 					>
 						{ this.showEvents(event) }
 					</TouchableOpacity>

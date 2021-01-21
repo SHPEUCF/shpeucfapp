@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { NavBar, Icon } from '@/components';
 import _ from 'lodash';
 import { FlatList, Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
-import { goToViewEvent } from '@/utils/router';
 import { filterEvents } from '@/utils/events';
 import { editUser, loadEvent, getCommittees, loadCommittee } from '@/ducks';
 
@@ -28,14 +26,15 @@ class Committees extends Component {
 			page
 		} = styles;
 		const {
-			committeesList
+			committeesList,
+			navigation
 		} = this.props;
 
 		const committeesArray = _.orderBy(committeesList, iteratees, order);
 
 		return (
 			<SafeAreaView style = { page }>
-				<NavBar title = 'Committees' back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Committees' back onBack = { () => navigation.pop() } />
 				<View style = { content }>
 					{ this.renderFlatlist(committeesArray) }
 				</View>
@@ -79,7 +78,7 @@ class Committees extends Component {
 
 	viewCommittee(item) {
 		this.props.loadCommittee(item);
-		Actions['CommitteePageC']({ screen: 'committees' });
+		this.props.navigation.push('CommitteePage');
 	}
 
 	renderCommittees(item) {
@@ -91,10 +90,11 @@ class Committees extends Component {
 
 		const {
 			activeUser,
-			sortedEvents
+			sortedEvents,
+			route: { params }
 		} = this.props;
 
-		if (this.props.screen === 'dashboard') {
+		if (params && params.prevRoute === 'Dashboard') {
 			return (
 				<View >
 					<View style = { contentContainerStyle }>
@@ -204,7 +204,6 @@ class Committees extends Component {
 
 	viewEvent(item) {
 		loadEvent(item);
-		goToViewEvent();
 	}
 
 	renderEvents(event) {

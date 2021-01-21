@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { TouchableOpacity, View, Text, Dimensions } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { loadEvent } from '../../../../ducks';
-import { goToViewEvent } from '../../../../utils/router';
+import { useNavigation } from '@react-navigation/native';
 
 const dimension = Dimensions.get('window');
 
@@ -13,6 +13,8 @@ export const DefaultItem = ({ item }) => {
 
 	const state = useSelector(state => state);
 	const dispatch = useDispatch();
+	const navigation = useNavigation();
+
 
 	// used to access previous item props data after rerendering
 	const itemRef = useRef();
@@ -28,7 +30,7 @@ export const DefaultItem = ({ item }) => {
 		&& !_.isEqual(state.events.activeEvent, item)) dispatch(loadEvent(item));
 
 	return (
-		<TouchableOpacity onPress = { () => viewEvent(item, dispatch) }>
+		<TouchableOpacity onPress = { () => viewEvent(item, dispatch, navigation) }>
 			<View style = { [itemContainer, { backgroundColor: state.user.activeUser.color }] }>
 				<Text style = { [{ fontWeight: 'bold' }, textColor] }>{ viewName }</Text>
 				<Text style = { textColor }>Time: { startTime } - { endTime }</Text>
@@ -52,9 +54,9 @@ export const DefaultEmptyData = () => {
 	);
 };
 
-const viewEvent = (item, dispatch) => {
+const viewEvent = (item, dispatch, navigation) => {
 	dispatch(loadEvent(item));
-	goToViewEvent('events');
+	navigation.push('EventDetails');
 };
 
 const styles = {

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Alert, Button, NavBar, FilterList, ButtonLayout, Icon } from '@/components';
-import { Actions } from 'react-native-router-flux';
 import QRCode from 'react-native-qrcode-svg';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { MemberPanel } from '@/utils/render';
@@ -259,7 +258,7 @@ class EventDetails extends Component {
 
 	confirmDelete() {
 		deleteEvent(this.props.activeEvent);
-		Actions.pop();
+		this.props.navigation.pop();
 	}
 
 	renderPickMembers() {
@@ -438,7 +437,7 @@ class EventDetails extends Component {
 
 			return (
 				<SafeAreaView style = { page }>
-					<NavBar title = { viewName } back onBack = { () => Actions.pop() } />
+					<NavBar title = { viewName } back onBack = { () => this.props.navigation.pop() } />
 					<EventForm
 						title = 'Edit Event'
 						values = { this.props.activeEvent }

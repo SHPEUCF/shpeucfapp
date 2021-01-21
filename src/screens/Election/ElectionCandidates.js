@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
@@ -8,7 +7,6 @@ import {
 	openElection,
 	closeElection,
 	deleteCandidates,
-	goToCandidateForm,
 	getPositions,
 	approveApplication,
 	deleteApplication,
@@ -35,7 +33,8 @@ class ElectionCandidates extends Component {
 			page
 		} = styles;
 		const {
-			positions
+			positions,
+			navigation
 		} = this.props;
 
 		const positionsArray = _.orderBy(positions, iteratees, order);
@@ -44,7 +43,7 @@ class ElectionCandidates extends Component {
 
 		return (
 			<SafeAreaView style = { page }>
-				<NavBar title = 'Candidates' back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Candidates' back onBack = { () => navigation.pop() } />
 				<View style = { content }>
 					{ this.renderFlatlist(positionsArray) }
 				</View>
@@ -135,11 +134,11 @@ class ElectionCandidates extends Component {
 		else {
 			return (
 				<View style = { [{ flexDirection: 'row', flex: 1 }] }>
-					<View style = { buttonContainerStyle }>
+					{/* <View style = { buttonContainerStyle }>
 						<TouchableOpacity onPress = { () => this.viewCandidate(item) }>
 							<Icon name = 'md-create' size = { 40 } color = '#e0e6ed' />
 						</TouchableOpacity>
-					</View>
+					</View> */}
 					<View style = { buttonContainerStyle }>
 						<TouchableOpacity
 							onPress = { () => deleteApplication(position, id) }>
@@ -151,11 +150,11 @@ class ElectionCandidates extends Component {
 		}
 	}
 
-	viewCandidate(item) {
-		this.props.candidateIdChanged(item.id);
-		this.props.candidatePlanChanged(item.plan);
-		this.props.goToCandidateForm('EDIT', item.position);
-	}
+	// viewCandidate(item) {
+	// 	this.props.candidateIdChanged(item.id);
+	// 	this.props.candidatePlanChanged(item.plan);
+	// 	this.props.navigation.push('CandidateForm', { action: 'EDIT', position: item.position });
+	// }
 
 	_keyExtractor = (item, index) => index;
 
@@ -232,7 +231,6 @@ const mapDispatchToProps = {
 	openElection,
 	closeElection,
 	deleteCandidates,
-	goToCandidateForm,
 	getPositions,
 	approveApplication,
 	deleteApplication,

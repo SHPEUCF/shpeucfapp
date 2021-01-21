@@ -1,6 +1,5 @@
 {
 	"name": "shpeucfapp",
-	"appVersion": 1.12,
 	"private": true,
 	"eslintIgnore": [
 		"*.test.js"
@@ -37,6 +36,7 @@
 		]
 	},
 	"scripts": {
+		"start": "react-native start",
 		"reinstall": "rm -rf node_modules; npm cache clean; npm install",
 		"reset": "watchman watch-del-all; npm run reinstall; npm start -- --reset-cache",
 		"ios": "react-native run-ios",
@@ -48,6 +48,10 @@
 	},
 	"dependencies": {
 		"@react-native-community/masked-view": "^0.1.10",
+		"@react-native-community/toolbar-android": "0.1.0-rc.2",
+		"@react-navigation/bottom-tabs": "^5.11.2",
+		"@react-navigation/native": "^5.8.10",
+		"@react-navigation/stack": "^5.12.8",
 		"firebase": "^8.2.1",
 		"qrcode": "^1.4.4",
 		"react": "^17.0.1",
@@ -64,7 +68,6 @@
 		"react-native-qrcode-scanner": "^1.5.1",
 		"react-native-qrcode-svg": "^6.0.6",
 		"react-native-reanimated": "^1.13.2",
-		"react-native-router-flux": "^4.2.0",
 		"react-native-safe-area-context": "^3.1.9",
 		"react-native-screens": "^2.16.1",
 		"react-native-svg": "^12.1.0",

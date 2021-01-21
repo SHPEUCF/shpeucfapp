@@ -1,7 +1,7 @@
 import React from 'react';
-import { Actions } from 'react-native-router-flux';
 import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { Icon } from './';
+import { useNavigation } from '@react-navigation/native';
 
 const { height } = Dimensions.get('screen');
 
@@ -21,10 +21,11 @@ const { height } = Dimensions.get('screen');
 
 export const NavBar = ({ title, back, onBack, style, childComponent, childStyle }) => {
 	const { tabBar, tabBarText, rowFlex, backButtonStyle } = styles;
+	const navigation = useNavigation();
 
 	return (
 		<View style = { [tabBar, style, rowFlex] }>
-			{ back && <TouchableOpacity style = { backButtonStyle } onPress = { () => onBack() }>
+			{ back && <TouchableOpacity style = { backButtonStyle } onPress = { () => onBack(navigation) }>
 				<Icon name = 'chevron-back-circle-outline' size = { height * 0.03 } color = '#FECB00' />
 			</TouchableOpacity> }
 			<Text style = { tabBarText }>{ title }</Text>
@@ -36,7 +37,7 @@ export const NavBar = ({ title, back, onBack, style, childComponent, childStyle 
 };
 
 NavBar.defaultProps = {
-	onBack: () => Actions.pop(),
+	onBack: navigation => navigation.pop(),
 	childStyle: { flex: 1, alignItems: 'flex-end' }
 };
 

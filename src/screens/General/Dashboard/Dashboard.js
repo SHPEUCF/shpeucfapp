@@ -36,7 +36,7 @@ class Dashboard extends Component {
 
 	renderContent() {
 		const { page, title, textColor, dashCommittees, dashboardContent, upcomingEvents } = styles;
-		const { allMemberPoints, activeUser, sortedEvents, committeesList, loadEvent } = this.props;
+		const { allMemberPoints, activeUser, sortedEvents, committeesList, loadEvent, navigation } = this.props;
 
 		return (
 			<SafeAreaView style = { page }>
@@ -47,16 +47,25 @@ class Dashboard extends Component {
 						<View style = { upcomingEvents }>
 							<Text style = { [title, textColor] }>Upcoming Events</Text>
 						</View>
-						<EventsList sortedEvents = { sortedEvents } loadEvent = { event => loadEvent(event) } />
+						<EventsList
+							sortedEvents = { sortedEvents }
+							loadEvent = { event => loadEvent(event) }
+							navigation = { navigation }
+						/>
 						<View style = { dashCommittees }>
 							<View style = {{ flex: 1 }}>
-								<Leaderboard membersPoints = { allMemberPoints } activeUser = { activeUser } />
+								<Leaderboard
+									membersPoints = { allMemberPoints }
+									activeUser = { activeUser }
+									navigation = { navigation }
+								/>
 							</View>
 							<View style = {{ flex: 1 }}>
 								<FavoriteCommittees
 									committeesList = { committeesList }
 									userCommittees = { activeUser.userCommittees }
 									loadCommittee = { this.props.loadCommittee }
+									navigation = { navigation }
 								/>
 							</View>
 						</View>

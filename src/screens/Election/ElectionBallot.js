@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { Text, View, SafeAreaView, FlatList, TouchableOpacity, Modal } from 'react-native';
 import { Alert, Button, NavBar, ButtonLayout, Avatar, Icon } from '@/components';
@@ -62,14 +61,15 @@ class ElectionBallot extends Component {
 
 		const {
 			positions,
-			activeUser
+			activeUser,
+			navigation
 		} = this.props;
 
 		const positionsArray = _.orderBy(positions, iterateesPos, orderPos);
 
 		return (
 			<SafeAreaView style = { [flex, mainBackground] }>
-				<NavBar title = 'Positions' back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Positions' back onBack = { () => navigation.pop() } />
 				<View style = { [flex, secondaryBackground] }>
 					<FlatList
 						data = { positionsArray }
@@ -83,7 +83,7 @@ class ElectionBallot extends Component {
 				</View>
 				{ !activeUser.voted && <ButtonLayout>
 					<Button title = 'Submit' onPress = { () => this.submitVote() } />
-					<Button title = 'Cancel' onPress = { () => { Actions.pop() } } />
+					<Button title = 'Cancel' onPress = { () => navigation.pop() } />
 				</ButtonLayout> }
 				{ this.renderModal() }
 			</SafeAreaView>
@@ -251,7 +251,7 @@ class ElectionBallot extends Component {
 		}
 		else {
 			vote(this.state.selectedCandidates);
-			Actions.pop();
+			this.props.navigation.pop();
 		}
 	}
 }

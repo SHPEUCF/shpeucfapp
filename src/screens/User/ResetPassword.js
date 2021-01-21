@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { Button, Input } from '@/components';
 import { resetPassword } from '@/ducks';
@@ -29,9 +28,9 @@ class ResetPassword extends Component {
 
 		return (
 			<View>
-				<Button title = 'RESET' onPress = { () => this.props.resetPassword(this.state.email) } />
+				<Button title = 'RESET' onPress = { () => this.props.resetPassword(this.state.email).then(() => this.navigation.pop()) } />
 				<View style = { resetPasswordContainer }>
-					<TouchableOpacity onPress = { () => Actions.login() }>
+					<TouchableOpacity onPress = { () => this.props.navigation.pop() }>
 						<Text style = { loginButton }>Log In</Text>
 					</TouchableOpacity>
 					<Text style = { insteadButton }> instead?</Text>

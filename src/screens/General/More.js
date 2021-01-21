@@ -1,14 +1,13 @@
 import React from 'react';
 import { View, SafeAreaView, Image } from 'react-native';
 import { useSelector } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
 import { ListItem } from '@/components';
 
 const menuItems = [
 	{
 		title: 'Leaderboard',
 		icon: 'format-align-left',
-		screen: 'LeaderboardM',
+		screen: 'Leaderboard',
 		userPrivilege: 'user'
 	},
 	{
@@ -43,7 +42,7 @@ const menuItems = [
 	}
 ];
 
-export default () => {
+export default ({ navigation }) => {
 	const {
 		flex25,
 		flex100,
@@ -64,7 +63,7 @@ export default () => {
 
 		if (privilege && privilege[userPrivilege]) {
 			return (
-				<ListItem onPress = { Actions[screen] } key = { title }>
+				<ListItem onPress = { () => navigation.push(screen) } key = { title }>
 					<ListItem.Title>{ title }</ListItem.Title>
 					<ListItem.LeftIcon type = 'MaterialIcons' name = { icon } color = 'white' />
 					<ListItem.RightIcon name = 'chevron-forward-circle-outline' size = { 22 } color = '#FECB00' />
