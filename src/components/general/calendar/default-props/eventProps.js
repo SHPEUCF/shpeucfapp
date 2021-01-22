@@ -1,38 +1,28 @@
 import React, { useEffect, useRef } from 'react';
-import _ from 'lodash';
 import { TouchableOpacity, View, Text, Dimensions } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { loadEvent } from '../../../../ducks';
+import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+import _ from 'lodash';
 
 const dimension = Dimensions.get('window');
 
-export const DefaultItem = ({ item }) => {
-	const { committee, type, name, id, location, startTime, endTime } = item;
+export const DefaultItem = ({ event }) => {
+	const { committee, type, name, location, startTime, endTime } = event;
 	const { textColor, itemContainer } = styles;
-
-	const state = useSelector(state => state);
-	const dispatch = useDispatch();
+	const backgroundColor = useSelector(state => state.user.activeUser.color);
 	const navigation = useNavigation();
-
-
 	// used to access previous item props data after rerendering
-	const itemRef = useRef();
-	const previousItemData = itemRef.current;
-
-	let viewName = committee ? committee + ': ' + name : type + ': ' + name;
+	const eventRef = useRef({ listener: () => null });
 
 	// stores item props data so that it can be accessed after the component rerenders
-	useEffect(() => { itemRef.current = item });
-
+	useEffect(() => { eventRef.current.event = event });
 	// reloads the active event if the item prop data changed upon rerender
-	if (!_.isEqual(previousItemData, item) && state.events.activeEvent.id === id
-		&& !_.isEqual(state.events.activeEvent, item)) dispatch(loadEvent(item));
+	if (eventRef.current.event !== undefined && !_.isEqual(eventRef.current, event)) eventRef.current.listener(event);
 
 	return (
-		<TouchableOpacity onPress = { () => viewEvent(item, dispatch, navigation) }>
-			<View style = { [itemContainer, { backgroundColor: state.user.activeUser.color }] }>
-				<Text style = { [{ fontWeight: 'bold' }, textColor] }>{ viewName }</Text>
+		<TouchableOpacity onPress = { () => navigation.push('EventDetails', eventRef) }>
+			<View style = { [itemContainer, { backgroundColor }] }>
+				<Text style = { [{ fontWeight: 'bold' }, textColor] }>{ committee ? committee + ': ' + name : type + ': ' + name }</Text>
 				<Text style = { textColor }>Time: { startTime } - { endTime }</Text>
 				<Text style = { textColor }>Location: { location }</Text>
 			</View>
@@ -45,18 +35,13 @@ export const DefaultEmptyData = () => {
 		textColor,
 		emptyData
 	} = styles;
-	const color = useSelector(state => state.user.activeUser.color);
+	const backgroundColor = useSelector(state => state.user.activeUser.color);
 
 	return (
-		<View style = { [emptyData, { backgroundColor: color }] }>
+		<View style = { [emptyData, { backgroundColor }] }>
 			<Text style = { textColor }>No events to display on this day</Text>
 		</View>
 	);
-};
-
-const viewEvent = (item, dispatch, navigation) => {
-	dispatch(loadEvent(item));
-	navigation.push('EventDetails');
 };
 
 const styles = {

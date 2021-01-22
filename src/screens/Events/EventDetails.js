@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import { Alert, Button, NavBar, FilterList, ButtonLayout, Icon } from '@/components';
 import QRCode from 'react-native-qrcode-svg';
 import QRCodeScanner from 'react-native-qrcode-scanner';
@@ -26,8 +27,11 @@ class EventDetails extends Component {
 
 		this.state = {
 			modalVisible: false,
-			eventFormVisibility: false
+			eventFormVisibility: false,
+			event: this.props.route.params.current.event
 		 };
+
+		this.props.route.params.current.listener = event => this.setState({ event });
 	}
 
 	componentDidMount() {
@@ -45,22 +49,15 @@ class EventDetails extends Component {
 	}
 
 	onSuccess = (e) => {
-		if (this.props.activeEvent.code === e.data)
-			checkIn(this.props.activeEvent, this.props.activeUser);
+		if (this.state.event.code === e.data)
+			checkIn(this.state.event, this.props.activeUser);
 		else
 			Alert.alert('Incorrect Code');
 	}
 
 	renderCodeBox() {
-		const {
-			activeEvent,
-			activeUser
-		} = this.props;
-
-		const {
-			modalBackground,
-			modalContent
-		} = styles;
+		const { activeUser } = this.props;
+		const { modalBackground, modalContent } = styles;
 
 		if (activeUser.privilege && activeUser.privilege.board) {
 			return (
@@ -79,7 +76,7 @@ class EventDetails extends Component {
 							<View style = {{ paddingTop: 20 }}></View>
 							<View style = {{ alignItems: 'center', flex: 2, justifyContent: 'center' }}>
 								<QRCode
-									value = { activeEvent.code }
+									value = { this.state.event.code }
 									size = { 300 }
 								/>
 							</View>
@@ -126,9 +123,7 @@ class EventDetails extends Component {
 	}
 
 	renderComponent(item) {
-		const {
-			textColor
-		} = styles;
+		const { textColor } = styles;
 
 		if (this.props.allMemberAccounts && this.props.allMemberAccounts[item]) {
 			const {
@@ -177,11 +172,7 @@ class EventDetails extends Component {
 	}
 
 	sendListToMail(attendants) {
-		const {
-			activeUser,
-			activeEvent,
-			allMemberAccounts
-		} = this.props;
+		const { activeUser, allMemberAccounts } = this.props;
 
 		let users = [];
 		const email = allMemberAccounts[activeUser.id].email;
@@ -200,7 +191,7 @@ class EventDetails extends Component {
 			3. Save the file and change the extension to .csv\n\
 			4. Open the file in Excel\n\
 			------------------\n\n' + csv;
-		let link = `mailto:${email}?subject=event: ${activeEvent.name}&body=` + data;
+		let link = `mailto:${email}?subject=event: ${this.state.event.name}&body=` + data;
 
 		if (!Linking.canOpenURL(link)) {
 			Alert.alert('Email could not be sent', { type: 'error', title: 'Failure' });
@@ -212,7 +203,8 @@ class EventDetails extends Component {
 	}
 
 	renderAttendance() {
-		const { activeEvent, activeUser } = this.props;
+		const { activeUser } = this.props;
+		const { event } = this.state;
 		const {
 			lineOnTop,
 			attendance,
@@ -222,10 +214,10 @@ class EventDetails extends Component {
 			fullFlex
 		} = styles;
 
-		if (!activeEvent) return null;
+		if (!event) return null;
 
-		if (activeUser.privilege && activeUser.privilege.board && activeEvent.attendance) {
-			let attendants = Object.keys(activeEvent.attendance);
+		if (activeUser.privilege && activeUser.privilege.board && event.attendance) {
+			let attendants = Object.keys(event.attendance);
 
 			return (
 				<View style = { [fullFlex, lineOnTop] }>
@@ -257,21 +249,18 @@ class EventDetails extends Component {
 	}
 
 	confirmDelete() {
-		deleteEvent(this.props.activeEvent);
+		deleteEvent(this.state.event);
 		this.props.navigation.pop();
 	}
 
 	renderPickMembers() {
-		const {
-			allMemberAccounts,
-			activeEvent,
-			activeUser
-		} = this.props;
+		const { allMemberAccounts, activeUser } = this.props;
+		const { event } = this.state;
 
-		if (!activeEvent) return null;
+		if (!event) return null;
 
 		let list = Object.assign({}, allMemberAccounts);
-		let excludeDataProp = !activeEvent ? {} : Object.assign({}, activeEvent.attendance);
+		let excludeDataProp = !event ? {} : Object.assign({}, event.attendance);
 		let Wrapper = (props) => <Button
 			title = 'Manual Check In'
 			onPress = { props.onPress }
@@ -293,32 +282,30 @@ class EventDetails extends Component {
 					regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
 					selectBy = { (data) => { return data.id } }
 					itemJSX = { (data) => MemberPanel(data) }
-					onSelect = { (selectedUsers) => selectedUsers.forEach(user => checkIn(activeEvent, user, false)) }
+					onSelect = { (selectedUsers) => selectedUsers.forEach(user => checkIn(event, user, false)) }
 				/>
 			</View>
 		);
 	}
 
 	renderEventListNum(iconSize) {
-		const {
-			activeEvent,
-			activeUser
-		} = this.props;
+		const { activeUser } = this.props;
 		const {
 			icon,
 			iconContainer,
 			text,
 			textColor
 		} = styles;
+		const { event } = this.state;
 
 		let numRSVP = 0;
 		let numAttendance;
 
-		if (activeEvent) {
-			if (activeEvent.attendance)
-				numAttendance = Object.keys(activeEvent.attendance).length;
-			if (activeEvent.rsvp)
-				numRSVP = Object.keys(activeEvent.rsvp).length;
+		if (event) {
+			if (event.attendance)
+				numAttendance = Object.keys(event.attendance).length;
+			if (event.rsvp)
+				numRSVP = Object.keys(event.rsvp).length;
 		}
 
 		if (activeUser.privilege && activeUser.privilege.board) {
@@ -357,10 +344,8 @@ class EventDetails extends Component {
 	}
 
 	renderButtons() {
-		const {
-			activeUser,
-			activeEvent
-		} = this.props;
+		const { activeUser } = this.props;
+		const { event } = this.state;
 
 		let buttons = [];
 
@@ -368,7 +353,7 @@ class EventDetails extends Component {
 			buttons = <ButtonLayout>
 				<Button
 					title = 'Open check-in'
-					onPress = { () => this.openCheckInButton() }
+					onPress = { () => console.log(this.props.route.params.listener) }
 				/>
 				{ this.renderPickMembers() }
 				<Button
@@ -390,9 +375,9 @@ class EventDetails extends Component {
 					title = 'Check in'
 					onPress = { () => { this.setState({ modalVisible: true }) } }
 				/>
-				{ this.limitRSVP(activeEvent.date) && <Button
+				{ this.limitRSVP(event.date) && <Button
 					title = 'RSVP'
-					onPress = { () => rsvp(activeEvent) }
+					onPress = { () => rsvp(event) }
 				/> }
 			</ButtonLayout>
 			;
@@ -419,7 +404,7 @@ class EventDetails extends Component {
 				location,
 				type,
 				committee
-			} = this.props.activeEvent;
+			} = this.state.event;
 			const {
 				page,
 				container,
@@ -440,7 +425,7 @@ class EventDetails extends Component {
 					<NavBar title = { viewName } back onBack = { () => this.props.navigation.pop() } />
 					<EventForm
 						title = 'Edit Event'
-						values = { this.props.activeEvent }
+						values = { this.state.event }
 						visible = { this.state.eventFormVisibility }
 						onSubmit = { event => editEvent(event) }
 						changeVisibility = { visible => this.setState({ eventFormVisibility: visible }) }
@@ -628,12 +613,11 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ events, user, members }) => {
-	const { activeEvent } = events;
+const mapStateToProps = ({ user, members }) => {
 	const { activeUser } = user;
 	const { allMemberAccounts } = members;
 
-	return { activeEvent, allMemberAccounts, activeUser };
+	return { allMemberAccounts, activeUser };
 };
 
 const mapDispatchToProps = { checkIn, rsvp, pageLoad, getAllMemberAccounts };

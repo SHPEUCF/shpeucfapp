@@ -6,13 +6,10 @@ import { Alert } from '@/components';
 
 // handle all things related to Elections
 const ACTIONS = createActionTypes([
-	'STORE_SORTED_EVENTS',
-	'LOAD_EVENT',
-	'PAGE_LOAD'
+	'STORE_SORTED_EVENTS'
 ]);
 
 const INITIAL_STATE = {
-	activeEvent: {},
 	sortedEvents: []
 };
 
@@ -24,8 +21,6 @@ export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
 		case ACTIONS.STORE_SORTED_EVENTS:
 			return { ...state, sortedEvents: payload };
-		case ACTIONS.LOAD_EVENT:
-			return { ...state, activeEvent: payload };
 		default:
 			return state;
 	}
@@ -75,21 +70,6 @@ export const getEvents = () => {
 
 			dispatch({ type: ACTIONS.STORE_SORTED_EVENTS, payload: sortedEvents });
 		});
-	};
-};
-
-/**
- * Loads the specified event to the store to be pulled in by some other page.
- *
- * Needs to be passed through mapDispatchToProps
- *
- * @access     public
- * @param {Event}   event The event you want to load into the redux.
- */
-
-export const loadEvent = (event) => {
-	return (dispatch) => {
-		dispatch({ type: ACTIONS.LOAD_EVENT, payload: event });
 	};
 };
 
