@@ -536,7 +536,7 @@ export default class AgendaView extends Component {
 }
 
 AgendaView.defaultProps = {
-	renderItem: (reservation) => <DefaultItem item = { reservation } />,
+	renderItem: (reservation) => <DefaultItem event = { reservation } />,
 	renderEmptyData: () => <DefaultEmptyData />,
 	renderEmptyDate: () => <View></View>,
 	rowHasChanged: (r1, r2) => r1 !== r2,
