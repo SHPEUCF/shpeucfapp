@@ -11,12 +11,12 @@ export const DefaultItem = ({ event }) => {
 	const { textColor, itemContainer } = styles;
 	const backgroundColor = useSelector(state => state.user.activeUser.color);
 	const navigation = useNavigation();
-	// used to access previous item props data after rerendering
+	// used to maintain event data across renders and push any updates to the active event
 	const eventRef = useRef({ listener: () => null });
 
-	// stores item props data so that it can be accessed after the component rerenders
 	useEffect(() => { eventRef.current.event = event });
-	// reloads the active event if the item prop data changed upon rerender
+
+	// pushes any new changes to the active event
 	if (eventRef.current.event !== undefined && !_.isEqual(eventRef.current, event)) eventRef.current.listener(event);
 
 	return (

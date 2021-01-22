@@ -31,6 +31,7 @@ class EventDetails extends Component {
 			event: this.props.route.params.current.event
 		 };
 
+		// listener function for changes to the event
 		this.props.route.params.current.listener = event => this.setState({ event });
 	}
 
@@ -353,7 +354,7 @@ class EventDetails extends Component {
 			buttons = <ButtonLayout>
 				<Button
 					title = 'Open check-in'
-					onPress = { () => console.log(this.props.route.params.listener) }
+					onPress = { () => this.openCheckInButton() }
 				/>
 				{ this.renderPickMembers() }
 				<Button
