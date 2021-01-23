@@ -71,22 +71,6 @@ export function convertNumToDate(date) {
 	return `${shortMonths[Number(month) - 1]} ${day}`;
 }
 
-/**
- * @description Prepends a 0 to any single digit number, otherwise returns the original number.
- *
- * @param {Number} item The number that may need a 0 prepended to it.
- *
- * @returns {String} The number as a string. It may have  a 0 prepended to it, if it was originally single digit.
- */
-
-export const prepend0 = (number) => number < 10 ? '0' + number : number;
-
-/**
- * @description Formats event to work with the calendar component.
- *
- * @param {Object[]} events An array of all the events that you want to format.
- */
-
 export function formatEventListForCalendar(events) {
 	let dates = {};
 
@@ -128,7 +112,7 @@ export function timeVerification(startTime, endTime) {
 
 export function changeHourBy(time, amount) {
 	const [hour, minute] = time.split(':');
-	let newHour = prepend0((parseInt(hour) + amount) % 24);
+	let newHour = ((parseInt(hour) + amount) % 24).toString().padStart(2, '0');
 
 	return `${newHour}:${minute}`;
 }

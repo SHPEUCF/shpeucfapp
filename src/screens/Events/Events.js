@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, ButtonLayout } from '@/components/';
-import { formatEventListForCalendar, prepend0, DefaultAgenda } from '@/utils/events';
+import { formatEventListForCalendar, DefaultAgenda } from '@/utils/events';
 import { createEvent } from '@/ducks';
 import { EventForm } from '@/data/FormData';
 import { View, Dimensions, SafeAreaView } from 'react-native';
@@ -10,9 +10,9 @@ const { height } = Dimensions.get('screen');
 
 const getTodaysDate = () => {
 	let date = new Date();
-	let month = prepend0((date.getMonth() + 1).toString());
+	let month = (date.getMonth() + 1).toString().padStart(2, '0');
 	let year = date.getFullYear();
-	let day = prepend0(date.getDate().toString());
+	let day = date.getDate().toString().padStart(2, '0');
 
 	return `${year}-${month}-${day}`;
 };
@@ -22,17 +22,6 @@ export const Events = () => {
 	const [isEventFormVisible, toggleEventFormVisibility] = useState(false);
 	const [targetDate, changeTargetDate] = useState(getTodaysDate());
 	const { user: { activeUser: { color, privilege } }, events: { sortedEvents } } = useSelector(state => state);
-
-	const renderButton = () => {
-		return (
-			<ButtonLayout>
-				{ privilege && privilege.board && <Button
-					title = 'Create Event'
-					onPress = { () => toggleEventFormVisibility(true) }
-				/> }
-			</ButtonLayout>
-		);
-	};
 
 	return (
 		<SafeAreaView style = { [fullFlex, mainBackgroundColor] }>
@@ -53,7 +42,12 @@ export const Events = () => {
 						height = { height }
 					/>
 				</View>
-				{ renderButton() }
+				<ButtonLayout>
+					{ privilege && privilege.board && <Button
+						title = 'Create Event'
+						onPress = { () => toggleEventFormVisibility(true) }
+					/> }
+				</ButtonLayout>
 			</View>
 		</SafeAreaView>
 	);

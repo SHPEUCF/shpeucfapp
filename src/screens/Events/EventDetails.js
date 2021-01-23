@@ -326,16 +326,6 @@ class EventDetails extends Component {
 			return true;
 	}
 
-	prepend0(item) {
-		let array = item.split(':');
-		let hour = array[0];
-
-		if (hour.length === 1)
-			hour = '0' + hour;
-
-		return hour + ':' + array[1] + ':' + array[2];
-	}
-
 	renderButtons() {
 		const { activeUser } = this.props;
 		const { event } = this.state;

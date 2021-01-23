@@ -27,9 +27,9 @@ class CommitteePage extends Component {
 
 	componentDidMount() {
 		let date = new Date();
-		let month = this.prepend0((date.getMonth() + 1).toString());
+		let month = (date.getMonth() + 1).toString().padStart(2, '0');
 		let year = date.getFullYear();
-		let day = this.prepend0(date.getDate().toString());
+		let day = date.getDate().toString().padStart(2, '0');
 		let stringDate = `${year}-${month}-${day}`;
 
 		dateStr = stringDate;
@@ -43,10 +43,6 @@ class CommitteePage extends Component {
 
 	static onRight = function() {
 		Alert.alert(new Date());
-	}
-
-	prepend0(item) {
-		return item < 10 ? '0' + item : item;
 	}
 
 	getDate(item) {

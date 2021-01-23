@@ -33,7 +33,6 @@ export const EventPanel = ({ event, screen }) => {
 			</TouchableOpacity>
 		);
 	}
-
 	else if (screen === 'Dashboard') {
 		const {
 			eventItem,
@@ -47,13 +46,13 @@ export const EventPanel = ({ event, screen }) => {
 		return (
 			<TouchableOpacity
 				style = { eventItem }
-				onPress = { () => { navigation.push('EventDetails', eventRef) } }
+				onPress = { () => navigation.push('EventDetails', eventRef) }
 			>
 				<View style = { eventItemInnerContainer }>
 					<View style = { eventTextContainer }>
 						<Text style = { eventTextStyle }>{ committee || type }: { name }</Text>
 						<Text style = { eventTextStyle }>
-							{ convertNumToDate(date) } - { startTime } - { endTime }
+							{ `${convertNumToDate(date)} - ${startTime} - ${endTime}` }
 						</Text>
 					</View>
 					<View style = { leaderboardArrow }>
