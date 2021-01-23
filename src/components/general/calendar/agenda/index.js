@@ -9,7 +9,6 @@ import ReservationsList from './reservation-list';
 import styleConstructor from './style';
 import { VelocityTracker } from '../input';
 import { AGENDA_CALENDAR_KNOB } from '../testIDs';
-import { DefaultItem, DefaultEmptyData } from '../default-props/eventProps';
 
 const dimension = Dimensions.get('window');
 const today = XDate();
@@ -534,29 +533,3 @@ export default class AgendaView extends Component {
 		);
 	}
 }
-
-AgendaView.defaultProps = {
-	renderItem: (reservation) => <DefaultItem event = { reservation } />,
-	renderEmptyData: () => <DefaultEmptyData />,
-	renderEmptyDate: () => <View></View>,
-	rowHasChanged: (r1, r2) => r1 !== r2,
-	pastScrollRange: 24,
-	futureScrollRange: 24,
-	theme: {
-		backgroundColor: 'black',
-		calendarBackground: '#21252b',
-		agendaDayTextColor: '#fff',
-		agendaDayNumColor: '#fff',
-		dayTextColor: '#fff',
-		monthTextColor: '#FECB00',
-		textSectionTitleColor: '#FECB00',
-		textDisabledColor: '#999',
-		selectedDayTextColor: '#000',
-		selectedDayBackgroundColor: '#FECB00',
-		todayTextColor: '#44a1ff',
-		textDayFontSize: 15,
-		textMonthFontSize: 16,
-		textDayHeaderFontSize: 14,
-		selectedDotColor: 'black'
-	}
-};

@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import { Alert, Button, NavBar, FilterList, ButtonLayout, Icon } from '@/components';
 import QRCode from 'react-native-qrcode-svg';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { MemberPanel } from '@/utils/render';
-import { months } from '@/data/DateItems';
 import { EventForm } from '@/data/FormData';
+import { convertNumToDate } from '@/utils/events';
 import { deleteEvent, editEvent, checkIn, rsvp, pageLoad, getAllMemberAccounts } from '@/ducks';
 import {
 	View,
@@ -40,13 +39,6 @@ class EventDetails extends Component {
 
 		if (activeUser.privilege && activeUser.privilege.board)
 			getAllMemberAccounts();
-	}
-
-	convertNumToDate(date) {
-		if (!date) return '';
-		let tempDate = date.split('-');
-
-		return `${months[Number(tempDate[1]) - 1]} ${tempDate[2]}`;
 	}
 
 	onSuccess = (e) => {
@@ -334,16 +326,6 @@ class EventDetails extends Component {
 			return true;
 	}
 
-	prepend0(item) {
-		let array = item.split(':');
-		let hour = array[0];
-
-		if (hour.length === 1)
-			hour = '0' + hour;
-
-		return hour + ':' + array[1] + ':' + array[2];
-	}
-
 	renderButtons() {
 		const { activeUser } = this.props;
 		const { event } = this.state;
@@ -438,7 +420,7 @@ class EventDetails extends Component {
 								name = 'md-calendar'
 								size = { iconSize }
 								color = '#000' />
-							<Text style = { [text, textColor] }>{ this.convertNumToDate(date) }</Text>
+							<Text style = { [text, textColor] }>{ convertNumToDate(date) }</Text>
 						</View>
 						<View style = { iconContainer }>
 							<Icon
