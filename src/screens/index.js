@@ -17,7 +17,7 @@ export { default as ElectionPositions } from './Election/ElectionPositions';
 export { default as PositionForm } from './Election/PositionForm';
 
 // Export Events
-export { default as Events } from './Events/Events';
+export { Events } from './Events/Events';
 export { default as EventDetails } from './Events/EventDetails';
 
 // Export General

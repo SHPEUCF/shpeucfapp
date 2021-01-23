@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import { Spinner, Icon } from '@/components';
 import { ColorPicker } from 'react-native-color-picker';
 import CountryFlag from '@/components/general/CountryFlag';
-import { months } from '@/data/DateItems';
-import { loadEvent, editUser, loadCommittee } from '@/ducks';
-import { Leaderboard, EventsList, FavoriteCommittees } from './';
+import { editUser, loadCommittee } from '@/ducks';
+import { EventPanel } from '@/utils/EventPanel';
+import { filterPastEvents, fullMonths } from '@/utils/events';
+import { Leaderboard, FavoriteCommittees } from './';
 import {
 	Text,
 	View,
@@ -35,8 +36,8 @@ class Dashboard extends Component {
 	}
 
 	renderContent() {
-		const { page, title, textColor, dashCommittees, dashboardContent, upcomingEvents } = styles;
-		const { allMemberPoints, activeUser, sortedEvents, committeesList, loadEvent, navigation } = this.props;
+		const { page, dashCommittees, dashboardContent } = styles;
+		const { allMemberPoints, activeUser, committeesList, navigation } = this.props;
 
 		return (
 			<SafeAreaView style = { page }>
@@ -44,14 +45,7 @@ class Dashboard extends Component {
 				<ScrollView>
 					{ this.renderHeader() }
 					<View style = { dashboardContent }>
-						<View style = { upcomingEvents }>
-							<Text style = { [title, textColor] }>Upcoming Events</Text>
-						</View>
-						<EventsList
-							sortedEvents = { sortedEvents }
-							loadEvent = { event => loadEvent(event) }
-							navigation = { navigation }
-						/>
+						{ this.renderEvents() }
 						<View style = { dashCommittees }>
 							<View style = {{ flex: 1 }}>
 								<Leaderboard
@@ -88,7 +82,7 @@ class Dashboard extends Component {
 					<Text style = { [textColor, { fontSize: 20 }] }>
 						{ date.getHours() >= 12 ? 'Good evening' : 'Good morning' }, { this.props.activeUser.firstName }.
 					</Text>
-					<Text style = { textColor }>Today is { months[date.getMonth()] } { date.getDate() }</Text>
+					<Text style = { textColor }>Today is { fullMonths[date.getMonth()] } { date.getDate() }</Text>
 				</View>
 				<View style = { headerOptionsContainer }>
 					<CountryFlag />
@@ -99,6 +93,23 @@ class Dashboard extends Component {
 						onPress = { () => this.setState({ colorPickerVisible: true }) }
 						size = { 15 }
 					/>
+				</View>
+			</View>
+		);
+	}
+
+	renderEvents() {
+		const { upcomingEvents, eventListContainerFull, eventEmptyText, title, textColor } = styles;
+		const events = filterPastEvents(this.props.sortedEvents) || [];
+
+		return (
+			<View>
+				<View style = { upcomingEvents }>
+					<Text style = { [title, textColor] }>Upcoming Events</Text>
+				</View>
+				<View style = { eventListContainerFull }>
+					{ !events.length && <Text style = { [textColor, eventEmptyText ] }>No Upcoming Events</Text>
+				|| events.slice(0, 3).map(event => <EventPanel event = { event } screen = { 'Dashboard' } />) }
 				</View>
 			</View>
 		);
@@ -266,6 +277,9 @@ const styles = {
 		height: 100,
 		justifyContent: 'center',
 		padding: 20
+	},
+	eventListContainerFull: {
+		backgroundColor: '#21252b'
 	}
 };
 
@@ -285,6 +299,6 @@ const mapStateToProps = ({ user, members, events, elect, committees }) => {
 	};
 };
 
-const mapDispatchToProps = { loadEvent, loadCommittee };
+const mapDispatchToProps = { loadCommittee };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

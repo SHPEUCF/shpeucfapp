@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { NavBar } from '@/components';
 import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
 import { getAllMemberPoints, loadUser, fetchEvents, goToViewEvent } from '@/ducks';
+import { convertNumToDate } from '@/utils/events';
 
 const dimension = Dimensions.get('screen');
 
@@ -116,13 +117,6 @@ class PointsBreakDown extends Component {
 		);
 	}
 
-	convertNumToDate(date) {
-		let months = ['Jan', 'Feb', 'Mar', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-		let tempDate = date.split('-');
-
-		return `${months[Number(tempDate[1]) - 1]} ${tempDate[2]}`;
-	}
-
 	renderInnerComponent(item, section) {
 		const {
 			innerContainerStyle,
@@ -140,7 +134,7 @@ class PointsBreakDown extends Component {
 						<View style = { innerContainerStyle }>
 							<Text style = { [title, botLevelText, textColor] }>{ item.name }</Text>
 							<Text style = { [points, botLevelText, textColor] }>{ item.points }</Text>
-							<Text style = { [botLevelText, textColor] }>{ this.convertNumToDate(item.date) }</Text>
+							<Text style = { [botLevelText, textColor] }>{ convertNumToDate(item.date) }</Text>
 						</View>
 					</View>
 				</TouchableOpacity>
