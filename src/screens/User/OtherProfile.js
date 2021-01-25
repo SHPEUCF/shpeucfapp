@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
-import { connect } from 'react-redux';
 import { Alert, ButtonLayout, NavBar, Avatar, Icon } from '@/components';
 import Flag from 'react-native-flags';
 import { verifiedCheckMark } from '@/utils/render';
@@ -8,16 +7,16 @@ import { verifiedCheckMark } from '@/utils/render';
 const dimension = Dimensions.get('screen');
 
 class OtherProfile extends Component {
-	render() {
-		return (
-			this.renderContent()
-		);
+	constructor(props) {
+		super(props);
+		this.state = { member: this.props.route.params.current.member };
+
+		// listener function for changes to the member account
+		this.props.route.params.current.listener = member => this.setState({ member });
 	}
 
-	renderContent() {
-		const {
-			email, major, points
-		} = this.props.visitedMember;
+	render() {
+		const { email, major, points } = this.state.member;
 		const {
 			bioContainer,
 			fieldContainerStyle,
@@ -83,7 +82,7 @@ class OtherProfile extends Component {
 			picture,
 			paidMember,
 			color
-		} = this.props.visitedMember;
+		} = this.state.member;
 
 		return (
 			<View style = { headerInfoContainer }>
@@ -103,13 +102,6 @@ class OtherProfile extends Component {
 				</View>
 			</View>
 		);
-	}
-
-	constructor(props) {
-		super(props);
-		this.state = {
-			dp: null
-		};
 	}
 
 	renderFlag() {
@@ -239,6 +231,4 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ members: { visitedMember } }) => ({ visitedMember });
-
-export default connect(mapStateToProps)(OtherProfile);
+export default OtherProfile;

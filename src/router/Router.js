@@ -62,6 +62,7 @@ const MoreStackNavigator = () => (
 		<MoreStack.Screen name = 'ElectionAdmin' component = { ElectionAdmin } />
 		<MoreStack.Screen name = 'ElectionCandidates' component = { ElectionCandidates } />
 		<MoreStack.Screen name = 'ElectionPositions' component = { ElectionPositions } />
+		<MoreStack.Screen name = 'OtherProfile' component = { OtherProfile } />
 	</MoreStack.Navigator>
 );
 

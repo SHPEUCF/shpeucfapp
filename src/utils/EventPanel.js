@@ -8,7 +8,7 @@ import _ from 'lodash';
 
 const { width, height } = Dimensions.get('screen');
 
-export const EventPanel = ({ event, screen }) => {
+export const EventPanel = ({ event, variant }) => {
 	const { committee, type, date, name, location, startTime, endTime } = event;
 	const backgroundColor = useSelector(state => state.user.activeUser.color);
 	const navigation = useNavigation();
@@ -20,7 +20,7 @@ export const EventPanel = ({ event, screen }) => {
 	// pushes any new changes to the active event
 	if (eventRef.current.event !== undefined && !_.isEqual(eventRef.current, event)) eventRef.current.listener(event);
 
-	if (screen === 'Events') {
+	if (variant === 'Events') {
 		const { itemContainer, textColor } = styles;
 
 		return (
@@ -33,7 +33,7 @@ export const EventPanel = ({ event, screen }) => {
 			</TouchableOpacity>
 		);
 	}
-	else if (screen === 'Dashboard') {
+	else if (variant === 'Dashboard') {
 		const {
 			eventItem,
 			eventItemInnerContainer,

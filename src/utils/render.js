@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, Text } from 'react-native';
 import firebase from 'firebase';
-import { Avatar, Icon } from '@/components';
+import { Icon } from '@/components';
 import ImagePicker from 'react-native-image-crop-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 
@@ -18,49 +17,6 @@ export const verifiedCheckMark = ({ paidMember }) => {
 	}
 };
 
-/*
- * MemberPanel needs should be made into its own component
- * May need to change because of Leaderboard
- */
-
-export const MemberPanel = user => {
-	const { textStyle, contentContainerStyle, userInfoContainer, fullFlex, AvatarContainer } = styles;
-
-	truncateNames(user);
-
-	return (
-		<View style = { contentContainerStyle }>
-			<View style = { userInfoContainer }>
-				<Text style = { [textStyle, fullFlex] }>{ `${user.firstName} ${user.lastName}` }</Text>
-				<View style = { AvatarContainer }>
-					<Avatar
-						source = { user.picture }
-						title = { user.firstName[0].concat(user.lastName[0]) }
-						style = {{ backgroundColor: user.color }}
-					/>
-				</View>
-			</View>
-		</View>
-	);
-};
-
-export const rankMembersAndReturnsCurrentUser = (sortedMembers, userId) => {
-	let currentMember;
-	let pastPoints = 0;
-	let pastIndex = 1;
-
-	sortedMembers.forEach((x, index) => {
-		x.index = x.points !== 0 ? index + 1 : sortedMembers.length;
-		if (x.points === pastPoints) x.index = pastIndex;
-		if (x.id === userId) currentMember = x;
-
-		pastPoints = x.points;
-		pastIndex = x.index;
-	});
-
-	return currentMember;
-};
-
 /**
  * @description Directly modifies firstName and lastName to get first word.
  *
@@ -70,11 +26,13 @@ export const rankMembersAndReturnsCurrentUser = (sortedMembers, userId) => {
  */
 
 export const truncateNames = item => {
-	[item.firstName] = item.firstName.trim().split(' ');
-	[item.lastName] = item.lastName.trim().split(' ');
+	let [firstName] = item.firstName.trim().split(' ');
+	let [lastName] = item.lastName.trim().split(' ');
 
-	if (item.firstName.length + item.lastName.length >= 15)
-		item.lastName = `${item.lastName[0]}.`;
+	if (firstName.length + lastName.length >= 15)
+		lastName = `${lastName[0]}.`;
+
+	return [firstName, lastName];
 };
 
 export const openGallery = (filePath, fileName, onImageStoreFunction) => {
@@ -139,28 +97,5 @@ const styles = {
 		backgroundColor: 'transparent',
 		alignSelf: 'center',
 		marginLeft: 10
-	},
-	textStyle: {
-		color: '#e0e6ed',
-		fontSize: 20
-	},
-	userInfoContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center'
-	},
-	fullFlex: {
-		flex: 1
-	},
-	AvatarContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center'
-	},
-	contentContainerStyle: {
-		height: 150,
-		alignItems: 'flex-start',
-		paddingHorizontal: 15,
-		justifyContent: 'center'
 	}
 };
