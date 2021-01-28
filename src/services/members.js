@@ -72,26 +72,23 @@ export const changePrivilegeOfMembers = (members, privilegeChanged, value) => {
 
 export const getAllMemberAccountsandRankings = listener => new Promise(resolve =>
 	firebase.database().ref('/users/')[listener ? 'on' : 'once']('value', snapshot => {
-		const allMemberAccounts = {};
-		let rankedIds = [];
-
-		_.orderBy(snapshot.val(), ['lastName', 'firstName'], ['asc', 'asc']).forEach(member => allMemberAccounts[member.id] = member);
-		rankedIds = _.orderBy(allMemberAccounts, ['points'], ['desc']).map(({ id }) => id);
-
+		const allMemberAccounts = _.orderBy(snapshot.val(), ['lastName', 'firstName'], ['asc', 'asc'])
+			.reduce((allMembers, member) => ({ ...allMembers, [member.id]: member }), {});
+		const rankedIDs = _.orderBy(allMemberAccounts, ['points'], ['desc']).map(({ id }) => id);
 		let pastPoints = 0;
 		let pastRank = 1;
 
-		rankedIds.forEach((id, index) => {
+		rankedIDs.forEach((id, index) => {
 			const member = allMemberAccounts[id];
 
-			member.rank = member.points !== 0 ? index + 1 : rankedIds.length;
+			member.rank = member.points !== 0 ? index + 1 : rankedIDs.length;
 			if (member.points === pastPoints) member.rank = pastRank;
 
-			pastPoints = member.points;
 			pastRank = member.rank;
+			pastPoints = member.points;
 		});
 
-		resolve({ allMemberAccounts, rankedIds });
+		resolve({ allMemberAccounts, rankedIDs });
 	})
 );
 

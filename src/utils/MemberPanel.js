@@ -12,7 +12,7 @@ export const MemberPanel = ({ member, variant }) => {
 	const { id, rank, picture, color, points, paidMember } = member;
 	const { text, currentUserTextColor } = styles;
 
-	const { user: { activeUser }, members: { allMemberAccounts, rankedIds } } = useSelector(state => state);
+	const { user: { activeUser }, members: { allMemberAccounts, rankedIDs } } = useSelector(state => state);
 	const navigation = useNavigation();
 
 	const [firstName, lastName] = truncateNames(member);
@@ -75,7 +75,7 @@ export const MemberPanel = ({ member, variant }) => {
 					</View>
 					<ProgressBar
 						style = { progress }
-						progress = { points / Math.max(allMemberAccounts[rankedIds[0]].points, 1) }
+						progress = { points / Math.max(allMemberAccounts[rankedIDs[0]].points, 1) }
 						height = { width * 0.03 }
 						width = { width * 0.75 }
 						color = '#FFD700'

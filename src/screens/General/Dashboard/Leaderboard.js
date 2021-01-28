@@ -6,8 +6,8 @@ import { Icon } from '@/components';
 const { width, height } = Dimensions.get('screen');
 
 export const Leaderboard = ({ navigation }) => {
-	const { user: { activeUser: { id } }, members: { rankedIds, allMemberAccounts } } = useSelector(state => state);
-	const firstMember = allMemberAccounts[rankedIds[0]];
+	const { user: { activeUser: { id } }, members: { rankedIDs, allMemberAccounts } } = useSelector(state => state);
+	const firstMember = allMemberAccounts[rankedIDs[0]];
 	const {
 		title,
 		leaderboardContent,

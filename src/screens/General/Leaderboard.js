@@ -8,7 +8,7 @@ const { height } = Dimensions.get('screen');
 
 export const Leaderboard = () => {
 	const [search, setSearch] = useState(false);
-	const { members: { allMemberAccounts, rankedIds } } = useSelector(state => state);
+	const { members: { allMemberAccounts, rankedIDs } } = useSelector(state => state);
 	const { screenBackground } = styles;
 	const searchIcon = <Icon
 		onPress = { () => setSearch(!search) }
@@ -21,7 +21,7 @@ export const Leaderboard = () => {
 		<SafeAreaView style = { screenBackground }>
 			<NavBar title = 'Leaderboard' childComponent = { searchIcon } back />
 			<FilterList
-				data = { rankedIds.map(id => allMemberAccounts[id]) }
+				data = { rankedIDs.map(id => allMemberAccounts[id]) }
 				search = { search }
 				placeholder = 'Find user'
 				itemJSX = { member => <MemberPanel member = { member } variant = 'Leaderboard' /> }

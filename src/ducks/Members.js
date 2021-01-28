@@ -10,15 +10,13 @@ const ACTIONS = createActionTypes([
 const INITIAL_STATE = {
 	allMemberAccounts: {},
 	allMemberPoints: {},
-	rankedIds: []
+	rankedIDs: []
 };
 
-export default (state = INITIAL_STATE, action) => {
-	const { payload } = action;
-
-	switch (action.type) {
+export default (state = INITIAL_STATE, { payload, type }) => {
+	switch (type) {
 		case ACTIONS.STORE_ALL_MEMBER_ACCOUNTS_AND_RANKINGS:
-			return { ...state, allMemberAccounts: payload.allMemberAccounts, rankedIds: payload.rankedIds };
+			return { ...state, allMemberAccounts: payload.allMemberAccounts, rankedIDs: payload.rankedIDs };
 		case ACTIONS.STORE_ALL_MEMBER_POINTS:
 			return { ...state, allMemberPoints: payload };
 		default:
@@ -27,9 +25,9 @@ export default (state = INITIAL_STATE, action) => {
 };
 
 export const storeMemberAccountsandRankings = () => dispatch =>
-	getAllMemberAccountsandRankings(true).then(({ allMemberAccounts, rankedIds }) => dispatch({
+	getAllMemberAccountsandRankings(true).then(({ allMemberAccounts, rankedIDs }) => dispatch({
 		type: ACTIONS.STORE_ALL_MEMBER_ACCOUNTS_AND_RANKINGS,
-		payload: { allMemberAccounts, rankedIds }
+		payload: { allMemberAccounts, rankedIDs }
 	}));
 
 export const storeAllMemberPoints = () => dispatch =>
