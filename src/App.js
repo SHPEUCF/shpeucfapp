@@ -10,10 +10,10 @@ import {
 	verifyAppVersion,
 	userStatus,
 	loadUser,
-	getAllMemberAccounts,
+	storeMemberAccountsandRankings,
+	storeAllMemberPoints,
 	getEvents,
 	getCommittees,
-	getAllMemberPoints,
 	updateElection
 } from './ducks';
 
@@ -27,7 +27,14 @@ export const App = () => {
 	const mounted = useRef();
 	const dispatch = useDispatch();
 	const store = useStore();
-	const initRoutine = [loadUser, getEvents, getCommittees, updateElection, getAllMemberAccounts, getAllMemberPoints];
+	const initRoutine = [
+		loadUser,
+		getEvents,
+		getCommittees,
+		updateElection,
+		storeMemberAccountsandRankings,
+		storeAllMemberPoints
+	];
 
 	useEffect(() => {
 		if (!mounted.current) {

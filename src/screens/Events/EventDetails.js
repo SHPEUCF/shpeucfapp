@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Alert, Button, NavBar, FilterList, ButtonLayout, Icon } from '@/components';
 import QRCode from 'react-native-qrcode-svg';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import { MemberPanel } from '@/utils/render';
+import { MemberPanel } from '@/utils/MemberPanel';
 import { EventForm } from '@/data/FormData';
 import { convertNumToDate } from '@/utils/events';
 import { deleteEvent, editEvent, checkIn, rsvp, pageLoad, getAllMemberAccounts } from '@/ducks';
@@ -272,9 +272,9 @@ class EventDetails extends Component {
 					multiple = { true }
 					CustomForm = { Wrapper }
 					data = { list }
-					regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
-					selectBy = { (data) => { return data.id } }
-					itemJSX = { (data) => MemberPanel(data) }
+					regexFunc = { member => { return `${member.firstName} ${member.lastName}` } }
+					selectBy = { member => { return member.id } }
+					itemJSX = { member => <MemberPanel member = { member } variant = 'General' /> }
 					onSelect = { (selectedUsers) => selectedUsers.forEach(user => checkIn(event, user, false)) }
 				/>
 			</View>

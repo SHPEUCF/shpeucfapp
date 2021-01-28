@@ -109,7 +109,7 @@ class Dashboard extends Component {
 				</View>
 				<View style = { eventListContainerFull }>
 					{ !events.length && <Text style = { [textColor, eventEmptyText ] }>No Upcoming Events</Text>
-				|| events.slice(0, 3).map(event => <EventPanel event = { event } screen = { 'Dashboard' } />) }
+				|| events.slice(0, 3).map(event => <EventPanel event = { event } variant = { 'Dashboard' } />) }
 				</View>
 			</View>
 		);
@@ -280,7 +280,13 @@ const styles = {
 	},
 	eventListContainerFull: {
 		backgroundColor: '#21252b'
-	}
+	},
+	eventEmptyText: {
+		fontSize: 20,
+		textAlign: 'center',
+		padding: 20,
+		height: 150
+	},
 };
 
 const mapStateToProps = ({ user, members, events, elect, committees }) => {

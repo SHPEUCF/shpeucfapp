@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, ScrollView, Dimensions, SafeAreaView } from 'react-native';
 import { Input, Button, FilterList, ButtonLayout } from '@/components/general';
-import { MemberPanel } from '@/utils/render';
-import MemberService from '@/services/members';
+import { MemberPanel } from '@/utils/MemberPanel';
+import { assignPosition } from '@/services/members';
 import {
 	addCommittee,
 	editCommittee,
@@ -13,7 +13,6 @@ import {
 	chairPersonChanged
 } from '@/ducks';
 
-const memberService = new MemberService();
 const dimension = Dimensions.get('screen');
 
 class CommitteeForm extends Component {
@@ -68,7 +67,8 @@ class CommitteeForm extends Component {
 				this.props.editCommittee(committeeTitle, committeeDescription, chairObj, this.state.oldTitle);
 			else
 				this.props.editCommittee(committeeTitle, committeeDescription, chairObj, null);
-			memberService.assignPosition(committeeTitle, 'board', chair.id, this.state.oldChair);
+
+			assignPosition(committeeTitle, 'board', chair.id, this.state.oldChair);
 			navigation.pop();
 		}
 	}
@@ -105,10 +105,10 @@ class CommitteeForm extends Component {
 							data = { allMemberAccounts }
 							value = { allMemberAccounts[chair.id] }
 							placeholder = { 'Director/Chairperson' }
-							regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
-							selectBy = { (data) => { return data.id } }
-							onSelect = { (data) => { this.props.chairPersonChanged(data) } }
-							itemJSX = { (data) => MemberPanel(data) }
+							regexFunc = { member => { return `${member.firstName} ${member.lastName}` } }
+							selectBy = { member => { return member.id } }
+							onSelect = { member => { this.props.chairPersonChanged(member) } }
+							itemJSX = { member => <MemberPanel member = { member } variant = 'General' /> }
 						/>
 					</View>
 					{ this.renderError() }

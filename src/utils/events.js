@@ -164,7 +164,7 @@ export const DefaultAgenda = ({ passDate, items, screen, color, height }) => {
 		passDate = { passDate }
 		items = { items }
 		style = {{ height: height * 0.73 }}
-		renderItem = { event => <EventPanel event = { event } screen = { screen } /> }
+		renderItem = { event => <EventPanel event = { event } variant = { screen } /> }
 		renderEmptyData = { () => <EmptyEventPanel /> }
 		renderEmptyDate = { () => <View></View> }
 		rowHasChanged = { (r1, r2) => r1 !== r2 }
