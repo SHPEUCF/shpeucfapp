@@ -1,118 +1,48 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { View, Text, ScrollView, SafeAreaView } from 'react-native';
-import { Input, Button, ButtonLayout } from '@/components/general';
-import {
-	addPosition,
-	editPosition,
-	positionTitleChanged,
-	positionDescriptionChanged,
-	deletePosition
-} from '@/ducks';
+import { Input, Button, ButtonLayout } from '@/components';
+import * as ElectionService from '@/services/elections';
 
-class PositionForm extends Component {
-	/*
-	 * EventCreationError(text) {
-	 * 	this.props.eventError(text);
-	 * }
-	 */
-	constructor(props) {
-		super(props);
-		this.state = { oldTitle: this.props.positionTitle };
-	}
+export const PositionForm = ({ navigation, route: { params: { action, position } } }) => {
+	const { positions } = useSelector(({ elect }) => elect);
+	const [title, setTitle] = useState(position ? position.title : '');
+	const [description, setDescription] = useState(position ? position.description : '');
+	const [error, setError] = useState('');
 
-	renderError() {
-		if (this.props.error) {
-			return (
-				<View>
-					<Text style = { styles.errorTextStyle }>
-						{ this.props.error }
-					</Text>
-				</View>
-			);
-		}
-	}
+	const onButtonPress = () => {
+		setError((title) ? '' : 'Title missing');
 
-	onButtonPress() {
-		const {
-			positionTitle,
-			candidatePlan,
-			positionDescription,
-			positions,
-			navigation,
-			route: { params: { action } }
-		} = this.props;
+		if (title && action === 'ADD')
+			ElectionService.addPosition(title, description, Object.keys(positions || {}).length);
+		else if (title && action === 'EDIT')
+			ElectionService.editPosition(title, description, (position.title === title) ? null : position.title);
 
-		let length = positions && positions ? Object.entries(positions).length : 0;
-
-		if (positionTitle === '') {
-			// this.EventCreationError('Please enter a Candidate Name');
-		}
-		else if (candidatePlan === '') {
-			// this.EventCreationError('Please enter a Plan of action');
-		}
-		else if (positionDescription === '') {
-			// this.EventCreationError('Please enter a position');
-		}
-		else {
-			if (action === 'ADD')
-				this.props.addPosition(positionTitle, positionDescription, length);
-			else
-			if (this.state.oldTitle !== positionTitle)
-				this.props.editPosition(positionTitle, positionDescription, this.state.oldTitle);
-			else
-				this.props.editPosition(positionTitle, positionDescription, null);
-
+		if (title && action)
 			navigation.pop();
-		}
-	}
+	};
 
-	render() {
-		return (
-			<SafeAreaView style = { styles.formContainerStyle }>
-				<View style = { styles.headerStyle }>
-					<Text style = { styles.headerTextStyle }>{ this.props.route.params.action + ' POSITION' }</Text>
-					{ /* <Text style={styles.headerSubtitleStyle}>Registration</Text> */ }
-				</View>
-				<ScrollView
-					ref = { (ref) => this.scrollView = ref }
-					style = { styles.scrollView }>
-					{ /* <RkAvoidKeyboard> */ }
-					<View>
-						<Input
-							placeholder = 'Position Title'
-							value = { this.props.positionTitle }
-							onChangeText = { this.props.positionTitleChanged.bind(this) }
-						/>
-						<Input
-							placeholder = 'Position Description'
-							value = { this.props.positionDescription }
-							onChangeText = { this.props.positionDescriptionChanged.bind(this) }
-						/>
-					</View>
-					{ this.renderError() }
-				</ScrollView>
-				<ButtonLayout>
-					<Button
-						title = 'Submit'
-						onPress = { this.onButtonPress.bind(this) }
-					/>
-					<Button
-						title = 'Cancel'
-						onPress = { () => this.props.navigation.pop() }
-					/>
-				</ButtonLayout>
-			</SafeAreaView>
-		);
-	}
-}
+	const { formContainerStyle, headerStyle, headerTextStyle, errorTextStyle, scrollView } = styles;
+
+	return (
+		<SafeAreaView style = { formContainerStyle }>
+			<View style = { headerStyle }>
+				<Text style = { headerTextStyle }>{ `${action} POSITION` }</Text>
+			</View>
+			<ScrollView style = { scrollView }>
+				<Input placeholder = 'Position Title' value = { title } onChangeText = { text => setTitle(text) } />
+				<Input placeholder = 'Position Description' value = { description } onChangeText = { text => setDescription(text) } />
+				{ !!error && <Text style = { errorTextStyle }>{ error }</Text> }
+			</ScrollView>
+			<ButtonLayout>
+				<Button title = 'Submit' onPress = { onButtonPress } />
+				<Button title = 'Cancel' onPress = { () => navigation.pop() } />
+			</ButtonLayout>
+		</SafeAreaView>
+	);
+};
 
 const styles = {
-	container: {
-		flex: 1,
-		backgroundColor: '#E1E1E1',
-		justifyContent: 'flex-end'
-	},
 	formContainerStyle: {
 		flex: 1,
 		backgroundColor: '#0c0b0b'
@@ -136,12 +66,6 @@ const styles = {
 		fontWeight: 'bold',
 		padding: 10
 	},
-	pickerTextInput: {
-		flex: 1,
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center'
-	},
 	scrollView: {
 		backgroundColor: 'black',
 		height: '50%',
@@ -151,24 +75,3 @@ const styles = {
 		paddingRight: '5%'
 	}
 };
-
-const mapStateToProps = ({ elect }) => {
-	const {
-		positionTitle,
-		positionDescription,
-		title,
-		positions
-	} = elect;
-
-	return { positionTitle, positionDescription, title, positions };
-};
-
-const mapDispatchToProps = {
-	addPosition,
-	editPosition,
-	positionTitleChanged,
-	positionDescriptionChanged,
-	deletePosition
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(PositionForm);
