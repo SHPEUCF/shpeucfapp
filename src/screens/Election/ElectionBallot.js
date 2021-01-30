@@ -1,157 +1,96 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import _ from 'lodash';
-import { connect } from 'react-redux';
-import { Text, View, SafeAreaView, FlatList, TouchableOpacity, Modal } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { Text, View, SafeAreaView, ScrollView, TouchableOpacity, Modal } from 'react-native';
 import { Alert, Button, NavBar, ButtonLayout, Avatar, Icon } from '@/components';
-import { getPositions, vote, getVotes } from '@/ducks';
+import { getPositions, getVotes } from '@/ducks';
 import { stockImg, truncateNames } from '@/utils/render';
+import * as ElectionService from '@/services/elections';
 
-const iterateesPos = ['level'];
-const orderPos = ['asc'];
-const iterateesCandidate = ['lastName', 'firstName'];
-const orderCandidate = ['asc', 'asc'];
+export const ElectionBallot = ({ navigation }) => {
+	const mounted = useRef(false);
+	const hasVotesLoaded = useRef(false);
+	const [selectedCandidates, setSelectedCandidates] = useState({});
+	const [focusedCandidate, setFocusedCandidate] = useState({});
+	const [isModalVisible, setModalVisibility] = useState(false);
+	const dispatch = useDispatch();
+	const {
+		elect: { positions, votes },
+		activeUser: { voted, id }
+	} = useSelector(({ elect, user: { activeUser } }) => ({ elect, activeUser }));
+	const { flex, mainBackground, secondaryBackground, center, titleStyle, textColor } = styles;
+	const positionsArray = _.orderBy(positions, ['level'], ['asc']);
 
-class ElectionBallot extends Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			selectedCandidates: {},
-			visibleCandidate: {},
-			visible: false,
-			isLoaded: false
-		};
-	}
-
-	componentDidMount() {
-		this.props.getPositions();
-		this.props.getVotes();
-	}
-
-	// Refills selectedCandidates object with data from firebase.
-	componentWillReceiveProps(nextProps) {
-		const {
-			votes,
-			voted,
-			id
-		} = nextProps;
-
-		if (votes && voted && !this.state.isLoaded) {
-			let selectedCandidates = {};
+	useEffect(() => {
+		if (!mounted.current) {
+			dispatch(getVotes());
+			dispatch(getPositions());
+			mounted.current = true;
+		}
+		else if (voted && !hasVotesLoaded.current) {
+			let votedForCandidates = {};
 
 			Object.entries(votes).forEach(([position, candidates]) => {
 				Object.entries(candidates).forEach(([candidate, candidateData]) => {
-					if (candidateData[id])
-						selectedCandidates[position] = candidate;
+					if (candidateData[id]) votedForCandidates[position] = candidate;
 				});
 			});
 
-			const isLoaded = !_.isEmpty(selectedCandidates);
-
-			this.setState({ selectedCandidates, isLoaded });
+			setSelectedCandidates(votedForCandidates);
+			hasVotesLoaded.current = true;
 		}
-	}
+	}, [votes, voted]);
 
-	render() {
-		const {
-			flex,
-			mainBackground,
-			secondaryBackground
-		} = styles;
+	const renderCandidatesList = ({ candidates, title }) => {
+		const { mainBackground, goldBackground, spacing, positionContent } = styles;
+		const candidateList = _.orderBy(candidates, ['lastName', 'firstName'], ['asc', 'asc']);
 
-		const {
-			positions,
-			activeUser,
-			navigation
-		} = this.props;
-
-		const positionsArray = _.orderBy(positions, iterateesPos, orderPos);
-
-		return (
-			<SafeAreaView style = { [flex, mainBackground] }>
-				<NavBar title = 'Positions' back onBack = { () => navigation.pop() } />
-				<View style = { [flex, secondaryBackground] }>
-					<FlatList
-						data = { positionsArray }
-						extraData = { this.state }
-						keyExtractor = { this.keyExtractor }
-						renderItem = { ({ item }) => this.renderCandidatesList(item) }
-						ListHeaderComponent = { () => this.renderSeparator() }
-						ListFooterComponent = { () => this.renderSeparator() }
-						ItemSeparatorComponent = { () => this.renderSeparator() }
-					/>
-				</View>
-				{ !activeUser.voted && <ButtonLayout>
-					<Button title = 'Submit' onPress = { () => this.submitVote() } />
-					<Button title = 'Cancel' onPress = { () => navigation.pop() } />
-				</ButtonLayout> }
-				{ this.renderModal() }
-			</SafeAreaView>
-		);
-	}
-
-	renderSeparator() {
-		return (
-			<View style = { styles.spacing } />
-		);
-	}
-
-	keyExtractor = (item, index) => index;
-
-	renderCandidatesList(item) {
-		const {
-			mainBackground,
-			goldBackground,
-			titleStyle,
-			spacing,
-			positionContent,
-			center
-		} = styles;
-
-		const candidateList = _.orderBy(item.candidates, iterateesCandidate, orderCandidate);
-
-		if (candidateList.length > 0 && candidateList.some((candidate) => candidate.approved)) {
+		if (candidateList.length > 0 && candidateList.some(candidate => candidate.approved)) {
 			return (
-				<View style = { [positionContent, center] }>
+				<View style = { [positionContent, center, { marginVertical: '5%' }] } key = { title }>
 					<View style = { [spacing, goldBackground] }>
-						<Text style = { titleStyle }>{ item.title }</Text>
+						<Text style = { titleStyle }>{ title }</Text>
 					</View>
 					<View style = { [spacing, mainBackground] }>
-						{ candidateList.map(candidate => <View>
-							{ this.renderCandidate(candidate) }
-						</View>) }
+						{ candidateList.map(candidate => renderCandidate(candidate)) }
 					</View>
 				</View>
 			);
 		}
-	}
+	};
 
-	renderCandidate(candidate) {
-		const {
-			center,
-			candidateStyle,
-			textColor,
-			titleStyle,
-			flex,
-			centerItems
-		} = styles;
+	const renderCandidate = candidate => {
+		const { candidateStyle, flex, centerItems } = styles;
+		const [firstName, lastName] = truncateNames(candidate);
+		const { id, position, approved, picture } = candidate;
+		const isChecked = id === selectedCandidates[position];
 
-		truncateNames(candidate);
-
-		const {
-			approved,
-			firstName,
-			lastName,
-			picture
-		} = candidate;
+		const updateSelection = () => {
+			if (voted) {
+				Alert.alert('You have already voted!');
+			}
+			else {
+				setSelectedCandidates(isChecked
+					? _.omit(selectedCandidates, position)
+					: { ...selectedCandidates, position: id }
+				);
+			}
+		};
 
 		if (approved) {
 			return (
-				<View style = { [candidateStyle, flex] }>
-					{ this.renderCheck(candidate) }
+				<View style = { [candidateStyle, flex] } key = { lastName }>
+					<TouchableOpacity style = { center } onPress = { updateSelection }>
+						<Icon
+							type = 'FontAwesome'
+							name = { isChecked ? 'check-circle-o' : 'circle-o' }
+							color = { isChecked ? '#FECB00' : '#FFF' }
+							size = { 30 }
+						/>
+					</TouchableOpacity>
 					<TouchableOpacity
 						style = { [candidateStyle, flex] }
-						onPress = { () => this.setState({ visibleCandidate: candidate, visible: true }) }
+						onPress = { () => { setFocusedCandidate(candidate); setModalVisibility(true) } }
 					>
 						<View style = { [flex, centerItems] }>
 							<Avatar size = { 50 } source = { picture || stockImg } />
@@ -166,66 +105,18 @@ class ElectionBallot extends Component {
 				</View>
 			);
 		}
-	}
+	};
 
-	renderCheck(candidate) {
-		const {
-			center
-		} = styles;
-
-		const isChecked = candidate.id === this.state.selectedCandidates[candidate.position];
+	const renderModal = () => {
+		const { firstName, lastName, picture, plan } = focusedCandidate;
+		const { modalBackground, modalContent, planStyle, closeModalBar } = styles;
 
 		return (
-			<TouchableOpacity style = { center } onPress = { () => this.updateSelection(isChecked, candidate) }>
-				<Icon
-					type = 'FontAwesome'
-					name = { isChecked ? 'check-circle-o' : 'circle-o' }
-					color = { isChecked ? '#FECB00' : '#FFF' }
-					size = { 30 }
-				/>
-			</TouchableOpacity>
-		);
-	}
-
-	updateSelection(isChecked, { position, id }) {
-		if (this.props.activeUser.voted) {
-			Alert.alert('You have already voted!');
-		}
-		else {
-			let selectedCandidates = Object.assign({}, this.state.selectedCandidates);
-
-			if (isChecked)
-				selectedCandidates = _.omit(selectedCandidates, position);
-			else
-				selectedCandidates[position] = id;
-
-			this.setState({ selectedCandidates });
-		}
-	}
-
-	renderModal() {
-		const {
-			firstName,
-			lastName,
-			picture,
-			plan
-		} = this.state.visibleCandidate;
-
-		const {
-			modalBackground,
-			modalContent,
-			textColor,
-			planStyle,
-			titleStyle,
-			closeModalBar
-		} = styles;
-
-		return (
-			<Modal transparent = { true } visible = { this.state.visible } animationType = 'slide'>
+			<Modal transparent visible = { isModalVisible } animationType = 'slide'>
 				<View style = { modalBackground }>
 					<TouchableOpacity
 						style = { closeModalBar }
-						onPress = { () => this.setState({ visible: false, visibleCandidate: {} }) }
+						onPress = { () => { setModalVisibility(false); setFocusedCandidate({}) } }
 					>
 						<Icon name = 'close-circle' size = { 40 } color = 'white' />
 					</TouchableOpacity>
@@ -239,22 +130,32 @@ class ElectionBallot extends Component {
 				</View>
 			</Modal>
 		);
-	}
+	};
 
-	submitVote() {
-		const {
-			vote
-		} = this.props.activeUser;
-
-		if (_.isEmpty(this.state.selectedCandidates)) {
+	const submitVote = () => {
+		if (_.isEmpty(selectedCandidates)) {
 			Alert.alert('Please vote for at least one candidate!');
 		}
 		else {
-			vote(this.state.selectedCandidates);
-			this.props.navigation.pop();
+			ElectionService.vote(selectedCandidates);
+			navigation.pop();
 		}
-	}
-}
+	};
+
+	return (
+		<SafeAreaView style = { [flex, mainBackground] }>
+			<NavBar title = 'Positions' back />
+			<ScrollView style = { [secondaryBackground] }>
+				{ positionsArray.map(position => renderCandidatesList(position)) }
+			</ScrollView>
+			{ !voted && <ButtonLayout>
+				<Button title = 'Submit' onPress = { submitVote } />
+				<Button title = 'Cancel' onPress = { () => navigation.pop() } />
+			</ButtonLayout> }
+			{ renderModal() }
+		</SafeAreaView>
+	);
+};
 
 const styles = {
 	textColor: {
@@ -321,30 +222,3 @@ const styles = {
 		alignItems: 'center'
 	}
 };
-
-const mapStateToProps = ({ elect, user }) => {
-	const {
-		election,
-		positions,
-		candidatePlan,
-		votes
-	} = elect;
-
-	const { activeUser } = user;
-
-	return {
-		election,
-		positions,
-		candidatePlan,
-		votes,
-		activeUser
-	};
-};
-
-const mapDispatchToProps = {
-	getPositions,
-	vote,
-	getVotes
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ElectionBallot);
