@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
 import { Alert, Button, SortableFlatList, NavBar, ButtonLayout, Icon } from '@/components';
 import { getPositions } from '@/ducks';
-import * as ElectionService from '@/services/elections';
+import { deletePosition, changeLevels } from '@/services/elections';
 
 const { height } = Dimensions.get('screen');
 
@@ -27,7 +27,7 @@ export const ElectionPositions = ({ navigation }) => {
 		const color = isActive ? { backgroundColor: '#ffd70066' } : { backgroundColor: 'black' };
 
 		const confirmDelete = () => Alert.alert(`Are you sure you want to delete the ${position.title} position?`,
-			{ type: 'confirmation',	submit: () => ElectionService.deletePosition(position.title) }
+			{ type: 'confirmation',	submit: () => deletePosition(position.title) }
 		);
 
 		return (
@@ -63,7 +63,7 @@ export const ElectionPositions = ({ navigation }) => {
 			</View>
 			<ButtonLayout>
 				<Button title = 'Add Positions' onPress = { () =>	navigation.push('PositionForm', { action: 'ADD' }) } />
-				<Button title = 'Set Order' onPress = { () => ElectionService.changeLevels(orderedPositions) } />
+				<Button title = 'Set Order' onPress = { () => changeLevels(orderedPositions) } />
 			</ButtonLayout>
 		</SafeAreaView>
 	);

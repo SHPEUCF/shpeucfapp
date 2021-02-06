@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Button, Input, NavBar, ButtonLayout, Avatar, Icon } from '@/components';
 import { openGallery } from '@/utils/render';
 import { getPositions } from '@/ducks';
-import * as ElectionService from '@/services/elections';
+import { editApplication } from '@/services/elections';
 
 export const ElectionApplication = ({ navigation }) => {
 	const mounted = useRef(false);
@@ -122,7 +122,7 @@ export const ElectionApplication = ({ navigation }) => {
 					{ (applying || applied) && <Button
 						title = { 'Submit ' + (applied && 'Changes' || 'Application') }
 						onPress = { () => {
-							ElectionService.editApplication({ ...candidate, applied });
+							editApplication({ ...candidate, applied });
 							navigation.pop();
 						} }
 					/> }

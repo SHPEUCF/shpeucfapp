@@ -5,7 +5,7 @@ import { Text, View, SafeAreaView, ScrollView, TouchableOpacity, Modal } from 'r
 import { Alert, Button, NavBar, ButtonLayout, Avatar, Icon } from '@/components';
 import { getPositions, getVotes } from '@/ducks';
 import { stockImg, truncateNames } from '@/utils/render';
-import * as ElectionService from '@/services/elections';
+import { vote } from '@/services/elections';
 
 export const ElectionBallot = ({ navigation }) => {
 	const mounted = useRef(false);
@@ -72,7 +72,7 @@ export const ElectionBallot = ({ navigation }) => {
 			else {
 				setSelectedCandidates(isChecked
 					? _.omit(selectedCandidates, position)
-					: { ...selectedCandidates, position: id }
+					: { ...selectedCandidates, [position]: id }
 				);
 			}
 		};
@@ -137,7 +137,7 @@ export const ElectionBallot = ({ navigation }) => {
 			Alert.alert('Please vote for at least one candidate!');
 		}
 		else {
-			ElectionService.vote(selectedCandidates);
+			vote(selectedCandidates);
 			navigation.pop();
 		}
 	};

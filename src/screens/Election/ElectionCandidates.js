@@ -4,7 +4,7 @@ import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from
 import _ from 'lodash';
 import { NavBar, Icon } from '@/components';
 import { getPositions } from '@/ducks';
-import * as ElectionService from '@/services/elections';
+import { approveApplication, deleteApplication } from '@/services/elections';
 
 const dimension = Dimensions.get('screen');
 
@@ -49,14 +49,14 @@ export const ElectionCandidates = () => {
 				<View style = { [{ flexDirection: 'row', flex: 1 }] }>
 					{ !approved && <View style = { buttonContainerStyle }>
 						<TouchableOpacity
-							onPress = { () => ElectionService.approveApplication(position, id, firstName, lastName) }
+							onPress = { () => approveApplication(position, id, firstName, lastName) }
 						>
 							<Icon name = 'md-checkmark-circle' size = { 40 } color = '#e0e6ed' />
 						</TouchableOpacity>
 					</View>
 					}
 					<View style = { buttonContainerStyle }>
-						<TouchableOpacity onPress = { () => ElectionService.deleteApplication(position, id) }>
+						<TouchableOpacity onPress = { () => deleteApplication(position, id) }>
 							<Icon name = 'md-remove-circle' size = { 40 } color = '#e0e6ed' />
 						</TouchableOpacity>
 					</View>

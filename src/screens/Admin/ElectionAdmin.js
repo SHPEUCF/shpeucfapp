@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavBar, Button, ButtonLayout } from '@/components';
 import _ from 'lodash';
-import { Text,	SafeAreaView,	Dimensions, View } from 'react-native';
+import { Text, SafeAreaView,	Dimensions, View } from 'react-native';
 import { getVotes, getPositions } from '@/ducks';
-import * as ElectionService from '@/services/elections';
+import { toggleElection, toggleApplications } from '@/services/elections';
 
 const { height } = Dimensions.get('screen');
 
@@ -41,11 +41,11 @@ export const ElectionAdmin = ({ navigation }) => {
 	const electionActions = [
 		<Button
 			title = { (election ? 'Close' : 'Open') + ' Election' }
-			onPress = { () => ElectionService.toggleElection(!election) }
+			onPress = { () => toggleElection(!election) }
 		/>,
 		<Button
 			title = { (apply ? 'Close' : 'Open') + ' Applications' }
-			onPress = { () => ElectionService.toggleApplications(!apply) }
+			onPress = { () => toggleApplications(!apply) }
 		/>,
 		<Button title = 'Manage Positions' onPress = { () => navigation.push('ElectionPositions') } />,
 		<Button title = 'Manage Candidates' onPress = { () => navigation.push('ElectionCandidates') } />

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { View, Text, ScrollView, SafeAreaView } from 'react-native';
 import { Input, Button, ButtonLayout } from '@/components';
-import * as ElectionService from '@/services/elections';
+import { addPosition, editPosition } from '@/services/elections';
 
 export const PositionForm = ({ navigation, route: { params: { action, position } } }) => {
 	const { positions } = useSelector(({ elect }) => elect);
@@ -14,9 +14,9 @@ export const PositionForm = ({ navigation, route: { params: { action, position }
 		setError((title) ? '' : 'Title missing');
 
 		if (title && action === 'ADD')
-			ElectionService.addPosition(title, description, Object.keys(positions || {}).length);
+			addPosition(title, description, Object.keys(positions || {}).length);
 		else if (title && action === 'EDIT')
-			ElectionService.editPosition(title, description, (position.title === title) ? null : position.title);
+			editPosition(title, description, (position.title === title) ? null : position.title);
 
 		if (title && action)
 			navigation.pop();
