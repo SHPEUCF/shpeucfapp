@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Modal, SafeAreaView, TouchableOpacity, View, Text, TextInput } from 'react-native';
 import Flag from 'react-native-flags';
 import { Button } from './';
-import { editUser } from '@/ducks';
+import { editUser } from '@/services/user';
 
 const { height, width } = Dimensions.get('screen');
 
@@ -21,7 +21,7 @@ class CountryFlag extends Component {
 		return (
 			<View>
 				<TouchableOpacity onPress = { () => this.setState({ flagsVisible: !this.state.flagsVisible }) }>
-					<Flag type = 'flat' code = { this.props.activeUser.flag } size = { 32 } />
+					<Flag type = 'flat' code = { this.props.user.flag } size = { 32 } />
 				</TouchableOpacity>
 				<RenderFlags
 					flagsVisible = { flagsVisible }
@@ -161,7 +161,6 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ user: { activeUser } }) => ({ activeUser });
-const mapDispatchToProps = { editUser };
+const mapStateToProps = ({ user }) => ({ user });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CountryFlag);
+export default connect(mapStateToProps)(CountryFlag);

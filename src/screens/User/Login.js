@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Button, Alert, Form } from '@/components';
 import { registrationFormData, loginFormData } from '@/data/FormData';
-import { createUser, loginUser, registrationError } from '@/ducks';
+import { loginUser, createUser } from '@/services/user';
 
 const { height } = Dimensions.get('screen');
 
@@ -18,19 +18,19 @@ class Login extends Component {
 	loginSubmit() {
 		const { email, password } = this.state;
 
-		if (!email) { this.props.registrationError('Please enter your knights email') }
-		else if (!password) { this.props.registrationError('Please enter your password') }
+		if (!email) { this.setState({ error: 'Please enter your knights email' }) }
+		else if (!password) { this.setState({ error: 'Please enter your password' }) }
 		else {
-			if (this.props.hasCorrectVersion) this.props.loginUser(email, password);
-			else Alert.alert('Please update your app');
+			loginUser(email, password, error => this.setState({ error }));
+			// else Alert.alert('Please update your app');
 		}
 	}
 
 	renderError() {
-		if (this.props.error) {
+		if (this.state.error) {
 			return (
 				<Text style = { styles.errorTextStyle }>
-					{ this.props.error }
+					{ this.state.error }
 				</Text>
 			);
 		}
@@ -42,11 +42,11 @@ class Login extends Component {
 		return (
 			<View style = { buttonContainer }>
 				<View style = {{ flex: 0.5, justifyContent: 'center', paddingHorizontal: '20%' }}>
-					<Button title = 'Log in' onPress = { () => this.loginSubmit() } />
+					<Button title = 'Log In' onPress = { () => this.loginSubmit() } />
 				</View>
 				<TouchableOpacity
 					style = { [bottomContainer, { flex: 0.4 }] }
-					onPress = { () => this.props.navigate.push('ResetPassword') }
+					onPress = { () => this.props.navigation.push('ResetPassword') }
 				>
 					<Text style = { resetPasswordText }>Forgot Password?</Text>
 				</TouchableOpacity>
@@ -77,7 +77,7 @@ class Login extends Component {
 						title = 'Registration'
 						visible = { this.state.registrationFormVisibility }
 						changeVisibility = { visible => this.setState({ registrationFormVisibility: visible }) }
-						onSubmit = { user => this.props.createUser({ ...user }) }
+						onSubmit = { user => createUser(user, error => Alert.alert(error, { type: 'error' })) }
 					/>
 					<View style = {{ flex: 1, backgroundColor: '#FECB00', alignItems: 'center' }}>
 						<Image
@@ -162,6 +162,5 @@ const styles = {
 const mapStateToProps = ({ app: { hasCorrectVersion }, user: { email, password, error, loading, loggedIn } }) => (
 	{ email, password, error, loading, loggedIn, hasCorrectVersion }
 );
-const mapDispatchToProps = { createUser, loginUser, registrationError };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps)(Login);

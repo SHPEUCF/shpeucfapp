@@ -21,7 +21,7 @@ export const Events = () => {
 	const { mainBackgroundColor, secondaryBackgroundColor, fullFlex } = styles;
 	const [isEventFormVisible, toggleEventFormVisibility] = useState(false);
 	const [targetDate, changeTargetDate] = useState(getTodaysDate());
-	const { user: { activeUser: { color, privilege } }, events: { sortedEvents } } = useSelector(state => state);
+	const { user: { color, privilege }, events: { sortedEvents } } = useSelector(state => state);
 
 	return (
 		<SafeAreaView style = { [fullFlex, mainBackgroundColor] }>

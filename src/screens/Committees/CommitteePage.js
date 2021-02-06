@@ -147,7 +147,7 @@ class CommitteePage extends Component {
 	}
 
 	renderGreeting() {
-		if (this.props.chair.id === this.props.activeUser.id) {
+		if (this.props.chair.id === this.props.user.id) {
 			return (
 				<View style = {{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
 					<Text style = {{ color: 'white', fontSize: 16 }}>Welcome to Your Committee!</Text>
@@ -189,7 +189,7 @@ class CommitteePage extends Component {
 		} = styles;
 
 		return (
-			<View style = { [emptyData, { backgroundColor: this.props.activeUser.color }] }>
+			<View style = { [emptyData, { backgroundColor: this.props.user.color }] }>
 				<Text style = { textColor }>No events to display on this day</Text>
 			</View>
 		);
@@ -216,7 +216,7 @@ class CommitteePage extends Component {
 
 		return (
 			<TouchableOpacity onPress = { () => this.viewEvent(item) }>
-				<View style = { [itemContainer, { backgroundColor: this.props.activeUser.color }] }>
+				<View style = { [itemContainer, { backgroundColor: this.props.user.color }] }>
 					<Text style = { [{ fontWeight: 'bold' }, textColor] }>{ item.name }</Text>
 					<Text style = { textColor }>Time: { this.convertHour(item.startTime) } - { this.convertHour(item.endTime) }</Text>
 					<Text style = { textColor }>Location: { item.location }</Text>
@@ -386,7 +386,6 @@ const styles = {
 };
 
 const mapStateToProps = ({ user, members, events, elect, committees }) => {
-	const { activeUser } = user;
 	const { allMemberAccounts } = members;
 	const { sortedEvents } = events;
 	const { election } = elect;
@@ -403,7 +402,7 @@ const mapStateToProps = ({ user, members, events, elect, committees }) => {
 	} = committees;
 
 	return {
-		activeUser,
+		user,
 		allMemberAccounts,
 		sortedEvents,
 		election,

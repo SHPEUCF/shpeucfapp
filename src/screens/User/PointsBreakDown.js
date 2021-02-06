@@ -3,7 +3,7 @@ import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { NavBar } from '@/components';
 import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
-import { getAllMemberPoints, loadUser, fetchEvents, goToViewEvent } from '@/ducks';
+import { getAllMemberPoints, fetchEvents, goToViewEvent } from '@/ducks';
 import { convertNumToDate } from '@/utils/events';
 
 const dimension = Dimensions.get('screen');
@@ -225,7 +225,6 @@ const mapStateToProps = ({ user, members }) => {
 
 const mapDispatchToProps = {
 	getAllMemberPoints,
-	loadUser,
 	fetchEvents,
 	goToViewEvent
 };

@@ -10,7 +10,7 @@ const { width, height } = Dimensions.get('screen');
 
 export const EventPanel = ({ event, variant }) => {
 	const { committee, type, date, name, location, startTime, endTime } = event;
-	const backgroundColor = useSelector(state => state.user.activeUser.color);
+	const backgroundColor = useSelector(state => state.user.color);
 	const navigation = useNavigation();
 	// used to maintain event data across renders and push any updates to the active event
 	const eventRef = useRef({ listener: () => null });
