@@ -22,7 +22,7 @@ export const Leaderboard = ({ navigation }) => {
 	} = styles;
 
 	return (
-		<TouchableOpacity style = { leaderboardContainer } onPress = { () => navigation.push('Leaderboard') }>
+		firstMember && <TouchableOpacity style = { leaderboardContainer } onPress = { () => navigation.push('Leaderboard') }>
 			<View style = {{ flex: 1 }}>
 				<View style = { leaderboardContent }>
 					<Text style = { [title, textColor] }>Top Member</Text>

@@ -1,7 +1,7 @@
 // Export Admin
 export { default as AdminHub } from './Admin/AdminHub';
 export { default as CommitteesAdmin } from './Admin/CommitteesAdmin';
-export { default as ElectionAdmin } from './Admin/ElectionAdmin';
+export { ElectionAdmin } from './Admin/ElectionAdmin';
 export { default as MemberAdmin } from './Admin/MemberAdmin';
 
 // Export Committees
@@ -10,11 +10,11 @@ export { default as Committees } from './Committees/Committees';
 export { default as CommitteeForm } from './Committees/CommitteeForm';
 
 // Export Election
-export { default as ElectionApplication } from './Election/ElectionApplication';
-export { default as ElectionBallot } from './Election/ElectionBallot';
-export { default as ElectionCandidates } from './Election/ElectionCandidates';
-export { default as ElectionPositions } from './Election/ElectionPositions';
-export { default as PositionForm } from './Election/PositionForm';
+export { ElectionApplication } from './Election/ElectionApplication';
+export { ElectionBallot } from './Election/ElectionBallot';
+export { ElectionCandidates } from './Election/ElectionCandidates';
+export { ElectionPositions } from './Election/ElectionPositions';
+export { PositionForm } from './Election/PositionForm';
 
 // Export Events
 export { Events } from './Events/Events';

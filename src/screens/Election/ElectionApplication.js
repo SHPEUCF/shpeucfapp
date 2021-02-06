@@ -1,285 +1,137 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Button, Input, NavBar, ButtonLayout, Avatar, Icon } from '@/components';
+import React, { useState, useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import _ from 'lodash';
 import { FlatList, Text, SafeAreaView, View, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Button, Input, NavBar, ButtonLayout, Avatar, Icon } from '@/components';
 import { openGallery } from '@/utils/render';
-import { getPositions, addApplication, editApplication } from '@/ducks';
+import { getPositions } from '@/ducks';
+import { editApplication } from '@/services/elections';
 
-const iterateesPos = ['level'];
-const orderPos = ['asc'];
+export const ElectionApplication = ({ navigation }) => {
+	const mounted = useRef(false);
+	const dispatch = useDispatch();
+	const [candidatePicture, setPicture] = useState('');
+	const [candidatePosition, setPosition] = useState('');
+	const [candidatePlan, setPlan] = useState('');
+	const [applying, setApplying] = useState(false);
+	const {
+		positions,
+		activeUser: { id, applied, firstName, lastName, picture }
+	} = useSelector(({ elect: { positions }, user: { activeUser } }) => ({ positions, activeUser }));
 
-class ElectionApplication extends Component {
-	constructor(props) {
-		super(props);
-	}
-
-	state = {
-		currentlyApplying: false,
-		candidate: {
-			approved: false,
-			firstName: '',
-			lastName: '',
-			picture: '',
-			position: '',
-			plan: '',
-			id: ''
-		},
-		index: null,
-		positions: {}
-	};
-
-	componentWillReceiveProps(nextProps, prevState) {
-		const {
-			positions,
-			id,
-			picture
-		} = nextProps;
-
-		if (positions !== prevState.positions) {
-			let candidate = Object.assign({}, this.state.candidate);
-
-			candidate.picture = picture;
-
-			// Searches for current user within Candidates
-			Object.entries(positions || {}).forEach(entry => {
-				Object.values(entry[1].candidates || {}).forEach(possibleCandidate => {
-					if (possibleCandidate.id === id) candidate = Object.assign({}, possibleCandidate);
+	useEffect(() => {
+		if (!mounted.current) {
+			dispatch(getPositions());
+			mounted.current = true;
+		}
+		else if (applied) {
+			Object.values(positions || {}).forEach(({ candidates }) => {
+				Object.values(candidates || {}).forEach(candidate => {
+					if (candidate.id === id) {
+						setPlan(candidate.plan);
+						setPicture(candidate.picture);
+						setPosition(candidate.position);
+					}
 				});
 			});
-
-			this.setState({ positions, candidate });
 		}
-	}
+	}, [positions]);
 
-	componentDidMount() {
-		this.props.getPositions();
-	}
+	const { titleStyle, inputContainer, column } = styles;
 
-	render() {
-		const {
-			currentlyApplying
-		} = this.state;
-
-		const {
-			positions,
-			applied,
-			navigation
-		} = this.props;
-
-		const {
-			page,
-			fullFlex
-		} = styles;
-
-		const positionsArray = _.orderBy(positions, iterateesPos, orderPos);
-
-		const shouldShowApplication = currentlyApplying || applied;
-
-		const content = shouldShowApplication ? this.showApplication() : this.renderPositions(positionsArray);
-
-		return (
-			<KeyboardAwareScrollView
-				style = {{ backgroundColor: '#0c0b0b' }}
-				resetScrollToCoords = {{ x: 0, y: 0 }}
-				contentContainerStyle = {{ height: '100%' }}
-				scrollEnabled = { false }
-				enableOnAndroid = { false }
-			>
-				<SafeAreaView style = { [page, fullFlex] }>
-					<NavBar
-						title = 'Positions'
-						back
-						onBack = { () => {
-							return !shouldShowApplication || applied
-								? navigation.pop() : this.setState({ currentlyApplying: false });
-						} } />
-					<View style = { fullFlex }>
-						{ content }
-					</View>
-					{ this.renderButtons() }
-				</SafeAreaView>
-			</KeyboardAwareScrollView>
-		);
-	}
-
-	showApplication() {
-		const {
-			firstName,
-			lastName
-		} = this.props.activeUser;
-
-		const {
-			candidate,
-			positionSelected
-		} = this.state;
-
-		const {
-			fullFlex,
-			textColor,
-			fontLarge,
-			titleStyle,
-			inputContainer,
-			column
-		} = styles;
-
-		return (
-			<View style = { [fullFlex, column ] }>
-				<Text style = { [fontLarge, textColor, titleStyle] }>
-					{ candidate.position || positionSelected }
-				</Text>
-				<Avatar
-					size = { 200 }
-					title = 'Add Image'
-					titleStyle = { fontLarge }
-					source = { candidate.picture }
-					onPress = { () => this.callOpenGallery(candidate) }
-				/>
-				<Text style = { [fontLarge, textColor] }>
-					{ firstName } { lastName }
-				</Text>
-				<Input
-					numberOfLines = { 10 }
-					style = { inputContainer }
-					textAlignVertical = 'top'
-					maxLength = { 250 }
-					blurOnSubmit = { true }
-					multiline = { true }
-					placeholder = 'Please write your plan for members to read.'
-					value = { candidate.plan }
-					onChangeText = { (plan) => {
-						let tempCandidate = Object.assign(candidate);
-
-						tempCandidate.plan = plan;
-						this.setState({ candidate: tempCandidate });
-					 } }
-				/>
-			</View>
-		);
-	}
-
-	callOpenGallery(candidate) {
-		openGallery(
-			`/election/positions/${candidate.position || this.state.positionSelected}/candidates/${this.props.activeUser.id}`, '',
-			(url) => {
-				let candidate = Object.assign({}, this.state.candidate);
-
-				candidate.picture = url;
-
-				this.setState({ candidate });
-			}
-		);
-	}
-
-	_keyExtractor = (item, index) => index;
-
-	renderPositions(positionsArray) {
-		return (
-			<FlatList
-				data = { positionsArray }
-				extraData = { this.state }
-				keyExtractor = { this._keyExtractor }
-				renderItem = { ({ item }) => this.renderPositionComponent(item) }
+	const showApplication = () => (
+		<View style = { [fullFlex, column] }>
+			<Text style = { [fontLarge, textColor, titleStyle] }>{ candidatePosition }</Text>
+			<Avatar
+				size = { 200 }
+				title = 'Add Image'
+				titleStyle = { fontLarge }
+				source = { candidatePicture }
+				onPress = { () => openGallery(`/election/positions/${candidatePosition}/candidates/${id}`, '', url => setPicture(url)) }
+				showEdit
 			/>
-		);
-	}
+			<Text style = { [fontLarge, textColor] }>
+				{ firstName } { lastName }
+			</Text>
+			<Input
+				value = { candidatePlan }
+				placeholder = 'Please write your plan for members to read.'
+				onChangeText = { plan => setPlan(plan) }
+				style = { inputContainer }
+				textAlignVertical = 'top'
+				maxLength = { 500 }
+				numberOfLines = { 10 }
+				blurOnSubmit
+				multiline
+			/>
+		</View>
+	);
 
-	renderPositionComponent(item) {
-		const {
-			fontLarge,
-			fontSmall,
-			fontBold,
-			textColor,
-			fullFlex,
-			positionContainer,
-			iconContainer
-		} = styles;
+	const { fontLarge, fontSmall, fontBold, textColor, positionContainer, iconContainer } = styles;
 
-		return (
-			<TouchableOpacity
-				onPress = { () => {
-					this.setState({ currentlyApplying: true, positionSelected: item.title });
-				} }
-				style = { [positionContainer, fullFlex] }
-			>
+	const renderPositionComponent = ({ title, description }) => (
+		<TouchableOpacity
+			onPress = { () => { setApplying(true); setPosition(title) } }
+			style = { [positionContainer, fullFlex] }
+		>
+			<View style = { fullFlex }>
+				<Text style = { [fontLarge, textColor, fontBold] }>{ title }</Text>
+				<Text style = { [fontSmall, textColor] }>{ description }</Text>
+			</View>
+			<Icon
+				type = 'MaterialIcons'
+				name = 'assignment'
+				color = '#FECB00'
+				size = { 35 }
+				style = { iconContainer }
+			/>
+		</TouchableOpacity>
+	);
+
+	const { page, fullFlex } = styles;
+	const positionsArray = _.orderBy(positions, ['level'], ['asc']);
+	const candidate = {
+		firstName,
+		lastName,
+		plan: candidatePlan,
+		position: candidatePosition,
+		picture: candidatePicture || picture
+	};
+
+	return (
+		<KeyboardAwareScrollView
+			style = {{ backgroundColor: '#0c0b0b' }}
+			resetScrollToCoords = {{ x: 0, y: 0 }}
+			contentContainerStyle = {{ height: '100%' }}
+			scrollEnabled = { false }
+			enableOnAndroid = { false }
+		>
+			<SafeAreaView style = { [page, fullFlex] }>
+				<NavBar title = 'Positions' back />
 				<View style = { fullFlex }>
-					<Text style = { [fontLarge, textColor, fontBold] }>{ item.title }</Text>
-					<Text style = { [fontSmall, textColor] }>{ item.description }</Text>
+					{ (applying || applied)
+						? showApplication()
+						: <FlatList
+							data = { positionsArray }
+							keyExtractor = { (item, index) => index }
+							renderItem = { ({ item }) => renderPositionComponent(item) }
+						/> }
 				</View>
-				<Icon
-					type = 'MaterialIcons'
-					name = 'assignment'
-					color = '#FECB00'
-					size = { 35 }
-					style = { iconContainer }
-				/>
-			</TouchableOpacity>
-		);
-	}
-
-	renderButtons() {
-		const {
-			firstName,
-			lastName,
-			applied,
-			picture
-		} = this.props.activeUser;
-
-		const {
-			currentlyApplying,
-			candidate,
-			positionSelected
-		} = this.state;
-
-		let submitButton;
-
-		if (currentlyApplying || applied) {
-			submitButton = <Button
-				title = { 'Submit ' + (applied && 'Changes' || 'Application') }
-				onPress = { () => {
-					if (!applied) {
-						addApplication(firstName, lastName, candidate.plan,
-									   positionSelected, candidate.picture || picture);
-						this.props.navigation.pop();
-					}
-					else {
-						candidate.firstName = firstName;
-						candidate.lastName = lastName;
-						editApplication(candidate);
-						this.props.navigation.pop();
-					}
-				} }
-			/>;
-		}
-
-		return (
-			<ButtonLayout>
-				{ submitButton }
-				<Button
-					title = 'Cancel'
-					onPress = { () => this.stopApplication() }
-				/>
-			</ButtonLayout>
-		);
-	}
-
-	stopApplication() {
-		this.setState({ candidate: {
-			approved: false,
-			firstName: '',
-			lastName: '',
-			picture: this.state.candidate.picture,
-			position: '',
-			plan: '',
-			id: ''
-		} });
-		if (!this.props.activeUser.applied && this.state.currentlyApplying)
-			this.setState({ currentlyApplying: false });
-		else
-			this.props.navigation.pop();
-	}
-}
+				<ButtonLayout>
+					{ (applying || applied) && <Button
+						title = { 'Submit ' + (applied && 'Changes' || 'Application') }
+						onPress = { () => {
+							editApplication({ ...candidate, applied });
+							navigation.pop();
+						} }
+					/> }
+					<Button title = 'Cancel' onPress = { () => applying ? setApplying(false) : navigation.pop() } />
+				</ButtonLayout>
+			</SafeAreaView>
+		</KeyboardAwareScrollView>
+	);
+};
 
 const styles = {
 	fontLarge: {
@@ -328,19 +180,3 @@ const styles = {
 		paddingLeft: 20
 	}
 };
-
-const mapStateToProps = ({ elect, user }) => {
-	const { positions } = elect;
-	const { activeUser } = user;
-
-	return {
-		positions,
-		activeUser
-	};
-};
-
-const mapDispatchToProps = {
-	getPositions
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ElectionApplication);

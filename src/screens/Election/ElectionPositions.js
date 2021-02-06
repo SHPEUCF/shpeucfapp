@@ -1,172 +1,88 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useState, useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import _ from 'lodash';
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
-import { Button, SortableFlatList, NavBar, ButtonLayout, Icon } from '@/components';
-import {
-	openElection,
-	closeElection,
-	deletePosition,
-	getPositions,
-	positionDescriptionChanged,
-	positionTitleChanged,
-	changeLevels
-} from '@/ducks';
+import { Alert, Button, SortableFlatList, NavBar, ButtonLayout, Icon } from '@/components';
+import { getPositions } from '@/ducks';
+import { deletePosition, changeLevels } from '@/services/elections';
 
-const dimension = Dimensions.get('screen');
-const iteratees = ['level'];
-const order = ['asc'];
+const { height } = Dimensions.get('screen');
 
-class ElectionPosition extends Component {
-	constructor(props) {
-		super(props);
-		this.renderPositions = this.renderPositions.bind(this);
-	}
+export const ElectionPositions = ({ navigation }) => {
+	const { positions } = useSelector(({ elect }) => elect);
+	const [orderedPositions, setOrderedPositions] = useState([]);
+	const mounted = useRef(false);
+	const dispatch = useDispatch();
 
-	componentDidMount() {
-		this.props.getPositions();
-	}
+	useEffect(() => {
+		if (!mounted.current) {
+			dispatch(getPositions());
+			mounted.current = true;
+		}
+		setOrderedPositions(_.orderBy(positions, ['level'], ['asc']));
+	}, [positions]);
 
-	state = {
-		data: _.orderBy(this.props.positions, iteratees, order).map((d, index) => ({
-			position: d,
-			key: `item-${index}`,
-			label: index,
-			backgroundColor: '#fff'
-		}))
-	}
-
-	render() {
-		const {
-			page
-		} = styles;
-		const {
-			positions,
-			navigation
-		} = this.props;
-
-		const positionsArray = _.toArray(positions);
-
-		return (
-			<SafeAreaView style = { page }>
-				<NavBar title = 'Positions' back onBack = { () => navigation.pop() } />
-				{ this.renderFlatlist(positionsArray) }
-				<ButtonLayout>
-					<Button
-						onPress = { () => {
-							this.props.positionTitleChanged('');
-							this.props.positionDescriptionChanged('');
-							navigation.push('PositionForm', { action: 'ADD' });
-						} }
-						title = { 'Add Positions' }
-					/>
-					<Button
-						onPress = { () => this.setLevels() }
-						title = { 'Set Order' }
-					/>
-				</ButtonLayout>
-			</SafeAreaView>
-		);
-	}
-
-	setLevels() {
-		const {
-			changeLevels
-		} = this.props;
-
-		changeLevels(this.state.data);
-	}
-
-	renderPositions({
-		item, move, moveEnd, isActive
-	}) {
-		const {
-			containerStyle,
-			contentContainerStyle,
-			textColor
-		} = styles;
-
+	const renderPositions = ({ item: position, move, moveEnd, isActive }) => {
+		const { containerStyle, buttonContainerStyle, positionContainer, textColor } = styles;
 		const color = isActive ? { backgroundColor: '#ffd70066' } : { backgroundColor: 'black' };
 
+		const confirmDelete = () => Alert.alert(`Are you sure you want to delete the ${position.title} position?`,
+			{ type: 'confirmation',	submit: () => deletePosition(position.title) }
+		);
+
 		return (
-			<TouchableOpacity
-				style = { [contentContainerStyle, color] }
-				onLongPress = { move }
-				onPressOut = { moveEnd }>
+			<TouchableOpacity style = { [positionContainer, color] } onLongPress = { move } onPressOut = { moveEnd }>
 				<View style = { containerStyle }>
-					<Text style = { textColor }>{ item.position.title }</Text>
+					<Text style = { textColor }>{ position.title }</Text>
 				</View>
-				<View style = { styles.buttonContainerStyle }>
-					<TouchableOpacity onPress = { () => this.viewPosition(item.position) }>
+				<View style = { buttonContainerStyle }>
+					<TouchableOpacity onPress = { () => navigation.push('PositionForm', { action: 'EDIT', position }) }>
 						<Icon style = { textColor } name = 'md-create' size = { 40 } />
 					</TouchableOpacity>
 				</View>
-				<View style = { styles.buttonContainerStyle }>
-					<TouchableOpacity onPress = { () => this.delete(item.position) }>
+				<View style = { buttonContainerStyle }>
+					<TouchableOpacity onPress = { () => confirmDelete() }>
 						<Icon style = { textColor } name = 'md-trash' size = { 40 } />
 					</TouchableOpacity>
 				</View>
 			</TouchableOpacity>
 		);
-	}
+	};
 
-	viewPosition(item) {
-		this.props.positionTitleChanged(item.title);
-		this.props.positionDescriptionChanged(item.description);
-		this.props.navigation.push('PositionForm', { action: 'EDIT' });
-	}
-
-	delete(position) {
-		this.setState({
-			data: this.state.data.filter(item => item.position !== position)
-		});
-
-		this.props.deletePosition(position.title);
-	}
-
-	renderFlatlist() {
-		return (
+	return (
+		<SafeAreaView style = { styles.page }>
+			<NavBar title = 'Positions' back />
 			<View style = {{ flex: 1 }}>
 				<SortableFlatList
-					data = { this.state.data }
-					extraData = { this.state }
-					keyExtractor = { (item) => `draggable-item-${item.key}` }
-					renderItem = { this.renderPositions }
+					data = { orderedPositions }
+					renderItem = { renderPositions }
 					scrollPercent = { 5 }
-					onMoveEnd = { ({
-						data
-					}) => this.setState({ data }) }
+					keyExtractor = { ({ key }) => `position-${key}` }
+					onMoveEnd = { ({ data }) => setOrderedPositions(data) }
 				/>
 			</View>
-		);
-	}
-}
+			<ButtonLayout>
+				<Button title = 'Add Positions' onPress = { () =>	navigation.push('PositionForm', { action: 'ADD' }) } />
+				<Button title = 'Set Order' onPress = { () => changeLevels(orderedPositions) } />
+			</ButtonLayout>
+		</SafeAreaView>
+	);
+};
 
 const styles = {
 	containerStyle: {
 		flex: 25,
 		justifyContent: 'center',
 		alignItems: 'flex-start',
-
 		paddingVertical: 10,
 		paddingHorizontal: 15
 	},
-	containerTextStyle: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'flex-start',
-		backgroundColor: '#2C3239',
-
-		paddingVertical: 10,
-		paddingHorizontal: 15
-	},
-	contentContainerStyle: {
+	positionContainer: {
 		margin: 1,
-		height: dimension.height * 0.09,
+		height: height * 0.09,
 		flex: 1,
 		flexDirection: 'row',
 		justifyContent: 'center'
-
 	},
 	textColor: {
 		color: '#e0e6ed'
@@ -181,24 +97,3 @@ const styles = {
 		backgroundColor: '#0c0b0b'
 	}
 };
-
-const mapStateToProps = ({ elect }) => {
-	const {
-		election,
-		positions
-	} = elect;
-
-	return { election, positions };
-};
-
-const mapDispatchToProps = {
-	openElection,
-	closeElection,
-	deletePosition,
-	getPositions,
-	positionDescriptionChanged,
-	positionTitleChanged,
-	changeLevels
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ElectionPosition);
