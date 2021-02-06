@@ -1,5 +1,5 @@
-import firebase from 'firebase';
 import { createActionTypes } from '@/utils/actions';
+import { getAllPositions, getAllVotes, updateElectionStatus } from '@/services/election';
 
 const ACTIONS = createActionTypes([
 	'GET_POSITIONS',
@@ -34,20 +34,13 @@ export default (state = INITIAL_STATE, { type, payload }) => {
 };
 
 export const getPositions = () => dispatch => {
-	firebase.database().ref('/election/positions').on('value', snapshot =>
-		dispatch({ type: ACTIONS.GET_POSITIONS, payload: snapshot.val() })
-	);
+	getAllPositions().then(payload => dispatch({ type: ACTIONS.GET_POSITIONS, payload }));
 };
 
 export const getVotes = () => dispatch => {
-	firebase.database().ref('voting').on('value', snapshot =>
-		dispatch({ type: ACTIONS.GET_VOTES, payload: snapshot.val() })
-	);
+	getAllVotes().then(payload => dispatch({ type: ACTIONS.GET_VOTES, payload }));
 };
 
 export const updateElection = () => dispatch => {
-	firebase.database().ref('/election/').on('value', snapshot => {
-		if (snapshot.exists())
-			dispatch({ type: ACTIONS.UPDATE_ELECTION, payload: snapshot.val() });
-	});
+	updateElectionStatus().then(payload => dispatch({ type: ACTIONS.UPDATE_ELECTION, payload }));
 };

@@ -85,7 +85,7 @@ export const vote = candidateObj => {
 		candidateList.forEach(([position, candidateID]) => {
 			electionObject[position][candidateID][uid] = true;
 			electionObject[position][candidateID].votes++;
-		});e
+		});
 		firebase.database().ref('/voting/').update(electionObject);
 	})
 		.then(() => firebase.database().ref('/election/votes').once('value', snapshot => {
@@ -97,12 +97,24 @@ export const vote = candidateObj => {
 };
 
 export const changeLevels = positions => {
-	firebase.database().ref('/election/').once('value', snapshot => {
+	firebase.database().ref('election').once('value', snapshot => {
 		const electionObject = snapshot.val();
 
 		positions.forEach((position, index) => electionObject.positions[position.title].level = index);
-		firebase.database().ref('/election/').update(electionObject);
+		firebase.database().ref('election').update(electionObject);
 	})
 		.then(() => Alert.alert('Order set!', { type: 'success', title: 'Successful' }))
 		.catch(() => Alert.alert('Order could not be set!', { type: 'error', title: 'Failure' }));
 };
+
+export const getAllPositions = () => new Promise(resolve =>
+	firebase.database().ref('/election/positions').on('value', snapshot => resolve(snapshot.val()))
+);
+
+export const getAllVotes = () => new Promise(resolve =>
+	firebase.database().ref('voting').on('value', snapshot => resolve(snapshot.val()))
+);
+
+export const updateElectionStatus = () => new Promise(resolve =>
+	firebase.database().ref('election').on('value', snapshot => resolve(snapshot.val()))
+);
