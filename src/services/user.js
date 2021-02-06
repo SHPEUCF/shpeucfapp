@@ -78,6 +78,7 @@ const createUserSuccess = user => {
 			.then(() => Alert.alert(`We sent a verification to: ${email}. Please open your email and verify your account`))
 			.catch(() => Alert.alert('We were not able to send an email. Please contact the Tech Director for assistance'))
 		)
+		.then(() => firebase.auth().signOut())
 		.catch(error => Alert.alert(error, { type: 'error' }));
 };
 
