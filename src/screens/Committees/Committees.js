@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { NavBar, Icon } from '@/components';
 import _ from 'lodash';
 import { FlatList, Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
-import { goToViewEvent } from '@/utils/router';
-import { filterEvents } from '@/utils/events';
+import { filterEvents, convertNumToDate } from '@/utils/events';
 import { editUser, loadEvent, getCommittees, loadCommittee } from '@/ducks';
 
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 const iteratees = ['level'];
 const order = ['asc'];
 
@@ -28,14 +26,15 @@ class Committees extends Component {
 			page
 		} = styles;
 		const {
-			committeesList
+			committeesList,
+			navigation
 		} = this.props;
 
 		const committeesArray = _.orderBy(committeesList, iteratees, order);
 
 		return (
 			<SafeAreaView style = { page }>
-				<NavBar title = 'Committees' back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Committees' back onBack = { () => navigation.pop() } />
 				<View style = { content }>
 					{ this.renderFlatlist(committeesArray) }
 				</View>
@@ -79,7 +78,7 @@ class Committees extends Component {
 
 	viewCommittee(item) {
 		this.props.loadCommittee(item);
-		Actions['CommitteePageC']({ screen: 'committees' });
+		this.props.navigation.push('CommitteePage');
 	}
 
 	renderCommittees(item) {
@@ -91,10 +90,11 @@ class Committees extends Component {
 
 		const {
 			activeUser,
-			sortedEvents
+			sortedEvents,
+			route: { params }
 		} = this.props;
 
-		if (this.props.screen === 'dashboard') {
+		if (params && params.prevRoute === 'Dashboard') {
 			return (
 				<View >
 					<View style = { contentContainerStyle }>
@@ -107,7 +107,7 @@ class Committees extends Component {
 								style = {{ backgroundColor: 'black', justifyContent: 'center', flex: 2, alignItems: 'flex-end' }}
 							>
 								<Icon
-									name = 'ios-star'
+									name = 'star'
 									size = { dimension.height * 0.03 }
 									onPress = { () => {
 										editUser({ userCommittees: {
@@ -124,7 +124,7 @@ class Committees extends Component {
 							style = {{ backgroundColor: 'black', justifyContent: 'center', flex: 2, alignItems: 'flex-end' }}
 						>
 							<Icon
-								name = 'ios-star-outline'
+								name = 'star-outline'
 								size = { dimension.height * 0.03 }
 								onPress = { () => {
 									if (!activeUser.userCommittees || Object.entries(activeUser.userCommittees).length <= 4) {
@@ -155,7 +155,7 @@ class Committees extends Component {
 						style = {{ backgroundColor: 'black', justifyContent: 'center', flex: 2, alignItems: 'flex-end' }}
 					>
 						<Icon
-							name = 'ios-calendar'
+							name = 'calendar'
 							size = { dimension.height * 0.03 }
 							onPress = { () => {
 								this.setState({ opened: Object.assign(this.state.opened, { [item.title]: this.toggleEvents(item.title) }) });
@@ -168,7 +168,7 @@ class Committees extends Component {
 						style = {{ backgroundColor: 'black', justifyContent: 'center', flex: 2, alignItems: 'flex-end' }}
 					>
 						<Icon
-							name = 'ios-calendar'
+							name = 'calendar'
 							size = { dimension.height * 0.03 }
 							onPress = { () => {
 								this.setState({ opened: Object.assign(this.state.opened, { [item.title]: this.toggleEvents(item.title) }) });
@@ -179,7 +179,7 @@ class Committees extends Component {
 					<View style = {{ flex: 1 }}></View>
 					<View style = {{ flex: 0.6, justifyContent: 'center' }}>
 						<Icon
-							name = 'ios-arrow-dropright'
+							name = 'chevron-forward-circle-outline'
 							size = { dimension.height * 0.025 }
 							style = {{ color: '#FECB00', backgroundColor: 'transparent', alignSelf: 'center' }}
 						/>
@@ -204,7 +204,6 @@ class Committees extends Component {
 
 	viewEvent(item) {
 		loadEvent(item);
-		goToViewEvent();
 	}
 
 	renderEvents(event) {
@@ -232,7 +231,7 @@ class Committees extends Component {
 							<View style = {{ flex: 1, alignItems: 'flex-start' }}>
 								<View style = {{ alignItems: 'flex-start' }}>
 									<Text style = {{ color: 'white', fontSize: dimension.width * 0.035 }}>{ name }</Text>
-									<Text style = {{ color: 'white', fontSize: dimension.width * 0.035 }}>{ this.convertNumToDate(date) } - { realStart } - { realEnd } </Text>
+									<Text style = {{ color: 'white', fontSize: dimension.width * 0.035 }}>{ convertNumToDate(date) } - { realStart } - { realEnd } </Text>
 								</View>
 							</View>
 							<View style = {{ flex: 0.08, height: '60%' }}></View>
@@ -258,14 +257,6 @@ class Committees extends Component {
 		if (hour === '0') hour = '12';
 
 		return hour + ':' + array[1] + ':' + array[2];
-	}
-
-	convertNumToDate(date) {
-		let months = ['Jan', 'Feb', 'Mar', 'April', 'May', 'June',
-			'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-		let tempDate = date.split('-');
-
-		return `${months[Number(tempDate[1]) - 1]} ${tempDate[2]}`;
 	}
 
 	renderbuttons(item) {

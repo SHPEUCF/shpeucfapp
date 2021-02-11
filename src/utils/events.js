@@ -1,4 +1,24 @@
-import { Alert } from '@/components';
+import React from 'react';
+import { Alert, Agenda } from '@/components';
+import { View, Text } from 'react-native';
+import { EventPanel } from '@/utils/EventPanel';
+
+export const fullMonths = [
+	'January',
+	'February',
+	'March',
+	'April',
+	'May',
+	'June',
+	'July',
+	'August',
+	'September',
+	'October',
+	'November',
+	'December'
+];
+
+export const shortMonths = ['Jan', 'Feb', 'Mar', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 /**
  * @description Pass in Standard time and the function returns that in Military Time.
@@ -38,20 +58,18 @@ export function convertMilitaryToStandardTime(militaryTime) {
 }
 
 /**
- * @description Prepends a 0 to any single digit number, otherwise returns the original number.
+ * @description Extract month name and day from a numerical date
  *
- * @param {Number} item The number that may need a 0 prepended to it.
+ * @param {String} date Format: 'Year-Month-Day'
  *
- * @returns {String} The number as a string. It may have  a 0 prepended to it, if it was originally single digit.
+ * @returns {String} Format: 'Month(Name) Day(Number)'
  */
 
-export const prepend0 = (number) => number < 10 ? '0' + number : number;
+export function convertNumToDate(date) {
+	let [, month, day] = date.split('-');
 
-/**
- * @description Formats event to work with the calendar component.
- *
- * @param {Object[]} events An array of all the events that you want to format.
- */
+	return `${shortMonths[Number(month) - 1]} ${day}`;
+}
 
 export function formatEventListForCalendar(events) {
 	let dates = {};
@@ -94,7 +112,7 @@ export function timeVerification(startTime, endTime) {
 
 export function changeHourBy(time, amount) {
 	const [hour, minute] = time.split(':');
-	let newHour = prepend0((parseInt(hour) + amount) % 24);
+	let newHour = ((parseInt(hour) + amount) % 24).toString().padStart(2, '0');
 
 	return `${newHour}:${minute}`;
 }
@@ -122,3 +140,52 @@ export const filterPastEvents = sortedEvents => sortedEvents.filter(event => {
  */
 
 export const filterEvents = (eventIds, sortedEvents) => sortedEvents.filter((event) => event.id in eventIds);
+
+export const DefaultAgenda = ({ passDate, items, screen, color, height }) => {
+	const EmptyEventPanel = () => {
+		const textColor = { color: '#e0e6ed' };
+		const emptyData = {
+			height: height * 0.15,
+			justifyContent: 'center',
+			alignItems: 'center',
+			backgroundColor: '#21252b',
+			borderRadius: 5,
+			marginTop: height * 0.017
+		};
+
+		return (
+			<View style = { [emptyData, { color }] }>
+				<Text style = { textColor }>No events to display on this day</Text>
+			</View>
+		);
+	};
+
+	return <Agenda
+		passDate = { passDate }
+		items = { items }
+		style = {{ height: height * 0.73 }}
+		renderItem = { event => <EventPanel event = { event } variant = { screen } /> }
+		renderEmptyData = { () => <EmptyEventPanel /> }
+		renderEmptyDate = { () => <View></View> }
+		rowHasChanged = { (r1, r2) => r1 !== r2 }
+		pastScrollRange = { 24 }
+		futureScrollRange = { 24 }
+		theme = {{
+			backgroundColor: 'black',
+			calendarBackground: '#21252b',
+			agendaDayTextColor: '#fff',
+			agendaDayNumColor: '#fff',
+			dayTextColor: '#fff',
+			monthTextColor: '#FECB00',
+			textSectionTitleColor: '#FECB00',
+			textDisabledColor: '#999',
+			selectedDayTextColor: '#000',
+			selectedDayBackgroundColor: '#FECB00',
+			todayTextColor: '#44a1ff',
+			textDayFontSize: 15,
+			textMonthFontSize: 16,
+			textDayHeaderFontSize: 14,
+			selectedDotColor: 'black'
+		}}
+	/>;
+};

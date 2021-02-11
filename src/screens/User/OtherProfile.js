@@ -1,24 +1,22 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
-import { Actions } from 'react-native-router-flux';
-import { connect } from 'react-redux';
 import { Alert, ButtonLayout, NavBar, Avatar, Icon } from '@/components';
 import Flag from 'react-native-flags';
 import { verifiedCheckMark } from '@/utils/render';
 
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 
 class OtherProfile extends Component {
-	render() {
-		return (
-			this.renderContent()
-		);
+	constructor(props) {
+		super(props);
+		this.state = { member: this.props.route.params.current.member };
+
+		// listener function for changes to the member account
+		this.props.route.params.current.listener = member => this.setState({ member });
 	}
 
-	renderContent() {
-		const {
-			email, major, points
-		} = this.props.visitedMember;
+	render() {
+		const { email, major, points } = this.state.member;
 		const {
 			bioContainer,
 			fieldContainerStyle,
@@ -29,7 +27,7 @@ class OtherProfile extends Component {
 
 		return (
 			<SafeAreaView style = {{ flex: 1, backgroundColor: '#0c0b0b' }}>
-				<NavBar back onBack = { () => Actions.pop() } />
+				<NavBar back onBack = { () => this.props.navigation.pop() } />
 				<View style = {{ backgroundColor: 'black', flex: 1 }}>
 					{ this.renderPicture() }
 					<View style = { [bioContainer] }>
@@ -82,19 +80,19 @@ class OtherProfile extends Component {
 			firstName,
 			lastName,
 			picture,
-			paidMember
-		} = this.props.visitedMember;
+			paidMember,
+			color
+		} = this.state.member;
 
 		return (
 			<View style = { headerInfoContainer }>
 				<View style = {{ flex: 1, paddingTop: '8%', marginBottom: '30%' }}>
-					{ picture
-						? <Avatar size = 'xlarge' source = { picture } />
-						: <Avatar
-							size = 'xlarge'
-							title = { firstName[0].concat(lastName[0]) }
-							titleStyle = {{ backgroundColor: this.props.color }}
-						/> }
+					<Avatar
+						size = 'xlarge'
+						title = { firstName[0].concat(lastName[0]) }
+						source = { picture }
+						style = {{ backgroundColor: color }}
+					/>
 				</View>
 				<View style = { [taglineContainer] }>
 					<View style = { row }>
@@ -104,13 +102,6 @@ class OtherProfile extends Component {
 				</View>
 			</View>
 		);
-	}
-
-	constructor(props) {
-		super(props);
-		this.state = {
-			dp: null
-		};
 	}
 
 	renderFlag() {
@@ -159,7 +150,7 @@ class OtherProfile extends Component {
 								Alert.alert('Coming Soon');
 								// Actions.PostShow({ title: 'Github', uri: 'https://www.github.com/'})
 							} } >
-							<Icon name = 'ios-mail' size = { dimension.height * 0.045 } color = 'white' />
+							<Icon name = 'mail' size = { dimension.height * 0.045 } color = 'white' />
 						</TouchableOpacity>
 					</View>
 				</View>
@@ -240,6 +231,4 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ members: { visitedMember } }) => ({ visitedMember });
-
-export default connect(mapStateToProps)(OtherProfile);
+export default OtherProfile;

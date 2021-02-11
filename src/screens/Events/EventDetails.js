@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Alert, Button, NavBar, FilterList, ButtonLayout, Icon } from '@/components';
-import { Actions } from 'react-native-router-flux';
 import QRCode from 'react-native-qrcode-svg';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import { MemberPanel } from '@/utils/render';
-import { months } from '@/data/DateItems';
+import { MemberPanel } from '@/utils/MemberPanel';
 import { EventForm } from '@/data/FormData';
+import { convertNumToDate } from '@/utils/events';
 import { deleteEvent, editEvent, checkIn, rsvp, pageLoad, getAllMemberAccounts } from '@/ducks';
 import {
 	View,
@@ -27,8 +26,12 @@ class EventDetails extends Component {
 
 		this.state = {
 			modalVisible: false,
-			eventFormVisibility: false
+			eventFormVisibility: false,
+			event: this.props.route.params.current.event
 		 };
+
+		// listener function for changes to the event
+		this.props.route.params.current.listener = event => this.setState({ event });
 	}
 
 	componentDidMount() {
@@ -38,30 +41,16 @@ class EventDetails extends Component {
 			getAllMemberAccounts();
 	}
 
-	convertNumToDate(date) {
-		if (!date) return '';
-		let tempDate = date.split('-');
-
-		return `${months[Number(tempDate[1]) - 1]} ${tempDate[2]}`;
-	}
-
 	onSuccess = (e) => {
-		if (this.props.activeEvent.code === e.data)
-			checkIn(this.props.activeEvent, this.props.activeUser);
+		if (this.state.event.code === e.data)
+			checkIn(this.state.event, this.props.activeUser);
 		else
 			Alert.alert('Incorrect Code');
 	}
 
 	renderCodeBox() {
-		const {
-			activeEvent,
-			activeUser
-		} = this.props;
-
-		const {
-			modalBackground,
-			modalContent
-		} = styles;
+		const { activeUser } = this.props;
+		const { modalBackground, modalContent } = styles;
 
 		if (activeUser.privilege && activeUser.privilege.board) {
 			return (
@@ -80,7 +69,7 @@ class EventDetails extends Component {
 							<View style = {{ paddingTop: 20 }}></View>
 							<View style = {{ alignItems: 'center', flex: 2, justifyContent: 'center' }}>
 								<QRCode
-									value = { activeEvent.code }
+									value = { this.state.event.code }
 									size = { 300 }
 								/>
 							</View>
@@ -127,9 +116,7 @@ class EventDetails extends Component {
 	}
 
 	renderComponent(item) {
-		const {
-			textColor
-		} = styles;
+		const { textColor } = styles;
 
 		if (this.props.allMemberAccounts && this.props.allMemberAccounts[item]) {
 			const {
@@ -178,11 +165,7 @@ class EventDetails extends Component {
 	}
 
 	sendListToMail(attendants) {
-		const {
-			activeUser,
-			activeEvent,
-			allMemberAccounts
-		} = this.props;
+		const { activeUser, allMemberAccounts } = this.props;
 
 		let users = [];
 		const email = allMemberAccounts[activeUser.id].email;
@@ -201,7 +184,7 @@ class EventDetails extends Component {
 			3. Save the file and change the extension to .csv\n\
 			4. Open the file in Excel\n\
 			------------------\n\n' + csv;
-		let link = `mailto:${email}?subject=event: ${activeEvent.name}&body=` + data;
+		let link = `mailto:${email}?subject=event: ${this.state.event.name}&body=` + data;
 
 		if (!Linking.canOpenURL(link)) {
 			Alert.alert('Email could not be sent', { type: 'error', title: 'Failure' });
@@ -213,7 +196,8 @@ class EventDetails extends Component {
 	}
 
 	renderAttendance() {
-		const { activeEvent, activeUser } = this.props;
+		const { activeUser } = this.props;
+		const { event } = this.state;
 		const {
 			lineOnTop,
 			attendance,
@@ -223,10 +207,10 @@ class EventDetails extends Component {
 			fullFlex
 		} = styles;
 
-		if (!activeEvent) return null;
+		if (!event) return null;
 
-		if (activeUser.privilege && activeUser.privilege.board && activeEvent.attendance) {
-			let attendants = Object.keys(activeEvent.attendance);
+		if (activeUser.privilege && activeUser.privilege.board && event.attendance) {
+			let attendants = Object.keys(event.attendance);
 
 			return (
 				<View style = { [fullFlex, lineOnTop] }>
@@ -258,21 +242,18 @@ class EventDetails extends Component {
 	}
 
 	confirmDelete() {
-		deleteEvent(this.props.activeEvent);
-		Actions.pop();
+		deleteEvent(this.state.event);
+		this.props.navigation.pop();
 	}
 
 	renderPickMembers() {
-		const {
-			allMemberAccounts,
-			activeEvent,
-			activeUser
-		} = this.props;
+		const { allMemberAccounts, activeUser } = this.props;
+		const { event } = this.state;
 
-		if (!activeEvent) return null;
+		if (!event) return null;
 
 		let list = Object.assign({}, allMemberAccounts);
-		let excludeDataProp = !activeEvent ? {} : Object.assign({}, activeEvent.attendance);
+		let excludeDataProp = !event ? {} : Object.assign({}, event.attendance);
 		let Wrapper = (props) => <Button
 			title = 'Manual Check In'
 			onPress = { props.onPress }
@@ -291,45 +272,43 @@ class EventDetails extends Component {
 					multiple = { true }
 					CustomForm = { Wrapper }
 					data = { list }
-					regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
-					selectBy = { (data) => { return data.id } }
-					itemJSX = { (data) => MemberPanel(data) }
-					onSelect = { (selectedUsers) => selectedUsers.forEach(user => checkIn(activeEvent, user, false)) }
+					regexFunc = { member => { return `${member.firstName} ${member.lastName}` } }
+					selectBy = { member => { return member.id } }
+					itemJSX = { member => <MemberPanel member = { member } variant = 'General' /> }
+					onSelect = { (selectedUsers) => selectedUsers.forEach(user => checkIn(event, user, false)) }
 				/>
 			</View>
 		);
 	}
 
 	renderEventListNum(iconSize) {
-		const {
-			activeEvent,
-			activeUser
-		} = this.props;
+		const { activeUser } = this.props;
 		const {
 			icon,
 			iconContainer,
 			text,
 			textColor
 		} = styles;
+		const { event } = this.state;
 
 		let numRSVP = 0;
 		let numAttendance;
 
-		if (activeEvent) {
-			if (activeEvent.attendance)
-				numAttendance = Object.keys(activeEvent.attendance).length;
-			if (activeEvent.rsvp)
-				numRSVP = Object.keys(activeEvent.rsvp).length;
+		if (event) {
+			if (event.attendance)
+				numAttendance = Object.keys(event.attendance).length;
+			if (event.rsvp)
+				numRSVP = Object.keys(event.rsvp).length;
 		}
 
 		if (activeUser.privilege && activeUser.privilege.board) {
 			return [
 				<View style = { iconContainer }>
-					<Icon style = { [icon, textColor] } name = 'ios-people' size = { iconSize } color = '#000' />
+					<Icon style = { [icon, textColor] } name = 'people' size = { iconSize } color = '#000' />
 					<Text style = { [text, textColor] }>{ numRSVP } { numRSVP == 1 ? 'person' : 'people' } RSVP'd</Text>
 				</View>,
 				numAttendance && <View style = { iconContainer }>
-					<Icon style = { [icon, textColor] } name = 'md-people' size = { iconSize } color = '#000' />
+					<Icon style = { [icon, textColor] } name = 'people' size = { iconSize } color = '#000' />
 					<Text style = { [text, textColor] }>{ numAttendance } { numAttendance == 1 ? 'person' : 'people' } attended</Text>
 				</View>
 			];
@@ -347,21 +326,9 @@ class EventDetails extends Component {
 			return true;
 	}
 
-	prepend0(item) {
-		let array = item.split(':');
-		let hour = array[0];
-
-		if (hour.length === 1)
-			hour = '0' + hour;
-
-		return hour + ':' + array[1] + ':' + array[2];
-	}
-
 	renderButtons() {
-		const {
-			activeUser,
-			activeEvent
-		} = this.props;
+		const { activeUser } = this.props;
+		const { event } = this.state;
 
 		let buttons = [];
 
@@ -391,9 +358,9 @@ class EventDetails extends Component {
 					title = 'Check in'
 					onPress = { () => { this.setState({ modalVisible: true }) } }
 				/>
-				{ this.limitRSVP(activeEvent.date) && <Button
+				{ this.limitRSVP(event.date) && <Button
 					title = 'RSVP'
-					onPress = { () => rsvp(activeEvent) }
+					onPress = { () => rsvp(event) }
 				/> }
 			</ButtonLayout>
 			;
@@ -420,7 +387,7 @@ class EventDetails extends Component {
 				location,
 				type,
 				committee
-			} = this.props.activeEvent;
+			} = this.state.event;
 			const {
 				page,
 				container,
@@ -438,10 +405,10 @@ class EventDetails extends Component {
 
 			return (
 				<SafeAreaView style = { page }>
-					<NavBar title = { viewName } back onBack = { () => Actions.pop() } />
+					<NavBar title = { viewName } back onBack = { () => this.props.navigation.pop() } />
 					<EventForm
 						title = 'Edit Event'
-						values = { this.props.activeEvent }
+						values = { this.state.event }
 						visible = { this.state.eventFormVisibility }
 						onSubmit = { event => editEvent(event) }
 						changeVisibility = { visible => this.setState({ eventFormVisibility: visible }) }
@@ -453,7 +420,7 @@ class EventDetails extends Component {
 								name = 'md-calendar'
 								size = { iconSize }
 								color = '#000' />
-							<Text style = { [text, textColor] }>{ this.convertNumToDate(date) }</Text>
+							<Text style = { [text, textColor] }>{ convertNumToDate(date) }</Text>
 						</View>
 						<View style = { iconContainer }>
 							<Icon
@@ -629,12 +596,11 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ events, user, members }) => {
-	const { activeEvent } = events;
+const mapStateToProps = ({ user, members }) => {
 	const { activeUser } = user;
 	const { allMemberAccounts } = members;
 
-	return { activeEvent, allMemberAccounts, activeUser };
+	return { allMemberAccounts, activeUser };
 };
 
 const mapDispatchToProps = { checkIn, rsvp, pageLoad, getAllMemberAccounts };

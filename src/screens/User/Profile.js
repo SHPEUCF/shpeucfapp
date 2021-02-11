@@ -4,14 +4,14 @@ import { connect } from 'react-redux';
 import { Alert, Button, ButtonLayout, Form, Avatar, Icon } from '@/components';
 import Flag from 'react-native-flags';
 import { openGallery, verifiedCheckMark } from '@/utils/render';
-import { loadUser, logoutUser, pageLoad, editUser } from '@/ducks';
+import { loadUser, logoutUser, editUser } from '@/ducks';
 import {
 	editProfileFormDataPrivileged,
 	editProfileFormDataRegular,
 	convertObjectToInitialValues
 } from '@/data/FormData';
 
-const { height, width } = Dimensions.get('window');
+const { height, width } = Dimensions.get('screen');
 
 class Profile extends Component {
 	constructor(props) {
@@ -156,7 +156,7 @@ class Profile extends Component {
 					<View style = {{ flex: 0.01 }} />
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
 						<TouchableOpacity onPress = { () => Alert.alert('Coming Soon') }>
-							<Icon name = 'ios-mail' size = { height * 0.045 } color = 'white' />
+							<Icon name = 'mail' size = { height * 0.045 } color = 'white' />
 						</TouchableOpacity>
 					</View>
 				</View>
@@ -226,16 +226,14 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ user, general }) => {
+const mapStateToProps = ({ user }) => {
 	const { activeUser } = user;
-	const { loading } = general;
 
-	return { activeUser, loading };
+	return { activeUser };
 };
 
 const mapDispatchToProps = {
-	loadUser,
-	pageLoad
+	loadUser
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

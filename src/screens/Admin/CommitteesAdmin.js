@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { Button, NavBar, SortableFlatList, ButtonLayout, Icon } from '@/components';
 import _ from 'lodash';
@@ -7,7 +6,6 @@ import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-na
 import {
 	getCommittees,
 	deleteCommittee,
-	goToCommitteeForm,
 	editCommittee,
 	getAllMemberAccounts,
 	addCommittee,
@@ -17,7 +15,7 @@ import {
 	changeLevelsCom
 } from '@/ducks';
 
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 const iteratees = ['level'];
 const order = ['asc'];
 
@@ -57,14 +55,15 @@ class CommitteesAdmin extends Component {
 			page
 		} = styles;
 		const {
-			committeesList
+			committeesList,
+			navigation
 		} = this.props;
 
 		const committeesArray = _.toArray(committeesList);
 
 		return (
 			<SafeAreaView style = { page }>
-				<NavBar title = 'Committees' back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Committees' back onBack = { () => navigation.pop() } />
 				{ this.renderFlatList(committeesArray) }
 				<View>
 					<ButtonLayout>
@@ -77,7 +76,7 @@ class CommitteesAdmin extends Component {
 								this.props.committeeTitleChanged('');
 								this.props.committeeDescriptionChanged('');
 								this.props.chairPersonChanged({});
-								this.props.goToCommitteeForm('ADD');
+								navigation.push('CommitteeForm', { action: 'ADD' });
 							} }
 							title = { 'Add Committees' }
 						/>
@@ -149,7 +148,7 @@ class CommitteesAdmin extends Component {
 		this.props.committeeTitleChanged(item.title);
 		this.props.committeeDescriptionChanged(item.description);
 		this.props.chairPersonChanged(item.chair);
-		this.props.goToCommitteeForm('EDIT');
+		this.props.navigation.push('CommitteeForm', { action: 'EDIT' });
 	}
 
 	setLevels() {
@@ -208,7 +207,6 @@ const mapStateToProps = ({ committees }) => {
 
 const mapDispatchToProps = {
 	getCommittees,
-	goToCommitteeForm,
 	deleteCommittee,
 	addCommittee,
 	editCommittee,

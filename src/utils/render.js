@@ -1,80 +1,48 @@
 import React from 'react';
-import { View, Text } from 'react-native';
 import firebase from 'firebase';
-import { Avatar, Icon } from '@/components';
+import { Icon } from '@/components';
 import ImagePicker from 'react-native-image-crop-picker';
 import RNFetchBlob from 'rn-fetch-blob';
-import { storeImageUrl } from '@/ducks';
 
 export const stockImg = 'https://cdn0.iconfinder.com/data/icons/superuser-web-kit/512/686909-user_people_man_human_head_person-512.png';
 
 // You pass in the privileges prop or user object
 export const verifiedCheckMark = ({ paidMember }) => {
-	const {
-		verifiedCheckMark
-	} = styles;
+	const { verifiedCheckMark } = styles;
 
 	if (paidMember) {
 		return (
-			<Icon name = 'ios-checkmark-circle' size = { 25 } style = { verifiedCheckMark } />
+			<Icon name = 'checkmark-circle' size = { 25 } style = { verifiedCheckMark } />
 		);
 	}
 };
 
-// MemberPanel needs should be made into its own component
-export const MemberPanel = (user) => {
-	const {
-		textStyle,
-		contentContainerStyle,
-		userInfoContainer,
-		fullFlex,
-		AvatarContainer
-	} = styles;
+/**
+ * @description Directly modifies firstName and lastName to get first word.
+ *
+ * @param {Object} item  Object with firstName and lastName keys
+ * @param {String} item.firstName
+ * @param {String} item.lastName
+ */
 
-	truncateNames(user);
+export const truncateNames = item => {
+	let [firstName] = item.firstName.trim().split(' ');
+	let [lastName] = item.lastName.trim().split(' ');
 
-	return (
-		<View style = { contentContainerStyle }>
-			<View style = { userInfoContainer }>
-				<Text style = { [textStyle, fullFlex ] }>{ `${user.firstName} ${user.lastName}` }</Text>
-				<View style = { AvatarContainer }>
-					{ user.picture
-						? <Avatar source = { user.picture } />
-						: <Avatar
-							title = { user.firstName[0].concat(user.lastName[0]) }
-							titleStyle = {{ backgroundColor: user.color }}
-						/> }
-				</View>
-			</View>
-		</View>
-	);
-};
+	if (firstName.length + lastName.length >= 15)
+		lastName = `${lastName[0]}.`;
 
-export const rankMembersAndReturnsCurrentUser = (sortedMembers, userId) => {
-	let currentMember;
-	let pastPoints = 0;
-	let pastIndex = 1;
-
-	sortedMembers.forEach((x, index) => {
-		x.index = x.points !== 0 ? index + 1 : sortedMembers.length;
-		if (x.points === pastPoints) x.index = pastIndex;
-		if (x.id === userId) currentMember = x;
-
-		pastPoints = x.points;
-		pastIndex = x.index;
-	});
-
-	return currentMember;
-};
-
-export const truncateNames = (item) => {
-	item.firstName = item.firstName.split(' ')[0];
-	item.lastName = item.lastName.split(' ')[0];
+	return [firstName, lastName];
 };
 
 export const openGallery = (filePath, fileName, onImageStoreFunction) => {
 	const Blob = RNFetchBlob.polyfill.Blob;
 	const fs = RNFetchBlob.fs;
+	const storeImageUrl = (url, filePath) => {
+		firebase.database().ref(`${filePath}/`).update({
+			picture: url
+		});
+	};
 
 	window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
 	window.Blob = Blob;
@@ -129,28 +97,5 @@ const styles = {
 		backgroundColor: 'transparent',
 		alignSelf: 'center',
 		marginLeft: 10
-	},
-	textStyle: {
-		color: '#e0e6ed',
-		fontSize: 20
-	},
-	userInfoContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center'
-	},
-	fullFlex: {
-		flex: 1
-	},
-	AvatarContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center'
-	},
-	contentContainerStyle: {
-		height: 150,
-		alignItems: 'flex-start',
-		paddingHorizontal: 15,
-		justifyContent: 'center'
 	}
 };

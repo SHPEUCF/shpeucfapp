@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import { Icon } from '@/components';
 
 const { height, width } = Dimensions.get('screen');
@@ -19,15 +18,15 @@ export default class FavoriteCommittees extends PureComponent {
 			gold
 		} = styles;
 
-		const { committeesList, userCommittees } = this.props;
+		const { committeesList, userCommittees, navigation , loadCommittee} = this.props;
 
 		return (
 			<View style = { committeesPanelContainer }>
 				<View style = { selectCommitteesIcon }>
 					<Icon
-						name = 'ios-information-circle'
+						name = 'information-circle'
 						size = { height * 0.028 }
-						onPress = { () => Actions['CommitteesD']({ screen: 'dashboard' }) } style = { gold }
+						onPress = { () => navigation.push('Committees', { prevRoute: 'Dashboard' }) } style = { gold }
 					/>
 				</View>
 				{ (!userCommittees || !committeesList)
@@ -39,15 +38,15 @@ export default class FavoriteCommittees extends PureComponent {
 							<TouchableOpacity
 								style = { committeeItemContainer }
 								onPress = { () => {
-									this.props.loadCommittee(committeesList[committeeName]);
-									Actions['CommitteePageD']({ screen: 'dashboard' });
+									loadCommittee(committeesList[committeeName]);
+									navigation.push('CommitteePage');
 								} }
 							>
 								<View style = { committeeNameContainer }>
 									<Text style = { [textColor, { fontSize: width * 0.03 }] }>{ committeeName }</Text>
 								</View>
 								<View style = { leaderboardArrow }>
-									<Icon name = 'ios-arrow-dropright' size = { height * 0.025 } style = { gold } />
+									<Icon name = 'chevron-forward-circle-outline' size = { height * 0.025 } style = { gold } />
 								</View>
 							</TouchableOpacity>
 						) }

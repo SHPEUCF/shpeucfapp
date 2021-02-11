@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { NavBar, Button, ButtonLayout, FilterList } from '@/components';
 import { SafeAreaView, View, Text } from 'react-native';
-import { MemberPanel } from '@/utils/render';
-import MemberService from '@/services/members';
-
-const memberService = new MemberService();
+import { MemberPanel } from '@/utils/MemberPanel';
+import { changePrivilegeOfMembers } from '@/services/members';
 
 class MemberAdmin extends Component {
 	constructor(props) {
@@ -22,7 +19,7 @@ class MemberAdmin extends Component {
 
 		return (
 			<SafeAreaView style = { screenBackground }>
-				<NavBar title = 'Members' back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Members' back onBack = { () => this.props.navigation.pop() } />
 				<View style = { contentContainer }>
 					<Text style = { textStyle }>Paid Members</Text>
 					<ButtonLayout>
@@ -31,12 +28,11 @@ class MemberAdmin extends Component {
 								multiple = { true }
 								CustomForm = { this.createButton(value) }
 								data = { this.makeUserList(value) }
-								regexFunc = { (data) => { return `${data.firstName} ${data.lastName}` } }
-								selectBy = { (data) => { return data.id } }
-								itemJSX = { (data) => MemberPanel(data) }
+								regexFunc = { member => { return `${member.firstName} ${member.lastName}` } }
+								selectBy = { member => { return member.id } }
+								itemJSX = { member => <MemberPanel member = { member } variant = 'General' /> }
 								onSelect = { (selectedUsers) =>
-									memberService.changePrivilegeOfMembers(
-										selectedUsers.map((user) => { return user.id }), 'paidMember', value) }
+									changePrivilegeOfMembers(selectedUsers.map(member => { return member.id }), 'paidMember', value) }
 							/>
 						) }
 					</ButtonLayout>
@@ -48,7 +44,7 @@ class MemberAdmin extends Component {
 	makeUserList(value) {
 		let list = {};
 
-		Object.entries(this.props.allMemberAccounts).forEach(function([userId, userData]) {
+		Object.entries(this.props.allMemberAccounts).forEach(([userId, userData]) => {
 			if (!userData.paidMember == value) list[userId] = userData;
 		});
 

@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Text, View, Dimensions, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Alert, Spinner, NavBar, Button } from '@/components';
-import { Actions } from 'react-native-router-flux';
 import { Agenda } from '@/components/general/calendar';
-import { goToViewEvent } from '@/utils/router';
 import { formatEventListForCalendar, filterEvents } from '@/utils/events';
 import { loadCommittee, loadEvent } from '@/ducks';
 
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 let dateStr = '';
 let initDate = '';
 
@@ -29,9 +27,9 @@ class CommitteePage extends Component {
 
 	componentDidMount() {
 		let date = new Date();
-		let month = this.prepend0((date.getMonth() + 1).toString());
+		let month = (date.getMonth() + 1).toString().padStart(2, '0');
 		let year = date.getFullYear();
-		let day = this.prepend0(date.getDate().toString());
+		let day = date.getDate().toString().padStart(2, '0');
 		let stringDate = `${year}-${month}-${day}`;
 
 		dateStr = stringDate;
@@ -45,10 +43,6 @@ class CommitteePage extends Component {
 
 	static onRight = function() {
 		Alert.alert(new Date());
-	}
-
-	prepend0(item) {
-		return item < 10 ? '0' + item : item;
 	}
 
 	getDate(item) {
@@ -65,7 +59,7 @@ class CommitteePage extends Component {
 		return (
 			<SafeAreaView style = {{ flex: 1, backgroundColor: '#0c0b0b' }}>
 				<View style = {{ flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'black', paddingRight: '10%' }}>
-					<NavBar title = { this.props.committeeTitle } back onBack = { () => Actions.pop() } />
+					<NavBar title = { this.props.committeeTitle } back onBack = { () => this.props.navigation.pop() } />
 				</View>
 				<View style = {{ flex: 1, backgroundColor: '#535C68' }}>
 					<View style = {{ flex: 1, height: dimension.height * 1.1 }}>
@@ -211,7 +205,7 @@ class CommitteePage extends Component {
 
 	viewEvent(item) {
 		loadEvent(item);
-		goToViewEvent(this.props.screen + 'committeepage');
+		this.props.navigation('EventDetails');
 	}
 
 	renderItem(item) {
@@ -391,9 +385,8 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ user, general, members, events, elect, committees }) => {
+const mapStateToProps = ({ user, members, events, elect, committees }) => {
 	const { activeUser } = user;
-	const { loading } = general;
 	const { allMemberAccounts } = members;
 	const { sortedEvents } = events;
 	const { election } = elect;
@@ -411,7 +404,6 @@ const mapStateToProps = ({ user, general, members, events, elect, committees }) 
 
 	return {
 		activeUser,
-		loading,
 		allMemberAccounts,
 		sortedEvents,
 		election,

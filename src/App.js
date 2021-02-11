@@ -1,69 +1,64 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import firebase from 'firebase';
-import { Actions } from 'react-native-router-flux';
-import Router from './config/Router';
-import { appVersion } from '../package.json';
-import { View } from 'react-native';
+import 'react-native-gesture-handler';
+import React, { useEffect, useRef } from 'react';
+import { useDispatch, useSelector, useStore } from 'react-redux';
+import Router from './router/Router';
+import { View, LogBox } from 'react-native';
 import { Alert } from './components';
-import { loadUser, getAllMemberAccounts, getEvents, getCommittees, getAllMemberPoints, updateElection } from './ducks';
-import { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId } from 'react-native-dotenv';
-
-console.ignoredYellowBox = ['Setting a timer'];
-
-class App extends Component {
-	componentDidMount() {
-		const config = { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId };
-
-		if (!firebase.apps.length)
-			firebase.initializeApp(config);
-
-		this.verifyLogIn();
-	}
-
-	verifyLogIn() {
-		const { getCommittees, getAllMemberAccounts, getEvents, loadUser, getAllMemberPoints, updateElection } = this.props;
-
-		firebase.auth().onAuthStateChanged(user => {
-			firebase.database().ref('/version').once('value', snapshot => {
-				let correctVersion = snapshot.val() === appVersion;
-
-				if (correctVersion && user) {
-					Actions.main();
-					loadUser();
-					getEvents();
-					getCommittees();
-					getAllMemberAccounts();
-					updateElection();
-					getAllMemberPoints();
-				}
-				else {
-					Actions.login();
-					if (!correctVersion) Alert.alert('Please update your app');
-					if (user) firebase.auth().signOut();
-				}
-				// Actions.splash({ correctVersion, user, signOut: () => firebase.auth.signOut() });
-			});
-		});
-	}
-
-	render() {
-		return (
-			<View style = {{ flex: 1 }}>
-				<Router />
-				<Alert.AlertBox />
-			</View>
-		);
-	}
-}
-
-const mapDispatchToProps = {
+import {
+	initializeFirebase,
+	logoutUser,
+	verifyAppVersion,
+	userStatus,
 	loadUser,
-	getAllMemberPoints,
+	storeMemberAccountsandRankings,
+	storeAllMemberPoints,
 	getEvents,
 	getCommittees,
-	getAllMemberAccounts,
 	updateElection
-};
+} from './ducks';
 
-export default connect(() => ({}), mapDispatchToProps)(App);
+LogBox.ignoreAllLogs(true);
+
+console.error = () => null;
+console.warn = () => null;
+
+export const App = () => {
+	const { isLoggedIn, hasCorrectVersion } = useSelector(state => state.app);
+	const mounted = useRef();
+	const dispatch = useDispatch();
+	const store = useStore();
+	const initRoutine = [
+		loadUser,
+		getEvents,
+		getCommittees,
+		updateElection,
+		storeMemberAccountsandRankings,
+		storeAllMemberPoints
+	];
+
+	useEffect(() => {
+		if (!mounted.current) {
+			initializeFirebase();
+			dispatch(userStatus());
+			dispatch(verifyAppVersion()).then(() => {
+				const { isLoggedIn, hasCorrectVersion } = store.getState().app;
+
+				if (isLoggedIn && hasCorrectVersion) initRoutine.forEach(initFunction => dispatch(initFunction()));
+				else if (isLoggedIn && !hasCorrectVersion) logoutUser();
+
+				if (!hasCorrectVersion) Alert.alert('Please update your app');
+			});
+			mounted.current = true;
+		}
+		else if (hasCorrectVersion && isLoggedIn) {
+			initRoutine.forEach(initFunction => dispatch(initFunction()));
+		}
+	}, [isLoggedIn, hasCorrectVersion]);
+
+	return (
+		<View style = {{ flex: 1 }}>
+			<Router isLoggedIn = { isLoggedIn } />
+			<Alert.AlertBox />
+		</View>
+	);
+};

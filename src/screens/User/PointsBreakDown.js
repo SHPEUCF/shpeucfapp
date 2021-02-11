@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { NavBar } from '@/components';
 import { FlatList, Text, View, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
 import { getAllMemberPoints, loadUser, fetchEvents, goToViewEvent } from '@/ducks';
+import { convertNumToDate } from '@/utils/events';
 
-const dimension = Dimensions.get('window');
+const dimension = Dimensions.get('screen');
 
 class PointsBreakDown extends Component {
 	componentWillMount() {
@@ -20,7 +20,7 @@ class PointsBreakDown extends Component {
 
 		return (
 			<SafeAreaView style = { page }>
-				<NavBar title = 'Points' back onBack = { () => Actions.pop() } />
+				<NavBar title = 'Points' back onBack = { () => this.props.navigation.pop() } />
 				{ this.renderContent() }
 			</SafeAreaView>
 		);
@@ -117,13 +117,6 @@ class PointsBreakDown extends Component {
 		);
 	}
 
-	convertNumToDate(date) {
-		let months = ['Jan', 'Feb', 'Mar', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-		let tempDate = date.split('-');
-
-		return `${months[Number(tempDate[1]) - 1]} ${tempDate[2]}`;
-	}
-
 	renderInnerComponent(item, section) {
 		const {
 			innerContainerStyle,
@@ -141,7 +134,7 @@ class PointsBreakDown extends Component {
 						<View style = { innerContainerStyle }>
 							<Text style = { [title, botLevelText, textColor] }>{ item.name }</Text>
 							<Text style = { [points, botLevelText, textColor] }>{ item.points }</Text>
-							<Text style = { [botLevelText, textColor] }>{ this.convertNumToDate(item.date) }</Text>
+							<Text style = { [botLevelText, textColor] }>{ convertNumToDate(item.date) }</Text>
 						</View>
 					</View>
 				</TouchableOpacity>
@@ -223,12 +216,11 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ user, members, general }) => {
+const mapStateToProps = ({ user, members }) => {
 	const { allMemberPoints } = members;
 	const { id } = user;
-	const { loading } = general;
 
-	return { allMemberPoints, id, loading };
+	return { allMemberPoints, id };
 };
 
 const mapDispatchToProps = {

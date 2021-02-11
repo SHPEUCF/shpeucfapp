@@ -14,7 +14,7 @@ export const About = () => {
 			<ListItem.Title>{ title }</ListItem.Title>
 			<ListItem.Subtitle>{ content }</ListItem.Subtitle>
 			<ListItem.LeftIcon name = { icon } size = { 26 } color = 'white' />
-			<ListItem.RightIcon name = 'ios-arrow-dropright' size = { height * 0.025 } color = '#FECB00' />
+			<ListItem.RightIcon name = 'chevron-forward-circle-outline' size = { height * 0.025 } color = '#FECB00' />
 		</ListItem>
 	);
 

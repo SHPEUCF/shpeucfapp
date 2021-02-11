@@ -1,82 +1,57 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Alert, Button, ButtonLayout, Agenda } from '@/components/';
-import { formatEventListForCalendar, prepend0 } from '@/utils/events';
-import { loadEvent, createEvent } from '@/ducks';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Button, ButtonLayout } from '@/components/';
+import { formatEventListForCalendar, DefaultAgenda } from '@/utils/events';
+import { createEvent } from '@/ducks';
 import { EventForm } from '@/data/FormData';
 import { View, Dimensions, SafeAreaView } from 'react-native';
 
-const dimension = Dimensions.get('window');
+const { height } = Dimensions.get('screen');
 
-class Events extends Component {
-	constructor(props) {
-		super(props);
+const getTodaysDate = () => {
+	let date = new Date();
+	let month = (date.getMonth() + 1).toString().padStart(2, '0');
+	let year = date.getFullYear();
+	let day = date.getDate().toString().padStart(2, '0');
 
-		this.state = {
-			status: 'closed',
-			currentDay: this.getTodaysDate(),
-			eventFormVisibility: false,
-			agendaRefresh: false
-	 };
-	}
+	return `${year}-${month}-${day}`;
+};
 
-	didBlurSubscription = this.props.navigation.addListener('didBlur',
-		() => this.setState({ agendaRefresh: !this.state.agendaRefresh })
-	);
+export const Events = () => {
+	const { mainBackgroundColor, secondaryBackgroundColor, fullFlex } = styles;
+	const [isEventFormVisible, toggleEventFormVisibility] = useState(false);
+	const [targetDate, changeTargetDate] = useState(getTodaysDate());
+	const { user: { activeUser: { color, privilege } }, events: { sortedEvents } } = useSelector(state => state);
 
-	getTodaysDate() {
-		let date = new Date();
-		let month = prepend0((date.getMonth() + 1).toString());
-		let year = date.getFullYear();
-		let day = prepend0(date.getDate().toString());
-
-		return `${year}-${month}-${day}`;
-	}
-
-	static onRight = function() {
-		Alert.alert(new Date());
-	}
-
-	render() {
-		const { mainBackgroundColor, secondaryBackgroundColor, fullFlex } = styles;
-
-		return (
-			<SafeAreaView style = { [fullFlex, mainBackgroundColor] }>
-				<View style = { [fullFlex, secondaryBackgroundColor] }>
-					<View style = { fullFlex }>
-						<EventForm
-							title = 'Create Event'
-							values = {{ date: this.state.currentDay }}
-							visible = { this.state.eventFormVisibility }
-							onSubmit = { event => createEvent(event) }
-							changeVisibility = { (visible) => this.setState({ eventFormVisibility: visible }) }
-						/>
-						<Agenda
-							passDate = { date => this.setState({ currentDay: date.dateString }) }
-							items = { formatEventListForCalendar(this.props.sortedEvents) }
-							style = {{ height: dimension.height * 0.73 }}
-							refresh = { this.state.agendaRefresh }
-						/>
-					</View>
-					{ this.renderButton() }
+	return (
+		<SafeAreaView style = { [fullFlex, mainBackgroundColor] }>
+			<View style = { [fullFlex, secondaryBackgroundColor] }>
+				<View style = { fullFlex }>
+					<EventForm
+						title = 'Create Event'
+						values = {{ date: targetDate }}
+						visible = { isEventFormVisible }
+						onSubmit = { event => createEvent(event) }
+						changeVisibility = { visible => toggleEventFormVisibility(visible) }
+					/>
+					<DefaultAgenda
+						passDate = { date => changeTargetDate(date.dateString) }
+						items = { formatEventListForCalendar(sortedEvents) }
+						screen = 'Events'
+						color = { color }
+						height = { height }
+					/>
 				</View>
-			</SafeAreaView>
-		);
-	}
-
-	renderButton() {
-		const { activeUser } = this.props;
-
-		return (
-			<ButtonLayout>
-				{ activeUser.privilege && activeUser.privilege.board && <Button
-					title = 'Create Event'
-					onPress = { () => this.setState({ eventFormVisibility: true }) }
-				/> }
-			</ButtonLayout>
-		);
-	}
-}
+				<ButtonLayout>
+					{ privilege && privilege.board && <Button
+						title = 'Create Event'
+						onPress = { () => toggleEventFormVisibility(true) }
+					/> }
+				</ButtonLayout>
+			</View>
+		</SafeAreaView>
+	);
+};
 
 const styles = {
 	mainBackgroundColor: {
@@ -89,14 +64,3 @@ const styles = {
 		flex: 1
 	}
 };
-
-const mapStateToProps = ({ events, user }) => {
-	const { sortedEvents } = events;
-	const { activeUser } = user;
-
-	return { sortedEvents, activeUser };
-};
-
-const mapDispatchToProps = { loadEvent };
-
-export default connect(mapStateToProps, mapDispatchToProps)(Events);

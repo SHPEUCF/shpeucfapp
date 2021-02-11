@@ -1,0 +1,6 @@
+module Pods_shpeucfapp_shpeucfappTests {
+  umbrella header "Pods-shpeucfapp-shpeucfappTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

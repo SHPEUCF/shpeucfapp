@@ -1,57 +1,52 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { Text, View, Dimensions, TouchableOpacity } from 'react-native';
-import { Actions } from 'react-native-router-flux';
-import _ from 'lodash';
-import { rankMembersAndReturnsCurrentUser } from '@/utils/render';
 import { Icon } from '@/components';
 
-const { width, height } = Dimensions.get('window');
-const iteratees = ['points', 'lastName', 'firstName'];
-const order = ['desc', 'asc', 'asc'];
+const { width, height } = Dimensions.get('screen');
 
-export default class Leaderboard extends PureComponent {
-	render() {
-		const {
-			title,
-			leaderboardContent,
-			textColor,
-			indexText,
-			index,
-			leaderboardContainer,
-			leaderboardContentDivider,
-			leaderboardDividerLine,
-			leaderboardArrow,
-			gold
-		} = styles;
+export const Leaderboard = ({ navigation }) => {
+	const { user: { activeUser: { id } }, members: { rankedIDs, allMemberAccounts } } = useSelector(state => state);
+	const firstMember = allMemberAccounts[rankedIDs[0]];
+	const {
+		title,
+		leaderboardContent,
+		textColor,
+		indexText,
+		index,
+		leaderboardContainer,
+		leaderboardContentDivider,
+		leaderboardDividerLine,
+		leaderboardArrow,
+		gold
+	} = styles;
 
-		let sortedMembers = _.orderBy(this.props.membersPoints, iteratees, order);
-		let currentMember = rankMembersAndReturnsCurrentUser(sortedMembers, this.props.activeUser.id);
-
-		return (
-			<TouchableOpacity style = { leaderboardContainer } onPress = { () => Actions.LeaderboardD() }>
-				{ currentMember && <View style = {{ flex: 1 }}>
-					<View style = { leaderboardContent }>
-						<Text style = { [title, textColor] }>Top Member</Text>
-						<Text style = { textColor }>{ sortedMembers[0].firstName } { sortedMembers[0].lastName }</Text>
+	return (
+		firstMember && <TouchableOpacity style = { leaderboardContainer } onPress = { () => navigation.push('Leaderboard') }>
+			<View style = {{ flex: 1 }}>
+				<View style = { leaderboardContent }>
+					<Text style = { [title, textColor] }>Top Member</Text>
+					<Text style = { textColor }>
+						{ firstMember.firstName } { firstMember.lastName }
+					</Text>
+				</View>
+				<View style = { leaderboardContentDivider }>
+					<View style = { leaderboardDividerLine } />
+					<View style = { leaderboardArrow }>
+						<Icon name = 'chevron-forward-circle-outline' size = { height * 0.025 } style = { gold } />
 					</View>
-					<View style = { leaderboardContentDivider }>
-						<View style = { leaderboardDividerLine } />
-						<View style = { leaderboardArrow }>
-							<Icon name = 'ios-arrow-dropright' size = { height * 0.025 } style = { gold } />
-						</View>
-						<View style = { leaderboardDividerLine } />
+					<View style = { leaderboardDividerLine } />
+				</View>
+				<View style = { leaderboardContent }>
+					<Text style = { [title, textColor] }>Your Ranking</Text>
+					<View style = { index }>
+						<Text style = { indexText }>{ allMemberAccounts[id].rank }</Text>
 					</View>
-					<View style = { leaderboardContent }>
-						<Text style = { [title, textColor] }>Your Ranking</Text>
-						<View style = { index }>
-							<Text style = { indexText }>{ currentMember.index }</Text>
-						</View>
-					</View>
-				</View> }
-			</TouchableOpacity>
-		);
-	}
-}
+				</View>
+			</View>
+		</TouchableOpacity>
+	);
+};
 
 const styles = {
 	title: {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import { Input, PickerInput } from './';
-import { convertStandardToMilitaryTime, convertMilitaryToStandardTime, prepend0 } from '@/utils/events';
+import { convertStandardToMilitaryTime, convertMilitaryToStandardTime } from '@/utils/events';
 
 class TimePicker extends Component {
 	static propTypes = {
@@ -63,7 +63,7 @@ class TimePicker extends Component {
 	update({ hour, minute, period }) {
 		if (hour !== '' && minute !== '' && period !== '') {
 			this.props.onSelect(
-				convertStandardToMilitaryTime(`${prepend0(hour)}:${prepend0(minute)} ${period}`)
+				convertStandardToMilitaryTime(`${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')} ${period}`)
 			);
 		}
 	}
@@ -130,7 +130,7 @@ class TimePicker extends Component {
 							data = { minuteArr }
 							style = { style }
 							title = { 'Enter minute' }
-							value = { minute !== '' ? prepend0(minute) : '' }
+							value = { minute !== '' ? minute.toString().padStart(2, '0') : '' }
 							onSelect = { (text) => this.clickActionMinute(text) }
 							placeholder = { '00' }
 							{ ...defaultPickerStyle }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, Modal, ScrollView, TouchableOpacity } from 'react-native';
 import { Animate, Icon } from './';
+import _ from 'lodash';
 
 /**
  * @classdesc Component that renders the alert box component using the Animation component. It is only
@@ -21,7 +22,9 @@ class AlertComponent extends Component {
 	}
 
 	close(button) {
-		const buttonPress = this.state[button] && this.state[button].onPress;
+		const buttonPress = _.isFunction(this.state[button])
+			? this.state[button]
+			: this.state[button] && this.state[button].onPress;
 
 		Animate.animation({ relative: { ratio: 1.0 }, duration: 800, easing: 'back', easeValue: 1 }, () => {
 			this.setState({ visible: false, submit: {}, cancel: {} });
@@ -127,10 +130,10 @@ class AlertComponent extends Component {
  *		@property {string=}                  title           Title of alert.
  *		@property {('alert'|'confirmation'|
  *		            'error'|'success')=}     type            Type of alert to display.
- *		@property {Object}                   submit          Config or function to execute with submit button.
+ *		@property {Object|Function}          submit          Config or function to execute with submit button.
  *		@property {string}                   submit.title    Title of confirm button.
  *		@property {Function}                 submit.onPress  onPress of confirm button.
- *		@property {Object}                   cancel          Config or function to execute with cancel button.
+ *		@property {Object|Function}          cancel          Config or function to execute with cancel button.
  *		@property {string}                   cancel.title    Title of cancel button.
  *		@property {Function}                 cancel.onPress  onPress of cancel button.
  */
