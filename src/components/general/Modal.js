@@ -1,49 +1,71 @@
-import React, { useRef, useEffect } from 'react';
-import { TouchableOpacity, SafeAreaView, BackHandler, Dimensions, Platform } from 'react-native';
+import React, { useEffect } from 'react';
+import { TouchableOpacity, BackHandler, Dimensions, SafeAreaView, ViewStyle } from 'react-native';
 
 const { height, width } = Dimensions.get('screen');
 
 /**
+ * Control Android back button handler to remove default Router control
+ * or hide modal if `onHide` callback is given.
  *
+ * @param {{ onHide: Function }}
  */
 
-export const Modal = ({ visible, onHide, priority, style, dismissBack, dismissButton, children }) => {
-	const mounted = useRef(false);
-
+const BackButton = ({ onHide }) => {
 	useEffect(() => {
-		if (mounted.current) {
-			if (visible && dismissButton && Platform.OS === 'android')
-				BackHandler.addEventListener('hardwareBackPress', () => hide());
-			else if (dismissButton && Platform.OS === 'android')
-				BackHandler.removeEventListener('hardwareBackPress');
-		}
-		else {
-			mounted.current = true;
-		}
+		const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+			onHide && onHide();
+
+			return true;
+		});
+
+		return () => backHandler.remove();
 	});
 
-	const hide = () => {
-		if (onHide)
-			onHide();
+	return null;
+};
 
-		return true;
-	};
+/**
+ * Displays a dialog on top of the current screen.
+ *
+ * @typedef {Object} ModalProps
+ * @prop {boolean}    visible            Control modal visibility
+ * @prop {Function}   onHide             Callback to hide modal on backdrop or back button
+ * @prop {number=}    priority           Controls zIndex of modal, larger priority modals show up on top
+ * @prop {boolean=}   dismissBackdrop    Dismiss modal by tapping the backdrop
+ * @prop {boolean=}   dismissBackButton  Dismiss modal with Android back button
+ * @prop {ViewStyle=} backdrop           Modal backdrop style
+ * @prop {ViewStyle}  style              Modal content style
+ *
+ * @param {ModalProps}
+ */
 
-	const { modal, backdrop } = styles;
+export const Modal = ({
+	visible,
+	onHide,
+	priority = 1,
+	dismissBackdrop = true,
+	dismissBackButton = true,
+	backdrop = styles.backdrop,
+	style,
+	children
+}) => {
+	const { modal, childCenter } = styles;
 
 	return (
+		visible &&
 		<SafeAreaView style = { [modal, { elevation: priority + 7, zIndex: priority + 99 }] }>
-			<TouchableOpacity activeOpacity = { 0.6 } style = { [{ height, width }, backdrop] } onPress = { dismissBack && hide }>
-				<TouchableOpacity activeOpacity = { 1 } style = { style }>
+			<TouchableOpacity
+				activeOpacity = { 1 }
+				onPress = { dismissBackdrop && onHide }
+				style = { [{ height, width, justifyContent: 'center' }, backdrop] }
+			>
+				<TouchableOpacity activeOpacity = { 1 } style = { [childCenter, style] }>
 					{ children }
 				</TouchableOpacity>
 			</TouchableOpacity>
+			{ visible && <BackButton onHide = { dismissBackButton && onHide } /> }
 		</SafeAreaView>
 	);
-};
-
-Modal.defaultProps = {
-	priority: 1
 };
 
 const styles = {
@@ -55,7 +77,9 @@ const styles = {
 		bottom: 0
 	},
 	backdrop: {
-		backgroundColor: 'rgba(0, 0, 0, 0.6)',
-		justifyContent: 'center'
+		backgroundColor: 'rgba(0, 0, 0, 0.6)'
+	},
+	childCenter: {
+		alignItems: 'center'
 	}
 };
