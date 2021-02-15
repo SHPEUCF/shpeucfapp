@@ -1,6 +1,7 @@
 export * from './calendar';
 export * from './Alert';
 export * from './Animation';
+export * from './Animated';
 export * from './Avatar';
 export * from './Button';
 export * from './ButtonLayout';
