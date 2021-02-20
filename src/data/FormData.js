@@ -292,7 +292,7 @@ const registrationFormData = [
 	}
 ];
 
-const upsertCommittee = [
+export const upsertCommittee = [
 	{
 		placeholder: 'Committee Name',
 		camelCaseName: 'title',
@@ -324,7 +324,6 @@ export {
 	editProfileFormDataPrivileged,
 	editProfileFormDataRegular,
 	registrationFormData,
-	upsertCommittee,
 	loginFormData
 };
 // functions

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Button, ButtonLayout, Form, Avatar, Icon } from '@/components';
 import Flag from 'react-native-flags';
 import { openGallery, verifiedCheckMark } from '@/utils/render';
-import { loadUser, logoutUser, editUser } from '@/ducks';
+import { loadUser, logoutUser } from '@/ducks';
 import { openAppOrWebsite } from '@/utils/appLinking';
 import {
 	editProfileFormDataPrivileged,
@@ -41,8 +41,6 @@ class Profile extends Component {
 					title = 'Edit Profile'
 					visible = { this.state.editProfileFormVisibility }
 					changeVisibility = { (visible) => this.setState({ editProfileFormVisibility: visible }) }
-					onSubmit = { ({ gender, major, country, birthday }) =>
-						editUser({ gender, major, country, birthday }) }
 				/>
 				<View style = {{ flex: 1, backgroundColor: 'black' }}>
 					{ this.renderPicture() }
