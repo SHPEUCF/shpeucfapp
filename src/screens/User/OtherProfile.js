@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
-import { Alert, ButtonLayout, NavBar, Avatar, Icon } from '@/components';
+import { ButtonLayout, NavBar, Avatar, Icon } from '@/components';
 import Flag from 'react-native-flags';
 import { verifiedCheckMark } from '@/utils/render';
+import { openAppOrWebsite } from '../../utils/appLinking';
 
 const dimension = Dimensions.get('screen');
 
@@ -17,13 +18,7 @@ class OtherProfile extends Component {
 
 	render() {
 		const { email, major, points } = this.state.member;
-		const {
-			bioContainer,
-			fieldContainerStyle,
-			itemLabelText,
-			itemValueText,
-			textColor
-		} = styles;
+		const { bioContainer, fieldContainerStyle, itemLabelText, itemValueText, textColor } = styles;
 
 		return (
 			<SafeAreaView style = {{ flex: 1, backgroundColor: '#0c0b0b' }}>
@@ -125,31 +120,28 @@ class OtherProfile extends Component {
 	}
 
 	renderSocialMedia() {
-		const {
-			LogoContainer,
-			socialmediarow
-		} = styles;
+		const { LogoContainer, socialmediarow } = styles;
+		const { firstName, email, linkedin, color } = this.state.member;
 
 		return (
 			<View style = {{ flex: 0.2 }}>
 				<View style = {{ flex: 0.03 }}></View>
 				<View style = { socialmediarow }>
-					<View style = { [LogoContainer, { backgroundColor: this.props.color, flex: 1 }] }>
+					<View style = { [LogoContainer, { backgroundColor: color, flex: 1 }] }>
 						<TouchableOpacity
 							onPress = { () => {
-								Alert.alert('Coming Soon');
-								// Actions.PostShow({ title: 'Linkedin', uri: 'https://www.linkedin.com/'})
-							} }>
+								openAppOrWebsite('linkedin', linkedin,
+									{ warning: `${firstName} has not added their LinkedIn profile yet.` });
+							} }
+						>
 							<Icon name = 'logo-linkedin' size = { dimension.height * 0.045 } color = 'white' />
 						</TouchableOpacity>
 					</View>
-					<View style = {{ flex: 0.01 }}></View>
-					<View style = { [LogoContainer, { backgroundColor: this.props.color, flex: 1 }] }>
+					<View style = {{ flex: 0.01 }} />
+					<View style = { [LogoContainer, { backgroundColor: color, flex: 1 }] }>
 						<TouchableOpacity
-							onPress = { () => {
-								Alert.alert('Coming Soon');
-								// Actions.PostShow({ title: 'Github', uri: 'https://www.github.com/'})
-							} } >
+							onPress = { () => openAppOrWebsite('email', email, { warning: `${firstName}'s email is not set.` }) }
+						>
 							<Icon name = 'mail' size = { dimension.height * 0.045 } color = 'white' />
 						</TouchableOpacity>
 					</View>

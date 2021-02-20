@@ -160,9 +160,14 @@ const editProfileFormDataRegular = [
 		options: {
 			data: Countries
 		}
+	},
+	{
+		placeholder: "LinkedIn Profile name",
+		camelCaseName: "linkedin",
+		type: "Input",
+		isRequired: false
 	}
 ];
-
 const editProfileFormDataPrivileged = [
 	{
 		placeholder: 'Gender',
@@ -322,14 +327,13 @@ export {
 	upsertCommittee,
 	loginFormData
 };
-
 // functions
 
 /**
  * @param {Object} obj and object with the props that match the camelcaseNames of the data
  * @returns {Array} an Array of initialValues made from the user props
  */
-const convertObjectToInitialValues = (obj) => {
+export const convertObjectToInitialValues = (obj) => {
 	let initialValues = [];
 
 	Object.entries(obj).forEach(([key, value]) => {
@@ -337,8 +341,4 @@ const convertObjectToInitialValues = (obj) => {
 	});
 
 	return initialValues;
-};
-
-export {
-	convertObjectToInitialValues
 };

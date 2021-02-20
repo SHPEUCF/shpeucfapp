@@ -7,17 +7,8 @@ import { editUser, loadCommittee } from '@/ducks';
 import { EventPanel } from '@/utils/EventPanel';
 import { filterPastEvents, fullMonths } from '@/utils/events';
 import { Leaderboard, FavoriteCommittees } from './';
-import {
-	Text,
-	View,
-	ScrollView,
-	Dimensions,
-	TouchableOpacity,
-	Linking,
-	Modal,
-	SafeAreaView,
-	StatusBar
-} from 'react-native';
+import { openAppOrWebsite } from '@/utils/appLinking';
+import { Text, View, ScrollView, Dimensions, TouchableOpacity, Modal, SafeAreaView, StatusBar } from 'react-native';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -136,23 +127,24 @@ class Dashboard extends Component {
 	renderButtonLinks() {
 		const { socialMediaButton, socialMediaContainer, buttonRowContainer, black } = styles;
 
-		let buttonLinks = [
-			['https://shpeucf2018-2019.slack.com/', 'slack'],
-			['https://www.facebook.com/shpeucfchapter/', 'facebook'],
-			['https://www.shpeucf.com/', 'globe'],
-			['https://www.instagram.com/shpeucf/?hl=en', 'instagram']
+		const socialMediaLinks = [
+			{ appLink: ['slack', 'announcements', { intent: 'channel' }], appImage: 'slack' },
+			{ appLink: ['facebook', 'shpeucf', { intent: 'groups' }], appImage: 'facebook' },
+			{ appLink: ['web', 'https://www.shpeucf.com/', {}], appImage: 'globe' },
+			{ appLink: ['instagram', 'shpeucf', {}], appImage: 'instagram' },
+			{ appLink: ['linkedin', 'shpeucf', { intent: 'company' }], appImage: 'linkedin' }
 		];
 
 		return (
 			<View style = { socialMediaContainer }>
 				<View style = { buttonRowContainer }>
-					{ buttonLinks.map(([link, icon], index) =>
+					{ socialMediaLinks.map(({ appLink, appImage }, index) =>
 						<TouchableOpacity
 							key = { index }
 							style = { socialMediaButton }
-							onPress = { () => Linking.openURL(link) }
+							onPress = { () => openAppOrWebsite(...appLink) }
 						>
-							<Icon type = 'FontAwesome' style = { black } name = { icon } size = { height * 0.04 } />
+							<Icon type = 'FontAwesome' style = { black } name = { appImage } size = { height * 0.04 } />
 						</TouchableOpacity>
 					) }
 				</View>
@@ -286,7 +278,7 @@ const styles = {
 		textAlign: 'center',
 		padding: 20,
 		height: 150
-	},
+	}
 };
 
 const mapStateToProps = ({ user, members, events, elect, committees }) => {

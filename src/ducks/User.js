@@ -27,6 +27,7 @@ const INITIAL_STATE = {
 		birthday: '0000-00-00',
 		paidMember: false,
 		id: '',
+		linkedin: '',
 		voted: false,
 		applied: false,
 		userCommittees: {}

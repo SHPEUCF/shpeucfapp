@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
-import { Alert, Button, ButtonLayout, Form, Avatar, Icon } from '@/components';
+import { Button, ButtonLayout, Form, Avatar, Icon } from '@/components';
 import Flag from 'react-native-flags';
 import { openGallery, verifiedCheckMark } from '@/utils/render';
 import { loadUser, logoutUser, editUser } from '@/ducks';
+import { openAppOrWebsite } from '@/utils/appLinking';
 import {
 	editProfileFormDataPrivileged,
 	editProfileFormDataRegular,
@@ -142,20 +143,25 @@ class Profile extends Component {
 
 	renderSocialMedia() {
 		const { logoContainer, socialMediaRow } = styles;
-		const { color } = this.props.activeUser;
+		const { color, email, linkedin } = this.props.activeUser;
 
 		return (
 			<View style = {{ flex: 0.2 }}>
 				<View style = {{ flex: 0.03 }} />
 				<View style = { socialMediaRow }>
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
-						<TouchableOpacity onPress = { () => Alert.alert('Coming Soon') }>
+						<TouchableOpacity
+							onPress = { () => {
+								openAppOrWebsite('linkedin', linkedin,
+									{ warning: 'No LinkedIn profile has been added. Edit your profile to add one.' });
+							} }
+						>
 							<Icon name = 'logo-linkedin' size = { height * 0.045 } color = 'white' />
 						</TouchableOpacity>
 					</View>
 					<View style = {{ flex: 0.01 }} />
 					<View style = { [logoContainer, { backgroundColor: color, flex: 1 }] }>
-						<TouchableOpacity onPress = { () => Alert.alert('Coming Soon') }>
+						<TouchableOpacity onPress = { () => openAppOrWebsite('email', email, {}) }>
 							<Icon name = 'mail' size = { height * 0.045 } color = 'white' />
 						</TouchableOpacity>
 					</View>
@@ -232,8 +238,6 @@ const mapStateToProps = ({ user }) => {
 	return { activeUser };
 };
 
-const mapDispatchToProps = {
-	loadUser
-};
+const mapDispatchToProps = { loadUser };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
