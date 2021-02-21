@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Dimensions, SafeAreaView } from 'react-native';
 import { useSelector } from 'react-redux';
-import { NavBar, FilterList, Icon } from '@/components';
-import { MemberPanel } from '@/utils/MemberPanel';
+import { NavBar, FilterList, Icon, MemberPanel } from '@/components';
 
 const { height } = Dimensions.get('screen');
 

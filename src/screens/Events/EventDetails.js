@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Alert, Button, NavBar, FilterList, ButtonLayout, Icon } from '@/components';
+import { Alert, Button, NavBar, FilterList, ButtonLayout, Icon, MemberPanel } from '@/components';
 import QRCode from 'react-native-qrcode-svg';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import { MemberPanel } from '@/utils/MemberPanel';
 import { EventForm } from '@/data/FormData';
 import { convertNumToDate } from '@/utils/events';
 import { deleteEvent, editEvent, checkIn, rsvp, pageLoad, getAllMemberAccounts } from '@/ducks';

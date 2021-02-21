@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, ScrollView, Dimensions, SafeAreaView } from 'react-native';
-import { Input, Button, FilterList, ButtonLayout } from '@/components/general';
-import { MemberPanel } from '@/utils/MemberPanel';
+import { Input, Button, FilterList, ButtonLayout, MemberPanel } from '@/components';
 import { assignPosition } from '@/services/members';
 import {
 	addCommittee,

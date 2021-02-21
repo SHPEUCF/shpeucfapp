@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { Alert, Button, ButtonLayout, Form, Avatar, Icon } from '@/components';
 import Flag from 'react-native-flags';
 import { openGallery, verifiedCheckMark } from '@/utils/render';
-import { editUser, logoutUser } from '@/services/user';
+import { editUser } from '@/services/user';
+import { logoutUser } from '@/services/app';
 import {
 	editProfileFormDataPrivileged,
 	editProfileFormDataRegular,

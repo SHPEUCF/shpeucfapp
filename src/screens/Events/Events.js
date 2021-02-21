@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, ButtonLayout } from '@/components/';
-import { formatEventListForCalendar, DefaultAgenda } from '@/utils/events';
+import { Button, ButtonLayout, DefaultAgenda } from '@/components';
+import { formatEventListForCalendar } from '@/utils/events';
 import { createEvent } from '@/ducks';
 import { EventForm } from '@/data/FormData';
 import { View, Dimensions, SafeAreaView } from 'react-native';

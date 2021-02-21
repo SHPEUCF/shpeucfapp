@@ -6,7 +6,7 @@ import XDate from 'xdate';
 
 import styleConstructor from './style';
 import CalendarList from '../calendar-list';
-import Week from '../expandableCalendar/week';
+import Week from './week';
 
 const commons = require('./commons');
 const UPDATE_SOURCES = commons.UPDATE_SOURCES;

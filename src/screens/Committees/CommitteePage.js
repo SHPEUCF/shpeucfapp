@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Text, View, Dimensions, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Alert, Spinner, NavBar, Button } from '@/components';
-import { Agenda } from '@/components/general/calendar';
+import { Agenda } from '@/components/general/Calendar';
 import { formatEventListForCalendar, filterEvents } from '@/utils/events';
 import { loadCommittee, loadEvent } from '@/ducks';
 

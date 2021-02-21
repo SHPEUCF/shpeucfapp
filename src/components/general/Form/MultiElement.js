@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Form } from './Form';
+import { Form } from './';
 import _ from 'lodash';
-import { copyStateAndSetValuesToNull } from '@/utils/general';
+import { nullifyObjectValues } from './utils';
 
 /**
  * Types
@@ -143,7 +143,7 @@ class MultiElement extends PureComponent {
 	 */
 
 	updateState(elementValuesFromForm) {
-		const newStateValue = copyStateAndSetValuesToNull(this.state.value);
+		const newStateValue = nullifyObjectValues(this.state.value);
 		const newVisibleElements = this.updateVisibleElements(elementValuesFromForm);
 		let parentElementHasChanged = false;
 

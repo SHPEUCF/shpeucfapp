@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Spinner, Icon } from '@/components';
+import { Spinner, Icon, EventPanel } from '@/components';
 import { ColorPicker } from 'react-native-color-picker';
 import CountryFlag from '@/components/general/CountryFlag';
 import { loadCommittee } from '@/ducks';
-import { EventPanel } from '@/utils/EventPanel';
 import { editUser } from '@/services/user';
 import { filterPastEvents, fullMonths } from '@/utils/events';
 import { Leaderboard, FavoriteCommittees } from './';
