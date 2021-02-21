@@ -1,4 +1,4 @@
-import { createActionTypes } from '@/utils/actions';
+import { createActionTypes } from './utils';
 import { getAllPositions, getAllVotes, updateElectionStatus } from '@/services/elections';
 
 const ACTIONS = createActionTypes([

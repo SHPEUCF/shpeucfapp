@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Button, Input } from '@/components';
-import { resetPassword } from '@/services/user';
+import { resetPassword } from '@/services/app';
 
 export const ResetPassword = ({ navigation }) => {
 	const [email, setEmail] = useState('');
@@ -12,7 +12,7 @@ export const ResetPassword = ({ navigation }) => {
 
 		return (
 			<>
-				<Button title = 'RESET' onPress = { () => resetPassword(email, setError).then(error => !error && navigation.pop()) } />
+				<Button title = 'RESET' onPress = { () => resetPassword(email).catch(error => error ? setError(error) : navigation.pop()) } />
 				<View style = { resetPasswordContainer }>
 					<TouchableOpacity onPress = { () => navigation.pop() }>
 						<Text style = { loginButton }>Log In</Text>

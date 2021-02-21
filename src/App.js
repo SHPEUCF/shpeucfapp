@@ -4,7 +4,7 @@ import { useDispatch, useSelector, useStore } from 'react-redux';
 import Router from './router/Router';
 import { View, LogBox } from 'react-native';
 import { Alert } from './components';
-import { logoutUser } from './services/user';
+import { logoutUser } from './services/app';
 import {
 	initializeFirebase,
 	verifyAppVersion,

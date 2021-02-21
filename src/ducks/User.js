@@ -1,4 +1,4 @@
-import { createActionTypes } from '@/utils/actions';
+import { createActionTypes } from './utils';
 import { loadCurrentUser } from '@/services/user';
 
 const ACTIONS = createActionTypes([

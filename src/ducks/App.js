@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-import { createActionTypes } from '@/utils/actions';
+import { createActionTypes } from './utils';
 import { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId, version } from '@env';
 
 const ACTIONS = createActionTypes([

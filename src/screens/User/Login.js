@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Button, Alert, Form } from '@/components';
 import { registrationFormData, loginFormData } from '@/data/FormData';
-import { loginUser, createUser } from '@/services/user';
+import { loginUser, createUser } from '@/services/app';
 
 const { height } = Dimensions.get('screen');
 
@@ -21,7 +21,7 @@ class Login extends Component {
 		if (!email) { this.setState({ error: 'Please enter your knights email' }) }
 		else if (!password) { this.setState({ error: 'Please enter your password' }) }
 		else {
-			loginUser(email, password, error => this.setState({ error }));
+			loginUser(email, password).catch(error => this.setState({ error }));
 			// else Alert.alert('Please update your app');
 		}
 	}

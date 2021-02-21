@@ -1,6 +1,7 @@
 import firebase from 'firebase';
 import _ from 'lodash';
 import { Alert } from '@/components';
+import { showFirebaseError } from './utils';
 
 /**
  * Sends a GET request to firebase to load the current user's information.
@@ -46,11 +47,11 @@ export const loadCurrentUser = () => new Promise(resolve => {
  * @param {Function?}                                                    setError  Callback to update error state on calling component.
  */
 
-export const createUser = (user, setError) => {
+export const createUser = user => new Promise((_, reject) =>
 	firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
 		.then(({ user: { uid } }) => createUserSuccess({ ..._.omit(user, 'password'), id: uid }))
-		.catch(error => showFirebaseError(error, setError));
-};
+		.catch(error => reject(showFirebaseError(error)))
+);
 
 /**
  * Creates a user on Firebase database with the desired fields. Then displays
@@ -100,67 +101,13 @@ export const editUser = user => {
  * Sends a request to firebase to reset the password using the email. Then displays an alert
  * to the user that an email to reset their password was sent to them.
  *
- * @param {string}    email     User's knights email
- * @param {Function?} setError  Callback to update error state on calling component.
+ * @param {string} email User's knights email.
  */
 
-export const resetPassword = async (email, setError) => (
+export const resetPassword = email => new Promise((_, reject) =>
 	firebase.auth().sendPasswordResetEmail(email)
 		.then(() => Alert.alert(`If an account with email ${email} exists, \
 a reset password email will be sent. Please check your email.`)
 		)
-		.catch(error => showFirebaseError(error, setError))
+		.catch(error => reject(showFirebaseError(error)))
 );
-
-/**
- * Sends a request to firebase to login to the account.
- * If the user is not verified then they will be alerted to check their email.
- *
- * @param {string}    email     User's knights email
- * @param {string}    password  User's password
- * @param {Function?} setError  Callback to update error state on calling component.
- */
-
-export const loginUser = (email, password, setError) => {
-	firebase.auth().signInWithEmailAndPassword(email, password)
-		.then(() => {
-			if (!firebase.auth().currentUser.emailVerified)
-				Alert.alert('Account must be verified!\nPlease check your email for the verification email');
-		})
-		.catch(error => showFirebaseError(error, setError));
-};
-
-/**
- * Sends an signOut request to firebase.
- */
-
-export const logoutUser = () => {
-	firebase.auth().signOut()
-		.then(Alert.alert('Signed Out', { title: 'Have a great day!', type: 'success' }));
-};
-
-/**
- * Updates error state in calling component.
- *
- * @param {Object}    error
- * @param {string}    error.code     Firebase error code
- * @param {string}    error.message  Firebase error message
- * @param {Function?} setError       Function to update error state
- */
-
-const showFirebaseError = ({ code, message }, setError) => {
-	setError && setError((() => {
-		switch (code) {
-			case 'auth/user-not-found':
-				return 'There is no user record corresponding to this identifier';
-			case 'auth/invalid-email':
-				return 'Enter a valid email';
-			case 'auth/wrong-password':
-				return 'Incorrect credentials';
-			default:
-				return message;
-		}
-	})());
-
-	return code;
-};
