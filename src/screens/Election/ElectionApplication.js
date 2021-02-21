@@ -15,10 +15,9 @@ export const ElectionApplication = ({ navigation }) => {
 	const [candidatePosition, setPosition] = useState('');
 	const [candidatePlan, setPlan] = useState('');
 	const [applying, setApplying] = useState(false);
-	const {
-		positions,
-		activeUser: { id, applied, firstName, lastName, picture }
-	} = useSelector(({ elect: { positions }, user: { activeUser } }) => ({ positions, activeUser }));
+	const { positions, id, applied, firstName, lastName, picture } = useSelector(
+		({ elect: { positions }, user }) => ({ positions, ...user })
+	);
 
 	useEffect(() => {
 		if (!mounted.current) {

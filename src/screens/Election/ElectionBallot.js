@@ -14,12 +14,9 @@ export const ElectionBallot = ({ navigation }) => {
 	const [focusedCandidate, setFocusedCandidate] = useState({});
 	const [isModalVisible, setModalVisibility] = useState(false);
 	const dispatch = useDispatch();
-	const {
-		elect: { positions, votes },
-		activeUser: { voted, id }
-	} = useSelector(({ elect, user: { activeUser } }) => ({ elect, activeUser }));
-	const { flex, mainBackground, secondaryBackground, center, titleStyle, textColor } = styles;
+	const { positions, votes, voted, id } = useSelector(({ elect, user }) => ({ ...elect, ...user }));
 	const positionsArray = _.orderBy(positions, ['level'], ['asc']);
+	const { flex, mainBackground, secondaryBackground, center, titleStyle, textColor } = styles;
 
 	useEffect(() => {
 		if (!mounted.current) {

@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { Alert, Button, ButtonLayout, Form, Avatar, Icon } from '@/components';
 import Flag from 'react-native-flags';
 import { openGallery, verifiedCheckMark } from '@/utils/render';
-import { loadUser, logoutUser, editUser } from '@/ducks';
+import { editUser } from '@/services/user';
+import { logoutUser } from '@/services/app';
 import {
 	editProfileFormDataPrivileged,
 	editProfileFormDataRegular,
@@ -29,19 +30,18 @@ class Profile extends Component {
 	}
 
 	renderContent() {
-		const { email, major, points, privilege } = this.props.activeUser;
+		const { email, major, points, privilege } = this.props.user;
 		const { bioContainer, fieldContainerStyle, itemLabelText, itemValueText, textColor } = styles;
 
 		return (
 			<SafeAreaView style = {{ flex: 1, backgroundColor: '#0c0b0b' }}>
 				<Form
 					elements = { privilege.eboard ? editProfileFormDataPrivileged : editProfileFormDataRegular }
-					values = { convertObjectToInitialValues(this.props.activeUser) }
+					values = { this.props.user }
 					title = 'Edit Profile'
 					visible = { this.state.editProfileFormVisibility }
 					changeVisibility = { (visible) => this.setState({ editProfileFormVisibility: visible }) }
-					onSubmit = { ({ gender, major, country, birthday }) =>
-						editUser({ gender, major, country, birthday }) }
+					onSubmit = { updatedUser => editUser(updatedUser) }
 				/>
 				<View style = {{ flex: 1, backgroundColor: 'black' }}>
 					{ this.renderPicture() }
@@ -84,7 +84,7 @@ class Profile extends Component {
 
 	renderPicture() {
 		const { headerInfoContainer, taglineContainer, nameLabelText, textColor, row } = styles;
-		const { firstName, lastName, picture, privilege, color, id } = this.props.activeUser;
+		const { firstName, lastName, picture, privilege, color, id } = this.props.user;
 
 		return (
 			<View style = { [headerInfoContainer] }>
@@ -115,7 +115,7 @@ class Profile extends Component {
 	}
 
 	renderButtons() {
-		const { flag } = this.props.activeUser;
+		const { flag } = this.props.user;
 
 		let icon = flag !== '' && flag ? {
 			data: <Flag
@@ -142,7 +142,7 @@ class Profile extends Component {
 
 	renderSocialMedia() {
 		const { logoContainer, socialMediaRow } = styles;
-		const { color } = this.props.activeUser;
+		const { color } = this.props.user;
 
 		return (
 			<View style = {{ flex: 0.2 }}>
@@ -227,13 +227,7 @@ const styles = {
 };
 
 const mapStateToProps = ({ user }) => {
-	const { activeUser } = user;
-
-	return { activeUser };
+	return { user };
 };
 
-const mapDispatchToProps = {
-	loadUser
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default connect(mapStateToProps)(Profile);

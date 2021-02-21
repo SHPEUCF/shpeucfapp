@@ -25,11 +25,11 @@ const menuItems = [
 ];
 
 export default ({ navigation }) => {
-	const { user: { activeUser } } = useSelector(state => state);
+	const { user } = useSelector(state => state);
 	const { page } = styles;
 
 	const renderItem = ({ privilege, title, icon, screen }) => {
-		if (activeUser.privilege && activeUser.privilege[privilege]) {
+		if (user.privilege && user.privilege[privilege]) {
 			return (
 				<ListItem onPress = { () => navigation.push(screen) } key = { title }>
 					<ListItem.Title>{ title }</ListItem.Title>

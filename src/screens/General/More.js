@@ -55,7 +55,7 @@ export default ({ navigation }) => {
 
 	const imageUrl = '../../assets/images/';
 
-	const { user: { activeUser: { privilege, apply } }, elect: { election } } = useSelector(state => state);
+	const { user: { privilege, apply }, elect: { election } } = useSelector(state => state);
 
 	const renderMenu = ({	title, icon, screen, userPrivilege }) => {
 		if ((title === 'Voting' && !election) || (title === 'E-Board Application' && !apply))

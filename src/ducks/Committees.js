@@ -1,5 +1,5 @@
-import { createActionTypes } from '@/utils/actions';
 import firebase from 'firebase';
+import { createActionTypes } from './utils';
 import { Alert } from '@/components';
 
 // handle all things related to Elections

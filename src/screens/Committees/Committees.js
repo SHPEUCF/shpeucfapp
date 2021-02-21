@@ -4,7 +4,8 @@ import { NavBar, Icon } from '@/components';
 import _ from 'lodash';
 import { FlatList, Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
 import { filterEvents, convertNumToDate } from '@/utils/events';
-import { editUser, loadEvent, getCommittees, loadCommittee } from '@/ducks';
+import { loadEvent, getCommittees, loadCommittee } from '@/ducks';
+import { editUser } from '@/services/user';
 
 const dimension = Dimensions.get('screen');
 const iteratees = ['level'];
@@ -89,7 +90,7 @@ class Committees extends Component {
 		} = styles;
 
 		const {
-			activeUser,
+			user,
 			sortedEvents,
 			route: { params }
 		} = this.props;
@@ -102,7 +103,7 @@ class Committees extends Component {
 						<View style = { containerStyle }>
 							<Text style = { [textColor, { fontSize: 16 }] }>{ item.title }</Text>
 						</View>
-						{ activeUser.userCommittees && activeUser.userCommittees[item.title]
+						{ user.userCommittees && user.userCommittees[item.title]
 							&& <View
 								style = {{ backgroundColor: 'black', justifyContent: 'center', flex: 2, alignItems: 'flex-end' }}
 							>
@@ -111,7 +112,7 @@ class Committees extends Component {
 									size = { dimension.height * 0.03 }
 									onPress = { () => {
 										editUser({ userCommittees: {
-											...activeUser.userCommittees,
+											...user.userCommittees,
 											...{ [item.title]: null }
 										} });
 										this.setState({});
@@ -119,7 +120,7 @@ class Committees extends Component {
 									style = {{ color: '#FECB00' }}
 								/>
 							</View> }
-						{ (!activeUser.userCommittees || !activeUser.userCommittees[item.title])
+						{ (!user.userCommittees || !user.userCommittees[item.title])
 						&& <View
 							style = {{ backgroundColor: 'black', justifyContent: 'center', flex: 2, alignItems: 'flex-end' }}
 						>
@@ -127,9 +128,9 @@ class Committees extends Component {
 								name = 'star-outline'
 								size = { dimension.height * 0.03 }
 								onPress = { () => {
-									if (!activeUser.userCommittees || Object.entries(activeUser.userCommittees).length <= 4) {
+									if (!user.userCommittees || Object.entries(user.userCommittees).length <= 4) {
 										editUser({ userCommittees: {
-											...activeUser.userCommittees,
+											...user.userCommittees,
 											...{ [item.title]: true }
 										} });
 									}
@@ -357,10 +358,9 @@ const styles = {
 
 const mapStateToProps = ({ committees, user, events }) => {
 	const { committeesList } = committees;
-	const { activeUser } = user;
 	const { sortedEvents } = events;
 
-	return { committeesList, activeUser, sortedEvents };
+	return { committeesList, user, sortedEvents };
 };
 
 const mapDispatchToProps = { getCommittees, loadCommittee };

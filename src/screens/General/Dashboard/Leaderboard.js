@@ -6,7 +6,7 @@ import { Icon } from '@/components';
 const { width, height } = Dimensions.get('screen');
 
 export const Leaderboard = ({ navigation }) => {
-	const { user: { activeUser: { id } }, members: { rankedIDs, allMemberAccounts } } = useSelector(state => state);
+	const { user: { id }, members: { rankedIDs, allMemberAccounts } } = useSelector(state => state);
 	const firstMember = allMemberAccounts[rankedIDs[0]];
 	const {
 		title,
@@ -22,7 +22,8 @@ export const Leaderboard = ({ navigation }) => {
 	} = styles;
 
 	return (
-		firstMember && <TouchableOpacity style = { leaderboardContainer } onPress = { () => navigation.push('Leaderboard') }>
+		firstMember &&
+		<TouchableOpacity style = { leaderboardContainer } onPress = { () => navigation.push('Leaderboard') }>
 			<View style = {{ flex: 1 }}>
 				<View style = { leaderboardContent }>
 					<Text style = { [title, textColor] }>Top Member</Text>
@@ -44,7 +45,7 @@ export const Leaderboard = ({ navigation }) => {
 					</View>
 				</View>
 			</View>
-		</TouchableOpacity>
+		</TouchableOpacity> || null
 	);
 };
 

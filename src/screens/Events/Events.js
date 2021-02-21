@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, ButtonLayout } from '@/components/';
-import { formatEventListForCalendar, DefaultAgenda } from '@/utils/events';
+import { Button, ButtonLayout, DefaultAgenda } from '@/components';
+import { formatEventListForCalendar } from '@/utils/events';
 import { createEvent } from '@/ducks';
 import { EventForm } from '@/data/FormData';
 import { View, Dimensions, SafeAreaView } from 'react-native';
@@ -21,7 +21,7 @@ export const Events = () => {
 	const { mainBackgroundColor, secondaryBackgroundColor, fullFlex } = styles;
 	const [isEventFormVisible, toggleEventFormVisibility] = useState(false);
 	const [targetDate, changeTargetDate] = useState(getTodaysDate());
-	const { user: { activeUser: { color, privilege } }, events: { sortedEvents } } = useSelector(state => state);
+	const { user: { color, privilege }, events: { sortedEvents } } = useSelector(state => state);
 
 	return (
 		<SafeAreaView style = { [fullFlex, mainBackgroundColor] }>

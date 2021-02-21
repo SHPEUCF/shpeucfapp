@@ -31,4 +31,4 @@ export { default as Login } from './User/Login';
 export { default as OtherProfile } from './User/OtherProfile';
 export { default as PointsBreakDown } from './User/PointsBreakDown';
 export { default as Profile } from './User/Profile';
-export { default as ResetPassword } from './User/ResetPassword';
+export { ResetPassword } from './User/ResetPassword';

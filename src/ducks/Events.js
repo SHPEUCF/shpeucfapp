@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 import _ from 'lodash';
-import { createActionTypes } from '@/utils/actions';
+import { createActionTypes } from './utils';
 import { convertMilitaryToStandardTime } from '@/utils/events';
 import { Alert } from '@/components';
 
