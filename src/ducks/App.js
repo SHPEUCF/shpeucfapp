@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-import { createActionTypes } from '@/utils/actions';
+import { createActionTypes } from './utils';
 import { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId, version } from '@env';
 
 const ACTIONS = createActionTypes([
@@ -25,13 +25,13 @@ export default (state = INITIAL_STATE, { payload, type }) => {
 
 export const userStatus = () => dispatch => {
 	firebase.auth().onAuthStateChanged(user =>
-		dispatch({ type: ACTIONS.USER_STATUS, payload: !!user }));
+		dispatch({ type: ACTIONS.USER_STATUS, payload: user && user.emailVerified }));
 };
 
 export const verifyAppVersion = () => dispatch =>
-	firebase.database().ref('/version').once('value', snapshot => {
-		dispatch({ type: ACTIONS.VERIFY_APP_VERSION, payload: snapshot.val() == version });
-	});
+	firebase.database().ref('/version').once('value', snapshot =>
+		dispatch({ type: ACTIONS.VERIFY_APP_VERSION, payload: snapshot.val() == version })
+	);
 
 export const initializeFirebase = () => {
 	const config = { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId };

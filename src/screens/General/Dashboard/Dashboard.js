@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Spinner, Icon } from '@/components';
+import { Spinner, Icon, EventPanel } from '@/components';
 import { ColorPicker } from 'react-native-color-picker';
 import CountryFlag from '@/components/general/CountryFlag';
-import { editUser, loadCommittee } from '@/ducks';
-import { EventPanel } from '@/utils/EventPanel';
+import { loadCommittee } from '@/ducks';
+import { editUser } from '@/services/user';
 import { filterPastEvents, fullMonths } from '@/utils/events';
 import { Leaderboard, FavoriteCommittees } from './';
 import {
@@ -32,12 +32,12 @@ class Dashboard extends Component {
 	);
 
 	render() {
-		return !this.props.activeUser.firstName ? <Spinner /> : this.renderContent();
+		return !this.props.user.firstName ? <Spinner /> : this.renderContent();
 	}
 
 	renderContent() {
 		const { page, dashCommittees, dashboardContent } = styles;
-		const { allMemberPoints, activeUser, committeesList, navigation } = this.props;
+		const { allMemberPoints, user, committeesList, navigation } = this.props;
 
 		return (
 			<SafeAreaView style = { page }>
@@ -48,16 +48,12 @@ class Dashboard extends Component {
 						{ this.renderEvents() }
 						<View style = { dashCommittees }>
 							<View style = {{ flex: 1 }}>
-								<Leaderboard
-									membersPoints = { allMemberPoints }
-									activeUser = { activeUser }
-									navigation = { navigation }
-								/>
+								<Leaderboard navigation = { navigation } />
 							</View>
 							<View style = {{ flex: 1 }}>
 								<FavoriteCommittees
 									committeesList = { committeesList }
-									userCommittees = { activeUser.userCommittees }
+									userCommittees = { user.userCommittees }
 									loadCommittee = { this.props.loadCommittee }
 									navigation = { navigation }
 								/>
@@ -77,10 +73,10 @@ class Dashboard extends Component {
 		const date = new Date();
 
 		return (
-			<View style = { [headerContainer, { backgroundColor: this.props.activeUser.color } ] }>
+			<View style = { [headerContainer, { backgroundColor: this.props.user.color } ] }>
 				<View style = { greetingContainer }>
 					<Text style = { [textColor, { fontSize: 20 }] }>
-						{ date.getHours() >= 12 ? 'Good evening' : 'Good morning' }, { this.props.activeUser.firstName }.
+						{ date.getHours() >= 12 ? 'Good evening' : 'Good morning' }, { this.props.user.firstName }.
 					</Text>
 					<Text style = { textColor }>Today is { fullMonths[date.getMonth()] } { date.getDate() }</Text>
 				</View>
@@ -121,7 +117,7 @@ class Dashboard extends Component {
 				<View style = { [styles.modalBackground, { backgroundColor: 'transparent' }] }>
 					<ColorPicker
 						defaultColor = '#21252b'
-						oldColor = { this.props.activeUser.color }
+						oldColor = { this.props.user.color }
 						onColorSelected = { color => {
 							editUser({ color });
 							this.setState({ colorPickerVisible: false });
@@ -290,14 +286,13 @@ const styles = {
 };
 
 const mapStateToProps = ({ user, members, events, elect, committees }) => {
-	const { activeUser } = user;
 	const { allMemberPoints } = members;
 	const { sortedEvents } = events;
 	const { election } = elect;
 	const { committeesList } = committees;
 
 	return {
-		activeUser,
+		user,
 		allMemberPoints,
 		sortedEvents,
 		election,

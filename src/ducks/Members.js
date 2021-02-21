@@ -1,4 +1,4 @@
-import { createActionTypes } from '@/utils/actions';
+import { createActionTypes } from './utils';
 import { getAllMemberAccountsandRankings, getAllMemberPoints } from '@/services/members';
 
 // Handle all things related to Events

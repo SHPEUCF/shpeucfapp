@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavBar, Button, ButtonLayout, FilterList } from '@/components';
+import { NavBar, Button, ButtonLayout, FilterList, MemberPanel } from '@/components';
 import { SafeAreaView, View, Text } from 'react-native';
-import { MemberPanel } from '@/utils/MemberPanel';
 import { changePrivilegeOfMembers } from '@/services/members';
 
 class MemberAdmin extends Component {

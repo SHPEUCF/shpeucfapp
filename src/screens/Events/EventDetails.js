@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Alert, Button, NavBar, FilterList, ButtonLayout, Icon } from '@/components';
+import { Alert, Button, NavBar, FilterList, ButtonLayout, Icon, MemberPanel } from '@/components';
 import QRCode from 'react-native-qrcode-svg';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import { MemberPanel } from '@/utils/MemberPanel';
 import { EventForm } from '@/data/FormData';
 import { convertNumToDate } from '@/utils/events';
 import { deleteEvent, editEvent, checkIn, rsvp, pageLoad, getAllMemberAccounts } from '@/ducks';
@@ -35,24 +34,24 @@ class EventDetails extends Component {
 	}
 
 	componentDidMount() {
-		const { activeUser } = this.props;
+		const { user } = this.props;
 
-		if (activeUser.privilege && activeUser.privilege.board)
+		if (user.privilege && user.privilege.board)
 			getAllMemberAccounts();
 	}
 
 	onSuccess = (e) => {
 		if (this.state.event.code === e.data)
-			checkIn(this.state.event, this.props.activeUser);
+			checkIn(this.state.event, this.props.user);
 		else
 			Alert.alert('Incorrect Code');
 	}
 
 	renderCodeBox() {
-		const { activeUser } = this.props;
+		const { user } = this.props;
 		const { modalBackground, modalContent } = styles;
 
-		if (activeUser.privilege && activeUser.privilege.board) {
+		if (user.privilege && user.privilege.board) {
 			return (
 				<Modal
 					transparent = { true }
@@ -165,10 +164,10 @@ class EventDetails extends Component {
 	}
 
 	sendListToMail(attendants) {
-		const { activeUser, allMemberAccounts } = this.props;
+		const { user, allMemberAccounts } = this.props;
 
 		let users = [];
-		const email = allMemberAccounts[activeUser.id].email;
+		const email = allMemberAccounts[user.id].email;
 
 		attendants.map(attendant => { users.push(allMemberAccounts[attendant]) });
 
@@ -196,7 +195,7 @@ class EventDetails extends Component {
 	}
 
 	renderAttendance() {
-		const { activeUser } = this.props;
+		const { user } = this.props;
 		const { event } = this.state;
 		const {
 			lineOnTop,
@@ -209,7 +208,7 @@ class EventDetails extends Component {
 
 		if (!event) return null;
 
-		if (activeUser.privilege && activeUser.privilege.board && event.attendance) {
+		if (user.privilege && user.privilege.board && event.attendance) {
 			let attendants = Object.keys(event.attendance);
 
 			return (
@@ -247,7 +246,7 @@ class EventDetails extends Component {
 	}
 
 	renderPickMembers() {
-		const { allMemberAccounts, activeUser } = this.props;
+		const { allMemberAccounts, user } = this.props;
 		const { event } = this.state;
 
 		if (!event) return null;
@@ -259,8 +258,8 @@ class EventDetails extends Component {
 			onPress = { props.onPress }
 		/>;
 
-		if (!excludeDataProp) excludeDataProp = { [activeUser.id]: true };
-		else Object.assign(excludeDataProp, { [activeUser.id]: true });
+		if (!excludeDataProp) excludeDataProp = { [user.id]: true };
+		else Object.assign(excludeDataProp, { [user.id]: true });
 
 		Object.keys(excludeDataProp).forEach(function (key) {
 			delete list[key];
@@ -282,7 +281,7 @@ class EventDetails extends Component {
 	}
 
 	renderEventListNum(iconSize) {
-		const { activeUser } = this.props;
+		const { user } = this.props;
 		const {
 			icon,
 			iconContainer,
@@ -301,7 +300,7 @@ class EventDetails extends Component {
 				numRSVP = Object.keys(event.rsvp).length;
 		}
 
-		if (activeUser.privilege && activeUser.privilege.board) {
+		if (user.privilege && user.privilege.board) {
 			return [
 				<View style = { iconContainer }>
 					<Icon style = { [icon, textColor] } name = 'people' size = { iconSize } color = '#000' />
@@ -327,12 +326,12 @@ class EventDetails extends Component {
 	}
 
 	renderButtons() {
-		const { activeUser } = this.props;
+		const { user } = this.props;
 		const { event } = this.state;
 
 		let buttons = [];
 
-		if (activeUser.privilege && activeUser.privilege.board) {
+		if (user.privilege && user.privilege.board) {
 			buttons = <ButtonLayout>
 				<Button
 					title = 'Open check-in'
@@ -597,10 +596,9 @@ const styles = {
 };
 
 const mapStateToProps = ({ user, members }) => {
-	const { activeUser } = user;
 	const { allMemberAccounts } = members;
 
-	return { allMemberAccounts, activeUser };
+	return { allMemberAccounts, user };
 };
 
 const mapDispatchToProps = { checkIn, rsvp, pageLoad, getAllMemberAccounts };

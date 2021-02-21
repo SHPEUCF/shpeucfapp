@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { ScrollView, SafeAreaView, Modal, View } from 'react-native';
 import { Alert, Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicker, FilterList } from '@/components';
 import { MultiElement } from './MultiElement';
-import { copyStateAndSetValuesToNull } from '@/utils/general';
+import { nullifyObjectValues } from './utils';
 
 /**
  * Types
@@ -405,7 +405,7 @@ class Form extends Component {
 	 */
 
 	resetState() {
-		let initialState = copyStateAndSetValuesToNull(this.state);
+		let initialState = nullifyObjectValues(this.state);
 
 		Object.assign(initialState, this.props.values);
 		this.setState(initialState);

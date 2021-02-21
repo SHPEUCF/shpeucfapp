@@ -12,11 +12,11 @@ export const MemberPanel = ({ member, variant }) => {
 	const { id, rank, picture, color, points, paidMember } = member;
 	const { text, currentUserTextColor } = styles;
 
-	const { user: { activeUser }, members: { allMemberAccounts, rankedIDs } } = useSelector(state => state);
+	const { user, members: { allMemberAccounts, rankedIDs } } = useSelector(state => state);
 	const navigation = useNavigation();
 
 	const [firstName, lastName] = truncateNames(member);
-	const isCurrentUser = id === activeUser.id;
+	const isCurrentUser = id === user.id;
 	const memberRef = useRef({ listener: () => null });
 	const defaultAvatar = <Avatar
 		source = { picture }

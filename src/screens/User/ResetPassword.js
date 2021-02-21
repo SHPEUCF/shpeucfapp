@@ -1,71 +1,50 @@
-import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
-import { connect } from 'react-redux';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Button, Input } from '@/components';
-import { resetPassword } from '@/ducks';
+import { resetPassword } from '@/services/app';
 
-const dimension = Dimensions.get('screen');
+export const ResetPassword = ({ navigation }) => {
+	const [email, setEmail] = useState('');
+	const [error, setError] = useState('');
 
-class ResetPassword extends Component {
-	constructor(props) {
-		super(props);
-
-		this.state = { email: '' };
-	}
-
-	renderError() {
-		if (this.props.error) {
-			return (
-				<Text style = { styles.errorTextStyle }>
-					{ this.props.error }
-				</Text>
-			);
-		}
-	}
-
-	renderButtons() {
+	const renderButtons = () => {
 		const { resetPasswordContainer, loginButton, insteadButton } = styles;
 
 		return (
-			<View>
-				<Button title = 'RESET' onPress = { () => this.props.resetPassword(this.state.email).then(() => this.navigation.pop()) } />
+			<>
+				<Button title = 'RESET' onPress = { () => resetPassword(email).catch(error => error ? setError(error) : navigation.pop()) } />
 				<View style = { resetPasswordContainer }>
-					<TouchableOpacity onPress = { () => this.props.navigation.pop() }>
+					<TouchableOpacity onPress = { () => navigation.pop() }>
 						<Text style = { loginButton }>Log In</Text>
 					</TouchableOpacity>
 					<Text style = { insteadButton }> instead?</Text>
 				</View>
-			</View>
+			</>
 		);
-	}
+	};
 
-	render() {
-		const { container, formContainer, header, headerText, headerSubtitle } = styles;
+	const { container, formContainer, header, headerText, headerSubtitle, errorTextStyle } = styles;
 
-		return (
-			<View style = { container }>
-				<View style = { formContainer }>
-					<View style = { header }>
-						<Text style = { headerText }>Reset Password</Text>
-						<Text style = { headerSubtitle }>Enter your email below</Text>
-					</View>
-					<View style = {{ height: dimension.height * 0.12 }}>
-						<Input
-							placeholder = 'Email'
-							value = { this.state.email }
-							autoCapitalize = 'none'
-							maxLength = { 45 }
-							onChangeText = { (email) => this.setState({ email }) }
-						/>
-						<View style = {{ height: dimension.height * 0.02 }}></View>
-					</View>
-					{ this.renderError() }
-					{ this.renderButtons() }
+	return (
+		<View style = { container }>
+			<View style = { formContainer }>
+				<View style = { header }>
+					<Text style = { headerText }>Reset Password</Text>
+					<Text style = { headerSubtitle }>Enter your email below</Text>
 				</View>
+				<Input
+					placeholder = 'Email'
+					value = { email }
+					autoCapitalize = 'none'
+					maxLength = { 45 }
+					onChangeText = { setEmail }
+				/>
+				{ !!error && <Text style = { errorTextStyle }>{ error }</Text> }
+				{ renderButtons() }
 			</View>
-		);
-	}
-}
+		</View>
+	);
+};
 
 const styles = {
 	container: {
@@ -100,10 +79,6 @@ const styles = {
 		fontWeight: 'bold',
 		padding: 10
 	},
-	formButton: {
-		marginTop: 10,
-		marginBottom: 10
-	},
 	resetPasswordContainer: {
 		flexDirection: 'row',
 		justifyContent: 'center',
@@ -120,8 +95,3 @@ const styles = {
 		marginBottom: 20
 	}
 };
-
-const mapStateToProps = ({ user: { error } }) => ({ error });
-const mapDispatchToProps = { resetPassword };
-
-export default connect(mapStateToProps, mapDispatchToProps)(ResetPassword);
