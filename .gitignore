@@ -34,6 +34,7 @@ local.properties
 # Firebase API
 .env
 .env.production
+config.js
 
 # node.js
 #

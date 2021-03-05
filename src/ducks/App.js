@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 import { createActionTypes } from './utils';
-import { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId, version } from '@env';
+import { config } from '../../config';
 
 const ACTIONS = createActionTypes([
 	'USER_STATUS',
@@ -30,12 +30,10 @@ export const userStatus = () => dispatch => {
 
 export const verifyAppVersion = () => dispatch =>
 	firebase.database().ref('/version').once('value', snapshot =>
-		dispatch({ type: ACTIONS.VERIFY_APP_VERSION, payload: snapshot.val() == version })
+		dispatch({ type: ACTIONS.VERIFY_APP_VERSION, payload: snapshot.val() == config.version })
 	);
 
 export const initializeFirebase = () => {
-	const config = { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId, appId };
-
 	if (!firebase.apps.length)
 		firebase.initializeApp(config);
 };
