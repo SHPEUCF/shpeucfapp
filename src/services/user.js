@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-import _ from 'lodash';
+import { omit, pickBy } from 'lodash';
 import { Alert } from '@/components';
 import { showFirebaseError } from './utils';
 
@@ -49,7 +49,7 @@ export const loadCurrentUser = () => new Promise(resolve => {
 
 export const createUser = user => new Promise((_, reject) =>
 	firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
-		.then(({ user: { uid } }) => createUserSuccess({ ..._.omit(user, 'password'), id: uid }))
+		.then(({ user: { uid } }) => createUserSuccess({ ...omit(user, 'password'), id: uid }))
 		.catch(error => reject(showFirebaseError(error)))
 );
 
@@ -76,8 +76,8 @@ const createUserSuccess = user => {
 		.then(() => firebase.database().ref(`/points/${id}/`).set({ firstName, lastName, id, points: 0 }))
 		.then(() => firebase.database().ref(`/privileges/${id}/`).set({ firstName, lastName, id, user: true }))
 		.then(() => firebase.auth().currentUser.sendEmailVerification()
-			.then(() => Alert.alert(`We sent a verification to: ${email}. Please open your email and verify your account`))
-			.catch(() => Alert.alert('We were not able to send an email. Please contact the Tech Director for assistance'))
+			.then(() => Alert.alert(`We sent a verification to: ${email}. Please open your email and verify your account`, { type: 'success' }))
+			.catch(() => Alert.alert('We were not able to send an email. Please contact the Tech Director for assistance', { type: 'error' }))
 		)
 		.then(() => firebase.auth().signOut())
 		.catch(error => Alert.alert(error, { type: 'error' }));
@@ -92,7 +92,7 @@ const createUserSuccess = user => {
 export const editUser = user => {
 	const invalid = ['firstName', 'lastName', 'points', 'voted', 'privileges', 'paidMember'];
 
-	firebase.database().ref(`/users/${user.id}/`).update(_.pickBy(user, value => value && !invalid.includes(value)))
+	firebase.database().ref(`/users/${user.id}/`).update(pickBy(user, value => value && !invalid.includes(value)))
 		.then(() => Alert.alert('Profile edited!', { type: 'success' }))
 		.catch(error => Alert.alert(error.message, { type: 'error' }));
 };

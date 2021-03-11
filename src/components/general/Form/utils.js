@@ -6,4 +6,4 @@ import _ from 'lodash';
  * @param {Object} obj Object to be cloned.
  */
 
-export const nullifyObjectValues = obj => _.deepCloneWith(obj, value => _.isObject(value) ? undefined : null);
+export const nullifyObjectValues = obj => _.cloneDeepWith(obj, value => _.isObject(value) ? undefined : null);
