@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Button, Alert, Form } from '@/components';
 import { registrationFormData, loginFormData } from '@/data/FormData';
-import { loginUser, createUser } from '@/services/app';
+import { createUser } from '@/services/user';
+import { loginUser } from '@/services/app';
 
 const { height } = Dimensions.get('screen');
 
@@ -77,7 +78,7 @@ class Login extends Component {
 						title = 'Registration'
 						visible = { this.state.registrationFormVisibility }
 						changeVisibility = { visible => this.setState({ registrationFormVisibility: visible }) }
-						onSubmit = { user => createUser(user, error => Alert.alert(error, { type: 'error' })) }
+						onSubmit = { user => createUser(user).catch(error => Alert.alert(error, { type: 'error' })) }
 					/>
 					<View style = {{ flex: 1, backgroundColor: '#FECB00', alignItems: 'center' }}>
 						<Image
