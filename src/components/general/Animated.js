@@ -50,12 +50,12 @@ const isTransformProp = property =>
  * @prop {Animation} animation Animating function for component
  *
  * @typedef {Object} AnimatedComponentProps
- * @prop {string}                               property     Property to animate over
- * @prop {number=}                              initial      Initial value for property
- * @prop {string}                               component    Animated component for animating
- * @prop {{ property: string, ranges: Array }=} interpolate  Interpolate values for interpolate function
- * @prop {ViewStyle}                            style        Style for animated component
- * @prop {{ current: AnimatedInner }}           ref          Reference for inner animated component functions
+ * @prop {string}                                property     Property to animate over
+ * @prop {number=}                               initial      Initial value for property
+ * @prop {string}                                component    Animated component for animating
+ * @prop {{ property: string, ranges: Object }=} interpolate  Interpolate values for interpolate function
+ * @prop {ViewStyle}                             style        Style for animated component
+ * @prop {{ current: AnimatedInner }}            ref          Reference for inner animated component functions
  */
 
 /**
@@ -68,7 +68,7 @@ const AnimatedComponent = forwardRef(({ property, initial = 0, interpolate = {},
 	useImperativeHandle(ref, () => ({
 		animation: (animationType, { easing, ...config }) =>
 			Animate[animationType](animatedProperty,
-				{ easing: resolveEasing(easing), useNativeDriver: true, ...config }
+				{ easing: resolveEasing(easing), ...config }
 			)
 	}));
 
