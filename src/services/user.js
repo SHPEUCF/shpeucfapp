@@ -1,21 +1,22 @@
 import firebase from 'firebase';
-import { omit, pickBy } from 'lodash';
+import { omit } from 'lodash';
 import { Alert } from '@/components';
-import { showFirebaseError } from './utils';
+import { showFirebaseError, cloneDeepWithout } from './utils';
 
 /**
  * Sends a GET request to firebase to load the current user's information.
+ * @param {Function} update Redux callback
  */
 
-export const loadCurrentUser = () => new Promise(resolve => {
+export const loadCurrentUser = update => {
 	const { currentUser } = firebase.auth();
 
 	firebase.database().ref(`/users/${currentUser.uid}/`).on('value', userSnapshot => {
 		firebase.database().ref(`/privileges/${currentUser.uid}/`).on('value', privilegeSnapshot => {
-			resolve({ ...userSnapshot.val(), privilege: privilegeSnapshot.val() });
+			update({ ...userSnapshot.val(), privilege: privilegeSnapshot.val() });
 		});
 	});
-});
+};
 
 /**
  * @typedef {Object} User
@@ -91,8 +92,9 @@ const createUserSuccess = user => {
 
 export const editUser = user => {
 	const invalid = ['firstName', 'lastName', 'points', 'voted', 'privileges', 'paidMember'];
+	const { currentUser } = firebase.auth();
 
-	firebase.database().ref(`/users/${user.id}/`).update(pickBy(user, value => value && !invalid.includes(value)))
+	firebase.database().ref(`/users/${currentUser.uid}/`).update(cloneDeepWithout(user, invalid))
 		.then(() => Alert.alert('Profile edited!', { type: 'success' }))
 		.catch(error => Alert.alert(error.message, { type: 'error' }));
 };
