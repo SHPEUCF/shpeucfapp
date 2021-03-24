@@ -1,6 +1,6 @@
 import React, { useRef, forwardRef, useImperativeHandle } from 'react';
-import { Animated as Animate, Easing, ViewStyle } from 'react-native';
 import _ from 'lodash';
+import { Animated as Animate, Easing, ViewStyle } from 'react-native';
 
 /**
  * Resolve easing functions as nested or sequential animations.

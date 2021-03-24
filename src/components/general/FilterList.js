@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View,	Modal,	FlatList,	Dimensions,	TouchableOpacity,	Text,	SafeAreaView } from 'react-native';
-import { Alert } from './Alert';
-import { Button } from './Button';
-import { ButtonLayout } from './ButtonLayout';
-import { Input } from './Input';
-import { Icon } from './Icon';
+import { Alert, Button, ButtonLayout, Input, Icon } from './';
 
 const dimension = Dimensions.get('screen');
 

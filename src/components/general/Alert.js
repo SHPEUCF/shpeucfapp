@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, Modal, ScrollView, TouchableOpacity } from 'react-native';
-import { Animate } from './Animation';
-import { Icon } from './Icon';
+import { Animate, Icon } from './';
 import _ from 'lodash';
 
 /**

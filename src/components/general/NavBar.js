@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { Icon } from './';
 import { useNavigation } from '@react-navigation/native';
-import { Icon } from './Icon';
 
 const { height } = Dimensions.get('screen');
 
