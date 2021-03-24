@@ -1,64 +1,131 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { View, Text, ScrollView, SafeAreaView } from 'react-native';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { View, Text, ScrollView, Dimensions, SafeAreaView } from 'react-native';
 import { Input, Button, FilterList, ButtonLayout, MemberPanel } from '@/components';
 import { assignPosition } from '@/services/members';
-import { upsertCommittee } from '@/services/committees';
+import {
+	addCommittee,
+	editCommittee,
+	committeeTitleChanged,
+	committeeDescriptionChanged,
+	deleteCommittee,
+	chairPersonChanged
+} from '@/ducks';
 
-export const CommitteeForm = ({ navigation, route: { params: { action, committee } } }) => {
-	const [error, setError] = useState('');
-	const [committeeTitle, setCommitteeTitle] = useState(committee && committee.title);
-	const [committeeDesc, setCommitteeDesc] = useState(committee && committee.description);
-	const [chair, setChair] = useState(committee && committee.chair || {});
-	const { allMemberAccounts, committeesList } = useSelector(({ members, committees }) => (
-		{ ...members, ...committees }
-	));
+const dimension = Dimensions.get('screen');
 
-	const submitForm = () => {
-		let level = Object.keys(committeesList || {}).length;
-		let committee = { title: committeeTitle, description: committeeDesc };
+class CommitteeForm extends Component {
+	/*
+	 * EventCreationError(text) {
+	 * 	this.props.eventError(text);
+	 * }
+	 */
+	constructor(props) {
+		super(props);
+		this.state = {
+			oldTitle: this.props.committeeTitle,
+			oldChair: this.props.chair
+		};
+	}
 
-		if (!committeeTitle) {
-			setError('Please enter a title');
+	renderError() {
+		if (this.props.error) {
+			return (
+				<View>
+					<Text style = { styles.errorTextStyle }>
+						{ this.props.error }
+					</Text>
+				</View>
+			);
 		}
-		else if (!committeeDesc) {
-			setError('Please enter description');
+	}
+
+	submitForm() {
+		const {
+			committeeTitle,
+			committeeDescription,
+			committeesList,
+			chair,
+			navigation,
+			route: { params: { action } }
+		} = this.props;
+
+		let length = committeesList && committeesList ? Object.entries(committeesList).length : 0;
+		let chairObj = { name: `${chair.firstName} ${chair.lastName}`, id: chair.id };
+
+		if (committeeTitle === '') {
+			// this.EventCreationError('Please enter a Candidate Name');
+		}
+		else if (committeeDescription === '') {
+			// this.EventCreationError('Please enter a committee');
 		}
 		else {
-			chair.id && assignPosition(committeeTitle, 'board', chair.id, committee.chair);
-			upsertCommittee({ ...committee, chair, level });
+			if (action === 'ADD')
+				this.props.addCommittee(committeeTitle, committeeDescription, chairObj, length);
+			else if (this.state.oldTitle !== committeeTitle)
+				this.props.editCommittee(committeeTitle, committeeDescription, chairObj, this.state.oldTitle);
+			else
+				this.props.editCommittee(committeeTitle, committeeDescription, chairObj, null);
+
+			assignPosition(committeeTitle, 'board', chair.id, this.state.oldChair);
 			navigation.pop();
 		}
-	};
+	}
 
-	const { formContainerStyle, headerStyle, headerTextStyle, scrollView, errorTextStyle } = styles;
+	render() {
+		const {
+			allMemberAccounts,
+			chair,
+			navigation,
+			route: { params: { action } }
+		} = this.props;
 
-	return (
-		<SafeAreaView style = { formContainerStyle }>
-			<View style = { headerStyle }>
-				<Text style = { headerTextStyle }>{ action } COMMITTEE</Text>
-			</View>
-			<ScrollView style = { scrollView }>
-				<Input placeholder = 'Committee Title' value = { committeeTitle } onChangeText = { setCommitteeTitle } />
-				<Input placeholder = 'Committee Description' value = { committeeDesc } onChangeText = { setCommitteeDesc } />
-				<FilterList
-					data = { allMemberAccounts }
-					value = { chair.id ? allMemberAccounts[chair.id] : null }
-					placeholder = 'Director/Chairperson'
-					regexFunc = { ({ firstName, lastName }) => `${firstName} ${lastName}` }
-					selectBy = { member => member.id }
-					onSelect = { setChair }
-					itemJSX = { member => <MemberPanel member = { member } variant = 'General' /> }
-				/>
-				{ !!error && <Text style = { errorTextStyle }>{ error }</Text> }
-			</ScrollView>
-			<ButtonLayout>
-				<Button title = 'Done' onPress = { submitForm } />
-				<Button title = 'Cancel' onPress = { () => navigation.pop() } />
-			</ButtonLayout>
-		</SafeAreaView>
-	);
-};
+		return (
+			<SafeAreaView style = { styles.formContainerStyle }>
+				<View style = { styles.headerStyle }>
+					<Text style = { styles.headerTextStyle }>{ action + ' COMMITTEE' }</Text>
+				</View>
+				<ScrollView
+					ref = { (ref) => this.scrollView = ref }
+					style = { styles.scrollView }
+				>
+					<View>
+						<Input
+							placeholder = 'Committee Title'
+							value = { this.props.committeeTitle }
+							onChangeText = { this.props.committeeTitleChanged.bind(this) }
+						/>
+						<Input
+							placeholder = 'Committee Description'
+							value = { this.props.committeeDescription }
+							onChangeText = { this.props.committeeDescriptionChanged.bind(this) }
+						/>
+						<FilterList
+							data = { allMemberAccounts }
+							value = { allMemberAccounts[chair.id] }
+							placeholder = { 'Director/Chairperson' }
+							regexFunc = { member => { return `${member.firstName} ${member.lastName}` } }
+							selectBy = { member => { return member.id } }
+							onSelect = { member => { this.props.chairPersonChanged(member) } }
+							itemJSX = { member => <MemberPanel member = { member } variant = 'General' /> }
+						/>
+					</View>
+					{ this.renderError() }
+				</ScrollView>
+				<ButtonLayout>
+					<Button
+						title = { 'Done' }
+						onPress = { () => {	this.submitForm() } }
+					/>
+					<Button
+						title = 'Cancel'
+						onPress = { () => navigation.pop() }
+					/>
+				</ButtonLayout>
+			</SafeAreaView>
+		);
+	}
+}
 
 const styles = {
 	formContainerStyle: {
@@ -83,6 +150,12 @@ const styles = {
 		fontWeight: 'bold',
 		padding: 10
 	},
+	pickerTextInput: {
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
 	scrollView: {
 		backgroundColor: 'black',
 		height: '50%',
@@ -90,5 +163,68 @@ const styles = {
 		paddingBottom: 0,
 		paddingLeft: '5%',
 		paddingRight: '5%'
+	},
+	titleStyle: {
+		flex: 0.13,
+		alignSelf: 'center',
+		fontSize: 20
+	},
+	buttonStyle: {
+		flex: 1,
+		alignSelf: 'center'
+	},
+	flatlistStyle: {
+		flex: 0.8
+	},
+	buttonContainer: {
+		flex: 0.2,
+		flexDirection: 'row',
+		borderTopColor: '#0001',
+		borderTopWidth: 1
+	},
+	modalBackground: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: '#0003',
+		margin: 0,
+		height: dimension.height,
+		width: dimension.width
+	},
+	modalStyle: {
+		height: dimension.height * 0.4,
+		width: dimension.width * 0.8,
+		backgroundColor: '#fff',
+		padding: 12,
+		borderRadius: 12
+	},
+	textStyle: {
+		color: '#e0e6ed',
+		fontSize: dimension.width * 0.05
 	}
 };
+
+const mapStateToProps = ({ committees, members }) => {
+	const {
+		allMemberAccounts
+	} = members;
+	const {
+		committeeTitle,
+		committeeDescription,
+		title,
+		committeesList,
+		chair
+	} = committees;
+
+	return { committeeTitle, committeeDescription, title, committeesList, chair, allMemberAccounts };
+};
+
+const mapDispatchToProps = {
+	addCommittee,
+	editCommittee,
+	committeeTitleChanged,
+	committeeDescriptionChanged,
+	deleteCommittee,
+	chairPersonChanged
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CommitteeForm);
