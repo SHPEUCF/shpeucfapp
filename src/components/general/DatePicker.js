@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
-import { Input, PickerInput } from './';
+import { Input } from './Input';
+import { PickerInput } from './PickerInput';
 
 /**
  * @desc Component to select day, month, and year.

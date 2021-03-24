@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { TouchableOpacity, View, Text, Dimensions } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { Icon } from '@/components';
+import { Icon } from '../general/Icon';
 import { convertNumToDate } from '@/utils/events';
 import _ from 'lodash';
 
