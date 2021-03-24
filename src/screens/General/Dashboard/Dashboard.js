@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Spinner, Icon, EventPanel } from '@/components';
+import { Spinner, Icon, CountryFlag, EventPanel } from '@/components';
 import { ColorPicker } from 'react-native-color-picker';
-import CountryFlag from '@/components/general/CountryFlag';
 import { loadCommittee } from '@/ducks';
 import { editUser } from '@/services/user';
 import { filterPastEvents, fullMonths } from '@/utils/events';
@@ -37,7 +36,7 @@ class Dashboard extends Component {
 
 	renderContent() {
 		const { page, dashCommittees, dashboardContent } = styles;
-		const { allMemberPoints, user, committeesList, navigation } = this.props;
+		const { user, committeesList, navigation } = this.props;
 
 		return (
 			<SafeAreaView style = { page }>
