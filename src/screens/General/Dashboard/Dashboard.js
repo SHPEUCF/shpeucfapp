@@ -6,7 +6,8 @@ import CountryFlag from '@/components/general/CountryFlag';
 import { loadCommittee } from '@/ducks';
 import { editUser } from '@/services/user';
 import { filterPastEvents, fullMonths } from '@/utils/events';
-import { Leaderboard, FavoriteCommittees } from './';
+import { Leaderboard } from './Leaderboard';
+import FavoriteCommittees from './FavoriteCommittees';
 import {
 	Text,
 	View,
@@ -37,7 +38,7 @@ class Dashboard extends Component {
 
 	renderContent() {
 		const { page, dashCommittees, dashboardContent } = styles;
-		const { allMemberPoints, user, committeesList, navigation } = this.props;
+		const { user, committeesList, navigation } = this.props;
 
 		return (
 			<SafeAreaView style = { page }>
