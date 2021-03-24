@@ -1,7 +1,7 @@
 import React from 'react';
 import FastImage from 'react-native-fast-image';
 import { TouchableOpacity, Text, Dimensions, TextStyle, ViewStyle } from 'react-native';
-import { Icon } from './';
+import { Icon } from './Icon';
 
 const { height } = Dimensions.get('screen');
 
