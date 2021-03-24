@@ -1,139 +1,104 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { View, Modal, FlatList, Dimensions, TouchableOpacity, Text } from 'react-native';
-import { Input, Icon } from './';
+import React, { useState } from 'react';
+import { View, Modal, FlatList, Dimensions, TouchableOpacity, Text, TextStyle, ViewStyle } from 'react-native';
+import { Input } from './Input';
+import { Icon } from './Icon';
 
-const dimension = Dimensions.get('screen');
+const { height, width } = Dimensions.get('screen');
 
-class PickerInput extends Component {
-	constructor(props) {
-		super(props);
-		this.state = { text: this.props.value, modalVisible: false };
-	}
+/**
+ * Component to select an item from an array of data
+ *
+ * @typedef {Object} PickerInputProps
+ * @prop {string}    title
+ * @prop {string}    value
+ * @prop {Array}     data
+ * @prop {string}    placeholder
+ * @prop {Object}    icon
+ * @prop {number}    icon.size
+ * @prop {string}    icon.color
+ * @prop {TextStyle} icon.style
+ * @prop {Function}  onSelect
+ * @prop {TextStyle} inputBoxStyle
+ * @prop {ViewStyle} style
+ *
+ * @param {PickerInputProps}
+ */
 
-	componentDidUpdate(prevProps) {
-		if (prevProps.value !== this.props.value) this.setState({ text: this.props.value });
-	}
+export const PickerInput = ({ title, value, data, placeholder, icon, onSelect, inputBoxStyle, style }) => {
+	const [visible, setVisibility] = useState(false);
 
-	static propTypes = {
-		title: PropTypes.string.isRequired,
-		value: PropTypes.oneOfType([
-			PropTypes.string,
-			PropTypes.number
-		]).isRequired,
-		data: PropTypes.oneOfType([
-			PropTypes.array,
-			PropTypes.shape({})
-		]).isRequired,
-		placeholder: PropTypes.string,
-		onSelect: PropTypes.func.isRequired,
-		inputBoxStyle: PropTypes.shape({}),
-		style: PropTypes.shape({}),
-		pickerItemStyle: PropTypes.shape({}),
-		dropDownArrowStyle: PropTypes.shape({}),
-		iconSize: PropTypes.number,
-		iconColor: PropTypes.string
-	}
-
-	clickAction(item) {
-		this.props.onSelect(item);
-		this.setState({ text: String(item), modalVisible: false });
-	}
-
-	renderComponent(item) {
-		const {
-			itemStyle,
-			itemTextStyle
-		} = styles;
+	const renderSelections = ({ item }) => {
+		const { itemStyle, itemTextStyle } = styles;
 
 		return (
-			<TouchableOpacity
-				onPress = { () => this.clickAction(item[1]) }>
-				<View style = { [itemStyle, this.props.pickerItemStyle] }>
-					<Text style = { itemTextStyle }>{ item[1] }</Text>
-				</View>
+			<TouchableOpacity onPress = { () => onSelect(item) } style = { [itemStyle, style] }>
+				<Text style = { itemTextStyle }>{ item }</Text>
 			</TouchableOpacity>
 		);
-	}
-
-	_keyExtractor = (item, index) => index;
-
-	render = () => {
-		const {
-			inputStyle,
-			iconStyle,
-			modalStyle,
-			modalBackground,
-			textStyle,
-			buttonContainer,
-			flatlistStyle,
-			buttonStyle,
-			titleStyle
-		} = styles;
-		const {
-			title,
-			value,
-			data,
-			placeholder,
-			style,
-			inputBoxStyle,
-			dropDownArrowStyle,
-			iconSize,
-			iconColor
-		} = this.props;
-
-		if (value && this.state.text !== String(value))
-			this.setState({ text: String(value) });
-
-		return (
-			<View>
-				<View style = { [{ flexDirection: 'row' }, style] }>
-					<Input
-						style = { [inputStyle, inputBoxStyle] }
-						value = { this.state.text }
-						placeholder = { placeholder }
-						editable = { false }
-					/>
-					<Icon
-						onPress = { () => this.setState({ modalVisible: true }) }
-						style = { [iconStyle, dropDownArrowStyle] }
-						name = { 'chevron-down-circle-outline' }
-						size = { iconSize }
-						color = { iconColor }
-					/>
-				</View>
-				<Modal
-					transparent = { true }
-					visible = { this.state.modalVisible }>
-					<View style = { modalBackground }>
-						<View style = { modalStyle }>
-							<Text style = { titleStyle }>{ title }</Text>
-							<View style = { flatlistStyle }>
-								<FlatList
-									data = { Object.entries(data) }
-									extraData = { this.state }
-									keyExtractor = { this._keyExtractor }
-									renderItem = { ({
-										item
-									}) =>
-										this.renderComponent(item) }
-								/>
-							</View>
-							<View style = { buttonContainer }>
-								<TouchableOpacity
-									style = { buttonStyle }
-									onPress = { () => this.setState({ modalVisible: false }) }
-								>
-									<Text style = { textStyle }>Cancel</Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-					</View>
-				</Modal>
-			</View>
-		);
 	};
-}
+
+	const renderModal = () => (
+		<Modal transparent visible = { visible }>
+			<View style = { modalBackground }>
+				<View style = { modalStyle }>
+					<Text style = { titleStyle }>{ title }</Text>
+					<View style = { flatListStyle }>
+						<FlatList
+							data = { data }
+							keyExtractor = { (item, index) => index }
+							renderItem = { renderSelections }
+						/>
+					</View>
+					<TouchableOpacity
+						onPress = { () => setVisibility(false) }
+						style = { [buttonStyle, buttonContainer] }
+					>
+						<Text style = { textStyle }>Cancel</Text>
+					</TouchableOpacity>
+				</View>
+			</View>
+		</Modal>
+	);
+
+	const {
+		inputStyle,
+		iconStyle,
+		modalStyle,
+		modalBackground,
+		textStyle,
+		buttonContainer,
+		flatListStyle,
+		buttonStyle,
+		titleStyle
+	} = styles;
+
+	return (
+		<>
+			<View style = { [{ flexDirection: 'row' }, style] }>
+				<Input
+					value = { value }
+					editable = { false }
+					placeholder = { placeholder }
+					style = { [inputBoxStyle, inputStyle] }
+				/>
+				<Icon
+					onPress = { () => setVisibility(true) }
+					name = 'chevron-down-circle-outline'
+					style = { [icon.style, iconStyle] }
+					{ ...icon }
+				/>
+			</View>
+			{ renderModal() }
+		</>
+	);
+};
+
+PickerInput.defaultProps = {
+	title: 'Title',
+	placeholder: 'Choose an option',
+	iconSize: 35,
+	iconColor: 'white'
+};
 
 const styles = {
 	itemStyle: {
@@ -145,12 +110,11 @@ const styles = {
 		borderBottomWidth: 1
 	},
 	itemTextStyle: {
-		paddingTop: dimension.height * 0.03,
-		paddingBottom: dimension.height * 0.03,
+		paddingTop: height * 0.03,
+		paddingBottom: height * 0.03,
 		flex: 1,
 		fontSize: 16,
 		alignSelf: 'center'
-
 	},
 	titleStyle: {
 		flex: 0.13,
@@ -161,7 +125,7 @@ const styles = {
 		flex: 1,
 		alignSelf: 'center'
 	},
-	flatlistStyle: {
+	flatListStyle: {
 		flex: 0.8
 	},
 	buttonContainer: {
@@ -181,12 +145,12 @@ const styles = {
 		alignItems: 'center',
 		backgroundColor: '#0003',
 		margin: 0,
-		height: dimension.height,
-		width: dimension.width
+		height: height,
+		width: width
 	},
 	modalStyle: {
-		height: dimension.height * 0.4,
-		width: dimension.width * 0.8,
+		height: height * 0.4,
+		width: width * 0.8,
 		backgroundColor: '#fff',
 		padding: 12,
 		borderRadius: 12
@@ -200,12 +164,3 @@ const styles = {
 		alignSelf: 'center'
 	}
 };
-
-PickerInput.defaultProps = {
-	title: 'Give me a title!',
-	placeholder: 'Choose an Option',
-	iconSize: 50,
-	iconColor: 'white'
-};
-
-export { PickerInput };
