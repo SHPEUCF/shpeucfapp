@@ -8,7 +8,7 @@ import {
 	/* User      */ Login, OtherProfile, PointsBreakDown, Profile, ResetPassword,
 	/* Admin     */ AdminHub, CommitteesAdmin, ElectionAdmin, MemberAdmin,
 	/* Election  */ ElectionApplication, ElectionBallot, ElectionCandidates, ElectionPositions,
-	/* Committee */ Committees,
+	/* Committee */ CommitteePage, Committees,
 	/* Events    */ Events, EventDetails,
 	/* Forms     */ CommitteeForm, PositionForm
 } from '@/screens';
@@ -24,6 +24,7 @@ const DashboardStackNavigator = () => (
 	<DashboardStack.Navigator screenOptions = {{ headerShown: false }}>
 		<DashboardStack.Screen name = 'Dashboard' component = { Dashboard } />
 		<DashboardStack.Screen name = 'Committees' component = { Committees } />
+		<DashboardStack.Screen name = 'CommitteePage' component = { CommitteePage } />
 		<DashboardStack.Screen name = 'EventDetails' component = { EventDetails } />
 		<DashboardStack.Screen name = 'Leaderboard' component = { Leaderboard } />
 		<DashboardStack.Screen name = 'OtherProfile' component = { OtherProfile } />
