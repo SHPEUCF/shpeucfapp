@@ -2,10 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import { View, Text, Dimensions, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import _ from 'lodash';
-import { Avatar } from '../general/Avatar';
-import { ProgressBar } from '../general/ProgressBar';
+import { Avatar, ProgressBar } from '@/components';
 import { truncateNames, verifiedCheckMark } from '@/utils/render';
+import _ from 'lodash';
 
 const { width, height } = Dimensions.get('screen');
 

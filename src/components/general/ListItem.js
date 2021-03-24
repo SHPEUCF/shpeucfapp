@@ -1,6 +1,6 @@
 import React, { Children } from 'react';
 import { View, Text, TouchableOpacity, TextProps, TouchableOpacityProps } from 'react-native';
-import { Icon } from './Icon';
+import { Icon } from './';
 
 /**
  * @desc Main title for item.

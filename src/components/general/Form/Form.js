@@ -1,16 +1,9 @@
 import React, { Component } from 'react';
-import { ScrollView, SafeAreaView, Modal, View } from 'react-native';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { Alert } from '../Alert';
-import { Button } from '../Button';
-import { ButtonLayout } from '../ButtonLayout';
-import { DatePicker } from '../DatePicker';
-import { NavBar } from '../NavBar';
-import { Input } from '../Input';
-import { PickerInput } from '../PickerInput';
-import { TimePicker } from '../TimePicker';
-import { FilterList } from '../FilterList';
+import { ScrollView, SafeAreaView, Modal, View } from 'react-native';
+import { Alert, Button, ButtonLayout, DatePicker, NavBar, Input, PickerInput, TimePicker, FilterList } from '@/components';
+import { MultiElement } from './MultiElement';
 import { nullifyObjectValues } from './utils';
 
 /**
@@ -306,23 +299,21 @@ class Form extends Component {
 					onSelect = { value => this.changeState(element, value) }
 				/>;
 			case 'MultiElement':
-				return import('./MultiElement').then(MultiElement =>
-					<MultiElement
-						key = { camelCaseName }
-						elements = { options.elements }
-						value = { (multiElementValues => { // Find values corresponding to MultiElement
-							options.elements.forEach(({ camelCaseName }) => {
-								Object.assign(multiElementValues, { [camelCaseName]: this.state[camelCaseName] });
-							});
+				return <MultiElement
+					key = { camelCaseName }
+					elements = { options.elements }
+					value = { (multiElementValues => { // Find values corresponding to MultiElement
+						options.elements.forEach(({ camelCaseName }) => {
+							Object.assign(multiElementValues, { [camelCaseName]: this.state[camelCaseName] });
+						});
 
-							return multiElementValues;
-						})({}) }
-						formatValue = { options.formatValue }
-						onSelect = { elementsAndValues => {
-							elementsAndValues.forEach(({ element, value }) => this.changeState(element, value));
-						} }
-					/>
-				);
+						return multiElementValues;
+					})({}) }
+					formatValue = { options.formatValue }
+					onSelect = { elementsAndValues => {
+						elementsAndValues.forEach(({ element, value }) => this.changeState(element, value));
+					} }
+				/>;
 			default:
 				console.error('Please Pick a Correct type',
 					'\nPossible types are [DatePicker, Input, PickerInput, TimePicker]');

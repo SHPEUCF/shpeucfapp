@@ -1,7 +1,7 @@
 import React from 'react';
-import { Agenda } from '../general/Calendar';
+import { Agenda } from '@/components';
 import { View, Text } from 'react-native';
-import { EventPanel } from './EventPanel';
+import { EventPanel } from './';
 
 export const DefaultAgenda = ({ passDate, items, screen, color, height }) => {
 	const EmptyEventPanel = () => {
