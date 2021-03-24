@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
-import { Icon } from '@/components';
+import { Alert, Icon } from '@/components';
 
 const { height, width } = Dimensions.get('screen');
 
@@ -18,7 +18,7 @@ export default class FavoriteCommittees extends PureComponent {
 			gold
 		} = styles;
 
-		const { committeesList, userCommittees, navigation , loadCommittee} = this.props;
+		const { committeesList, userCommittees, navigation } = this.props;
 
 		return (
 			<View style = { committeesPanelContainer }>
@@ -35,13 +35,7 @@ export default class FavoriteCommittees extends PureComponent {
 					</View>
 					: <View style = { committeesListContainer }>
 						{ Object.keys(userCommittees).map(committeeName =>
-							<TouchableOpacity
-								style = { committeeItemContainer }
-								onPress = { () => {
-									loadCommittee(committeesList[committeeName]);
-									navigation.push('CommitteePage');
-								} }
-							>
+							<TouchableOpacity onPress = { () => Alert.alert('Coming soon!') } style = { committeeItemContainer }>
 								<View style = { committeeNameContainer }>
 									<Text style = { [textColor, { fontSize: width * 0.03 }] }>{ committeeName }</Text>
 								</View>
