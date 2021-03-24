@@ -42,7 +42,7 @@ const menuItems = [
 	}
 ];
 
-export default ({ navigation }) => {
+export const More = ({ navigation }) => {
 	const {
 		flex25,
 		flex100,
