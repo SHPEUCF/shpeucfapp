@@ -1,65 +1,57 @@
-import { Dimensions } from 'react-native';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Modal, SafeAreaView, TouchableOpacity, View, Text, TextInput } from 'react-native';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Modal, SafeAreaView, TouchableOpacity, View, Text, Dimensions } from 'react-native';
 import Flag from 'react-native-flags';
-import { Button } from './';
+import { Button } from './Button';
+import { Input } from './Input';
 import { editUser } from '@/services/user';
 
 const { height, width } = Dimensions.get('screen');
 
-class CountryFlag extends Component {
-	constructor(props) {
-		super(props);
+export const CountryFlag = () => {
+	const [allFlagsVisible, setAllFlags] = useState(false);
+	const [customFlagVisible, setCustomFlag] = useState(false);
+	const [flagText, setText] = useState('');
+	const user = useSelector(({ user }) => user);
 
-		this.state = { flagsVisible: false, customFlagVisible: false, customFlagText: '' };
-	}
+	const updateFlag = flag => {
+		(!flag) ? setCustomFlag(true) : editUser({ flag });
+		setAllFlags(false);
+	};
 
-	render() {
-		const { customFlagVisible, customFlagText, flagsVisible } = this.state;
+	return (
+		<>
+			<TouchableOpacity onPress = { () => setAllFlags(!allFlagsVisible) }>
+				<Flag type = 'flat' code = { user.flag } size = { 32 } />
+			</TouchableOpacity>
+			<RenderAllFlags visible = { allFlagsVisible } onHide = { setAllFlags } onSelect = { updateFlag } />
+			<CustomFlag
+				customFlagVisible = { customFlagVisible }
+				flagText = { flagText }
+				changeText = { setText }
+				changeVisibility = { setCustomFlag }
+				flagPicked = { flag => { editUser({ flag }); setAllFlags(false) } }
+			/>
+		</>
+	);
+};
 
-		return (
-			<View>
-				<TouchableOpacity onPress = { () => this.setState({ flagsVisible: !this.state.flagsVisible }) }>
-					<Flag type = 'flat' code = { this.props.user.flag } size = { 32 } />
-				</TouchableOpacity>
-				<RenderFlags
-					flagsVisible = { flagsVisible }
-					changeVisibility = { val => this.setState({ flagsVisible: val }) }
-					flagPicked = { flag => {
-						(!flag) ? this.setState({ flagsVisible: false, customFlagVisible: true }) : editUser({ flag });
-						this.setState({ flagsVisible: false });
-					} }
-				/>
-				<CustomFlag
-					customFlagVisible = { customFlagVisible }
-					customFlagText = { customFlagText }
-					changeText = { (text) => this.setState({ customFlagText: text }) }
-					changeVisibility = { (val) => this.setState({ customFlagVisible: val }) }
-					flagPicked = { flag => { editUser({ flag }); this.setState({ flagsVisible: false }) } }
-				/>
-			</View>
-		);
-	}
-}
-
-const RenderFlags = (props) => {
+const RenderAllFlags = ({ onHide, onSelect, visible }) => {
 	const { flagModal, flagColumn } = styles;
-	const { changeVisibility, flagPicked, flagsVisible } = props;
 
 	const flagHeight = { height: height - 0.3 * height };
 	const countriesL = ['AR', 'BO', 'BR', 'CL', 'CO', 'CR', 'CU', 'DO', 'EC', 'SV', 'GQ', 'GT', 'HN'];
 	const countriesR = ['MX', 'NI', 'PA', 'PY', 'PE', 'PR', 'RO', 'ES', 'TT', 'US', 'UY', 'VE', ''];
 
 	return (
-		<Modal visible = { flagsVisible } transparent>
-			<SafeAreaView >
-				<TouchableOpacity style = { [flagModal, flagHeight] } onPress = { () => changeVisibility(false) }>
+		<Modal visible = { visible } transparent>
+			<SafeAreaView>
+				<TouchableOpacity style = { [flagModal, flagHeight] } onPress = { () => onHide(false) }>
 					{ [countriesL, countriesR].map(countries => (
 						<View style = { flagColumn }>
-							{ countries.map(item =>
-								<TouchableOpacity onPress = { () => flagPicked(item) }>
-									<Flag type = 'flat' code = { item } size = { 32 } />
+							{ countries.map(flag =>
+								<TouchableOpacity onPress = { () => onSelect(flag) }>
+									<Flag type = 'flat' code = { flag } size = { 32 } />
 								</TouchableOpacity>
 							) }
 						</View>
@@ -70,9 +62,8 @@ const RenderFlags = (props) => {
 	);
 };
 
-const CustomFlag = props => {
+const CustomFlag = ({ customFlagVisible, flagText, changeVisibility, changeText, flagPicked }) => {
 	const { textColor, modalText, modalButton, modalButtonContainer } = styles;
-	const { customFlagVisible, customFlagText, changeVisibility, changeText, flagPicked } = props;
 
 	return (
 		<Modal visible = { customFlagVisible } transparent = { true }>
@@ -81,17 +72,17 @@ const CustomFlag = props => {
 					<Text style = { [modalText, textColor] }>
 						Look up your two digit country ISO code and enter it!
 					</Text>
-					<TextInput
+					<Input
 						style = { styles.modalTextInput }
 						onChangeText = { (text) => changeText(text) }
-						value = { customFlagText }
+						value = { flagText }
 						autoCapitalize = { 'characters' }
 						autoCorrect = { false }
 						maxLength = { 2 }
 					/>
 					<View style = { modalButtonContainer }>
 						<View style = { modalButton }>
-							<Button title = 'Done' onPress = { () => { flagPicked(customFlagText); changeVisibility(false) } } />
+							<Button title = 'Done' onPress = { () => { flagPicked(flagText); changeVisibility(false) } } />
 						</View>
 						<View style = { modalButton }>
 							<Button title = 'Cancel' onPress = { () => changeVisibility(false) } />
@@ -131,7 +122,8 @@ const styles = {
 	modalButton: {
 		flex: 0.45
 	},
-	flagModal: { position: 'absolute',
+	flagModal: {
+		position: 'absolute',
 	 flexDirection: 'row',
 	 width: width,
 	 justifyContent: 'space-between',
@@ -160,7 +152,3 @@ const styles = {
 		color: '#E0E6ED'
 	}
 };
-
-const mapStateToProps = ({ user }) => ({ user });
-
-export default connect(mapStateToProps)(CountryFlag);
