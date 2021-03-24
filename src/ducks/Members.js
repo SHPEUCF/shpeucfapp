@@ -1,7 +1,6 @@
 import { createActionTypes } from './utils';
-import { getAllMemberAccountsandRankings, getAllMemberPoints } from '@/services/members';
+import { getAllMemberAccountsAndRankings, getAllMemberPoints } from '@/services/members';
 
-// Handle all things related to Events
 const ACTIONS = createActionTypes([
 	'STORE_ALL_MEMBER_ACCOUNTS_AND_RANKINGS',
 	'STORE_ALL_MEMBER_POINTS'
@@ -24,14 +23,14 @@ export default (state = INITIAL_STATE, { payload, type }) => {
 	}
 };
 
-export const storeMemberAccountsandRankings = () => dispatch =>
-	getAllMemberAccountsandRankings(true).then(({ allMemberAccounts, rankedIDs }) => dispatch({
+export const storeMemberAccountsAndRankings = () => dispatch =>
+	getAllMemberAccountsAndRankings(true, ({ allMemberAccounts, rankedIDs }) => dispatch({
 		type: ACTIONS.STORE_ALL_MEMBER_ACCOUNTS_AND_RANKINGS,
 		payload: { allMemberAccounts, rankedIDs }
 	}));
 
 export const storeAllMemberPoints = () => dispatch =>
-	getAllMemberPoints(true).then(allMemberPoints => dispatch({
+	getAllMemberPoints(true, allMemberPoints => dispatch({
 		type: ACTIONS.STORE_ALL_MEMBER_POINTS,
 		payload: allMemberPoints
 	}));

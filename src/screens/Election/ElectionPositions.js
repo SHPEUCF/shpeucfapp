@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
 import { Alert, Button, SortableFlatList, NavBar, ButtonLayout, Icon } from '@/components';
 import { getPositions } from '@/ducks';
-import { deletePosition, changeLevels } from '@/services/elections';
+import { deletePosition, changeLevelsPosition } from '@/services/elections';
 
 const { height } = Dimensions.get('screen');
 
@@ -63,7 +63,7 @@ export const ElectionPositions = ({ navigation }) => {
 			</View>
 			<ButtonLayout>
 				<Button title = 'Add Positions' onPress = { () =>	navigation.push('PositionForm', { action: 'ADD' }) } />
-				<Button title = 'Set Order' onPress = { () => changeLevels(orderedPositions) } />
+				<Button title = 'Set Order' onPress = { () => changeLevelsPosition(orderedPositions) } />
 			</ButtonLayout>
 		</SafeAreaView>
 	);

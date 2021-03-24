@@ -25,15 +25,11 @@ export const editMember = user => {
 export const assignPosition = (title, types, id, oldChair) => {
 	if (oldChair) {
 		firebase.database().ref(`/users/${oldChair.id}/${types}`).remove()
-			.then(() => firebase.database().ref(`/privileges/${oldChair.id}/`).update({
-				[types]: false
-			}));
+			.then(() => firebase.database().ref(`/privileges/${oldChair.id}/`).update({ [types]: false }));
 	}
 
 	firebase.database().ref(`/users/${id}/`).update({ [types]: title })
-		.then(() => firebase.database().ref(`/privileges/${id}/`).update({
-			[types]: true
-		}));
+		.then(() => firebase.database().ref(`/privileges/${id}/`).update({ [types]: true }));
 };
 
 /*
@@ -70,7 +66,7 @@ export const changePrivilegeOfMembers = (members, privilegeChanged, value) => {
 	}
 };
 
-export const getAllMemberAccountsandRankings = listener => new Promise(resolve =>
+export const getAllMemberAccountsAndRankings = (listener, update) =>
 	firebase.database().ref('/users/')[listener ? 'on' : 'once']('value', snapshot => {
 		const allMemberAccounts = _.orderBy(snapshot.val(), ['lastName', 'firstName'], ['asc', 'asc'])
 			.reduce((allMembers, member) => ({ ...allMembers, [member.id]: member }), {});
@@ -88,9 +84,8 @@ export const getAllMemberAccountsandRankings = listener => new Promise(resolve =
 			pastPoints = member.points;
 		});
 
-		resolve({ allMemberAccounts, rankedIDs });
-	})
-);
+		update({ allMemberAccounts, rankedIDs });
+	});
 
-export const getAllMemberPoints = listener => new Promise(resolve =>
-	firebase.database().ref('/points')[listener ? 'on' : 'once']('value', snapshot => resolve(snapshot.val())));
+export const getAllMemberPoints = (listener, update) =>
+	firebase.database().ref('/points')[listener ? 'on' : 'once']('value', snapshot => update(snapshot.val()));

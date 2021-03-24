@@ -96,7 +96,7 @@ export const vote = candidateObj => {
 		.catch(() => Alert.alert('Vote could not be cast!', { type: 'error', title: 'Failure' }));
 };
 
-export const changeLevels = positions => {
+export const changeLevelsPosition = positions => {
 	firebase.database().ref('election').once('value', snapshot => {
 		const electionObject = snapshot.val();
 
@@ -107,14 +107,11 @@ export const changeLevels = positions => {
 		.catch(() => Alert.alert('Order could not be set!', { type: 'error', title: 'Failure' }));
 };
 
-export const getAllPositions = () => new Promise(resolve =>
-	firebase.database().ref('/election/positions').on('value', snapshot => resolve(snapshot.val()))
-);
+export const getAllPositions = update =>
+	firebase.database().ref('/election/positions').on('value', snapshot => update(snapshot.val()));
 
-export const getAllVotes = () => new Promise(resolve =>
-	firebase.database().ref('voting').on('value', snapshot => resolve(snapshot.val()))
-);
+export const getAllVotes = update =>
+	firebase.database().ref('voting').on('value', snapshot => update(snapshot.val()));
 
-export const updateElectionStatus = () => new Promise(resolve =>
-	firebase.database().ref('election').on('value', snapshot => resolve(snapshot.val()))
-);
+export const updateElectionStatus = update =>
+	firebase.database().ref('election').on('value', snapshot => update(snapshot.val()));
