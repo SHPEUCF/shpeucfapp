@@ -7,34 +7,6 @@
 	"jest": {
 		"preset": "react-native"
 	},
-	"babel": {
-		"presets": [
-			"module:metro-react-native-babel-preset"
-		],
-		"plugins": [
-			[
-				"module:react-native-dotenv"
-			],
-			[
-				"module-resolver",
-				{
-					"root": [
-						"./src"
-					],
-					"alias": {
-						"@": "./src"
-					},
-					"extensions": [
-						".ios.js",
-						".android.js",
-						".js",
-						".json"
-					]
-				},
-				"module:react-native-dotenv"
-			]
-		]
-	},
 	"scripts": {
 		"start": "react-native start",
 		"reinstall": "rm -rf node_modules; npm cache clean; npm install",
