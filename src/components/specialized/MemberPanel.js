@@ -156,8 +156,7 @@ const styles = {
 	leaderboardUserInfoContainer: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		alignItems: 'flex-start',
-		paddingBottom: 20
+		alignItems: 'flex-start'
 	},
 	generalUserInfoContainer: {
 		flexDirection: 'row',
