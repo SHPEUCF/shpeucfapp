@@ -26,6 +26,7 @@ export const Leaderboard = () => {
 				itemJSX = { member => <MemberPanel member = { member } variant = 'Leaderboard' /> }
 				regexFunc = { ({ firstName, lastName }) => `${firstName} ${lastName}` }
 				onSelect = { () => null }
+				style = {{ flex: 1 }}
 			/>
 		</SafeAreaView>
 	);
@@ -35,5 +36,5 @@ const styles = {
 	screenBackground: {
 		flex: 1,
 		backgroundColor: '#0c0b0b'
-	},
+	}
 };
