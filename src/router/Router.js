@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { RouterTabs } from './RouterTabs';
 import {
 	/* General   */ About, Dashboard, Leaderboard, More,
@@ -13,7 +13,7 @@ import {
 	/* Forms     */ CommitteeForm, PositionForm
 } from '@/screens';
 
-const MainTabs = createBottomTabNavigator();
+const MainTabs = createMaterialTopTabNavigator();
 const AuthStack = createStackNavigator();
 const DashboardStack = createStackNavigator();
 const EventsStack = createStackNavigator();
@@ -73,7 +73,7 @@ export default ({ isLoggedIn }) => (
 				<AuthStack.Screen name = 'Login' component = { Login } />
 				<AuthStack.Screen name = 'ResetPassword' component = { ResetPassword } />
 			</AuthStack.Navigator>
-			: <MainTabs.Navigator tabBar = { props => <RouterTabs { ...props } /> }>
+			: <MainTabs.Navigator tabBarPosition = 'bottom' lazy tabBar = { props => <RouterTabs { ...props } /> }>
 				<MainTabs.Screen name = 'Dashboard' component = { DashboardStackNavigator } />
 				<MainTabs.Screen name = 'Events' component = { EventsStackNavigator } />
 				<MainTabs.Screen name = 'Profile' component = { ProfileStackNavigator } />
