@@ -22,9 +22,9 @@ export { default as EventDetails } from './Events/EventDetails';
 
 // Export General
 export { Leaderboard } from './General/Leaderboard';
-export { default as More } from './General/More';
+export { More } from './General/More';
 export { About } from './General/About';
-export { Dashboard } from './General/Dashboard';
+export { default as Dashboard } from './General/Dashboard/Dashboard';
 
 // Export User
 export { default as Login } from './User/Login';
