@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View,	Modal,	FlatList,	Dimensions,	TouchableOpacity,	Text,	SafeAreaView } from 'react-native';
+import { View, Modal, FlatList, Dimensions, TouchableOpacity, Text, SafeAreaView, ViewStyle } from 'react-native';
 import { Alert, Button, ButtonLayout, Input, Icon } from './';
 
 const dimension = Dimensions.get('screen');
@@ -15,6 +15,7 @@ const dimension = Dimensions.get('screen');
  * @param {Function=}              itemJSX      (Optional) Determines how each item will be rendered.
  * @param {Boolean=}               multiple     (Optional) Allows user to select multiple items.
  * @param {Boolean=}               search       (Optional) Determines the visibility of the searchbar.
+ * @param {ViewStyle}              style        (Optional) Style for view wrapping FilterList.
  *
  * @example
  * Single
@@ -111,7 +112,7 @@ class FilterList extends Component {
 	}
 
 	render = () => {
-		const { placeholder, CustomForm, search, selectionBoxStyle, iconColor, iconSize } = this.props;
+		const { placeholder, CustomForm, search, selectionBoxStyle, iconColor, iconSize, style } = this.props;
 		const { val, modalVisible } = this.state;
 		const { iconStyle, dropDownArrowStyle, selectionStyle } = styles;
 
@@ -154,7 +155,7 @@ class FilterList extends Component {
 		}
 
 		return (
-			<View>
+			<View style = { style }>
 				{ picker }
 			</View>
 		);
