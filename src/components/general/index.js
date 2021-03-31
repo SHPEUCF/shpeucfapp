@@ -6,6 +6,7 @@ export * from './Animated';
 export * from './Avatar';
 export * from './Button';
 export * from './ButtonLayout';
+export * from './CountryFlag';
 export * from './DatePicker';
 export * from './DraggableFlatList';
 export * from './Icon';

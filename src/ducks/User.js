@@ -41,5 +41,5 @@ export default (state = INITIAL_STATE, { payload, type }) => {
 };
 
 export const loadUser = () => dispatch => {
-	loadCurrentUser().then(payload => dispatch({ type: ACTIONS.LOAD_USER_AND_PRIVILEGE, payload }));
+	loadCurrentUser(payload => dispatch({ type: ACTIONS.LOAD_USER_AND_PRIVILEGE, payload }));
 };

@@ -1,7 +1,7 @@
 import firebase from 'firebase';
 import _ from 'lodash';
 import { createActionTypes } from './utils';
-import { convertMilitaryToStandardTime } from '@/utils/events';
+import { convertTimeTo } from '@/utils/events';
 import { Alert } from '@/components';
 
 // handle all things related to Elections
@@ -62,8 +62,8 @@ export const getEvents = () => {
 
 			// Converts all Military time to Standard Time.
 			sortedEvents = sortedEvents.map(event => {
-				event.startTime = convertMilitaryToStandardTime(event.startTime);
-				event.endTime = convertMilitaryToStandardTime(event.endTime);
+				event.startTime = convertTimeTo(event.startTime, 'standard');
+				event.endTime = convertTimeTo(event.endTime, 'standard');
 
 				return event;
 			});
