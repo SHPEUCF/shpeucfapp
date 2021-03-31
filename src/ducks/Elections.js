@@ -23,24 +23,20 @@ export default (state = INITIAL_STATE, { type, payload }) => {
 			return { ...state, votes: payload };
 		case ACTIONS.UPDATE_ELECTION:
 			return {
-				...state,
-				apply: payload.apply,
-				election: payload.election,
-				numOfVotes: payload.votes
-			};
+				...state, apply: payload.apply, election: payload.election, numOfVotes: payload.votes };
 		default:
 			return state;
 	}
 };
 
 export const getPositions = () => dispatch => {
-	getAllPositions().then(payload => dispatch({ type: ACTIONS.GET_POSITIONS, payload }));
+	getAllPositions(payload => dispatch({ type: ACTIONS.GET_POSITIONS, payload }));
 };
 
 export const getVotes = () => dispatch => {
-	getAllVotes().then(payload => dispatch({ type: ACTIONS.GET_VOTES, payload }));
+	getAllVotes(payload => dispatch({ type: ACTIONS.GET_VOTES, payload }));
 };
 
 export const updateElection = () => dispatch => {
-	updateElectionStatus().then(payload => dispatch({ type: ACTIONS.UPDATE_ELECTION, payload }));
+	updateElectionStatus(payload => dispatch({ type: ACTIONS.UPDATE_ELECTION, payload }));
 };

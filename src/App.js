@@ -10,7 +10,7 @@ import {
 	verifyAppVersion,
 	userStatus,
 	loadUser,
-	storeMemberAccountsandRankings,
+	storeMemberAccountsAndRankings,
 	storeAllMemberPoints,
 	getEvents,
 	getCommittees,
@@ -24,7 +24,7 @@ console.warn = () => null;
 
 export const App = () => {
 	const { isLoggedIn, hasCorrectVersion } = useSelector(state => state.app);
-	const mounted = useRef();
+	const mounted = useRef(false);
 	const dispatch = useDispatch();
 	const store = useStore();
 	const initRoutine = [
@@ -32,7 +32,7 @@ export const App = () => {
 		getEvents,
 		getCommittees,
 		updateElection,
-		storeMemberAccountsandRankings,
+		storeMemberAccountsAndRankings,
 		storeAllMemberPoints
 	];
 
