@@ -1,0 +1,23 @@
+{
+  "name": "toolbar-android",
+  "version": "0.1.0-rc.2",
+  "summary": "A React Native Component for Android Toolbar",
+  "license": "MIT",
+  "authors": "Connectdotz <vsun@connectdotz.com>",
+  "homepage": "https://github.com/react-native-community/toolbar-android#readme",
+  "description": "A React Native Component for Android Toolbar",
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source": {
+    "git": "https://github.com/react-native-community/toolbar-android.git",
+    "tag": "master"
+  },
+  "source_files": "ios/**/*.{h,m}",
+  "requires_arc": true,
+  "dependencies": {
+    "React": [
+
+    ]
+  }
+}
