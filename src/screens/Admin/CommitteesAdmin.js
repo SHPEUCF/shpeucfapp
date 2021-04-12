@@ -1,164 +1,69 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Button, NavBar, SortableFlatList, ButtonLayout, Icon } from '@/components';
-import _ from 'lodash';
+import React, { useState, useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Text, View, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
-import {
-	getCommittees,
-	deleteCommittee,
-	editCommittee,
-	getAllMemberAccounts,
-	addCommittee,
-	chairPersonChanged,
-	committeeDescriptionChanged,
-	committeeTitleChanged,
-	changeLevelsCom
-} from '@/ducks';
+import _ from 'lodash';
+import { getCommittees, storeMemberAccountsAndRankings } from '@/ducks';
+import { deleteCommittee, changeLevelsCommittees } from '@/services/committees';
+import { Button, NavBar, SortableFlatList, ButtonLayout, Icon } from '@/components';
 
-const dimension = Dimensions.get('screen');
-const iteratees = ['level'];
-const order = ['asc'];
+const { height } = Dimensions.get('screen');
 
-class CommitteesAdmin extends Component {
-	constructor(props) {
-		super(props);
-		this.renderCommittees = this.renderCommittees.bind(this);
-	}
+export const CommitteesAdmin = ({ navigation }) => {
+	const mounted = useRef(false);
+	const dispatch = useDispatch();
+	const [orderedCommittees, setOrderedCommittees] = useState([]);
+	const { committeesList } = useSelector(({ committees }) => committees);
 
-	componentDidMount() {
-		this.props.getCommittees();
-		this.props.getAllMemberAccounts();
-	}
-
-	componentDidUpdate(prevProps) {
-		if (prevProps.committeesList !== this.props.committeesList) {
-			this.setState({ data: _.orderBy(this.props.committeesList, iteratees, order).map((d, index) => ({
-				committee: d,
-				key: `item-${index}`,
-				label: index,
-				backgroundColor: '#fff'
-			})) });
+	useEffect(() => {
+		if (!mounted.current) {
+			dispatch(getCommittees());
+			dispatch(storeMemberAccountsAndRankings());
+			mounted.current = true;
 		}
-	}
+		setOrderedCommittees(_.orderBy(committeesList, ['level'], ['asc']));
+	}, [committeesList]);
 
-	state = {
-		data: _.orderBy(this.props.committeesList, iteratees, order).map((d, index) => ({
-			committee: d,
-			key: `item-${index}`,
-			label: index,
-			backgroundColor: '#fff'
-		}))
-	}
-
-	render() {
-		const {
-			page
-		} = styles;
-		const {
-			committeesList,
-			navigation
-		} = this.props;
-
-		const committeesArray = _.toArray(committeesList);
-
-		return (
-			<SafeAreaView style = { page }>
-				<NavBar title = 'Committees' back onBack = { () => navigation.pop() } />
-				{ this.renderFlatList(committeesArray) }
-				<View>
-					<ButtonLayout>
-						<Button
-							onPress = { () => this.setLevels() }
-							title = { 'Set Order' }
-						/>
-						<Button
-							onPress = { () => {
-								this.props.committeeTitleChanged('');
-								this.props.committeeDescriptionChanged('');
-								this.props.chairPersonChanged({});
-								navigation.push('CommitteeForm', { action: 'ADD' });
-							} }
-							title = { 'Add Committees' }
-						/>
-					</ButtonLayout>
-				</View>
-			</SafeAreaView>
-		);
-	}
-
-	_keyExtractor = (item, index) => index;
-
-	renderFlatList() {
-		return (
-			<View style = {{ flex: 1 }}>
-				<SortableFlatList
-					data = { this.state.data }
-					extraData = { this.state }
-					keyExtractor = { (item) => `draggable-item-${item.key}` }
-					renderItem = { this.renderCommittees }
-					scrollPercent = { 5 }
-					onMoveEnd = { ({ data }) => this.setState({ data }) }
-				/>
-			</View>
-		);
-	}
-
-	renderCommittees({
-		item, move, moveEnd, isActive
-	}) {
-		const {
-			containerStyle,
-			contentContainerStyle,
-			textColor
-		} = styles;
-
+	const renderCommittees = ({ item: committee, move, moveEnd, isActive }) => {
+		const { containerStyle, contentStyle, textColor, buttonStyle } = styles;
 		const color = isActive ? { backgroundColor: '#ffd70066' } : { backgroundColor: 'black' };
 
 		return (
-			<TouchableOpacity
-				style = { [contentContainerStyle, color] }
-				onLongPress = { move }
-				onPressOut = { moveEnd }>
+			<TouchableOpacity style = { [contentStyle, color] } onLongPress = { move } onPressOut = { moveEnd }>
 				<View style = { containerStyle }>
-					<Text style = { textColor }>{ item.committee.title }</Text>
+					<Text style = { textColor }>{ committee.title }</Text>
 				</View>
-				<View style = { styles.buttonContainerStyle }>
-					<TouchableOpacity onPress = { () => this.viewCommittee(item.committee) }>
-						<Icon style = { textColor } name = 'md-create' size = { 40 } />
-					</TouchableOpacity>
-				</View>
-				<View style = { styles.buttonContainerStyle }>
-					<TouchableOpacity onPress = { () => this.delete(item.committee) }>
-						<Icon style = { textColor } name = 'md-trash' size = { 40 } />
-					</TouchableOpacity>
-				</View>
+				<TouchableOpacity
+					onPress = { () => navigation.push('CommitteeForm', { action: 'EDIT', committee }) }
+					style = { buttonStyle }
+				>
+					<Icon style = { textColor } name = 'md-create' size = { 40 } />
+				</TouchableOpacity>
+				<TouchableOpacity onPress = { () => deleteCommittee(committee) } style = { buttonStyle }>
+					<Icon style = { textColor } name = 'md-trash' size = { 40 } />
+				</TouchableOpacity>
 			</TouchableOpacity>
 		);
-	}
+	};
 
-	delete(committee) {
-		this.setState({
-			data: this.state.data.filter(item => item.committee !== committee)
-		});
-
-		this.props.deleteCommittee(committee.title, committee.chair);
-	}
-
-	viewCommittee(item) {
-		this.props.committeeTitleChanged(item.title);
-		this.props.committeeDescriptionChanged(item.description);
-		this.props.chairPersonChanged(item.chair);
-		this.props.navigation.push('CommitteeForm', { action: 'EDIT' });
-	}
-
-	setLevels() {
-		const {
-			changeLevelsCom
-		} = this.props;
-
-		changeLevelsCom(this.state.data);
-	}
-}
+	return (
+		<SafeAreaView style = { styles.page }>
+			<NavBar title = 'Committees' back onBack = { () => navigation.pop() } />
+			<View style = {{ flex: 1 }}>
+				<SortableFlatList
+					data = { orderedCommittees }
+					keyExtractor = { (item, index) => index }
+					renderItem = { renderCommittees }
+					scrollPercent = { 5 }
+					onMoveEnd = { ({ data }) => setOrderedCommittees(data) }
+				/>
+			</View>
+			<ButtonLayout>
+				<Button title = 'Set Order' onPress = { () => changeLevelsCommittees(orderedCommittees) } />
+				<Button title = 'Add Committees' onPress = { () => navigation.push('CommitteeForm', { action: 'ADD' }) } />
+			</ButtonLayout>
+		</SafeAreaView>
+	);
+};
 
 const styles = {
 	containerStyle: {
@@ -168,27 +73,17 @@ const styles = {
 		paddingVertical: 10,
 		paddingHorizontal: 15
 	},
-	containerTextStyle: {
+	contentStyle: {
 		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'flex-start',
-		backgroundColor: '#2C3239',
-		paddingVertical: 10,
-		paddingHorizontal: 15
-	},
-	contentContainerStyle: {
-		margin: 1,
-		height: dimension.height * 0.09,
-		flex: 1,
+		height: height * 0.09,
 		flexDirection: 'row',
 		justifyContent: 'center'
 	},
 	textColor: {
 		color: '#e0e6ed'
 	},
-	buttonContainerStyle: {
+	buttonStyle: {
 		flex: 5,
-		margin: 5,
 		justifyContent: 'center'
 	},
 	page: {
@@ -196,25 +91,3 @@ const styles = {
 		backgroundColor: '#0c0b0b'
 	}
 };
-
-const mapStateToProps = ({ committees }) => {
-	const {
-		committeesList
-	} = committees;
-
-	return { committeesList };
-};
-
-const mapDispatchToProps = {
-	getCommittees,
-	deleteCommittee,
-	addCommittee,
-	editCommittee,
-	chairPersonChanged,
-	committeeDescriptionChanged,
-	committeeTitleChanged,
-	changeLevelsCom,
-	getAllMemberAccounts
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CommitteesAdmin);
