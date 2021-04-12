@@ -19,16 +19,18 @@ Follow these instructions to get you started in contributing to the SHPE UCF app
 ## Pre-requisites
 What do I need to start contributing to the SHPE app?
 
+*A more detailed summary can be found [here](https://reactnative.dev/docs/environment-setup)*.
+
 ### Windows
 <details>
 	<summary>Git</summary>
 
-For version control; this is how we manage all the files on our app and how you are able to read this now on GitHub. You can download the latest version (2.25.0 as of February 2020) [here](https://git-scm.com/).
+For version control; this is how we manage all the files on our app and how you are able to read this now on GitHub. You can download the latest version (2.31.0 as of March 2021) [here](https://git-scm.com/).
 </details>
 <details>
 	<summary>Node</summary>
 	
-The runtime we use to build the app. Download the latest stable version (12.15.0 as of February 2020) [here](https://nodejs.org/en/).
+The runtime we use to build the app. Download the latest stable version (14.16.0 as of March 2021) [here](https://nodejs.org/en/).
 </details>
 <details>
 	<summary>Java 8 JDK</summary>
@@ -40,7 +42,7 @@ Used to build and emulate the app on Android Studio.
 <details>
 	<summary>Python 3</summary>
 
-Since the building system for React Native uses Python, you will need to install it. Go [here](https://www.python.org/downloads/windows/) and download the latest version (3.8.1 as of February 2020).
+Since the building system for React Native uses Python, you will need to install it. Go [here](https://www.python.org/downloads/windows/) and download the latest stable version (3.9.2 as of March 2021).
 </details>
 <details>
 	<summary>Android Studio</summary>
@@ -56,19 +58,19 @@ To build and test the app you can:
 <details>
 	<summary>Git</summary>
 
-For version control; this is how we manage all the files on our app and how you are able to read this now on GitHub. You can download the latest version (2.25.0 as of February 2020) [here](https://git-scm.com/).
+For version control; this is how we manage all the files on our app and how you are able to read this now on GitHub. You can download the latest version (2.31.0 as of March 2021) [here](https://git-scm.com/).
 </details>
 <details>
 	<summary>Node</summary>
 	
 The runtime we use to build the app.
 * Download HomeBrew [here](https://brew.sh/).
-* On your terminal, write `brew install node@10`.
+* On your terminal, write `brew install node@12`.
 </details>
 <details>
 	<summary>Xcode</summary>
 
-* You can only download this through the App Store, version 9.1+.
+* You can only download this through the App Store, version 12+.
 * If you want to use a physical device follow [this](https://facebook.github.io/react-native/docs/running-on-device).
 * Make sure that you are signed in to your Apple account and that your account is a [developer account](https://9to5mac.com/2016/03/27/how-to-create-free-apple-developer-account-sideload-apps/).
 </details>
@@ -91,21 +93,17 @@ To build and test the app you can:
 
 ## Installation
 **Getting your development environment running...**
-1. Install the react-native command line interface by using command prompt/terminal.
-```
-npm i -g react-native-cli
-```
-2.  (Optional) [Fork the repository](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) (if you plan on contributing to the app).
-3. Open command prompt/terminal and navigate to the directory you want to download the shpeucf repository, preferably the Desktop.
-4. Clone the original (or forked) repository. Note that this will create the folder **shpeucfapp** in the directory you are currently in.
+1.  (Optional) [Fork the repository](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) (if you plan on contributing to the app).
+2. Open command prompt/terminal and navigate to the directory you want to download the shpeucf repository, preferably the Desktop.
+3. Clone the original (or forked) repository. Note that this will create the folder **shpeucfapp** in the directory you are currently in.
 ```
 git clone https://github.com/SHPEUCF/shpeucfapp.git
 ```
-5. Navigate inside the cloned repository.
+4. Navigate inside the cloned repository.
 ```
 cd shpeucfapp
 ```
-6. Install the dependencies used in this project using the **n**ode **p**ackage **m**anager.
+5. Install the dependencies used in this project using the **n**ode **p**ackage **m**anager.
 ```
 npm install
 ```
@@ -113,9 +111,9 @@ npm install
 ## Running
 ### Android
 * Open Android Studio and run the Android emulator.
-* Open the terminal/command prompt, navigate to the cloned repository (shpeucfapp), and type `react-native run-android`.
+* Open the terminal/command prompt, navigate to the cloned repository (shpeucfapp), and type `npx react-native run-android` or `npm run android`.
 ### iOS
-* Open the terminal, navigate to the cloned repository (shpeucfapp), and type `react-native run-ios`.
+* Open the terminal, navigate to the cloned repository (shpeucfapp), and type `npx react-native run-ios` or `npm run ios`.
 
 ## Contributing
 For contributing to this project, please check out [contributing](https://github.com/SHPEUCF/shpeucfapp/blob/master/.github/CONTRIBUTING.md) and the [contribution guidelines](https://github.com/SHPEUCF/shpeucfapp/wiki/Contribution-guidelines).
@@ -129,6 +127,7 @@ For contributing to this project, please check out [contributing](https://github
 * [Luis Benavides](https://github.com/luisbenan), initial work
 * [Haniel Diaz](https://github.com/HanielDiaz), continued work
 * [Steven Perdomo](https://github.com/esteban737), continued work
+* [Idel Martinez](https://github.com/idelmr), continued work
 
 ...and our [contributors](https://github.com/SHPEUCF/shpeucfapp/graphs/contributors) who participated in this project.
 

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Form } from './';
 import _ from 'lodash';
+import { Form } from './Form';
 import { nullifyObjectValues } from './utils';
 
 /**

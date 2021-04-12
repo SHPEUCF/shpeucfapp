@@ -1,5 +1,6 @@
 import { Alert } from '@/components';
 
+export const shortMonths = ['Jan', 'Feb', 'Mar', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 export const fullMonths = [
 	'January',
 	'February',
@@ -15,60 +16,47 @@ export const fullMonths = [
 	'December'
 ];
 
-export const shortMonths = ['Jan', 'Feb', 'Mar', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
 /**
- * @description Pass in Standard time and the function returns that in Military Time.
+ * Convert given time to the format given, returned as an array of strings.
  *
- * @param {String} standardTime Format: 'Hour:Minute (AM/PM)' (1 <= Hour <= 12); (0 <= Minute <= 59)
- *
- * @returns {String} Format: 'Hour:Minute' (1 <= Hour <= 24); (0 <= Minute <= 59)
+ * @param {string}                  time    Initial time string: 'HH:MM [AM/PM]'
+ * @param {'standard' | 'military'} format  Time format
  */
 
-export function convertStandardToMilitaryTime(standardTime) {
-	let [hour, minute] = standardTime.split(':');
-	let [newHour, newMinute, period] = [parseInt(hour), ...minute.split(' ')];
+export const convertTimeTo = (time, format) => {
+	let [hour, minute, period] = time.split(/[: ]/);
 
-	newHour = newHour === 12 ? 0 : newHour;
-	newHour += period === 'AM' ? 0 : 12;
-	newHour = newHour < 10 ? '0' + newHour : String(newHour);
+	switch (format) {
+		case 'standard':
+			if (!period) {
+				period = (hour >= 12) ? 'PM' : 'AM';
+				hour -= (hour > 12) ? 12 : 0;
+			}
 
-	return `${newHour}:${newMinute}`;
-}
+			return [String(hour || 12), minute, period];
+		case 'military':
+			if (period)
+				hour = (hour == 12 ? 0 : parseInt(hour)) + (period === 'PM' ? 12 : 0);
 
-/**
- * @description Pass in Standard time and the function returns that in Military Time.
- *
- * @param {String} militaryTime Format: 'Hour:Minute' (1 <= Hour <= 24); (0 <= Minute <= 59)
- *
- * @returns {String} Format: 'Hour:Minute (AM/PM)' (1 <= Hour <= 12); (0 <= Minute <= 59)
- */
-
-export function convertMilitaryToStandardTime(militaryTime) {
-	let [hour, minute] = militaryTime.split(':');
-	const period = hour >= 12 ? 'PM' : 'AM';
-
-	hour -= hour > 12 ? 12 : 0;
-	hour = hour === 0 ? 12 : hour;
-
-	return `${hour}:${minute} ${period}`;
-}
+			return [String(hour).padStart(2, '0'), minute];
+	}
+};
 
 /**
- * @description Extract month name and day from a numerical date
+ * Extract month name and day from a numerical date
  *
  * @param {String} date Format: 'Year-Month-Day'
  *
  * @returns {String} Format: 'Month(Name) Day(Number)'
  */
 
-export function convertNumToDate(date) {
+export const convertNumToDate = date => {
 	let [, month, day] = date.split('-');
 
 	return `${shortMonths[Number(month) - 1]} ${day}`;
-}
+};
 
-export function formatEventListForCalendar(events) {
+export const formatEventListForCalendar = events => {
 	let dates = {};
 
 	events.forEach((event) => {
@@ -79,46 +67,44 @@ export function formatEventListForCalendar(events) {
 	});
 
 	return dates;
-}
+};
 
 /**
- * @description Verifies whether an events times are valid.
+ * Verifies whether an events times are valid.
  *
- * @param {String}  s  Start Time
- * @param {String}  e  End Time
+ * @param {String} startTime  Start Time
+ * @param {String} endTime    End Time
  */
 
-export function timeVerification(startTime, endTime) {
+export const timeVerification = (startTime, endTime) => {
 	let [startHour, startMinute] = startTime.split(':');
 	let [endHour, endMinute] = endTime.split(':');
+	let validTime = endHour >= startHour || (endHour !== startHour && endMinute > startMinute);
 
-	if (endHour < startHour || (endHour === startHour && endMinute <= startMinute)) {
+	if (!validTime)
 		Alert.alert('Ending time must be after start time');
 
-		return false;
-	}
-	else { return true }
-}
+	return validTime;
+};
 
 /**
- * @description Changes an hour by a certain amount and returns the new hour.
+ * Changes an hour by a certain amount and returns the new hour.
  *
- * @param {string}  time    The hour that you want to change, **Must be Military Time**
- * @param {number}  amount  The amount that you want to change the hour by.
+ * @param {string} time    Hour to be changed (**Must be Military Time**)
+ * @param {number} amount  Amount to change the hour by
  */
 
-export function changeHourBy(time, amount) {
+export const changeHourBy = (time, amount) => {
 	const [hour, minute] = time.split(':');
 	let newHour = ((parseInt(hour) + amount) % 24).toString().padStart(2, '0');
 
 	return `${newHour}:${minute}`;
-}
+};
 
 /**
- * @description Filters out all events that have passed; only leaving future events.
+ * Filters out all events that have passed; only leaving future events.
  *
  * @param {Object[]} sortedEvents A sorted array of all the events.
- * @access     public
  */
 
 export const filterPastEvents = sortedEvents => sortedEvents.filter(event => {
@@ -130,10 +116,10 @@ export const filterPastEvents = sortedEvents => sortedEvents.filter(event => {
 });
 
 /**
- * @description Filters out all events that aren't inside of the eventIds array.
+ * Filters out all events that aren't inside of the eventIds array.
  *
- * @param {Object}    eventIds      An array of the event Ids that you want to keep.
- * @param {Object[]}  sortedEvents  An array of all the events that you are searching through.
+ * @param {Object}   eventIds      An array of the event Ids that you want to keep.
+ * @param {Object[]} sortedEvents  An array of all the events that you are searching through.
  */
 
 export const filterEvents = (eventIds, sortedEvents) => sortedEvents.filter((event) => event.id in eventIds);

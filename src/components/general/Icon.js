@@ -4,11 +4,11 @@ import React from 'react';
  * @desc Icon component from react-native-vector-icons.
  *
  * @typedef {Object} IconProps
- * @prop {number}                                     props.size   Icon size.
- * @prop {string}                                     props.name   Icon name.
- * @prop {string}                                     props.color  Icon color.
+ * @prop {Number}                                    props.size   Icon size.
+ * @prop {String}                                    props.name   Icon name.
+ * @prop {String}                                    props.color  Icon color.
  * @prop {'AntDesign' | 'EvilIcons' | 'FontAwesome'
- *       | 'MaterialIcons' | 'IonIcons'} [type=]      Type of icon component.
+ *       | 'Ionicons' | 'MaterialIcons'}             [type=]      Type of icon component.
  *
  * @param {IconProps}
  */
