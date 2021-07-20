@@ -28,7 +28,7 @@
 		"lodash": "^4.17.21",
 		"qrcode": "^1.4.4",
 		"react": "17.0.1",
-		"react-native": "0.64.0",
+		"react-native": "0.64.1",
 		"react-native-camera": "^3.40.5",
 		"react-native-color-picker": "^0.6.0",
 		"react-native-dotenv": "^2.5.0",
