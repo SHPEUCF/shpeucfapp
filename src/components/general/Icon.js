@@ -10,7 +10,7 @@ import React from 'react';
  * @prop {'AntDesign' | 'EvilIcons' | 'FontAwesome'
  *       | 'Ionicons' | 'MaterialIcons'}             [type=]      Type of icon component.
  *
- * @param {...IconProps}
+ * @param {IconProps}
  */
 
 export const Icon = ({ type, ...props }) => {
